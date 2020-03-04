@@ -3,7 +3,7 @@
 #' @param generations A number
 #' @param path A number
 #' @param both A number
-#' @return The sum of \code{x} and \code{y}
+#' @return Relatedness Coefficient \code{coef}
 #' @examples
 #'
 #'
