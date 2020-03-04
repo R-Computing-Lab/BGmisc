@@ -1,4 +1,9 @@
-#' Calculate Relatedness Coefficient
+#' Relatedness Coefficient Calculation
+#'
+#' Relatedness Coefficient Calculation based on Wright (1922)
+#'
+#' \eqn{r_{bc} = \sum \left(\frac{1}{2}\right)^{n+n'+1} (1+f_a)}
+#' where the relatedness coefficient between two people (b & c) is defined in relation to their common ancestors.
 #'
 #' @param generations A number
 #' @param path A number
