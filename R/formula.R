@@ -5,8 +5,8 @@
 #' @param both A number
 #' @return The sum of \code{x} and \code{y}
 #' @examples
-#' add(1, 1)
-#' add(10, 1)
+#'
+#'
 related_coef=function(
   generations=2,
   path=NULL,
