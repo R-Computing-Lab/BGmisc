@@ -14,7 +14,9 @@
 #'
 related_coef=function(
   generations=2,
+#' Specifies the number of generations back of common ancestors the pair share
   path=NULL,
+#' Traditional method to count common ancestry, which is 2 times the number of generations removed from common ancestors
   both=TRUE,
   ...){
   if(is.null(path)){
