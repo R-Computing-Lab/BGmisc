@@ -4,14 +4,14 @@
 \alias{related_coef}
 \title{Relatedness Coefficient Calculation}
 \usage{
-related_coef(generations = 2, path = NULL, both = TRUE, ...)
+related_coef(generations = 2, path = NULL, full = TRUE, ...)
 }
 \arguments{
-\item{generations}{A number}
+\item{generations}{Specifies the number of generations back of common ancestors the pair share}
 
-\item{path}{A number}
+\item{path}{A Traditional method to count common ancestry, which is 2 times the number of generations removed from common ancestors}
 
-\item{both}{A number}
+\item{full}{Full or half kin}
 }
 \value{
 Relatedness Coefficient \code{coef}
@@ -26,4 +26,6 @@ where the relatedness coefficient between two people (b & c) is defined in relat
 \examples{
 
 
+Specifies the number of generations back of common ancestors the pair share
+Traditional method to count common ancestry, which is 2 times the number of generations removed from common ancestors
 }
