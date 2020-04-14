@@ -3,19 +3,19 @@
 #' @description
 #' The classic behavior genetic model uses data from twins to decompose sources of phenotypic variation into the broad categories of genetic (a^2; Additive), environmental (c^2; Shared), and unique (e^2; Non-Shared) variance. The primary aim of this research is to describe the relative influence of genes and the environment on virtually every phenotype. It is used across a range of disciplines from psychology to economics.
 #'
-#' The \code{BG.Misc} package primarily does two things.  \enumerate{
+#' The \code{BG.Misc} package primarily does two things:  \enumerate{
 #'  \item it extends the popular \code{\link[=ggplot]{ggplot2}} package, and
 #'  \item implements analytic functions
 #'}
 #' In this document, some of the main features are highlighted, however, current examples (and corresponding outputs)
 #' can be viewed at https://github.com/smasongarrison/BG.Misc
 #'
-#' @section \code{BG.Misc} Constructor:
+#' @section \code{BG.Misc} Plots:
 #' Plots in \code{BG.Misc} are instigated via the default constructor: \code{BG.Misc(...)},
 #' for additional information, click \link[=BG.Misc]{HERE}:
 #'
 #'
-#' @section  \code{BG.Misc} Modification to Required Aesthetics:
+#' @section  \code{BG.Misc} Equations:
 
 #'
 #' @references
