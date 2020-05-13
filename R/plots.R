@@ -1,7 +1,7 @@
 #' Wrapper for Behavior Genetic Plots
 #' @description Function Wrapper for plots.
-#' @param S
+#' @param S S
 
 #' @return Returns
 
-gg <- function(){}
+gg <- function(S){}

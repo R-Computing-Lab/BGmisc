@@ -4,7 +4,10 @@
 \alias{gg}
 \title{Wrapper for Behavior Genetic Plots}
 \usage{
-gg()
+gg(S)
+}
+\arguments{
+\item{S}{S}
 }
 \value{
 Returns
