@@ -28,4 +28,19 @@ related_coef=function(
   }
     return(coef)
 }
-
+#' Estimate Relatedness based on Observed Correlation
+#'
+#' 
+#'
+#' @param cor_obs Observed Correlation
+#' @param ace_A proportion of variance attributable to additive genetic variance
+#' @param ace_C proportion of variance attributable to shared environmental variance
+#' @param sharedc proportion of shared envirnment shared. Typically takes zero or 1.
+#' @return estimated relatedness Coefficient  \code{est_r}
+#' @examples
+#'
+#'
+relatedness <- function(cor_obs, ace_A=.9,ace_C=0, sharedc=0 ){
+  est_r=(cor_obs-sharedc*ace_C)/ace_A
+  return(est_r)
+}
