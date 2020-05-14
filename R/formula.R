@@ -1,3 +1,5 @@
+
+
 #' Relatedness Coefficient Calculation
 #'
 #' Relatedness Coefficient Calculation based on Wright (1922)
@@ -30,7 +32,7 @@ related_coef=function(
 }
 #' Estimate Relatedness based on Observed Correlation
 #'
-#' 
+#'
 #'
 #' @param cor_obs Observed Correlation
 #' @param ace_A proportion of variance attributable to additive genetic variance
