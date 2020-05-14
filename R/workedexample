@@ -1,0 +1,35 @@
+
+
+comp2vech(list(matrix(c(1, .5, .5, 1), 2, 2), matrix(1, 2, 2)))
+
+identifyComponentModel(A=list(matrix(1, 2, 2)), C=list(matrix(1, 2, 2)), E=diag(1, 2))
+identifyComponentModel(A=list(matrix(c(1, .5, .5, 1), 2, 2), matrix(1, 2, 2)), C=list(matrix(1, 2, 2), matrix(1, 2, 2)), E=diag(1, 4))
+
+#fitComponentModel(matrix(rnorm(25), 5, 5), acmp)
+
+
+
+require(EasyMx)
+require(OpenMx)
+data(twinData)
+twinVar = names(twinData)
+selVars <- c('ht1', 'ht2')
+mzdzData <- subset(twinData, zyg %in% c(1, 3), c(selVars, 'zyg'))
+mzdzData$RCoef <- c(1, NA, .5)[mzdzData$zyg]
+
+run3 <- emxTwinModel(model='Cholesky', relatedness='RCoef',
+	data=mzdzData, use=selVars, run=TRUE, name='TwCh')
+
+
+
+data(twinData, package='OpenMx')
+selVars <- c('ht1', 'ht2')
+mzData <- subset(twinData, zyg %in% c(1), c(selVars, 'zyg'))
+dzData <- subset(twinData, zyg %in% c(3), c(selVars, 'zyg'))
+
+fitComponentModel(
+	covmat=list(cov(mzData[,selVars], use='pair'), cov(dzData[,selVars], use='pair')),
+	A=list(matrix(1, nrow=2, ncol=2), matrix(c(1, .5, .5, 1), nrow=2, ncol=2)),
+	C=list(matrix(1, nrow=2, ncol=2), matrix(1, nrow=2, ncol=2)),
+	E=list(diag(1, nrow=2), diag(1, nrow=2))
+)
