@@ -94,6 +94,8 @@ comp2vech <- function(x, include.zeros=FALSE){
 		} else {
 			return(do.call(c, lapply(x, vech)))
 		}
+	} else if(inherits(x, 'Matrix')) {
+		return(vech(as.matrix(x)))
 	} else {
 		msg <- paste("Can't make component into a half vectorization:",
 			"x is neither a list nor a matrix.")
