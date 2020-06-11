@@ -37,12 +37,14 @@ related_coef=function(
 #' @param cor_obs Observed Correlation
 #' @param ace_A proportion of variance attributable to additive genetic variance
 #' @param ace_C proportion of variance attributable to shared environmental variance
-#' @param sharedc proportion of shared envirnment shared. Typically takes zero or 1.
+#' @param shared_c proportion of shared environment shared. Typically takes zero or 1.
 #' @return estimated relatedness Coefficient  \code{est_r}
 #' @examples
 #'
 #'
-relatedness <- function(cor_obs, ace_A=.9,ace_C=0, sharedc=0 ){
-  est_r=(cor_obs-sharedc*ace_C)/ace_A
+relatedness <- function(cor_obs, ace_A=.9,ace_C=0, shared_c=0 ){
+if(ace_A>1|ace_A<0|ace_C>1|ace_C<0){
+	stop("ace_A and ace_C must be proportions")}
+  est_r=(cor_obs-shared_c*ace_C)/ace_A
   return(est_r)
 }
