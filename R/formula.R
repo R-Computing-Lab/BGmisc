@@ -9,7 +9,7 @@
 #'
 #' @param generations Specifies the number of generations back of common ancestors the pair share
 #' @param path A Traditional method to count common ancestry, which is 2 times the number of generations removed from common ancestors
-#' @param full Full or half kin
+#' @param full Full or half kin. Do the kin share both parents at the common ancestor's generation?
 #' @return Relatedness Coefficient \code{coef}
 #' @examples
 #'
