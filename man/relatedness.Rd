@@ -4,7 +4,7 @@
 \alias{relatedness}
 \title{Estimate Relatedness based on Observed Correlation}
 \usage{
-relatedness(cor_obs, ace_A = 0.9, ace_C = 0, sharedc = 0)
+relatedness(cor_obs, ace_A = 0.9, ace_C = 0, shared_c = 0)
 }
 \arguments{
 \item{cor_obs}{Observed Correlation}
@@ -13,7 +13,7 @@ relatedness(cor_obs, ace_A = 0.9, ace_C = 0, sharedc = 0)
 
 \item{ace_C}{proportion of variance attributable to shared environmental variance}
 
-\item{sharedc}{proportion of shared envirnment shared. Typically takes zero or 1.}
+\item{shared_c}{proportion of shared environment shared. Typically takes zero or 1.}
 }
 \value{
 estimated relatedness Coefficient  \code{est_r}

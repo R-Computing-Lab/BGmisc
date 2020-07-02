@@ -11,7 +11,7 @@ related_coef(generations = 2, path = NULL, full = TRUE, ...)
 
 \item{path}{A Traditional method to count common ancestry, which is 2 times the number of generations removed from common ancestors}
 
-\item{full}{Full or half kin}
+\item{full}{Full or half kin. Do the kin share both parents at the common ancestor's generation?}
 }
 \value{
 Relatedness Coefficient \code{coef}
