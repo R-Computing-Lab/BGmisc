@@ -1,13 +1,15 @@
 Package: BGmisc
-Title: What the Package Does (One Line, Title Case)
+Title: Behavior Genetic Modeling Functions
 Version: 0.0.0.9000
 Authors@R: 
     person(given = "S. Mason",
            family = "Garrison",
            role = c("aut", "cre"),
            email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: This collection contains functions for behavior genetic modeling. These functions include model indentification, calculating relatedness, and various others.
+           comment = c(ORCID = "YOUR-ORCID-ID"),
+	person(c("Michael", "D."), "Hunter", role="aut"),
+	person(c("S.", "Alexandra"), "Burt", role="aut"),)
+Description: This collection contains functions for behavior genetic modeling. These functions include model identification, calculating relatedness, and various others.
 License: What license it uses
 Encoding: UTF-8
 LazyData: true
