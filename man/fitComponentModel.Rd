@@ -16,5 +16,5 @@ Fit the estimated variance components of a model to covariance data
 }
 \details{
 Returns a regression (linear model fitted with \code{lm}).
-The coeficients of the regression are the estimated variance components.
+The coefficients of the regression are the estimated variance components.
 }

@@ -4,7 +4,7 @@
 \alias{related_coef}
 \title{Relatedness Coefficient Calculation}
 \usage{
-related_coef(generations = 2, path = NULL, full = TRUE, ...)
+related_coef(generations = 2, path = NULL, full = TRUE)
 }
 \arguments{
 \item{generations}{Specifies the number of generations back of common ancestors the pair share}
@@ -22,10 +22,4 @@ Relatedness Coefficient Calculation based on Wright (1922)
 \details{
 \eqn{r_{bc} = \sum \left(\frac{1}{2}\right)^{n+n'+1} (1+f_a)}
 where the relatedness coefficient between two people (b & c) is defined in relation to their common ancestors.
-}
-\examples{
-
-
-Specifies the number of generations back of common ancestors the pair share
-Traditional method to count common ancestry, which is 2 times the number of generations removed from common ancestors
 }

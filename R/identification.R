@@ -43,7 +43,7 @@ identifyComponentModel <- function(..., silent=FALSE){
 ##'
 ##' @details
 ##' Returns a regression (linear model fitted with \code{lm}).
-##' The coeficients of the regression are the estimated variance components.
+##' The coefficients of the regression are the estimated variance components.
 fitComponentModel <- function(covmat, ...){
 	dots <- list(...)
 	compl <- lapply(dots, comp2vech, include.zeros=TRUE)
@@ -61,7 +61,7 @@ fitComponentModel <- function(covmat, ...){
 			" are possible with the data given.\n")
 		warning(msg)
 	}
-	lm(y ~ 0 + compm)
+	stats::lm(y ~ 0 + compm)
 }
 
 ##' Create the half-vectorization of a matrix

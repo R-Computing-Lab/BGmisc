@@ -21,7 +21,3 @@ estimated relatedness Coefficient  \code{est_r}
 \description{
 Estimate Relatedness based on Observed Correlation
 }
-\examples{
-
-
-}

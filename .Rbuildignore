@@ -1,2 +1,5 @@
-^BG\.Misc\.Rproj$
+^BGmisc\.Rproj$
 ^\.Rproj\.user$
+^LICENSE\.md$
+^R/\.Rhistory$
+^R/workedexample$

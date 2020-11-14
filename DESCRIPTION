@@ -2,17 +2,18 @@ Package: BGmisc
 Title: Behavior Genetic Modeling Functions
 Version: 0.0.0.9000
 Authors@R: 
-    c(person(given = "S. Mason",
-           family = "Garrison",
-           role = c("aut", "cre"),
-           email = "garrissm@wfu.edu",
-           comment = c(ORCID = "YOUR-ORCID-ID"),
-	person(c("Michael", "D."), "Hunter", role="aut"),
-	person(c("S.", "Alexandra"), "Burt", role="aut"),
-	#JONATHAN IS THE BEST
-	)
+    c(person("S. Mason", "Garrison", email = "garrissm@wfu.edu", role = "aut"),
+    person(c("Michael", "D."), "Hunter", role = "aut"),
+    person(c("S.", "Alexandra"), "Burt", role = "aut"),
+    person(c("Jonathan", "D."), "Trattner", email = "code@jdtrat.com", role = c("aut", "cre"))
+    )
 Description: Functions for behavior genetic modeling, including model identification, calculating relatedness, and various others.
-License: What license it uses
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1.9000
+Imports: 
+    Matrix,
+    stats
+
+
