@@ -1,13 +1,14 @@
 Package: BGmisc
 Title: Behavior Genetic Modeling Functions
-Version: 0.0.0.9000
+Version: 0.1
+Date: 2020-11-15
 Authors@R: 
     c(person("S. Mason", "Garrison", email = "garrissm@wfu.edu", role = "aut"),
     person(c("Michael", "D."), "Hunter", role = "aut"),
     person(c("S.", "Alexandra"), "Burt", role = "aut"),
     person(c("Jonathan", "D."), "Trattner", email = "code@jdtrat.com", role = c("aut", "cre"))
     )
-Description: Functions for behavior genetic modeling, including model identification, calculating relatedness, and various others (e.g., Hunter, Garrison, et al, 2019) <doi:10.1007/s10519-019-09973-8 >. 
+Description: Functions for behavior genetic modeling, including model identification, calculating relatedness, and various others (e.g., Hunter, Garrison, et al, 2019 <doi:10.1007/s10519-019-09973-8>). 
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
