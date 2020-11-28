@@ -9,6 +9,16 @@
 #' @param path A Traditional method to count common ancestry, which is 2 times the number of generations removed from common ancestors
 #' @param full Full or half kin. Do the kin share both parents at the common ancestor's generation?
 #' @return Relatedness Coefficient \code{coef}
+#'
+#' @examples
+#'
+#' # For two full siblings, we would expect a relatedness of 0.5. Using the
+#' default method to count common ancestry, and looking back one generation
+#' (i.e. towards the full siblings' parents), we get a relatedness coefficient
+#' of 0.5:
+#' related_coef(generations = 1, path = NULL, full = TRUE)
+#' # Similarly, for half siblings, we would expect a relatedness coefficient of 0.25:
+#' related_coef(generations = 1, path = NULL, full = FALSE)
 
 related_coef=function(
   generations=2,
@@ -28,13 +38,20 @@ related_coef=function(
 
 #' Estimate Relatedness based on Observed Correlation
 #'
-#'
-#'
 #' @param cor_obs Observed Correlation
 #' @param ace_A proportion of variance attributable to additive genetic variance
-#' @param ace_C proportion of variance attributable to shared environmental variance
-#' @param shared_c proportion of shared environment shared. Typically takes zero or 1.
+#' @param ace_C proportion of variance attributable to shared environmental
+#'   variance
+#' @param shared_c proportion of shared environment shared. Typically takes zero
+#'   or 1.
 #' @return estimated relatedness Coefficient  \code{est_r}
+#'
+#' @examples
+#' # Using the ACE framework, we can estimate the relatedness between two
+#' individuals based on the observed correlation between their additive genetic
+#' variance, shared environmental variance, and proportion of shared environment.
+#'
+#' relatedness(cor_obs = 0.5, ace_a = 0.9, ace_c = 0, shared_c = 0)
 
 relatedness <- function(cor_obs, ace_A=.9,ace_C=0, shared_c=0 ){
 if(ace_A>1|ace_A<0|ace_C>1|ace_C<0){
