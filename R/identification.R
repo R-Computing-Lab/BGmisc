@@ -4,6 +4,7 @@ require(Matrix)
 ##'
 ##' @param ... Comma-separated relatedness component matrices.
 ##' @param silent logical. Whether to print messages about identification.
+##' @export
 ##'
 ##' @details
 ##' Returns of list of length 2. The first element is a single logical value:
@@ -12,6 +13,12 @@ require(Matrix)
 ##' have 5 components with 3 of them identified and 2 of them not.  The second
 ##' list element will give the names of the components that are not
 ##' simultaneously identified.
+##'
+##' @examples
+##'
+##' identifyComponentModel(A=list(matrix(1, 2, 2)), C=list(matrix(1, 2, 2)), E= diag(1, 2))
+##'
+##'
 identifyComponentModel <- function(..., silent=FALSE){
 	dots <- list(...)
 	nam <- names(dots)
@@ -40,10 +47,29 @@ identifyComponentModel <- function(..., silent=FALSE){
 ##'
 ##' @param covmat the covariance matrix of the raw data, possibly blockwise.
 ##' @param ... Comma-separated relatedness component matrices.
+##' @export
 ##'
 ##' @details
 ##' Returns a regression (linear model fitted with \code{lm}).
 ##' The coefficients of the regression are the estimated variance components.
+##'
+##' @examples
+##'
+##' \dontrun{
+##' # install.packages("OpenMX")
+##' data(twinData, package = "OpenMx")
+##' sellVars <- c("ht1", "ht2")
+##' mzData <- subset(twinData, zyg %in% c(1), c(selVars, 'zyg'))
+##' dzData <- subset(twinData, zyg %in% c(3), c(selVars, 'zyg'))
+##'
+##' fitComponentModel(
+##' covmat = list(cov(mzData[,selVars], use = "pair"), cov(dzData[,selVars], use = "pair")),
+##' A = list(matrix(1, nrow = 2, ncol = 2), matrix(c(1, 0.5, 0.5, 1), nrow = 2, ncol = 2)),
+##' C = list(matrix(1, nrow = 2, ncol = 2), matrix(1, nrow = 2, ncol = 2)),
+##' E = list(diag(1, nrow = 2), diag(1, nrow = 2))
+##' )
+##' }
+##'
 fitComponentModel <- function(covmat, ...){
 	dots <- list(...)
 	compl <- lapply(dots, comp2vech, include.zeros=TRUE)
@@ -67,11 +93,17 @@ fitComponentModel <- function(covmat, ...){
 ##' Create the half-vectorization of a matrix
 ##'
 ##' @param x a matrix, the half-vectorization of which is desired
+##' @export
 ##'
 ##' @details
 ##' Returns the vector of the lower triangle of a matrix, including the diagonal.
 ##' The upper triangle is ignored with no checking that the provided matrix
 ##' is symmetric.
+##'
+##' @examples
+##'
+##' vech(matrix(c(1, 0.5, 0.5, 1), nrow = 2, ncol = 2))
+##'
 vech <- function(x){
 	x[lower.tri(x, diag=TRUE)]
 }
@@ -80,11 +112,15 @@ vech <- function(x){
 ##'
 ##' @param x relatedness component matrix
 ##' @param include.zeros logical. Whether to include all-zero rows.
+##' @export
 ##'
 ##' @details
 ##' This is a wrapper around the \code{vech} function for producing the
 ##' half-vectorization of a matrix.  The extension here is to allow for
 ##' blockwise matrices.
+##'
+##' @examples comp2vech(list(matrix(c(1, .5, .5, 1), 2, 2), matrix(1, 2, 2)))
+##'
 comp2vech <- function(x, include.zeros=FALSE){
 	if(is.matrix(x)){
 		return(vech(x))
@@ -103,24 +139,6 @@ comp2vech <- function(x, include.zeros=FALSE){
 	}
 }
 
-##' Compute the null space of a matrix
-##'
-##' @param M a matrix of which the null space is desired
-##'
-##' @details
-##' The method uses the QR factorization to determine a basis for the null
-##' space of a matrix.  This is sometimes also called the orthogonal
-##' complement of a matrix.  As implemented, this function is identical
-##' to the function of the same name in the MASS package.
-Null <- function (M) {
-	tmp <- qr(M)
-	set <- if (tmp$rank == 0L) {
-		seq_len(ncol(M))
-	} else {
-		-seq_len(tmp$rank)
-	}
-	return(qr.Q(tmp, complete = TRUE)[, set, drop = FALSE])
-}
 
 
 

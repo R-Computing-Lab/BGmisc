@@ -11,13 +11,22 @@ relatedness(cor_obs, ace_A = 0.9, ace_C = 0, shared_c = 0)
 
 \item{ace_A}{proportion of variance attributable to additive genetic variance}
 
-\item{ace_C}{proportion of variance attributable to shared environmental variance}
+\item{ace_C}{proportion of variance attributable to shared environmental
+variance}
 
-\item{shared_c}{proportion of shared environment shared. Typically takes zero or 1.}
+\item{shared_c}{proportion of shared environment shared. Typically takes zero
+or 1.}
 }
 \value{
 estimated relatedness Coefficient  \code{est_r}
 }
 \description{
 Estimate Relatedness based on Observed Correlation
+}
+\examples{
+# Using the ACE framework, we can estimate the relatedness between two
+# individuals based on the observed correlation between their additive genetic
+# variance, shared environmental variance, and proportion of shared environment.
+
+relatedness(cor_obs = 0.5, ace_A = 0.9, ace_C = 0, shared_c = 0)
 }

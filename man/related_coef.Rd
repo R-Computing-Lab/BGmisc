@@ -23,3 +23,13 @@ Relatedness Coefficient Calculation based on Wright (1922)
 \eqn{r_{bc} = \sum \left(\frac{1}{2}\right)^{n+n'+1} (1+f_a)}
 where the relatedness coefficient between two people (b & c) is defined in relation to their common ancestors.
 }
+\examples{
+
+# For two full siblings, we would expect a relatedness of 0.5. Using the
+# default method to count common ancestry, and looking back one generation
+# (i.e. towards the full siblings' parents), we get a relatedness coefficient
+# of 0.5:
+related_coef(generations = 1, path = NULL, full = TRUE)
+# Similarly, for half siblings, we would expect a relatedness coefficient of 0.25:
+related_coef(generations = 1, path = NULL, full = FALSE)
+}

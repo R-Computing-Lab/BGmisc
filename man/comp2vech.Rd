@@ -19,3 +19,7 @@ This is a wrapper around the \code{vech} function for producing the
 half-vectorization of a matrix.  The extension here is to allow for
 blockwise matrices.
 }
+\examples{
+comp2vech(list(matrix(c(1, .5, .5, 1), 2, 2), matrix(1, 2, 2)))
+
+}

@@ -22,3 +22,9 @@ have 5 components with 3 of them identified and 2 of them not.  The second
 list element will give the names of the components that are not
 simultaneously identified.
 }
+\examples{
+
+identifyComponentModel(A=list(matrix(1, 2, 2)), C=list(matrix(1, 2, 2)), E= diag(1, 2))
+
+
+}

@@ -20,7 +20,7 @@ rmvn <- function(n,sigma) {
   matrix(stats::rnorm(ncol(sigma)*n),ncol=ncol(sigma))%*%Sh
 }
 
-#' nullToNA 
+#' nullToNA
 #' @keywords internal
 #' @param x vector of any length
 #' @return replaces null values in a vector to NA
@@ -38,6 +38,26 @@ nullToNA <- function(x) {
 #'
 #' @param x vector of any length
 #' @keywords internal
-#' @return Fuses the nullToNA function with efunc 
+#' @return Fuses the nullToNA function with efunc
 
 try_na=function(x){nullToNA(tryCatch(x, error = efunc))}
+
+##' Compute the null space of a matrix
+##'
+##' @param M a matrix of which the null space is desired
+##' @keywords internal
+##'
+##' @details
+##' The method uses the QR factorization to determine a basis for the null
+##' space of a matrix.  This is sometimes also called the orthogonal
+##' complement of a matrix.  As implemented, this function is identical
+##' to the function of the same name in the MASS package.
+Null <- function (M) {
+  tmp <- qr(M)
+  set <- if (tmp$rank == 0L) {
+    seq_len(ncol(M))
+  } else {
+    -seq_len(tmp$rank)
+  }
+  return(qr.Q(tmp, complete = TRUE)[, set, drop = FALSE])
+}
