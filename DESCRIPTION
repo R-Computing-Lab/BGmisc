@@ -3,10 +3,10 @@ Title: Behavior Genetic Modeling Functions
 Version: 0.1
 Date: 2020-11-15
 Authors@R: 
-    c(person("S. Mason", "Garrison", email = "garrissm@wfu.edu", role = "aut"),
+    c(person("S. Mason", "Garrison", email = "garrissm@wfu.edu", role = c("aut", "cre")),
     person(c("Michael", "D."), "Hunter", role = "aut"),
     person(c("S.", "Alexandra"), "Burt", role = "aut"),
-    person(c("Jonathan", "D."), "Trattner", email = "code@jdtrat.com", role = c("aut", "cre"))
+    person(c("Jonathan", "D."), "Trattner", role = "aut")
     )
 Description: Functions for behavior genetic modeling, including model identification, calculating relatedness, and various others (e.g., Hunter, Garrison, et al, 2019 <doi:10.1007/s10519-019-09973-8>). 
 License: GPL-3
