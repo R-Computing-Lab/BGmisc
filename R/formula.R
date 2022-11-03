@@ -26,15 +26,33 @@ related_coef=function(
 # Specifies the number of generations back of common ancestors the pair share
   path=NULL,
 # Traditional method to count common ancestry, which is 2 times the number of generations removed from common ancestors
-  full=TRUE){
+  full=TRUE,
+  maternal=FALSE,
+  empirical=FALSE, # adjust proportion
+  segregating=TRUE, # adjust for segregating genes
+  total_a=6800*1000000,
+  total_m=16500,
+  weight_a=1,   # weight phenotypic influence
+  weight_m=1,   # weight phenotypic influence
+  denom_m=FALSE,
+  ...)){
   if(is.null(path)){
     path=generations*2
   }
   coef=.5^path
   if(full){
     coef=coef*2
+  } if(!segregating){  
+  coef=coef*.01+.99
+}
+
+if(empirical){
+    return(
+      (coef*total_a*weight_a+maternal*total_m*weight_m)/(denom_m*total_m*weight_m+total_a*weight_a)
+    )
+}else{
+  return(coef)
   }
-    return(coef)
 }
 
 #' Estimate Relatedness based on Observed Correlation
