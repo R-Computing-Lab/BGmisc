@@ -11,7 +11,6 @@
 #' @export
 #' 
 ped2com <- function(ped, component, max.gen=Inf, sparse=FALSE, verbose=FALSE, gc=FALSE){
-    #' @param gen.only logical  If true, only computes and returns the "generation" of each ID
     component <- match.arg(tolower(component), choices=c('generation', 'additive', 'common nuclear', 'mitochondrial'))
     nr <- nrow(ped)
     if(verbose){cat(paste0('Family Size = ', nr, '\n'))}
@@ -59,6 +58,11 @@ ped2com <- function(ped, component, max.gen=Inf, sparse=FALSE, verbose=FALSE, gc
     isPar <- Matrix::sparseMatrix(i=iss, j=jss, x=parVal, dims=c(nr, nr), dimnames=list(ped$ID, ped$ID))
     if(verbose){cat('Completed first degree relatives (adjacency)\n')}
     # isPar is the adjacency matrix.  'A' matrix from RAM
+    if(component %in% c('common nuclear')){
+        Matrix::diag(isPar) <- 1
+        if(!sparse){ isPar <- as.matrix(isPar) }
+        return(isPar)
+    }
     isChild <- apply(ped[,c('momID', 'dadID')], 1, function(x){2^(-!all(is.na(x)))})
     # isChild is the 'S' matrix from RAM
     r <- Matrix::Diagonal(x=1, n=nr)
@@ -70,7 +74,7 @@ ped2com <- function(ped, component, max.gen=Inf, sparse=FALSE, verbose=FALSE, gc
     # r is I + A + A^2 + ... = (I-A)^-1 from RAM
     while(mtSum != 0 & count < maxCount){
         r <- r + newIsPar
-        gen <- gen + (rowSums(newIsPar) > 0)
+        gen <- gen + (Matrix::rowSums(newIsPar) > 0)
         newIsPar <- newIsPar %*% isPar
         mtSum <- sum(newIsPar)
         count <- count + 1
@@ -82,12 +86,12 @@ ped2com <- function(ped, component, max.gen=Inf, sparse=FALSE, verbose=FALSE, gc
     if(gc){ rm(isPar, newIsPar) }
     if(gc){ gc() }
     if(verbose){cat('Doing I-A inverse times diagonal multiplication\n')}
-    r2 <- r %*% Diagonal(x=sqrt(isChild), n=nr)
+    r2 <- r %*% Matrix::Diagonal(x=sqrt(isChild), n=nr)
     if(gc){ rm(r, isChild) }
     if(gc){ gc() }
     if(verbose){cat('Doing tcrossprod\n')}
-    r <- tcrossprod(r2)
-    if(component == generation){
+    r <- Matrix::tcrossprod(r2)
+    if(component == 'generation'){
         return(gen)
     } else {
         if(!sparse){ r <- as.matrix(r) }
