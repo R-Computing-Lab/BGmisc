@@ -2,22 +2,54 @@
 % Please edit documentation in R/formula.R
 \name{related_coef}
 \alias{related_coef}
-\title{Relatedness Coefficient Calculation}
+\title{Function to calculate relatedness coefficient}
 \usage{
-related_coef(generations = 2, path = NULL, full = TRUE)
+related_coef(
+  generations = 2,
+  path = NULL,
+  full = TRUE,
+  maternal = FALSE,
+  empirical = FALSE,
+  segregating = TRUE,
+  total_a = 6800 * 1e+06,
+  total_m = 16500,
+  weight_a = 1,
+  weight_m = 1,
+  denom_m = FALSE,
+  ...
+)
 }
 \arguments{
-\item{generations}{Specifies the number of generations back of common ancestors the pair share}
+\item{generations}{The number of generations back of common ancestors the pair share}
 
-\item{path}{A Traditional method to count common ancestry, which is 2 times the number of generations removed from common ancestors}
+\item{path}{The traditional method to count common ancestry, which is twice the number of generations removed from common ancestors.
+If path is not provided, it is calculated as 2*generations.}
 
-\item{full}{Full or half kin. Do the kin share both parents at the common ancestor's generation?}
+\item{full}{Logical parameter indicating whether the kin share both parents at the common ancestor's generation.  Default is TRUE.}
+
+\item{maternal}{logical.  Does something.}
+
+\item{empirical}{logical.  Adjusts proportion?}
+
+\item{segregating}{logical.  Whether to adjust for segregating genes}
+
+\item{total_a}{numeric.  Does something.}
+
+\item{total_m}{numeric.  Does something.}
+
+\item{weight_a}{numeric.  weight phenotypic influence}
+
+\item{weight_m}{numeric.  weight phenotypic influence}
+
+\item{denom_m}{loogical}
+
+\item{...}{further named arguments passed to ... something?}
 }
 \value{
-Relatedness Coefficient \code{coef}
+Relatedness Coefficient, a measure of the genetic relationship between two individuals.= \code{coef}
 }
 \description{
-Relatedness Coefficient Calculation based on Wright (1922)
+This function calculates the relatedness coefficient between two individuals based on their shared ancestry. It is based on Wright (1922)
 }
 \details{
 \eqn{r_{bc} = \sum \left(\frac{1}{2}\right)^{n+n'+1} (1+f_a)}
@@ -32,4 +64,5 @@ where the relatedness coefficient between two people (b & c) is defined in relat
 related_coef(generations = 1, path = NULL, full = TRUE)
 # Similarly, for half siblings, we would expect a relatedness coefficient of 0.25:
 related_coef(generations = 1, path = NULL, full = FALSE)
+
 }

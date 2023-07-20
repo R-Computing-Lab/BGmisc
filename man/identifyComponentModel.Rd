@@ -26,5 +26,4 @@ simultaneously identified.
 
 identifyComponentModel(A=list(matrix(1, 2, 2)), C=list(matrix(1, 2, 2)), E= diag(1, 2))
 
-
 }
