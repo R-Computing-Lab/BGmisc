@@ -34,7 +34,7 @@
 #' 
 related_coef <- function(generations=2, path=NULL, full=TRUE, maternal=FALSE,
   empirical=FALSE, segregating=TRUE, total_a=6800*1000000, total_m=16500,
-  weight_a=1, weight_m=1, denom_m=FALSE, ...)){
+  weight_a=1, weight_m=1, denom_m=FALSE, ...){
 	
   # If path is not provided, it is calculated as twice the number of generations
   if(is.null(path)){
