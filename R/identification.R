@@ -1,5 +1,3 @@
-require(Matrix)
-
 #' Determine if a variance components model is identified
 #'
 #' @param ... Comma-separated relatedness component matrices.
