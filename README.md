@@ -12,3 +12,6 @@ The latest version of BGmisc can be installed from GitHub using the following co
 # install.packages("devtools")
 devtools::install_github("R-Computing-Lab/BGmisc")
 ```
+
+## Contributing
+Contributions to the BGmisc project are welcome. Please submit issues and pull requests on the GitHub repository. For support, please use the GitHub issues page.
