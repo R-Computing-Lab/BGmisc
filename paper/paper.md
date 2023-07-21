@@ -1,5 +1,5 @@
 ---
-title: 'BGmisc: Snappy SUBTITLE'
+title: 'BGmisc: An R Package for Behavior Genetics Analysis'
 tags:
   - R
   - pedigrees
