@@ -47,6 +47,14 @@ Aside from toy problems and demonstrations, the majority of problems require
 efficient numerical tools, many of which require the same base code (e.g., for
 performing numerical orbit integration).
 -->
+# Features
+- Provides behavior genetic miscellaneous functions for modeling and analysis.
+- Calculates the relatedness coefficient between two individuals based on their shared ancestry.
+- Estimates the relatedness between two individuals based on the observed correlation between their additive genetic variance and shared environmental variance.
+- Determines if a variance components model is identified and fits the estimated variance components of a model to covariance data.
+- Converts a pedigree into various types of relatedness matrices, including additive genetics, mitochondrial, common nuclear, and extended environmental relatedness matrices.
+
+## Limitations
 
 # Statement of need
 
@@ -72,7 +80,6 @@ scientific explorations of forthcoming data releases from the *Gaia* mission
 [@gaia] by students and experts alike.
 
 -->
-# Citations
 
 # Acknowledgements
 <!--
