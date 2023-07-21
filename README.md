@@ -13,5 +13,13 @@ The latest version of BGmisc can be installed from GitHub using the following co
 devtools::install_github("R-Computing-Lab/BGmisc")
 ```
 
+## Dependencies
+This package depends on the following R packages:
+- [Add dependencies here]
+
+
 ## Contributing
 Contributions to the BGmisc project are welcome. Please submit issues and pull requests on the GitHub repository. For support, please use the GitHub issues page.
+
+## License
+BGmisc is licensed under the GNU General Public License v3.0. For more details, see the [LICENSE.md](https://github.com/R-Computing-Lab/BGmisc/blob/main/LICENSE.md) file.
