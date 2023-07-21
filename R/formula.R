@@ -16,7 +16,7 @@
 #' @param total_m numeric.  Does something.
 #' @param weight_a numeric.  weight phenotypic influence
 #' @param weight_m numeric.  weight phenotypic influence
-#' @param denom_m loogical
+#' @param denom_m logical
 #' @param ... further named arguments passed to ... something?
 #' 
 #' @return Relatedness Coefficient, a measure of the genetic relationship between two individuals.= \code{coef}
