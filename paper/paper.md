@@ -8,6 +8,15 @@ authors:
   - name: S. Mason Garrison
     orcid: 0000-0000-0000-0000
     affiliation: 1
+  - name: Michael D. Hunter
+    orcid: 0000-0000-0000-0000
+    affiliation: 1
+  - name: Xuanyu Lyu
+    orcid: 0000-0000-0000-0000
+    affiliation: 1
+  - name: S. Alexandra Burt
+    orcid: 0000-0000-0000-0000
+    affiliation: 1
 affiliations:
  - name: University, Place, USA
    index: 1
@@ -56,7 +65,6 @@ scientific explorations of forthcoming data releases from the *Gaia* mission
 
 # Acknowledgements
 <!--
-We acknowledge contributions from Brigitta Sipocz, Syrtis Major, and Semyeong
-Oh, and support from Kathryn Johnston during the genesis of this project.
+We acknowledge contributions from Jonathan D. Trattner.
 -->
 # References
