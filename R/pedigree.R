@@ -91,6 +91,7 @@ ped2com <- function(ped, component, max.gen=Inf, sparse=FALSE, verbose=FALSE, gc
     if(gc){ gc() }
     if(verbose){cat('Doing tcrossprod\n')}
     r <- Matrix::tcrossprod(r2)
+    # TODO for mitochondrial component, set all nonzero values to 1
     if(component == 'generation'){
         return(gen)
     } else {
