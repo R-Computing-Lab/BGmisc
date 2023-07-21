@@ -15,7 +15,8 @@ devtools::install_github("R-Computing-Lab/BGmisc")
 
 ## Dependencies
 This package depends on the following R packages:
-- [Add dependencies here]
+- Matrix
+- stats
 
 
 ## Contributing
