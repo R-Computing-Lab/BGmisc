@@ -9,7 +9,7 @@ authors:
     orcid: 0000-0000-0000-0000
     affiliation: 1
   - name: Michael D. Hunter
-    orcid: 0000-0000-0000-0000
+    orcid: 0000-0002-3651-6709
     affiliation: 1
   - name: Xuanyu Lyu
     orcid: 0000-0000-0000-0000
