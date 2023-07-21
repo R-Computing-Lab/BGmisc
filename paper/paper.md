@@ -1,5 +1,5 @@
 ---
-title: 'TITLE'
+title: 'BGmisc: Snappy SUBTITLE'
 tags:
   - R
   - pedigrees
@@ -24,9 +24,19 @@ date: 07/21/2023
 bibliography: paper.bib
 
 ---
+<!--Guidance 
+JOSS welcomes submissions from broadly diverse research areas. For this reason, we require that authors include in the paper some sentences that explain the software functionality and domain of use to a non-specialist reader. We also require that authors explain the research applications of the software. The paper should be between 250-1000 words. Authors submitting papers significantly longer than 1000 words may be asked to reduce the length of their paper.
+Your paper should include:
 
+A list of the authors of the software and their affiliations, using the correct format (see the example below).
+A summary describing the high-level functionality and purpose of the software for a diverse, non-specialist audience.
+A Statement of need section that clearly illustrates the research purpose of the software and places it in the context of related work.
+A list of key references, including to other software addressing related needs. Note that the references should include full names of venues, e.g., journals and conferences, not abbreviations only understood in the context of a specific discipline.
+Mention (if applicable) a representative set of past or ongoing research projects using the software and recent scholarly publications enabled by it.
+Acknowledgment of any financial support.
+-->
 # Summary
-<!--
+<!-- example from template
 The forces on stars, galaxies, and dark matter under external gravitational
 fields lead to the dynamical evolution of structures in the universe. The orbits
 of these bodies are therefore key to understanding the formation, history, and
@@ -39,7 +49,8 @@ performing numerical orbit integration).
 -->
 
 # Statement of need
-<!--
+
+<!-- example from template
 `Gala` is an Astropy-affiliated Python package for galactic dynamics. Python
 enables wrapping low-level languages (e.g., C) for speed without losing
 flexibility or ease-of-use in the user-interface. The API for `Gala` was
@@ -65,6 +76,6 @@ scientific explorations of forthcoming data releases from the *Gaia* mission
 
 # Acknowledgements
 <!--
-We acknowledge contributions from Jonathan D. Trattner.
+We acknowledge contributions from Jonathan D. Trattner, ....
 -->
 # References
