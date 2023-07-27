@@ -41,7 +41,7 @@ If path is not provided, it is calculated as 2*generations.}
 
 \item{weight_m}{numeric.  weight phenotypic influence}
 
-\item{denom_m}{loogical}
+\item{denom_m}{logical}
 
 \item{...}{further named arguments passed to ... something?}
 }
