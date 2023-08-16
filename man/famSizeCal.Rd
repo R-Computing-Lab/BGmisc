@@ -2,22 +2,22 @@
 % Please edit documentation in R/famSizeCal.R
 \name{famSizeCal}
 \alias{famSizeCal}
-\title{allGens
+\title{famSizeCal
 A function to calculate the total number of individuals in a pedigree given parameters. This is a supporting function for function \code{SimPed}}
 \usage{
 famSizeCal(kpc, Ngen, marR)
 }
 \arguments{
-\item{kpc}{kids per couple}
+\item{kpc}{Number of kids per couple (integer >= 2).}
 
-\item{Ngen}{number of generations}
+\item{Ngen}{Number of generations (integer >= 1).}
 
-\item{marR}{Mating rate.}
+\item{marR}{Mating rate (numeric value ranging from 0 to 1).}
 }
 \value{
-Returns a numeric value indicating the pedigree size.
+Returns a numeric value indicating the total pedigree size.
 }
 \description{
-allGens
+famSizeCal
 A function to calculate the total number of individuals in a pedigree given parameters. This is a supporting function for function \code{SimPed}
 }

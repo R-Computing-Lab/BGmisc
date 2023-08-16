@@ -27,26 +27,26 @@ If path is not provided, it is calculated as 2*generations.}
 
 \item{full}{Logical parameter indicating whether the kin share both parents at the common ancestor's generation.  Default is TRUE.}
 
-\item{maternal}{logical.  Does something.}
+\item{maternal}{Logical parameter indicating whether the maternal lineage should be considered in the calculation.}
 
-\item{empirical}{logical.  Adjusts proportion?}
+\item{empirical}{Logical parameter to adjust the coefficient based on empirical data, using the total number of nucleotides and other parameters.}
 
-\item{segregating}{logical.  Whether to adjust for segregating genes}
+\item{segregating}{Logical parameter indicating whether to adjust for segregating genes.}
 
-\item{total_a}{numeric.  Does something.}
+\item{total_a}{Numeric parameter representing the total size of the autosomal genome in terms of nucleotides, used in empirical adjustment. Default is 6800*1000000, indicating the genome size.}
 
-\item{total_m}{numeric.  Does something.}
+\item{total_m}{Numeric parameter representing the total size of the mitochondrial genome in terms of nucleotides, used in empirical adjustment. Default is 16500, indicating the genome size.}
 
-\item{weight_a}{numeric.  weight phenotypic influence}
+\item{weight_a}{Numeric parameter representing the weight of phenotypic influence from additive genetic variance, used in empirical adjustment.}
 
-\item{weight_m}{numeric.  weight phenotypic influence}
+\item{weight_m}{Numeric parameter representing the weight of phenotypic influence from mitochondrial effects, used in empirical adjustment.}
 
-\item{denom_m}{logical}
+\item{denom_m}{Logical parameter indicating whether to include `total_m` and `weight_m` in the denominator of the empirical adjustment calculation.}
 
-\item{...}{further named arguments passed to ... something?}
+\item{...}{Further named arguments that may be passed to another}
 }
 \value{
-Relatedness Coefficient, a measure of the genetic relationship between two individuals.= \code{coef}
+Relatedness Coefficient, a measure of the genetic relationship between two individuals, returned as \code{coef}.
 }
 \description{
 This function calculates the relatedness coefficient between two individuals based on their shared ancestry. It is based on Wright (1922)

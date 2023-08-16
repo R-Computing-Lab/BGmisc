@@ -3,19 +3,27 @@
 \name{evenInsert}
 \alias{evenInsert}
 \title{evenInsert
-A function to insert m elements in a length n vector evenly. This is a supporting function for function \code{SimPed}}
+A function to insert m elements evenly into a length n vector.}
 \usage{
 evenInsert(m, n)
 }
 \arguments{
-\item{m}{a vector}
+\item{m}{A numeric vector of length less than or equal to n. The elements to be inserted.}
 
-\item{n}{a vector}
+\item{n}{A numeric vector. The vector into which the elements of m will be inserted.}
 }
 \value{
-Returns the inserted vector.
+Returns a numeric vector with the elements of m evenly inserted into n.
 }
 \description{
 evenInsert
-A function to insert m elements in a length n vector evenly. This is a supporting function for function \code{SimPed}
+A function to insert m elements evenly into a length n vector.
+}
+\details{
+The function takes two vectors, m and n, and inserts the elements of m evenly into n.
+If the length of m is greater than the length of n, the vectors are swapped, and the insertion proceeds.
+The resulting vector is a combination of m and n, with the elements of m evenly distributed within n.
+}
+\seealso{
+\code{\link{SimPed}} for the main function that uses this supporting function.
 }

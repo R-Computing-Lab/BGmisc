@@ -1,27 +1,33 @@
+#' identifyComponentModel
 #' Determine if a variance components model is identified
 #'
-#' @param ... Comma-separated relatedness component matrices.
-#' @param silent logical. Whether to print messages about identification.
+#' @param ... Comma-separated relatedness component matrices representing the variance components of the model.
+#' @param silent logical. If TRUE, suppresses messages about identification; FALSE by default.
+#' @return A list of length 2 containing:
+#'   \itemize{
+#'     \item \code{identified}: TRUE if the model is identified, FALSE otherwise.
+#'     \item \code{nidp}: A vector of non-identified parameters, specifying the names of components that are not simultaneously identified.
+#'   }
+#'
 #' @export
 #'
 #' @details
-#' Returns of list of length 2. The first element is a single logical value:
-#' TRUE if the model is identified, FALSE otherwise. The second list element
-#' is the vector of non-identified parameters.  For instance, a model might
-#' have 5 components with 3 of them identified and 2 of them not.  The second
-#' list element will give the names of the components that are not
-#' simultaneously identified.
+#' This function checks the identification status of a given variance components model
+#' by examining the rank of the concatenated matrices of the components.
+#' If any components are not identified, their names are returned in the output.
 #'
 #' @examples
 #'
 #' identifyComponentModel(A=list(matrix(1, 2, 2)), C=list(matrix(1, 2, 2)), E= diag(1, 2))
 #'
 identifyComponentModel <- function(..., silent=FALSE){
+  # Collect the relatedness components
 	dots <- list(...)
 	nam <- names(dots)
 	if(is.null(nam)){
 		nam <- paste0('Comp', 1:length(dots))
 	}
+	# Convert components to vectorized form
 	compl <- lapply(dots, comp2vech, include.zeros=TRUE)
 	compm <- do.call(cbind, compl)
 	rank <- qr(compm)$rank
@@ -40,15 +46,18 @@ identifyComponentModel <- function(..., silent=FALSE){
 	}
 }
 
+#' fitComponentModel
 #' Fit the estimated variance components of a model to covariance data
 #'
-#' @param covmat the covariance matrix of the raw data, possibly blockwise.
-#' @param ... Comma-separated relatedness component matrices.
+#' @param covmat The covariance matrix of the raw data, which may be blockwise.
+#' @param ... Comma-separated relatedness component matrices representing the variance components of the model.
+#' @return A regression (linear model fitted with \code{lm}). The coefficients of the regression represent the estimated variance components.
 #' @export
 #'
 #' @details
-#' Returns a regression (linear model fitted with \code{lm}).
-#' The coefficients of the regression are the estimated variance components.
+#' This function fits the estimated variance components of a model to given covariance data.
+#' The rank of the component matrices is checked to ensure that the variance components are all identified.
+#' Warnings are issued if there are inconsistencies.
 #'
 #' @examples
 #'
@@ -87,15 +96,16 @@ fitComponentModel <- function(covmat, ...){
 	stats::lm(y ~ 0 + compm)
 }
 
+#' vech
 #' Create the half-vectorization of a matrix
 #'
 #' @param x a matrix, the half-vectorization of which is desired
+#' @return A vector containing the lower triangle of the matrix, including the diagonal.
 #' @export
 #'
 #' @details
-#' Returns the vector of the lower triangle of a matrix, including the diagonal.
-#' The upper triangle is ignored with no checking that the provided matrix
-#' is symmetric.
+#' This function returns the vectorized form of the lower triangle of a matrix, including the diagonal.
+#' The upper triangle is ignored with no checking that the provided matrix is symmetric.
 #'
 #' @examples
 #'
@@ -105,16 +115,16 @@ vech <- function(x){
 	x[lower.tri(x, diag=TRUE)]
 }
 
+#' comp2vech
 #' Turn a variance component relatedness matrix into its half-vectorization
 #'
-#' @param x relatedness component matrix
-#' @param include.zeros logical. Whether to include all-zero rows.
+#' @param x Relatedness component matrix (can be a matrix, list, or object that inherits from 'Matrix').
+#' @param include.zeros logical. Whether to include all-zero rows. Default is FALSE.
 #' @export
-#'
+#' @return The half-vectorization of the relatedness component matrix.
 #' @details
-#' This is a wrapper around the \code{vech} function for producing the
-#' half-vectorization of a matrix.  The extension here is to allow for
-#' blockwise matrices.
+#' This function is a wrapper around the \code{vech} function, extending it to allow for blockwise matrices and specific classes.
+#' It facilitates the conversion of a variance component relatedness matrix into a half-vectorized form.
 #'
 #' @examples comp2vech(list(matrix(c(1, .5, .5, 1), 2, 2), matrix(1, 2, 2)))
 #'

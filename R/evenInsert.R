@@ -1,9 +1,16 @@
 #' evenInsert
-#' A function to insert m elements in a length n vector evenly. This is a supporting function for function \code{SimPed}
-#' @param m a vector
-#' @param n a vector
-#' @return Returns the inserted vector.
+#' A function to insert m elements evenly into a length n vector.
+#'
+#' @param m A numeric vector of length less than or equal to n. The elements to be inserted.
+#' @param n A numeric vector. The vector into which the elements of m will be inserted.
+#' @return Returns a numeric vector with the elements of m evenly inserted into n.
+#' @details
+#' The function takes two vectors, m and n, and inserts the elements of m evenly into n.
+#' If the length of m is greater than the length of n, the vectors are swapped, and the insertion proceeds.
+#' The resulting vector is a combination of m and n, with the elements of m evenly distributed within n.
 #' @export
+#' @seealso \code{\link{SimPed}} for the main function that uses this supporting function.
+
 evenInsert <- function(m,n){
       if (length(m) > length(n)){
             temp <- m

@@ -2,20 +2,24 @@
 % Please edit documentation in R/identification.R
 \name{vech}
 \alias{vech}
-\title{Create the half-vectorization of a matrix}
+\title{vech
+Create the half-vectorization of a matrix}
 \usage{
 vech(x)
 }
 \arguments{
 \item{x}{a matrix, the half-vectorization of which is desired}
 }
+\value{
+A vector containing the lower triangle of the matrix, including the diagonal.
+}
 \description{
+vech
 Create the half-vectorization of a matrix
 }
 \details{
-Returns the vector of the lower triangle of a matrix, including the diagonal.
-The upper triangle is ignored with no checking that the provided matrix
-is symmetric.
+This function returns the vectorized form of the lower triangle of a matrix, including the diagonal.
+The upper triangle is ignored with no checking that the provided matrix is symmetric.
 }
 \examples{
 

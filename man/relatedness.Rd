@@ -2,27 +2,27 @@
 % Please edit documentation in R/formula.R
 \name{relatedness}
 \alias{relatedness}
-\title{Function to estimate relatedness based on the observed correlation}
+\title{Calculate Relatedness Coefficient}
 \usage{
 relatedness(cor_obs, ace_A = 0.9, ace_C = 0, shared_C = 0)
 }
 \arguments{
-\item{cor_obs}{Observed Correlation}
+\item{cor_obs}{Numeric. Observed correlation between the two groups Must be a value between -1 and 1.}
 
-\item{ace_A}{proportion of variance attributable to additive genetic variance}
+\item{ace_A}{Numeric. Proportion of variance attributable to additive genetic variance. Must be a value between 0 and 1. Default is 0.9.}
 
-\item{ace_C}{proportion of variance attributable to shared environmental variance}
+\item{ace_C}{Numeric. Proportion of variance attributable to shared environmental variance. Must be a value between 0 and 1. Default is 0.}
 
-\item{shared_C}{proportion of shared environment shared. Typically takes 0 or 1.}
+\item{shared_C}{Numeric. Proportion of shared environment shared between the two individuals. Must be a value between 0 and 1. Default is 0.}
 }
 \value{
-estimated relatedness Coefficient  \code{est_r}
+Numeric. Calculated relatedness coefficient `est_r`.
 }
 \description{
-This function estimates the relatedness between two individuals based on the observed correlation between their additive genetic variance and shared environmental variance.
+This function calculates the relatedness coefficient between two groups based on the observed correlation between their additive genetic variance and shared environmental variance.
 }
 \examples{
-# Using the ACE framework, we can estimate the relatedness between two
+# Using the ACE framework, we can calculate the relatedness between two
 # individuals based on the observed correlation between their additive genetic
 # variance, shared environmental variance, and proportion of shared environment.
 

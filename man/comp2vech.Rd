@@ -2,22 +2,26 @@
 % Please edit documentation in R/identification.R
 \name{comp2vech}
 \alias{comp2vech}
-\title{Turn a variance component relatedness matrix into its half-vectorization}
+\title{comp2vech
+Turn a variance component relatedness matrix into its half-vectorization}
 \usage{
 comp2vech(x, include.zeros = FALSE)
 }
 \arguments{
-\item{x}{relatedness component matrix}
+\item{x}{Relatedness component matrix (can be a matrix, list, or object that inherits from 'Matrix').}
 
-\item{include.zeros}{logical. Whether to include all-zero rows.}
+\item{include.zeros}{logical. Whether to include all-zero rows. Default is FALSE.}
+}
+\value{
+The half-vectorization of the relatedness component matrix.
 }
 \description{
+comp2vech
 Turn a variance component relatedness matrix into its half-vectorization
 }
 \details{
-This is a wrapper around the \code{vech} function for producing the
-half-vectorization of a matrix.  The extension here is to allow for
-blockwise matrices.
+This function is a wrapper around the \code{vech} function, extending it to allow for blockwise matrices and specific classes.
+It facilitates the conversion of a variance component relatedness matrix into a half-vectorized form.
 }
 \examples{
 comp2vech(list(matrix(c(1, .5, .5, 1), 2, 2), matrix(1, 2, 2)))

@@ -3,21 +3,21 @@
 \name{allGens}
 \alias{allGens}
 \title{allGens
-A function to return a vector for number of individuals in each generation. This is a supporting function for function \code{SimPed}}
+A function to calculate the number of individuals in each generation. This is a supporting function for \code{SimPed}.}
 \usage{
 allGens(kpc, Ngen, marR)
 }
 \arguments{
-\item{kpc}{kids per couple}
+\item{kpc}{Number of kids per couple (integer >= 2).}
 
-\item{Ngen}{number of generations}
+\item{Ngen}{Number of generations (integer >= 1).}
 
-\item{marR}{Mating rate.}
+\item{marR}{Mating rate (numeric value ranging from 0 to 1).}
 }
 \value{
-Returns a vector including the number of individuals in every generation.
+Returns a vector containing the number of individuals in every generation.
 }
 \description{
 allGens
-A function to return a vector for number of individuals in each generation. This is a supporting function for function \code{SimPed}
+A function to calculate the number of individuals in each generation. This is a supporting function for \code{SimPed}.
 }

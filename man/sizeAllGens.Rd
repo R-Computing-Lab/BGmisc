@@ -3,21 +3,21 @@
 \name{sizeAllGens}
 \alias{sizeAllGens}
 \title{sizeAllGens
-An internal supporting function for function \code{allGens}}
+An internal supporting function for \code{SimPed}.}
 \usage{
 sizeAllGens(kpc, Ngen, marR)
 }
 \arguments{
-\item{kpc}{kids per couple}
+\item{kpc}{Number of kids per couple (integer >= 2).}
 
-\item{Ngen}{number of generations}
+\item{Ngen}{Number of generations (integer >= 1).}
 
-\item{marR}{Mating rate.}
+\item{marR}{Mating rate (numeric value ranging from 0 to 1).}
 }
 \value{
 Returns a vector including the number of individuals in every generation.
 }
 \description{
 sizeAllGens
-An internal supporting function for function \code{allGens}
+An internal supporting function for \code{SimPed}.
 }

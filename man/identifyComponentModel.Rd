@@ -2,25 +2,31 @@
 % Please edit documentation in R/identification.R
 \name{identifyComponentModel}
 \alias{identifyComponentModel}
-\title{Determine if a variance components model is identified}
+\title{identifyComponentModel
+Determine if a variance components model is identified}
 \usage{
 identifyComponentModel(..., silent = FALSE)
 }
 \arguments{
-\item{...}{Comma-separated relatedness component matrices.}
+\item{...}{Comma-separated relatedness component matrices representing the variance components of the model.}
 
-\item{silent}{logical. Whether to print messages about identification.}
+\item{silent}{logical. If TRUE, suppresses messages about identification; FALSE by default.}
+}
+\value{
+A list of length 2 containing:
+  \itemize{
+    \item \code{identified}: TRUE if the model is identified, FALSE otherwise.
+    \item \code{nidp}: A vector of non-identified parameters, specifying the names of components that are not simultaneously identified.
+  }
 }
 \description{
+identifyComponentModel
 Determine if a variance components model is identified
 }
 \details{
-Returns of list of length 2. The first element is a single logical value:
-TRUE if the model is identified, FALSE otherwise. The second list element
-is the vector of non-identified parameters.  For instance, a model might
-have 5 components with 3 of them identified and 2 of them not.  The second
-list element will give the names of the components that are not
-simultaneously identified.
+This function checks the identification status of a given variance components model
+by examining the rank of the concatenated matrices of the components.
+If any components are not identified, their names are returned in the output.
 }
 \examples{
 

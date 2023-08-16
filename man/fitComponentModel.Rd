@@ -2,21 +2,27 @@
 % Please edit documentation in R/identification.R
 \name{fitComponentModel}
 \alias{fitComponentModel}
-\title{Fit the estimated variance components of a model to covariance data}
+\title{fitComponentModel
+Fit the estimated variance components of a model to covariance data}
 \usage{
 fitComponentModel(covmat, ...)
 }
 \arguments{
-\item{covmat}{the covariance matrix of the raw data, possibly blockwise.}
+\item{covmat}{The covariance matrix of the raw data, which may be blockwise.}
 
-\item{...}{Comma-separated relatedness component matrices.}
+\item{...}{Comma-separated relatedness component matrices representing the variance components of the model.}
+}
+\value{
+A regression (linear model fitted with \code{lm}). The coefficients of the regression represent the estimated variance components.
 }
 \description{
+fitComponentModel
 Fit the estimated variance components of a model to covariance data
 }
 \details{
-Returns a regression (linear model fitted with \code{lm}).
-The coefficients of the regression are the estimated variance components.
+This function fits the estimated variance components of a model to given covariance data.
+The rank of the component matrices is checked to ensure that the variance components are all identified.
+Warnings are issued if there are inconsistencies.
 }
 \examples{
 
