@@ -53,11 +53,13 @@ performing numerical orbit integration).
 - Estimates the relatedness between two individuals based on the observed correlation between their additive genetic variance and shared environmental variance.
 - Determines if a variance components model is identified and fits the estimated variance components of a model to covariance data.
 - Converts a pedigree into various types of relatedness matrices, including additive genetics, mitochondrial, common nuclear, and extended environmental relatedness matrices.
+- Simulates pedigrees based on parameters like the number of children per couple, the number of generations, the sex ratio of offspring, and birth rate. 
 
 ## Limitations
 
 # Statement of need
 
+`BGmisc` is an R package for <non-twin data, and a grab bag of behavior genetic functions>
 <!-- example from template
 `Gala` is an Astropy-affiliated Python package for galactic dynamics. Python
 enables wrapping low-level languages (e.g., C) for speed without losing
