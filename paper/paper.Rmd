@@ -71,18 +71,18 @@ The field of behavior genetics seeks to understand the genetic and environmental
 `BGmisc` is an R package for extended family data, such as pedigrees. It contains a variety of behavior genetic functions. It was designed to [do what it does]. It [describe the dependencies and compatibilities].
 
 
-`BGmisc` was designed to be used by behavior geneticists and others working with large pedigree data. At present, behavior genetic tools exclusively focus on model fitting for standard family structures (e.g., example, example). 
-
-It was developed as part of a grant, and has been used in several projects (e.g., ) and theses (cite xuanyu). Further, the technical aspects related to model identification have been described in Hunter et al. [@hunter_analytic_2021].
+`BGmisc` was designed to be used by behavior geneticists and others working with large pedigree data. It was developed as part of a grant, and has been used in several projects (e.g., ) and theses (cite xuanyu). Further, the technical aspects related to model identification have been described in Hunter et al. [@hunter_analytic_2021].
 
 
 The study of intricate family structures, beyond classic twins, requires specialized tools to model genetic relationships, infer relatedness, simulate pedigrees, and convert pedigrees into various relatedness matrices. BGmisc meets this need by offering a comprehensive suite of functions designed specifically for these complex analyses:
 
-- Relatedness Coefficient Calculation: Using path tracing rules first described in [@Wright1922], BGmisc calculates the relatedness coefficient between any two individuals on their shared ancestry.
+The BGmisc package is designed to accommodate the intricate relationships found in extended family structures, moving beyond the limitations of classic twin studies. Its features include:
 
-- Relatedness Inference: The package infers the relatedness between two groups based on <fix> the observed correlation between their additive genetic variance and shared environmental variance.
+- Relatedness Coefficient Calculation: Utilizing path tracing rules, BGmisc calculates the relatedness coefficient between individuals in complex family structures, reflecting the multifaceted nature of extended family relationships.
 
-- Model Identification: BGmisc determines if a variance components model is identified (see [@hunter_analytic_2021] for more information]
+- Relatedness Inference: The package infers the relatedness between individuals in extended family structures by correlating their additive genetic variance and shared environmental variance.
+
+- Model Identification: BGmisc determines if a variance components model is identified and fits the estimated variance components of a model to covariance data.
 
 - Pedigree Conversion: The package converts pedigrees into various relatedness matrices, including additive genetics, mitochondrial, common nuclear, and extended environmental relatedness matrices, catering to the diverse needs of non-twin family structures.
 

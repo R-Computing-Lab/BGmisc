@@ -51,9 +51,18 @@ Mention (if applicable) a representative set of past or ongoing research project
 Acknowledgment of any financial support.
 -->
 # Summary
-<!-- > A summary describing the high-level functionality and purpose of the software for a diverse, non-specialist audience. -->
-
-The field of behavior genetics seeks to understand the genetic and environmental influences on individual differences in behavior. As research in this domain has expanded beyond classical twin studies, so has the need for specialized tools to facilitate complex analyses. The BGmisc package addresses this need by offering a suite of functions tailored for behavior genetic modeling and complex data structures.
+<!-- example from template
+The forces on stars, galaxies, and dark matter under external gravitational
+fields lead to the dynamical evolution of structures in the universe. The orbits
+of these bodies are therefore key to understanding the formation, history, and
+future state of galaxies. The field of "galactic dynamics," which aims to model
+the gravitating components of galaxies to study their structure and evolution,
+is now well-established, commonly taught, and frequently used in astronomy.
+Aside from toy problems and demonstrations, the majority of problems require
+efficient numerical tools, many of which require the same base code (e.g., for
+performing numerical orbit integration).
+-->
+The package is available on GitHub under the GNU General Public License at https://github.com/R-Computing-Lab/BGmisc and on the Comprehensive R Archive Network (CRAN) at https://cran.r-project.org/package=BGmisc
 
 ## Features
 
@@ -64,37 +73,36 @@ The field of behavior genetics seeks to understand the genetic and environmental
 - Converts a pedigree into various types of relatedness matrices, including additive genetics, mitochondrial, common nuclear, and extended environmental relatedness matrices.
 - Simulates pedigrees based on parameters like the number of children per couple, the number of generations, the sex ratio of offspring, and birth rate. 
 
+## Limitations
 
 
 # Statement of need
 
 `BGmisc` is an R package for extended family data, such as pedigrees. It contains a variety of behavior genetic functions. It was designed to [do what it does]. It [describe the dependencies and compatibilities].
+<!-- example from template
+`Gala` is an Astropy-affiliated Python package for galactic dynamics. Python
+enables wrapping low-level languages (e.g., C) for speed without losing
+flexibility or ease-of-use in the user-interface. The API for `Gala` was
+designed to provide a class-based and user-friendly interface to fast (C or
+Cython-optimized) implementations of common operations such as gravitational
+potential and force evaluation, orbit integration, dynamical transformations,
+and chaos indicators for nonlinear dynamics. `Gala` also relies heavily on and
+interfaces well with the implementations of physical units and astronomical
+coordinate systems in the `Astropy` package [@astropy] (`astropy.units` and
+`astropy.coordinates`). -->
 
+`BGmisc` was designed to be used by behavior geneticists and others working with large pedigree data. It was developed as part of a grant, and has been used in several projects (e.g., ) and theses (cite xuanyu). Further, the technical aspects related to model identification have been described in Hunter et al. [@hunter_analytic_2021]. 
+<!-- example from template
+`Gala` was designed to be used by both astronomical researchers and by
+students in courses on gravitational dynamics or astronomy. It has already been
+used in a number of scientific publications [@Pearson:2017] and has also been
+used in graduate courses on Galactic dynamics to, e.g., provide interactive
+visualizations of textbook material [@Binney:2008]. The combination of speed,
+design, and support for Astropy functionality in `Gala` will enable exciting
+scientific explorations of forthcoming data releases from the *Gaia* mission
+[@gaia] by students and experts alike.
 
-`BGmisc` was designed to be used by behavior geneticists and others working with large pedigree data. At present, behavior genetic tools exclusively focus on model fitting for standard family structures (e.g., example, example). 
-
-It was developed as part of a grant, and has been used in several projects (e.g., ) and theses (cite xuanyu). Further, the technical aspects related to model identification have been described in Hunter et al. [@hunter_analytic_2021].
-
-
-The study of intricate family structures, beyond classic twins, requires specialized tools to model genetic relationships, infer relatedness, simulate pedigrees, and convert pedigrees into various relatedness matrices. BGmisc meets this need by offering a comprehensive suite of functions designed specifically for these complex analyses:
-
-- Relatedness Coefficient Calculation: Using path tracing rules first described in [@Wright1922], BGmisc calculates the relatedness coefficient between any two individuals on their shared ancestry.
-
-- Relatedness Inference: The package infers the relatedness between two groups based on <fix> the observed correlation between their additive genetic variance and shared environmental variance.
-
-- Model Identification: BGmisc determines if a variance components model is identified (see [@hunter_analytic_2021] for more information]
-
-- Pedigree Conversion: The package converts pedigrees into various relatedness matrices, including additive genetics, mitochondrial, common nuclear, and extended environmental relatedness matrices, catering to the diverse needs of non-twin family structures.
-
-- Pedigree Simulation: BGmisc simulates pedigrees based on parameters like the number of children per couple, generations, sex ratio, and birth rate, allowing for the modeling of intricate family dynamics beyond classic twins.
-
-These features collectively enable researchers and practitioners to conduct more nuanced analyses of genetic relationships, facilitating the exploration of the multifaceted genetic relationships that shape human behavior.
-
-
-# Availability
-
-The BGmisc package is open-source and available on both GitHub at https://github.com/R-Computing-Lab/BGmisc and the Comprehensive R Archive Network (CRAN)  at https://cran.r-project.org/package=BGmisc. It is licensed under the GNU General Public License
-
+-->
 
 # Acknowledgements
 
