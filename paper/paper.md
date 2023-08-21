@@ -32,7 +32,7 @@ affiliations:
    index: 3
  - name: University, Place, USA
    index: 4
-date: 07/21/2023
+date: "21 August, 2023"
 bibliography: paper.bib
 vignette: >
   %\VignetteEncoding{UTF-8}
@@ -51,58 +51,43 @@ Mention (if applicable) a representative set of past or ongoing research project
 Acknowledgment of any financial support.
 -->
 # Summary
-<!-- example from template
-The forces on stars, galaxies, and dark matter under external gravitational
-fields lead to the dynamical evolution of structures in the universe. The orbits
-of these bodies are therefore key to understanding the formation, history, and
-future state of galaxies. The field of "galactic dynamics," which aims to model
-the gravitating components of galaxies to study their structure and evolution,
-is now well-established, commonly taught, and frequently used in astronomy.
-Aside from toy problems and demonstrations, the majority of problems require
-efficient numerical tools, many of which require the same base code (e.g., for
-performing numerical orbit integration).
--->
-The package is available on GitHub under the GNU General Public License at https://github.com/R-Computing-Lab/BGmisc and on the Comprehensive R Archive Network (CRAN) at https://cran.r-project.org/package=BGmisc
+<!-- > A summary describing the high-level functionality and purpose of the software for a diverse, non-specialist audience. -->
 
-## Features
+The field of behavior genetics seeks to understand the genetic and environmental influences on individual differences in behavior. As research in this domain has expanded beyond classical twin studies, so has the need for specialized tools to facilitate complex analyses and equally-complex data structures. The BGmisc package addresses this need by offering a suite of functions tailored for modeling pedigrees and complex data structures. 
 
-- Provides behavior genetic miscellaneous functions for modeling and analysis.
-- Calculates the relatedness coefficient between two individuals based on their shared ancestry, using path tracing rules first described in [@Wright1922].
-- Infers the relatedness between two individuals based on the observed correlation between their additive genetic variance and shared environmental variance.
-- Determines if a variance components model is identified and fits the estimated variance components of a model to covariance data.
-- Converts a pedigree into various types of relatedness matrices, including additive genetics, mitochondrial, common nuclear, and extended environmental relatedness matrices.
-- Simulates pedigrees based on parameters like the number of children per couple, the number of generations, the sex ratio of offspring, and birth rate. 
-
-## Limitations
+( need to be more speccific )
 
 
 # Statement of need
+<!-- A Statement of need section that clearly illustrates the research purpose of the software and places it in the context of related work. -->
 
-`BGmisc` is an R package for extended family data, such as pedigrees. It contains a variety of behavior genetic functions. It was designed to [do what it does]. It [describe the dependencies and compatibilities].
-<!-- example from template
-`Gala` is an Astropy-affiliated Python package for galactic dynamics. Python
-enables wrapping low-level languages (e.g., C) for speed without losing
-flexibility or ease-of-use in the user-interface. The API for `Gala` was
-designed to provide a class-based and user-friendly interface to fast (C or
-Cython-optimized) implementations of common operations such as gravitational
-potential and force evaluation, orbit integration, dynamical transformations,
-and chaos indicators for nonlinear dynamics. `Gala` also relies heavily on and
-interfaces well with the implementations of physical units and astronomical
-coordinate systems in the `Astropy` package [@astropy] (`astropy.units` and
-`astropy.coordinates`). -->
+`BGmisc` is an R package specifically designed for extended family data, such as pedigrees. Unlike tools that focus solely on classic twin studies, BGmisc accommodates the intricate relationships found in extended family structures. It contains a variety of behavior genetic functions and is intended for use by behavior geneticists and others working with large pedigree data. The package models genetic relationships, infers relatedness, simulates pedigrees, and converts pedigrees into various relatedness matrices. [Describe the dependencies and compatibilities here.]
 
-`BGmisc` was designed to be used by behavior geneticists and others working with large pedigree data. It was developed as part of a grant, and has been used in several projects (e.g., ) and theses (cite xuanyu). Further, the technical aspects related to model identification have been described in Hunter et al. [@hunter_analytic_2021]. 
-<!-- example from template
-`Gala` was designed to be used by both astronomical researchers and by
-students in courses on gravitational dynamics or astronomy. It has already been
-used in a number of scientific publications [@Pearson:2017] and has also been
-used in graduate courses on Galactic dynamics to, e.g., provide interactive
-visualizations of textbook material [@Binney:2008]. The combination of speed,
-design, and support for Astropy functionality in `Gala` will enable exciting
-scientific explorations of forthcoming data releases from the *Gaia* mission
-[@gaia] by students and experts alike.
+At present, behavior genetic tools exclusively focus on model fitting for standard family structures (e.g., example, example).  ( paragraph on contextualizing the current field )
+<!-- A list of key references, including to other software addressing related needs. Note that the references should include full names of venues, e.g., journals and conferences, not abbreviations only understood in the context of a specific discipline.-->
 
--->
+The study of complex family structures, beyond classic twins, necessitates specialized tools. BGmisc meets this need by offering a comprehensive suite of functions designed for these intricate analyses:
+
+- Relatedness Coefficient Calculation: Using path tracing rules first described in [@Wright1922], BGmisc calculates the relatedness coefficient between all pairs of individuals based on mother and father ids.
+
+- Relatedness Inference: The package infers the relatedness between two groups based on the observed total correlation, given  additive genetic  and shared environmental parameters
+
+- Model Identification: BGmisc determines if a variance components model is identified and fits the estimated variance components of a model to covariance data. The technical aspects related to model identification have been described in Hunter et al. [@hunter_analytic_2021].
+
+- Pedigree Conversion: The package converts pedigrees into various relatedness matrices, including additive genetics, mitochondrial, common nuclear, and extended environmental relatedness matrices.
+
+- Pedigree Simulation: BGmisc simulates pedigrees based on parameters like the number of children per couple, generations, sex ratio, and birth rate, allowing for the modeling of intricate family dynamics beyond classic twins.
+
+
+<!-- Mention (if applicable) a representative set of past or ongoing research projects using the software and recent scholarly publications enabled by it.-->
+These features collectively enable researchers and practitioners to conduct more nuanced analyses of genetic relationships, facilitating the exploration of the multifaceted genetic relationships that shape human behavior. It was developed as part of a grant and has been used in several projects (e.g., [provide examples]) and theses (cite Xuanyu).
+
+
+
+# Availability
+
+The BGmisc package is open-source and available on both GitHub at https://github.com/R-Computing-Lab/BGmisc and the Comprehensive R Archive Network (CRAN)  at https://cran.r-project.org/package=BGmisc. It is licensed under the GNU General Public License
+
 
 # Acknowledgements
 
