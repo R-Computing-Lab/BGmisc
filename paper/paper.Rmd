@@ -19,19 +19,17 @@ authors:
     affiliation: 1
   - name: Jonathan D. Trattner
     orcid: 0000-0000-0000-0000
-    affiliation: 3  
+    affiliation: 1  
   - name: S. Alexandra Burt
     orcid: 0000-0000-0000-0000
-    affiliation: 4
+    affiliation: 3
 affiliations:
- - name: University, Place, USA
+ - name: Wake Forest University, North Carolina, USA
    index: 1
- - name: University, Place, USA
+ - name: Pennsylvania State University, Pennsylvania, USA
    index: 2
- - name: University, Place, USA
+ - name: Michigan State University, Michigan, USA
    index: 3
- - name: University, Place, USA
-   index: 4
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 bibliography: paper.bib
 vignette: >
@@ -53,15 +51,16 @@ Acknowledgment of any financial support.
 # Summary
 <!-- > A summary describing the high-level functionality and purpose of the software for a diverse, non-specialist audience. -->
 
-The field of behavior genetics seeks to understand the genetic and environmental influences on individual differences in behavior. As research in this domain has expanded beyond classical twin studies, so has the need for specialized tools to facilitate complex analyses and equally-complex data structures. The BGmisc package addresses this need by offering a suite of functions tailored for modeling pedigrees and complex data structures. 
+The field of behavior genetics seeks to understand  genetic and environmental influences on individual differences. As research in this domain has expanded beyond classical twin studies, so has the need for specialized tools to facilitate complex analyses and equally-complex data structures. The BGmisc package addresses this need by offering a suite of functions tailored for modeling pedigrees and complex data structures. 
 
-( need to be more speccific )
+
+( need to be more specific)
 
 
 # Statement of need
 <!-- A Statement of need section that clearly illustrates the research purpose of the software and places it in the context of related work. -->
 
-`BGmisc` is an R package specifically designed for extended family data, such as pedigrees. Unlike tools that focus solely on classic twin studies, BGmisc accommodates the intricate relationships found in extended family structures. It contains a variety of behavior genetic functions and is intended for use by behavior geneticists and others working with large pedigree data. The package models genetic relationships, infers relatedness, simulates pedigrees, and converts pedigrees into various relatedness matrices. [Describe the dependencies and compatibilities here.]
+`BGmisc` is an R package specifically designed for extended family data, such as pedigrees. Unlike tools that focus solely on classical twin studies, BGmisc accommodates the intricate relationships found in extended family structures. It contains a variety of behavior genetic functions and is intended for use by behavior geneticists and others working with large pedigree data. The package models genetic relationships, infers relatedness, simulates pedigrees, and converts pedigrees into various relatedness matrices. The package depends on XX. Although it is primarily used with openmx, it is compatible with any SEM software or workflow.
 
 At present, behavior genetic tools exclusively focus on model fitting for standard family structures (e.g., example, example).  ( paragraph on contextualizing the current field )
 <!-- A list of key references, including to other software addressing related needs. Note that the references should include full names of venues, e.g., journals and conferences, not abbreviations only understood in the context of a specific discipline.-->
