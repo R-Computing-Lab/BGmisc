@@ -34,7 +34,7 @@ date: "`r format(Sys.time(), '%d %B, %Y')`"
 bibliography: paper.bib
 vignette: >
   %\VignetteEncoding{UTF-8}
-  %\VignetteIndexEntry{BGmisc: An R Package for Behavior Genetics Analysis}
+  %\VignetteIndexEntry{BGmisc}
   %\VignetteEngine{knitr::rmarkdown}
 ---
 <!--Guidance 

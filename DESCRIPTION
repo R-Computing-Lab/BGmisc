@@ -17,3 +17,7 @@ Imports:
     Matrix,
     stats,
     kinship2
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
