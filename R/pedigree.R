@@ -1,5 +1,5 @@
 #' Take a pedigree and turn it into a relatedness matrix
-#' @param ped a pedigree data file.  Needs ID, momID, and dadID columns
+#' @param ped a pedigree dataset.  Needs ID, momID, and dadID columns
 #' @param component character.  Which component of the pedigree to return.  See Details.
 #' @param max.gen the maximum number of generations to compute
 #'  (e.g., only up to 4th degree relatives).  The default of Inf uses as many

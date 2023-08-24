@@ -16,7 +16,8 @@ RoxygenNote: 7.2.3
 Imports: 
     Matrix,
     stats,
-    kinship2
+    kinship2,
+    igraph
 Suggests: 
     knitr,
     rmarkdown,
