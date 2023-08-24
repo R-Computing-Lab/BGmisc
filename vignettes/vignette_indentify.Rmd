@@ -21,13 +21,18 @@ This vignette provides a detailed guide to specific functions within the `BGmisc
 
 ## Loading Required Libraries
 
+```{r setup, include=FALSE}
+library(BGmisc)
+require(EasyMx)
+require(OpenMx)
+```
 Ensure that the `BGmisc` package is installed and loaded.
 
 Ensure that the following dependencies are installed before proceeding as they provide us with behavior genetic data and models:
 - `EasyMx`
 - `OpenMx`
 
-```{r setup}
+```{r}
 library(BGmisc)
 library(EasyMx)
 library(OpenMx)
