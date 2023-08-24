@@ -14,19 +14,60 @@ knitr::opts_chunk$set(
 )
 ```
 
+
+# Introduction
+
+This vignette provides a detailed guide to specific functions within the `BGmisc` package that aid in the identification and fitting of variance component models common in behavior genetics. We will explore key functions such as `identifyComponentModel`, providing practical examples and theoretical background. Identification ensures a unique set of parameters that define the model-implied covariance matrix, preventing free parameters from trading off one another.
+
+## Loading Required Libraries
+
+Ensure that the `BGmisc` package is installed and loaded.
+
+Ensure that the following dependencies are installed before proceeding as they provide us with behavior genetic data and models:
+- `EasyMx`
+- `OpenMx`
+
 ```{r setup}
 library(BGmisc)
-require(EasyMx)
-require(OpenMx)
+library(EasyMx)
+library(OpenMx)
 ```
 
+Note: If any of the libraries are not installed, you can install them using install.packages("`package_name`").
+
+# Working with Variance Component Models
+
+In this section, we will demonstrate core functions related to the identification and fitting of variance component models.
+
+## Using `comp2vech` Function
+
+The `comp2vech` function is used to vectorize a components model. The function is often used in conjunction with the identification process. In this example, we apply it to a list of matrices:
+
+
 ```{r}
-comp2vech(list(matrix(c(1, .5, .5, 1), 2, 2), matrix(1, 2, 2)))
+comp2vech(list(matrix(c(1, .5, .5, 1), 2, 2), 
+               matrix(1, 2, 2)))
+```
 
-identifyComponentModel(A=list(matrix(1, 2, 2)), C=list(matrix(1, 2, 2)), E=diag(1, 2))
-identifyComponentModel(A=list(matrix(c(1, .5, .5, 1), 2, 2), matrix(1, 2, 2)), C=list(matrix(1, 2, 2), matrix(1, 2, 2)), E=diag(1, 4))
+The result showcases how the matrices have been transformed, reflecting their role in subsequent variance component analysis.
 
-#fitComponentModel(matrix(rnorm(25), 5, 5), acmp)
+## Using `identifyComponentModel` Function
+
+The `identifyComponentModel` function helps determine if a variance components model is identified. It accepts relatedness component matrices and returns information about identified and non-identified parameters. 
+
+Here's an example using the classical twin model with only MZ twins:
+```{r}
+identifyComponentModel(A = list(matrix(1, 2, 2)), 
+                       C = list(matrix(1, 2, 2)), 
+                       E=diag(1, 2))
+```
+As you can see, the model is not identified. We need to add an additional group so that we have sufficient information.
+
+```{r}
+identifyComponentModel(A = list(matrix(c(1, .5, .5, 1), 2, 2), matrix(1, 2, 2)), 
+                       C=list(matrix(1, 2, 2), matrix(1, 2, 2)),
+                       E=diag(1, 4))
+
 
 
 
