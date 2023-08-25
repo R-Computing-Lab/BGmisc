@@ -46,3 +46,6 @@ ped2fam <- function(ped, personID='ID', momID='momID', dadID='dadID', famID='fam
     return(ped2)    
 }
 
+# take a pedigree and return a graph
+ped2graph <- function(){return(0)}
+
