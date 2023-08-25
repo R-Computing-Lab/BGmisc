@@ -14,7 +14,7 @@ ped2com(
 )
 }
 \arguments{
-\item{ped}{a pedigree data file.  Needs ID, momID, and dadID columns}
+\item{ped}{a pedigree dataset.  Needs ID, momID, and dadID columns}
 
 \item{component}{character.  Which component of the pedigree to return.  See Details.}
 
