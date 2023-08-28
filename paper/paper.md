@@ -1,5 +1,5 @@
 ---
-title: 'BGmisc: An R Package for Behavior Genetics Analysis'
+title: 'BGmisc: An R Package for Extended Behavior Genetics Analysis'
 output:
   rmarkdown::html_vignette:
     keep_md: TRUE
@@ -30,7 +30,7 @@ affiliations:
    index: 2
  - name: Michigan State University, Michigan, USA
    index: 3
-date: "22 August, 2023"
+date: "28 August, 2023"
 bibliography: paper.bib
 vignette: >
   %\VignetteEncoding{UTF-8}
@@ -51,7 +51,7 @@ Acknowledgment of any financial support.
 # Summary
 <!-- > A summary describing the high-level functionality and purpose of the software for a diverse, non-specialist audience. -->
 
-The field of behavior genetics seeks to understand  genetic and environmental influences on individual differences. As research in this domain has expanded beyond classical twin studies, so has the need for specialized tools to facilitate complex analyses and equally-complex data structures. The BGmisc package addresses this need by offering a suite of functions tailored for modeling pedigrees and complex data structures. 
+The field of behavior genetics seeks to understand  genetic and environmental influences on individual differences. As research in this domain has expanded beyond classical twin studies, so has the need for specialized tools to facilitate complex analyses and equally-complex data structures. The `BGmisc` package addresses this need by offering a suite of functions tailored for modeling pedigrees and complex data structures. 
 
 
 ( need to be more specific)
@@ -60,22 +60,35 @@ The field of behavior genetics seeks to understand  genetic and environmental in
 # Statement of need
 <!-- A Statement of need section that clearly illustrates the research purpose of the software and places it in the context of related work. -->
 
-`BGmisc` is an R package specifically designed for extended family data, such as pedigrees. Unlike tools that focus solely on classical twin studies, BGmisc accommodates the intricate relationships found in extended family structures. It contains a variety of behavior genetic functions and is intended for use by behavior geneticists and others working with large pedigree data. The package models genetic relationships, infers relatedness, simulates pedigrees, and converts pedigrees into various relatedness matrices. The package depends on XX. Although it is primarily used with openmx, it is compatible with any SEM software or workflow.
+`BGmisc` is an R package specifically designed for extended family data, such as pedigrees. Although  there are existing tools tailored to behavior genetics modeling, these tools, like `easymx` and `OpenMx`, focus  on common twin models. Thus there remains a pressing need for software adept at handling the complexities of extended family structures.
 
-At present, behavior genetic tools exclusively focus on model fitting for standard family structures (e.g., example, example).  ( paragraph on contextualizing the current field )
+The `OpenMx` package is a workhorse in behavior genetic research. Amoung other things it <is a broad SEM software> and introduces the mxCheckIdentification() function (Neale et al. 2016), an invaluable tool for model identification. Yet, it falls short in certain areas, such as handling modern molecular designs (Kirkpatrick et al. 2021) and computational efficiency due to its dependence on a numerical Jacobian.
+
+`easymx` provides a robust suite of functions building upon `OpenMx`'s infastructure. These include twin modeling  ranging from foundational matrix builders like `emxCholeskyVariance` and `emxGeneticFactorVariance` to more advanced functions like `emxTwinModel` for constructing basic twin models. Although invaluable for twin studies, the field of behavior genetics is now probing deeper into more complex family structure.
+
+
+While `easymx` and `openmx` has proven itself to be a versatile tool for behavior genetics, especially for twin models, `BGmisc` ventures into territories that `easymx` does not primarily focus on. `BGmisc` offers functions that cater explicitly to the complexities of extended family structures, beyond just twins. The package offers functions for modeling genetic relationships, infers relatedness, simulates pedigrees, and converts pedigrees into various relatedness matrices.
+
+
+
+Unlike tools that focus solely on classical twin studies, `BGmisc` accommodates the intricate relationships found in extended family structures. It contains a variety of behavior genetic functions and is intended for use by behavior geneticists and others working with large pedigree data.  The package depends on XX. Although it is primarily used with OpenMx, it is compatible with any SEM software or workflow.
+
+
 <!-- A list of key references, including to other software addressing related needs. Note that the references should include full names of venues, e.g., journals and conferences, not abbreviations only understood in the context of a specific discipline.-->
 
-The study of complex family structures, beyond classic twins, necessitates specialized tools. BGmisc meets this need by offering a comprehensive suite of functions designed for these intricate analyses:
+## Features
 
-- Relatedness Coefficient Calculation: Using path tracing rules first described in [@Wright1922], BGmisc calculates the relatedness coefficient between all pairs of individuals based on mother and father ids.
+`BGmisc` offers an array of features tailored for in-depth behavior genetics analysis:
+
+- Relatedness Coefficient Calculation: Using path tracing rules first described in [@Wright1922], `BGmisc` calculates the relatedness coefficient between all pairs of individuals based on mother and father ids.
 
 - Relatedness Inference: The package infers the relatedness between two groups based on the observed total correlation, given  additive genetic  and shared environmental parameters
 
-- Model Identification: BGmisc determines if a variance components model is identified and fits the estimated variance components of a model to covariance data. The technical aspects related to model identification have been described in Hunter et al. [@hunter_analytic_2021].
+- Model Identification: `BGmisc` determines if a variance components model is identified and fits the estimated variance components of a model to covariance data. The technical aspects related to model identification have been described in Hunter et al. [@hunter_analytic_2021].
 
 - Pedigree Conversion: The package converts pedigrees into various relatedness matrices, including additive genetics, mitochondrial, common nuclear, and extended environmental relatedness matrices.
 
-- Pedigree Simulation: BGmisc simulates pedigrees based on parameters like the number of children per couple, generations, sex ratio, and birth rate, allowing for the modeling of intricate family dynamics beyond classic twins.
+- Pedigree Simulation: `BGmisc` simulates pedigrees based on parameters like the number of children per couple, generations, sex ratio, and birth rate, allowing for the modeling of intricate family dynamics beyond classic twins.
 
 
 <!-- Mention (if applicable) a representative set of past or ongoing research projects using the software and recent scholarly publications enabled by it.-->
@@ -85,7 +98,7 @@ These features collectively enable researchers and practitioners to conduct more
 
 # Availability
 
-The BGmisc package is open-source and available on both GitHub at https://github.com/R-Computing-Lab/BGmisc and the Comprehensive R Archive Network (CRAN)  at https://cran.r-project.org/package=BGmisc. It is licensed under the GNU General Public License
+The `BGmisc` package is open-source and available on both GitHub at https://github.com/R-Computing-Lab/BGmisc and the Comprehensive R Archive Network (CRAN)  at https://cran.r-project.org/package=BGmisc. It is licensed under the GNU General Public License
 
 
 # Acknowledgements
