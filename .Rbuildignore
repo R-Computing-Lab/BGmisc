@@ -3,3 +3,7 @@
 ^LICENSE\.md$
 ^R/\.Rhistory$
 ^R/paper$
+^doc$
+^Meta$
+^vignettes/articles$
+^README\.Rmd$
