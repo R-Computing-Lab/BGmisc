@@ -34,7 +34,7 @@ date: "30 August, 2023"
 bibliography: paper.bib
 vignette: >
   %\VignetteEncoding{UTF-8}
-  %\VignetteIndexEntry{BGmisc}
+  %\VignetteIndexEntry{modelingandrelatedness}
   %\VignetteEngine{knitr::rmarkdown}
 ---
 

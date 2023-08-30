@@ -2,7 +2,7 @@
 title: "Modeling and Relatedness"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{ModelingandRelatedness}
+  %\VignetteIndexEntry{modelingandrelatedness}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -79,7 +79,7 @@ As you can see the model is identified, now that we've added another group. Let 
 
 ```{r}
 require(dplyr)
-require(purrr)
+#require(purrr)
 
 data(twinData, package='OpenMx')
 selVars <- c('ht1', 'ht2')

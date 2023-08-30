@@ -34,7 +34,8 @@ date: "`r format(Sys.time(), '%d %B, %Y')`"
 bibliography: paper.bib
 vignette: >
   %\VignetteEncoding{UTF-8}
-  %\VignetteIndexEntry{BGmisc}
+  %\VignetteIndexEntry{modelingandrelatedness}
+  %\VignetteIndexEntry{pedigree}
   %\VignetteEngine{knitr::rmarkdown}
 ---
 ```{r setup, echo=FALSE}

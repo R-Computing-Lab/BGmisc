@@ -3,12 +3,13 @@ Title: Behavior Genetic Modeling Functions
 Version: 1.0
 Date: 2023-06-15
 Authors@R: 
-    c(person("S. Mason", "Garrison", email = "garrissm@wfu.edu", role = c("aut", "cre")),
+  c(person("S. Mason", "Garrison", email = "garrissm@wfu.edu", role = c("aut", "cre"), comment=c(ORCID = "0000-0000-0000-0000")),
     person(c("Michael", "D."), "Hunter", role = "aut", comment=c(ORCID = "0000-0002-3651-6709")),
-    person(c("S.", "Alexandra"), "Burt", role = "aut"),
-    person(c("Jonathan", "D."), "Trattner", role = "aut")
-    )
-Description: Functions for behavior genetic modeling, including model identification, calculating relatedness, and various others (e.g., Hunter, Garrison, et al, 2019 <doi:10.1007/s10519-019-09973-8>). 
+    person("Xuanyu", "Lyu", role = "aut", comment=c(ORCID = "0000-0000-0000-0000")),
+    person(c("Jonathan", "D."), "Trattner", role = "aut", comment=c(ORCID = "0000-0000-0000-0000")),
+    person(c("S.", "Alexandra"), "Burt", role = "aut", comment=c(ORCID = "0000-0000-0000-0000"))
+  )
+Description: Functions for extended family behavior genetic modeling, including model identification, calculating relatedness, and various others (e.g., Hunter, Garrison, et al, 2019 <doi:10.1007/s10519-019-09973-8>). 
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
@@ -23,6 +24,7 @@ Suggests:
     rmarkdown,
     EasyMx,
     OpenMx,
+    dplyr,
     testthat (>= 3.0.0)
 VignetteBuilder: knitr
 Config/testthat/edition: 3
