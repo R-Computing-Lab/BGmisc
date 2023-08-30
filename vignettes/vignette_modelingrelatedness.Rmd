@@ -1,8 +1,8 @@
 ---
-title: "identify"
+title: "Modeling and Relatedness"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{identify}
+  %\VignetteIndexEntry{ModelingandRelatedness}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -103,7 +103,7 @@ run1 <- emxTwinModel(model='Cholesky', relatedness='RCoef',
 
 ```
 
-As you can see the model was unsucessful because it was not identified. But when we add another group, so that the model is identified.
+As you can see the model was unsucessful because it was not identified. But when we add another group, so that the model is identified, the model now fits.
 
 ```{r}
 run2 <- emxTwinModel(model='Cholesky', relatedness='RCoef',

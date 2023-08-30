@@ -1,0 +1,37 @@
+---
+title: "Pedigree"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Pedigree}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+# Introduction
+
+This vignette provides a detailed guide to the pedigree-related functions within the `BGmisc` package.
+
+## Loading Required Libraries
+
+```{r setup, include=FALSE}
+library(BGmisc)
+
+```
+
+# Simulating Pedigree
+
+```{r}
+
+df_ped <- SimPed(kpc = 6, Ngen = 3, marR = .5)
+
+
+PlotPedigree(df_ped )
+```
