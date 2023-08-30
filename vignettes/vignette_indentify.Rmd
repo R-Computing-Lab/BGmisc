@@ -78,8 +78,8 @@ identifyComponentModel(A = list(matrix(c(1, .5, .5, 1), 2, 2), matrix(1, 2, 2)),
 As you can see the model is identified, now that we've added another group. Let us confirm by fitting a model. First we prepare the data.
 
 ```{r}
-library(dplyr)
-library(purrr)
+require(dplyr)
+require(purrr)
 
 data(twinData, package='OpenMx')
 selVars <- c('ht1', 'ht2')
@@ -94,7 +94,7 @@ mzData <- mzdzData  %>% filter(zyg ==1)
 
 ```
 
-Let us fit the mz only data
+Let us fit the data with MZ twins by themselves. 
 
 ```{r}
 
