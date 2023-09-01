@@ -64,7 +64,8 @@ As behavior genetics delves into more complex data structures like pedigrees, th
 The `BGmisc` R package is designed specifically to address these challenges, going beyond what is available in tools like `EasyMx` and `OpenMx` that mainly focus on classical twin models.
 
 
-Two widely used R packages in behavior genetics modeling are `EasyMx` [@easy] and `OpenMx` [@Neale2016] . The `OpenMx` [@Neale2016] package is a workhorse in behavior genetic research. Not only is it  a general purpose software for structural equation modeling that is popular among behavior geneticists [@Garrison2018], but also for its unique features -- the `mxCheckIdentification()` function. This function checks whether a model is identified^[Sentence on what is model identification]. Conversely, `EasyMx` is a more user-friendly package that streamlines the process of building and estimating structural equation models.  It seamlessly integrates with `OpenMx`'s infastructure. Its functionalities range from foundational matrix builders like `emxCholeskyVariance` and `emxGeneticFactorVariance` to more specialized functions like `emxTwinModel` designed for  classical twin models. 
+Two widely used R packages in behavior genetics modeling are `EasyMx` [@easy] and `OpenMx` [@Neale2016] . The `OpenMx` [@Neale2016] package is a workhorse in behavior genetic research. Not only is it a general purpose software for structural equation modeling that is popular among behavior geneticists [@Garrison2018], but also for its unique features -- the `mxCheckIdentification()` function. 
+This function checks whether a model is identified, which means determining if there is a unique solution to estimate the model's parameters based on the observed data. Conversely, `EasyMx` is a more user-friendly package that streamlines the process of building and estimating structural equation models. It seamlessly integrates with `OpenMx`'s infrastructure. Its functionalities range from foundational matrix builders like `emxCholeskyVariance` and `emxGeneticFactorVariance` to more specialized functions like `emxTwinModel` designed for classical twin models. 
 
 Despite their strengths, both `EasyMx` and `OpenMx` have limitations when it comes to handling extended family data. Notably, they lack functions for handling modern molecular designs [@kirkpatrick_combining_2021], modeling genetic complex relationships, inferring relatedness, or simulating pedigrees. Additionally, they can be computationally inefficient when dealing with large pedigrees.
 
@@ -84,7 +85,7 @@ The `BGmisc` package offers an array of features tailored for in-depth behavior 
 
 ### Modeling and Relatedness:
 
-- Relatedness Inference: `BGmisc` infers the relatedness between two groups based on their observed total correlation, given  additive genetic  and shared environmental parameters.
+- Relatedness Inference: `BGmisc` infers the relatedness between two groups based on their observed total correlation, given additive genetic and shared environmental parameters.
 
 - Model Identification: `BGmisc` evaluates whether a variance components model is identified and fits the model's estimated variance components to observed covariance data. The technical aspects related to model identification have been described in @hunter_analytic_2021.
 
@@ -94,7 +95,7 @@ These tools collectively provide a valuable resource for behavior geneticists an
 
 # Availability
 
-The `BGmisc` package is open-source and available on both GitHub at https://github.com/R-Computing-Lab/BGmisc and the Comprehensive R Archive Network (CRAN)  at https://cran.r-project.org/package=BGmisc. It is licensed under the GNU General Public License
+The `BGmisc` package is open-source and available on both GitHub at https://github.com/R-Computing-Lab/BGmisc and the Comprehensive R Archive Network (CRAN) at https://cran.r-project.org/package=BGmisc. It is licensed under the GNU General Public License
 
 
 # Acknowledgements

@@ -30,8 +30,8 @@ A pedigree dataset with one additional column for the newly created extended fam
 Add an extended family ID variable to a pedigree
 }
 \details{
-The general idea of this function is to use person ID, mother ID, and father ID to 
-create an extended family ID such that everyone with the same family ID is in the 
+The general idea of this function is to use person ID, mother ID, and father ID to
+create an extended family ID such that everyone with the same family ID is in the
 same (perhaps very extended) pedigree.  That is, a pair of people with the same family ID
 have at least one traceable relation of any length to one another.
 

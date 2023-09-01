@@ -5,12 +5,76 @@
 \title{PlotPedigree
 A wrapped function to plot simulated pedigree from function \code{SimPed}. This function require the installation of package \code{kinship2}.}
 \usage{
-PlotPedigree(ped, cex = 0.5)
+PlotPedigree(
+  ped,
+  cex = 0.5,
+  col = 1,
+  symbolsize = 1,
+  branch = 0.6,
+  packed = TRUE,
+  align = c(1.5, 2),
+  width = 8,
+  density = c(-1, 35, 65, 20),
+  angle = c(90, 65, 40, 0),
+  keep.par = FALSE,
+  pconnect = 0.5,
+  ...
+)
 }
 \arguments{
 \item{ped}{The simulated pedigree data.frame from function \code{SimPed}. Or a pedigree dataframe with the same colnames as the dataframe simulated from function \code{SimPed}.}
 
 \item{cex}{The font size of the IDs for each individual in the plot.}
+
+\item{col}{
+color for each id.  Default assigns the same color to everyone.
+}
+
+\item{symbolsize}{
+controls symbolsize. Default=1.
+}
+
+\item{branch}{
+defines how much angle is used to connect various levels of nuclear families.
+}
+
+\item{packed}{
+default=T.  If T, uniform distance between all individuals at a given level.
+}
+
+\item{align}{ these parameters control the extra effort spent trying to
+  align children underneath parents, but without making the pedigree too
+  wide.  Set to F to speed up plotting.
+}
+
+\item{width}{
+default=8.  For a packed pedigree, the minimum width allowed in the
+realignment of pedigrees.
+}
+
+\item{density}{
+defines density used in the symbols.  Takes up to 4 different values.
+}
+
+\item{angle}{
+defines angle used in the symbols.  Takes up to 4 different values.
+}
+
+\item{keep.par}{
+Default = F, allows user to keep the parameter settings the same as they
+were for plotting (useful for adding extras to the plot)
+}
+
+\item{pconnect}{when connecting parent to children the program will try
+  to make the connecting line as close to vertical as possible, subject
+  to it lying inside the endpoints of the line that connects the
+  children by at least \code{pconnect} people.  Setting this option
+  to a large number will force the line to connect at the midpoint of
+  the children.}
+
+\item{...}{
+Extra options that feed into the plot function.
+}
 }
 \value{
 A plot of the simulated pedigree

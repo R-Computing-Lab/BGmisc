@@ -29,6 +29,26 @@ library(BGmisc)
 
 # Simulating Pedigree
 
+Unlike Tolstoy, where only happy families are alike, all pedigrees are alike. Moreover, such pedigrees can be simulated as a function of several parameters. For example, we can create a family with 3 generations (or 4).
+
+```{r,fig.width=8, fig.height=6}
+
+
+df_ped_3 <- SimPed(Ngen = 3)
+df_ped_4 <- SimPed(Ngen = 4)
+
+
+par(mfrow=c(2, 1))
+PlotPedigree(df_ped_3,width = 19)
+PlotPedigree(df_ped_4,width=1)
+
+```
+
+
+
+For family pedigrees, properties including the number of involved generations, average offspring per couple, sex ratios of newborns, the mating rate in a generation, inbreeding, remarriage rate, and adoption rate will influence the pedigree structure and the family size. Among those factors, the number of involved generations (the depth of a pedigree) and the average offspring per couple (the width of a pedigree) prominently determine the overall shape of the pedigree and the total number of family members. The mating rate is one crucial factor influencing the family size given a fixed number of generations and average offspring per couple. Hence, the number of generations, average offspring per couple and mating rate will be the three main factors to operationalize different family structures. Due to the relatively low prevalence of factors like inbreeding and twins, I will assume these factors do not exist in simulated families in order to reduce the design complexity and increase the computational efficiency. Sex ratios  of newborns will not strongly impact the family structure but will hugely impact the proportion of family members that share the same mtDNA, due to the maternal inheritance pattern of mtDNA (see Figure 2 as a demonstration of mtDNA inheritance). Hence, a small deviation from .5 will be designed to investigate its impact on estimation power. 
+
+
 ```{r}
 
 df_ped <- SimPed(kpc = 6, Ngen = 3, marR = .5)
