@@ -9,7 +9,7 @@ tags:
   - behavior genetics
 authors:
   - name: S. Mason Garrison
-    orcid: 0000-0000-0000-0000
+    orcid: 0000-0002-4804-6003
     affiliation: 1
   - name: Michael D. Hunter
     orcid: 0000-0002-3651-6709
@@ -18,10 +18,10 @@ authors:
     orcid: 0000-0002-2841-5529
     affiliation: 1
   - name: Jonathan D. Trattner
-    orcid: 0000-0000-0000-0000
+    orcid: 0000-0002-1097-7603
     affiliation: 1  
   - name: S. Alexandra Burt
-    orcid: 0000-0000-0000-0000
+    orcid: 0000-0001-5538-7431
     affiliation: 3
 affiliations:
  - name: Wake Forest University, North Carolina, USA
@@ -30,7 +30,7 @@ affiliations:
    index: 2
  - name: Michigan State University, Michigan, USA
    index: 3
-date: "03 九月, 2023"
+date: "04 September, 2023"
 bibliography: paper.bib
 vignette: >
   %\VignetteEncoding{UTF-8}
@@ -64,31 +64,27 @@ Behavior genetics focuses on understanding genetic and environmental influences 
 
 <!-- A Statement of need section that clearly illustrates the research purpose of the software and places it in the context of related work. -->
 
-As behavior genetics delves into more complex data structures like pedigrees, the limitations of current tools become evident. The `BGmisc` R package is designed specifically to address these challenges, going beyond what is available in tools like `EasyMx` and `OpenMx` that mainly focus on classical twin models.
+As behavior genetics delves into more complex data structures like pedigrees, the limitations of current tools become evident. The `BGmisc` R package is designed specifically to address these challenges, going beyond what is available in tools like `OpenMx` and `EasyMx` that mainly focus on classical twin models.
 
-Two widely used R packages in behavior genetics modeling are `EasyMx` [@easy] and `OpenMx` [@Neale2016] . The `OpenMx` [@Neale2016] package is a workhorse in behavior genetic research. Not only is it a general purpose software for structural equation modeling that is popular among behavior geneticists [@Garrison2018], but also for its unique features -- the `mxCheckIdentification()` function. This function checks whether a model is identified, which means determining if there is a unique solution to estimate the model's parameters based on the observed data. Conversely, `EasyMx` is a more user-friendly package that streamlines the process of building and estimating structural equation models. It seamlessly integrates with `OpenMx`'s infrastructure. Its functionalities range from foundational matrix builders like `emxCholeskyVariance` and `emxGeneticFactorVariance` to more specialized functions like `emxTwinModel` designed for classical twin models.
+Two widely used R packages in genetics modeling are `OpenMx` [@Neale2016] and `kinship2` [@kinship2; @kinship2R].  The `OpenMx` [@Neale2016] package is a workhorse in behavior genetic research. Not only is it a general purpose software for structural equation modeling that is popular among behavior geneticists [@Garrison2018], but also for its unique features -- the `mxCheckIdentification()` function. This function checks whether a model is identified, which means determining if there is a unique solution to estimate the model's parameters based on the observed data. In addition, `EasyMx` [@easy] is a more user-friendly package that streamlines the process of building and estimating structural equation models. It seamlessly integrates with `OpenMx`'s infrastructure. Its functionalities range from foundational matrix builders like `emxCholeskyVariance` and `emxGeneticFactorVariance` to more specialized functions like `emxTwinModel` designed for classical twin models.
 
-Despite their strengths, both `EasyMx` and `OpenMx` have limitations when it comes to handling extended family data. Notably, they lack functions for handling modern molecular designs [@kirkpatrick_combining_2021], modeling genetic complex relationships, inferring relatedness, or simulating pedigrees. Additionally, they can be computationally inefficient when dealing with large pedigrees.
+Although not a staple in behavior genetics, the `kinship2` [@kinship2] package provides core feature to the broader statistical genetics scientific community, such as computing genetic relatedness matrices and plotting pedigrees. It uses the Lange algorithm to compute relatedness, which  `BGmisc` package extends the capabilities of `kinship2` by introducing an alternative algorithm to calculate the relatedness coefficient, based on network models. This alternative algorithm harnesses networks to trace paths, applying traditional path tracing rules to the entirety of the network. 
+
+
+Despite their strengths,`kinship2`, `EasyMx` and `OpenMx` have limitations when it comes to handling extended family data. Notably, they lack functions for handling modern molecular designs [@kirkpatrick_combining_2021], modeling genetic complex relationships, inferring relatedness, or simulating pedigrees. Additionally, they can be computationally inefficient when dealing with large pedigrees.
 
 ## Features
 
-The `BGmisc` package offers an array of features tailored for in-depth behavior genetics analysis, organized into distinct categories for clarity:
+The `BGmisc` package offers an array of features tailored for in-depth behavior genetics analysis, organized under two headings for clarity:
 
 ### Pedigree Analysis and Simulation:
 
--   Relatedness Coefficient Calculation: Using path tracing rules first described in [@Wright1922], `BGmisc` calculates the relatedness coefficient between all pairs of individuals based on mother and father identifiers.
+-   Relatedness Coefficient Calculation: Using path tracing rules first described in [@Wright1922], `BGmisc` calculates the relatedness coefficient between all pairs of individuals based on mother and father identifiers. Building upon established packages such as `kinship2`, `BGmisc` introduces an alternative algorithm for calculating the relatedness coefficient. Leveraging the power of network analysis, this new method traces paths using classic path tracing rules applied to the entire network, bypassing the need for a multi-step recursive approach.
 
 -   Pedigree Conversion: `BGmisc` converts pedigrees into various relatedness matrices, including additive genetics, mitochondrial, common nuclear, and extended environmental relatedness matrices.
 
 -   Pedigree Simulation: `BGmisc` simulates pedigrees based on parameters including the number of children per mate, generations, sex ratio of newborns, and mating rate.
 
-    -   The simulation function provides users the opportunity to test family models in pedigrees with a customized pedigree length and width. Since data in the form of large family pedigrees is difficult to collect or access, simulated pedigrees serve as an efficient tool for building statistical models using family data and evaluating the statistical properties of the model, such as power, bias, and computational efficiency.
-
-    -   For example, a pedigree that follows these conditions: There are a total of four generations in which each mating produces four offspring. The number of male and female newborns is equal. 70% of individuals mate and bear offspring. Such a pedigree structure can be simulated by running `Ped = SimPed(kpc = 4, Ngen = 4, sexR = .5, marR = .7)`.
-
-    -   The simulation output is a `data.frame` with 57 rows and 7 columns. Each row represents a simulated individual. The columns represents the individual's family ID, the individual's personal ID, the generation the individual is in, the IDs of his/her father and mother, the ID of his/her spouse, and the biological sex of the individual, respectively.
-
-    -   To visualize the simulated pedigree, execute `PlotPedigree(Ped)` to produce a classic pedigree plot.
 
 ### Modeling and Relatedness:
 
@@ -102,7 +98,7 @@ These tools collectively provide a valuable resource for behavior geneticists an
 
 # Availability
 
-The `BGmisc` package is open-source and available on both GitHub at <https://github.com/R-Computing-Lab/BGmisc> and the Comprehensive R Archive Network (CRAN) at <https://cran.r-project.org/package=BGmisc>. It is licensed under the GNU General Public License
+The `BGmisc` package is open-source and available on both GitHub at [https://github.com/R-Computing-Lab/BGmisc] and the Comprehensive R Archive Network (CRAN) at [https://cran.r-project.org/package=BGmisc]. It is licensed under the GNU General Public License
 
 # Acknowledgements
 
