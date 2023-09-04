@@ -73,7 +73,7 @@ Two widely used R packages in genetics modeling are `OpenMx` [@Neale2016] and `k
 Although not a staple in behavior genetics, the `kinship2` [@kinship2] package provides core feature to the broader statistical genetics scientific community, such as computing genetic relatedness matrices and plotting pedigrees. It uses the Lange algorithm to compute relatedness, which  `BGmisc` package extends the capabilities of `kinship2` by introducing an alternative algorithm to calculate the relatedness coefficient, based on network models. This alternative algorithm harnesses networks to trace paths, applying traditional path tracing rules to the entirety of the network. 
 
 
-Despite their strengths,`kinship2`, `EasyMx` and `OpenMx` have limitations when it comes to handling extended family data. Notably, they lack functions for handling modern molecular designs [@kirkpatrick_combining_2021], modeling genetic complex relationships, inferring relatedness, or simulating pedigrees. Additionally, they can be computationally inefficient when dealing with large pedigrees.
+Despite their strengths, `kinship2`, `EasyMx` and `OpenMx` have limitations when it comes to handling extended family data. Notably, they lack functions for handling modern molecular designs [@kirkpatrick_combining_2021], modeling genetic complex relationships, inferring relatedness, or simulating pedigrees. Additionally, they can be computationally inefficient when dealing with large pedigrees.
 
 ## Features
 
