@@ -1,5 +1,5 @@
 ---
-title: "Pedigree"
+title: "Pedigree Simulation and Visualization with BGmisc"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Pedigree}
@@ -18,41 +18,80 @@ options(rmarkdown.html_vignette.check_title = FALSE)
 
 # Introduction
 
-This vignette provides a detailed guide to the pedigree-related functions within the `BGmisc` package.
+This vignette provides a detailed guide to the pedigree-related functions within the `BGmisc` package. 
 
 ## Loading Required Libraries
 
-```{r setup, include=FALSE}
+```{r setup}
 library(BGmisc)
-
 ```
 
 # Simulating Pedigree
 
-Unlike Tolstoy, where only happy families are alike, all pedigrees are alike. Moreover, such pedigrees can be simulated as a function of several parameters. For example, we can create a family with 3 generations (or 4).
-
-```{r,fig.width=8, fig.height=6}
 
 
-df_ped_3 <- SimPed(Ngen = 3)
-df_ped_4 <- SimPed(Ngen = 4)
+Unlike Tolstoy, where only happy families are alike, all pedigrees are alike. Moreover, such pedigrees can be simulated as a function of several parameters, including the number of children per mate, generations, sex ratio of newborns, and mating rate 
 
+The simulation function provides users the opportunity to test family models in pedigrees with a customized pedigree length and width. Since data in the form of large family pedigrees is difficult to collect or access, simulated pedigrees serve as an efficient tool for building statistical models using family data and evaluating the statistical properties of the model, such as power, bias, and computational efficiency. 
 
-par(mfrow=c(2, 1))
-PlotPedigree(df_ped_3,width = 19)
-PlotPedigree(df_ped_4,width=1)
-
-```
-
-
-
-For family pedigrees, properties including the number of involved generations, average offspring per couple, sex ratios of newborns, the mating rate in a generation, inbreeding, remarriage rate, and adoption rate will influence the pedigree structure and the family size. Among those factors, the number of involved generations (the depth of a pedigree) and the average offspring per couple (the width of a pedigree) prominently determine the overall shape of the pedigree and the total number of family members. The mating rate is one crucial factor influencing the family size given a fixed number of generations and average offspring per couple. Hence, the number of generations, average offspring per couple and mating rate will be the three main factors to operationalize different family structures. Due to the relatively low prevalence of factors like inbreeding and twins, I will assume these factors do not exist in simulated families in order to reduce the design complexity and increase the computational efficiency. Sex ratios  of newborns will not strongly impact the family structure but will hugely impact the proportion of family members that share the same mtDNA, due to the maternal inheritance pattern of mtDNA (see Figure 2 as a demonstration of mtDNA inheritance). Hence, a small deviation from .5 will be designed to investigate its impact on estimation power. 
-
+For example, a pedigree that follows these conditions: There are a total of four generations in which each mating produces four offspring. The number of male and female newborns is equal. 70% of individuals mate and bear offspring. Such a pedigree structure can be simulated by running:
 
 ```{r}
+set.seed(5)
+Ped <- SimPed(kpc = 4, Ngen = 4, sexR = .5, marR = .7)
 
-df_ped <- SimPed(kpc = 6, Ngen = 3, marR = .5)
-
-
-PlotPedigree(df_ped )
+summary(Ped)
 ```
+
+The simulation output is a `data.frame` with `r length(Ped$ID)` rows and `r length(Ped)` columns. Each row corresponds to a simulated individual.
+
+```{r}
+Ped[21,]
+```
+
+The columns represents the individual's family ID, the individual's personal ID, the generation the individual is in, the IDs of their father and mother, the ID of their spouse, and the biological sex of the individual, respectively.
+
+## Plotting Pedigree
+
+
+Pedigrees are visual diagrams that represent family relationships across generations. They are commonly used in genetics to trace the inheritance of specific traits or conditions. This vignette will guide you through visualizing simulated pedigrees using the `PlotPedigree` function.
+
+### Single Pedigree Visualization
+
+To visualize a single simulated pedigree, use the `PlotPedigree()` function.
+
+```{r,fig.width=8,fig.height=6}
+
+# Plot the simulated pedigree
+PlotPedigree(Ped)
+
+```
+
+
+In the resulting plot, biological males are represented by squares, while biological females are represented by circles, following the standard pedigree conventions.
+
+### Visualizing Multiple Pedigrees Side-by-Side
+
+If you wish to compare different pedigrees side by side, you can plot them together. For instance, let's visualize pedigrees for families spanning three and four generations, respectively.
+
+
+```{r,fig.width=8, fig.height=6}
+# Simulate a family with 3 generations
+df_ped_3 <- SimPed(Ngen = 3)
+
+# Simulate a family with 4 generations
+df_ped_4 <- SimPed(Ngen = 4)
+
+# Set up plotting parameters for side-by-side display
+par(mfrow=c(1, 2))
+
+# Plot the 3-generation pedigree
+PlotPedigree(df_ped_3, width = 3)
+
+# Plot the 4-generation pedigree
+PlotPedigree(df_ped_4, width = 1)
+
+
+```   
+
+By examining the side-by-side plots, you can contrast and analyze the structures of different families, tracing the inheritance of specific traits or conditions if needed.
