@@ -7,6 +7,8 @@
 
 [![CRAN
 version](https://www.r-pkg.org/badges/version/BGmisc)](https://cran.r-project.org/package=BGmisc)
+
+[![.github/workflows/draft-pdf.yml](https://github.com/R-Computing-Lab/BGmisc/actions/workflows/draft-pdf.yml/badge.svg)](https://github.com/R-Computing-Lab/BGmisc/actions/workflows/draft-pdf.yml)
 <!-- badges: end -->
 
 BGmisc contains many functions useful for behavior genetics, including

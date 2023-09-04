@@ -100,7 +100,7 @@ These tools collectively provide a valuable resource for behavior geneticists an
 
 # Availability
 
-The `BGmisc` package is open-source and available on both GitHub at <https://github.com/R-Computing-Lab/BGmisc> and the Comprehensive R Archive Network (CRAN) at <https://cran.r-project.org/package=BGmisc>. It is licensed under the GNU General Public License
+The `BGmisc` package is open-source and available on both GitHub at [https://github.com/R-Computing-Lab/BGmisc](https://github.com/R-Computing-Lab/BGmisc) and the Comprehensive R Archive Network (CRAN) at [https://cran.r-project.org/package=BGmisc](https://cran.r-project.org/package=BGmisc). It is licensed under the GNU General Public License
 
 # Acknowledgements
 
