@@ -9,7 +9,7 @@ tags:
   - behavior genetics
 authors:
   - name: S. Mason Garrison
-    orcid: 0000-0000-0000-0000
+    orcid: 0000-0002-4804-6003
     affiliation: 1
   - name: Michael D. Hunter
     orcid: 0000-0002-3651-6709
@@ -18,10 +18,10 @@ authors:
     orcid: 0000-0002-2841-5529
     affiliation: 1
   - name: Jonathan D. Trattner
-    orcid: 0000-0000-0000-0000
+    orcid: 0000-0002-1097-7603
     affiliation: 1  
   - name: S. Alexandra Burt
-    orcid: 0000-0000-0000-0000
+    orcid: 0000-0001-5538-7431
     affiliation: 3
 affiliations:
  - name: Wake Forest University, North Carolina, USA
