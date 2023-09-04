@@ -7,3 +7,4 @@
 ^Meta$
 ^vignettes/articles$
 ^README\.Rmd$
+^\.github$
