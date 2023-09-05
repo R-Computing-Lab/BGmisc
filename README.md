@@ -17,8 +17,7 @@ downloads](https://cranlogs.r-pkg.org/badges/grand-total/BGmisc)](https://cran.r
 ![License](https://img.shields.io/badge/License-GPL_v3-blue.svg)
 <!-- badges: end -->
 
-BGmisc contains many functions useful for behavior genetics, including
-plots and classic formulae.
+BGmisc contains many functions useful for behavior genetics.
 
 ## Installation
 
