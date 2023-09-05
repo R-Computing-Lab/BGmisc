@@ -65,7 +65,7 @@ The result showcases how the matrices have been transformed, reflecting their ro
 
 The `identifyComponentModel` function helps determine if a variance components model is identified. It accepts relatedness component matrices and returns information about identified and non-identified parameters. 
 
-Here's an example using the classical twin model with only MZ twins:
+Here's an example using the classical twin model *with only MZ twins*:
 ```{r}
 identifyComponentModel(A = list(matrix(1, 2, 2)), 
                        C = list(matrix(1, 2, 2)), 
