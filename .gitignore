@@ -7,3 +7,5 @@ paper/paper.html
 inst/doc
 /doc/
 /Meta/
+*.knit.md
+vignettes/articles/paper.html

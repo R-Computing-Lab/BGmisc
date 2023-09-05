@@ -31,8 +31,11 @@ require(OpenMx)
 Ensure that the `BGmisc` package is installed and loaded.
 
 Ensure that the following dependencies are installed before proceeding as they provide us with behavior genetic data and models:
+
 - `EasyMx`
+
 - `OpenMx`
+
 
 ```{r}
 library(BGmisc)
@@ -102,6 +105,7 @@ Let us fit the data with MZ twins by themselves.
 run1 <- emxTwinModel(model='Cholesky', relatedness='RCoef',
                data=mzData, use=selVars, run=TRUE, name='TwCh')
 
+summary(run1)
 ```
 
 As you can see the model was unsucessful because it was not identified. But when we add another group, so that the model is identified, the model now fits.
@@ -110,4 +114,5 @@ As you can see the model was unsucessful because it was not identified. But when
 run2 <- emxTwinModel(model='Cholesky', relatedness='RCoef',
 	data=mzdzData, use=selVars, run=TRUE, name='TwCh')
 
+summary(run2)
 ```
