@@ -1,5 +1,6 @@
 on: [push]
-
+ paths:
+      - '**.md'
 jobs:
   paper:
     runs-on: ubuntu-latest
