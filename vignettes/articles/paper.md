@@ -58,7 +58,7 @@ Acknowledgment of any financial support.
 
 <!-- > A summary describing the high-level functionality and purpose of the software for a diverse, non-specialist audience. -->
 
-Behavior genetics focuses on understanding genetic and environmental influences on individual differences, traditionally through twin studies. With the expansion of research to more complex data structures like extended family data, there arises a need for specialized software tools.  The `BGmisc` package addresses this gap by offering a comprehensive suite of functions tailored for modeling such data.
+Behavior genetics focuses on understanding genetic and environmental influences on individual differences, traditionally through twin studies. However, with the expansion of research to more complex data structures like extended family data, there arises a need for specialized software tools.  The `BGmisc` package addresses this gap by offering a comprehensive suite of functions for structuring and modeling such data.
 
 
 # Statement of need
@@ -79,7 +79,7 @@ The `BGmisc` package offers various features tailored for extended behavior gene
 
 -   Model Identification: `BGmisc` evaluates whether a variance components model is identified and fits the model's estimated variance components to observed covariance data. The technical aspects related to model identification have been described in @hunter_analytic_2021.
 
--   Relatedness Coefficient Calculation: Using path tracing rules first described in [@Wright1922], `BGmisc` calculates the relatedness coefficient between all pairs of individuals based on mother and father identifiers. 
+-   Relatedness Coefficient Calculation: Using path tracing rules first described in [@Wright1922] and formalized in [@mcardleRAM], `BGmisc` calculates the (sparse) relatedness coefficients between all pairs of individuals in extended pedigrees based purely on mother and father identifiers. 
 
 -   Relatedness Inference: `BGmisc` infers the relatedness between two groups based on their observed total correlation, given additive genetic and shared environmental parameters.
 
