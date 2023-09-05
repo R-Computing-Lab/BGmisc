@@ -23,8 +23,8 @@ jobs:
           path: vignettes/articles/paper.pdf
       - name: download
         uses: actions/download-artifact@v3
-          with:
-            name: 'paper'
-            path: vignettes/articles/paper.pdf
+        with:
+          name: 'paper'
+          path: vignettes/articles/paper.pdf
       - name: 'Echo download path'
-       run: echo ${{steps.download.outputs.download-path}}
+        run: echo ${{steps.download.outputs.download-path}}
