@@ -102,8 +102,11 @@ Let us fit the data with MZ twins by themselves.
 
 ```{r}
 
-run1 <- emxTwinModel(model='Cholesky', relatedness='RCoef',
-               data=mzData, use=selVars, run=TRUE, name='TwCh')
+run1 <- emxTwinModel(model='Cholesky', 
+                     relatedness='RCoef',
+                     data=mzData, 
+                     use=selVars, 
+                     run=TRUE, name='TwCh')
 
 summary(run1)
 ```
@@ -111,8 +114,11 @@ summary(run1)
 As you can see the model was unsucessful because it was not identified. But when we add another group, so that the model is identified, the model now fits.
 
 ```{r}
-run2 <- emxTwinModel(model='Cholesky', relatedness='RCoef',
-	data=mzdzData, use=selVars, run=TRUE, name='TwCh')
+run2 <- emxTwinModel(model='Cholesky', 
+                     relatedness='RCoef',
+                     data=mzdzData, 
+                     use=selVars, 
+                     run=TRUE, name='TwCh')
 
 summary(run2)
 ```
