@@ -388,8 +388,8 @@ reflecting their role in subsequent variance component analysis.</p>
 variance components model is identified. It accepts relatedness
 component matrices and returns information about identified and
 non-identified parameters.</p>
-<p>Here’s an example using the classical twin model with only MZ
-twins:</p>
+<p>Here’s an example using the classical twin model <em>with only MZ
+twins</em>:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">identifyComponentModel</span>(<span class="at">A =</span> <span class="fu">list</span>(<span class="fu">matrix</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>)), </span>
 <span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>                       <span class="at">C =</span> <span class="fu">list</span>(<span class="fu">matrix</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>)), </span>
 <span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>                       <span class="at">E =</span> <span class="fu">diag</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
@@ -476,8 +476,8 @@ group. Let us confirm by fitting a model. First we prepare the data.</p>
 <span id="cb6-37"><a href="#cb6-37" tabindex="-1"></a><span class="co">#&gt; AIC:      -5917.148              -3685.148                -3685.078</span></span>
 <span id="cb6-38"><a href="#cb6-38" tabindex="-1"></a><span class="co">#&gt; BIC:     -10747.543              -3667.773                -3680.471</span></span>
 <span id="cb6-39"><a href="#cb6-39" tabindex="-1"></a><span class="co">#&gt; To get additional fit indices, see help(mxRefModels)</span></span>
-<span id="cb6-40"><a href="#cb6-40" tabindex="-1"></a><span class="co">#&gt; timestamp: 2023-09-05 20:00:53 </span></span>
-<span id="cb6-41"><a href="#cb6-41" tabindex="-1"></a><span class="co">#&gt; Wall clock time: 0.08094406 secs </span></span>
+<span id="cb6-40"><a href="#cb6-40" tabindex="-1"></a><span class="co">#&gt; timestamp: 2023-09-06 10:35:14 </span></span>
+<span id="cb6-41"><a href="#cb6-41" tabindex="-1"></a><span class="co">#&gt; Wall clock time: 0.08595896 secs </span></span>
 <span id="cb6-42"><a href="#cb6-42" tabindex="-1"></a><span class="co">#&gt; optimizer:  SLSQP </span></span>
 <span id="cb6-43"><a href="#cb6-43" tabindex="-1"></a><span class="co">#&gt; OpenMx version number: 2.21.8 </span></span>
 <span id="cb6-44"><a href="#cb6-44" tabindex="-1"></a><span class="co">#&gt; Need help?  See help(mxSummary)</span></span></code></pre></div>
@@ -513,8 +513,8 @@ identified, the model now fits.</p>
 <span id="cb7-27"><a href="#cb7-27" tabindex="-1"></a><span class="co">#&gt; AIC:      -9113.092              -5499.092                -5499.048</span></span>
 <span id="cb7-28"><a href="#cb7-28" tabindex="-1"></a><span class="co">#&gt; BIC:     -17811.437              -5479.794                -5492.498</span></span>
 <span id="cb7-29"><a href="#cb7-29" tabindex="-1"></a><span class="co">#&gt; To get additional fit indices, see help(mxRefModels)</span></span>
-<span id="cb7-30"><a href="#cb7-30" tabindex="-1"></a><span class="co">#&gt; timestamp: 2023-09-05 20:00:53 </span></span>
-<span id="cb7-31"><a href="#cb7-31" tabindex="-1"></a><span class="co">#&gt; Wall clock time: 0.06252909 secs </span></span>
+<span id="cb7-30"><a href="#cb7-30" tabindex="-1"></a><span class="co">#&gt; timestamp: 2023-09-06 10:35:14 </span></span>
+<span id="cb7-31"><a href="#cb7-31" tabindex="-1"></a><span class="co">#&gt; Wall clock time: 0.08642101 secs </span></span>
 <span id="cb7-32"><a href="#cb7-32" tabindex="-1"></a><span class="co">#&gt; optimizer:  SLSQP </span></span>
 <span id="cb7-33"><a href="#cb7-33" tabindex="-1"></a><span class="co">#&gt; OpenMx version number: 2.21.8 </span></span>
 <span id="cb7-34"><a href="#cb7-34" tabindex="-1"></a><span class="co">#&gt; Need help?  See help(mxSummary)</span></span></code></pre></div>
