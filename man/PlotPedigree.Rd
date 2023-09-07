@@ -72,9 +72,7 @@ were for plotting (useful for adding extras to the plot)
   to a large number will force the line to connect at the midpoint of
   the children.}
 
-\item{...}{
-Extra options that feed into the plot function.
-}
+\item{...}{ Extra options that feed into the plot function}
 }
 \value{
 A plot of the simulated pedigree
