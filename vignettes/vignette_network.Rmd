@@ -1,0 +1,63 @@
+---
+title: "Network tools for finding extended pedigrees and path tracing"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Network}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+options(rmarkdown.html_vignette.check_title = FALSE) 
+```
+
+
+# Introduction
+
+This vignette illustrates two features that capitalize on the network structure of a pedigree.  The first feature finds extended families with *any* connecting relationship between the members.  This feature strictly uses a person ID, mother ID, and a father ID to find out which people in a dataset are remotely related by any path.  This feature thus finds all the separable extended families in a dataset.  The second feature uses path tracing rules to determine the *amount* of relatedness between all pairs of people in a dataset.  The amount of relatedness can be determined by additive nuclear DNA, shared mitochondrial DNA, sharing both parents, or being in the same extended pedigree.
+
+## Loading Required Libraries and Data
+
+```{r setup}
+library(BGmisc)
+data(hazard)
+```
+
+# Finding Extended Families
+
+Many pedigree datasets only contain information on the person, their mother, and their father.  They often do not contain nuclear or extended family IDs.  Many tasks related to pedigrees are much easier if you know which sets of people are not related at all.  This function helps with that by finding all the extended families.  People in the same extended family have at least some (possibly distant) relation with one another.  People in different extended families have not relations at all.
+
+To illustrate our family finding algorithm, we apply it to the our `hazard` pedigree data.
+
+```{r}
+ds <- ped2fam(hazard, famID='newFamID')
+table(ds$FamID, ds$newFamID)
+```
+
+Because the `hazard` data already had a family ID variable we compare our newly created variable to the pre-existing one.  They match!
+
+
+# Computing Relatedness
+
+Once you know which sets of people are related at all to one another, you'll likely want to know how much.  For additive genetic relatedness, you can use the `ped2add()` function.
+
+```{r}
+add <- ped2add(hazard)
+```
+
+This computes the additive genetic relatedness for everyone in the data.  It returns a square, symmetric matrix that has as many rows and columns as there are IDs.  The entry in the ith row and the jth column gives the relatedness between person i and person j.
+
+It's probably fine to do this on the whole dataset when your data have fewer than 10,000 people.  When the data get large, however, it's much more efficient to compute this relatedness separately for each extended family.
+
+```{r}
+add_list <- lapply(
+  unique(hazard$FamID),
+  function(d){tmp <- hazard[hazard$FamID %in% d,]; ped2add(tmp)})
+```
+
+The function works similarly for mitochonrial (`ped2mit`), common nuclear environment through sharing both parents (`ped2cn`), and common extended family environment (`ped2ce`).
+
