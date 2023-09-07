@@ -11,26 +11,25 @@
 #' @export
 #' @seealso \code{\link{SimPed}} for the main function that uses this supporting function.
 
-evenInsert <- function(m,n){
-      if (length(m) > length(n)){
-            temp <- m
-            m <- n
-            n <- temp
-      }
+evenInsert <- function(m, n) {
+  if (length(m) > length(n)) {
+    temp <- m
+    m <- n
+    n <- temp
+  }
 
-      #idx <- numeric()
-      for (i in 1:length(m)){
-            names(m)[i] <- ceiling(i*length(n)/length(m))
-      }
-      #print(m)
+  # idx <- numeric()
+  for (i in 1:length(m)) {
+    names(m)[i] <- ceiling(i * length(n) / length(m))
+  }
+  # print(m)
 
-      names(n) <- 1:length(n)
-      #print(n)
+  names(n) <- 1:length(n)
+  # print(n)
 
-      vec <- c(m,n)
-      vec <- vec[order(as.numeric(names(vec)))]
-      vec <- unname(vec)
+  vec <- c(m, n)
+  vec <- vec[order(as.numeric(names(vec)))]
+  vec <- unname(vec)
 
-      return(vec)
+  return(vec)
 }
-

@@ -12,7 +12,7 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-options(rmarkdown.html_vignette.check_title = FALSE) 
+options(rmarkdown.html_vignette.check_title = FALSE)
 ```
 
 
@@ -46,7 +46,7 @@ summary(Ped)
 The simulation output is a `data.frame` with `r length(Ped$ID)` rows and `r length(Ped)` columns. Each row corresponds to a simulated individual.
 
 ```{r}
-Ped[21,]
+Ped[21, ]
 ```
 
 The columns represents the individual's family ID, the individual's personal ID, the generation the individual is in, the IDs of their father and mother, the ID of their spouse, and the biological sex of the individual, respectively.
@@ -61,10 +61,8 @@ Pedigrees are visual diagrams that represent family relationships across generat
 To visualize a single simulated pedigree, use the `PlotPedigree()` function.
 
 ```{r,fig.width=8,fig.height=6}
-
 # Plot the simulated pedigree
 PlotPedigree(Ped)
-
 ```
 
 
@@ -83,15 +81,13 @@ df_ped_3 <- SimPed(Ngen = 3)
 df_ped_4 <- SimPed(Ngen = 4)
 
 # Set up plotting parameters for side-by-side display
-par(mfrow=c(1, 2))
+par(mfrow = c(1, 2))
 
 # Plot the 3-generation pedigree
 PlotPedigree(df_ped_3, width = 3)
 
 # Plot the 4-generation pedigree
 PlotPedigree(df_ped_4, width = 1)
-
-
 ```   
 
 By examining the side-by-side plots, you can contrast and analyze the structures of different families, tracing the inheritance of specific traits or conditions if needed.

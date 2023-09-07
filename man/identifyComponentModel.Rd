@@ -30,6 +30,6 @@ If any components are not identified, their names are returned in the output.
 }
 \examples{
 
-identifyComponentModel(A=list(matrix(1, 2, 2)), C=list(matrix(1, 2, 2)), E= diag(1, 2))
+identifyComponentModel(A = list(matrix(1, 2, 2)), C = list(matrix(1, 2, 2)), E = diag(1, 2))
 
 }

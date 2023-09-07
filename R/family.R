@@ -20,36 +20,43 @@
 #'
 #' @export
 #'
-ped2fam <- function(ped, personID='ID', momID='momID', dadID='dadID', famID='famID'){
-    if(!inherits(ped, 'data.frame')) stop("ped should be a data.frame or inherit to a data.frame")
-    if(!all(c() %in% names(ped))) stop("'personID', 'momID', and 'dadID' were not all found in your pedigree.\nMake sure you have the variable names correct.")
+ped2fam <- function(ped, personID = "ID", momID = "momID", dadID = "dadID", famID = "famID") {
+  if (!inherits(ped, "data.frame")) stop("ped should be a data.frame or inherit to a data.frame")
+  if (!all(c() %in% names(ped))) stop("'personID', 'momID', and 'dadID' were not all found in your pedigree.\nMake sure you have the variable names correct.")
 
-    # TODO call ped2graph
-    nodes <- unique(
-      stats::na.omit(c(ped[[personID]], ped[[momID]], ped[[dadID]]))
-    )
-    edges <- rbind(
-        as.matrix(ped[,c(personID, momID)]),
-        as.matrix(ped[,c(personID, dadID)]))
-    edges <- edges[stats::complete.cases(edges),]
+  # TODO call ped2graph
+  nodes <- unique(
+    stats::na.omit(c(ped[[personID]], ped[[momID]], ped[[dadID]]))
+  )
+  edges <- rbind(
+    as.matrix(ped[, c(personID, momID)]),
+    as.matrix(ped[, c(personID, dadID)])
+  )
+  edges <- edges[stats::complete.cases(edges), ]
 
-    # Make graph
-    pg <- igraph::graph_from_data_frame(d=edges,
-                                        directed=FALSE,
-                                        vertices=nodes) # directed = TRUE looks better?
+  # Make graph
+  pg <- igraph::graph_from_data_frame(
+    d = edges,
+    directed = FALSE,
+    vertices = nodes
+  ) # directed = TRUE looks better?
 
-    # Find weakly connected components of graph
-    wcc <- igraph::components(pg)
+  # Find weakly connected components of graph
+  wcc <- igraph::components(pg)
 
-    fam <- data.frame(V1=as.numeric(names(wcc$membership)),
-                      V2=wcc$membership)
-    names(fam) <- c(personID, famID)
-    ped2 <- merge(fam, ped,
-                  by='ID', all.x=FALSE, all.y=TRUE)
+  fam <- data.frame(
+    V1 = as.numeric(names(wcc$membership)),
+    V2 = wcc$membership
+  )
+  names(fam) <- c(personID, famID)
+  ped2 <- merge(fam, ped,
+    by = "ID", all.x = FALSE, all.y = TRUE
+  )
 
-    return(ped2)
+  return(ped2)
 }
 
 # take a pedigree and return a graph
-ped2graph <- function(){return(0)}
-
+ped2graph <- function() {
+  return(0)
+}

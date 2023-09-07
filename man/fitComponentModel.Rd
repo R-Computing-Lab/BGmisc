@@ -25,19 +25,18 @@ The rank of the component matrices is checked to ensure that the variance compon
 Warnings are issued if there are inconsistencies.
 }
 \examples{
-
 \dontrun{
 # install.packages("OpenMX")
 data(twinData, package = "OpenMx")
 sellVars <- c("ht1", "ht2")
-mzData <- subset(twinData, zyg \%in\% c(1), c(selVars, 'zyg'))
-dzData <- subset(twinData, zyg \%in\% c(3), c(selVars, 'zyg'))
+mzData <- subset(twinData, zyg \%in\% c(1), c(selVars, "zyg"))
+dzData <- subset(twinData, zyg \%in\% c(3), c(selVars, "zyg"))
 
 fitComponentModel(
-covmat = list(cov(mzData[,selVars], use = "pair"), cov(dzData[,selVars], use = "pair")),
-A = list(matrix(1, nrow = 2, ncol = 2), matrix(c(1, 0.5, 0.5, 1), nrow = 2, ncol = 2)),
-C = list(matrix(1, nrow = 2, ncol = 2), matrix(1, nrow = 2, ncol = 2)),
-E = list(diag(1, nrow = 2), diag(1, nrow = 2))
+  covmat = list(cov(mzData[, selVars], use = "pair"), cov(dzData[, selVars], use = "pair")),
+  A = list(matrix(1, nrow = 2, ncol = 2), matrix(c(1, 0.5, 0.5, 1), nrow = 2, ncol = 2)),
+  C = list(matrix(1, nrow = 2, ncol = 2), matrix(1, nrow = 2, ncol = 2)),
+  E = list(diag(1, nrow = 2), diag(1, nrow = 2))
 )
 }
 

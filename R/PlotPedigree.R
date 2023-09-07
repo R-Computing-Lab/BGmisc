@@ -15,31 +15,34 @@ PlotPedigree <- function(ped, cex = .5,
                          density = c(-1, 35, 65, 20), # mar=c(3.1, 1, 3.1, 1),
                          angle = c(90, 65, 40, 0), keep.par = FALSE,
                          pconnect = .5,
-                         ...	){
-      #library(kinship2)
-      p <- ped[,-c(3,6)]
-      colnames(p) <- c("ped","id","father","mother","sex")
-      p[is.na(p)] <- 0
-      p$ped <- 1
-      p$affected <- 0
-      p$avail <- 0
-      p2 <- kinship2::pedigree(id=p$id,
-                     dadid=p$father,
-                     momid=p$mother,
-                     sex=p$sex,
-                     famid=p$ped)
-      p3 <- p2['1']
-      print(p3)
-      return(kinship2::plot.pedigree(p3,
-                           cex = cex,
-                           col = col,
-                           symbolsize = symbolsize,
-                           branch = branch,
-                           packed = packed, align = align,
-                           width = width,
-                           density = density,
-                           angle = angle, keep.par = keep.par,
-                           pconnect = pconnect))
+                         ...) {
+  # library(kinship2)
+  p <- ped[, -c(3, 6)]
+  colnames(p) <- c("ped", "id", "father", "mother", "sex")
+  p[is.na(p)] <- 0
+  p$ped <- 1
+  p$affected <- 0
+  p$avail <- 0
+  p2 <- kinship2::pedigree(
+    id = p$id,
+    dadid = p$father,
+    momid = p$mother,
+    sex = p$sex,
+    famid = p$ped
+  )
+  p3 <- p2["1"]
+  print(p3)
+  return(kinship2::plot.pedigree(p3,
+    cex = cex,
+    col = col,
+    symbolsize = symbolsize,
+    branch = branch,
+    packed = packed, align = align,
+    width = width,
+    density = density,
+    angle = angle, keep.par = keep.par,
+    pconnect = pconnect
+  ))
 }
 
-#PlotPedigree(SimPed(kpc = 2, Ngen = 6, marR = .8))
+# PlotPedigree(SimPed(kpc = 2, Ngen = 6, marR = .8))

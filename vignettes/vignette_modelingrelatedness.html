@@ -376,9 +376,11 @@ identification and fitting of variance component models.</p>
 <p>The <code>comp2vech</code> function is used to vectorize a components
 model. The function is often used in conjunction with the identification
 process. In this example, we apply it to a list of matrices:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">comp2vech</span>(<span class="fu">list</span>(<span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>, .<span class="dv">5</span>, .<span class="dv">5</span>, <span class="dv">1</span>), <span class="dv">2</span>, <span class="dv">2</span>), </span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>               <span class="fu">matrix</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>)))</span>
-<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co">#&gt; [1] 1.0 0.5 1.0 1.0 1.0 1.0</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">comp2vech</span>(<span class="fu">list</span>(</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>  <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>, .<span class="dv">5</span>, .<span class="dv">5</span>, <span class="dv">1</span>), <span class="dv">2</span>, <span class="dv">2</span>),</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>  <span class="fu">matrix</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>))</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co">#&gt; [1] 1.0 0.5 1.0 1.0 1.0 1.0</span></span></code></pre></div>
 <p>The result showcases how the matrices have been transformed,
 reflecting their role in subsequent variance component analysis.</p>
 </div>
@@ -390,28 +392,32 @@ component matrices and returns information about identified and
 non-identified parameters.</p>
 <p>Here’s an example using the classical twin model <em>with only MZ
 twins</em>:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">identifyComponentModel</span>(<span class="at">A =</span> <span class="fu">list</span>(<span class="fu">matrix</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>)), </span>
-<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>                       <span class="at">C =</span> <span class="fu">list</span>(<span class="fu">matrix</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>)), </span>
-<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>                       <span class="at">E =</span> <span class="fu">diag</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
-<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co">#&gt; Component model is not identified.</span></span>
-<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#&gt; Non-identified parameters are  A, C</span></span>
-<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="co">#&gt; $identified</span></span>
-<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co">#&gt; [1] FALSE</span></span>
-<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co">#&gt; $nidp</span></span>
-<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="co">#&gt; [1] &quot;A&quot; &quot;C&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">identifyComponentModel</span>(</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>  <span class="at">A =</span> <span class="fu">list</span>(<span class="fu">matrix</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>)),</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>  <span class="at">C =</span> <span class="fu">list</span>(<span class="fu">matrix</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>)),</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>  <span class="at">E =</span> <span class="fu">diag</span>(<span class="dv">1</span>, <span class="dv">2</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>)</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="co">#&gt; Component model is not identified.</span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co">#&gt; Non-identified parameters are  A, C</span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="co">#&gt; $identified</span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co">#&gt; [1] FALSE</span></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="co">#&gt; $nidp</span></span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a><span class="co">#&gt; [1] &quot;A&quot; &quot;C&quot;</span></span></code></pre></div>
 <p>As you can see, the model is not identified. We need to add an
 additional group so that we have sufficient information. Let us add the
 rest of the classical twin model, in this case DZ twins.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">identifyComponentModel</span>(<span class="at">A =</span> <span class="fu">list</span>(<span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>, .<span class="dv">5</span>, .<span class="dv">5</span>, <span class="dv">1</span>), <span class="dv">2</span>, <span class="dv">2</span>), <span class="fu">matrix</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>)), </span>
-<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>                       <span class="at">C=</span><span class="fu">list</span>(<span class="fu">matrix</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>), <span class="fu">matrix</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>)),</span>
-<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>                       <span class="at">E=</span><span class="fu">diag</span>(<span class="dv">1</span>, <span class="dv">4</span>))</span>
-<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&gt; Component model is identified.</span></span>
-<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co">#&gt; $identified</span></span>
-<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co">#&gt; [1] TRUE</span></span>
-<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="co">#&gt; $nidp</span></span>
-<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="co">#&gt; character(0)</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">identifyComponentModel</span>(</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>  <span class="at">A =</span> <span class="fu">list</span>(<span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>, .<span class="dv">5</span>, .<span class="dv">5</span>, <span class="dv">1</span>), <span class="dv">2</span>, <span class="dv">2</span>), <span class="fu">matrix</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>)),</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>  <span class="at">C =</span> <span class="fu">list</span>(<span class="fu">matrix</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>), <span class="fu">matrix</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>)),</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>  <span class="at">E =</span> <span class="fu">diag</span>(<span class="dv">1</span>, <span class="dv">4</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>)</span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co">#&gt; Component model is identified.</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="co">#&gt; $identified</span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="co">#&gt; [1] TRUE</span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="co">#&gt; $nidp</span></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="co">#&gt; character(0)</span></span></code></pre></div>
 <p>As you can see the model is identified, now that we’ve added another
 group. Let us confirm by fitting a model. First we prepare the data.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">require</span>(dplyr)</span>
@@ -424,100 +430,105 @@ group. Let us confirm by fitting a model. First we prepare the data.</p>
 <span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a><span class="co">#&gt; The following objects are masked from &#39;package:base&#39;:</span></span>
 <span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="co">#&gt;     intersect, setdiff, setequal, union</span></span>
-<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="co">#require(purrr)</span></span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="co"># require(purrr)</span></span>
 <span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a></span>
-<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a><span class="fu">data</span>(twinData, <span class="at">package=</span><span class="st">&#39;OpenMx&#39;</span>)</span>
-<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a>selVars <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&#39;ht1&#39;</span>, <span class="st">&#39;ht2&#39;</span>)</span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a><span class="fu">data</span>(twinData, <span class="at">package =</span> <span class="st">&quot;OpenMx&quot;</span>)</span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a>selVars <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;ht1&quot;</span>, <span class="st">&quot;ht2&quot;</span>)</span>
 <span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a></span>
-<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a>mzdzData <span class="ot">&lt;-</span> <span class="fu">subset</span>(twinData, zyg <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>), </span>
-<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a>                   <span class="fu">c</span>(selVars, <span class="st">&#39;zyg&#39;</span>))</span>
-<span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a></span>
-<span id="cb5-19"><a href="#cb5-19" tabindex="-1"></a>mzdzData<span class="sc">$</span>RCoef <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="cn">NA</span>, .<span class="dv">5</span>)[mzdzData<span class="sc">$</span>zyg]</span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a>mzdzData <span class="ot">&lt;-</span> <span class="fu">subset</span>(</span>
+<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a>  twinData, zyg <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>),</span>
+<span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a>  <span class="fu">c</span>(selVars, <span class="st">&quot;zyg&quot;</span>)</span>
+<span id="cb5-19"><a href="#cb5-19" tabindex="-1"></a>)</span>
 <span id="cb5-20"><a href="#cb5-20" tabindex="-1"></a></span>
-<span id="cb5-21"><a href="#cb5-21" tabindex="-1"></a></span>
-<span id="cb5-22"><a href="#cb5-22" tabindex="-1"></a>mzData <span class="ot">&lt;-</span> mzdzData  <span class="sc">%&gt;%</span> <span class="fu">filter</span>(zyg <span class="sc">==</span><span class="dv">1</span>)</span></code></pre></div>
+<span id="cb5-21"><a href="#cb5-21" tabindex="-1"></a>mzdzData<span class="sc">$</span>RCoef <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="cn">NA</span>, .<span class="dv">5</span>)[mzdzData<span class="sc">$</span>zyg]</span>
+<span id="cb5-22"><a href="#cb5-22" tabindex="-1"></a></span>
+<span id="cb5-23"><a href="#cb5-23" tabindex="-1"></a></span>
+<span id="cb5-24"><a href="#cb5-24" tabindex="-1"></a>mzData <span class="ot">&lt;-</span> mzdzData <span class="sc">%&gt;%</span> <span class="fu">filter</span>(zyg <span class="sc">==</span> <span class="dv">1</span>)</span></code></pre></div>
 <p>Let us fit the data with MZ twins by themselves.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a></span>
-<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>run1 <span class="ot">&lt;-</span> <span class="fu">emxTwinModel</span>(<span class="at">model=</span><span class="st">&#39;Cholesky&#39;</span>, </span>
-<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>                     <span class="at">relatedness=</span><span class="st">&#39;RCoef&#39;</span>,</span>
-<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>                     <span class="at">data=</span>mzData, </span>
-<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>                     <span class="at">use=</span>selVars, </span>
-<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>                     <span class="at">run=</span><span class="cn">TRUE</span>, <span class="at">name=</span><span class="st">&#39;TwCh&#39;</span>)</span>
-<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="co">#&gt; Running TwCh with 4 parameters</span></span>
-<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="co">#&gt; Warning: In model &#39;TwCh&#39; Optimizer returned a non-zero status code 5. The</span></span>
-<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="co">#&gt; Hessian at the solution does not appear to be convex. See</span></span>
-<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="co">#&gt; ?mxCheckIdentification for possible diagnosis (Mx status RED).</span></span>
-<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a></span>
-<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a><span class="fu">summary</span>(run1)</span>
-<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="co">#&gt; Summary of TwCh </span></span>
-<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a><span class="co">#&gt;  </span></span>
-<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a><span class="co">#&gt; The Hessian at the solution does not appear to be convex. See ?mxCheckIdentification for possible diagnosis (Mx status RED). </span></span>
-<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a><span class="co">#&gt;  </span></span>
-<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a><span class="co">#&gt; free parameters:</span></span>
-<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a><span class="co">#&gt;      name matrix row col   Estimate    Std.Error A lbound ubound</span></span>
-<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a><span class="co">#&gt; 1 sqrtA11  sqrtA   1   1 0.05090090           NA    1e-06       </span></span>
-<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a><span class="co">#&gt; 2 sqrtC11  sqrtC   1   1 0.03565565           NA !     0!       </span></span>
-<span id="cb6-21"><a href="#cb6-21" tabindex="-1"></a><span class="co">#&gt; 3 sqrtE11  sqrtE   1   1 0.02325722 0.0007017955 !     0!       </span></span>
-<span id="cb6-22"><a href="#cb6-22" tabindex="-1"></a><span class="co">#&gt; 4    Mht1  Means ht1   1 1.62974907 0.0027023908                </span></span>
-<span id="cb6-23"><a href="#cb6-23" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-24"><a href="#cb6-24" tabindex="-1"></a><span class="co">#&gt; Model Statistics: </span></span>
-<span id="cb6-25"><a href="#cb6-25" tabindex="-1"></a><span class="co">#&gt;                |  Parameters  |  Degrees of Freedom  |  Fit (-2lnL units)</span></span>
-<span id="cb6-26"><a href="#cb6-26" tabindex="-1"></a><span class="co">#&gt;        Model:              4                   1112             -3693.148</span></span>
-<span id="cb6-27"><a href="#cb6-27" tabindex="-1"></a><span class="co">#&gt;    Saturated:              5                   1111                    NA</span></span>
-<span id="cb6-28"><a href="#cb6-28" tabindex="-1"></a><span class="co">#&gt; Independence:              4                   1112                    NA</span></span>
-<span id="cb6-29"><a href="#cb6-29" tabindex="-1"></a><span class="co">#&gt; Number of observations/statistics: 569/1116</span></span>
-<span id="cb6-30"><a href="#cb6-30" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>run1 <span class="ot">&lt;-</span> <span class="fu">emxTwinModel</span>(</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>  <span class="at">model =</span> <span class="st">&quot;Cholesky&quot;</span>,</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>  <span class="at">relatedness =</span> <span class="st">&quot;RCoef&quot;</span>,</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>  <span class="at">data =</span> mzData,</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>  <span class="at">use =</span> selVars,</span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>  <span class="at">run =</span> <span class="cn">TRUE</span>, <span class="at">name =</span> <span class="st">&quot;TwCh&quot;</span></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>)</span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="co">#&gt; Running TwCh with 4 parameters</span></span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="co">#&gt; Warning: In model &#39;TwCh&#39; Optimizer returned a non-zero status code 5. The</span></span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="co">#&gt; Hessian at the solution does not appear to be convex. See</span></span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="co">#&gt; ?mxCheckIdentification for possible diagnosis (Mx status RED).</span></span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a></span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="fu">summary</span>(run1)</span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a><span class="co">#&gt; Summary of TwCh </span></span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a><span class="co">#&gt;  </span></span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a><span class="co">#&gt; The Hessian at the solution does not appear to be convex. See ?mxCheckIdentification for possible diagnosis (Mx status RED). </span></span>
+<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a><span class="co">#&gt;  </span></span>
+<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a><span class="co">#&gt; free parameters:</span></span>
+<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a><span class="co">#&gt;      name matrix row col   Estimate    Std.Error A lbound ubound</span></span>
+<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a><span class="co">#&gt; 1 sqrtA11  sqrtA   1   1 0.05090090           NA    1e-06       </span></span>
+<span id="cb6-21"><a href="#cb6-21" tabindex="-1"></a><span class="co">#&gt; 2 sqrtC11  sqrtC   1   1 0.03565565           NA !     0!       </span></span>
+<span id="cb6-22"><a href="#cb6-22" tabindex="-1"></a><span class="co">#&gt; 3 sqrtE11  sqrtE   1   1 0.02325722 0.0007017955 !     0!       </span></span>
+<span id="cb6-23"><a href="#cb6-23" tabindex="-1"></a><span class="co">#&gt; 4    Mht1  Means ht1   1 1.62974907 0.0027023908                </span></span>
+<span id="cb6-24"><a href="#cb6-24" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-25"><a href="#cb6-25" tabindex="-1"></a><span class="co">#&gt; Model Statistics: </span></span>
+<span id="cb6-26"><a href="#cb6-26" tabindex="-1"></a><span class="co">#&gt;                |  Parameters  |  Degrees of Freedom  |  Fit (-2lnL units)</span></span>
+<span id="cb6-27"><a href="#cb6-27" tabindex="-1"></a><span class="co">#&gt;        Model:              4                   1112             -3693.148</span></span>
+<span id="cb6-28"><a href="#cb6-28" tabindex="-1"></a><span class="co">#&gt;    Saturated:              5                   1111                    NA</span></span>
+<span id="cb6-29"><a href="#cb6-29" tabindex="-1"></a><span class="co">#&gt; Independence:              4                   1112                    NA</span></span>
+<span id="cb6-30"><a href="#cb6-30" tabindex="-1"></a><span class="co">#&gt; Number of observations/statistics: 569/1116</span></span>
 <span id="cb6-31"><a href="#cb6-31" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-32"><a href="#cb6-32" tabindex="-1"></a><span class="co">#&gt; ** Information matrix is not positive definite (not at a candidate optimum).</span></span>
-<span id="cb6-33"><a href="#cb6-33" tabindex="-1"></a><span class="co">#&gt;   Be suspicious of these results. At minimum, do not trust the standard errors.</span></span>
-<span id="cb6-34"><a href="#cb6-34" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-35"><a href="#cb6-35" tabindex="-1"></a><span class="co">#&gt; Information Criteria: </span></span>
-<span id="cb6-36"><a href="#cb6-36" tabindex="-1"></a><span class="co">#&gt;       |  df Penalty  |  Parameters Penalty  |  Sample-Size Adjusted</span></span>
-<span id="cb6-37"><a href="#cb6-37" tabindex="-1"></a><span class="co">#&gt; AIC:      -5917.148              -3685.148                -3685.078</span></span>
-<span id="cb6-38"><a href="#cb6-38" tabindex="-1"></a><span class="co">#&gt; BIC:     -10747.543              -3667.773                -3680.471</span></span>
-<span id="cb6-39"><a href="#cb6-39" tabindex="-1"></a><span class="co">#&gt; To get additional fit indices, see help(mxRefModels)</span></span>
-<span id="cb6-40"><a href="#cb6-40" tabindex="-1"></a><span class="co">#&gt; timestamp: 2023-09-06 10:35:14 </span></span>
-<span id="cb6-41"><a href="#cb6-41" tabindex="-1"></a><span class="co">#&gt; Wall clock time: 0.08595896 secs </span></span>
-<span id="cb6-42"><a href="#cb6-42" tabindex="-1"></a><span class="co">#&gt; optimizer:  SLSQP </span></span>
-<span id="cb6-43"><a href="#cb6-43" tabindex="-1"></a><span class="co">#&gt; OpenMx version number: 2.21.8 </span></span>
-<span id="cb6-44"><a href="#cb6-44" tabindex="-1"></a><span class="co">#&gt; Need help?  See help(mxSummary)</span></span></code></pre></div>
+<span id="cb6-32"><a href="#cb6-32" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-33"><a href="#cb6-33" tabindex="-1"></a><span class="co">#&gt; ** Information matrix is not positive definite (not at a candidate optimum).</span></span>
+<span id="cb6-34"><a href="#cb6-34" tabindex="-1"></a><span class="co">#&gt;   Be suspicious of these results. At minimum, do not trust the standard errors.</span></span>
+<span id="cb6-35"><a href="#cb6-35" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-36"><a href="#cb6-36" tabindex="-1"></a><span class="co">#&gt; Information Criteria: </span></span>
+<span id="cb6-37"><a href="#cb6-37" tabindex="-1"></a><span class="co">#&gt;       |  df Penalty  |  Parameters Penalty  |  Sample-Size Adjusted</span></span>
+<span id="cb6-38"><a href="#cb6-38" tabindex="-1"></a><span class="co">#&gt; AIC:      -5917.148              -3685.148                -3685.078</span></span>
+<span id="cb6-39"><a href="#cb6-39" tabindex="-1"></a><span class="co">#&gt; BIC:     -10747.543              -3667.773                -3680.471</span></span>
+<span id="cb6-40"><a href="#cb6-40" tabindex="-1"></a><span class="co">#&gt; To get additional fit indices, see help(mxRefModels)</span></span>
+<span id="cb6-41"><a href="#cb6-41" tabindex="-1"></a><span class="co">#&gt; timestamp: 2023-09-07 10:37:41 </span></span>
+<span id="cb6-42"><a href="#cb6-42" tabindex="-1"></a><span class="co">#&gt; Wall clock time: 0.07050681 secs </span></span>
+<span id="cb6-43"><a href="#cb6-43" tabindex="-1"></a><span class="co">#&gt; optimizer:  SLSQP </span></span>
+<span id="cb6-44"><a href="#cb6-44" tabindex="-1"></a><span class="co">#&gt; OpenMx version number: 2.21.8 </span></span>
+<span id="cb6-45"><a href="#cb6-45" tabindex="-1"></a><span class="co">#&gt; Need help?  See help(mxSummary)</span></span></code></pre></div>
 <p>As you can see the model was unsucessful because it was not
 identified. But when we add another group, so that the model is
 identified, the model now fits.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>run2 <span class="ot">&lt;-</span> <span class="fu">emxTwinModel</span>(<span class="at">model=</span><span class="st">&#39;Cholesky&#39;</span>, </span>
-<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>                     <span class="at">relatedness=</span><span class="st">&#39;RCoef&#39;</span>,</span>
-<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>                     <span class="at">data=</span>mzdzData, </span>
-<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>                     <span class="at">use=</span>selVars, </span>
-<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>                     <span class="at">run=</span><span class="cn">TRUE</span>, <span class="at">name=</span><span class="st">&#39;TwCh&#39;</span>)</span>
-<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co">#&gt; Running TwCh with 4 parameters</span></span>
-<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a></span>
-<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="fu">summary</span>(run2)</span>
-<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="co">#&gt; Summary of TwCh </span></span>
-<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="co">#&gt;  </span></span>
-<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="co">#&gt; free parameters:</span></span>
-<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a><span class="co">#&gt;      name matrix row col   Estimate    Std.Error A lbound ubound</span></span>
-<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a><span class="co">#&gt; 1 sqrtA11  sqrtA   1   1 0.06339271 0.0014377690    1e-06       </span></span>
-<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a><span class="co">#&gt; 2 sqrtC11  sqrtC   1   1 0.00000100 0.0250258713 !     0!       </span></span>
-<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a><span class="co">#&gt; 3 sqrtE11  sqrtE   1   1 0.02330040 0.0007015267       0!       </span></span>
-<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a><span class="co">#&gt; 4    Mht1  Means ht1   1 1.63295540 0.0020511844                </span></span>
-<span id="cb7-17"><a href="#cb7-17" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb7-18"><a href="#cb7-18" tabindex="-1"></a><span class="co">#&gt; Model Statistics: </span></span>
-<span id="cb7-19"><a href="#cb7-19" tabindex="-1"></a><span class="co">#&gt;                |  Parameters  |  Degrees of Freedom  |  Fit (-2lnL units)</span></span>
-<span id="cb7-20"><a href="#cb7-20" tabindex="-1"></a><span class="co">#&gt;        Model:              4                   1803             -5507.092</span></span>
-<span id="cb7-21"><a href="#cb7-21" tabindex="-1"></a><span class="co">#&gt;    Saturated:              5                   1802                    NA</span></span>
-<span id="cb7-22"><a href="#cb7-22" tabindex="-1"></a><span class="co">#&gt; Independence:              4                   1803                    NA</span></span>
-<span id="cb7-23"><a href="#cb7-23" tabindex="-1"></a><span class="co">#&gt; Number of observations/statistics: 920/1807</span></span>
-<span id="cb7-24"><a href="#cb7-24" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb7-25"><a href="#cb7-25" tabindex="-1"></a><span class="co">#&gt; Information Criteria: </span></span>
-<span id="cb7-26"><a href="#cb7-26" tabindex="-1"></a><span class="co">#&gt;       |  df Penalty  |  Parameters Penalty  |  Sample-Size Adjusted</span></span>
-<span id="cb7-27"><a href="#cb7-27" tabindex="-1"></a><span class="co">#&gt; AIC:      -9113.092              -5499.092                -5499.048</span></span>
-<span id="cb7-28"><a href="#cb7-28" tabindex="-1"></a><span class="co">#&gt; BIC:     -17811.437              -5479.794                -5492.498</span></span>
-<span id="cb7-29"><a href="#cb7-29" tabindex="-1"></a><span class="co">#&gt; To get additional fit indices, see help(mxRefModels)</span></span>
-<span id="cb7-30"><a href="#cb7-30" tabindex="-1"></a><span class="co">#&gt; timestamp: 2023-09-06 10:35:14 </span></span>
-<span id="cb7-31"><a href="#cb7-31" tabindex="-1"></a><span class="co">#&gt; Wall clock time: 0.08642101 secs </span></span>
-<span id="cb7-32"><a href="#cb7-32" tabindex="-1"></a><span class="co">#&gt; optimizer:  SLSQP </span></span>
-<span id="cb7-33"><a href="#cb7-33" tabindex="-1"></a><span class="co">#&gt; OpenMx version number: 2.21.8 </span></span>
-<span id="cb7-34"><a href="#cb7-34" tabindex="-1"></a><span class="co">#&gt; Need help?  See help(mxSummary)</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>run2 <span class="ot">&lt;-</span> <span class="fu">emxTwinModel</span>(</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>  <span class="at">model =</span> <span class="st">&quot;Cholesky&quot;</span>,</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>  <span class="at">relatedness =</span> <span class="st">&quot;RCoef&quot;</span>,</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>  <span class="at">data =</span> mzdzData,</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>  <span class="at">use =</span> selVars,</span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>  <span class="at">run =</span> <span class="cn">TRUE</span>, <span class="at">name =</span> <span class="st">&quot;TwCh&quot;</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>)</span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="co">#&gt; Running TwCh with 4 parameters</span></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="fu">summary</span>(run2)</span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="co">#&gt; Summary of TwCh </span></span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a><span class="co">#&gt;  </span></span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a><span class="co">#&gt; free parameters:</span></span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a><span class="co">#&gt;      name matrix row col   Estimate    Std.Error A lbound ubound</span></span>
+<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a><span class="co">#&gt; 1 sqrtA11  sqrtA   1   1 0.06339271 0.0014377690    1e-06       </span></span>
+<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a><span class="co">#&gt; 2 sqrtC11  sqrtC   1   1 0.00000100 0.0250258713 !     0!       </span></span>
+<span id="cb7-17"><a href="#cb7-17" tabindex="-1"></a><span class="co">#&gt; 3 sqrtE11  sqrtE   1   1 0.02330040 0.0007015267       0!       </span></span>
+<span id="cb7-18"><a href="#cb7-18" tabindex="-1"></a><span class="co">#&gt; 4    Mht1  Means ht1   1 1.63295540 0.0020511844                </span></span>
+<span id="cb7-19"><a href="#cb7-19" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-20"><a href="#cb7-20" tabindex="-1"></a><span class="co">#&gt; Model Statistics: </span></span>
+<span id="cb7-21"><a href="#cb7-21" tabindex="-1"></a><span class="co">#&gt;                |  Parameters  |  Degrees of Freedom  |  Fit (-2lnL units)</span></span>
+<span id="cb7-22"><a href="#cb7-22" tabindex="-1"></a><span class="co">#&gt;        Model:              4                   1803             -5507.092</span></span>
+<span id="cb7-23"><a href="#cb7-23" tabindex="-1"></a><span class="co">#&gt;    Saturated:              5                   1802                    NA</span></span>
+<span id="cb7-24"><a href="#cb7-24" tabindex="-1"></a><span class="co">#&gt; Independence:              4                   1803                    NA</span></span>
+<span id="cb7-25"><a href="#cb7-25" tabindex="-1"></a><span class="co">#&gt; Number of observations/statistics: 920/1807</span></span>
+<span id="cb7-26"><a href="#cb7-26" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-27"><a href="#cb7-27" tabindex="-1"></a><span class="co">#&gt; Information Criteria: </span></span>
+<span id="cb7-28"><a href="#cb7-28" tabindex="-1"></a><span class="co">#&gt;       |  df Penalty  |  Parameters Penalty  |  Sample-Size Adjusted</span></span>
+<span id="cb7-29"><a href="#cb7-29" tabindex="-1"></a><span class="co">#&gt; AIC:      -9113.092              -5499.092                -5499.048</span></span>
+<span id="cb7-30"><a href="#cb7-30" tabindex="-1"></a><span class="co">#&gt; BIC:     -17811.437              -5479.794                -5492.498</span></span>
+<span id="cb7-31"><a href="#cb7-31" tabindex="-1"></a><span class="co">#&gt; To get additional fit indices, see help(mxRefModels)</span></span>
+<span id="cb7-32"><a href="#cb7-32" tabindex="-1"></a><span class="co">#&gt; timestamp: 2023-09-07 10:37:41 </span></span>
+<span id="cb7-33"><a href="#cb7-33" tabindex="-1"></a><span class="co">#&gt; Wall clock time: 0.04858994 secs </span></span>
+<span id="cb7-34"><a href="#cb7-34" tabindex="-1"></a><span class="co">#&gt; optimizer:  SLSQP </span></span>
+<span id="cb7-35"><a href="#cb7-35" tabindex="-1"></a><span class="co">#&gt; OpenMx version number: 2.21.8 </span></span>
+<span id="cb7-36"><a href="#cb7-36" tabindex="-1"></a><span class="co">#&gt; Need help?  See help(mxSummary)</span></span></code></pre></div>
 </div>
 </div>
 

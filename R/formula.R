@@ -32,30 +32,30 @@
 #' # Similarly, for half siblings, we would expect a relatedness coefficient of 0.25:
 #' related_coef(generations = 1, path = NULL, full = FALSE)
 #'
-related_coef <- function(generations=2, path=NULL, full=TRUE, maternal=FALSE,
-  empirical=FALSE, segregating=TRUE, total_a=6800*1000000, total_m=16500,
-  weight_a=1, weight_m=1, denom_m=FALSE, ...){
-
+related_coef <- function(
+    generations = 2, path = NULL, full = TRUE, maternal = FALSE,
+    empirical = FALSE, segregating = TRUE, total_a = 6800 * 1000000, total_m = 16500,
+    weight_a = 1, weight_m = 1, denom_m = FALSE, ...) {
   # If path is not provided, it is calculated as twice the number of generations
-  if(is.null(path)){
-    path <- generations*2
+  if (is.null(path)) {
+    path <- generations * 2
   }
 
   # Calculate the coefficient based on the path
   coef <- .5^path
 
   # If full siblings, the coefficient is doubled
-  if(full){
-    coef <- coef*2
+  if (full) {
+    coef <- coef * 2
   }
   # If not considering segregating genes, adjust the coefficient
-  if(!segregating){
-    coef <- coef*.01+.99
+  if (!segregating) {
+    coef <- coef * .01 + .99
   }
 
   # If empirical adjustment is needed
-  if(empirical){
-    coef <-  (coef*total_a*weight_a + maternal*total_m*weight_m) / (denom_m*total_m*weight_m + total_a*weight_a)
+  if (empirical) {
+    coef <- (coef * total_a * weight_a + maternal * total_m * weight_m) / (denom_m * total_m * weight_m + total_a * weight_a)
   }
   return(coef)
 }
@@ -78,11 +78,10 @@ related_coef <- function(generations=2, path=NULL, full=TRUE, maternal=FALSE,
 #'
 #' relatedness(cor_obs = 0.5, ace_A = 0.9, ace_C = 0, shared_C = 0)
 #'
-relatedness <- function(cor_obs, ace_A = .9, ace_C = 0, shared_C = 0){
-  if(ace_A > 1 | ace_A < 0 | ace_C > 1 | ace_C < 0){
+relatedness <- function(cor_obs, ace_A = .9, ace_C = 0, shared_C = 0) {
+  if (ace_A > 1 | ace_A < 0 | ace_C > 1 | ace_C < 0) {
     stop("ace_A and ace_C must be proportions between 0 and 1")
   }
   calc_r <- (cor_obs - shared_C * ace_C) / ace_A
   return(calc_r)
 }
-

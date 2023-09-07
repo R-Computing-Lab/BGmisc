@@ -11,13 +11,15 @@ allGens <- function(kpc, Ngen, marR) {
     stop("The number of generations should be an integer greater or equal than 1")
   }
   if (Ngen == 1) {
-    allGens = 2
+    allGens <- 2
   }
   if (Ngen >= 2) {
-    allGens = sizeAllGens(kpc = kpc,
-                          Ngen = Ngen,
-                          marR = marR)
-  } else{
+    allGens <- sizeAllGens(
+      kpc = kpc,
+      Ngen = Ngen,
+      marR = marR
+    )
+  } else {
     stop()
   }
   return(allGens)
@@ -35,14 +37,14 @@ sizeAllGens <- function(kpc, Ngen, marR) {
 
   # Calculate the number of individuals for middle generations
   for (i in 2:(Ngen - 1)) {
-    midGens[i - 1] <- kpc ^ (i - 1) * marR ^ (i - 2) * (1 + marR)
+    midGens[i - 1] <- kpc^(i - 1) * marR^(i - 2) * (1 + marR)
     midGens[i - 1] <- ceiling(midGens[i - 1])
   }
 
   # Calculate the number of individuals for the last generation
-  lastGen <- ceiling(kpc ^ (Ngen - 1) * marR ^ (Ngen - 2))
+  lastGen <- ceiling(kpc^(Ngen - 1) * marR^(Ngen - 2))
   allGens <- c(2, midGens, lastGen)
-  #print(allGens)
+  # print(allGens)
   return(allGens)
 }
 
@@ -57,14 +59,16 @@ famSizeCal <- function(kpc, Ngen, marR) {
     stop("The number of generations should be an integer greater or equal than 1")
   }
   if (Ngen == 1) {
-    size = 2
+    size <- 2
   }
   if (Ngen >= 2) {
-    allGens = sizeAllGens(kpc = kpc,
-                          Ngen = Ngen,
-                          marR = marR)
-    size = sum(allGens)
-  } else{
+    allGens <- sizeAllGens(
+      kpc = kpc,
+      Ngen = Ngen,
+      marR = marR
+    )
+    size <- sum(allGens)
+  } else {
     stop()
   }
   return(size)
