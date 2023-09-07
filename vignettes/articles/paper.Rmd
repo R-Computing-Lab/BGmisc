@@ -58,9 +58,12 @@ Acknowledgment of any financial support.
 ```
 # Summary
 
-<!-- > A summary describing the high-level functionality and purpose of the software for a diverse, non-specialist audience. -->
+<!--  A summary describing the high-level functionality and purpose of the software for a diverse, non-specialist audience. -->
 
-Behavior genetics focuses on understanding genetic and environmental influences on individual differences, traditionally through twin studies. However, with the expansion of research to more complex data structures like extended family data, there arises a need for specialized software tools.  The `BGmisc` package addresses this gap by offering a comprehensive suite of functions for structuring and modeling such data.
+Behavior genetics focuses on understanding genetic and environmental influences on individual differences. 
+Traditionally, twin studies have been at the forefront of this discipline.  However, research has moved beyond the classical twin design to embrace more complex family structures such as children of twins [@DOnofrio2003], mother-daughter-aunt-niece [@rodgers_mdan], and other extended family designs. This expansion allows for a deeper, more nuanced exploration of genetic and environmental influences, but it also introduces challenges, particularly in data structuring and modeling.
+
+A notable challenge arises when researchers venture into extended family data. The data structures inherent in such family designs are orders of magnitude larger than traditional designs. In the classical twin study, a family will consist of a single twin pair, whereas in the MADN design a family consists of four. This problem becomes intractable, when applied to pedigrees.  The `BGmisc` package addresses this gap by offering a comprehensive suite of functions for structuring and modeling such data.
 
 
 # Statement of need
@@ -102,7 +105,7 @@ Collectively, these tools provide a valuable resource for behavior geneticists a
 
 The `BGmisc` package is open-source and available on both GitHub at [https://github.com/R-Computing-Lab/BGmisc](https://github.com/R-Computing-Lab/BGmisc) and the Comprehensive R Archive Network (CRAN) at [https://cran.r-project.org/package=BGmisc](https://cran.r-project.org/package=BGmisc). It is licensed under the GNU General Public License.
 
-# Acknowledgements
+# Acknowledgments
 
 The current research is supported by the National Institute on Aging (NIA), RF1-AG073189. We want to acknowledge assistance from Carlos Santos.
 
