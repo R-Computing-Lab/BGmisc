@@ -17,8 +17,8 @@
 ##'
 ##' @docType data
 ##' @keywords datasets
-##' @name ped_inbreeding
-##' @usage data(ped_inbreeding)
+##' @name inbreeding
+##' @usage data(inbreeding)
 ##' @format A data frame (and ped object) with 113 rows and 7 variables
 NULL
 
@@ -48,7 +48,7 @@ NULL
 ##'
 ##' @docType data
 ##' @keywords datasets
-##' @name ped_hazard
-##' @usage data(ped_hazard)
+##' @name hazard
+##' @usage data(hazard)
 ##' @format A data frame with 43 rows and 14 variables
 NULL
