@@ -29,7 +29,7 @@ The variables are as follows:
   \item birthYr.  Birth year for person
   \item onsetYr.  Year of onset for person
   \item deathYr.  Death year for person
-  \item available.  logical.  Whether 
+  \item available.  logical.  Whether
   \item Gen.  Generation of the person
   \item proband.  logical.  Whether the person is a proband or not
 }

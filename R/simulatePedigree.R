@@ -25,7 +25,7 @@
 #' }
 #' @export
 
-SimPed <- function(kpc = 3,
+simulatePedigree <- function(kpc = 3,
                    Ngen = 4,
                    sexR = .5,
                    marR = 2 / 3,

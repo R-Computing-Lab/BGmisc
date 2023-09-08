@@ -3,7 +3,7 @@
 \name{sizeAllGens}
 \alias{sizeAllGens}
 \title{sizeAllGens
-An internal supporting function for \code{SimPed}.}
+An internal supporting function for \code{simulatePedigree}.}
 \usage{
 sizeAllGens(kpc, Ngen, marR)
 }
@@ -19,5 +19,5 @@ Returns a vector including the number of individuals in every generation.
 }
 \description{
 sizeAllGens
-An internal supporting function for \code{SimPed}.
+An internal supporting function for \code{simulatePedigree}.
 }

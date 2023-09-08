@@ -3,7 +3,7 @@
 \name{allGens}
 \alias{allGens}
 \title{allGens
-A function to calculate the number of individuals in each generation. This is a supporting function for \code{SimPed}.}
+A function to calculate the number of individuals in each generation. This is a supporting function for \code{simulatePedigree}.}
 \usage{
 allGens(kpc, Ngen, marR)
 }
@@ -19,5 +19,5 @@ Returns a vector containing the number of individuals in every generation.
 }
 \description{
 allGens
-A function to calculate the number of individuals in each generation. This is a supporting function for \code{SimPed}.
+A function to calculate the number of individuals in each generation. This is a supporting function for \code{simulatePedigree}.
 }

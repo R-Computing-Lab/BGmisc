@@ -3,7 +3,7 @@
 \name{famSizeCal}
 \alias{famSizeCal}
 \title{famSizeCal
-A function to calculate the total number of individuals in a pedigree given parameters. This is a supporting function for function \code{SimPed}}
+A function to calculate the total number of individuals in a pedigree given parameters. This is a supporting function for function \code{simulatePedigree}}
 \usage{
 famSizeCal(kpc, Ngen, marR)
 }
@@ -19,5 +19,5 @@ Returns a numeric value indicating the total pedigree size.
 }
 \description{
 famSizeCal
-A function to calculate the total number of individuals in a pedigree given parameters. This is a supporting function for function \code{SimPed}
+A function to calculate the total number of individuals in a pedigree given parameters. This is a supporting function for function \code{simulatePedigree}
 }

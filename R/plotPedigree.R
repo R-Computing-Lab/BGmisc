@@ -1,13 +1,13 @@
-#' PlotPedigree
-#' A wrapped function to plot simulated pedigree from function \code{SimPed}. This function require the installation of package \code{kinship2}.
+#' plotPedigree
+#' A wrapped function to plot simulated pedigree from function \code{simulatePedigree}. This function require the installation of package \code{kinship2}.
 #' @import kinship2
-#' @param ped The simulated pedigree data.frame from function \code{SimPed}. Or a pedigree dataframe with the same colnames as the dataframe simulated from function \code{SimPed}.
+#' @param ped The simulated pedigree data.frame from function \code{simulatePedigree}. Or a pedigree dataframe with the same colnames as the dataframe simulated from function \code{simulatePedigree}.
 #' @param cex The font size of the IDs for each individual in the plot.
 #' @inheritParams kinship2::plot.pedigree
 #' @return A plot of the simulated pedigree
 #' @export
 
-PlotPedigree <- function(ped, cex = .5,
+plotPedigree <- function(ped, cex = .5,
                          # optional inputs for the pedigree plot
                          col = 1,
                          symbolsize = 1, branch = 0.6,
@@ -45,4 +45,4 @@ PlotPedigree <- function(ped, cex = .5,
   ))
 }
 
-# PlotPedigree(SimPed(kpc = 2, Ngen = 6, marR = .8))
+# plotPedigree(simulatePedigree(kpc = 2, Ngen = 6, marR = .8))

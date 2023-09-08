@@ -63,3 +63,26 @@ Null <- function(M) {
   }
   return(qr.Q(tmp, complete = TRUE)[, set, drop = FALSE])
 }
+
+#' SimPed (Deprecated)
+#'
+#' This function is a wrapper around the new `simulatePedigree` function.
+#' `SimPed` has been deprecated, and it's advised to use `simulatePedigree` directly.
+#'
+#' @param ... Arguments to be passed to `simulatePedigree`.
+#' @return The same result as calling `simulatePedigree`.
+#' @seealso \code{\link{simulatePedigree}} for the updated function.
+#' @description When calling this function, a warning will be issued about its deprecation.
+#' @keywords deprecated
+#' @examples
+#' \dontrun{
+#' # This is an example of the deprecated function:
+#' SimPed(...)
+#' # It is recommended to use:
+#' simulatePedigree(...)
+#' }
+#' @export
+SimPed <- function(...) {
+  warning("The 'SimPed' function is deprecated. Please use 'simulatePedigree' instead.")
+  simulatePedigree(...)
+}

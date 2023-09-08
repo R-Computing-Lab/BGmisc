@@ -38,7 +38,7 @@ For example, a pedigree that follows these conditions: There are a total of four
 
 ```{r}
 set.seed(5)
-Ped <- SimPed(kpc = 4, Ngen = 4, sexR = .5, marR = .7)
+Ped <- simulatePedigree(kpc = 4, Ngen = 4, sexR = .5, marR = .7)
 
 summary(Ped)
 ```
@@ -54,15 +54,15 @@ The columns represents the individual's family ID, the individual's personal ID,
 ## Plotting Pedigree
 
 
-Pedigrees are visual diagrams that represent family relationships across generations. They are commonly used in genetics to trace the inheritance of specific traits or conditions. This vignette will guide you through visualizing simulated pedigrees using the `PlotPedigree` function. This function is a wrapper function for Kinship2's base R plotting.
+Pedigrees are visual diagrams that represent family relationships across generations. They are commonly used in genetics to trace the inheritance of specific traits or conditions. This vignette will guide you through visualizing simulated pedigrees using the `plotPedigree` function. This function is a wrapper function for Kinship2's base R plotting.
 
 ### Single Pedigree Visualization
 
-To visualize a single simulated pedigree, use the `PlotPedigree()` function.
+To visualize a single simulated pedigree, use the `plotPedigree()` function.
 
 ```{r,fig.width=8,fig.height=6}
 # Plot the simulated pedigree
-PlotPedigree(Ped)
+plotPedigree(Ped)
 ```
 
 
@@ -75,19 +75,19 @@ If you wish to compare different pedigrees side by side, you can plot them toget
 
 ```{r,fig.width=8, fig.height=6}
 # Simulate a family with 3 generations
-df_ped_3 <- SimPed(Ngen = 3)
+df_ped_3 <- simulatePedigree(Ngen = 3)
 
 # Simulate a family with 4 generations
-df_ped_4 <- SimPed(Ngen = 4)
+df_ped_4 <- simulatePedigree(Ngen = 4)
 
 # Set up plotting parameters for side-by-side display
 par(mfrow = c(1, 2))
 
 # Plot the 3-generation pedigree
-PlotPedigree(df_ped_3, width = 3)
+plotPedigree(df_ped_3, width = 3)
 
 # Plot the 4-generation pedigree
-PlotPedigree(df_ped_4, width = 1)
+plotPedigree(df_ped_4, width = 1)
 ```   
 
 By examining the side-by-side plots, you can contrast and analyze the structures of different families, tracing the inheritance of specific traits or conditions if needed.

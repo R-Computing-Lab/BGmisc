@@ -1,5 +1,5 @@
 #' allGens
-#' A function to calculate the number of individuals in each generation. This is a supporting function for \code{SimPed}.
+#' A function to calculate the number of individuals in each generation. This is a supporting function for \code{simulatePedigree}.
 #' @param kpc Number of kids per couple (integer >= 2).
 #' @param Ngen Number of generations (integer >= 1).
 #' @param marR Mating rate (numeric value ranging from 0 to 1).
@@ -27,7 +27,7 @@ allGens <- function(kpc, Ngen, marR) {
 
 
 #' sizeAllGens
-#' An internal supporting function for \code{SimPed}.
+#' An internal supporting function for \code{simulatePedigree}.
 #' @inheritParams allGens
 #' @return Returns a vector including the number of individuals in every generation.
 
@@ -50,7 +50,7 @@ sizeAllGens <- function(kpc, Ngen, marR) {
 
 
 #' famSizeCal
-#' A function to calculate the total number of individuals in a pedigree given parameters. This is a supporting function for function \code{SimPed}
+#' A function to calculate the total number of individuals in a pedigree given parameters. This is a supporting function for function \code{simulatePedigree}
 #' @inheritParams allGens
 #' @return Returns a numeric value indicating the total pedigree size.
 #' @export
