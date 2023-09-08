@@ -29,7 +29,7 @@ data(hazard)
 
 # Finding Extended Families
 
-Many pedigree datasets only contain information on the person, their mother, and their father.  They often do not contain nuclear or extended family IDs.  Many tasks related to pedigrees are much easier if you know which sets of people are not related at all.  This function helps with that by finding all the extended families.  People in the same extended family have at least some (possibly distant) relation with one another.  People in different extended families have not relations at all.
+Many pedigree datasets only contain information on the person, their mother, and their father.  They often do not contain nuclear or extended family IDs.  Many tasks related to pedigrees are much easier if you know which sets of people are not related at all.  This function helps with that by finding all the extended families.  People in the same extended family have at least some (possibly distant) relation with one another.  People in different extended families have no relations at all.
 
 To illustrate our family finding algorithm, we apply it to the our `hazard` pedigree data.
 
@@ -47,9 +47,21 @@ Once you know which sets of people are related at all to one another, you'll lik
 
 ```{r}
 add <- ped2add(hazard)
+
 ```
 
-This computes the additive genetic relatedness for everyone in the data.  It returns a square, symmetric matrix that has as many rows and columns as there are IDs.  The entry in the ith row and the jth column gives the relatedness between person i and person j.
+This computes the additive genetic relatedness for everyone in the data.  It returns a square, symmetric matrix that has as many rows and columns as there are IDs.  
+
+```{r}
+add[1:7, 1:7]
+```
+
+
+The entry in the ith row and the jth column gives the relatedness between person i and person j. For example, person 1 and person 11 share  `r add[1,11]`
+
+```{r}
+table(add)
+```
 
 It's probably fine to do this on the whole dataset when your data have fewer than 10,000 people.  When the data get large, however, it's much more efficient to compute this relatedness separately for each extended family.
 

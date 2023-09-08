@@ -7,6 +7,7 @@ A wrapped function to plot simulated pedigree from function \code{simulatePedigr
 \usage{
 plotPedigree(
   ped,
+  code_male = NULL,
   cex = 0.5,
   col = 1,
   symbolsize = 1,
@@ -23,6 +24,8 @@ plotPedigree(
 }
 \arguments{
 \item{ped}{The simulated pedigree data.frame from function \code{simulatePedigree}. Or a pedigree dataframe with the same colnames as the dataframe simulated from function \code{simulatePedigree}.}
+
+\item{code_male}{This optional input allows you to indicate what value in the sex variable codes for male.}
 
 \item{cex}{The font size of the IDs for each individual in the plot.}
 
