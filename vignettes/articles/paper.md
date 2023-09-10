@@ -30,7 +30,7 @@ affiliations:
    index: 2
  - name: Michigan State University, Michigan, USA
    index: 3
-date: "07 September, 2023"
+date: "10 September, 2023"
 bibliography: paper.bib
 vignette: >
   %\VignetteEncoding{UTF-8}
@@ -59,9 +59,9 @@ Acknowledgment of any financial support.
 <!--  A summary describing the high-level functionality and purpose of the software for a diverse, non-specialist audience. -->
 
 Behavior genetics focuses on understanding genetic and environmental influences on individual differences. 
-Traditionally, twin studies have been at the forefront of this discipline.  However, research has moved beyond the classical twin design to embrace more complex family structures such as children of twins [@DOnofrio2003], mother-daughter-aunt-niece [@rodgers_mdan], and other extended family designs. This expansion allows for a deeper, more nuanced exploration of genetic and environmental influences, but it also introduces challenges, particularly in data structuring and modeling.
+Traditionally, twin studies have been at the forefront of this discipline. However, research has moved beyond the classical twin design to embrace more complex family structures such as children of twins (CoT) [@DOnofrio2003], mother-daughter-aunt-niece (MDAN) [@rodgers_mdan], and other extended family designs. This expansion allows for a deeper, more nuanced exploration of genetic and environmental influences, but it also introduces challenges, particularly in data structuring and modeling.
 
-A notable challenge arises when researchers venture into extended family data. The data structures inherent in such family designs are orders of magnitude larger than traditional designs. In the classical twin study, a family will consist of a single twin pair, whereas in the MADN design a family consists of four. This problem becomes intractable, when applied to pedigrees.  The `BGmisc` package addresses this gap by offering a comprehensive suite of functions for structuring and modeling such data.
+A notable challenge arises when researchers venture into extended family data. The data structures inherent in such family designs are orders of magnitude larger than traditional designs. In the classical twin study, a family will consist of a single pair of twins (i.e., two people), whereas in the MADN design a family consists of two mother-daughter pairs (i.e. four people). This problem becomes intractable, when applied to pedigrees, where a single family can be of any size.  The `BGmisc` package addresses this gap by offering a comprehensive suite of functions for structuring and modeling such data.
 
 
 # Statement of need

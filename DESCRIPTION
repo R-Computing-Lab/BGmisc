@@ -1,15 +1,15 @@
 Package: BGmisc
-Title: Behavior Genetic Modeling Functions
+Title: An R Package for Extended Behavior Genetics Analysis
 Version: 1.0
-Date: 2023-06-15
+Date: 2023-09-10
 Authors@R: 
-  c(person("S. Mason", "Garrison", email = "garrissm@wfu.edu", role = c("aut", "cre"), comment=c(ORCID = "0000-0000-0000-0000")),
+  c(person("S. Mason", "Garrison", email = "garrissm@wfu.edu", role = c("aut", "cre"), comment=c(ORCID = "0000-0002-4804-6003")),
     person(c("Michael", "D."), "Hunter", role = "aut", comment=c(ORCID = "0000-0002-3651-6709")),
-    person("Xuanyu", "Lyu", role = "aut", comment=c(ORCID = "0000-0000-0000-0000")),
-    person(c("Jonathan", "D."), "Trattner", role = "aut", comment=c(ORCID = "0000-0000-0000-0000")),
-    person(c("S.", "Alexandra"), "Burt", role = "aut", comment=c(ORCID = "0000-0000-0000-0000"))
+    person("Xuanyu", "Lyu", role = "aut", comment=c(ORCID = "0000-0002-2841-5529")),
+    person(c("Jonathan", "D."), "Trattner", role = "aut", comment=c(ORCID = "0000-0002-1097-7603")),
+    person(c("S.", "Alexandra"), "Burt", role = "aut", comment=c(ORCID = "0000-0001-5538-7431"))
   )
-Description: Functions for extended family behavior genetic modeling, including model identification, calculating relatedness, and various others (e.g., Hunter, Garrison, et al, 2019 <doi:10.1007/s10519-019-09973-8>). 
+Description: The BGmisc R package offers a comprehensive suite of functions tailored for extended behavior genetics analysis, including model identification, calculating relatedness, pedigree conversion, pedigree simulation, and more.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
