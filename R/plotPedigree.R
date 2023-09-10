@@ -39,7 +39,7 @@ plotPedigree <- function(ped,
     p$sex_recode <- p$sex
   }
  # family id
-  if(length(unique(p$fam))==1){ # only one family
+  if(length(unique(p$ped))==1){ # only one family
     p$ped <- 1
    }else{
      # Assign a unique string pattern "fam #" for each unique family
@@ -47,7 +47,6 @@ plotPedigree <- function(ped,
      named_families <- 1:length(unique_families)
      p$ped <- named_families[match(p$fam, unique_families)]
   }
-
   p2 <- kinship2::pedigree(
     id = p$id,
     dadid = p$father,
