@@ -139,7 +139,7 @@ ped2com <- function(ped, component,
       r[r != 0] <- 1 # for mitochondrial component, set all nonzero values to 1
     }
     if (flatten.diag) { #flattens diagonal if you don't want to deal with inbreeding
-      r[diag(r)] <- 1
+      diag(r) <- 1
     }
     return(r)
   }
