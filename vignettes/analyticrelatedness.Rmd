@@ -1,0 +1,55 @@
+---
+title: "Calculating and Inferring Relatedness Coefficients with BGmisc"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Relatedness Coefficients}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+options(rmarkdown.html_vignette.check_title = FALSE)
+```
+
+# Introduction
+
+This vignette focuses on the calculation and inference of relatedness coefficients using the `BGmisc` package. The relatedness coefficient is a measure of the genetic relationship between two individuals. Here, we introduce two functions: `calculateRelatedness` and `inferRelatedness`, which allow users to compute and infer the relatedness coefficient respectively.
+
+## Loading Required Libraries
+
+```{r setup}
+library(BGmisc)
+```
+
+# Calculating Relatedness Coefficient
+
+The `calculateRelatedness` function offers a method to compute the relatedness coefficient based on shared ancestry, as described by Wright (1922). This function utilizes the formula:
+
+\[
+r_{bc} = \sum \left(\frac{1}{2}\right)^{n+n'+1} (1+f_a)
+\]
+
+Where \( n \) and \( n' \) represent the number of generations back of common ancestors the pair share.
+
+```{r}
+# Example usage:
+# For full siblings, the relatedness coefficient is expected to be 0.5:
+calculateRelatedness(generations = 1, full = TRUE)
+# For half siblings, the relatedness coefficient is expected to be 0.25:
+calculateRelatedness(generations = 1, full = FALSE)
+```
+
+# Inferring Relatedness Coefficient
+
+The `inferRelatedness` function is designed to infer the relatedness coefficient between two groups based on the observed correlation between their additive genetic variance and shared environmental variance. This function leverages the ACE framework.
+
+```{r}
+# Example usage:
+# Infer the relatedness coefficient:
+inferRelatedness(cor_obs = 0.5, ace_A = 0.9, ace_C = 0, shared_C = 0)
+```
+

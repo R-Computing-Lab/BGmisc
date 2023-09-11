@@ -18,7 +18,10 @@ options(rmarkdown.html_vignette.check_title = FALSE)
 
 # Introduction
 
-This vignette illustrates two features that capitalize on the network structure of a pedigree.  The first feature finds extended families with *any* connecting relationship between the members.  This feature strictly uses a person ID, mother ID, and a father ID to find out which people in a dataset are remotely related by any path.  This feature thus finds all the separable extended families in a dataset.  The second feature uses path tracing rules to determine the *amount* of relatedness between all pairs of people in a dataset.  The amount of relatedness can be determined by additive nuclear DNA, shared mitochondrial DNA, sharing both parents, or being in the same extended pedigree.
+This vignette showcases two key features that capitalize on the network structure inherent in pedigrees:
+1. Finding extended families with *any* connecting relationships between members. This feature strictly uses a person's ID, mother's ID, and father's ID to find out which people in a dataset are remotely related by any path, effectively finding all separable extended families in a dataset.
+2. Using path tracing rules to quantify the *amount* of relatedness between all pairs of individuals in a dataset. The amount of relatedness can be characterized by additive nuclear DNA, shared mitochondrial DNA, sharing both parents, or being part of the same extended pedigree.
+
 
 ## Loading Required Libraries and Data
 
@@ -29,9 +32,9 @@ data(hazard)
 
 # Finding Extended Families
 
-Many pedigree datasets only contain information on the person, their mother, and their father.  They often do not contain nuclear or extended family IDs.  Many tasks related to pedigrees are much easier if you know which sets of people are not related at all.  This function helps with that by finding all the extended families.  People in the same extended family have at least some (possibly distant) relation with one another.  People in different extended families have no relations at all.
+Many pedigree datasets only contain information on the person, their mother, and their father, often without nuclear or extended family IDs.  Recognizing which sets of people are unrelated simplifies many pedigree-related tasks. This function facilitates those tasks by finding all the extended families.  People within the same extended family have at least some form of relation, however distant, while those in different extended families have no relations.
 
-To illustrate our family finding algorithm, we apply it to the our `hazard` pedigree data.
+Using the `hazard` pedigree data as an example:
 
 ```{r}
 ds <- ped2fam(hazard, famID='newFamID')

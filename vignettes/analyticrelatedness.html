@@ -12,7 +12,7 @@
 
 
 
-<title>Network tools for finding extended pedigrees and path tracing</title>
+<title>Calculating and Inferring Relatedness Coefficients with BGmisc</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -336,85 +336,53 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 
-<h1 class="title toc-ignore">Network tools for finding extended
-pedigrees and path tracing</h1>
+<h1 class="title toc-ignore">Calculating and Inferring Relatedness
+Coefficients with BGmisc</h1>
 
 
 
 <div id="introduction" class="section level1">
 <h1>Introduction</h1>
-<p>This vignette showcases two key features that capitalize on the
-network structure inherent in pedigrees: 1. Finding extended families
-with <em>any</em> connecting relationships between members. This feature
-strictly uses a person’s ID, mother’s ID, and father’s ID to find out
-which people in a dataset are remotely related by any path, effectively
-finding all separable extended families in a dataset. 2. Using path
-tracing rules to quantify the <em>amount</em> of relatedness between all
-pairs of individuals in a dataset. The amount of relatedness can be
-characterized by additive nuclear DNA, shared mitochondrial DNA, sharing
-both parents, or being part of the same extended pedigree.</p>
-<div id="loading-required-libraries-and-data" class="section level2">
-<h2>Loading Required Libraries and Data</h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(BGmisc)</span>
-<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">data</span>(hazard)</span></code></pre></div>
+<p>This vignette focuses on the calculation and inference of relatedness
+coefficients using the <code>BGmisc</code> package. The relatedness
+coefficient is a measure of the genetic relationship between two
+individuals. Here, we introduce two functions:
+<code>calculateRelatedness</code> and <code>inferRelatedness</code>,
+which allow users to compute and infer the relatedness coefficient
+respectively.</p>
+<div id="loading-required-libraries" class="section level2">
+<h2>Loading Required Libraries</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(BGmisc)</span></code></pre></div>
 </div>
 </div>
-<div id="finding-extended-families" class="section level1">
-<h1>Finding Extended Families</h1>
-<p>Many pedigree datasets only contain information on the person, their
-mother, and their father, often without nuclear or extended family IDs.
-Recognizing which sets of people are unrelated simplifies many
-pedigree-related tasks. This function facilitates those tasks by finding
-all the extended families. People within the same extended family have
-at least some form of relation, however distant, while those in
-different extended families have no relations.</p>
-<p>Using the <code>hazard</code> pedigree data as an example:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>ds <span class="ot">&lt;-</span> <span class="fu">ped2fam</span>(hazard, <span class="at">famID=</span><span class="st">&#39;newFamID&#39;</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="fu">table</span>(ds<span class="sc">$</span>FamID, ds<span class="sc">$</span>newFamID)</span>
-<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co">#&gt;    </span></span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co">#&gt;      1  2</span></span>
-<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co">#&gt;   1 18  0</span></span>
-<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="co">#&gt;   2  0 25</span></span></code></pre></div>
-<p>Because the <code>hazard</code> data already had a family ID variable
-we compare our newly created variable to the pre-existing one. They
-match!</p>
+<div id="calculating-relatedness-coefficient" class="section level1">
+<h1>Calculating Relatedness Coefficient</h1>
+<p>The <code>calculateRelatedness</code> function offers a method to
+compute the relatedness coefficient based on shared ancestry, as
+described by Wright (1922). This function utilizes the formula:</p>
+<p><span class="math display">\[
+r_{bc} = \sum \left(\frac{1}{2}\right)^{n+n&#39;+1} (1+f_a)
+\]</span></p>
+<p>Where <span class="math inline">\(n\)</span> and <span class="math inline">\(n&#39;\)</span> represent the number of
+generations back of common ancestors the pair share.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># Example usage:</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co"># For full siblings, the relatedness coefficient is expected to be 0.5:</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="fu">calculateRelatedness</span>(<span class="at">generations =</span> <span class="dv">1</span>, <span class="at">full =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co">#&gt; [1] 0.5</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co"># For half siblings, the relatedness coefficient is expected to be 0.25:</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="fu">calculateRelatedness</span>(<span class="at">generations =</span> <span class="dv">1</span>, <span class="at">full =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="co">#&gt; [1] 0.25</span></span></code></pre></div>
 </div>
-<div id="computing-relatedness" class="section level1">
-<h1>Computing Relatedness</h1>
-<p>Once you know which sets of people are related at all to one another,
-you’ll likely want to know how much. For additive genetic relatedness,
-you can use the <code>ped2add()</code> function.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>add <span class="ot">&lt;-</span> <span class="fu">ped2add</span>(hazard)</span></code></pre></div>
-<p>This computes the additive genetic relatedness for everyone in the
-data. It returns a square, symmetric matrix that has as many rows and
-columns as there are IDs.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>add[<span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>]</span>
-<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co">#&gt;     1   2   3   4 7   5   6</span></span>
-<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co">#&gt; 1 1.0 0.0 0.5 0.5 0 0.5 0.5</span></span>
-<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&gt; 2 0.0 1.0 0.5 0.5 0 0.5 0.5</span></span>
-<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co">#&gt; 3 0.5 0.5 1.0 0.5 0 0.5 0.5</span></span>
-<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co">#&gt; 4 0.5 0.5 0.5 1.0 0 0.5 0.5</span></span>
-<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="co">#&gt; 7 0.0 0.0 0.0 0.0 1 0.0 0.0</span></span>
-<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="co">#&gt; 5 0.5 0.5 0.5 0.5 0 1.0 0.5</span></span>
-<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="co">#&gt; 6 0.5 0.5 0.5 0.5 0 0.5 1.0</span></span></code></pre></div>
-<p>The entry in the ith row and the jth column gives the relatedness
-between person i and person j. For example, person 1 and person 11 share
-0.125</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">table</span>(add)</span>
-<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="co">#&gt; add</span></span>
-<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="co">#&gt;      0 0.0625  0.125   0.25    0.5      1 </span></span>
-<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co">#&gt;   1144    110    182    188    182     43</span></span></code></pre></div>
-<p>It’s probably fine to do this on the whole dataset when your data
-have fewer than 10,000 people. When the data get large, however, it’s
-much more efficient to compute this relatedness separately for each
-extended family.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>add_list <span class="ot">&lt;-</span> <span class="fu">lapply</span>(</span>
-<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>  <span class="fu">unique</span>(hazard<span class="sc">$</span>FamID),</span>
-<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>  <span class="cf">function</span>(d){tmp <span class="ot">&lt;-</span> hazard[hazard<span class="sc">$</span>FamID <span class="sc">%in%</span> d,]; <span class="fu">ped2add</span>(tmp)})</span></code></pre></div>
-<p>The function works similarly for mitochonrial (<code>ped2mit</code>),
-common nuclear environment through sharing both parents
-(<code>ped2cn</code>), and common extended family environment
-(<code>ped2ce</code>).</p>
+<div id="inferring-relatedness-coefficient" class="section level1">
+<h1>Inferring Relatedness Coefficient</h1>
+<p>The <code>inferRelatedness</code> function is designed to infer the
+relatedness coefficient between two groups based on the observed
+correlation between their additive genetic variance and shared
+environmental variance. This function leverages the ACE framework.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co"># Example usage:</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co"># Infer the relatedness coefficient:</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="fu">inferRelatedness</span>(<span class="at">cor_obs =</span> <span class="fl">0.5</span>, <span class="at">ace_A =</span> <span class="fl">0.9</span>, <span class="at">ace_C =</span> <span class="dv">0</span>, <span class="at">shared_C =</span> <span class="dv">0</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co">#&gt; [1] 0.5555556</span></span></code></pre></div>
 </div>
 
 

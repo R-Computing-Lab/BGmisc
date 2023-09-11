@@ -86,3 +86,49 @@ SimPed <- function(...) {
   warning("The 'SimPed' function is deprecated. Please use 'simulatePedigree' instead.")
   simulatePedigree(...)
 }
+
+#' related_coef (Deprecated)
+#'
+#' This function is a wrapper around the new `calculateRelatedness` function.
+#' `related_coef` has been deprecated, and it's advised to use `calculateRelatedness` directly.
+#'
+#' @param ... Arguments to be passed to `calculateRelatedness`.
+#' @return The same result as calling `calculateRelatedness`.
+#' @seealso \code{\link{calculateRelatedness}} for the updated function.
+#' @description When calling this function, a warning will be issued about its deprecation.
+#' @keywords deprecated
+#' @examples
+#' \dontrun{
+#' # This is an example of the deprecated function:
+#' related_coef(...)
+#' # It is recommended to use:
+#' calculateRelatedness(...)
+#' }
+#' @export
+related_coef <- function(...) {
+  warning("The 'related_coef' function is deprecated. Please use 'calculateRelatedness' instead.")
+  calculateRelatedness(...)
+}
+
+#' relatedness (Deprecated)
+#'
+#' This function is a wrapper around the new `inferRelatedness` function.
+#' `relatedness` has been deprecated, and it's advised to use `inferRelatedness` directly.
+#'
+#' @param ... Arguments to be passed to `inferRelatedness`.
+#' @return The same result as calling `inferRelatedness`.
+#' @seealso \code{\link{inferRelatedness}} for the updated function.
+#' @description When calling this function, a warning will be issued about its deprecation.
+#' @keywords deprecated
+#' @examples
+#' \dontrun{
+#' # This is an example of the deprecated function:
+#' relatedness(...)
+#' # It is recommended to use:
+#' inferRelatedness(...)
+#' }
+#' @export
+relatedness <- function(...) {
+  warning("The 'relatedness' function is deprecated. Please use 'inferRelatedness' instead.")
+  inferRelatedness(...)
+}
