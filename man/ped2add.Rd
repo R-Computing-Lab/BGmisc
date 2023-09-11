@@ -7,7 +7,7 @@
 ped2add(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FALSE)
 }
 \arguments{
-\item{ped}{a pedigree data file.  Needs ID, momID, and dadID columns}
+\item{ped}{a pedigree dataset.  Needs ID, momID, and dadID columns}
 
 \item{max.gen}{the maximum number of generations to compute
 (e.g., only up to 4th degree relatives).  The default of Inf uses as many

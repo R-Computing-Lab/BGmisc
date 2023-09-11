@@ -135,13 +135,7 @@ ped2com <- function(ped, component, max.gen = Inf, sparse = FALSE, verbose = FAL
 }
 
 #' Take a pedigree and turn it into an additive genetics relatedness matrix
-#' @param ped a pedigree data file.  Needs ID, momID, and dadID columns
-#' @param max.gen the maximum number of generations to compute
-#'  (e.g., only up to 4th degree relatives).  The default of Inf uses as many
-#'  generations as there are in the data.
-#' @param sparse logical.  If TRUE, use and return sparse matrices from Matrix package
-#' @param verbose logical  If TRUE, print progress through stages of algorithm
-#' @param gc logical. If TRUE, do frequent garbage collection via \code{\link{gc}} to save memory
+#' @inheritParams ped2com
 #' @details source examplePedigreeFunctions
 #' @export
 #'
@@ -150,13 +144,7 @@ ped2add <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FA
 }
 
 #' Take a pedigree and turn it into a mitochondrial relatedness matrix
-#' @param ped a pedigree data file.  Needs ID, momID, and dadID columns
-#' @param max.gen the maximum number of generations to compute
-#'  (e.g., only up to 4th degree relatives).  The default of Inf uses as many
-#'  generations as there are in the data.
-#' @param sparse logical.  If TRUE, use and return sparse matrices from Matrix package
-#' @param verbose logical  If TRUE, print progress through stages of algorithm
-#' @param gc logical. If TRUE, do frequent garbage collection via \code{\link{gc}} to save memory
+#' @inheritParams ped2com
 #' @details source examplePedigreeFunctions
 #' @export
 #'
@@ -165,13 +153,7 @@ ped2mit <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FA
 }
 
 #' Take a pedigree and turn it into a common nuclear environmental relatedness matrix
-#' @param ped a pedigree data file.  Needs ID, momID, and dadID columns
-#' @param max.gen the maximum number of generations to compute
-#'  (e.g., only up to 4th degree relatives).  The default of Inf uses as many
-#'  generations as there are in the data.
-#' @param sparse logical.  If TRUE, use and return sparse matrices from Matrix package
-#' @param verbose logical  If TRUE, print progress through stages of algorithm
-#' @param gc logical. If TRUE, do frequent garbage collection via \code{\link{gc}} to save memory
+#' @inheritParams ped2com
 #' @details source examplePedigreeFunctions
 #' @export
 #'
@@ -180,7 +162,8 @@ ped2cn <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FAL
 }
 
 #' Take a pedigree and turn it into an extended environmental relatedness matrix
-#' @param ped a pedigree data file.  Needs ID, momID, and dadID columns
+#' @inheritParams ped2com
+#' @details source examplePedigreeFunctions
 #' @export
 #'
 ped2ce <- function(ped) {

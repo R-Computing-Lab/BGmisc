@@ -7,8 +7,11 @@
 ped2ce(ped)
 }
 \arguments{
-\item{ped}{a pedigree data file.  Needs ID, momID, and dadID columns}
+\item{ped}{a pedigree dataset.  Needs ID, momID, and dadID columns}
 }
 \description{
 Take a pedigree and turn it into an extended environmental relatedness matrix
+}
+\details{
+source examplePedigreeFunctions
 }
