@@ -55,11 +55,11 @@ test_that("ped2add produces correct matrix dims, values, and dimnames for hazard
 
 test_that("ped2add produces correct matrix dims, values, and dimnames for inbreeding data", {
   data(inbreeding)
-  add <- ped2add(inbreeding)
+  add <- ped2add(inbreeding, flatten.diag = TRUE)
   # Check dimension
   expect_equal(dim(add), c(nrow(inbreeding), nrow(inbreeding)))
   # Check several values
-  expect_true(all(diag(add) >= 1))
+  expect_true(all(diag(add) == 1))
   expect_equal(add, t(add))
   expect_equal(add[2, 1], 0)
   expect_equal(add[6, 1], .5)
@@ -74,7 +74,7 @@ test_that("ped2add produces correct matrix dims, values, and dimnames for inbree
 test_that("ped2mit produces correct matrix dims, values, and dimnames", {
   # Check dimension
   data(inbreeding)
-  mit <- ped2mit(inbreeding)
+  mit <- ped2mit(inbreeding, flatten.diag = TRUE)
   # Check dimension
   expect_equal(dim(mit), c(nrow(inbreeding), nrow(inbreeding)))
   # Check several values

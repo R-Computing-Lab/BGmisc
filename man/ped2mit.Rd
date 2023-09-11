@@ -4,7 +4,14 @@
 \alias{ped2mit}
 \title{Take a pedigree and turn it into a mitochondrial relatedness matrix}
 \usage{
-ped2mit(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FALSE)
+ped2mit(
+  ped,
+  max.gen = Inf,
+  sparse = FALSE,
+  verbose = FALSE,
+  gc = FALSE,
+  flatten.diag = FALSE
+)
 }
 \arguments{
 \item{ped}{a pedigree dataset.  Needs ID, momID, and dadID columns}
@@ -18,6 +25,8 @@ generations as there are in the data.}
 \item{verbose}{logical  If TRUE, print progress through stages of algorithm}
 
 \item{gc}{logical. If TRUE, do frequent garbage collection via \code{\link{gc}} to save memory}
+
+\item{flatten.diag}{Logical. The default is FALSE. If TRUE, overwrites the diagonal of the final relatedness matrix with ones.}
 }
 \description{
 Take a pedigree and turn it into a mitochondrial relatedness matrix
