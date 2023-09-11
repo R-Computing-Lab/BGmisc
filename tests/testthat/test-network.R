@@ -1,3 +1,4 @@
+
 test_that("hazard data loads", {
   expect_silent(data(hazard))
 })
@@ -13,17 +14,32 @@ test_that("ped2fam gets the right families for hazard data", {
   expect_equal(ds$FamID, ds$newFamID)
 })
 
-test_that("ped2graph produces a graph", {
+test_that("ped2fam gets the right families for inbreeding data", {
+  data(inbreeding)
+  ds <- ped2fam(inbreeding, famID='newFamID')
+  tab <- table(ds$FamID, ds$newFamID)
+  expect_equal(ds$FamID, ds$newFamID)
+})
+
+test_that("ped2graph produces a graph for hazard data", {
+  expect_silent(data(hazard))
+  g <- ped2graph(hazard)
+  expect_true(inherits(g, 'igraph'))
+})
+
+test_that("ped2graph produces a graph for inbreeding data", {
   expect_silent(data(inbreeding))
   g <- ped2graph(inbreeding)
   expect_true(inherits(g, 'igraph'))
 })
 
-test_that("ped2add produces correct matrix dims, values, and dimnames", {
+
+
+test_that("ped2add produces correct matrix dims, values, and dimnames for hazard", {
   data(hazard)
   add <- ped2add(hazard)
   # Check dimension
-  expect_equal(dim(add), c(43, 43))
+  expect_equal(dim(add), c(nrow(hazard), nrow(hazard)))
   # Check several values
   expect_true(all(diag(add) == 1))
   expect_equal(add, t(add))
@@ -37,12 +53,44 @@ test_that("ped2add produces correct matrix dims, values, and dimnames", {
   expect_equal(dn[[1]], as.character(hazard$ID))
 })
 
-#test_that("ped2mit produces correct matrix dims, values, and dimnames", {
-#  # Check dimension
-#  # Check several values
-#  # Check that dimnames are correct
+test_that("ped2add produces correct matrix dims, values, and dimnames for inbreeding data", {
+  data(inbreeding)
+  add <- ped2add(inbreeding)
+  # Check dimension
+  expect_equal(dim(add), c(nrow(inbreeding), nrow(inbreeding)))
+  # Check several values
+  expect_true(all(diag(add) >= 1))
+  expect_equal(add, t(add))
+  expect_equal(add[2, 1], 0)
+  expect_equal(add[6, 1], .5)
+  expect_equal(add[113, 113], 1.1250)
+  expect_equal(add['113', '112'], 0.62500)
+  # Check that dimnames are correct
+  dn <- dimnames(add)
+  expect_equal(dn[[1]], dn[[2]])
+  expect_equal(dn[[1]], as.character(inbreeding$ID))
+})
+
+test_that("ped2mit produces correct matrix dims, values, and dimnames", {
+  # Check dimension
+  data(inbreeding)
+  mit <- ped2mit(inbreeding)
+  # Check dimension
+  expect_equal(dim(mit), c(nrow(inbreeding), nrow(inbreeding)))
+  # Check several values
+  expect_true(all(diag(mit) >= 1))
+  expect_equal(mit, t(mit))
+  expect_equal(mit[2, 1], 0)
+  expect_equal(mit[6, 1], 1)
+  expect_equal(mit[113, 113], 1)
+  expect_equal(mit['113', '112'], 1)
+  # Check that dimnames are correct
+  dn <- dimnames(mit)
+  expect_equal(dn[[1]], dn[[2]])
+  expect_equal(dn[[1]], as.character(inbreeding$ID))
+
 #  expect_silent(data(inbreeding))
-#})
+})
 
 #test_that("ped2cn produces correct matrix dims, values, and dimnames", {
 #  # Check dimension
