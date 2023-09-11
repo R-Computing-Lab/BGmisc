@@ -16,7 +16,7 @@ authors:
     affiliation: 2
   - name: Xuanyu Lyu
     orcid: 0000-0002-2841-5529
-    affiliation: 1
+    affiliation: "1, 3, 4" # (Multiple affiliations must be quoted)
   - name: Jonathan D. Trattner
     orcid: 0000-0002-1097-7603
     affiliation: 1  
@@ -28,9 +28,13 @@ affiliations:
    index: 1
  - name: Pennsylvania State University, Pennsylvania, USA
    index: 2
- - name: Michigan State University, Michigan, USA
+ - name: Institute for Behavioral Genetics, University of Colorado at Boulder, Boulder, USA 
    index: 3
-date: "10 September, 2023"
+ - name: Department of Psychology & Neuroscience, University of Colorado at Boulder, Boulder, USA
+   index: 4
+ - name: Michigan State University, Michigan, USA
+   index: 5
+date: "11 September, 2023"
 bibliography: paper.bib
 vignette: >
   %\VignetteEncoding{UTF-8}
