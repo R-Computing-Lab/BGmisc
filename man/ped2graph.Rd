@@ -9,7 +9,8 @@ ped2graph(
   personID = "ID",
   momID = "momID",
   dadID = "dadID",
-  famID = "famID"
+  famID = "famID",
+  directed = TRUE
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ ped2graph(
 \item{dadID}{character.  Name of the column in ped for the father ID variable}
 
 \item{famID}{character.  Name of the column to be created in ped for the family ID variable}
+
+\item{directed}{Logical scalar. Default is TRUE. Indicates whether or not to create a directed graph.}
 }
 \value{
 A graph

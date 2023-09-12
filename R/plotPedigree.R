@@ -26,47 +26,47 @@ plotPedigree <- function(ped,
 
   # Check if dataframe matches the criteria
   if (identical(sort(names(ped)), sort(simulated_vars))) {
-  p <- ped[, c("fam", "ID", "dadID", "momID","sex")]
-  colnames(p) <- c("ped", "id", "father", "mother", "sex")
-  # data conversation
-  p[is.na(p)] <- 0
-  p$affected <- 0
-  p$avail <- 0
-  if(!is.null(code_male)){
-    p$sex_recode <- "F"
-    p$sex_recode[p$sex==code_male] <- "M"
-  }else{
-    p$sex_recode <- p$sex
-  }
- # family id
-  if(length(unique(p$ped))==1){ # only one family
-    p$ped <- 1
-   }else{
-     # Assign a unique string pattern "fam #" for each unique family
-     unique_families <- unique(p$fam)
-     named_families <- 1:length(unique_families)
-     p$ped <- named_families[match(p$fam, unique_families)]
-  }
-  p2 <- kinship2::pedigree(
-    id = p$id,
-    dadid = p$father,
-    momid = p$mother,
-    sex = p$sex_recode,
-    famid = p$ped
-  )
-  p3 <- p2["1"]
-  print(p3)
-  return(kinship2::plot.pedigree(p3,
-    cex = cex,
-    col = col,
-    symbolsize = symbolsize,
-    branch = branch,
-    packed = packed, align = align,
-    width = width,
-    density = density,
-    angle = angle, keep.par = keep.par,
-    pconnect = pconnect
-  ))
+    p <- ped[, c("fam", "ID", "dadID", "momID", "sex")]
+    colnames(p) <- c("ped", "id", "father", "mother", "sex")
+    # data conversation
+    p[is.na(p)] <- 0
+    p$affected <- 0
+    p$avail <- 0
+    if (!is.null(code_male)) {
+      p$sex_recode <- "F"
+      p$sex_recode[p$sex == code_male] <- "M"
+    } else {
+      p$sex_recode <- p$sex
+    }
+    # family id
+    if (length(unique(p$ped)) == 1) { # only one family
+      p$ped <- 1
+    } else {
+      # Assign a unique string pattern "fam #" for each unique family
+      unique_families <- unique(p$fam)
+      named_families <- 1:length(unique_families)
+      p$ped <- named_families[match(p$fam, unique_families)]
+    }
+    p2 <- kinship2::pedigree(
+      id = p$id,
+      dadid = p$father,
+      momid = p$mother,
+      sex = p$sex_recode,
+      famid = p$ped
+    )
+    p3 <- p2["1"]
+    print(p3)
+    return(kinship2::plot.pedigree(p3,
+      cex = cex,
+      col = col,
+      symbolsize = symbolsize,
+      branch = branch,
+      packed = packed, align = align,
+      width = width,
+      density = density,
+      angle = angle, keep.par = keep.par,
+      pconnect = pconnect
+    ))
   } else {
     stop("The structure of the provided pedigree data does not match the expected structure.")
   }

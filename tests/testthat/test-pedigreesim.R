@@ -1,9 +1,9 @@
 test_that("simulated pedigree generates expected data structure", {
   set.seed(5)
   Ngen <- 4
-  kpc  <-  4
-  sexR  <-  .50
-  marR  <-  .7
+  kpc <- 4
+  sexR <- .50
+  marR <- .7
 
   results <- simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR)
   # Check that dimnames are correct

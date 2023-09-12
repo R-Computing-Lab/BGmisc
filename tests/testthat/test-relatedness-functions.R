@@ -8,4 +8,3 @@ test_that("calculateRelatedness function for half siblings", {
   result <- calculateRelatedness(generations = 1, full = FALSE)
   expect_equal(result, 0.25, tolerance = 1e-8)
 })
-

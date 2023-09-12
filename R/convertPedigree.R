@@ -138,7 +138,7 @@ ped2com <- function(ped, component,
     if (component == "mitochondrial") {
       r[r != 0] <- 1 # for mitochondrial component, set all nonzero values to 1
     }
-    if (flatten.diag) { #flattens diagonal if you don't want to deal with inbreeding
+    if (flatten.diag) { # flattens diagonal if you don't want to deal with inbreeding
       diag(r) <- 1
     }
     return(r)
@@ -151,13 +151,15 @@ ped2com <- function(ped, component,
 #' @export
 #'
 ped2add <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FALSE, flatten.diag = FALSE) {
-  ped2com(ped = ped,
-          max.gen = max.gen,
-          sparse = sparse,
-          verbose = verbose,
-          gc = gc,
-          component = "additive",
-          flatten.diag = flatten.diag )
+  ped2com(
+    ped = ped,
+    max.gen = max.gen,
+    sparse = sparse,
+    verbose = verbose,
+    gc = gc,
+    component = "additive",
+    flatten.diag = flatten.diag
+  )
 }
 
 #' Take a pedigree and turn it into a mitochondrial relatedness matrix
@@ -166,13 +168,15 @@ ped2add <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FA
 #' @export
 #'
 ped2mit <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FALSE, flatten.diag = FALSE) {
-  ped2com(ped = ped,
-          max.gen = max.gen,
-          sparse = sparse,
-          verbose = verbose,
-          gc = gc,
-          component = "mitochondrial",
-          flatten.diag = flatten.diag )
+  ped2com(
+    ped = ped,
+    max.gen = max.gen,
+    sparse = sparse,
+    verbose = verbose,
+    gc = gc,
+    component = "mitochondrial",
+    flatten.diag = flatten.diag
+  )
 }
 
 #' Take a pedigree and turn it into a common nuclear environmental relatedness matrix
@@ -181,13 +185,15 @@ ped2mit <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FA
 #' @export
 #'
 ped2cn <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FALSE, flatten.diag = FALSE) {
-  ped2com(ped = ped,
-          max.gen = max.gen,
-          sparse = sparse,
-          verbose = verbose,
-          gc = gc,
-          component = "common nuclear",
-          flatten.diag = flatten.diag )
+  ped2com(
+    ped = ped,
+    max.gen = max.gen,
+    sparse = sparse,
+    verbose = verbose,
+    gc = gc,
+    component = "common nuclear",
+    flatten.diag = flatten.diag
+  )
 }
 
 #' Take a pedigree and turn it into an extended environmental relatedness matrix

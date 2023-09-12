@@ -12,7 +12,7 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-options(rmarkdown.html_vignette.check_title = FALSE) 
+options(rmarkdown.html_vignette.check_title = FALSE)
 ```
 
 
@@ -37,7 +37,7 @@ Many pedigree datasets only contain information on the person, their mother, and
 Using the `hazard` pedigree data as an example:
 
 ```{r}
-ds <- ped2fam(hazard, famID='newFamID')
+ds <- ped2fam(hazard, famID = "newFamID")
 table(ds$FamID, ds$newFamID)
 ```
 
@@ -50,7 +50,6 @@ Once you know which sets of people are related at all to one another, you'll lik
 
 ```{r}
 add <- ped2add(hazard)
-
 ```
 
 This computes the additive genetic relatedness for everyone in the data.  It returns a square, symmetric matrix that has as many rows and columns as there are IDs.  
@@ -71,7 +70,11 @@ It's probably fine to do this on the whole dataset when your data have fewer tha
 ```{r}
 add_list <- lapply(
   unique(hazard$FamID),
-  function(d){tmp <- hazard[hazard$FamID %in% d,]; ped2add(tmp)})
+  function(d) {
+    tmp <- hazard[hazard$FamID %in% d, ]
+    ped2add(tmp)
+  }
+)
 ```
 
 The function works similarly for mitochonrial (`ped2mit`), common nuclear environment through sharing both parents (`ped2cn`), and common extended family environment (`ped2ce`).

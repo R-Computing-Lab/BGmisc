@@ -26,11 +26,11 @@
 #' @export
 
 simulatePedigree <- function(kpc = 3,
-                   Ngen = 4,
-                   sexR = .5,
-                   marR = 2 / 3,
-                   balancedSex = TRUE,
-                   balancedmar = TRUE) {
+                             Ngen = 4,
+                             sexR = .5,
+                             marR = 2 / 3,
+                             balancedSex = TRUE,
+                             balancedmar = TRUE) {
   # SexRatio: ratio of male over female in the offspring setting; used in the between generation combinations
   SexRatio <- sexR / (1 - sexR)
 
