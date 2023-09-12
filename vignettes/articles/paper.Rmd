@@ -22,7 +22,7 @@ authors:
     affiliation: 1  
   - name: S. Alexandra Burt
     orcid: 0000-0001-5538-7431
-    affiliation: 3
+    affiliation: 5
 affiliations:
  - name: Wake Forest University, North Carolina, USA
    index: 1
@@ -67,7 +67,7 @@ Acknowledgment of any financial support.
 Behavior genetics focuses on understanding genetic and environmental influences on individual differences. 
 Traditionally, twin studies have been at the forefront of this discipline. However, research has moved beyond the classical twin design to embrace more complex family structures such as children of twins (CoT) [@DOnofrio2003], mother-daughter-aunt-niece (MDAN) [@rodgers_mdan], and other extended family designs. This expansion allows for a deeper, more nuanced exploration of genetic and environmental influences, but it also introduces challenges, particularly in data structuring and modeling.
 
-A notable challenge arises when researchers venture into extended family data. The data structures inherent in such family designs are orders of magnitude larger than traditional designs. In the classical twin study, a family will consist of a single pair of twins (i.e., two people), whereas in the MADN design a family consists of two mother-daughter pairs (i.e. four people). This problem becomes intractable, when applied to pedigrees, where a single family can be of any size.  The `BGmisc` package addresses this gap by offering a comprehensive suite of functions for structuring and modeling such data.
+A notable challenge arises when researchers venture into extended family data. The data structures inherent in such family designs are orders of magnitude larger than traditional designs. In the classical twin study, a family will consist of a single pair of twins (i.e., two people), whereas in the MDAN design a family consists of two mother-daughter pairs (i.e. four people). This problem becomes intractable, when applied to pedigrees, where a single family can be of any size.  The `BGmisc` package addresses this gap by offering a comprehensive suite of functions for structuring and modeling such data.
 
 
 # Statement of need
