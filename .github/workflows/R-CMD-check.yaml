@@ -3,6 +3,8 @@ on:
     branches: [main, master]
     paths:
       - '**.Rmd'
+      - '**.Rd'
+      - '**.R'
   pull_request:
     branches: [main, master]
 
