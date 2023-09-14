@@ -7,6 +7,7 @@ test_that("identified model is identified", {
     E = diag(1, 4)
   )$identified)
 })
+
 test_that("underidentified model is unidentified", {
   set.seed(5)
 
