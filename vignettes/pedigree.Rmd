@@ -26,27 +26,29 @@ This vignette provides a detailed guide to the pedigree-related functions within
 library(BGmisc)
 ```
 
-# Simulating Pedigree
+# Simulating Pedigrees
 
 
 
-Unlike Tolstoy, where only happy families are alike, all pedigrees are alike. Moreover, such pedigrees can be simulated as a function of several parameters, including the number of children per mate, generations, sex ratio of newborns, and mating rate 
+Unlike Tolstoy, where *only* happy families are alike, all pedigrees are alike -- or at least, all simulated pedigrees are alike. The `simulatePedigree` function generates a pedigree with a user-specified number of generations and individuals per generation. This function provides users the opportunity to test family models in pedigrees with a customized pedigree length and width.
 
-The simulation function provides users the opportunity to test family models in pedigrees with a customized pedigree length and width. Since data in the form of large family pedigrees is difficult to collect or access, simulated pedigrees serve as an efficient tool for building statistical models using family data and evaluating the statistical properties of the model, such as power, bias, and computational efficiency. 
+These pedigrees can be simulated as a function of several parameters, including the number of children per mate, generations, sex ratio of newborns, and mating rate. Given that large family pedigrees are difficult to collect or access, simulated pedigrees serve as an efficient tool for researchers. These simulated pedigrees are useful for building family-based statistical models, and evaluating their statistical properties, such as power, bias, and computational efficiency.
 
-For example, a pedigree that follows these conditions: There are a total of four generations in which each mating produces four offspring. The number of male and female newborns is equal. 70% of individuals mate and bear offspring. Such a pedigree structure can be simulated by running:
+To illustrate this, let us generate a pedigree. This pedigree has a total of four generations, in which each person who "mates", grows a family with four offspring. In our scenario, the number of male and female newborns is equal. In this illustration 70% of individuals will mate and bear offspring. Such a pedigree structure can be simulated by running:
 
 ```{r}
 set.seed(5)
-Ped <- simulatePedigree(kpc = 4, Ngen = 4, sexR = .5, marR = .7)
-
-summary(Ped)
+df_ped <- simulatePedigree(kpc = 4,
+                        Ngen = 4,
+                        sexR = .5,
+                        marR = .7)
+summary(df_ped)
 ```
 
-The simulation output is a `data.frame` with `r length(Ped$ID)` rows and `r length(Ped)` columns. Each row corresponds to a simulated individual.
+The simulation output is a `data.frame` with `r length(df_ped$ID)` rows and `r length(df_ped)` columns. Each row corresponds to a simulated individual.
 
 ```{r}
-Ped[21, ]
+df_ped[21, ]
 ```
 
 The columns represents the individual's family ID, the individual's personal ID, the generation the individual is in, the IDs of their father and mother, the ID of their spouse, and the biological sex of the individual, respectively.
@@ -62,7 +64,7 @@ To visualize a single simulated pedigree, use the `plotPedigree()` function.
 
 ```{r,fig.width=8,fig.height=6}
 # Plot the simulated pedigree
-plotPedigree(Ped)
+plotPedigree(df_ped)
 ```
 
 
