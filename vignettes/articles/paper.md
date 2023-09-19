@@ -34,7 +34,7 @@ affiliations:
    index: 4
  - name: Department of Psychology, Michigan State University, Michigan, USA
    index: 5
-date: "12 September, 2023"
+date: "19 September, 2023"
 bibliography: paper.bib
 vignette: >
   %\VignetteEncoding{UTF-8}
@@ -69,25 +69,23 @@ Traditionally, twin studies have been at the forefront of this discipline. Howev
 # Statement of need
 <!-- A Statement of need section that clearly illustrates the research purpose of the software and places it in the context of related work. -->
 
-As behavior genetics delves into more complex data structures like extended pedigrees, the limitations of current tools become evident. The `BGmisc` R package addresses these challenges, going beyond what is available in tools like `OpenMx` and `EasyMx`, which mainly focus on classical twin models.
+As behavior genetics delves into more complex data structures like extended pedigrees, the limitations of current tools become evident. Understandably, packages like `OpenMx` [@Neale2016], `EasyMx` [@easy], and `kinship2` [@kinship2; @kinship2R]  were built for  smaller families and classical designs. In contrast, the `BGmisc` R package was specifically developed to structure and model extended family pedigree data.
 
-Two widely used R packages in genetics modeling are `OpenMx` [@Neale2016] and `kinship2` [@kinship2; @kinship2R]. The `OpenMx` [@Neale2016] package is a workhorse in behavior genetic research. Not only is it a general-purpose software for structural equation modeling that is popular among behavior geneticists [@Garrison2018], but also for its unique features -- the `mxCheckIdentification()` function. This function checks whether a model is identified, determining if there is a unique solution to estimate the model's parameters based on the observed data. In addition, `EasyMx` [@easy] is a more user-friendly package that streamlines the process of building and estimating structural equation models. It seamlessly integrates with `OpenMx`'s infrastructure. Its functionalities range from foundational matrix builders like `emxCholeskyVariance` and `emxGeneticFactorVariance` to more specialized functions like `emxTwinModel` designed for classical twin models. Despite their strengths, `EasyMx` and `OpenMx` have limitations when handling extended family data. Notably, they lack functions for handling modern molecular designs [@kirkpatrick_combining_2021], modeling complex genetic relationships, inferring relatedness, or simulating pedigrees.
+Two widely-used R packages in genetic modeling are `OpenMx` [@Neale2016] and `kinship2` [@kinship2; @kinship2R]. The `OpenMx` [@Neale2016] package is a general-purpose software for structural equation modeling that is popular among behavior geneticists [@Garrison2018] for its unique features, like the `mxCheckIdentification()` function. This function checks whether a model is identified, determining if there is a unique solution to estimate the model's parameters based on the observed data. In addition, `EasyMx` [@easy] is a more user-friendly package that streamlines the process of building and estimating structural equation models. It seamlessly integrates with `OpenMx`'s infrastructure. Its functionalities range from foundational matrix builders like `emxCholeskyVariance` and `emxGeneticFactorVariance` to more specialized functions like `emxTwinModel` designed for classical twin models. Despite their strengths, `EasyMx` and `OpenMx` have limitations when handling extended family data. Notably, they lack functions for handling modern molecular designs [@kirkpatrick_combining_2021], modeling complex genetic relationships, inferring relatedness, and simulating pedigrees.
 
 Although not a staple in behavior genetics, the `kinship2` [@kinship2] package provides core features to the broader statistical genetics scientific community, such as plotting pedigrees and computing genetic relatedness matrices. It uses the Lange algorithm [@lange_genetic_2002] to compute relatedness coefficients. This recursive algorithm is discussed in great detail elsewhere, laying out several boundary conditions and recurrence rules. The `BGmisc` package extends the capabilities of `kinship2` by introducing an alternative algorithm to calculate the relatedness coefficient based on network models. By applying classic path-tracing rules to the entire network, this new method is computationally more efficient by eliminating the need for a multi-step recursive approach.
 
 ## Features
 
-The `BGmisc` package offers various features tailored for extended behavior genetics analysis. These features are grouped under two main categories, mirroring the structure presented in our vignettes.
-
+The `BGmisc` package offers features tailored for extended behavior genetics analysis. These features are grouped under two main categories, mirroring the structure presented in our vignettes.
 
 ### Modeling and Relatedness:
 
 -   Model Identification: `BGmisc` evaluates whether a variance components model is identified and fits the model's estimated variance components to observed covariance data. The technical aspects related to model identification have been described by @hunter_analytic_2021.
 
--   Relatedness Coefficient Calculation: Using path tracing rules first described by @Wright1922 and formalized by @mcardleRAM, `BGmisc` calculates the (sparse) relatedness coefficients between all pairs of individuals in extended pedigrees based soley on mother and father identifiers. 
+-   Relatedness Coefficient Calculation: Using path tracing rules first described by @Wright1922 and formalized by @mcardleRAM, `BGmisc` calculates the (sparse) relatedness coefficients between all pairs of individuals in extended pedigrees based solely on mother and father identifiers. 
 
 -   Relatedness Inference: `BGmisc` infers the relatedness between two groups based on their observed total correlation, given additive genetic and shared environmental parameters.
-
 
 
 ### Pedigree Analysis and Simulation:
@@ -95,6 +93,7 @@ The `BGmisc` package offers various features tailored for extended behavior gene
 -   Pedigree Conversion: `BGmisc` converts pedigrees into various relatedness matrices, including additive genetics, mitochondrial, common nuclear, and extended environmental relatedness matrices.
 
 -   Pedigree Simulation: `BGmisc` simulates pedigrees based on parameters including the number of children per mate, generations, sex ratio of newborns, and mating rate.
+
 
 
 <!-- Mention (if applicable) a representative set of past or ongoing research projects using the software and recent scholarly publications enabled by it.-->
