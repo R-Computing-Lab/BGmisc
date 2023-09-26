@@ -368,13 +368,20 @@ pedigree-related tasks. This function facilitates those tasks by finding
 all the extended families. People within the same extended family have
 at least some form of relation, however distant, while those in
 different extended families have no relations.</p>
-<p>Using the <code>hazard</code> pedigree data as an example:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>ds <span class="ot">&lt;-</span> <span class="fu">ped2fam</span>(hazard, <span class="at">famID =</span> <span class="st">&quot;newFamID&quot;</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="fu">table</span>(ds<span class="sc">$</span>FamID, ds<span class="sc">$</span>newFamID)</span>
-<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co">#&gt;    </span></span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co">#&gt;      1  2</span></span>
-<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co">#&gt;   1 18  0</span></span>
-<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="co">#&gt;   2  0 25</span></span></code></pre></div>
+<div class="figure">
+<img src="data:image/png;base64,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" alt="Hazard Pedigree" width="50%" />
+<p class="caption">
+Hazard Pedigree
+</p>
+</div>
+<p>We will use the <code>hazard</code> pedigree data as an example.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>ds <span class="ot">&lt;-</span> <span class="fu">ped2fam</span>(hazard, <span class="at">famID =</span> <span class="st">&quot;newFamID&quot;</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="fu">table</span>(ds<span class="sc">$</span>FamID, ds<span class="sc">$</span>newFamID)</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co">#&gt;    </span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co">#&gt;      1  2</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="co">#&gt;   1 18  0</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="co">#&gt;   2  0 25</span></span></code></pre></div>
 <p>Because the <code>hazard</code> data already had a family ID variable
 we compare our newly created variable to the pre-existing one. They
 match!</p>
@@ -415,10 +422,75 @@ extended family.</p>
 <span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>    <span class="fu">ped2add</span>(tmp)</span>
 <span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>  }</span>
 <span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>)</span></code></pre></div>
-<p>The function works similarly for mitochonrial (<code>ped2mit</code>),
-common nuclear environment through sharing both parents
-(<code>ped2cn</code>), and common extended family environment
+<div id="other-relatedness-measures" class="section level2">
+<h2>Other relatedness measures</h2>
+<p>The function works similarly for mitochondrial
+(<code>ped2mit</code>), common nuclear environment through sharing both
+parents (<code>ped2cn</code>), and common extended family environment
 (<code>ped2ce</code>).</p>
+<div id="computing-mitochondrial-relatedness" class="section level3">
+<h3>Computing mitochondrial relatedness</h3>
+<p>Here we calculate the mitochondrial relatedness between all pairs of
+individuals in the <code>hazard</code> dataset.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>mit <span class="ot">&lt;-</span> <span class="fu">ped2mit</span>(hazard)</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>mit[<span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>]</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="co">#&gt;   1 2 3 4 7 5 6</span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co">#&gt; 1 1 0 1 1 0 1 1</span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co">#&gt; 2 0 1 0 0 0 0 0</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co">#&gt; 3 1 0 1 1 0 1 1</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="co">#&gt; 4 1 0 1 1 0 1 1</span></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="co">#&gt; 7 0 0 0 0 1 0 0</span></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="co">#&gt; 5 1 0 1 1 0 1 1</span></span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="co">#&gt; 6 1 0 1 1 0 1 1</span></span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="fu">table</span>(mit)</span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a><span class="co">#&gt; mit</span></span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a><span class="co">#&gt;    0    1 </span></span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a><span class="co">#&gt; 1590  259</span></span></code></pre></div>
+<p>As you can see, some of the family members share mitochrondial DNA,
+such as person 1 and person 3 1, whereas person 1 and person 2 do
+not.</p>
+</div>
+<div id="computing-relatedness-through-common-nuclear-environment" class="section level3">
+<h3>Computing relatedness through common nuclear environment</h3>
+<p>Here we calculate the relatedness between all pairs of individuals in
+the <code>hazard</code> dataset through sharing both parents.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>commonNuclear <span class="ot">&lt;-</span> <span class="fu">ped2cn</span>(hazard)</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>commonNuclear [<span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>]</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="co">#&gt;   1 2 3 4 7 5 6</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="co">#&gt; 1 1 0 0 0 0 0 0</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="co">#&gt; 2 0 1 0 0 0 0 0</span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="co">#&gt; 3 0 0 1 1 0 1 1</span></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="co">#&gt; 4 0 0 1 1 0 1 1</span></span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="co">#&gt; 7 0 0 0 0 1 0 0</span></span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a><span class="co">#&gt; 5 0 0 1 1 0 1 1</span></span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a><span class="co">#&gt; 6 0 0 1 1 0 1 1</span></span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a></span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a><span class="fu">table</span>(commonNuclear)</span>
+<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a><span class="co">#&gt; commonNuclear</span></span>
+<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a><span class="co">#&gt;    0    1 </span></span>
+<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a><span class="co">#&gt; 1744  105</span></span></code></pre></div>
+</div>
+<div id="computing-relatedness-through-common-extended-family-environment" class="section level3">
+<h3>Computing relatedness through common extended family
+environment</h3>
+<p>Here we calculate the relatedness between all pairs of individuals in
+the <code>hazard</code> dataset through sharing an extended family.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>extendedFamilyEnvironment <span class="ot">&lt;-</span> <span class="fu">ped2ce</span>(hazard)</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>extendedFamilyEnvironment[<span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>]</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="co">#&gt;   1 2 3 4 7 5 6</span></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="co">#&gt; 1 1 1 1 1 1 1 1</span></span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a><span class="co">#&gt; 2 1 1 1 1 1 1 1</span></span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a><span class="co">#&gt; 3 1 1 1 1 1 1 1</span></span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a><span class="co">#&gt; 4 1 1 1 1 1 1 1</span></span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a><span class="co">#&gt; 7 1 1 1 1 1 1 1</span></span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a><span class="co">#&gt; 5 1 1 1 1 1 1 1</span></span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a><span class="co">#&gt; 6 1 1 1 1 1 1 1</span></span>
+<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a><span class="fu">table</span>(extendedFamilyEnvironment)</span>
+<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a><span class="co">#&gt; extendedFamilyEnvironment</span></span>
+<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a><span class="co">#&gt;    1 </span></span>
+<span id="cb9-14"><a href="#cb9-14" tabindex="-1"></a><span class="co">#&gt; 1849</span></span></code></pre></div>
+</div>
+</div>
 </div>
 
 

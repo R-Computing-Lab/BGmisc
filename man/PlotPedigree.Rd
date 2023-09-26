@@ -8,6 +8,7 @@ A wrapped function to plot simulated pedigree from function \code{simulatePedigr
 plotPedigree(
   ped,
   code_male = NULL,
+  quiet = TRUE,
   cex = 0.5,
   col = 1,
   symbolsize = 1,
@@ -16,6 +17,7 @@ plotPedigree(
   align = c(1.5, 2),
   width = 8,
   density = c(-1, 35, 65, 20),
+  mar = c(2.1, 1, 2.1, 1),
   angle = c(90, 65, 40, 0),
   keep.par = FALSE,
   pconnect = 0.5,
@@ -26,6 +28,8 @@ plotPedigree(
 \item{ped}{The simulated pedigree data.frame from function \code{simulatePedigree}. Or a pedigree dataframe with the same colnames as the dataframe simulated from function \code{simulatePedigree}.}
 
 \item{code_male}{This optional input allows you to indicate what value in the sex variable codes for male.}
+
+\item{quiet}{Logical. If TRUE, suppresses the printing of the pedigree object. Default is TRUE.}
 
 \item{cex}{The font size of the IDs for each individual in the plot.}
 
@@ -58,6 +62,8 @@ realignment of pedigrees.
 \item{density}{
 defines density used in the symbols.  Takes up to 4 different values.
 }
+
+\item{mar}{margin parmeters, as in the \code{par} function}
 
 \item{angle}{
 defines angle used in the symbols.  Takes up to 4 different values.

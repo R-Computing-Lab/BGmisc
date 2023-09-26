@@ -31,6 +31,7 @@
 #' }
 #' @export
 #'
+# lint-disable
 calculateRelatedness <- function(
     generations = 2, path = NULL, full = TRUE, maternal = FALSE,
     empirical = FALSE, segregating = TRUE, total_a = 6800 * 1000000, total_m = 16500,
@@ -81,7 +82,7 @@ calculateRelatedness <- function(
 #' }
 #' @export
 inferRelatedness <- function(cor_obs, ace_A = .9, ace_C = 0, shared_C = 0) {
-  if (ace_A > 1 | ace_A < 0 | ace_C > 1 | ace_C < 0) {
+  if (ace_A > 1 || ace_A < 0 || ace_C > 1 || ace_C < 0) {
     stop("ace_A and ace_C must be proportions between 0 and 1")
   }
   calc_r <- (cor_obs - shared_C * ace_C) / ace_A
