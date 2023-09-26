@@ -9,3 +9,4 @@ inst/doc
 /Meta/
 *.knit.md
 vignettes/articles/paper.html
+BGmisc.code-workspace
