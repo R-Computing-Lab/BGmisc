@@ -1,7 +1,6 @@
 Description
 -----------------------------------------------
-This is a major update to the BGmisc package, adding in several new functions related to simulating pedigrees and calculating relatedness. We've also transitioned to having Mason Garrison maintain the package.
-
+This is a hotfix for the BGmisc package, as we discovered that the plotPedigree wrapper function broke for pedigrees that contained multiple families.
 
 Test environments
 -----------------------------------------------
@@ -18,15 +17,9 @@ Test environments
 
 ## R CMD check results
 
-0 errors | 0 warnings | 0 notes
+──────────────────────── BGmisc 1.0.1 ────
+Duration: 1m 1.4s
 
+0 errors ✔ | 0 warnings ✔ | 0 notes ✔
 
-
-Notes
-Version: 1.0
-Date: 2023-09-10
-Description: The BGmisc R package offers a comprehensive suite of functions tailored for extended behavior genetics analysis, including model identification, calculating relatedness, pedigree conversion, pedigree simulation, and more.
-Dependencies:
-Imports: Matrix, stats, kinship2, igraph
-Suggests: knitr, rmarkdown, EasyMx, OpenMx, dplyr, testthat (>= 3.0.0)
-Depends: R (>= 3.5.0)
+R CMD check succeeded
