@@ -7,7 +7,7 @@ Test environments
 1. Local OS: Windows 10, R version 4.2.3 
 2. Local OS: Windows 10, R version 4.3.1 
 3. **GitHub Actions**:  
-    - [Link](https://github.com/R-Computing-Lab/BGmisc/actions/runs/6240228122)
+    - [Link](https://github.com/R-Computing-Lab/BGmisc/actions/runs/6317831880)
     - macOS (latest version) with the latest R release.
     - Windows (latest version) with the latest R release.
     - Ubuntu (latest version) with:
