@@ -1,6 +1,8 @@
 ---
 title: 'BGmisc: An R Package for Extended Behavior Genetics Analysis'
 output:
+  rticles::joss_article:
+    keep_md: TRUE
   rmarkdown::html_vignette:
     keep_md: TRUE
 tags:
@@ -8,7 +10,7 @@ tags:
   - pedigrees
   - behavior genetics
 authors:
-  - name: S. Mason Garrison
+  - name: S. Mason Garrison^[corresponding author]
     orcid: 0000-0002-4804-6003
     affiliation: 1
   - name: Michael D. Hunter
@@ -34,6 +36,9 @@ affiliations:
    index: 4
  - name: Department of Psychology, Michigan State University, Michigan, USA
    index: 5
+citation_author: Garrison, Hunter, Lyu, Trattner, & Burt
+csl: apa.csl
+journal: JOSS
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 bibliography: paper.bib
 vignette: >
@@ -41,6 +46,7 @@ vignette: >
   %\VignetteIndexEntry{modelingandrelatedness}
   %\VignetteIndexEntry{pedigree}
   %\VignetteEngine{knitr::rmarkdown}
+
 ---
 
 ```{r setup, echo=FALSE}
