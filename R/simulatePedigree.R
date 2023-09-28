@@ -1,5 +1,4 @@
 #' Simulate Pedigrees
-#'
 #' This function simulates "balanced" pedigrees based on a group of parameters:
 #' 1) k - Kids per couple;
 #' 2) G - Number of generations;
