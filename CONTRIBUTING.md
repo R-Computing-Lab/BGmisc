@@ -59,7 +59,7 @@ Follow the [Tidyverse Style Guide](https://style.tidyverse.org/) for R programmi
 
 ## Documentation
 
-- Update the README.md and other relevant documentation.
+- Update the README.Rmd and other relevant documentation.
 - Use [roxygen2](https://cran.r-project.org/web/packages/roxygen2/index.html) for documenting functions.
 - Include examples in the documentation where possible.
 
@@ -71,7 +71,3 @@ Follow the [Tidyverse Style Guide](https://style.tidyverse.org/) for R programmi
 By contributing, you agree to abide by these guidelines and the project's [Code of Conduct](https://github.com/R-Computing-Lab/BGmisc/blob/main/CODE_OF_CONDUCT.md).
 
 Thank you for contributing to BGmisc!
-
----
-
-Feel free to adapt these guidelines to better fit the specifics of the BGmisc project.
