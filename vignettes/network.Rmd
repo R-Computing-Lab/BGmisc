@@ -42,11 +42,8 @@ capture.output(plotPedigree(hazard, code_male = 0))
 We will use the `hazard` pedigree data as an example.
 
 ```{r}
-
 ds <- ped2fam(hazard, famID = "newFamID")
 table(ds$FamID, ds$newFamID)
-
-
 ```
 
 Because the `hazard` data already had a family ID variable we compare our newly created variable to the pre-existing one.  They match!
@@ -107,7 +104,7 @@ Here we calculate the relatedness between all pairs of individuals in the `hazar
 through sharing both parents.
 ```{r}
 commonNuclear <- ped2cn(hazard)
-commonNuclear [1:7, 1:7]
+commonNuclear[1:7, 1:7]
 
 table(commonNuclear)
 ```

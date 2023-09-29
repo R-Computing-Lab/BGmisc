@@ -44,7 +44,7 @@ simulatePedigree <- function(kpc = 3,
     # idGen <- ifelse(i==1,
     #                 paste(i,"-",1:sizeGens[i]),
     #                 paste(i,"-",sizeGens[i-1]:sizeGens[i]))
-    ### For each generation, create a seperate dataframe
+    ### For each generation, create a separate dataframe
     df_Ngen <- data.frame(
       fam = rep(paste("fam", 1), sizeGens[i], sep = ""),
       id = idGen[1:sizeGens[i]],

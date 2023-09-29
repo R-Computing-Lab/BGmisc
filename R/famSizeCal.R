@@ -69,7 +69,7 @@ famSizeCal <- function(kpc, Ngen, marR) {
     )
     size <- sum(allGens)
   } else {
-    stop("You should never see this message. 
+    stop("You should never see this message.
     If you do, that means that famSizeCal is not working properly.")
   }
   return(size)
