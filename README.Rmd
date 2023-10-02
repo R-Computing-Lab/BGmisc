@@ -24,7 +24,8 @@ knitr::opts_chunk$set(
 ![License](https://img.shields.io/badge/License-GPL_v3-blue.svg)
 <!-- badges: end -->
 
-BGmisc contains many functions useful for behavior genetics.
+The `BGmisc` package offers features tailored for extended behavior genetics analysis. These features are grouped under two main categories, mirroring the structure presented in our vignettes.
+
 
 ## Installation
 

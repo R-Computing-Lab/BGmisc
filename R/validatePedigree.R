@@ -1,8 +1,9 @@
 #' Standardize Column Names in a Dataframe (Internal)
 #'
 #' This internal function standardizes the column names of a given dataframe.
-#' It is useful for ensuring that dataframes with varying column names can be processed by functions
-#' expecting specific column names.
+#' It utilizes regular expressions and the `tolower()` function to match column names 
+#' against a list of predefined standard names. The approach is case-insensitive and 
+#' allows for flexible matching of column names.
 #'
 #' @param df A dataframe whose column names need to be standardized.
 #'
@@ -12,59 +13,24 @@
 standardize_colnames <- function(df) {
   # Internal mapping of standardized names to possible variants
   mapping <- list(
-    "fam" = c(
-      "fam", "Fam", "FAM",
-      "famID", "FamID", "FAMID",
-      "famid", "Famid", "FAMid",
-      "famfam", "Famfam", "FAMFAM"
-    ),
-    "ID" = c(
-      "ID", "id", "Id",
-      "Indiv", "indiv", "INDIV",
-      "individual", "Individual", "INDIVIDUAL"
-    ),
-    "gen" = c(
-      "gen", "Gen", "GEN",
-      "gens", "Gens", "GENS",
-      "generation", "Generation", "GENERATION"
-    ),
-    "dadID" = c(
-      "dadID", "DadID", "DADID",
-      "fatherID", "FatherID", "FATHERID"
-    ),
-    "momID" = c(
-      "momID", "MomID", "MOMID",
-      "motherID", "MotherID", "MOTHERID"
-    ),
-    "spt" = c(
-      "spt", "Spt", "SPT",
-      "sptID", "SptID", "SPTID",
-      "sptid", "Sptid", "SPTid",
-      "spouse", "Spouse", "SPOUSE",
-      "spouseID", "SpouseID", "SPOUSEID",
-      "spouseid", "Spouseid", "SPOUSEid",
-    ),
-    "twinID" = c(
-      "twinID", "twinid", "TWINID",
-      "twin", "Twin", "TWIN"
-    ),
-    "sex" = c(
-      "sex", "Sex", "SEX",
-      "female", "Female", "FEMALE",
-      "gender", "Gender", "GENDER",
-      "male", "Male", "MALE",
-      "man", "Man", "MAN",
-      "men", "Men", "MEN",
-      "woman", "Woman", "WOMAN",
-      "women", "Women", "WOMEN"
-    )
+    "fam" = "fam(?:ily)(?:id)?",
+    "ID" = "^id$|indiv(?:idual)?",
+    "gen" = "gen(?:s|eration)?",
+    "dadID" = "d(?:ad)?id|fatherid",
+    "momID" = "m(?:om)?id|motherid",
+    "spt" = "s(?:pt)?id|spouse(?:id)?",
+    "twinID" = "twin(?:id)?",
+    "sex" = "sex|gender|female|m(?:a(?:le|n)|en)|wom[ae]n"
   )
+
+  lowered_colnames <- tolower(colnames(df))
   for (standard_name in names(mapping)) {
-    for (variant in mapping[[standard_name]]) {
-      if (variant %in% colnames(df)) {
-        colnames(df)[colnames(df) == variant] <- standard_name
-        break # Exit the loop once a match is found
-      }
+    regex_pattern <- mapping[[standard_name]]
+    matched_variant <- grep(regex_pattern, lowered_colnames, value = TRUE)
+    if (length(matched_variant) > 0) {
+      # Update the first match in original case
+      original_matched <- colnames(df)[tolower(colnames(df)) == matched_variant[1]]
+      colnames(df)[colnames(df) == original_matched] <- standard_name
     }
   }
 

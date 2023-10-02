@@ -11,7 +11,7 @@ ped2com(
   sparse = FALSE,
   verbose = FALSE,
   gc = FALSE,
-  flatten.diag = FALSE
+  flatten_diag = FALSE
 )
 }
 \arguments{
@@ -29,7 +29,7 @@ generations as there are in the data.}
 
 \item{gc}{logical. If TRUE, do frequent garbage collection via \code{\link{gc}} to save memory}
 
-\item{flatten.diag}{Logical. The default is FALSE. If TRUE, overwrites the diagonal of the final relatedness matrix with ones.}
+\item{flatten_diag}{Logical. The default is FALSE. If TRUE, overwrites the diagonal of the final relatedness matrix with ones.}
 }
 \description{
 Take a pedigree and turn it into a relatedness matrix

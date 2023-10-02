@@ -3,7 +3,7 @@
 #' @import kinship2
 #' @param ped The simulated pedigree data.frame from function \code{simulatePedigree}. Or a pedigree dataframe with the same colnames as the dataframe simulated from function \code{simulatePedigree}.
 #' @param cex The font size of the IDs for each individual in the plot.
-#' @param quiet Logical. If TRUE, suppresses the printing of the pedigree object. Default is TRUE.
+#' @param verbose logical  If TRUE, prints additional information. Default is FALSE.
 #' @param code_male This optional input allows you to indicate what value in the sex variable codes for male.
 #' @inheritParams kinship2::plot.pedigree
 #' @return A plot of the simulated pedigree
@@ -12,7 +12,7 @@
 plotPedigree <- function(ped,
                          # optional data management
                          code_male = NULL,
-                         quiet = TRUE,
+                         verbose = FALSE,
                          # optional inputs for the pedigree plot
                          cex = .5,
                          col = 1,
@@ -61,25 +61,54 @@ plotPedigree <- function(ped,
       famid = p$ped
     )
     p3 <- p2["1"]
-    if (!quiet) {
+    if (verbose) {
       print(p3)
+      return(kinship2::plot.pedigree(p3,
+                                     cex = cex,
+                                     col = col,
+                                     symbolsize = symbolsize,
+                                     branch = branch,
+                                     packed = packed, align = align,
+                                     width = width,
+                                     density = density,
+                                     angle = angle, keep.par = keep.par,
+                                     pconnect = pconnect,
+                                     mar = mar
+      ))
+    } else { # suppress the printing of the pedigree comments
+      # Determine the null device based on the OS
+      null_device <- ifelse(.Platform$OS.type == "windows", "nul", "/dev/null")
+
+      # Start redirecting the standard output to suppress messages
+      sink(file = null_device, type = "output")
+
+      # Ensure the output is reverted back to console when function exits
+      on.exit(if(sink.number() > 0) sink(), add = TRUE)
+
+      plot_picture <- kinship2::plot.pedigree(p3,
+                                              cex = cex,
+                                              col = col,
+                                              symbolsize = symbolsize,
+                                              branch = branch,
+                                              packed = packed, align = align,
+                                              width = width,
+                                              density = density,
+                                              angle = angle, keep.par = keep.par,
+                                              pconnect = pconnect,
+                                              mar = mar)
+
+      # Explicitly revert the standard output back to the console
+      if(sink.number() > 0) {
+        sink()
+      }
+
+      return(plot_picture)
     }
 
-    return(kinship2::plot.pedigree(p3,
-      cex = cex,
-      col = col,
-      symbolsize = symbolsize,
-      branch = branch,
-      packed = packed, align = align,
-      width = width,
-      density = density,
-      angle = angle, keep.par = keep.par,
-      pconnect = pconnect,
-      mar = mar
-    ))
+
   } else {
     stop("The structure of the provided pedigree data does not match the expected structure.")
   }
 }
 
-# plotPedigree(simulatePedigree(kpc = 2, Ngen = 6, marR = .8))
+
