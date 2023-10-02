@@ -8,7 +8,7 @@
 #' @param verbose logical  If TRUE, print progress through stages of algorithm
 #' @param gc logical. If TRUE, do frequent garbage collection via \code{\link{gc}} to save memory
 #' @param flatten_diag Logical. The default is FALSE. If TRUE, overwrites the diagonal of the final relatedness matrix with ones.
-#' @details source examplePedigreeFunctions
+#' @details The algorithms and methodologies used in this function are further discussed and exemplified in the vignette titled "examplePedigreeFunctions".
 #' @export
 #'
 ped2com <- function(ped, component,
@@ -166,7 +166,7 @@ ped2add <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FA
 
 #' Take a pedigree and turn it into a mitochondrial relatedness matrix
 #' @inheritParams ped2com
-#' @details source examplePedigreeFunctions
+#' @details The algorithms and methodologies used in this function are further discussed and exemplified in the vignette titled "examplePedigreeFunctions".
 #' @export
 #'
 ped2mit <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FALSE, flatten_diag = FALSE) {
@@ -177,17 +177,16 @@ ped2mit <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FA
     verbose = verbose,
     gc = gc,
     component = "mitochondrial",
-    flatten.diag = flatten.diag
+    flatten_diag = flatten_diag
   )
 }
 
 #' Take a pedigree and turn it into a common nuclear environmental relatedness matrix
 #' @inheritParams ped2com
-#' @details source examplePedigreeFunctions
+#' @details The algorithms and methodologies used in this function are further discussed and exemplified in the vignette titled "examplePedigreeFunctions".
 #' @export
 #'
 ped2cn <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FALSE, flatten_diag = FALSE) {
-ped2cn <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FALSE, flatten.diag = FALSE) {
   ped2com(
     ped = ped,
     max.gen = max.gen,
@@ -201,7 +200,7 @@ ped2cn <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FAL
 
 #' Take a pedigree and turn it into an extended environmental relatedness matrix
 #' @inheritParams ped2com
-#' @details source examplePedigreeFunctions
+#' @details The algorithms and methodologies used in this function are further discussed and exemplified in the vignette titled "examplePedigreeFunctions".
 #' @export
 #'
 ped2ce <- function(ped) {

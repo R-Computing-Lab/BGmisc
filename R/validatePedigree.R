@@ -1,8 +1,8 @@
 #' Standardize Column Names in a Dataframe (Internal)
 #'
 #' This internal function standardizes the column names of a given dataframe.
-#' It utilizes regular expressions and the `tolower()` function to match column names 
-#' against a list of predefined standard names. The approach is case-insensitive and 
+#' It utilizes regular expressions and the `tolower()` function to match column names
+#' against a list of predefined standard names. The approach is case-insensitive and
 #' allows for flexible matching of column names.
 #'
 #' @param df A dataframe whose column names need to be standardized.
@@ -36,6 +36,31 @@ standardize_colnames <- function(df) {
 
   return(df)
 }
+
+
+#' recode_sex
+#' An internal utility function for \code{plotPedigree} to handle the recoding of the 'sex' variable in a pedigree dataframe.
+#'
+#' @param ped A pedigree data.frame containing the relevant columns, including 'sex'.
+#' @inheritParams plotPedigree
+#' @return A modified version of the input data.frame \code{ped}, containing an additional or modified 'sex_recode' column where the 'sex' values are recoded according to \code{code_male}. NA values in the 'sex' column are preserved.
+#' @keywords internal
+#' @seealso \code{\link{plotPedigree}}
+#'
+recode_sex <- function(ped, code_male) {
+
+  # Recode as "F" or "M" based on code_male, preserving NAs
+  if (!is.null(code_male)) {
+    # Initialize sex_recode as NA, preserving the length of the 'sex' column
+    ped$sex_recode <- as.character(NA)
+    ped$sex_recode[ped$sex != code_male & !is.na(ped$sex)] <- "F"
+    ped$sex_recode[ped$sex == code_male] <- "M"
+  } else {
+    ped$sex_recode <- ped$sex
+  }
+  return(ped)
+}
+
 
 
 #' Repair Pedigree

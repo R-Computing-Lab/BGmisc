@@ -4,7 +4,7 @@
 #' @param ped The simulated pedigree data.frame from function \code{simulatePedigree}. Or a pedigree dataframe with the same colnames as the dataframe simulated from function \code{simulatePedigree}.
 #' @param cex The font size of the IDs for each individual in the plot.
 #' @param verbose logical  If TRUE, prints additional information. Default is FALSE.
-#' @param code_male This optional input allows you to indicate what value in the sex variable codes for male.
+#' @param code_male This optional input allows you to indicate what value in the sex variable codes for male. Will be recoded as "M" (Male). If \code{NULL}, no recoding is performed.
 #' @inheritParams kinship2::plot.pedigree
 #' @return A plot of the simulated pedigree
 #' @export
@@ -38,12 +38,7 @@ plotPedigree <- function(ped,
     p$affected <- 0
     p$avail <- 0
     # recode sex values
-    if (!is.null(code_male)) {
-      p$sex_recode <- "F"
-      p$sex_recode[p$sex == code_male] <- "M"
-    } else {
-      p$sex_recode <- p$sex
-    }
+    p <- recode_sex(p, code_male = code_male)
     # family id
     if (length(unique(p$ped)) == 1) { # only one family
       p$ped <- 1

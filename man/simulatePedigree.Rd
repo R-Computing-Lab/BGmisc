@@ -10,7 +10,7 @@ simulatePedigree(
   sexR = 0.5,
   marR = 2/3,
   balancedSex = TRUE,
-  balancedmar = TRUE
+  balancedMar = TRUE
 )
 }
 \arguments{
@@ -24,7 +24,7 @@ simulatePedigree(
 
 \item{balancedSex}{Not fully developed yet. Always \code{TRUE} in the current version.}
 
-\item{balancedmar}{Not fully developed yet. Always \code{TRUE} in the current version.}
+\item{balancedMar}{Not fully developed yet. Always \code{TRUE} in the current version.}
 }
 \value{
 A \code{data.frame} with each row representing a simulated individual. The columns are as follows:
