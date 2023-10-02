@@ -13,14 +13,14 @@
 standardize_colnames <- function(df) {
   # Internal mapping of standardized names to possible variants
   mapping <- list(
-    "fam" = "fam(?:ily)(?:id)?",
-    "ID" = "^id$|indiv(?:idual)?",
-    "gen" = "gen(?:s|eration)?",
-    "dadID" = "d(?:ad)?id|fatherid",
-    "momID" = "m(?:om)?id|motherid",
-    "spt" = "s(?:pt)?id|spouse(?:id)?",
-    "twinID" = "twin(?:id)?",
-    "sex" = "sex|gender|female|m(?:a(?:le|n)|en)|wom[ae]n"
+    "fam" = "^(?:fam(?:ily)?(?:id)?)",
+    "ID" = "^(?:i(?:d$|ndiv(?:idual)?))",
+    "gen" = "^(?:gen(?:s|eration)?)",
+    "dadID" = "^(?:d(?:ad)?id|fatherid)",
+    "momID" = "^(?:m(?:om)?id|motherid)",
+    "spt" = "^(?:s(?:pt)?id|spouse(?:id)?)",
+    "twinID" = "^(?:twin(?:id)?)",
+    "sex" = "^(?:sex|gender|female|m(?:a(?:le|n)|en)|wom[ae]n)"
   )
 
   lowered_colnames <- tolower(colnames(df))

@@ -13,6 +13,7 @@ plotPedigree <- function(ped,
                          # optional data management
                          code_male = NULL,
                          verbose = FALSE,
+                         affected = NULL,
                          # optional inputs for the pedigree plot
                          cex = .5,
                          col = 1,
@@ -99,9 +100,7 @@ plotPedigree <- function(ped,
 
       return(plot_picture)
     }
-
-
-  } else {
+}else {
     stop("The structure of the provided pedigree data does not match the expected structure.")
   }
 }

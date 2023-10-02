@@ -35,5 +35,5 @@ generations as there are in the data.}
 Take a pedigree and turn it into a relatedness matrix
 }
 \details{
-source examplePedigreeFunctions
+The algorithms and methodologies used in this function are further discussed and exemplified in the vignette titled "examplePedigreeFunctions".
 }

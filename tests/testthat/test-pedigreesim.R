@@ -31,5 +31,5 @@ test_that("simulated pedigree plots correctly", {
   results2 <- simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR)
   results2$fam <- paste0("fam 2")
   results <- rbind(results,results2)
-  expect_no_error(plotPedigree(results, verbose = TRUE))
+  expect_output(plotPedigree(results, verbose = TRUE))
 })
