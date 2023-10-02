@@ -37,7 +37,8 @@ devtools::install_github("R-Computing-Lab/BGmisc")
 ```
 
 ## Contributing
-Contributions to the BGmisc project are welcome. Please submit issues and pull requests on the GitHub repository. For support, please use the GitHub issues page.
+Contributions to the BGmisc project are welcome. For guidelines on how to contribute, please refer to the [Contributing Guidelines](https://github.com/R-Computing-Lab/BGmisc/blob/main/CONTRIBUTING.md). Issues and pull requests should be submitted on the GitHub repository. For support, please use the GitHub issues page.
 
 ## License
 BGmisc is licensed under the GNU General Public License v3.0. For more details, see the [LICENSE.md](https://github.com/R-Computing-Lab/BGmisc/blob/main/LICENSE.md) file.
+```
