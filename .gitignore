@@ -12,3 +12,4 @@ vignettes/articles/paper.html
 BGmisc.code-workspace
 .lintr
 
+tests/testthat/Rplots.pdf
