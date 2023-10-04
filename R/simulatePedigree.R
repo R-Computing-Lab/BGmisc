@@ -10,6 +10,7 @@
 #' @param Ngen Number of generations. An integer >= 2 that determines how many generations the simulated pedigree will have. The first generation is always a fertilized couple. The last generation has no mated individuals.
 #' @param sexR Sex ratio of offspring. A numeric value ranging from 0 to 1 that determines the proportion of males in all offspring in this pedigree. For instance, 0.4 means 40 percent of the offspring will be male.
 #' @param marR Mating rate. A numeric value ranging from 0 to 1 which determines the proportion of mated (fertilized) couples in the pedigree within each generation. For instance, marR = 0.5 suggests 50 percent of the offspring in a specific generation will be mated and have their offspring.
+#' @param verbose logical  If TRUE, print progress through stages of algorithm 
 #' @param balancedSex Not fully developed yet. Always \code{TRUE} in the current version.
 #' @param balancedMar Not fully developed yet. Always \code{TRUE} in the current version.
 #' @return A \code{data.frame} with each row representing a simulated individual. The columns are as follows:
