@@ -91,13 +91,22 @@ repairPedigree <- function(ped, repair_funs = NULL) {
   }
 }
 
+# To do
+# - Missing parents: If one parent is missing and the other one isn't, this needs to be handled somehow. Firstly, I think it can cause certain ways of estimating relatedness to give wrong numbers. And secondly, it requires us to make guesses in cases where e.g. two people have the same mother and missing fathers: They could then be either half-sibs, if the missing fathers are different people, or full sibs if not. This then also affects relatedness for their descendants.
+# - Missing rows: Sometimes, ID-codes in the mother or father column do not exist in the ID-column. That is, the people listed as someone's parents sometimes do not have their own rows, with columns for their parents etc.
+# - Wrong IDs: It is possible that the ID code written for e.g. someone's mother is simply written wrong. This is especially problematic if there are people in the file who actually have the code that was mistakenly given.
+# - A person's child being registered as their parent: I randomly found a case of this. A girl was registered as her father's mother.
+# - People existing in both the mother and father column. This can happen through error. And it can also happen when same-sex couples have children (e.g. through adoption or fertilization). In the MoBa sample we had some cases of this, where there were same-sex pairs with several children, and where it was switched around from one child to the next whether one or the other of these parents were the father or mother in the registry.
+
 # Repair Missing IDs
 repairMissingIDs <- function(ped) {
+  # Create a list to track the changes made
+  changes <- list()
   # [logic to repair missing IDs]
   return(ped)
 }
 
-# Repairing IDs
+# Repairing  existing IDs
 repairIDs <- function(ped) {
   # Create a list to track the changes made
   changes <- list()
@@ -123,7 +132,12 @@ repairParentIDs <- function(ped) {
 #' @param ... Additional arguments to be passed to \code{\link{validatePedigree}}
 #' @return A logical indicating whether the pedigree is valid and a list of warnings and ids of potentially invalid relationships
 #' @export
-validatePedigree <- function(ped, verbose = FALSE) {
+validatePedigree <- function(ped, 
+                            verbose = FALSE,
+                            check_sex = TRUE,
+                            check_parents = TRUE,
+                            check_id = TRUE) {
+
   corrected_ped <- repairPedigree(ped$ID,
                                   ped$dadID,
                                   ped$momID,

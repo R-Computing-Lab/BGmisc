@@ -38,12 +38,12 @@ plotPedigree <- function(ped,
     # data conversation
     p[is.na(p)] <- 0
 
-# adds affected status if present
-    if(is.null(affected)) {
+    # adds affected status if present
+    if (is.null(affected)) {
       p$affected <- 0
     } else {
       # Check if 'affected' is a character (indicating a column name)
-      if(is.character(affected)) {
+      if (is.character(affected)) {
         # Check if the DataFrame contains a column that matches the 'affected' string
         if (affected %in% names(ped)) {
           p$affected <- ped[[affected]]
@@ -52,9 +52,9 @@ plotPedigree <- function(ped,
         }
       }
       # Check if 'affected' is a numeric or logical vector
-      else if(is.numeric(affected) || is.logical(affected)) {
+      else if (is.numeric(affected) || is.logical(affected)) {
         # Check if the length of the vector matches the number of rows in the DataFrame
-        if(length(affected) == nrow(p)) {
+        if (length(affected) == nrow(p)) {
           p$affected <- affected
         } else {
           stop("Length of the 'affected' vector does not match the number of rows in the DataFrame")
@@ -90,16 +90,16 @@ plotPedigree <- function(ped,
     if (verbose) {
       print(p3)
       return(kinship2::plot.pedigree(p3,
-                                     cex = cex,
-                                     col = col,
-                                     symbolsize = symbolsize,
-                                     branch = branch,
-                                     packed = packed, align = align,
-                                     width = width,
-                                     density = density,
-                                     angle = angle, keep.par = keep.par,
-                                     pconnect = pconnect,
-                                     mar = mar
+        cex = cex,
+        col = col,
+        symbolsize = symbolsize,
+        branch = branch,
+        packed = packed, align = align,
+        width = width,
+        density = density,
+        angle = angle, keep.par = keep.par,
+        pconnect = pconnect,
+        mar = mar
       ))
     } else { # suppress the printing of the pedigree comments
       # Determine the null device based on the OS
@@ -109,30 +109,29 @@ plotPedigree <- function(ped,
       sink(file = null_device, type = "output")
 
       # Ensure the output is reverted back to console when function exits
-      on.exit(if(sink.number() > 0) sink(), add = TRUE)
+      on.exit(if (sink.number() > 0) sink(), add = TRUE)
 
       plot_picture <- kinship2::plot.pedigree(p3,
-                                              cex = cex,
-                                              col = col,
-                                              symbolsize = symbolsize,
-                                              branch = branch,
-                                              packed = packed, align = align,
-                                              width = width,
-                                              density = density,
-                                              angle = angle, keep.par = keep.par,
-                                              pconnect = pconnect,
-                                              mar = mar)
+        cex = cex,
+        col = col,
+        symbolsize = symbolsize,
+        branch = branch,
+        packed = packed, align = align,
+        width = width,
+        density = density,
+        angle = angle, keep.par = keep.par,
+        pconnect = pconnect,
+        mar = mar
+      )
 
       # Explicitly revert the standard output back to the console
-      if(sink.number() > 0) {
+      if (sink.number() > 0) {
         sink()
       }
 
       return(plot_picture)
     }
-}else {
+  } else {
     stop("The structure of the provided pedigree data does not match the expected structure.")
   }
 }
-
-

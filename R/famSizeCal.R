@@ -76,7 +76,7 @@ famSizeCal <- function(kpc, Ngen, marR) {
 }
 
 #' twinImpute
-#' A function to impute twins in the simulated pedigree \code{data.frame}. 
+#' A function to impute twins in the simulated pedigree \code{data.frame}.
 #' Twins can be imputed by specifying their IDs or by specifying the generation the twin should be imputed.
 #' This is a supplementary function for \code{simulatePedigree}.
 #' @param ped A \code{data.frame} in the same format as the output of \code{simulatePedigree}.
@@ -86,39 +86,40 @@ famSizeCal <- function(kpc, Ngen, marR) {
 #' @return Returns a \code{data.frame} with MZ twins infomration added as a new column.
 #' @export
 
-# A function to impute twins in the simulated pedigree \code{data.frame}. 
+# A function to impute twins in the simulated pedigree \code{data.frame}.
 # Twins can be imputed by specifying their IDs or by specifying the generation the twin should be imputed.
-twinImpute <- function(ped, ID_twin1 = NA_integer_, ID_twin2 = NA_integer_, gen_twin = 2){
+twinImpute <- function(ped, ID_twin1 = NA_integer_, ID_twin2 = NA_integer_, gen_twin = 2) {
   # Check if the ped is the same format as the output of simulatePedigree
-  if(paste0(colnames(ped), collapse = "") != paste0(c("fam", "ID", "gen", "dadID", "momID", "spt", "sex"), collapse = "")){
+  if (paste0(colnames(ped), collapse = "") != paste0(c("fam", "ID", "gen", "dadID", "momID", "spt", "sex"), collapse = "")) {
     stop("The input pedigree is not in the same format as the output of simulatePedigree")
   }
   ped$MZtwin <- NA_integer_
   # Check if the two IDs are provided
-  if(is.na(ID_twin1) || is.na(ID_twin2)){
+  if (is.na(ID_twin1) || is.na(ID_twin2)) {
     # Check if the generation is provided
-    if(is.na(gen_twin)){
+    if (is.na(gen_twin)) {
       stop("You should provide either the IDs of the twins or the generation of the twins")
     } else {
       # Check if the generation is valid
-      if(gen_twin < 2 || gen_twin > max(ped$gen)){
+      if (gen_twin < 2 || gen_twin > max(ped$gen)) {
         stop("The generation of the twins should be an integer between 2 and the maximum generation in the pedigree")
       } else {
         # randomly loop through all the indivuduals in the generation until find an individual who is the same sex and shares the same dadID and momID with another individual
-        for (i in 1: nrow(ped[ped$gen == gen_twin,])) {
+        for (i in 1:nrow(ped[ped$gen == gen_twin, ])) {
           # check if i is equal to the number of individuals in the generation
-          if(i != ncol(ped[ped$gen == gen_twin,])){
+          if (i != ncol(ped[ped$gen == gen_twin, ])) {
             # randomly select one individual from the generation
             ID_twin1 <- sample(ped$ID[ped$gen == gen_twin], 1)
             # find one same sex sibling who has the same dadID and momID as the selected individual
             ID_twin2 <- sample(
-             ped$ID[ped$ID != ID_twin1 &
-             ped$gen == gen_twin & 
-             ped$sex == ped$sex[ped$ID == ID_twin1] & 
-             ped$dadID == ped$dadID[ped$ID == ID_twin1] & 
-             ped$momID == ped$momID[ped$ID == ID_twin1]], 1)
+              ped$ID[ped$ID != ID_twin1 &
+                ped$gen == gen_twin &
+                ped$sex == ped$sex[ped$ID == ID_twin1] &
+                ped$dadID == ped$dadID[ped$ID == ID_twin1] &
+                ped$momID == ped$momID[ped$ID == ID_twin1]], 1
+            )
             # test if the ID_twin2 is missing
-            if(!is.na(ID_twin2)){
+            if (!is.na(ID_twin2)) {
               break
             }
           } else {
@@ -134,16 +135,14 @@ twinImpute <- function(ped, ID_twin1 = NA_integer_, ID_twin2 = NA_integer_, gen_
             ID_twin1 <- ID_DoubleTwin[1]
             ID_twin2 <- ID_DoubleTwin[2]
             break
-
           }
-
+        }
+        # Impute the IDs of the twin in the MZtwin column
+        ped$MZtwin[ped$ID == ID_twin1] <- ID_twin2
+        ped$MZtwin[ped$ID == ID_twin2] <- ID_twin1
       }
-      # Impute the IDs of the twin in the MZtwin column
-      ped$MZtwin[ped$ID == ID_twin1] <- ID_twin2
-      ped$MZtwin[ped$ID == ID_twin2] <- ID_twin1
     }
-  }
-} else {
+  } else {
     # Impute the IDs of the twin in the MZtwin column
     ped$MZtwin[ped$ID == ID_twin1] <- ID_twin2
     ped$MZtwin[ped$ID == ID_twin2] <- ID_twin1
