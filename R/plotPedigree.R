@@ -5,8 +5,9 @@
 #' @param cex The font size of the IDs for each individual in the plot.
 #' @param verbose logical  If TRUE, prints additional information. Default is FALSE.
 #' @param code_male This optional input allows you to indicate what value in the sex variable codes for male. Will be recoded as "M" (Male). If \code{NULL}, no recoding is performed.
+#' @param affected This optional parameter can either be a string specifying the column name that indicates affected status or a numeric/logical vector of the same length as the number of rows in 'ped'. If \code{NULL}, no affected status is assigned.
 #' @inheritParams kinship2::plot.pedigree
-#' @return A plot of the simulated pedigree
+#' @return A plot of the provided pedigree
 #' @export
 
 plotPedigree <- function(ped,
@@ -36,10 +37,39 @@ plotPedigree <- function(ped,
 
     # data conversation
     p[is.na(p)] <- 0
-    p$affected <- 0
+
+# adds affected status if present
+    if(is.null(affected)) {
+      p$affected <- 0
+    } else {
+      # Check if 'affected' is a character (indicating a column name)
+      if(is.character(affected)) {
+        # Check if the DataFrame contains a column that matches the 'affected' string
+        if (affected %in% names(ped)) {
+          p$affected <- ped[[affected]]
+        } else {
+          stop(paste("Column", affected, "does not exist in the DataFrame"))
+        }
+      }
+      # Check if 'affected' is a numeric or logical vector
+      else if(is.numeric(affected) || is.logical(affected)) {
+        # Check if the length of the vector matches the number of rows in the DataFrame
+        if(length(affected) == nrow(p)) {
+          p$affected <- affected
+        } else {
+          stop("Length of the 'affected' vector does not match the number of rows in the DataFrame")
+        }
+      }
+      # If 'affected' is neither a string nor a numeric/logical vector
+      else {
+        stop("The 'affected' parameter must be either a string (column name) or a numeric/logical vector")
+      }
+    }
+
     p$avail <- 0
     # recode sex values
     p <- recode_sex(p, code_male = code_male)
+
     # family id
     if (length(unique(p$ped)) == 1) { # only one family
       p$ped <- 1
