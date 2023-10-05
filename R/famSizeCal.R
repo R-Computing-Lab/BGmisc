@@ -89,6 +89,8 @@ famSizeCal <- function(kpc, Ngen, marR) {
 # A function to impute twins in the simulated pedigree \code{data.frame}. 
 # Twins can be imputed by specifying their IDs or by specifying the generation the twin should be imputed.
 twinImpute <- function(ped, ID_twin1 = NA_integer_, ID_twin2 = NA_integer_, gen_twin = 2){
+  # a support function
+  resample <- function(x, ...) x[sample.int(length(x), ...)]
   # Check if the ped is the same format as the output of simulatePedigree
   if(paste0(colnames(ped), collapse = "") != paste0(c("fam", "ID", "gen", "dadID", "momID", "spt", "sex"), collapse = "")){
     stop("The input pedigree is not in the same format as the output of simulatePedigree")
@@ -104,29 +106,35 @@ twinImpute <- function(ped, ID_twin1 = NA_integer_, ID_twin2 = NA_integer_, gen_
       if(gen_twin < 2 || gen_twin > max(ped$gen)){
         stop("The generation of the twins should be an integer between 2 and the maximum generation in the pedigree")
       } else {
+        idx <- nrow(ped[ped$gen == gen_twin,]) -1
+        usedID = c()
         # randomly loop through all the indivuduals in the generation until find an individual who is the same sex and shares the same dadID and momID with another individual
-        for (i in 1: nrow(ped[ped$gen == gen_twin,])) {
+        for (i in 1: idx) {
           # check if i is equal to the number of individuals in the generation
-          if(i != ncol(ped[ped$gen == gen_twin,])){
+          usedID <- c(usedID, ID_twin1)
+          print(usedID)
+          if(i < idx){
             # randomly select one individual from the generation
-            ID_twin1 <- sample(ped$ID[ped$gen == gen_twin], 1)
+            ID_twin1 <- resample(ped$ID[ped$gen == gen_twin & !(ped$ID %in% usedID) & !is.na(ped$dadID)], 1)
+            cat("twin1", ID_twin1, "\n")
             # find one same sex sibling who has the same dadID and momID as the selected individual
-            ID_twin2 <- sample(
+            ID_twin2 <- resample(
              ped$ID[ped$ID != ID_twin1 &
              ped$gen == gen_twin & 
              ped$sex == ped$sex[ped$ID == ID_twin1] & 
              ped$dadID == ped$dadID[ped$ID == ID_twin1] & 
-             ped$momID == ped$momID[ped$ID == ID_twin1]], 1)
+             ped$momID == ped$momID[ped$ID == ID_twin1]] , 1)
+            cat("twin2", ID_twin2, "\n")
             # test if the ID_twin2 is missing
             if(!is.na(ID_twin2)){
               break
             }
           } else {
             # randomly select all males or females in the generation and put them in a vector
-            selectGender <- ped$ID[ped$gen == gen_twin & ped$sex == sample(c("M", "F"), 1)]
+            selectGender <- ped$ID[ped$gen == gen_twin & ped$sex == resample(c("M", "F"), 1) & !is.na(ped$dadID) & !is.na(ped$momID)]
             # randomly select two individuals from the vector
-            ID_DoubleTwin <- sample(selectGender, 2)
-            print(ID_DoubleTwin)
+            ID_DoubleTwin <- resample(selectGender, 2)
+            #print(ID_DoubleTwin)
             # change the second person's dadID and momID to the first person's dadID and momID
             ped$dadID[ped$ID == ID_DoubleTwin[2]] <- ped$dadID[ped$ID == ID_DoubleTwin[1]]
             ped$momID[ped$ID == ID_DoubleTwin[2]] <- ped$momID[ped$ID == ID_DoubleTwin[1]]
@@ -150,3 +158,4 @@ twinImpute <- function(ped, ID_twin1 = NA_integer_, ID_twin2 = NA_integer_, gen_
   }
   return(ped)
 }
+
