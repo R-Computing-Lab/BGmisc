@@ -10,7 +10,7 @@ ped2add(
   sparse = FALSE,
   verbose = FALSE,
   gc = FALSE,
-  flatten_diag = FALSE
+  flatten.diag = FALSE
 )
 }
 \arguments{
@@ -22,11 +22,11 @@ generations as there are in the data.}
 
 \item{sparse}{logical.  If TRUE, use and return sparse matrices from Matrix package}
 
-\item{verbose}{logical  If TRUE, print progress through stages of algorithm}
+\item{verbose}{logical.  If TRUE, print progress through stages of algorithm}
 
 \item{gc}{logical. If TRUE, do frequent garbage collection via \code{\link{gc}} to save memory}
 
-\item{flatten_diag}{Logical. The default is FALSE. If TRUE, overwrites the diagonal of the final relatedness matrix with ones.}
+\item{flatten.diag}{Logical. The default is FALSE. If TRUE, overwrites the diagonal of the final relatedness matrix with ones.}
 }
 \description{
 Take a pedigree and turn it into an additive genetics relatedness matrix

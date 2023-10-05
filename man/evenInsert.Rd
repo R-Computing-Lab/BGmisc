@@ -5,12 +5,14 @@
 \title{evenInsert
 A function to insert m elements evenly into a length n vector.}
 \usage{
-evenInsert(m, n)
+evenInsert(m, n, verbose = FALSE)
 }
 \arguments{
 \item{m}{A numeric vector of length less than or equal to n. The elements to be inserted.}
 
 \item{n}{A numeric vector. The vector into which the elements of m will be inserted.}
+
+\item{verbose}{logical  If TRUE, prints additional information. Default is FALSE.}
 }
 \value{
 Returns a numeric vector with the elements of m evenly inserted into n.

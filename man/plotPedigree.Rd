@@ -32,12 +32,7 @@ plotPedigree(
 
 \item{verbose}{logical  If TRUE, prints additional information. Default is FALSE.}
 
-\item{affected}{
-vector, or matrix with up to 4 columns for affected
-indicators. Subject's symbol is divided into sections for each
-status, shaded if indicator is 1, not-shaded for 0, and symbol "?"
-if missing (NA)
-}
+\item{affected}{This optional parameter can either be a string specifying the column name that indicates affected status or a numeric/logical vector of the same length as the number of rows in 'ped'. If \code{NULL}, no affected status is assigned.}
 
 \item{cex}{The font size of the IDs for each individual in the plot.}
 
@@ -94,7 +89,7 @@ Extra options that feed into the plot function.
 }
 }
 \value{
-A plot of the simulated pedigree
+A plot of the provided pedigree
 }
 \description{
 plotPedigree

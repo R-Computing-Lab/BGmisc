@@ -30,6 +30,8 @@ simulatePedigree(
 \item{balancedSex}{Not fully developed yet. Always \code{TRUE} in the current version.}
 
 \item{balancedMar}{Not fully developed yet. Always \code{TRUE} in the current version.}
+
+\item{verbose}{logical  If TRUE, print progress through stages of algorithm}
 }
 \value{
 A \code{data.frame} with each row representing a simulated individual. The columns are as follows:

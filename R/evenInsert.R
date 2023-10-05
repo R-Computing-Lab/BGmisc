@@ -23,12 +23,12 @@ evenInsert <- function(m, n, verbose = FALSE) {
   for (i in 1:length(m)) {
     names(m)[i] <- ceiling(i * length(n) / length(m))
   }
-  if(verbose){
-   print(m)
-}
+  if (verbose) {
+    print(m)
+  }
   names(n) <- 1:length(n)
-  if(verbose){
-  print(n)
+  if (verbose) {
+    print(n)
   }
   vec <- c(m, n)
   vec <- vec[order(as.numeric(names(vec)))]

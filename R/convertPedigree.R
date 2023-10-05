@@ -5,9 +5,9 @@
 #'  (e.g., only up to 4th degree relatives).  The default of Inf uses as many
 #'  generations as there are in the data.
 #' @param sparse logical.  If TRUE, use and return sparse matrices from Matrix package
-#' @param verbose logical  If TRUE, print progress through stages of algorithm
+#' @param verbose logical.  If TRUE, print progress through stages of algorithm
 #' @param gc logical. If TRUE, do frequent garbage collection via \code{\link{gc}} to save memory
-#' @param flatten_diag Logical. The default is FALSE. If TRUE, overwrites the diagonal of the final relatedness matrix with ones.
+#' @param flatten.diag Logical. The default is FALSE. If TRUE, overwrites the diagonal of the final relatedness matrix with ones.
 #' @details The algorithms and methodologies used in this function are further discussed and exemplified in the vignette titled "examplePedigreeFunctions".
 #' @export
 #'
@@ -16,8 +16,8 @@ ped2com <- function(ped, component,
                     sparse = FALSE,
                     verbose = FALSE,
                     gc = FALSE,
-                    flatten_diag = FALSE) {
-
+                    flatten.diag = FALSE,
+                    ...) {
   # Validate the 'component' argument and match it against predefined choices
   component <- match.arg(tolower(component),
     choices = c(
@@ -167,7 +167,7 @@ ped2com <- function(ped, component,
     if (component == "mitochondrial") {
       r[r != 0] <- 1 # for mitochondrial component, set all nonzero values to 1
     }
-    if (flatten_diag) { # flattens diagonal if you don't want to deal with inbreeding
+    if (flatten.diag) { # flattens diagonal if you don't want to deal with inbreeding
       diag(r) <- 1
     }
     return(r)
@@ -181,7 +181,7 @@ ped2com <- function(ped, component,
 
 #' @export
 #'
-ped2add <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FALSE, flatten_diag = FALSE) {
+ped2add <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FALSE, flatten.diag = FALSE) {
   ped2com(
     ped = ped,
     max.gen = max.gen,
@@ -189,7 +189,7 @@ ped2add <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FA
     verbose = verbose,
     gc = gc,
     component = "additive",
-    flatten_diag = flatten_diag
+    flatten.diag = flatten.diag
   )
 }
 
@@ -198,7 +198,7 @@ ped2add <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FA
 #' @details The algorithms and methodologies used in this function are further discussed and exemplified in the vignette titled "examplePedigreeFunctions".
 #' @export
 #'
-ped2mit <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FALSE, flatten_diag = FALSE) {
+ped2mit <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FALSE, flatten.diag = FALSE) {
   ped2com(
     ped = ped,
     max.gen = max.gen,
@@ -206,7 +206,7 @@ ped2mit <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FA
     verbose = verbose,
     gc = gc,
     component = "mitochondrial",
-    flatten_diag = flatten_diag
+    flatten.diag = flatten.diag
   )
 }
 
@@ -215,7 +215,7 @@ ped2mit <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FA
 #' @details The algorithms and methodologies used in this function are further discussed and exemplified in the vignette titled "examplePedigreeFunctions".
 #' @export
 #'
-ped2cn <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FALSE, flatten_diag = FALSE) {
+ped2cn <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FALSE, flatten.diag = FALSE) {
   ped2com(
     ped = ped,
     max.gen = max.gen,
@@ -223,7 +223,7 @@ ped2cn <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FAL
     verbose = verbose,
     gc = gc,
     component = "common nuclear",
-    flatten_diag = flatten_diag
+    flatten.diag = flatten.diag
   )
 }
 

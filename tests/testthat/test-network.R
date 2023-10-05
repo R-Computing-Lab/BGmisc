@@ -71,7 +71,7 @@ test_that("ped2add produces correct matrix dims, values, and dimnames for inbree
 })
 test_that("ped2add flattens diagonal for inbreeding data", {
   data(inbreeding)
-  add <- ped2add(inbreeding, flatten_diag = TRUE)
+  add <- ped2add(inbreeding, flatten.diag = TRUE)
   # Check dimension
   expect_equal(dim(add), c(nrow(inbreeding), nrow(inbreeding)))
   # Check several values

@@ -3,6 +3,8 @@
 export(SimPed)
 export(allGens)
 export(calculateRelatedness)
+export(checkIDs)
+export(checkParentIDs)
 export(comp2vech)
 export(evenInsert)
 export(famSizeCal)

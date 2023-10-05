@@ -4,10 +4,12 @@
 \alias{standardize_colnames}
 \title{Standardize Column Names in a Dataframe (Internal)}
 \usage{
-standardize_colnames(df)
+standardize_colnames(df, verbose = FALSE)
 }
 \arguments{
 \item{df}{A dataframe whose column names need to be standardized.}
+
+\item{verbose}{A logical indicating whether to print progress messages.}
 }
 \value{
 A dataframe with standardized column names.

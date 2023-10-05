@@ -4,12 +4,24 @@
 \alias{validatePedigree}
 \title{Validate Pedigrees}
 \usage{
-validatePedigree(ped, verbose = FALSE)
+validatePedigree(
+  ped,
+  verbose = FALSE,
+  check_sex = TRUE,
+  check_parents = TRUE,
+  check_id = TRUE
+)
 }
 \arguments{
 \item{ped}{A pedigree object}
 
-\item{verbose}{A logical indicating whether to print progress messages}
+\item{verbose}{Logical. Indicates whether to print progress messages}
+
+\item{check_sex}{Logical. Indicates that sex should be validated}
+
+\item{check_parents}{Logical. Indicates that parents should be validated}
+
+\item{check_id}{Logical. Indicates that IDs should be validated}
 
 \item{...}{Additional arguments to be passed to \code{\link{validatePedigree}}}
 }
