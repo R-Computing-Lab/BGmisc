@@ -25,7 +25,7 @@ knitr::opts_chunk$set(
 ![License](https://img.shields.io/badge/License-GPL_v3-blue.svg)
 <!-- badges: end -->
 
-BGmisc contains many functions useful for behavior genetics.
+The BGmisc R package offers a comprehensive suite of functions tailored for extended behavior genetics analysis, including model identification, calculating relatedness, pedigree conversion, pedigree simulation, and more.
 
 ## Installation
 
