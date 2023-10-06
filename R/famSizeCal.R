@@ -106,34 +106,39 @@ twinImpute <- function(ped, ID_twin1 = NA_integer_, ID_twin2 = NA_integer_, gen_
       if(gen_twin < 2 || gen_twin > max(ped$gen)){
         stop("The generation of the twins should be an integer between 2 and the maximum generation in the pedigree")
       } else {
-        idx <- nrow(ped[ped$gen == gen_twin,]) -1
+        idx <- nrow(ped[ped$gen == gen_twin & !is.na(ped$dadID),]) 
         usedID = c()
         # randomly loop through all the indivuduals in the generation until find an individual who is the same sex and shares the same dadID and momID with another individual
         for (i in 1: idx) {
+          cat("loop",i)
           # check if i is equal to the number of individuals in the generation
           usedID <- c(usedID, ID_twin1)
-          print(usedID)
+          #print(usedID)
           if(i < idx){
             # randomly select one individual from the generation
             ID_twin1 <- resample(ped$ID[ped$gen == gen_twin & !(ped$ID %in% usedID) & !is.na(ped$dadID)], 1)
-            cat("twin1", ID_twin1, "\n")
+            #cat("twin1", ID_twin1, "\n")
             # find one same sex sibling who has the same dadID and momID as the selected individual
-            ID_twin2 <- resample(
-             ped$ID[ped$ID != ID_twin1 &
-             ped$gen == gen_twin & 
-             ped$sex == ped$sex[ped$ID == ID_twin1] & 
-             ped$dadID == ped$dadID[ped$ID == ID_twin1] & 
-             ped$momID == ped$momID[ped$ID == ID_twin1]] , 1)
-            cat("twin2", ID_twin2, "\n")
-            # test if the ID_twin2 is missing
-            if(!is.na(ID_twin2)){
+            twin2_Pool = ped$ID[ped$ID != ID_twin1 & ped$gen == gen_twin & ped$sex == ped$sex[ped$ID == ID_twin1] & ped$dadID == ped$dadID[ped$ID == ID_twin1] & ped$momID == ped$momID[ped$ID == ID_twin1]] 
+            # if there is an non-NA value in the twin2_Pool, get rid of the NA value
+            if (all(is.na(twin2_Pool))) {
+              cat("twin2_Pool is all NA\n")
+              next
+            } else {
+              twin2_Pool <- twin2_Pool[!is.na(twin2_Pool)]
+              ID_twin2 <- resample( twin2_Pool , 1)
               break
             }
+            # test if the ID_twin2 is missing
+            # if(!is.na(ID_twin2)){
+            #   break
+            # }
           } else {
             # randomly select all males or females in the generation and put them in a vector
             selectGender <- ped$ID[ped$gen == gen_twin & ped$sex == resample(c("M", "F"), 1) & !is.na(ped$dadID) & !is.na(ped$momID)]
+            #print(selectGender)
             # randomly select two individuals from the vector
-            ID_DoubleTwin <- resample(selectGender, 2)
+            ID_DoubleTwin <- sample(selectGender, 2)
             #print(ID_DoubleTwin)
             # change the second person's dadID and momID to the first person's dadID and momID
             ped$dadID[ped$ID == ID_DoubleTwin[2]] <- ped$dadID[ped$ID == ID_DoubleTwin[1]]
@@ -156,6 +161,8 @@ twinImpute <- function(ped, ID_twin1 = NA_integer_, ID_twin2 = NA_integer_, gen_
     ped$MZtwin[ped$ID == ID_twin1] <- ID_twin2
     ped$MZtwin[ped$ID == ID_twin2] <- ID_twin1
   }
+  cat("twin1", ID_twin1, "\n")
+  cat("twin2", ID_twin2, "\n")
   return(ped)
 }
 
