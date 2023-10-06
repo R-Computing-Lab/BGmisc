@@ -39,8 +39,11 @@ simulatePedigree <- function(kpc = 3,
   # Calculate the expected family size in each generations
   sizeGens <- allGens(kpc = kpc, Ngen = Ngen, marR = marR)
   famSizeIndex <- 1:sum(sizeGens)
-  if(verbose){print(
-    "Step 1: Let's build the connection within each generation first")}
+  if (verbose) {
+    print(
+      "Step 1: Let's build the connection within each generation first"
+    )
+  }
   for (i in 1:Ngen) {
     idGen <- as.numeric(paste(100, i, 1:sizeGens[i], sep = ""))
     # idGen <- ifelse(i==1,
@@ -169,8 +172,11 @@ simulatePedigree <- function(kpc = 3,
     }
   }
 
-  if(verbose){ print(
-    "Step 2: Let's try to build connection between each two generations")}
+  if (verbose) {
+    print(
+      "Step 2: Let's try to build connection between each two generations"
+    )
+  }
   df_Fam$ifparent <- FALSE
   df_Fam$ifson <- FALSE
   df_Fam$ifdau <- FALSE
@@ -280,8 +286,11 @@ simulatePedigree <- function(kpc = 3,
       df_Ngen <- df_Ngen[order(as.numeric(rownames(df_Ngen))), , drop = FALSE]
       df_Ngen <- df_Ngen[, -ncol(df_Ngen)]
       df_Fam[df_Fam$gen == i, ] <- df_Ngen
-      if(verbose){print(
-      "Step 2.2: mark a group of potential parents in the i-1 th generation")}
+      if (verbose) {
+        print(
+          "Step 2.2: mark a group of potential parents in the i-1 th generation"
+        )
+      }
       df_Ngen <- df_Fam[df_Fam$gen == i - 1, ]
       df_Ngen$ifparent <- FALSE
       df_Ngen$ifson <- FALSE
@@ -308,8 +317,11 @@ simulatePedigree <- function(kpc = 3,
 
       df_Ngen <- df_Ngen[order(as.numeric(rownames(df_Ngen))), , drop = FALSE]
       df_Fam[df_Fam$gen == i - 1, ] <- df_Ngen
-      if(verbose){print(
-      "Step 2.3: connect the i and i-1 th generation")}
+      if (verbose) {
+        print(
+          "Step 2.3: connect the i and i-1 th generation"
+        )
+      }
       if (i == 1) {
         next
       } else {

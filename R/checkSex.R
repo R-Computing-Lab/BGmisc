@@ -13,13 +13,12 @@
 #' @return Depending on the value of `repair`, either a list containing validation results or a repaired dataframe is returned.
 #' @examples
 #' \dontrun{
-#'   ped <- data.frame(ID = c(1, 2, 3), sex = c("M", "F", "M"))
-#'   checkSex(ped, code_male = "M", verbose = TRUE, repair = FALSE, recode = TRUE)
+#' ped <- data.frame(ID = c(1, 2, 3), sex = c("M", "F", "M"))
+#' checkSex(ped, code_male = "M", verbose = TRUE, repair = FALSE, recode = TRUE)
 #' }
 #' @export
 #'
 checkSex <- function(ped, code_male = NULL, verbose = FALSE, repair = FALSE, recode = FALSE) {
-
   # Initialize a list to store validation results
   validation_results <- list()
 
@@ -71,8 +70,8 @@ checkSex <- function(ped, code_male = NULL, verbose = FALSE, repair = FALSE, rec
 #' @return A dataframe where the sex coding has been repaired.
 #' @examples
 #' \dontrun{
-#'   ped <- data.frame(ID = c(1, 2, 3), sex = c("M", "F", "M"))
-#'   repairSex(ped, code_male = "M", verbose = TRUE)
+#' ped <- data.frame(ID = c(1, 2, 3), sex = c("M", "F", "M"))
+#' repairSex(ped, code_male = "M", verbose = TRUE)
 #' }
 #' @export
 #'
@@ -90,6 +89,6 @@ repairSex <- function(ped, verbose = FALSE, code_male = NULL, recode = TRUE) {
 #' @return A modified version of the input data.frame \code{ped}, containing an additional or modified 'sex_recode' column where the 'sex' values are recoded according to \code{code_male}. NA values in the 'sex' column are preserved.
 #' @keywords internal
 #' @seealso \code{\link{plotPedigree}}
-recodeSex <- function(ped, verbose = FALSE,code_male = NULL) {
+recodeSex <- function(ped, verbose = FALSE, code_male = NULL) {
   checkSex(ped = ped, verbose = verbose, repair = FALSE, code_male = code_male, recode = TRUE)
 }
