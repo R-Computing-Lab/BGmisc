@@ -18,11 +18,10 @@ plotPedigree <- function(ped,
                          col = 1,
                          symbolsize = 1, branch = 0.6,
                          packed = TRUE, align = c(1.5, 2), width = 8,
-                         density = c(-1, 35, 65, 20), mar=c(2.1, 1, 2.1, 1),
+                         density = c(-1, 35, 65, 20), mar = c(2.1, 1, 2.1, 1),
                          angle = c(90, 65, 40, 0), keep.par = FALSE,
                          pconnect = .5,
                          ...) {
-
   # Standardize column names in the input dataframe
   ped <- standardize_colnames(ped)
 
@@ -48,9 +47,8 @@ plotPedigree <- function(ped,
     # family id
     if (length(unique(p$ped)) == 1) { # only one family
       p$ped <- 1
-
     } else {
-     # Assign a unique string pattern "ped #" for each unique family
+      # Assign a unique string pattern "ped #" for each unique family
       unique_families <- unique(p$ped)
       named_families <- 1:length(unique_families)
       p$ped <- named_families[match(p$ped, unique_families)]

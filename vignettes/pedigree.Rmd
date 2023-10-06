@@ -38,10 +38,12 @@ To illustrate this, let us generate a pedigree. This pedigree has a total of fou
 
 ```{r}
 set.seed(5)
-df_ped <- simulatePedigree(kpc = 4,
-                        Ngen = 4,
-                        sexR = .5,
-                        marR = .7)
+df_ped <- simulatePedigree(
+  kpc = 4,
+  Ngen = 4,
+  sexR = .5,
+  marR = .7
+)
 summary(df_ped)
 ```
 
