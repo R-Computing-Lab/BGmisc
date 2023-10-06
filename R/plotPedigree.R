@@ -68,7 +68,7 @@ plotPedigree <- function(ped,
 
     p$avail <- 0
     # recode sex values
-    p <- recode_sex(p, code_male = code_male)
+    p <- recodeSex(p, code_male = code_male)
 
     # family id
     if (length(unique(p$ped)) == 1) { # only one family

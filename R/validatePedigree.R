@@ -40,30 +40,6 @@ standardize_colnames <- function(df, verbose = FALSE) {
 }
 
 
-#' recode_sex
-#' An internal utility function for \code{plotPedigree} to handle the recoding of the 'sex' variable in a pedigree dataframe.
-#'
-#' @param ped A pedigree data.frame containing the relevant columns, including 'sex'.
-#' @inheritParams plotPedigree
-#' @return A modified version of the input data.frame \code{ped}, containing an additional or modified 'sex_recode' column where the 'sex' values are recoded according to \code{code_male}. NA values in the 'sex' column are preserved.
-#' @keywords internal
-#' @seealso \code{\link{plotPedigree}}
-#'
-recode_sex <- function(ped, code_male) {
-  # Recode as "F" or "M" based on code_male, preserving NAs
-  if (!is.null(code_male)) {
-    # Initialize sex_recode as NA, preserving the length of the 'sex' column
-    ped$sex_recode <- as.character(NA)
-    ped$sex_recode[ped$sex != code_male & !is.na(ped$sex)] <- "F"
-    ped$sex_recode[ped$sex == code_male] <- "M"
-  } else {
-    ped$sex_recode <- ped$sex
-  }
-  return(ped)
-}
-
-
-
 #' Repair Pedigree
 #'
 #' This function applies a list of repair functions sequentially to a pedigree.
@@ -97,10 +73,6 @@ repairPedigree <- function(ped, repair_funs = NULL) {
 # - Wrong IDs: It is possible that the ID code written for e.g. someone's mother is simply written wrong. This is especially problematic if there are people in the file who actually have the code that was mistakenly given.
 # - A person's child being registered as their parent: I randomly found a case of this. A girl was registered as her father's mother.
 # - People existing in both the mother and father column. This can happen through error. And it can also happen when same-sex couples have children (e.g. through adoption or fertilization). In the MoBa sample we had some cases of this, where there were same-sex pairs with several children, and where it was switched around from one child to the next whether one or the other of these parents were the father or mother in the registry.
-
-
-
-
 
 
 #' Validate Pedigrees
