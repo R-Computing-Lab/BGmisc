@@ -3,7 +3,7 @@
 \name{twinImpute}
 \alias{twinImpute}
 \title{twinImpute
-A function to impute twins in the simulated pedigree \code{data.frame}.
+A function to impute twins in the simulated pedigree \code{data.frame}. 
 Twins can be imputed by specifying their IDs or by specifying the generation the twin should be imputed.
 This is a supplementary function for \code{simulatePedigree}.}
 \usage{
@@ -23,7 +23,7 @@ Returns a \code{data.frame} with MZ twins infomration added as a new column.
 }
 \description{
 twinImpute
-A function to impute twins in the simulated pedigree \code{data.frame}.
+A function to impute twins in the simulated pedigree \code{data.frame}. 
 Twins can be imputed by specifying their IDs or by specifying the generation the twin should be imputed.
 This is a supplementary function for \code{simulatePedigree}.
 }
