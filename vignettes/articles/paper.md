@@ -44,7 +44,7 @@ vignette: >
   %\VignetteIndexEntry{modelingandrelatedness}
   %\VignetteIndexEntry{pedigree}
   %\VignetteEngine{knitr::rmarkdown}
-
+ 
 ---
 
 
