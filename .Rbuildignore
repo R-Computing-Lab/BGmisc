@@ -12,3 +12,5 @@
 ^CRAN-SUBMISSION$
 ^BGmisc\.code-workspace$
 ^\.lintr$
+^CODE_OF_CONDUCT\.md
+^CONTRIBUTING\.md

@@ -2,7 +2,12 @@
 % Please edit documentation in R/simulatePedigree.R
 \name{simulatePedigree}
 \alias{simulatePedigree}
-\title{Simulate Pedigrees}
+\title{Simulate Pedigrees
+This function simulates "balanced" pedigrees based on a group of parameters:
+1) k - Kids per couple;
+2) G - Number of generations;
+3) p - Proportion of males in offspring;
+4) r - Mating rate.}
 \usage{
 simulatePedigree(
   kpc = 3,
@@ -10,7 +15,8 @@ simulatePedigree(
   sexR = 0.5,
   marR = 2/3,
   balancedSex = TRUE,
-  balancedmar = TRUE
+  balancedmar = TRUE,
+  verbose = FALSE
 )
 }
 \arguments{
@@ -25,6 +31,8 @@ simulatePedigree(
 \item{balancedSex}{Not fully developed yet. Always \code{TRUE} in the current version.}
 
 \item{balancedmar}{Not fully developed yet. Always \code{TRUE} in the current version.}
+
+\item{verbose}{logical  If TRUE, print progress through stages of algorithm}
 }
 \value{
 A \code{data.frame} with each row representing a simulated individual. The columns are as follows:
@@ -39,6 +47,7 @@ A \code{data.frame} with each row representing a simulated individual. The colum
 }
 }
 \description{
+Simulate Pedigrees
 This function simulates "balanced" pedigrees based on a group of parameters:
 1) k - Kids per couple;
 2) G - Number of generations;

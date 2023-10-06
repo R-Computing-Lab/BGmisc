@@ -1,5 +1,4 @@
 #' Simulate Pedigrees
-#'
 #' This function simulates "balanced" pedigrees based on a group of parameters:
 #' 1) k - Kids per couple;
 #' 2) G - Number of generations;
@@ -13,6 +12,8 @@
 #' @param marR Mating rate. A numeric value ranging from 0 to 1 which determines the proportion of mated (fertilized) couples in the pedigree within each generation. For instance, marR = 0.5 suggests 50 percent of the offspring in a specific generation will be mated and have their offspring.
 #' @param balancedSex Not fully developed yet. Always \code{TRUE} in the current version.
 #' @param balancedmar Not fully developed yet. Always \code{TRUE} in the current version.
+#' @param verbose logical  If TRUE, print progress through stages of algorithm
+
 #' @return A \code{data.frame} with each row representing a simulated individual. The columns are as follows:
 #' \itemize{
 #'   \item{fam: The family id of each simulated individual. It is 'fam1' in a single simulated pedigree.}
@@ -30,15 +31,16 @@ simulatePedigree <- function(kpc = 3,
                              sexR = .5,
                              marR = 2 / 3,
                              balancedSex = TRUE,
-                             balancedmar = TRUE) {
+                             balancedmar = TRUE,
+                             verbose = FALSE) {
   # SexRatio: ratio of male over female in the offspring setting; used in the between generation combinations
   SexRatio <- sexR / (1 - sexR)
 
   # Calculate the expected family size in each generations
   sizeGens <- allGens(kpc = kpc, Ngen = Ngen, marR = marR)
   famSizeIndex <- 1:sum(sizeGens)
-
-  # Step 1: Let's build the connection within each generation first
+  if(verbose){print(
+    "Step 1: Let's build the connection within each generation first")}
   for (i in 1:Ngen) {
     idGen <- as.numeric(paste(100, i, 1:sizeGens[i], sep = ""))
     # idGen <- ifelse(i==1,
@@ -167,7 +169,8 @@ simulatePedigree <- function(kpc = 3,
     }
   }
 
-  # Step 2: Let's try to build connection between each two generations
+  if(verbose){ print(
+    "Step 2: Let's try to build connection between each two generations")}
   df_Fam$ifparent <- FALSE
   df_Fam$ifson <- FALSE
   df_Fam$ifdau <- FALSE
@@ -277,8 +280,8 @@ simulatePedigree <- function(kpc = 3,
       df_Ngen <- df_Ngen[order(as.numeric(rownames(df_Ngen))), , drop = FALSE]
       df_Ngen <- df_Ngen[, -ncol(df_Ngen)]
       df_Fam[df_Fam$gen == i, ] <- df_Ngen
-
-      # Step 2.2: mark a group of potential parents in the i-1 th generation
+      if(verbose){print(
+      "Step 2.2: mark a group of potential parents in the i-1 th generation")}
       df_Ngen <- df_Fam[df_Fam$gen == i - 1, ]
       df_Ngen$ifparent <- FALSE
       df_Ngen$ifson <- FALSE
@@ -305,8 +308,8 @@ simulatePedigree <- function(kpc = 3,
 
       df_Ngen <- df_Ngen[order(as.numeric(rownames(df_Ngen))), , drop = FALSE]
       df_Fam[df_Fam$gen == i - 1, ] <- df_Ngen
-
-      # Step 2.3: connect the i and i-1 th generation
+      if(verbose){print(
+      "Step 2.3: connect the i and i-1 th generation")}
       if (i == 1) {
         next
       } else {
