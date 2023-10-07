@@ -198,7 +198,7 @@ ped2add <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FA
 #' @details The algorithms and methodologies used in this function are further discussed and exemplified in the vignette titled "examplePedigreeFunctions".
 #' @export
 #'
-ped2mit <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FALSE, flatten.diag = FALSE) {
+ped2mit <- ped2mt<- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FALSE, flatten.diag = FALSE) {
   ped2com(
     ped = ped,
     max.gen = max.gen,
@@ -209,6 +209,9 @@ ped2mit <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FA
     flatten.diag = flatten.diag
   )
 }
+
+
+
 
 #' Take a pedigree and turn it into a common nuclear environmental relatedness matrix
 #' @inheritParams ped2com
