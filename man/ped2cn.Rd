@@ -26,7 +26,7 @@ generations as there are in the data.}
 
 \item{gc}{logical. If TRUE, do frequent garbage collection via \code{\link{gc}} to save memory}
 
-\item{flatten.diag}{Logical. The default is FALSE. If TRUE, overwrites the diagonal of the final relatedness matrix with ones.}
+\item{flatten.diag}{logical. If TRUE, overwrite the diagonal of the final relatedness matrix with ones}
 }
 \description{
 Take a pedigree and turn it into a common nuclear environmental relatedness matrix

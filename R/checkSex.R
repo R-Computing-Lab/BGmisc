@@ -19,25 +19,26 @@
 #' @export
 #'
 checkSex <- function(ped, code_male = NULL, verbose = FALSE, repair = FALSE, recode = FALSE) {
-  # Initialize a list to store validation results
-  validation_results <- list()
+  # Standardize column names in the input dataframe
+  ped <- standardize_colnames(ped)
 
-  if (recode) {
+  # bypass the rest of the function if recode_only is TRUE
+
+    # Initialize a list to store validation results
+    validation_results <- list()
     if (verbose) {
-      cat("Step 1: Recoding sex variable...\n")
+      cat("Step 1: Checking how many genders...\n")
     }
-    # Recode as "F" or "M" based on code_male, preserving NAs
-    if (!is.null(code_male)) {
-      # Initialize sex_recode as NA, preserving the length of the 'sex' column
-      ped$sex_recode <- as.character(NA)
-      ped$sex_recode[ped$sex != code_male & !is.na(ped$sex)] <- "F"
-      ped$sex_recode[ped$sex == code_male] <- "M"
-    } else {
-      ped$sex_recode <- ped$sex
-    }
-    # Update the validation_results list
-    validation_results$recoded_sex <- TRUE
+  # check how many genders
+
+  validation_results$sex_unique <- unique(ped$sex)
+  validation_results$sex_length <- length(unique(ped$sex))
+  if (verbose) {
+    cat(paste0(validation_results$sex_length, " unique values found.\n ",
+               paste0(validation_results$sex_unique)))
   }
+
+
 
   if (repair) {
     if (verbose) {
@@ -46,6 +47,9 @@ checkSex <- function(ped, code_male = NULL, verbose = FALSE, repair = FALSE, rec
     # Initialize a list to track changes made during repair
     changes <- list()
     # [Insert logic to repair sex coding here]
+    if(validation_results$sex_length==2){
+
+      }
     # Update the pedigree dataframe after repair
     repaired_ped <- ped
 
@@ -56,9 +60,8 @@ checkSex <- function(ped, code_male = NULL, verbose = FALSE, repair = FALSE, rec
     return(repaired_ped)
   } else {
     return(validation_results)
-  }
 }
-
+}
 
 
 #' Repairs Sex Coding in a Pedigree Dataframe
@@ -76,7 +79,7 @@ checkSex <- function(ped, code_male = NULL, verbose = FALSE, repair = FALSE, rec
 #' @export
 #'
 #' @seealso \code{\link{checkSex}}
-repairSex <- function(ped, verbose = FALSE, code_male = NULL, recode = TRUE) {
+repairSex <- function(ped, verbose = FALSE, code_male = NULL) {
   checkSex(ped = ped, verbose = verbose, repair = TRUE, code_male = code_male)
 }
 
@@ -90,5 +93,15 @@ repairSex <- function(ped, verbose = FALSE, code_male = NULL, recode = TRUE) {
 #' @keywords internal
 #' @seealso \code{\link{plotPedigree}}
 recodeSex <- function(ped, verbose = FALSE, code_male = NULL) {
-  checkSex(ped = ped, verbose = verbose, repair = FALSE, code_male = code_male, recode = TRUE)
-}
+    # Recode as "F" or "M" based on code_male, preserving NAs
+    if (!is.null(code_male)) {
+      # Initialize sex_recode as NA, preserving the length of the 'sex' column
+      ped$sex_recode <- as.character(NA)
+      ped$sex_recode[ped$sex != code_male & !is.na(ped$sex)] <- "F"
+      ped$sex_recode[ped$sex == code_male] <- "M"
+    } else {
+      ped$sex_recode <- ped$sex
+    }
+      return(ped)
+    }
+

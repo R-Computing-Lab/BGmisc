@@ -4,7 +4,7 @@
 \alias{repairPedigree}
 \title{Repair Pedigree}
 \usage{
-repairPedigree(ped, repair_funs = NULL)
+repairPedigree(ped, repair_funs = NULL, ...)
 }
 \arguments{
 \item{ped}{A pedigree object.}

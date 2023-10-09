@@ -58,10 +58,11 @@ checkParentIDs <- function(ped, verbose = FALSE, repair = FALSE) {
         "'.\n"
       ))
     }
-    validation_results$female_moms <- 1
+    validation_results$female_moms <- TRUE
     validation_results$female_var <- validation_results$mom_sex
   } else {
     validation_results$female_moms <- FALSE
+
     # to do; find a way to code the proportions
   }
   # are all dads the same sex?
@@ -74,7 +75,7 @@ checkParentIDs <- function(ped, verbose = FALSE, repair = FALSE) {
         "'.\n"
       ))
     }
-    validation_results$male_dads <- 1
+    validation_results$male_dads <- TRUE
     validation_results$male_var <- validation_results$dad_sex
   } else {
     validation_results$male_dads <- FALSE

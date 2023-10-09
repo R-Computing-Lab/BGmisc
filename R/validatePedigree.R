@@ -47,7 +47,7 @@ standardize_colnames <- function(df, verbose = FALSE) {
 #' @param ped A pedigree object.
 #' @param repair_funs A list of functions to repair the pedigree.
 #' @return A corrected pedigree.
-repairPedigree <- function(ped, repair_funs = NULL) {
+repairPedigree <- function(ped, repair_funs = NULL, ...) {
   corrected_ped <- ped <- standardize_colnames(ped)
 
   # applies a list of repair functions sequentially to a pedigree.
@@ -58,10 +58,9 @@ repairPedigree <- function(ped, repair_funs = NULL) {
     return(corrected_ped)
     # if not provided, use the default repair functions
   } else if (is.null(repair_funs)) {
-    corrected_ped <- repairIDs(corrected_ped)
-    corrected_ped <- repairSex(corrected_ped)
-    corrected_ped <- repairParentIDs(corrected_ped)
-
+    if(check_id){corrected_ped <- repairIDs(corrected_ped)}
+    if(check_sex){corrected_ped <- repairSex(corrected_ped)}
+    if(check_parents){corrected_ped <- repairParentIDs(corrected_ped)}
     return(corrected_ped)
   } else {
     print("You should never see this message. If you do, that means the repair_funs variable in repairPedigree is broken")

@@ -7,7 +7,8 @@
 #' @param sparse logical.  If TRUE, use and return sparse matrices from Matrix package
 #' @param verbose logical.  If TRUE, print progress through stages of algorithm
 #' @param gc logical. If TRUE, do frequent garbage collection via \code{\link{gc}} to save memory
-#' @param flatten.diag Logical. The default is FALSE. If TRUE, overwrites the diagonal of the final relatedness matrix with ones.
+#' @param flatten.diag logical. If TRUE, overwrite the diagonal of the final relatedness matrix with ones
+#' @param ... additional arguments to be passed to \code{\link{ped2com}}
 #' @details The algorithms and methodologies used in this function are further discussed and exemplified in the vignette titled "examplePedigreeFunctions".
 #' @export
 #'
@@ -99,7 +100,11 @@ ped2com <- function(ped, component,
   }
 
   # Initialize adjacency matrix for parent-child relationships
-  isPar <- Matrix::sparseMatrix(i = iss, j = jss, x = parVal, dims = c(nr, nr), dimnames = list(ped$ID, ped$ID))
+  isPar <- Matrix::sparseMatrix(i = iss,
+                                j = jss,
+                                x = parVal,
+                                dims = c(nr, nr),
+                                dimnames = list(ped$ID, ped$ID))
 
   if (verbose) {
     cat("Completed first degree relatives (adjacency)\n")
@@ -197,8 +202,9 @@ ped2add <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FA
 #' @inheritParams ped2com
 #' @details The algorithms and methodologies used in this function are further discussed and exemplified in the vignette titled "examplePedigreeFunctions".
 #' @export
+#'@aliases ped2mt
 #'
-ped2mit <- ped2mt<- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FALSE, flatten.diag = FALSE) {
+ped2mit <- ped2mt <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FALSE, flatten.diag = FALSE) {
   ped2com(
     ped = ped,
     max.gen = max.gen,
