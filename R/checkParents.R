@@ -47,49 +47,73 @@ checkParentIDs <- function(ped, verbose = FALSE, repair = FALSE) {
     }
     validation_results$missing_parents <- FALSE
   }
-  # are all moms the same sex?
-  validation_results$mom_sex <- unique(ped$sex[ped$ID %in% ped$momID])
+  # If missing parents are found
+  else {
+    if (verbose) {
+      cat("Missing single parents found.\n")
+    }
+    validation_results$missing_parents <- TRUE
+  }
 
+  if (verbose) {
+    cat("Step 2: Determining the if moms are the same sex and dads are same sex\n")
+  }
+
+  # Determine the most frequent sex for moms and dads
+  most_frequent_sex_mom <- names(sort(table(ped$sex[ped$ID %in% ped$momID]), decreasing = TRUE))[1]
+  most_frequent_sex_dad <- names(sort(table(ped$sex[ped$ID %in% ped$dadID]), decreasing = TRUE))[1]
+
+  # are all moms/dads the same sex?
+  validation_results$mom_sex <- unique(ped$sex[ped$ID %in% ped$momID])
+  validation_results$dad_sex <- unique(ped$sex[ped$ID %in% ped$dadID])
+
+  # Store the most frequent sex for moms and dads
+  if (is.numeric(ped$sex)) {
+    validation_results$female_var <- as.numeric(most_frequent_sex_mom)
+    validation_results$male_var <- as.numeric(most_frequent_sex_dad)
+  } else if (is.character(ped$sex) | is.factor(ped$sex)) {
+    validation_results$female_var <- most_frequent_sex_mom
+    validation_results$male_var <- most_frequent_sex_dad
+  } else {
+    print("You should never see this. If you do, then you have a problem with the data type of the sex variable")
+  }
+
+  # verbose
   if (length(validation_results$mom_sex) == 1) {
     if (verbose) {
       cat(paste0(
         "All moms are '",
-        validation_results$mom_sex,
+        validation_results$female_var,
         "'.\n"
       ))
     }
     validation_results$female_moms <- TRUE
-    validation_results$female_var <- validation_results$mom_sex
   } else {
     validation_results$female_moms <- FALSE
-
-    # to do; find a way to code the proportions
   }
-  # are all dads the same sex?
-  validation_results$dad_sex <- unique(ped$sex[ped$ID %in% ped$dadID])
+
   if (length(validation_results$dad_sex) == 1) {
     if (verbose) {
       cat(paste0(
         "All dads are '",
-        validation_results$dad_sex,
+        validation_results$male_var,
         "'.\n"
       ))
     }
     validation_results$male_dads <- TRUE
-    validation_results$male_var <- validation_results$dad_sex
   } else {
     validation_results$male_dads <- FALSE
-    # to do; find a way to code the proportions
   }
+    # Check for inconsistent gender roles
+    wrong_sex_moms <- ped$ID[which(ped$sex[ped$ID %in% ped$momID] != validation_results$female_var)]
+    wrong_sex_dads <- ped$ID[which(ped$sex[ped$ID %in% ped$dadID] != validation_results$male_var)]
+
+
 
   # Are any parents in both momID and dadID?
   momdad <- intersect(ped$dadID, ped$momID)
   if (length(momdad) > 0) {
     validation_results$parents_in_both <- momdad
-  }
-
-
-  if (length(unique(ped$sex)) == 2) {
   }
 
 
