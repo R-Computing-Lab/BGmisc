@@ -75,25 +75,31 @@ famSizeCal <- function(kpc, Ngen, marR) {
   return(size)
 }
 
-#' twinImpute
+#' makeTwins
 #' A function to impute twins in the simulated pedigree \code{data.frame}.
 #' Twins can be imputed by specifying their IDs or by specifying the generation the twin should be imputed.
 #' This is a supplementary function for \code{simulatePedigree}.
 #' @param ped A \code{data.frame} in the same format as the output of \code{simulatePedigree}.
 #' @param ID_twin1 A vector of \code{ID} of the first twin.
 #' @param ID_twin2 A vector of \code{ID} of the second twin.
+#' @param verbose logical.  If TRUE, print progress through stages of algorithm
 #' @param gen_twin A vector of \code{generation} of the twin to be imputed.
 #' @return Returns a \code{data.frame} with MZ twins infomration added as a new column.
 #' @export
 
 # A function to impute twins in the simulated pedigree \code{data.frame}.
 # Twins can be imputed by specifying their IDs or by specifying the generation the twin should be imputed.
-twinImpute <- function(ped, ID_twin1 = NA_integer_, ID_twin2 = NA_integer_, gen_twin = 2) {
+makeTwins <- function(ped, ID_twin1 = NA_integer_, ID_twin2 = NA_integer_, gen_twin = 2) {
   # a support function
   resample <- function(x, ...) x[sample.int(length(x), ...)]
   # Check if the ped is the same format as the output of simulatePedigree
-  if (paste0(colnames(ped), collapse = "") != paste0(c("fam", "ID", "gen", "dadID", "momID", "spt", "sex"), collapse = "")) {
-    stop("The input pedigree is not in the same format as the output of simulatePedigree")
+  if (paste0(colnames(ped), collapse = "") != paste0(c("fam", "ID", "gen",
+   "dadID", "momID", "spt", "sex"), collapse = "")) {
+    ped <- standardize_colnames(ped)
+    if(verbose){
+      cat("The input pedigree is not in the same format as the output of simulatePedigree\n")
+    }
+    #stop("The input pedigree is not in the same format as the output of simulatePedigree")
   }
   ped$MZtwin <- NA_integer_
   # Check if the two IDs are provided
@@ -159,7 +165,9 @@ twinImpute <- function(ped, ID_twin1 = NA_integer_, ID_twin2 = NA_integer_, gen_
     ped$MZtwin[ped$ID == ID_twin1] <- ID_twin2
     ped$MZtwin[ped$ID == ID_twin2] <- ID_twin1
   }
-  cat("twin1", ID_twin1, "\n")
-  cat("twin2", ID_twin2, "\n")
+  if(verbose){
+    cat("twin1", ID_twin1, "\n")
+    cat("twin2", ID_twin2, "\n")
+  }
   return(ped)
 }
