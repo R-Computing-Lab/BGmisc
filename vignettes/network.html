@@ -344,19 +344,15 @@ pedigrees and path tracing</h1>
 <div id="introduction" class="section level1">
 <h1>Introduction</h1>
 <p>This vignette showcases two key features that capitalize on the
-network structure inherent in pedigrees:</p>
-<ol style="list-style-type: decimal">
-<li><p>Finding extended families with <em>any</em> connecting
-relationships between members. This feature strictly uses a person’s ID,
-mother’s ID, and father’s ID to find out which people in a dataset are
-remotely related by any path, effectively finding all separable extended
-families in a dataset.</p></li>
-<li><p>Using path tracing rules to quantify the <em>amount</em> of
-relatedness between all pairs of individuals in a dataset. The amount of
-relatedness can be characterized by additive nuclear DNA, shared
-mitochondrial DNA, sharing both parents, or being part of the same
-extended pedigree.</p></li>
-</ol>
+network structure inherent in pedigrees: 1. Finding extended families
+with <em>any</em> connecting relationships between members. This feature
+strictly uses a person’s ID, mother’s ID, and father’s ID to find out
+which people in a dataset are remotely related by any path, effectively
+finding all separable extended families in a dataset. 2. Using path
+tracing rules to quantify the <em>amount</em> of relatedness between all
+pairs of individuals in a dataset. The amount of relatedness can be
+characterized by additive nuclear DNA, shared mitochondrial DNA, sharing
+both parents, or being part of the same extended pedigree.</p>
 <div id="loading-required-libraries-and-data" class="section level2">
 <h2>Loading Required Libraries and Data</h2>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(BGmisc)</span>
@@ -379,12 +375,13 @@ Hazard Pedigree
 </p>
 </div>
 <p>We will use the <code>hazard</code> pedigree data as an example.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>ds <span class="ot">&lt;-</span> <span class="fu">ped2fam</span>(hazard, <span class="at">famID =</span> <span class="st">&quot;newFamID&quot;</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="fu">table</span>(ds<span class="sc">$</span>FamID, ds<span class="sc">$</span>newFamID)</span>
-<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co">#&gt;    </span></span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co">#&gt;      1  2</span></span>
-<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co">#&gt;   1 18  0</span></span>
-<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="co">#&gt;   2  0 25</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>ds <span class="ot">&lt;-</span> <span class="fu">ped2fam</span>(hazard, <span class="at">famID =</span> <span class="st">&quot;newFamID&quot;</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="fu">table</span>(ds<span class="sc">$</span>FamID, ds<span class="sc">$</span>newFamID)</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co">#&gt;    </span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co">#&gt;      1  2</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="co">#&gt;   1 18  0</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="co">#&gt;   2  0 25</span></span></code></pre></div>
 <p>Because the <code>hazard</code> data already had a family ID variable
 we compare our newly created variable to the pre-existing one. They
 match!</p>
@@ -458,7 +455,7 @@ not.</p>
 <p>Here we calculate the relatedness between all pairs of individuals in
 the <code>hazard</code> dataset through sharing both parents.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>commonNuclear <span class="ot">&lt;-</span> <span class="fu">ped2cn</span>(hazard)</span>
-<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>commonNuclear[<span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>]</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>commonNuclear [<span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>]</span>
 <span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="co">#&gt;   1 2 3 4 7 5 6</span></span>
 <span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="co">#&gt; 1 1 0 0 0 0 0 0</span></span>
 <span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="co">#&gt; 2 0 1 0 0 0 0 0</span></span>

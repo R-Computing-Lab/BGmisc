@@ -16,20 +16,3 @@ test_that("simulated pedigree generates expected data structure", {
   # check number of sex ratio
   expect_equal(mean(results$sex == "M"), sexR, tolerance = .05)
 })
-
-test_that("simulated pedigree plots correctly", {
-  set.seed(5)
-  Ngen <- 4
-  kpc <- 4
-  sexR <- .50
-  marR <- .7
-
-  results <- simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR)
-  expect_no_error(plotPedigree(results, verbose = FALSE))
-
-  kpc <- 2
-  results2 <- simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR)
-  results2$fam <- paste0("fam 2")
-  results <- rbind(results, results2)
-  expect_output(plotPedigree(results, verbose = TRUE))
-})

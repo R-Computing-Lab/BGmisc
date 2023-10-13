@@ -15,7 +15,7 @@ simulatePedigree(
   sexR = 0.5,
   marR = 2/3,
   balancedSex = TRUE,
-  balancedMar = TRUE,
+  balancedmar = TRUE,
   verbose = FALSE
 )
 }
@@ -30,7 +30,7 @@ simulatePedigree(
 
 \item{balancedSex}{Not fully developed yet. Always \code{TRUE} in the current version.}
 
-\item{balancedMar}{Not fully developed yet. Always \code{TRUE} in the current version.}
+\item{balancedmar}{Not fully developed yet. Always \code{TRUE} in the current version.}
 
 \item{verbose}{logical  If TRUE, print progress through stages of algorithm}
 }

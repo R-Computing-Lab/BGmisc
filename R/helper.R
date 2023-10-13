@@ -133,7 +133,6 @@ relatedness <- function(...) {
   inferRelatedness(...)
 }
 
-
 #' Standardize Column Names in a Dataframe (Internal)
 #'
 #' This internal function standardizes the column names of a given dataframe.
@@ -195,4 +194,3 @@ standardize_colnames <- function(df) {
 
   return(df)
 }
-
