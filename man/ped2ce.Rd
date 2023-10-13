@@ -13,5 +13,5 @@ ped2ce(ped)
 Take a pedigree and turn it into an extended environmental relatedness matrix
 }
 \details{
-source examplePedigreeFunctions
+The algorithms and methodologies used in this function are further discussed and exemplified in the vignette titled "examplePedigreeFunctions".
 }

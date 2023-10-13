@@ -2,6 +2,7 @@
 % Please edit documentation in R/convertPedigree.R
 \name{ped2mit}
 \alias{ped2mit}
+\alias{ped2mt}
 \title{Take a pedigree and turn it into a mitochondrial relatedness matrix}
 \usage{
 ped2mit(
@@ -22,15 +23,15 @@ generations as there are in the data.}
 
 \item{sparse}{logical.  If TRUE, use and return sparse matrices from Matrix package}
 
-\item{verbose}{logical  If TRUE, print progress through stages of algorithm}
+\item{verbose}{logical.  If TRUE, print progress through stages of algorithm}
 
 \item{gc}{logical. If TRUE, do frequent garbage collection via \code{\link{gc}} to save memory}
 
-\item{flatten.diag}{Logical. The default is FALSE. If TRUE, overwrites the diagonal of the final relatedness matrix with ones.}
+\item{flatten.diag}{logical. If TRUE, overwrite the diagonal of the final relatedness matrix with ones}
 }
 \description{
 Take a pedigree and turn it into a mitochondrial relatedness matrix
 }
 \details{
-source examplePedigreeFunctions
+The algorithms and methodologies used in this function are further discussed and exemplified in the vignette titled "examplePedigreeFunctions".
 }

@@ -5,10 +5,11 @@
 #'  (e.g., only up to 4th degree relatives).  The default of Inf uses as many
 #'  generations as there are in the data.
 #' @param sparse logical.  If TRUE, use and return sparse matrices from Matrix package
-#' @param verbose logical  If TRUE, print progress through stages of algorithm
+#' @param verbose logical.  If TRUE, print progress through stages of algorithm
 #' @param gc logical. If TRUE, do frequent garbage collection via \code{\link{gc}} to save memory
-#' @param flatten.diag Logical. The default is FALSE. If TRUE, overwrites the diagonal of the final relatedness matrix with ones.
-#' @details source examplePedigreeFunctions
+#' @param flatten.diag logical. If TRUE, overwrite the diagonal of the final relatedness matrix with ones
+#' @param ... additional arguments to be passed to \code{\link{ped2com}}
+#' @details The algorithms and methodologies used in this function are further discussed and exemplified in the vignette titled "examplePedigreeFunctions".
 #' @export
 #'
 ped2com <- function(ped, component,
@@ -16,24 +17,44 @@ ped2com <- function(ped, component,
                     sparse = FALSE,
                     verbose = FALSE,
                     gc = FALSE,
-                    flatten.diag = FALSE) {
-  component <- match.arg(tolower(component), choices = c("generation", "additive", "common nuclear", "mitochondrial"))
+                    flatten.diag = FALSE,
+                    ...) {
+  # Validate the 'component' argument and match it against predefined choices
+  component <- match.arg(tolower(component),
+    choices = c(
+      "generation",
+      "additive",
+      "common nuclear",
+      "mitochondrial"
+    )
+  )
+
+  # Get the number of rows in the pedigree dataset, representing the size of the family
   nr <- nrow(ped)
+
+  # Print the family size if verbose is TRUE
   if (verbose) {
     cat(paste0("Family Size = ", nr, "\n"))
   }
+  # Initialize variables
   parList <- list()
   lens <- integer(nr)
+
+  # Loop through each individual in the pedigree build the adjacency matrix for parent-child relationships
   # Is person in column j the parent of the person in row i? .5 for yes, 0 for no.
   for (i in 1:nr) {
     x <- ped[i, , drop = FALSE]
+
+    # Handle parentage according to the 'component' specified
     if (component %in% c("generation", "additive")) {
-      # iS mom of ID or iS dad of ID
+      # Code for 'generation' and 'additive' components
+      # Checks if is mom of ID or is dad of ID
       sMom <- (as.numeric(x["ID"]) == as.numeric(ped$momID))
       sDad <- (as.numeric(x["ID"]) == as.numeric(ped$dadID))
       val <- sMom | sDad
       val[is.na(val)] <- FALSE
     } else if (component %in% c("common nuclear")) {
+      # Code for 'common nuclear' component
       # IDs have the Same mom and Same dad
       sMom <- (as.numeric(x["momID"]) == as.numeric(ped$momID))
       sMom[is.na(sMom)] <- FALSE
@@ -41,6 +62,7 @@ ped2com <- function(ped, component,
       sDad[is.na(sDad)] <- FALSE
       val <- sMom & sDad
     } else if (component %in% c("mitochondrial")) {
+      # Code for 'mitochondrial' component
       sMom <- (as.numeric(x["ID"]) == as.numeric(ped$momID))
       sDad <- TRUE
       val <- sMom & sDad
@@ -48,22 +70,27 @@ ped2com <- function(ped, component,
     } else {
       stop("Unknown relatedness component requested")
     }
+    # Storing the indices of the parent-child relationships
     # keep track of indices only, and then initialize a single sparse matrix
     wv <- which(val)
     parList[[i]] <- wv
     lens[i] <- length(wv)
+    # Print progress if verbose is TRUE
     if (verbose && !(i %% 100)) {
       cat(paste0("Done with ", i, " of ", nr, "\n"))
     }
   }
+  # Construct sparse matrix
   jss <- rep(1L:nr, times = lens)
   iss <- unlist(parList)
+
+  # Garbage collection if gc is TRUE
   if (gc) {
     rm(parList, lens)
-  }
-  if (gc) {
     gc()
   }
+
+  # Set parent values depending on the component type
   if (component %in% c("generation", "additive")) {
     parVal <- .5
   } else if (component %in% c("common nuclear", "mitochondrial")) {
@@ -71,7 +98,16 @@ ped2com <- function(ped, component,
   } else {
     stop("Don't know how to set parental value")
   }
-  isPar <- Matrix::sparseMatrix(i = iss, j = jss, x = parVal, dims = c(nr, nr), dimnames = list(ped$ID, ped$ID))
+
+  # Initialize adjacency matrix for parent-child relationships
+  isPar <- Matrix::sparseMatrix(
+    i = iss,
+    j = jss,
+    x = parVal,
+    dims = c(nr, nr),
+    dimnames = list(ped$ID, ped$ID)
+  )
+
   if (verbose) {
     cat("Completed first degree relatives (adjacency)\n")
   }
@@ -147,7 +183,9 @@ ped2com <- function(ped, component,
 
 #' Take a pedigree and turn it into an additive genetics relatedness matrix
 #' @inheritParams ped2com
-#' @details source examplePedigreeFunctions
+#' @details The algorithms and methodologies used in this function are further discussed and exemplified in the vignette titled "examplePedigreeFunctions".
+#' For more advanced scenarios and detailed explanations, consult this vignette.
+
 #' @export
 #'
 ped2add <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FALSE, flatten.diag = FALSE) {
@@ -164,10 +202,11 @@ ped2add <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FA
 
 #' Take a pedigree and turn it into a mitochondrial relatedness matrix
 #' @inheritParams ped2com
-#' @details source examplePedigreeFunctions
+#' @details The algorithms and methodologies used in this function are further discussed and exemplified in the vignette titled "examplePedigreeFunctions".
 #' @export
+#' @aliases ped2mt
 #'
-ped2mit <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FALSE, flatten.diag = FALSE) {
+ped2mit <- ped2mt <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FALSE, flatten.diag = FALSE) {
   ped2com(
     ped = ped,
     max.gen = max.gen,
@@ -179,9 +218,12 @@ ped2mit <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FA
   )
 }
 
+
+
+
 #' Take a pedigree and turn it into a common nuclear environmental relatedness matrix
 #' @inheritParams ped2com
-#' @details source examplePedigreeFunctions
+#' @details The algorithms and methodologies used in this function are further discussed and exemplified in the vignette titled "examplePedigreeFunctions".
 #' @export
 #'
 ped2cn <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FALSE, flatten.diag = FALSE) {
@@ -198,7 +240,7 @@ ped2cn <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FAL
 
 #' Take a pedigree and turn it into an extended environmental relatedness matrix
 #' @inheritParams ped2com
-#' @details source examplePedigreeFunctions
+#' @details The algorithms and methodologies used in this function are further discussed and exemplified in the vignette titled "examplePedigreeFunctions".
 #' @export
 #'
 ped2ce <- function(ped) {
