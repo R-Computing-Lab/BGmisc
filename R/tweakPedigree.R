@@ -125,9 +125,7 @@ makeInbreeding = function(ped,
     ped <- standardize_colnames(ped)
     if(verbose){
       cat("The input pedigree is not in the same format as the output of simulatePedigree\n")
-    }
-    #stop("The input pedigree is not in the same format as the output of simulatePedigree")
-    }
+    }}
     # check if the two IDs are provided
     if (is.na(ID_mate1) || is.na(ID_mate2)) {
     # Check if the generation is provided
@@ -139,18 +137,68 @@ makeInbreeding = function(ped,
         stop("The generation of the twins should be an integer between 2 and the maximum generation in the pedigree")
       } else {
         if(type_inbred == "sib"){
-            # select two opposite sex siblings from the generation. Prefer to select individuals that have not been mated. 
-            ID_pool_mate1 <- ped$ID[ped$gen == gen_inbred & ped$sex == "F" & !is.na(ped$dadID) & !is.na(ped$momID) & is.na(ped$mateID)]
-            ID_mate1 <- resample(ID_pool_mate1, 1)
-            # try to find one opposite-sex individual who has the same dadID and momID as the selected individual, preferalbly not mated
-            ID_pool_mate2 <- ped$ID[ped$gen == gen_inbred & ped$sex == "M" & ped$dadID == ped$dadID[ped$ID == ID_mate1] & ped$momID == ped$momID[ped$ID == ID_mate1] & is.na(ped$mateID)]
-            # if the pool is not empty, randomly select one individual from the pool
-            if(length(ID_pool_mate2) > 0){
-                ID_mate2 <- resample(ID_pool_mate2, 1)}
+            # loop through all the nuclear families in the generation
+            idx <- nrow(ped[ped$gen == gen_inbred & !is.na(ped$dadID), ])
+            usedID <- c()
+            ID_mate2 <- NA_integer_
+            for (i in 1: idx){
+              # if ID_mate2 is not missing, break the loop
+              if(!is.na(ID_mate2)){
+                break
+              }
+              ID_pool_mate1 <- ped$ID[ped$gen == gen_inbred & !is.na(ped$dadID) & !is.na(ped$momID) & is.na(ped$mateID) & !(ped$ID %in% usedID)]
+              # if the pool is empty, find all individuals who have the same dadID and momID as the selected individual but mated
+              if(length(ID_pool_mate1) == 0){
+                ID_pool_mate1 <- ped$ID[ped$gen == gen_inbred & !is.na(ped$dadID) & !is.na(ped$momID) & !(ped$ID %in% usedID)]
+              }
+              ID_mate1 <- resample(ID_pool_mate1, 1)
+              usedID <- c(usedID, ID_mate1)
+              # try to find one opposite-sex individual who has the same dadID and momID as the selected individual, preferalbly not mated
+              ID_pool_mate2 <- ped$ID[ped$gen == gen_inbred & ped$sex != ped$sex[ped$ID == ID_mate1] & ped$dadID == ped$dadID[ped$ID == ID_mate1] & ped$momID == ped$momID[ped$ID == ID_mate1] & is.na(ped$mateID)]
+              # if the pool is not empty, randomly select one individual from the pool
+              if(length(ID_pool_mate2) > 0){
+                ID_mate2 <- resample(ID_pool_mate2, 1)
+                }
                 else {
                    # if the pool is empty, find all individuals who have the same dadID and momID as the selected individual but mated
-                     ID_pool_mate2 <- ped$ID[ped$gen == gen_inbred & ped$sex == "M" & ped$dadID == ped$dadID[ped$ID == ID_mate1] & ped$momID == ped$momID[ped$ID == ID_mate1]]
-                        # if the pool is empty again, 
+                     ID_pool_mate2 <- ped$ID[ped$gen == gen_inbred & ped$sex == ped$sex[ped$ID == ID_mate1] & ped$dadID == ped$dadID[ped$ID == ID_mate1] & ped$momID == ped$momID[ped$ID == ID_mate1]]
+                      # if the pool is not empty, randomly select one individual from the pool
+                      if(length(ID_pool_mate2) > 0){
+                        ID_mate2 <- resample(ID_pool_mate2, 1)
+                      } else {
+                        next
+                      }
                 }
+            }   
+                
+            
+            
+      } else if(type_inbred == "cousin"){
+        cat("cousin inbreeding is not supported yet\n")
+      } else{stop("The type of inbreeding should be either sib or cousin")}
+      }}}
+      # save the two individfual's former mates' IDs if they have any
+      ID_mate1_former_mate <- ped$mateID[ped$ID == ID_mate1]
+      ID_mate2_former_mate <- ped$mateID[ped$ID == ID_mate2]
+      # remove two individuals' former mates from the pedigree if they have any
+      ped$mateID[ped$ID == ID_mate1] <- NA_integer_
+      ped$mateID[ped$ID == ID_mate2] <- NA_integer_
+      # change the spouseID of ID_mate1 and ID_mate2 to each other
+      ped$mateID[ped$ID == ID_mate1] <- ID_mate2
+      ped$mateID[ped$ID == ID_mate2] <- ID_mate1
+      # change the individuals in next generation whoes dadID and momID are ID_mate1 and ID_mate2's former mates to ID_mate1 and ID_mate2
+      for (j in 1:nrow(ped)){
+        if(ped$dadID[j] == ID_mate1_former_mate){
+          ped$dadID[j] <- ID_mate2
+        }
+        if(ped$momID[j] == ID_mate1_former_mate){
+          ped$momID[j] <- ID_mate2
+        }
+        if(ped$dadID[j] == ID_mate2_former_mate){
+          ped$dadID[j] <- ID_mate1
+        }
+        if(ped$momID[j] == ID_mate2_former_mate){
+          ped$momID[j] <- ID_mate1
+        }
       }
-}
+      return(ped)}
