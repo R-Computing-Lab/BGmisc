@@ -8,7 +8,8 @@ A wrapped function to plot simulated pedigree from function \code{simulatePedigr
 plotPedigree(
   ped,
   code_male = NULL,
-  quiet = TRUE,
+  verbose = FALSE,
+  affected = NULL,
   cex = 0.5,
   col = 1,
   symbolsize = 1,
@@ -27,9 +28,11 @@ plotPedigree(
 \arguments{
 \item{ped}{The simulated pedigree data.frame from function \code{simulatePedigree}. Or a pedigree dataframe with the same colnames as the dataframe simulated from function \code{simulatePedigree}.}
 
-\item{code_male}{This optional input allows you to indicate what value in the sex variable codes for male.}
+\item{code_male}{This optional input allows you to indicate what value in the sex variable codes for male. Will be recoded as "M" (Male). If \code{NULL}, no recoding is performed.}
 
-\item{quiet}{Logical. If TRUE, suppresses the printing of the pedigree object. Default is TRUE.}
+\item{verbose}{logical  If TRUE, prints additional information. Default is FALSE.}
+
+\item{affected}{This optional parameter can either be a string specifying the column name that indicates affected status or a numeric/logical vector of the same length as the number of rows in 'ped'. If \code{NULL}, no affected status is assigned.}
 
 \item{cex}{The font size of the IDs for each individual in the plot.}
 
@@ -86,7 +89,7 @@ Extra options that feed into the plot function.
 }
 }
 \value{
-A plot of the simulated pedigree
+A plot of the provided pedigree
 }
 \description{
 plotPedigree
