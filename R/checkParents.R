@@ -104,9 +104,9 @@ checkParentIDs <- function(ped, verbose = FALSE, repair = FALSE) {
   } else {
     validation_results$male_dads <- FALSE
   }
-    # Check for inconsistent gender roles
-    wrong_sex_moms <- ped$ID[which(ped$sex[ped$ID %in% ped$momID] != validation_results$female_var)]
-    wrong_sex_dads <- ped$ID[which(ped$sex[ped$ID %in% ped$dadID] != validation_results$male_var)]
+  # Check for inconsistent gender roles
+  wrong_sex_moms <- ped$ID[which(ped$sex[ped$ID %in% ped$momID] != validation_results$female_var)]
+  wrong_sex_dads <- ped$ID[which(ped$sex[ped$ID %in% ped$dadID] != validation_results$male_var)]
 
 
 

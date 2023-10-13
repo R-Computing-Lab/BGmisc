@@ -93,13 +93,15 @@ makeTwins <- function(ped, ID_twin1 = NA_integer_, ID_twin2 = NA_integer_, gen_t
   # a support function
   resample <- function(x, ...) x[sample.int(length(x), ...)]
   # Check if the ped is the same format as the output of simulatePedigree
-  if (paste0(colnames(ped), collapse = "") != paste0(c("fam", "ID", "gen",
-   "dadID", "momID", "spt", "sex"), collapse = "")) {
+  if (paste0(colnames(ped), collapse = "") != paste0(c(
+    "fam", "ID", "gen",
+    "dadID", "momID", "spt", "sex"
+  ), collapse = "")) {
     ped <- standardize_colnames(ped)
-    if(verbose){
+    if (verbose) {
       cat("The input pedigree is not in the same format as the output of simulatePedigree\n")
     }
-    #stop("The input pedigree is not in the same format as the output of simulatePedigree")
+    # stop("The input pedigree is not in the same format as the output of simulatePedigree")
   }
   ped$MZtwin <- NA_integer_
   # Check if the two IDs are provided
@@ -165,7 +167,7 @@ makeTwins <- function(ped, ID_twin1 = NA_integer_, ID_twin2 = NA_integer_, gen_t
     ped$MZtwin[ped$ID == ID_twin1] <- ID_twin2
     ped$MZtwin[ped$ID == ID_twin2] <- ID_twin1
   }
-  if(verbose){
+  if (verbose) {
     cat("twin1", ID_twin1, "\n")
     cat("twin2", ID_twin2, "\n")
   }

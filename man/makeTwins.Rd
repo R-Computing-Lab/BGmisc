@@ -7,7 +7,13 @@ A function to impute twins in the simulated pedigree \code{data.frame}.
 Twins can be imputed by specifying their IDs or by specifying the generation the twin should be imputed.
 This is a supplementary function for \code{simulatePedigree}.}
 \usage{
-makeTwins(ped, ID_twin1 = NA_integer_, ID_twin2 = NA_integer_, gen_twin = 2)
+makeTwins(
+  ped,
+  ID_twin1 = NA_integer_,
+  ID_twin2 = NA_integer_,
+  gen_twin = 2,
+  verbose = FALSE
+)
 }
 \arguments{
 \item{ped}{A \code{data.frame} in the same format as the output of \code{simulatePedigree}.}

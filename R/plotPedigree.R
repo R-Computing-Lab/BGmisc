@@ -103,13 +103,13 @@ plotPedigree <- function(ped,
       ))
     } else { # TODO: consisently suppress the printing of the pedigree comments
       # Determine the null device based on the OS
- #     null_device <- ifelse(.Platform$OS.type == "windows", "nul", "/dev/null")
+      #     null_device <- ifelse(.Platform$OS.type == "windows", "nul", "/dev/null")
 
       # Start redirecting the standard output to suppress messages
- #     sink(file = null_device, type = "output")
+      #     sink(file = null_device, type = "output")
 
       # Ensure the output is reverted back to console when function exits
- #     on.exit(if (sink.number() > 0) sink(), add = TRUE)
+      #     on.exit(if (sink.number() > 0) sink(), add = TRUE)
 
       plot_picture <- kinship2::plot.pedigree(p3,
         cex = cex,
@@ -125,9 +125,9 @@ plotPedigree <- function(ped,
       )
 
       # Explicitly revert the standard output back to the console
-#      if (sink.number() > 0) {
-#        sink()
-#      }
+      #      if (sink.number() > 0) {
+      #        sink()
+      #      }
 
       return(plot_picture)
     }

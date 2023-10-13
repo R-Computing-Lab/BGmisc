@@ -4,7 +4,15 @@
 \alias{recodeSex}
 \title{Recodes Sex Variable in a Pedigree Dataframe}
 \usage{
-recodeSex(ped, verbose = FALSE, code_male = NULL)
+recodeSex(
+  ped,
+  verbose = FALSE,
+  code_male = NULL,
+  code_na = NULL,
+  recode_male = "M",
+  recode_female = "F",
+  recode_na = NA_character_
+)
 }
 \arguments{
 \item{ped}{A dataframe representing the pedigree data with a 'sex' column.}

@@ -50,7 +50,7 @@ at least some form of relation, however distant, while those in
 different extended families have no relations.
 
 ```{r, echo=FALSE, results='hide', out.width='50%', fig.cap="Hazard Pedigree"}
-plotPedigree(hazard, code_male = 0, verbose = TRUE,)
+plotPedigree(hazard, code_male = 0, verbose = TRUE, )
 ```
 
 We will use the `hazard` pedigree data as an example.
