@@ -50,7 +50,8 @@ checkSex <- function(ped, code_male = NULL, verbose = FALSE, repair = FALSE, rec
     changes <- list()
     # [Insert logic to repair sex coding here]
     if (validation_results$sex_length == 2) {
-
+      most_frequent_sex_dad <- names(sort(table(ped$sex[ped$ID %in% ped$dadID]), decreasing = TRUE))[1]
+      ped <- recodeSex(ped,code_male = most_frequent_sex_dad)
     }
     # Update the pedigree dataframe after repair
     repaired_ped <- ped
