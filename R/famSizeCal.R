@@ -75,6 +75,7 @@ famSizeCal <- function(kpc, Ngen, marR) {
   return(size)
 }
 
+
 #' makeTwins
 #' A function to impute twins in the simulated pedigree \code{data.frame}.
 #' Twins can be imputed by specifying their IDs or by specifying the generation the twin should be imputed.
@@ -89,6 +90,7 @@ famSizeCal <- function(kpc, Ngen, marR) {
 
 # A function to impute twins in the simulated pedigree \code{data.frame}.
 # Twins can be imputed by specifying their IDs or by specifying the generation the twin should be imputed.
+
 makeTwins <- function(ped, ID_twin1 = NA_integer_, ID_twin2 = NA_integer_, gen_twin = 2, verbose = FALSE) {
   # a support function
   resample <- function(x, ...) x[sample.int(length(x), ...)]
@@ -101,7 +103,6 @@ makeTwins <- function(ped, ID_twin1 = NA_integer_, ID_twin2 = NA_integer_, gen_t
     if (verbose) {
       cat("The input pedigree is not in the same format as the output of simulatePedigree\n")
     }
-    # stop("The input pedigree is not in the same format as the output of simulatePedigree")
   }
   ped$MZtwin <- NA_integer_
   # Check if the two IDs are provided

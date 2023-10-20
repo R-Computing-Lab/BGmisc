@@ -132,3 +132,4 @@ relatedness <- function(...) {
   warning("The 'relatedness' function is deprecated. Please use 'inferRelatedness' instead.")
   inferRelatedness(...)
 }
+
