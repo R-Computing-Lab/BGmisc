@@ -7,13 +7,13 @@
 ##' 
 ##' \itemize{
 ##'     \item{Extended Family 1}{Sister wives: Children with the same father and different mothers who are sisters}
-##'     \item{Extended Family 2}{Full siblings have children}
-##'     \item{Extended Family 3}{Half siblings have children}
-##'     \item{Extended Family 4}{First cousins have children}
-##'     \item{Extended Family 5}{Father has child with his daughter}
-##'     \item{Extended Family 6}{Half sister wives: Children with the same father and different mothers who are half sisters}
-##'     \item{Extended Family 7}{Uncle-niece and Aunt-nephew have children}
-##'     \item{Extended Family 8}{A father-son pairs has children with a corresponding mother-daughter pair}
+##'     \item{Extended Family 2. }{Full siblings have children}
+##'     \item{Extended Family 3. }{Half siblings have children}
+##'     \item{Extended Family 4. }{First cousins have children}
+##'     \item{Extended Family 5. }{Father has child with his daughter}
+##'     \item{Extended Family 6. }{Half sister wives: Children with the same father and different mothers who are half sisters}
+##'     \item{Extended Family 7. }{Uncle-niece and Aunt-nephew have children}
+##'     \item{Extended Family 8}. {A father-son pairs has children with a corresponding mother-daughter pair}
 ##' }
 ##' 
 ##' Although not all of the above structures are technically inbreeding, they aim to test pedigree diagramming and path tracing algorithms.
