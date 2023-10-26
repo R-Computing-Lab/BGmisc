@@ -1,7 +1,22 @@
-##' Artificial pedigree data on seven families with inbreeding
+##' Artificial pedigree data on eight families with inbreeding
 ##'
 ##' A dataset created purely from imagination that includes several types of inbreeding.
 ##' Different kinds of inbreeding occur in each extended family.
+##' 
+##' The types of inbreeding are as follows:
+##' 
+##' \itemize{
+##'     \item{Extended Family 1}{Sister wives: Children with the same father and different mothers who are sisters}
+##'     \item{Extended Family 2}{Full siblings have children}
+##'     \item{Extended Family 3}{Half siblings have children}
+##'     \item{Extended Family 4}{First cousins have children}
+##'     \item{Extended Family 5}{Father has child with his daughter}
+##'     \item{Extended Family 6}{Half sister wives: Children with the same father and different mothers who are half sisters}
+##'     \item{Extended Family 7}{Uncle-niece and Aunt-nephew have children}
+##'     \item{Extended Family 8}{A father-son pairs has children with a corresponding mother-daughter pair}
+##' }
+##' 
+##' Although not all of the above structures are technically inbreeding, they aim to test pedigree diagramming and path tracing algorithms.
 ##'
 ##' The variables are as follows:
 ##'
@@ -19,7 +34,7 @@
 ##' @keywords datasets
 ##' @name inbreeding
 ##' @usage data(inbreeding)
-##' @format A data frame (and ped object) with 113 rows and 7 variables
+##' @format A data frame (and ped object) with 134 rows and 7 variables
 NULL
 
 ##' Simulated pedigree with two extended families and an age-related hazard
