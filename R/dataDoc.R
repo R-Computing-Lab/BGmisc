@@ -2,9 +2,9 @@
 ##'
 ##' A dataset created purely from imagination that includes several types of inbreeding.
 ##' Different kinds of inbreeding occur in each extended family.
-##' 
+##'
 ##' The types of inbreeding are as follows:
-##' 
+##'
 ##' \itemize{
 ##'     \item{Extended Family 1}{Sister wives: Children with the same father and different mothers who are sisters}
 ##'     \item{Extended Family 2. }{Full siblings have children}
@@ -15,7 +15,7 @@
 ##'     \item{Extended Family 7. }{Uncle-niece and Aunt-nephew have children}
 ##'     \item{Extended Family 8}. {A father-son pairs has children with a corresponding mother-daughter pair}
 ##' }
-##' 
+##'
 ##' Although not all of the above structures are technically inbreeding, they aim to test pedigree diagramming and path tracing algorithms.
 ##'
 ##' The variables are as follows:
@@ -66,4 +66,27 @@ NULL
 ##' @name hazard
 ##' @usage data(hazard)
 ##' @format A data frame with 43 rows and 14 variables
+NULL
+
+##' Fictional pedigree data on a wizarding family
+##'
+##' A dataset created purely from imagination that includes a subset of the Potter extended family.
+##'
+##' The variables are as follows:
+##'
+##' \itemize{
+##'   \item ID.  Person identification variable
+##'   \item sex.  Sex of the ID: 1 is male; 0 is female
+##'   \item maID.  ID of the mother
+##'   \item paID.  ID of the father
+##'   \item Name.  Name of the person
+##' }
+##'
+##' Negative \code{maID}s and \code{paID}s are for people not in the dataset.
+##'
+##' @docType data
+##' @keywords datasets
+##' @name potter
+##' @usage data(potter)
+##' @format A data frame (and ped object) with 24 rows and 5 variables
 NULL
