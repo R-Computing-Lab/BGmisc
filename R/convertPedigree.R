@@ -134,6 +134,9 @@ ped2com <- function(ped, component,
   newIsPar <- isPar
   count <- 0
   maxCount <- max.gen + 1
+  if (verbose) {
+    cat("About to do RAM path tracing\n")
+  }
   # r is I + A + A^2 + ... = (I-A)^-1 from RAM
   while (mtSum != 0 & count < maxCount) {
     r <- r + newIsPar
@@ -144,9 +147,6 @@ ped2com <- function(ped, component,
     if (verbose) {
       cat(paste0("Completed ", count - 1, " degree relatives\n"))
     }
-  }
-  if (verbose) {
-    cat("About to do RAM path tracing\n")
   }
   # compute rsq <- r %*% sqrt(diag(isChild))
   # compute rel <- tcrossprod(rsq)
