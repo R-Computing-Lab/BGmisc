@@ -168,11 +168,12 @@ ped2com <- function(ped, component,
   if (component == "generation") {
     return(gen)
   } else {
+    if (component == "mitochondrial") {
+      r@x <- rep(1, length(r@x))
+      # Assign 1 to all nonzero elements for mitochondrial component
+    }
     if (!sparse) {
       r <- as.matrix(r)
-    }
-    if (component == "mitochondrial") {
-      r[r != 0] <- 1 # for mitochondrial component, set all nonzero values to 1
     }
     if (flatten.diag) { # flattens diagonal if you don't want to deal with inbreeding
       diag(r) <- 1
