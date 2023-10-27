@@ -6,7 +6,7 @@
 ##' The types of inbreeding are as follows:
 ##'
 ##' \itemize{
-##'     \item{Extended Family 1}{Sister wives: Children with the same father and different mothers who are sisters}
+##'     \item{Extended Family 1. }{Sister wives: Children with the same father and different mothers who are sisters}
 ##'     \item{Extended Family 2. }{Full siblings have children}
 ##'     \item{Extended Family 3. }{Half siblings have children}
 ##'     \item{Extended Family 4. }{First cousins have children}
