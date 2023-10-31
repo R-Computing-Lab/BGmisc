@@ -33,7 +33,7 @@ ped2fam <- function(ped, personID = "ID", momID = "momID", dadID = "dadID", famI
   )
   names(fam) <- c(personID, famID)
   ped2 <- merge(fam, ped,
-    by = "ID", all.x = FALSE, all.y = TRUE
+    by = personID, all.x = FALSE, all.y = TRUE
   )
 
   return(ped2)
@@ -63,11 +63,13 @@ ped2graph <- function(ped,
   if (!all(c() %in% names(ped))) stop("'personID', 'momID', and 'dadID' were not all found in your pedigree.\nMake sure you have the variable names correct.")
 
   nodes <- unique(
-    stats::na.omit(c(ped[[personID]], ped[[momID]], ped[[dadID]]))
+    stats::na.omit(
+      as.character(c(ped[[personID]], ped[[momID]], ped[[dadID]]))
+      )
   )
   edges <- rbind(
-    as.matrix(ped[, c(personID, momID)]),
-    as.matrix(ped[, c(personID, dadID)])
+    as.matrix(sapply(ped[, c(personID, momID)], as.character)),
+    as.matrix(sapply(ped[, c(personID, dadID)], as.character))
   )
   edges <- edges[stats::complete.cases(edges), ]
 
