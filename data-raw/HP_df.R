@@ -1,55 +1,44 @@
----
-title: "Harry Potter Pedigree"
-author: "Rachel Good"
-date: "2023-10-18"
-output: html_document
----
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
 #devtools::install_github("R-Computing-Lab/BGmisc")
-library(BGmisc)
 library(tidyverse)
-```
 
 
 ## Create dataframe
 
-```{r createdf}
 hp_ped <- data.frame(
-  ID = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 
-         11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 
+  ID = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+         11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
          21, 22, 23, 24, 25, 26, 27, 28, 29, 30),
   FamID = c("fam1", "fam1", "fam1", "fam1", "fam1", "fam1", "fam1", "fam1", "fam1", "fam1", "fam1", "fam1", "fam1", "fam1", "fam1", "fam1", "fam1", "fam1", "fam1", "fam1", "fam1", "fam1", "fam1", "fam1", "fam1", "fam1", "fam1", "fam1", "fam1", "fam1"),
-  name = c("Vernon Dursley", 
-           "Marjorie Dursley", 
-           "Petunia Evans", 
-           "Lily Evans", 
-           "James Potter", 
-           "Dudley Dursley", 
-           "Harry Potter", 
-           "Ginny Weasley", 
-           "Arthur Weasley", 
-           "Molly Prewett", 
-           "Ron Weasley", 
-           "Fred Weasley", 
-           "George Weasley", 
-           "Percy Weasley", 
-           "Charlie Weasley", 
-           "Bill Weasley", 
-           "Hermione Granger", 
-           "Fleur Delacour", 
-           "Gabrielle Delacour", 
-           "Audrey UNKNOWN", 
-           "James Potter II", 
-           "Albus Potter", 
-           "Lily Potter", 
-           "Rose Weasley", 
-           "Hugo Weasley", 
-           "Victoire Weasley", 
-           "Dominique Weasley", 
-           "Louis Weasley", 
-           "Molly Weasley", 
+  name = c("Vernon Dursley",
+           "Marjorie Dursley",
+           "Petunia Evans",
+           "Lily Evans",
+           "James Potter",
+           "Dudley Dursley",
+           "Harry Potter",
+           "Ginny Weasley",
+           "Arthur Weasley",
+           "Molly Prewett",
+           "Ron Weasley",
+           "Fred Weasley",
+           "George Weasley",
+           "Percy Weasley",
+           "Charlie Weasley",
+           "Bill Weasley",
+           "Hermione Granger",
+           "Fleur Delacour",
+           "Gabrielle Delacour",
+           "Audrey UNKNOWN",
+           "James Potter II",
+           "Albus Potter",
+           "Lily Potter",
+           "Rose Weasley",
+           "Hugo Weasley",
+           "Victoire Weasley",
+           "Dominique Weasley",
+           "Louis Weasley",
+           "Molly Weasley",
            "Lucy Weasley"),
   gen = c(1, 1, 1, 1, 1, 2, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3),
   motherID = c(101, 101, 103, 103, NA, 3, 4, 10, NA, NA, 10, 10, 10, 10, 10, 10, NA, 105, 105, NA, 8, 8, 8, 17, 17, 18, 18, 18, 20, 20),
@@ -61,12 +50,11 @@ hp_ped <- data.frame(
 
 # audrey weasley - unknown maiden name
 # James Potter II might not be correct, but I used it to differentiate grandson from grandfather
-```
+
 
 ### Add additional people
 
 
-```{r addrow}
 hp_ped[nrow(hp_ped) + 1,] <- list(101,
                                   "fam1",
                                   "Mother Durseley",
@@ -117,22 +105,6 @@ hp_ped[nrow(hp_ped) + 1,] <- list(105,
                                   "F")
 
 #hp_ped[nrow(hp_ped) + 1,] <- list(ID,FamID,name,gen,motherID,fatherID,spouseID,sex)
-```
 
-# Tests
-```{r}
-plotPedigree(hp_ped, width = 1,code_male = "M",verbose = FALSE)
-
-```
-
-```{r}
-data(inbreeding)
-df <- inbreeding
-summary(df)
-plotPedigree(df, width = 1)
-
-data(hazard)
-df <- hazard
-summary(df)
-plotPedigree(df, width = 1)
-```
+write_csv(hp_ped, "hp_ped.csv")
+usethis::use_data(hp_ped, overwrite = TRUE, compress = 'xz')
