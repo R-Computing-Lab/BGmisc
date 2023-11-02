@@ -44,8 +44,8 @@ hp_ped <- data.frame(
   motherID = c(101, 101, 103, 103, NA, 3, 4, 10, NA, NA, 10, 10, 10, 10, 10, 10, NA, 105, 105, NA, 8, 8, 8, 17, 17, 18, 18, 18, 20, 20),
   fatherID = c(102, 102, 104, 104, NA, 1, 5, 9, NA, NA, 9, 9, 9, 9, 9, 9, NA, 106, 106, NA, 7, 7, 7, 11, 11, 16, 16, 16, 14, 14),
   spouseID = c(3, NA, 1, 5, 4, NA, 8, 7, 10, 9, 17, NA, NA, 20, NA, 18, 11, 16, NA, 14, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA),
-  sex = c("M", "F", "F", "F", "M", "M", "M", "F", "M", "F", "M", "M", "M", "M", "M", "M", "F", "F", "F", "F", "M", "M", "F", "F", "M", "F", "F", "M", "F", "F")
-)
+  sex = c(1, 0, 0, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0)
+) #sex: 0 = female, 1 = male 
 
 
 # audrey weasley - unknown maiden name
@@ -62,7 +62,7 @@ hp_ped[nrow(hp_ped) + 1,] <- list(101,
                                   NA,
                                   NA,
                                   102,
-                                  "F")
+                                  0)
 hp_ped[nrow(hp_ped) + 1,] <- list(102,
                                   "fam1",
                                   "Father Durseley",
@@ -70,7 +70,7 @@ hp_ped[nrow(hp_ped) + 1,] <- list(102,
                                   NA,
                                   NA,
                                   101,
-                                  "M")
+                                  1)
 hp_ped[nrow(hp_ped) + 1,] <- list(104,
                                   "fam1",
                                   "Father Evans",
@@ -78,7 +78,7 @@ hp_ped[nrow(hp_ped) + 1,] <- list(104,
                                   NA,
                                   NA,
                                   103,
-                                  "M")
+                                  1)
 hp_ped[nrow(hp_ped) + 1,] <- list(103,
                                   "fam1",
                                   "Mother Evans",
@@ -86,7 +86,7 @@ hp_ped[nrow(hp_ped) + 1,] <- list(103,
                                   NA,
                                   NA,
                                   104,
-                                  "F")
+                                  0)
 hp_ped[nrow(hp_ped) + 1,] <- list(106,
                                   "fam1",
                                   "Father Delacour",
@@ -94,7 +94,7 @@ hp_ped[nrow(hp_ped) + 1,] <- list(106,
                                   NA,
                                   NA,
                                   105,
-                                  "M")
+                                  1)
 hp_ped[nrow(hp_ped) + 1,] <- list(105,
                                   "fam1",
                                   "Mother Delacour",
@@ -102,7 +102,7 @@ hp_ped[nrow(hp_ped) + 1,] <- list(105,
                                   NA,
                                   NA,
                                   106,
-                                  "F")
+                                  )
 
 #hp_ped[nrow(hp_ped) + 1,] <- list(ID,FamID,name,gen,motherID,fatherID,spouseID,sex)
 
