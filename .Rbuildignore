@@ -4,6 +4,7 @@
 ^R/\.Rhistory$
 ^R/paper$
 ^doc$
+^data-raw$
 ^Meta$
 ^vignettes/articles$
 ^README\.Rmd$
