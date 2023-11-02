@@ -102,7 +102,7 @@ hp_ped[nrow(hp_ped) + 1,] <- list(105,
                                   NA,
                                   NA,
                                   106,
-                                  )
+                                  0)
 
 #hp_ped[nrow(hp_ped) + 1,] <- list(ID,FamID,name,gen,motherID,fatherID,spouseID,sex)
 
