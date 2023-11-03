@@ -104,7 +104,7 @@ hp_ped[nrow(hp_ped) + 1,] <- list(105,
                                   106,
                                   0)
 
-#hp_ped[nrow(hp_ped) + 1,] <- list(ID,FamID,name,gen,motherID,fatherID,spouseID,sex)
+#hp_ped[nrow(hp_ped) + 1,] <- list(personID,fam,name,gen,momID,dadID,spouseID,sex)
 
-write_csv(hp_ped, "hp_ped.csv")
+write_csv(hp_ped, "~/GitHub/BGmisc/data-raw/hp_ped.csv")
 usethis::use_data(hp_ped, overwrite = TRUE, compress = 'xz')
