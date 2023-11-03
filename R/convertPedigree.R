@@ -28,7 +28,8 @@ ped2com <- function(ped, component,
       "mitochondrial"
     )
   )
-
+  # standardize colnames
+  standardize_colnames(ped) <- ped
   # Get the number of rows in the pedigree dataset, representing the size of the family
   nr <- nrow(ped)
 
