@@ -46,7 +46,7 @@ data(hp_ped)
 
 
 ```{r, echo=FALSE, results='hide', out.width='50%', fig.cap="hp_ped Pedigree"}
-plotPedigree(hp_ped, code_male = 0, verbose = TRUE, )
+plotPedigree(hp_ped, code_male = 0, verbose = TRUE)
 ```
 
 We will use the `hp_ped` pedigree data as an example.
