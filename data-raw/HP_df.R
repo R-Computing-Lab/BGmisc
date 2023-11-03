@@ -1,11 +1,11 @@
 
-#devtools::install_github("R-Computing-Lab/BGmisc")
+devtools::install_github("R-Computing-Lab/BGmisc")
 library(tidyverse)
 
 
 ## Create dataframe
 
-hp_ped <- data.frame(
+hp_ped1 <- data.frame(
   personID = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
          11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
          21, 22, 23, 24, 25, 26, 27, 28, 29, 30),
@@ -55,7 +55,7 @@ hp_ped <- data.frame(
 ### Add additional people
 
 
-hp_ped[nrow(hp_ped) + 1,] <- list(101,
+hp_ped1[nrow(hp_ped1) + 1,] <- list(101,
                                   "1",
                                   "Mother Durseley",
                                   0,
@@ -63,7 +63,7 @@ hp_ped[nrow(hp_ped) + 1,] <- list(101,
                                   NA,
                                   102,
                                   0)
-hp_ped[nrow(hp_ped) + 1,] <- list(102,
+hp_ped1[nrow(hp_ped1) + 1,] <- list(102,
                                   "1",
                                   "Father Durseley",
                                   0,
@@ -71,7 +71,7 @@ hp_ped[nrow(hp_ped) + 1,] <- list(102,
                                   NA,
                                   101,
                                   1)
-hp_ped[nrow(hp_ped) + 1,] <- list(104,
+hp_ped1[nrow(hp_ped1) + 1,] <- list(104,
                                   "1",
                                   "Father Evans",
                                   0,
@@ -79,7 +79,7 @@ hp_ped[nrow(hp_ped) + 1,] <- list(104,
                                   NA,
                                   103,
                                   1)
-hp_ped[nrow(hp_ped) + 1,] <- list(103,
+hp_ped1[nrow(hp_ped1) + 1,] <- list(103,
                                   "1",
                                   "Mother Evans",
                                   0,
@@ -87,7 +87,7 @@ hp_ped[nrow(hp_ped) + 1,] <- list(103,
                                   NA,
                                   104,
                                   0)
-hp_ped[nrow(hp_ped) + 1,] <- list(106,
+hp_ped1[nrow(hp_ped1) + 1,] <- list(106,
                                   "1",
                                   "Father Delacour",
                                   0,
@@ -95,7 +95,7 @@ hp_ped[nrow(hp_ped) + 1,] <- list(106,
                                   NA,
                                   105,
                                   1)
-hp_ped[nrow(hp_ped) + 1,] <- list(105,
+hp_ped1[nrow(hp_ped1) + 1,] <- list(105,
                                   "1",
                                   "Mother Delacour",
                                   0,
@@ -104,7 +104,7 @@ hp_ped[nrow(hp_ped) + 1,] <- list(105,
                                   106,
                                   0)
 
-#hp_ped[nrow(hp_ped) + 1,] <- list(personID,fam,name,gen,momID,dadID,spouseID,sex)
+#hp_ped1[nrow(hp_ped1) + 1,] <- list(personID,fam,name,gen,momID,dadID,spouseID,sex)
 
-write_csv(hp_ped, "~/GitHub/BGmisc/data-raw/hp_ped.csv")
-usethis::use_data(hp_ped, overwrite = TRUE, compress = 'xz')
+write_csv(hp_ped1, "~/GitHub/BGmisc/data-raw/hp_ped1.csv")
+usethis::use_data(hp_ped1, overwrite = TRUE, compress = 'xz')
