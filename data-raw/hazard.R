@@ -1,5 +1,4 @@
-
-#devtools::install_github("R-Computing-Lab/BGmisc")
+# devtools::install_github("R-Computing-Lab/BGmisc")
 library(tidyverse)
 library(usethis)
 
@@ -10,4 +9,4 @@ hazard <- raw
 # data processing
 
 write.csv(hazard, "data-raw/hazard.csv", row.names = FALSE)
-usethis::use_data(hazard, overwrite = TRUE, compress = 'xz')
+usethis::use_data(hazard, overwrite = TRUE, compress = "xz")
