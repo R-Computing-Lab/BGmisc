@@ -8,6 +8,7 @@
 #' @param verbose logical.  If TRUE, print progress through stages of algorithm
 #' @param gc logical. If TRUE, do frequent garbage collection via \code{\link{gc}} to save memory
 #' @param flatten.diag logical. If TRUE, overwrite the diagonal of the final relatedness matrix with ones
+#' @param standardize_colnames logical. If TRUE, standardize the column names of the pedigree dataset
 #' @param ... additional arguments to be passed to \code{\link{ped2com}}
 #' @details The algorithms and methodologies used in this function are further discussed and exemplified in the vignette titled "examplePedigreeFunctions".
 #' @export
@@ -18,6 +19,7 @@ ped2com <- function(ped, component,
                     verbose = FALSE,
                     gc = FALSE,
                     flatten.diag = FALSE,
+                    standardize_colnames = TRUE,
                     ...) {
   # Validate the 'component' argument and match it against predefined choices
   component <- match.arg(tolower(component),
@@ -29,7 +31,9 @@ ped2com <- function(ped, component,
     )
   )
   # standardize colnames
+  if(standardize_colnames){
    ped <-  standardize_colnames(ped)
+  }
   # Get the number of rows in the pedigree dataset, representing the size of the family
   nr <- nrow(ped)
 
