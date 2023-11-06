@@ -4,14 +4,14 @@
 \alias{makeInbreeding}
 \title{makeInbreeding
 A function to create inbred mates in the simulated pedigree \code{data.frame}.
-Inbred mates can be created by specifying their IDs or by specifying the generation the inbred mate should be created. 
+Inbred mates can be created by specifying their IDs or by specifying the generation the inbred mate should be created.
 When specifying the generation, inbreeding between siblings or 1st cousin needs to be specified.
 This is a supplementary function for \code{simulatePedigree}.}
 \usage{
 makeInbreeding(
   ped,
   ID_mate1 = NA_integer_,
-  ID_mate2 = NA_interger_,
+  ID_mate2 = NA_integer_,
   verbose = FALSE,
   gen_inbred = 2,
   type_inbred = "sib"
@@ -36,7 +36,7 @@ Returns a \code{data.frame} with some inbred mates.
 \description{
 makeInbreeding
 A function to create inbred mates in the simulated pedigree \code{data.frame}.
-Inbred mates can be created by specifying their IDs or by specifying the generation the inbred mate should be created. 
+Inbred mates can be created by specifying their IDs or by specifying the generation the inbred mate should be created.
 When specifying the generation, inbreeding between siblings or 1st cousin needs to be specified.
 This is a supplementary function for \code{simulatePedigree}.
 }

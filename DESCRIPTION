@@ -1,11 +1,12 @@
 Package: BGmisc
 Title: An R Package for Extended Behavior Genetics Analysis
-Version: 1.0.1
-Date: 2023-09-26
+Version: 1.1.0
+Date: 2023-11-06
 Authors@R: 
   c(person("S. Mason", "Garrison", email = "garrissm@wfu.edu", role = c("aut", "cre"), comment=c(ORCID = "0000-0002-4804-6003")),
     person(c("Michael", "D."), "Hunter", role = "aut", comment=c(ORCID = "0000-0002-3651-6709")),
     person("Xuanyu", "Lyu", role = "aut", comment=c(ORCID = "0000-0002-2841-5529")),
+    person(c("Rachel", "N."), "Good", role = "aut", comment=c(ORCID = "0000-0000-0000-0000")),    
     person(c("Jonathan", "D."), "Trattner", role = "aut", comment=c(ORCID = "0000-0002-1097-7603")),
     person(c("S.", "Alexandra"), "Burt", role = "aut", comment=c(ORCID = "0000-0001-5538-7431"))
   )

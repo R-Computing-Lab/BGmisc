@@ -74,4 +74,3 @@ famSizeCal <- function(kpc, Ngen, marR) {
   }
   return(size)
 }
-

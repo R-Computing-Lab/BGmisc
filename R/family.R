@@ -65,7 +65,7 @@ ped2graph <- function(ped,
   nodes <- unique(
     stats::na.omit(
       as.character(c(ped[[personID]], ped[[momID]], ped[[dadID]]))
-      )
+    )
   )
   edges <- rbind(
     as.matrix(sapply(ped[, c(personID, momID)], as.character)),

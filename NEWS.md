@@ -1,5 +1,5 @@
 # BGmisc 1.1.0
-* Added ability to simulate twins
+* Added ability to simulate twins, and harry potter dataset
 
 # BGmisc 1.0.1
 * Hot fix to resolve plotPedigree wrapper function breaking for pedigrees that contained multiple families
