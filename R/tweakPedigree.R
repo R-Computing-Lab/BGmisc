@@ -98,7 +98,7 @@ makeTwins <- function(ped, ID_twin1 = NA_integer_, ID_twin2 = NA_integer_, gen_t
 
 #' makeInbreeding
 #' A function to create inbred mates in the simulated pedigree \code{data.frame}.
-#' Inbred mates can be created by specifying their IDs or by specifying the generation the inbred mate should be created. 
+#' Inbred mates can be created by specifying their IDs or by specifying the generation the inbred mate should be created.
 #' When specifying the generation, inbreeding between siblings or 1st cousin needs to be specified.
 #' This is a supplementary function for \code{simulatePedigree}.
 #' @param ped A \code{data.frame} in the same format as the output of \code{simulatePedigree}.
@@ -112,14 +112,14 @@ makeTwins <- function(ped, ID_twin1 = NA_integer_, ID_twin2 = NA_integer_, gen_t
 
 # A function to create inbred mates in the simulated pedigree.
 
-makeInbreeding = function(ped, 
-                          ID_mate1 = NA_integer_, 
-                          ID_mate2 = NA_interger_, 
-                          verbose = FALSE, 
-                          gen_inbred = 2, 
+makeInbreeding = function(ped,
+                          ID_mate1 = NA_integer_,
+                          ID_mate2 = NA_integer_,
+                          verbose = FALSE,
+                          gen_inbred = 2,
                           type_inbred = "sib"){
     # A support function
-    resample <- function(x, ...) x[sample.int(length(x), ...)]                        
+    resample <- function(x, ...) x[sample.int(length(x), ...)]
     # check if the ped is the same format as the output of simulatePedigree
     if (paste0(colnames(ped), collapse = "") != paste0(c("fam", "ID", "gen", "dadID", "momID", "spt", "sex"), collapse = "")) {
     ped <- standardize_colnames(ped)
@@ -169,10 +169,10 @@ makeInbreeding = function(ped,
                         next
                       }
                 }
-            }   
-                
-            
-            
+            }
+
+
+
       } else if(type_inbred == "cousin"){
         cat("cousin inbreeding is not supported yet\n")
       } else{stop("The type of inbreeding should be either sib or cousin")}
