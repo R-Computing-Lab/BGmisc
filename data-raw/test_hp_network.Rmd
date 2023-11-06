@@ -1,0 +1,153 @@
+---
+title: "Network tools for finding extended pedigrees and path tracing"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Network}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+options(rmarkdown.html_vignette.check_title = FALSE)
+```
+
+# Introduction
+
+This vignette showcases two key features that capitalize on the network
+structure inherent in pedigrees:
+
+1.  Finding extended families with *any* connecting relationships
+    between members. This feature strictly uses a person's ID, mother's
+    ID, and father's ID to find out which people in a dataset are
+    remotely related by any path, effectively finding all separable
+    extended families in a dataset.
+
+2.  Using path tracing rules to quantify the *amount* of relatedness
+    between all pairs of individuals in a dataset. The amount of
+    relatedness can be characterized by additive nuclear DNA, shared
+    mitochondrial DNA, sharing both parents, or being part of the same
+    extended pedigree.
+
+## Loading Required Libraries and Data
+
+```{r setup}
+library(BGmisc)
+#data(potter)
+```
+
+
+
+# Finding Extended Families
+
+Many pedigree datasets only contain information on the person, their
+mother, and their father, often without nuclear or extended family IDs.
+Recognizing which sets of people are unrelated simplifies many
+pedigree-related tasks. This function facilitates those tasks by finding
+all the extended families. People within the same extended family have
+at least some form of relation, however distant, while those in
+different extended families have no relations.
+
+```{r, echo=FALSE, results='hide', out.width='50%', fig.cap="potter Pedigree"}
+plotPedigree(potter, code_male = 1, verbose = TRUE, )
+```
+
+We will use the `potter` pedigree data as an example.
+
+```{r}
+ds <- ped2fam(potter, personID = "personID", famID = "famID")
+table(ds$FamID, ds$newFamID)
+```
+
+Because the `potter` data already had a family ID variable we compare
+our newly created variable to the pre-existing one. They match!
+
+# Computing Relatedness
+
+Once you know which sets of people are related at all to one another,
+you'll likely want to know how much. For additive genetic relatedness,
+you can use the `ped2add()` function.
+
+```{r}
+add <- ped2add(potter)
+```
+
+This computes the additive genetic relatedness for everyone in the data.
+It returns a square, symmetric matrix that has as many rows and columns
+as there are IDs.
+
+```{r}
+add[1:7, 1:7]
+```
+
+The entry in the ith row and the jth column gives the relatedness
+between person i and person j. For example, person 1 and person 11 share
+`r add[1,11]`
+
+```{r}
+table(add)
+```
+
+It's probably fine to do this on the whole dataset when your data have
+fewer than 10,000 people. When the data get large, however, it's much
+more efficient to compute this relatedness separately for each extended
+family.
+
+```{r}
+add_list <- lapply(
+  unique(potter$famID),
+  function(d) {
+    tmp <- potter[potter$famID %in% d, ]
+    ped2add(tmp)
+  }
+)
+```
+
+## Other relatedness measures
+
+The function works similarly for mitochondrial (`ped2mit`), common
+nuclear environment through sharing both parents (`ped2cn`), and common
+extended family environment (`ped2ce`).
+
+### Computing mitochondrial relatedness
+
+Here we calculate the mitochondrial relatedness between all pairs of
+individuals in the `potter` dataset.
+
+```{r}
+mit <- ped2mit(potter)
+mit[1:7, 1:7]
+table(mit)
+```
+
+As you can see, some of the family members share mitochrondial DNA, such
+as person 1 and person 3 `r mit[1,3]`, whereas person 1 and person 2 do
+not.
+
+### Computing relatedness through common nuclear environment
+
+Here we calculate the relatedness between all pairs of individuals in
+the `potter` dataset through sharing both parents.
+
+```{r}
+commonNuclear <- ped2cn(potter)
+commonNuclear[6, 7] <- 1
+commonNuclear[7, 6] <- 1
+commonNuclear[1:7, 1:7]
+
+table(commonNuclear)
+```
+
+### Computing relatedness through common extended family environment
+
+Here we calculate the relatedness between all pairs of individuals in
+the `potter` dataset through sharing an extended family.
+
+```{r}
+extendedFamilyEnvironment <- ped2ce(potter)
+extendedFamilyEnvironment[1:7, 1:7]
+table(extendedFamilyEnvironment)
+```
