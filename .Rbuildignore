@@ -15,5 +15,5 @@
 ^\.lintr$
 ^CODE_OF_CONDUCT\.md$
 ^CONTRIBUTING\.md$
-^checkParents\.X$
-^checkIDs\.X$
+^R/checkParents\.X$
+^R/checkIDs\.X$
