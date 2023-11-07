@@ -14,11 +14,15 @@ version](https://www.r-pkg.org/badges/version/BGmisc)](https://cran.r-project.or
 downloads](https://cranlogs.r-pkg.org/badges/grand-total/BGmisc)](https://cran.r-project.org/package=BGmisc)</br>
 [![.github/workflows/draft-pdf.yml](https://github.com/R-Computing-Lab/BGmisc/actions/workflows/draft-pdf.yml/badge.svg)](https://github.com/R-Computing-Lab/BGmisc/actions/workflows/draft-pdf.yml)
 [![R-CMD-check](https://github.com/R-Computing-Lab/BGmisc/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/R-Computing-Lab/BGmisc/actions/workflows/R-CMD-check.yaml)
-[![Dev branch](https://github.com/R-Computing-Lab/BGmisc/actions/workflows/R-CMD-devcheck.yaml/badge.svg)](https://github.com/R-Computing-Lab/BGmisc/actions/workflows/R-CMD-devcheck.yaml)
+[![Dev
+branch](https://github.com/R-Computing-Lab/BGmisc/actions/workflows/R-CMD-devcheck.yaml/badge.svg)](https://github.com/R-Computing-Lab/BGmisc/actions/workflows/R-CMD-devcheck.yaml)
 ![License](https://img.shields.io/badge/License-GPL_v3-blue.svg)
 <!-- badges: end -->
 
-BGmisc contains many functions useful for behavior genetics.
+The BGmisc R package offers a comprehensive suite of functions tailored
+for extended behavior genetics analysis, including model identification,
+calculating relatedness, pedigree conversion, pedigree simulation, and
+more.
 
 ## Installation
 
@@ -32,9 +36,11 @@ devtools::install_github("R-Computing-Lab/BGmisc")
 
 ## Contributing
 
-Contributions to the BGmisc project are welcome. Please submit issues
-and pull requests on the GitHub repository. For support, please use the
-GitHub issues page.
+Contributions to the BGmisc project are welcome. For guidelines on how
+to contribute, please refer to the [Contributing
+Guidelines](https://github.com/R-Computing-Lab/BGmisc/blob/main/CONTRIBUTING.md).
+Issues and pull requests should be submitted on the GitHub repository.
+For support, please use the GitHub issues page.
 
 ## License
 
