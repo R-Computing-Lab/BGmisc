@@ -82,3 +82,31 @@ ped2graph <- function(ped,
 
   return(pg)
 }
+
+#' Add a maternal line ID variable to a pedigree
+#' @inheritParams ped2fam
+#' @details
+#' Under various scenarios it is useful to know which people in a pedigree
+#' belong to the same maternal lines.  This function first turns a pedigree
+#' into a graph where adjacency is defined by mother-child relationships.
+#' Subsequently, the weakly connected components algorithm finds all the
+#' separate maternal lines and gives them an ID variable.
+#' @seealso [ped2fam()] for creating extended family IDs, and [ped2paternal()]
+#' for creating paternal line IDs
+#' @export
+#'
+ped2maternal <- function(ped, personID = "ID", momID = "momID", dadID = "dadID", famID = "famID"){}
+
+#' Add a paternal line ID variable to a pedigree
+#' @inheritParams ped2fam
+#' @details
+#' Under various scenarios it is useful to know which people in a pedigree
+#' belong to the same paternal lines.  This function first turns a pedigree
+#' into a graph where adjacency is defined by father-child relationships.
+#' Subsequently, the weakly connected components algorithm finds all the
+#' separate paternal lines and gives them an ID variable.
+#' @seealso [ped2fam()] for creating extended family IDs, and [ped2maternal()]
+#' for creating maternal line IDs
+#' @export
+#'
+ped2paternal <- function(ped, personID = "ID", momID = "momID", dadID = "dadID", famID = "famID"){}
