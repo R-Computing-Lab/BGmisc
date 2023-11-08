@@ -32,7 +32,7 @@ affiliations:
    index: 2
  - name: Institute for Behavioral Genetics, University of Colorado at Boulder, Boulder, USA 
    index: 3
- - name: Department of Psychology & Neuroscience, University of Colorado at Boulder, Boulder, USA
+ - name: Department of Psychology \& Neuroscience, University of Colorado at Boulder, Boulder, USA
    index: 4
  - name: Department of Psychology, Michigan State University, Michigan, USA
    index: 5

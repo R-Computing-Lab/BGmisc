@@ -4,6 +4,7 @@
 ^R/\.Rhistory$
 ^R/paper$
 ^doc$
+^data-raw$
 ^Meta$
 ^vignettes/articles$
 ^README\.Rmd$
@@ -14,4 +15,5 @@
 ^\.lintr$
 ^CODE_OF_CONDUCT\.md$
 ^CONTRIBUTING\.md$
-^checkParents\.X$
+^R/checkParents\.X$
+^R/checkIDs\.X$
