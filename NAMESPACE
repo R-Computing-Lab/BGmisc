@@ -3,6 +3,7 @@
 export(SimPed)
 export(allGens)
 export(calculateRelatedness)
+export(checkIDs)
 export(checkSex)
 export(comp2vech)
 export(evenInsert)

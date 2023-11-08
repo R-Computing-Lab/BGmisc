@@ -12,7 +12,7 @@ ped2com(
   verbose = FALSE,
   gc = FALSE,
   flatten.diag = FALSE,
-  standardize_colnames = TRUE,
+  standardize.colnames = TRUE,
   ...
 )
 }
@@ -33,7 +33,7 @@ generations as there are in the data.}
 
 \item{flatten.diag}{logical. If TRUE, overwrite the diagonal of the final relatedness matrix with ones}
 
-\item{standardize_colnames}{logical. If TRUE, standardize the column names of the pedigree dataset}
+\item{standardize.colnames}{logical. If TRUE, standardize the column names of the pedigree dataset}
 
 \item{...}{additional arguments to be passed to \code{\link{ped2com}}}
 }

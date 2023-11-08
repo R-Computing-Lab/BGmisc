@@ -17,8 +17,8 @@ standardize_colnames <- function(df, verbose = FALSE) {
     "ID" = "^(?:i(?:d$|ndiv(?:idual)?)|p(?:erson)?id)",
     "gen" = "^(?:gen(?:s|eration)?)",
     "dadID" = "^(?:d(?:ad)?id|paid|fatherid)",
-    "momID" = "^(?:m(?:om|a)?id|motherid)",
-    "spt" = "^(?:s(?:pt)?id|spouse(?:id)?)",
+    "momID" = "^(?:m(?:om|a|other)?id)",
+    "spt" = "^(?:s(?:pt)?id|spouse(?:id)?|partner(?:id)?)",
     "twinID" = "^(?:twin(?:id)?)",
     "sex" = "^(?:sex|gender|female|m(?:a(?:le|n)|en)|wom[ae]n)"
   )
