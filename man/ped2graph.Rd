@@ -9,8 +9,8 @@ ped2graph(
   personID = "ID",
   momID = "momID",
   dadID = "dadID",
-  famID = "famID",
-  directed = TRUE
+  directed = TRUE,
+  adjacent = c("parents", "mothers", "fathers")
 )
 }
 \arguments{
@@ -22,9 +22,9 @@ ped2graph(
 
 \item{dadID}{character.  Name of the column in ped for the father ID variable}
 
-\item{famID}{character.  Name of the column to be created in ped for the family ID variable}
-
 \item{directed}{Logical scalar. Default is TRUE. Indicates whether or not to create a directed graph.}
+
+\item{adjacent}{Character.  Relationship that defines adjacency in the graph: parents, mothers, or fathers}
 }
 \value{
 A graph
@@ -36,4 +36,10 @@ Turn a pedigree into a graph
 The general idea of this function is to represent a pedigree as a graph using the igraph package.
 
 Once in graph form, several common pedigree tasks become much simpler.
+
+The \code{adjacent} argument allows for different kinds of graph structures.
+When using \code{parents} for adjacency, the graph shows all parent-child relationships.
+When using \code{mother} for adjacency, the graph only shows mother-child relationships.
+Similarly when using \code{father} for adjacency, only father-child relationships appear in the graph.
+Extended families can be constructed from the parent graph, maternal lines from the mothers graph, and paternal lines from the fathers graph.
 }
