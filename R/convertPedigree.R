@@ -194,7 +194,7 @@ ped2com <- function(ped, component,
 
 #' @export
 #'
-ped2add <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FALSE, flatten.diag = FALSE) {
+ped2add <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FALSE, flatten.diag = FALSE, standardize.colnames = TRUE) {
   ped2com(
     ped = ped,
     max.gen = max.gen,
@@ -202,7 +202,8 @@ ped2add <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FA
     verbose = verbose,
     gc = gc,
     component = "additive",
-    flatten.diag = flatten.diag
+    flatten.diag = flatten.diag,
+    standardize.colnames = standardize.colnames
   )
 }
 
@@ -212,7 +213,7 @@ ped2add <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FA
 #' @export
 #' @aliases ped2mt
 #'
-ped2mit <- ped2mt <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FALSE, flatten.diag = FALSE) {
+ped2mit <- ped2mt <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FALSE, flatten.diag = FALSE, standardize.colnames = TRUE) {
   ped2com(
     ped = ped,
     max.gen = max.gen,
@@ -220,7 +221,8 @@ ped2mit <- ped2mt <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALS
     verbose = verbose,
     gc = gc,
     component = "mitochondrial",
-    flatten.diag = flatten.diag
+    flatten.diag = flatten.diag,
+    standardize.colnames = standardize.colnames
   )
 }
 
@@ -240,7 +242,8 @@ ped2cn <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FAL
     verbose = verbose,
     gc = gc,
     component = "common nuclear",
-    flatten.diag = flatten.diag
+    flatten.diag = flatten.diag,
+    standardize.colnames = standardize.colnames
   )
 }
 
