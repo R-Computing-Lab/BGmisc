@@ -44,8 +44,10 @@ checkSex <- function(ped, code_male = NULL, code_female = NULL,verbose = FALSE, 
     ),
     paste0(validation_results$sex_unique))
   }
-
-
+  validation_results$all_sex_dad <- names(sort(table(ped$sex[ped$ID %in% ped$dadID]), decreasing = TRUE))
+  validation_results$all_sex_mom <- names(sort(table(ped$sex[ped$ID %in% ped$momID]), decreasing = TRUE))
+  validation_results$most_frequent_sex_dad <- validation_results$all_sex_dad[1]
+  validation_results$most_frequent_sex_mom <- validation_results$all_sex_mom[1]
   if (repair) {
     if (verbose) {
       cat("Step 2: Attempting to repair sex coding...\n")
