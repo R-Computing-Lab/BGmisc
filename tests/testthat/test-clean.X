@@ -2,13 +2,14 @@
 test_that("Check Sex", {
   data(potter)
   df_fam <- potter
-  df_fam$sex[df_fam$name=="Vernon Dursley"] <-0
+  df_fam$sex[df_fam$name=="Vernon Dursley"] <- 0
 
-  checkSex(
+  result <-   checkSex(
     df_fam,
     code_male = 1,
-    verbose = TRUE,
-    repair = FALSE
+    verbose = FALSE,
+    repair = TRUE
   )
-
+  expect_equal(result[[2]]$sex[result[[2]][["name"]]=="Vernon Dursley"], "M", tolerance = 1e-8)
 })
+

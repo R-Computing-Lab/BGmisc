@@ -11,7 +11,8 @@ ped2mit(
   sparse = FALSE,
   verbose = FALSE,
   gc = FALSE,
-  flatten.diag = FALSE
+  flatten.diag = FALSE,
+  standardize.colnames = TRUE
 )
 }
 \arguments{
@@ -28,6 +29,8 @@ generations as there are in the data.}
 \item{gc}{logical. If TRUE, do frequent garbage collection via \code{\link{gc}} to save memory}
 
 \item{flatten.diag}{logical. If TRUE, overwrite the diagonal of the final relatedness matrix with ones}
+
+\item{standardize.colnames}{logical. If TRUE, standardize the column names of the pedigree dataset}
 }
 \description{
 Take a pedigree and turn it into a mitochondrial relatedness matrix

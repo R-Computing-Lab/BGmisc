@@ -7,21 +7,21 @@
 checkSex(
   ped,
   code_male = NULL,
+  code_female = NULL,
   verbose = FALSE,
-  repair = FALSE,
-  recode = FALSE
+  repair = FALSE
 )
 }
 \arguments{
 \item{ped}{A dataframe representing the pedigree data with a 'sex' column.}
 
-\item{code_male}{The code used to represent males in the 'sex' column. If NULL, no recoding is performed.}
+\item{code_male}{The code used to represent males in the 'sex' column. If both male and female are NULL, no recoding is performed.}
+
+\item{code_female}{The code used to represent females in the 'sex' column. If both male and female are NULL, no recoding is performed.}
 
 \item{verbose}{A logical flag indicating whether to print progress and validation messages to the console.}
 
 \item{repair}{A logical flag indicating whether to attempt repairs on the sex coding.}
-
-\item{recode}{A logical flag indicating whether to recode the 'sex' variable.}
 }
 \value{
 Depending on the value of `repair`, either a list containing validation results or a repaired dataframe is returned.
@@ -34,6 +34,6 @@ This function performs two main tasks:
 \examples{
 \dontrun{
 ped <- data.frame(ID = c(1, 2, 3), sex = c("M", "F", "M"))
-checkSex(ped, code_male = "M", verbose = TRUE, repair = FALSE, recode = TRUE)
+checkSex(ped, code_male = "M", verbose = TRUE, repair = FALSE)
 }
 }

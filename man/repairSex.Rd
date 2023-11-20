@@ -4,14 +4,16 @@
 \alias{repairSex}
 \title{Repairs Sex Coding in a Pedigree Dataframe}
 \usage{
-repairSex(ped, verbose = FALSE, code_male = NULL)
+repairSex(ped, verbose = FALSE, code_male = NULL, code_female = NULL)
 }
 \arguments{
 \item{ped}{A dataframe representing the pedigree data with a 'sex' column.}
 
 \item{verbose}{A logical flag indicating whether to print progress and validation messages to the console.}
 
-\item{code_male}{The code used to represent males in the 'sex' column. If NULL, no recoding is performed.}
+\item{code_male}{The code used to represent males in the 'sex' column. If both male and female are NULL, no recoding is performed.}
+
+\item{code_female}{The code used to represent females in the 'sex' column. If both male and female are NULL, no recoding is performed.}
 }
 \value{
 A dataframe where the sex coding has been repaired.
