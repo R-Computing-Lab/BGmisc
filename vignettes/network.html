@@ -360,7 +360,7 @@ extended pedigree.</p></li>
 <div id="loading-required-libraries-and-data" class="section level2">
 <h2>Loading Required Libraries and Data</h2>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(BGmisc)</span>
-<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">data</span>(hazard)</span></code></pre></div>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">data</span>(potter)</span></code></pre></div>
 </div>
 </div>
 <div id="finding-extended-families" class="section level1">
@@ -373,19 +373,18 @@ all the extended families. People within the same extended family have
 at least some form of relation, however distant, while those in
 different extended families have no relations.</p>
 <div class="figure">
-<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASAAAAEgCAMAAAAjXV6yAAAAkFBMVEUAAAArK1UrK4ArVVUrVYArVaorgKpVKytVK1VVK4BVVVVVVYBVVapVgKpVgNRVqtRVqv+AKyuAK1WAVSuAVVWAVYCAgFWAgICAqv+A1P+qVQCqVSuqVVWqVYCqgFWq1P+q/9Sq///UgCvUgFXUgIDUqlXUqoDU1KrU////qlX/1ID/1Kr/1NT//6r//9T///8rX/+WAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAIAElEQVR4nO2dgVbbRhBF5dAWatKUFEjqYEiNmxacRvr/v6sV0kATz7yd2dn1Cr97Dglgzc7TjYwk7M12A1Hp9h2gdSgIQEEACgJQEICCABQEoCAABQEoCEBBAAoCUBCAggAUBKAgAAUBKAhAQQAKAlAQgIIAFASgIAAFASgIQEEACgJQEICCABQEoCAABQEoCEBBAAoCUBCAggAUBGhHUPc/zIXFYpUa2EwnfqGXdU//imfqgh7FFNqTiQt6sl2hY+j5CCq0K9MW1FGQoabMvrQqKBF5hCKx9go8gnZ87xupoXmUJPvBI4g/pC3foyC9iheKu6N26qP5TF7QeMIbDuNmFd3Ny1FL7kQ7giD7iUpBTXZ1QUEACgJQEICChqE/P/pdfFCOer0qEQZ13Qe3i/43cWelqP357GAEDcOnn++kh0RBd8vDEdS/XoiPyVEPR9Cnk/fygxQ0DFdH81PzU+yQBKnwNA+gIAAFASgIQEEACgJQEGBCglJfOZ8QwYI8RbUaBe8RBYEiCgJFFASKKAgUURAooiBQREGgiIJAEQWBIgoCRbbhEu9flBpDP+v2j0WeGqnIKMhR2ilfqXXdw5+WhK65UXqjZgV1332SUOMq0mtaFdTt/DS5KP0YQo0mIKhoDSxqVJCnUX66Zy6oTKPqghy/Aj0sQWkR+BQD42QLSr6MNSXJHw52SBTkOs3nnsVaPc3vztXpj4NW1gt2JUjySN9tXVTQY3DTrca3xSk1eqNmBX1Jbrzz/Hz+s96uqo3M/ePv5uVx7DfmvhqtyDFaNA1EUGggXQMRFBpI10AEhQbSNRBBoYF0DURQaCBdAxEUHOn6ix+UCQO7Wc/np1KREuH2zNqov5j/Ir5XX+RmJs7CcghaL5QpOSKbl/YIm2OzoM0ra8WW9Vn/Vtojz/Hd39hT9BfmeWBDf/nBLOh+dvyrtWZYvpmJk4xcPwD+lmecSNzLTsUI68W9WdDHO8fUlndn8jw+h6C/VsOVPKtLQKmQIvQ38+MX1n+JP9/7wolWHYI2J+c/WWuUmZZaBPsRtJnZw2336OJH6bEGzrENRFBoIF0DERQaSNdABIUG0jUQQaGBdA1EUGggXQMRFBpI10AEhQbSNRBBIThd6kvv+cTmVvao6eGeX6Op5q7WaKq5qzWaau5qjaaau1qjqeau1miquas1mmruao2mmrtao6nmrtZoqrnLN3LfKblurCrejYUJco76sKVn/lKlg2i/gjLnL9VQtGdBjiCemgz2KujpZsmHQyd8XohmBHmOOgoKqsmhkCDH7009gioYqnYE7Wp0wEdQWiP+DAKNXPt6SIJ810GPWz6r66DdjXgljRp9mYpkvBfrhkp6Kt7Ni4089+UVX1qd3O9VakNBAAoCUBCAggAUBAjN3V8dmSeFXK/6m5l1elV/bp+R5SRU0O1Zf2mbVjSu7LRWqqRGC3OJl1BBm1N5opQg6G650qaSCDhKvIQKWr+SJ0pJjZar7a5a93Yzm5dcU+wpoYKWykQpWdB6ocy2280/d+YSL7FPsZM35mlFy9XHk3PrDMbNqbnEC0/zAAoCUBCAggAUBKAgAAUBKAgg53ZOU6pFA4JqRXBBQQAKAlAQgIIAFASgIAAFASgIQEEACgLsVZD7pse1fY1GGYS9O/frW8U87zYs3SiDOEGO91ZWa5RBmCDPu3OrNcogTlBmTdFGGVCQod3O7yVmyN7Xoo0ywII8vwJ17WzBRhm4jqAd3ytzBEU1yiBKUJmfQVGNMqAgQJygEtdBUY0yCBNU5Eo6qlEGcYJK3ItFNcpg90EMbrKlaOF381GNMnC1qZStYqPgCBRUoqjpRsERKKhEUdONgiNQ0DhL6eHDWGRfOWqsERd0UhqdH4kLOoWyO8I4S2n8MBdZV44aa5QFneRGtwttsZdAhAh3y9X4YS6yrhw11igLOimNBs8aXg6kg3iMYF4QaCywrhy1XCkLOimN+tfmNY5cBAuyrxy1XCkLOsmNPp1UmpMZLMi+ctS2Rl7QSW50dTS3L3Lmgaf5EhEoqERR042CI1BQiaKmGwVHoKASRU03Co5AQSWKmm4UHMFTlPrehHw8exS7rz5BTTcKHo6CChS13Sh4OAoqUNR2o+DhKKhAUduNgoejoAJFbTcKHo6CxK3d1/SuWwBPUfS9hlGQs/Rzamt0z/877mqkj+jfOr30vy1t646Z2/gaJQ7p2Dq5tNvxGaxxFTlq0sc0b51a2gmfpxZ5auIM1RaUWFStkS2JbWtP7tSiao1sgxaJ0Clf7b+RcVTT1qm5ax1Brka2JLat+RQLipB7FivbyDKocWvPdVDR07yrkSGIdev0nf26peVK2lPjKUrNYd/afFnsWY/Xdl/lagSGtG3tvZv3vKLnehkw/KXD4N+ePD8oCEBBAAoCUBCAggAOQeMsqdszc83NzDp/6Xq1ns9PbVMOrlfaElUOzII+z5LaHJsEfVkD6q1p7sDDdKzNS2uNtkSVA7ugcabU5QeboG3N8s3M9g/7MLvKtoTPWKMtUeXA8RQblyu6Nz7Flqt3Z+YZcFtB99Z93YZTlqhy4BH0x838+IV1VphjSTBtsSm5xlOl4DqChsF+BG1OLsSVo8Qi+7TLsZG8RJUDnuYBFASgIAAFASgIQEEACgJQEICCABQEoCAABQEoCEBBAAoCUBCAggAUBKAgAAUBKAhAQQAKAlAQgIIAFASgIAAFASgIQEEACgJQEICCAP8CLwD6yof7A/UAAAAASUVORK5CYII=" alt="Hazard Pedigree" width="50%" />
+<img src="data:image/png;base64,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" alt="potter Pedigree" width="50%" />
 <p class="caption">
-Hazard Pedigree
+potter Pedigree
 </p>
 </div>
-<p>We will use the <code>hazard</code> pedigree data as an example.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>ds <span class="ot">&lt;-</span> <span class="fu">ped2fam</span>(hazard, <span class="at">famID =</span> <span class="st">&quot;newFamID&quot;</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="fu">table</span>(ds<span class="sc">$</span>FamID, ds<span class="sc">$</span>newFamID)</span>
+<p>We will use the <code>potter</code> pedigree data as an example.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>ds <span class="ot">&lt;-</span> <span class="fu">ped2fam</span>(potter, <span class="at">famID =</span> <span class="st">&quot;newFamID&quot;</span>, <span class="at">personID =</span> <span class="st">&quot;personID&quot;</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="fu">table</span>(ds<span class="sc">$</span>famID, ds<span class="sc">$</span>newFamID)</span>
 <span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co">#&gt;    </span></span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co">#&gt;      1  2</span></span>
-<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co">#&gt;   1 18  0</span></span>
-<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="co">#&gt;   2  0 25</span></span></code></pre></div>
-<p>Because the <code>hazard</code> data already had a family ID variable
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co">#&gt;      1</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co">#&gt;   1 36</span></span></code></pre></div>
+<p>Because the <code>potter</code> data already had a family ID variable
 we compare our newly created variable to the pre-existing one. They
 match!</p>
 </div>
@@ -394,34 +393,34 @@ match!</p>
 <p>Once you know which sets of people are related at all to one another,
 you’ll likely want to know how much. For additive genetic relatedness,
 you can use the <code>ped2add()</code> function.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>add <span class="ot">&lt;-</span> <span class="fu">ped2add</span>(hazard)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>add <span class="ot">&lt;-</span> <span class="fu">ped2add</span>(potter)</span></code></pre></div>
 <p>This computes the additive genetic relatedness for everyone in the
 data. It returns a square, symmetric matrix that has as many rows and
 columns as there are IDs.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>add[<span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>]</span>
-<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co">#&gt;     1   2   3   4 7   5   6</span></span>
-<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co">#&gt; 1 1.0 0.0 0.5 0.5 0 0.5 0.5</span></span>
-<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&gt; 2 0.0 1.0 0.5 0.5 0 0.5 0.5</span></span>
-<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co">#&gt; 3 0.5 0.5 1.0 0.5 0 0.5 0.5</span></span>
-<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co">#&gt; 4 0.5 0.5 0.5 1.0 0 0.5 0.5</span></span>
-<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="co">#&gt; 7 0.0 0.0 0.0 0.0 1 0.0 0.0</span></span>
-<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="co">#&gt; 5 0.5 0.5 0.5 0.5 0 1.0 0.5</span></span>
-<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="co">#&gt; 6 0.5 0.5 0.5 0.5 0 0.5 1.0</span></span></code></pre></div>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co">#&gt;     1    2    3    4   5     6     7</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co">#&gt; 1 1.0 0.50 0.00 0.00 0.0 0.500 0.000</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&gt; 2 0.5 1.00 0.00 0.00 0.0 0.250 0.000</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co">#&gt; 3 0.0 0.00 1.00 0.50 0.0 0.500 0.250</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co">#&gt; 4 0.0 0.00 0.50 1.00 0.0 0.250 0.500</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="co">#&gt; 5 0.0 0.00 0.00 0.00 1.0 0.000 0.500</span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="co">#&gt; 6 0.5 0.25 0.50 0.25 0.0 1.000 0.125</span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="co">#&gt; 7 0.0 0.00 0.25 0.50 0.5 0.125 1.000</span></span></code></pre></div>
 <p>The entry in the ith row and the jth column gives the relatedness
 between person i and person j. For example, person 1 and person 11 share
-0.125</p>
+0</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">table</span>(add)</span>
 <span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="co">#&gt; add</span></span>
 <span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="co">#&gt;      0 0.0625  0.125   0.25    0.5      1 </span></span>
-<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co">#&gt;   1144    110    182    188    182     43</span></span></code></pre></div>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co">#&gt;    788      6     94    208    164     36</span></span></code></pre></div>
 <p>It’s probably fine to do this on the whole dataset when your data
 have fewer than 10,000 people. When the data get large, however, it’s
 much more efficient to compute this relatedness separately for each
 extended family.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>add_list <span class="ot">&lt;-</span> <span class="fu">lapply</span>(</span>
-<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>  <span class="fu">unique</span>(hazard<span class="sc">$</span>FamID),</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>  <span class="fu">unique</span>(potter<span class="sc">$</span>famID),</span>
 <span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>  <span class="cf">function</span>(d) {</span>
-<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>    tmp <span class="ot">&lt;-</span> hazard[hazard<span class="sc">$</span>FamID <span class="sc">%in%</span> d, ]</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>    tmp <span class="ot">&lt;-</span> potter[potter<span class="sc">$</span>famID <span class="sc">%in%</span> d, ]</span>
 <span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>    <span class="fu">ped2add</span>(tmp)</span>
 <span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>  }</span>
 <span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>)</span></code></pre></div>
@@ -434,64 +433,64 @@ parents (<code>ped2cn</code>), and common extended family environment
 <div id="computing-mitochondrial-relatedness" class="section level3">
 <h3>Computing mitochondrial relatedness</h3>
 <p>Here we calculate the mitochondrial relatedness between all pairs of
-individuals in the <code>hazard</code> dataset.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>mit <span class="ot">&lt;-</span> <span class="fu">ped2mit</span>(hazard)</span>
+individuals in the <code>potter</code> dataset.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>mit <span class="ot">&lt;-</span> <span class="fu">ped2mit</span>(potter)</span>
 <span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>mit[<span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>]</span>
-<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="co">#&gt;   1 2 3 4 7 5 6</span></span>
-<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co">#&gt; 1 1 0 1 1 0 1 1</span></span>
-<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co">#&gt; 2 0 1 0 0 0 0 0</span></span>
-<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co">#&gt; 3 1 0 1 1 0 1 1</span></span>
-<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="co">#&gt; 4 1 0 1 1 0 1 1</span></span>
-<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="co">#&gt; 7 0 0 0 0 1 0 0</span></span>
-<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="co">#&gt; 5 1 0 1 1 0 1 1</span></span>
-<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="co">#&gt; 6 1 0 1 1 0 1 1</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="co">#&gt;   1 2 3 4 5 6 7</span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co">#&gt; 1 1 1 0 0 0 0 0</span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co">#&gt; 2 1 1 0 0 0 0 0</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co">#&gt; 3 0 0 1 1 0 1 1</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="co">#&gt; 4 0 0 1 1 0 1 1</span></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="co">#&gt; 5 0 0 0 0 1 0 0</span></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="co">#&gt; 6 0 0 1 1 0 1 1</span></span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="co">#&gt; 7 0 0 1 1 0 1 1</span></span>
 <span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="fu">table</span>(mit)</span>
 <span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a><span class="co">#&gt; mit</span></span>
 <span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a><span class="co">#&gt;    0    1 </span></span>
-<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a><span class="co">#&gt; 1590  259</span></span></code></pre></div>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a><span class="co">#&gt; 1082  214</span></span></code></pre></div>
 <p>As you can see, some of the family members share mitochrondial DNA,
-such as person 1 and person 3 1, whereas person 1 and person 2 do
+such as person 1 and person 3 0, whereas person 1 and person 2 do
 not.</p>
 </div>
 <div id="computing-relatedness-through-common-nuclear-environment" class="section level3">
 <h3>Computing relatedness through common nuclear environment</h3>
 <p>Here we calculate the relatedness between all pairs of individuals in
-the <code>hazard</code> dataset through sharing both parents.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>commonNuclear <span class="ot">&lt;-</span> <span class="fu">ped2cn</span>(hazard)</span>
+the <code>potter</code> dataset through sharing both parents.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>commonNuclear <span class="ot">&lt;-</span> <span class="fu">ped2cn</span>(potter)</span>
 <span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>commonNuclear[<span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>]</span>
-<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="co">#&gt;   1 2 3 4 7 5 6</span></span>
-<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="co">#&gt; 1 1 0 0 0 0 0 0</span></span>
-<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="co">#&gt; 2 0 1 0 0 0 0 0</span></span>
-<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="co">#&gt; 3 0 0 1 1 0 1 1</span></span>
-<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="co">#&gt; 4 0 0 1 1 0 1 1</span></span>
-<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="co">#&gt; 7 0 0 0 0 1 0 0</span></span>
-<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a><span class="co">#&gt; 5 0 0 1 1 0 1 1</span></span>
-<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a><span class="co">#&gt; 6 0 0 1 1 0 1 1</span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="co">#&gt;   1 2 3 4 5 6 7</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="co">#&gt; 1 1 1 0 0 0 0 0</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="co">#&gt; 2 1 1 0 0 0 0 0</span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="co">#&gt; 3 0 0 1 1 0 0 0</span></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="co">#&gt; 4 0 0 1 1 0 0 0</span></span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="co">#&gt; 5 0 0 0 0 1 0 0</span></span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a><span class="co">#&gt; 6 0 0 0 0 0 1 0</span></span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a><span class="co">#&gt; 7 0 0 0 0 0 0 1</span></span>
 <span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a></span>
 <span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a><span class="fu">table</span>(commonNuclear)</span>
 <span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a><span class="co">#&gt; commonNuclear</span></span>
 <span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a><span class="co">#&gt;    0    1 </span></span>
-<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a><span class="co">#&gt; 1744  105</span></span></code></pre></div>
+<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a><span class="co">#&gt; 1196  100</span></span></code></pre></div>
 </div>
 <div id="computing-relatedness-through-common-extended-family-environment" class="section level3">
 <h3>Computing relatedness through common extended family
 environment</h3>
 <p>Here we calculate the relatedness between all pairs of individuals in
-the <code>hazard</code> dataset through sharing an extended family.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>extendedFamilyEnvironment <span class="ot">&lt;-</span> <span class="fu">ped2ce</span>(hazard)</span>
+the <code>potter</code> dataset through sharing an extended family.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>extendedFamilyEnvironment <span class="ot">&lt;-</span> <span class="fu">ped2ce</span>(potter)</span>
 <span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>extendedFamilyEnvironment[<span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>]</span>
-<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="co">#&gt;   1 2 3 4 7 5 6</span></span>
-<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="co">#&gt; 1 1 1 1 1 1 1 1</span></span>
-<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a><span class="co">#&gt; 2 1 1 1 1 1 1 1</span></span>
-<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a><span class="co">#&gt; 3 1 1 1 1 1 1 1</span></span>
-<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a><span class="co">#&gt; 4 1 1 1 1 1 1 1</span></span>
-<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a><span class="co">#&gt; 7 1 1 1 1 1 1 1</span></span>
-<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a><span class="co">#&gt; 5 1 1 1 1 1 1 1</span></span>
-<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a><span class="co">#&gt; 6 1 1 1 1 1 1 1</span></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="co">#&gt;      [,1] [,2] [,3] [,4] [,5] [,6] [,7]</span></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="co">#&gt; [1,]    1    1    1    1    1    1    1</span></span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a><span class="co">#&gt; [2,]    1    1    1    1    1    1    1</span></span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a><span class="co">#&gt; [3,]    1    1    1    1    1    1    1</span></span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a><span class="co">#&gt; [4,]    1    1    1    1    1    1    1</span></span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a><span class="co">#&gt; [5,]    1    1    1    1    1    1    1</span></span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a><span class="co">#&gt; [6,]    1    1    1    1    1    1    1</span></span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a><span class="co">#&gt; [7,]    1    1    1    1    1    1    1</span></span>
 <span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a><span class="fu">table</span>(extendedFamilyEnvironment)</span>
 <span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a><span class="co">#&gt; extendedFamilyEnvironment</span></span>
 <span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a><span class="co">#&gt;    1 </span></span>
-<span id="cb9-14"><a href="#cb9-14" tabindex="-1"></a><span class="co">#&gt; 1849</span></span></code></pre></div>
+<span id="cb9-14"><a href="#cb9-14" tabindex="-1"></a><span class="co">#&gt; 1296</span></span></code></pre></div>
 </div>
 </div>
 </div>
