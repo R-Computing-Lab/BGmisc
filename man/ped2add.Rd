@@ -11,7 +11,9 @@ ped2add(
   verbose = FALSE,
   gc = FALSE,
   flatten.diag = FALSE,
-  standardize.colnames = TRUE
+  standardize.colnames = TRUE,
+  alt.tcross1 = FALSE,
+  alt.tcross2 = FALSE
 )
 }
 \arguments{
@@ -30,6 +32,10 @@ generations as there are in the data.}
 \item{flatten.diag}{logical. If TRUE, overwrite the diagonal of the final relatedness matrix with ones}
 
 \item{standardize.colnames}{logical. If TRUE, standardize the column names of the pedigree dataset}
+
+\item{alt.tcross1}{logical. If TRUE, use an alternative method for computing the transpose}
+
+\item{alt.tcross2}{logical. If TRUE, use an alternative method for computing the transpose}
 }
 \description{
 Take a pedigree and turn it into an additive genetics relatedness matrix

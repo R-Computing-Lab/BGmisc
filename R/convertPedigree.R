@@ -9,6 +9,8 @@
 #' @param gc logical. If TRUE, do frequent garbage collection via \code{\link{gc}} to save memory
 #' @param flatten.diag logical. If TRUE, overwrite the diagonal of the final relatedness matrix with ones
 #' @param standardize.colnames logical. If TRUE, standardize the column names of the pedigree dataset
+#' @param alt.tcross1 logical. If TRUE, use an alternative method for computing the transpose
+#' @param alt.tcross2 logical. If TRUE, use an alternative method for computing the transpose
 #' @param ... additional arguments to be passed to \code{\link{ped2com}}
 #' @details The algorithms and methodologies used in this function are further discussed and exemplified in the vignette titled "examplePedigreeFunctions".
 #' @export
@@ -20,6 +22,8 @@ ped2com <- function(ped, component,
                     gc = FALSE,
                     flatten.diag = FALSE,
                     standardize.colnames = TRUE,
+                    alt.tcross1 = FALSE,
+                    alt.tcross2 = FALSE,
                     ...) {
   # Validate the 'component' argument and match it against predefined choices
   component <- match.arg(tolower(component),
@@ -169,7 +173,15 @@ ped2com <- function(ped, component,
   if (verbose) {
     cat("Doing tcrossprod\n")
   }
-  r <- Matrix::tcrossprod(r2)
+  if(alt.tcross1){
+    cat("Doing alt tcrossprod crossprod t \n")
+    r <-    crossprod(t(as.matrix(r2)))
+    }else if(alt.tcross2){
+	  cat("Doing alt tcrossprod %*% t \n")
+     r <-       r2 %*% t(as.matrix(r2))
+  }else{
+     r <- Matrix::tcrossprod(r2)
+  }
   if (component == "generation") {
     return(gen)
   } else {
@@ -194,7 +206,8 @@ ped2com <- function(ped, component,
 
 #' @export
 #'
-ped2add <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FALSE, flatten.diag = FALSE, standardize.colnames = TRUE) {
+ped2add <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FALSE, flatten.diag = FALSE, standardize.colnames = TRUE,
+                    alt.tcross1 = FALSE, alt.tcross2 = FALSE) {
   ped2com(
     ped = ped,
     max.gen = max.gen,
@@ -203,7 +216,9 @@ ped2add <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FA
     gc = gc,
     component = "additive",
     flatten.diag = flatten.diag,
-    standardize.colnames = standardize.colnames
+    standardize.colnames = standardize.colnames,
+    alt.tcross1 = alt.tcross1,
+    alt.tcross2 = alt.tcross2
   )
 }
 
@@ -213,7 +228,7 @@ ped2add <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FA
 #' @export
 #' @aliases ped2mt
 #'
-ped2mit <- ped2mt <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FALSE, flatten.diag = FALSE, standardize.colnames = TRUE) {
+ped2mit <- ped2mt <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FALSE, flatten.diag = FALSE, standardize.colnames = TRUE, alt.tcross1 = FALSE, alt.tcross2 = FALSE) {
   ped2com(
     ped = ped,
     max.gen = max.gen,
@@ -222,7 +237,9 @@ ped2mit <- ped2mt <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALS
     gc = gc,
     component = "mitochondrial",
     flatten.diag = flatten.diag,
-    standardize.colnames = standardize.colnames
+    standardize.colnames = standardize.colnames,
+    alt.tcross1 = alt.tcross1,
+    alt.tcross2 = alt.tcross2
   )
 }
 
@@ -234,7 +251,7 @@ ped2mit <- ped2mt <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALS
 #' @details The algorithms and methodologies used in this function are further discussed and exemplified in the vignette titled "examplePedigreeFunctions".
 #' @export
 #'
-ped2cn <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FALSE, flatten.diag = FALSE, standardize.colnames = TRUE) {
+ped2cn <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FALSE, flatten.diag = FALSE, standardize.colnames = TRUE, alt.tcross1 = FALSE, alt.tcross2 = FALSE) {
   ped2com(
     ped = ped,
     max.gen = max.gen,
@@ -243,7 +260,9 @@ ped2cn <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FAL
     gc = gc,
     component = "common nuclear",
     flatten.diag = flatten.diag,
-    standardize.colnames = standardize.colnames
+    standardize.colnames = standardize.colnames,
+    alt.tcross1 = alt.tcross1,
+    alt.tcross2 = alt.tcross2
   )
 }
 
