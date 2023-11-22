@@ -20,8 +20,6 @@ ped2com <- function(ped, component,
                     gc = FALSE,
                     flatten.diag = FALSE,
                     standardize.colnames = TRUE,
-                    alt.tcross1 = FALSE,
-                    alt.tcross2 = FALSE,
                     ...) {
   # Validate the 'component' argument and match it against predefined choices
   component <- match.arg(tolower(component),
@@ -171,14 +169,7 @@ ped2com <- function(ped, component,
   if (verbose) {
     cat("Doing tcrossprod\n")
   }
-  if(alt.tcross1){
-    cat("Doing alt tcrossprod\n")
-    r <-    crossprod(t(r2)))
-    }else if(alt.tcross2){
-     r <-       r2 %*% t(r2) 
-  }else{
-     r <- Matrix::tcrossprod(r2)
-  }
+  r <- Matrix::tcrossprod(r2)
   if (component == "generation") {
     return(gen)
   } else {
