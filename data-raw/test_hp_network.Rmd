@@ -35,7 +35,7 @@ structure inherent in pedigrees:
 ## Loading Required Libraries and Data
 
 ```{r setup}
-library(BGmisc)
+#library(BGmisc)
 #data(potter)
 ```
 
@@ -54,6 +54,16 @@ different extended families have no relations.
 ```{r, echo=FALSE, results='hide', out.width='50%', fig.cap="potter Pedigree"}
 plotPedigree(potter, code_male = 1, verbose = TRUE, )
 ```
+Subsets of pedigrees can also be plotted to zoom in on smaller portions of pedigrees
+However, this subset does not plot the relationship between spouses (such as the marriage between Vernon (1) and Petunia (3)), as there are not children to connect the two individuals together yet
+
+```{r, echo=FALSE, results='hide', out.width='50%', fig.cap="potter Pedigree"}
+subset_rows <- c(1:5, 31:36)
+subset_potter <- potter[subset_rows, ]
+
+plotPedigree(subset_potter, code_male = 1, verbose = TRUE )
+```
+
 
 We will use the `potter` pedigree data as an example.
 

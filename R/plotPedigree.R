@@ -11,7 +11,6 @@
 #' @export
 
 plotPedigree <- function(ped,
-                         n_rows = Inf, #default to all rows
                          # optional data management
                          code_male = NULL,
                          verbose = FALSE,
@@ -25,6 +24,7 @@ plotPedigree <- function(ped,
                          angle = c(90, 65, 40, 0), keep.par = FALSE,
                          pconnect = .5,
                          ...) {
+
   # Standardize column names in the input dataframe
   ped <- standardize_colnames(ped)
 
