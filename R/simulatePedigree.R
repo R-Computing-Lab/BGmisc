@@ -328,11 +328,11 @@ simulatePedigree <- function(kpc = 3,
         if (rd_kpc) {
           # get the number of pairs of mates in the i th generation
           nMates <- sum(df_Ngen$ifparent)/2
-          cat("number of mates",nMates, "\n")
+          #cat("number of mates",nMates, "\n")
           diff <- nMates + 1
           while(diff > nMates){
             random_numbers = rpois(nMates, kpc)
-            cat("original random numbers", random_numbers, "\n")
+            #cat("original random numbers", random_numbers, "\n")
             diff = abs(nMates*kpc - sum(random_numbers))
           }
 
@@ -354,8 +354,8 @@ simulatePedigree <- function(kpc = 3,
         }
           
 
-        cat("final random numbers",random_numbers, "\n")
-        cat("mean",sum(random_numbers)/length(random_numbers), "\n")
+        #cat("final random numbers",random_numbers, "\n")
+        #cat("mean",sum(random_numbers)/length(random_numbers), "\n")
         # create two vectors for maId and paId; replicate the ids to match the same length as IdOfp
         IdMa <- numeric()
         IdPa <- numeric()
