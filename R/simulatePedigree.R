@@ -328,17 +328,22 @@ simulatePedigree <- function(kpc = 3,
         if (rd_kpc) {
           # get the number of pairs of mates in the i th generation
           nMates <- sum(df_Ngen$ifparent)/2
-          # get a distribution of kids per couple
-          random_numbers <- rpois(length(nMates), kpc)
+          cat("number of mates",nMates, "\n")
+          diff <- nMates + 1
+          while(diff > nMates){
+            random_numbers = rpois(nMates, kpc)
+            cat("original random numbers", random_numbers, "\n")
+            diff = abs(nMates*kpc - sum(random_numbers))
+          }
+
+          #diff = abs(length(IdOfp) - sum(random_numbers))
           # make sure the sum of kids per couple is equal to the number of kids in the i th generation
-          if (sum(random_numbers) < length(IdOfp)){
-            diff = length(IdOfp) - sum(random_numbers)
+          if (sum(random_numbers) < nMates*kpc){
             names(random_numbers) <- seq(length(random_numbers))
             random_numbers = sort(random_numbers)
             random_numbers[1:diff]= random_numbers[1:diff] + 1
             random_numbers = random_numbers[order(names(random_numbers))]
-          } else if (sum(random_numbers) > length(IdOfp)) {
-            diff = sum(random_numbers) - length(IdOfp)
+          } else if (sum(random_numbers) > nMates*kpc) {
             names(random_numbers) <- seq(length(random_numbers))
             random_numbers = sort(random_numbers, decreasing = TRUE)
             random_numbers[1:diff]= random_numbers[1:diff] - 1
@@ -347,7 +352,10 @@ simulatePedigree <- function(kpc = 3,
         } else {
            random_numbers <- rep(kpc, sum(df_Ngen$ifparent)/2)
         }
-        
+          
+
+        cat("final random numbers",random_numbers, "\n")
+        cat("mean",sum(random_numbers)/length(random_numbers), "\n")
         # create two vectors for maId and paId; replicate the ids to match the same length as IdOfp
         IdMa <- numeric()
         IdPa <- numeric()
