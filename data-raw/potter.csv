@@ -1,4 +1,4 @@
-personID,famID,name,gen,momID,dadID,spouseID,sex
+ID,fam,name,gen,momID,dadID,spouseID,sex
 1,1,Vernon Dursley,1,101,102,3,1
 2,1,Marjorie Dursley,1,101,102,NA,0
 3,1,Petunia Evans,1,103,104,1,0

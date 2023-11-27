@@ -11,6 +11,7 @@
 #' @export
 
 plotPedigree <- function(ped,
+                         n_rows = Inf, #default to all rows
                          # optional data management
                          code_male = NULL,
                          verbose = FALSE,
