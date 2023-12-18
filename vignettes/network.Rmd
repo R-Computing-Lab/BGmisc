@@ -56,8 +56,8 @@ plotPedigree(potter, code_male = 1, verbose = TRUE)
 We will use the `potter` pedigree data as an example.
 
 ```{r}
-ds <- ped2fam(potter, famID = "newFamID", personID = "personID")
-table(ds$famID, ds$newFamID)
+ds <- ped2fam(potter, famID = "newFamID", personID = "ID")
+table(ds$fam, ds$newFamID)
 
 ```
 
