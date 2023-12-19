@@ -100,7 +100,8 @@ plotPedigree <- function(ped,
         density = density,
         angle = angle, keep.par = keep.par,
         pconnect = pconnect,
-        mar = mar
+        mar = mar,
+        ...
       ))
     } else { # TODO: consisently suppress the printing of the pedigree comments
       # Determine the null device based on the OS
@@ -122,7 +123,8 @@ plotPedigree <- function(ped,
         density = density,
         angle = angle, keep.par = keep.par,
         pconnect = pconnect,
-        mar = mar
+        mar = mar,
+        ...
       )
 
       # Explicitly revert the standard output back to the console
