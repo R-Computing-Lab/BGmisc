@@ -208,3 +208,45 @@ makeInbreeding <- function(ped,
   }
   return(ped)
 }
+
+#' dropLink
+#' A function to drop a person from his/her parents in the simulated pedigree \code{data.frame}.
+#' The person can be dropped by specifying his/her ID or by specifying the generation which the randomly to be dropeed person is in.
+#' The function can seperate one pedigree into two pedigrees. Seperating into small pieces should be done by running the function multiple times.
+#' This is a supplementary function for \code{simulatePedigree}.
+#' @param ped a pedigree simulated from simulatePedigree function or the same format
+#' @param ID_drop the ID of the person to be dropped from his/her parents. 
+#' @param gen_drop the generation in which the randomly dropped person is. Will work if ID_drop is not specified.
+#' @param sex_drop the biological sex of the randomly dropped person.
+#' @param n_drop the number of times the mutation happens.
+#' @return a pedigree with the dropped person's dadID and momID set to NA.
+#' @export
+dropLink = function(ped, 
+                    ID_drop = NA_integer_,
+                    gen_drop = 2,
+                    sex_drop = NA_character_,
+                    n_drop = 1){ 
+                        # a supporting function 
+                        resample = function(x, ...){
+                          #print(length(x))
+                          if(length(x) == 0) return(NA_integer_)
+                          x[sample.int(length(x), ...)]
+                          } 
+                         # check if the ID_drop is specified
+                        if(is.na(ID_drop)){
+                            # check if the sex_drop is specified
+                            if(is.na(sex_drop)){
+                                ID_drop = resample(ped$ID[ped$gen == gen_drop & !is.na(ped$dadID) & !is.na(ped$momID)], n_drop)
+                            } else {
+                                ID_drop = resample(ped$ID[ped$gen == gen_drop & !is.na(ped$dadID) & !is.na(ped$momID) & ped$sex == sex_drop], n_drop)
+                            }
+                            if(!is.na(ID_drop)){
+                              ped[ped$ID %in% ID_drop, c("dadID", "momID")] = NA_integer_
+                            } else {
+                               warning("No individual is dropped from his/her parents.")
+                            }
+                        } else {
+                            ped[ped$ID == ID_drop, c("dadID", "momID")] = NA_integer_
+                        }
+                        return(ped)
+                    }
