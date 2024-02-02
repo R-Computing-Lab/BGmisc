@@ -26,8 +26,15 @@ more.
 
 ## Installation
 
-You can install the development version of BGmisc from
-[GitHub](https://github.com/) with:
+You can install the released version of BGmisc from
+[CRAN](https://cran.r-project.org/) with:
+
+``` r
+install.packages("BGmisc")
+```
+
+To install the development version of BGmisc from
+[GitHub](https://github.com/) use:
 
 ``` r
 # install.packages("devtools")
