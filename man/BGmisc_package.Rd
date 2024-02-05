@@ -2,6 +2,7 @@
 % Please edit documentation in R/BGmisc-package.R
 \docType{package}
 \name{BGmisc_package}
+\alias{BGmisc}
 \alias{BGmisc_package}
 \alias{BGmisc-package}
 \title{Behavior Genetic Miscellaneous functions in R}

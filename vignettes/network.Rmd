@@ -35,7 +35,7 @@ structure inherent in pedigrees:
 ## Loading Required Libraries and Data
 
 ```{r setup}
-library(BGmisc)
+#library(BGmisc)
 data(potter)
 ```
 
@@ -57,7 +57,7 @@ We will use the `potter` pedigree data as an example.
 
 ```{r}
 ds <- ped2fam(potter, famID = "newFamID", personID = "ID")
-table(ds$famID, ds$newFamID)
+table(ds$fam, ds$newFamID)
 
 ```
 
