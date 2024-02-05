@@ -33,3 +33,13 @@ test_that("simulated pedigree plots correctly", {
   results <- rbind(results, results2)
   expect_output(plotPedigree(results, verbose = TRUE))
 })
+
+test_that("simulatePedigree verbose prints updates",{
+  set.seed(5)
+  Ngen <- 4
+  kpc <- 4
+  sexR <- .50
+  marR <- .7
+
+  expect_output(simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR,verbose = TRUE), regexp = "Let's build the connection within each generation first")
+})
