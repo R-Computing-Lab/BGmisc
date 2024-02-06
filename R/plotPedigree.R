@@ -50,18 +50,17 @@ plotPedigree <- function(ped,
         } else {
           stop(paste("Column", affected, "does not exist in the DataFrame"))
         }
-      }
-      # Check if 'affected' is a numeric or logical vector
-      else if (is.numeric(affected) || is.logical(affected)) {
+
+        # Check if 'affected' is a numeric or logical vector
+      } else if (is.numeric(affected) || is.logical(affected)) {
         # Check if the length of the vector matches the number of rows in the DataFrame
         if (length(affected) == nrow(p)) {
           p$affected <- affected
         } else {
           stop("Length of the 'affected' vector does not match the number of rows in the DataFrame")
         }
-      }
-      # If 'affected' is neither a string nor a numeric/logical vector
-      else {
+        # If 'affected' is neither a string nor a numeric/logical vector
+      } else {
         stop("The 'affected' parameter must be either a string (column name) or a numeric/logical vector")
       }
     }
@@ -101,7 +100,7 @@ plotPedigree <- function(ped,
         pconnect = pconnect,
         mar = mar
       ))
-    } else { # TODO: consisently suppress the printing of the pedigree comments
+    } else { # TODO: consistently suppress the printing of the pedigree comments
       # Determine the null device based on the OS
       #     null_device <- ifelse(.Platform$OS.type == "windows", "nul", "/dev/null")
 

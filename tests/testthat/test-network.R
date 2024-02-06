@@ -160,8 +160,7 @@ test_that("ped2ce produces correct matrix dims, values, and dimnames", {
   expect_equal(dn[[1]], as.character(inbreeding$ID))
 })
 
-test_that("ped2add verbose prints updates",{
+test_that("ped2add verbose prints updates", {
   data(hazard)
   expect_output(ped2add(hazard, verbose = TRUE), regexp = "Family Size =")
 })
-

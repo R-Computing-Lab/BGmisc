@@ -14,7 +14,7 @@ checkIDs(ped, verbose = FALSE, repair = FALSE)
 \item{repair}{A logical flag indicating whether to attempt repairs on non-unique IDs.}
 }
 \value{
-Depending on the value of `repair`, either a list containing validation results or a repaired dataframe is returned.
+Depending on the value of `repair`, either returns a list containing validation results or a repaired dataframe
 }
 \description{
 This function takes a pedigree object and performs two main tasks:
