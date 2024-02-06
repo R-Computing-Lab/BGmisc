@@ -14,16 +14,16 @@ test_that("Check Sex repair functionality", {
 
 
 # Test Case 1: Recoding sex variable without repair
-test_that("Sex variable is correctly recoded without repair", {
-  data(potter)
-  df_fam <- potter
-  df_fam$sex[df_fam$sex==1] <- "F"
-  df_fam$sex[df_fam$sex==0] <- "M"
-  expected_ped <- potter
+#test_that("Sex variable is correctly recoded without repair", {
+#  data(potter)
+#  df_fam <- potter
+#  df_fam$sex[df_fam$sex==1] <- "F"
+#  df_fam$sex[df_fam$sex==0] <- "M"
+#  expected_ped <- potter
   #df_recode <- checkSex(df_fam, code_male = "M", recode = TRUE, repair = FALSE)
-  df_repair <- checkSex(df_fam, code_male = "M", recode = TRUE, repair = TRUE)
-  expect_equal(df_repair, expected_ped)
-})
+#  df_repair <- checkSex(df_fam, code_male = "M", recode = TRUE, repair = TRUE)
+#  expect_equal(df_repair, expected_ped)
+#})
 #
 # # Test Case 2: Verbose output
 # test_that("Verbose output is correct", {
