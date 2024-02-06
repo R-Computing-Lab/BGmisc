@@ -76,7 +76,7 @@ plotPedigree <- function(ped,
     } else {
       # Assign a unique string pattern "ped #" for each unique family
       unique_families <- unique(p$ped)
-      named_families <- 1:length(unique_families)
+      named_families <- seq_along(unique_families)
       p$ped <- named_families[match(p$ped, unique_families)]
     }
     p2 <- kinship2::pedigree(
