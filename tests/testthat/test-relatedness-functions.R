@@ -21,7 +21,7 @@ test_that("calculateRelatedness function with empirical", {
 
 test_that("calculateRelatedness function with empirical", {
   result <- calculateRelatedness(generations = 2, empirical = TRUE, maternal = TRUE)
-  expect_equal(result, 0.125+.000002426, tolerance = 1e-8)
+  expect_equal(result, 0.125 + .000002426, tolerance = 1e-8)
 })
 
 
