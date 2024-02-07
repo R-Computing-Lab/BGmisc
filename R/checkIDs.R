@@ -8,7 +8,7 @@
 #' @param verbose A logical flag indicating whether to print progress and validation messages to the console.
 #' @param repair A logical flag indicating whether to attempt repairs on non-unique IDs.
 #'
-#' @return Depending on the value of `repair`, either returns a list containing validation results or a repaired dataframe
+#' @return Depending on `repair` value, either returns a list containing validation results or a repaired dataframe
 #' @examples
 #' \dontrun{
 #' ped <- data.frame(ID = c(1, 2, 2, 3), dadID = c(NA, 1, 1, 2), momID = c(NA, NA, 2, 2))
