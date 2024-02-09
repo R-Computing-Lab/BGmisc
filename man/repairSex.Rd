@@ -11,7 +11,7 @@ repairSex(ped, verbose = FALSE, code_male = NULL)
 
 \item{verbose}{A logical flag indicating whether to print progress and validation messages to the console.}
 
-\item{code_male}{The code used to represent males in the 'sex' column. If both male and female are NULL, no recoding is performed.}
+\item{code_male}{The current code used to represent males in the 'sex' column. At least one is needed.}
 }
 \value{
 A modified version of the input data.frame \code{ped}, containing an additional or modified 'sex_recode' column where the 'sex' values are recoded according to \code{code_male}. NA values in the 'sex' column are preserved.
