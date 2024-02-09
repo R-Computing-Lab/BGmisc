@@ -14,7 +14,7 @@ repairSex(ped, verbose = FALSE, code_male = NULL)
 \item{code_male}{The code used to represent males in the 'sex' column. If both male and female are NULL, no recoding is performed.}
 }
 \value{
-A dataframe where the sex coding has been repaired.
+A modified version of the input data.frame \code{ped}, containing an additional or modified 'sex_recode' column where the 'sex' values are recoded according to \code{code_male}. NA values in the 'sex' column are preserved.
 }
 \description{
 This function serves as a wrapper around `checkSex` to specifically handle
