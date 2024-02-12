@@ -20,13 +20,13 @@ evenInsert <- function(m, n, verbose = FALSE) {
   }
 
   # idx <- numeric()
-  for (i in 1:length(m)) {
+  for (i in seq_along(m)) {
     names(m)[i] <- ceiling(i * length(n) / length(m))
   }
   if (verbose) {
     print(m)
   }
-  names(n) <- 1:length(n)
+  names(n) <- seq_along(n)
   if (verbose) {
     print(n)
   }

@@ -46,5 +46,5 @@ test_that("related_coef issues a deprecation warning", {
 })
 
 test_that("relatedness issues a deprecation warning", {
-  expect_warning(relatedness(cor_obs = .5), "deprecated")
+  expect_warning(relatedness(obsR = .5), "deprecated")
 })
