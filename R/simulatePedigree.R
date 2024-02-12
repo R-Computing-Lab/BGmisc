@@ -10,6 +10,7 @@
 #' @param Ngen Number of generations. An integer >= 2 that determines how many generations the simulated pedigree will have. The first generation is always a fertilized couple. The last generation has no mated individuals.
 #' @param sexR Sex ratio of offspring. A numeric value ranging from 0 to 1 that determines the proportion of males in all offspring in this pedigree. For instance, 0.4 means 40 percent of the offspring will be male.
 #' @param marR Mating rate. A numeric value ranging from 0 to 1 which determines the proportion of mated (fertilized) couples in the pedigree within each generation. For instance, marR = 0.5 suggests 50 percent of the offspring in a specific generation will be mated and have their offspring.
+#' @param rd_kpc logical. If TRUE, the number of kids per mate will be randomly generated from a poisson distribution with mean kpc. If FALSE, the number of kids per mate will be fixed at kpc.
 #' @param balancedSex Not fully developed yet. Always \code{TRUE} in the current version.
 #' @param balancedMar Not fully developed yet. Always \code{TRUE} in the current version.
 #' @param verbose logical  If TRUE, print progress through stages of algorithm
@@ -30,9 +31,16 @@ simulatePedigree <- function(kpc = 3,
                              Ngen = 4,
                              sexR = .5,
                              marR = 2 / 3,
+                             rd_kpc = FALSE,
                              balancedSex = TRUE,
                              balancedMar = TRUE,
                              verbose = FALSE) {
+  # a supporting function 
+  resample = function(x, ...){
+    #print(length(x))
+    if(length(x) == 0) return(NA_integer_)
+    x[sample.int(length(x), ...)]
+    } 
   # SexRatio: ratio of male over female in the offspring setting; used in the between generation combinations
   SexRatio <- sexR / (1 - sexR)
 
@@ -236,29 +244,17 @@ simulatePedigree <- function(kpc = 3,
       # get the number of linked female and male children after excluding the single children
       # get a vector of single person id in the ith generation
       IdSingle <- df_Ngen$id[is.na(df_Ngen$spt)]
-      # print(N_LinkedMem)
-      # print(N_LinkedFemale)
-      # print(N_LinkedMale)
       SingleF <- sum(df_Ngen$sex == "F" & is.na(df_Ngen$spt))
       CoupleF <- N_LinkedFemale - SingleF
-      # print(CoupleF)
-
       SingleM <- sum(df_Ngen$sex == "M" & is.na(df_Ngen$spt))
       CoupleM <- N_LinkedMale - SingleM
-      # print(CoupleM)
       # get all couple ids
-      # print(i)
-      # print(df_Ngen$IdCouple)
       coupleID <- unique(df_Ngen$IdCouple[!is.na(df_Ngen$IdCouple)])
-      # print(coupleID)
       if (i == Ngen) {
         CoupleF <- 0
       }
       coupleGirl <- sample(coupleID, CoupleF)
-      # print(coupleGirl)
       coupleBoy <- coupleID[!coupleID %in% coupleGirl]
-      # print(coupleGirl)
-      # print(coupleBoy)
       # single person should all be sons or daus
       # change the ifson and ifdau based on coupleGirl and coupleBoy
       for (j in 1:sizeGens[i]) {
@@ -280,8 +276,6 @@ simulatePedigree <- function(kpc = 3,
           }
         }
       }
-      # print(df_Ngen)
-
 
       df_Ngen <- df_Ngen[order(as.numeric(rownames(df_Ngen))), , drop = FALSE]
       df_Ngen <- df_Ngen[, -ncol(df_Ngen)]
@@ -337,10 +331,45 @@ simulatePedigree <- function(kpc = 3,
         # print(IdDau)
         IdOfp <- evenInsert(IdSon, IdDau)
 
+        if (rd_kpc) {
+          # get the number of pairs of mates in the i th generation
+          nMates <- sum(df_Ngen$ifparent)/2
+          #cat("number of mates",nMates, "\n")
+          diff <- nMates + 1
+          while(diff > nMates){
+            random_numbers = rpois(nMates, kpc)
+            #cat("original random numbers", random_numbers, "\n")
+            diff = abs(nMates*kpc - sum(random_numbers))
+          }
+
+          #diff = abs(length(IdOfp) - sum(random_numbers))
+          # make sure the sum of kids per couple is equal to the number of kids in the i th generation
+          if (sum(random_numbers) < nMates*kpc){
+            names(random_numbers) <- seq(length(random_numbers))
+            random_numbers = sort(random_numbers)
+            random_numbers[1:diff]= random_numbers[1:diff] + 1
+            random_numbers = random_numbers[order(names(random_numbers))]
+          } else if (sum(random_numbers) > nMates*kpc) {
+            names(random_numbers) <- seq(length(random_numbers))
+            random_numbers = sort(random_numbers, decreasing = TRUE)
+            random_numbers[1:diff]= random_numbers[1:diff] - 1
+            random_numbers = random_numbers[order(names(random_numbers))]
+          }
+        } else {
+           random_numbers <- rep(kpc, sum(df_Ngen$ifparent)/2)
+        }
+        if (min(random_numbers) < 0) {
+          random_numbers[random_numbers == -1] <- 0
+          random_numbers[random_numbers == max(random_numbers)] <- max(random_numbers) - 1
+        }
+
+        #cat("final random numbers",random_numbers, "\n")
+        #cat("mean",sum(random_numbers)/length(random_numbers), "\n")
         # create two vectors for maId and paId; replicate the ids to match the same length as IdOfp
         IdMa <- numeric()
         IdPa <- numeric()
         UsedId <- numeric()
+        idx = 1
 
         for (l in 1:sizeI) {
           # check if the id is used
@@ -348,12 +377,14 @@ simulatePedigree <- function(kpc = 3,
             # check if the member can be a parent
             if (df_Ngen$ifparent[l] == TRUE & df_Ngen$sex[l] == "F") {
               UsedId <- c(UsedId, df_Ngen$id[l], df_Ngen$spt[l])
-              IdMa <- c(IdMa, rep(df_Ngen$id[l], kpc))
-              IdPa <- c(IdPa, rep(df_Ngen$spt[l], kpc))
-            } else if (df_Ngen$ifparent[l] == TRUE && df_Ngen$sex[l] == "M") {
+              IdMa <- c(IdMa, rep(df_Ngen$id[l], random_numbers[idx]))
+              IdPa <- c(IdPa, rep(df_Ngen$spt[l], random_numbers[idx]))
+              idx = idx + 1
+            } else if (df_Ngen$ifparent[l] == TRUE & df_Ngen$sex[l] == "M") {
               UsedId <- c(UsedId, df_Ngen$id[l], df_Ngen$spt[l])
-              IdPa <- c(IdPa, rep(df_Ngen$id[l], kpc))
-              IdMa <- c(IdMa, rep(df_Ngen$spt[l], kpc))
+              IdPa <- c(IdPa, rep(df_Ngen$id[l], random_numbers[idx]))
+              IdMa <- c(IdMa, rep(df_Ngen$spt[l], random_numbers[idx]))
+              idx = idx + 1
             } else {
               next
             }
@@ -363,17 +394,17 @@ simulatePedigree <- function(kpc = 3,
         }
 
         # the length of IdMa and IdPa can be longer than the vector of offspring, so truncated it
-        # print(IdPa)
-        # print(IdOfp)
         ### making sure sampling out the single people instead of couples
-
-
-        if (length(IdPa) - length(IdOfp) > 0) {
+        if (length(IdPa) - length(IdOfp) > 0 ) {
+          #cat("length of IdPa", length(IdPa), "\n")
           IdRm <- sample.int(length(IdPa), size = length(IdPa) - length(IdOfp))
           IdPa <- IdPa[-IdRm]
           IdMa <- IdMa[-IdRm]
         } else if (length(IdPa) - length(IdOfp) < 0) {
-          IdRm <- sample(IdSingle, size = length(IdOfp) - length(IdPa))
+          #cat("length of IdOfp", length(IdOfp), "\n")
+          #cat("length of IdPa", length(IdPa), "\n")
+          #cat("length of IdSingle", length(IdMa), "\n")
+          IdRm <- resample(IdSingle, size = length(IdOfp) - length(IdPa))
 
           IdOfp <- IdOfp[!(IdOfp %in% IdRm)]
         }
@@ -389,7 +420,7 @@ simulatePedigree <- function(kpc = 3,
 
         # print(IdPa)
         # print(IdOfp)
-
+        
         # put the IdMa and IdPa into the dfFam with correspondent OfpId
         for (m in seq_along(IdOfp)) {
           df_Ngen[df_Ngen$id == IdOfp[m], "pat"] <- IdPa[m]
@@ -410,6 +441,12 @@ simulatePedigree <- function(kpc = 3,
 
   # connect the detached members
   df_Fam[is.na(df_Fam$momID) & is.na(df_Fam$dadID) & df_Fam$gen > 1, ]
+  # if the sex rate is .5, make there is a 50% chance to change male to female and female to male
+  if (sexR == .5 & runif(1) > .5) {
+    df_Fam$sex[df_Fam$sex == "M"] <- "F1"
+    df_Fam$sex[df_Fam$sex == "F"] <- "M"
+    df_Fam$sex[df_Fam$sex == "F1"] <- "F"
+  }
   # print(df_Fam)
   return(df_Fam)
 }
