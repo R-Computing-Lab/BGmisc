@@ -37,6 +37,30 @@ test_that("Null computes the null space of a matrix", {
   expect_equal(dim(result), c(2, 0))
 })
 
+test_that("resample on a non-empty vector returns correctly sized sample", {
+  set.seed(123) # Setting seed for reproducibility
+  result <- resample(1:10, size = 5)
+  expect_equal(length(result), 5)
+})
+
+test_that("resample returns NA_integer_ for empty vector", {
+  result <- resample(integer(0))
+  expect_identical(result, NA_integer_)
+})
+
+test_that("resample with replacement behaves as expected", {
+  set.seed(123)
+  result <- resample(1:3, size = 10, replace = TRUE)
+  expect_equal(length(result), 10)
+  expect_true(all(result %in% 1:3))
+})
+
+test_that("resample with specific size returns correct length", {
+  set.seed(123)
+  result <- resample(1:10, size = 7)
+  expect_equal(length(result), 7)
+})
+
 test_that("SimPed issues a deprecation warning", {
   expect_warning(SimPed(), "deprecated")
 })

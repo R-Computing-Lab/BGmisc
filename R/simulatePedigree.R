@@ -35,12 +35,7 @@ simulatePedigree <- function(kpc = 3,
                              balancedSex = TRUE,
                              balancedMar = TRUE,
                              verbose = FALSE) {
-  # a supporting function 
-  resample = function(x, ...){
-    #print(length(x))
-    if(length(x) == 0) return(NA_integer_)
-    x[sample.int(length(x), ...)]
-    } 
+
   # SexRatio: ratio of male over female in the offspring setting; used in the between generation combinations
   SexRatio <- sexR / (1 - sexR)
 
@@ -420,7 +415,7 @@ simulatePedigree <- function(kpc = 3,
 
         # print(IdPa)
         # print(IdOfp)
-        
+
         # put the IdMa and IdPa into the dfFam with correspondent OfpId
         for (m in seq_along(IdOfp)) {
           df_Ngen[df_Ngen$id == IdOfp[m], "pat"] <- IdPa[m]
@@ -442,11 +437,12 @@ simulatePedigree <- function(kpc = 3,
   # connect the detached members
   df_Fam[is.na(df_Fam$momID) & is.na(df_Fam$dadID) & df_Fam$gen > 1, ]
   # if the sex rate is .5, make there is a 50% chance to change male to female and female to male
-  if (sexR == .5 & runif(1) > .5) {
-    df_Fam$sex[df_Fam$sex == "M"] <- "F1"
-    df_Fam$sex[df_Fam$sex == "F"] <- "M"
-    df_Fam$sex[df_Fam$sex == "F1"] <- "F"
-  }
+# doesn't seem to produce the expected results, sometimes leads to moms being classified as dads
+  #  if (sexR == .5 & runif(1) > .5) {
+ #   df_Fam$sex[df_Fam$sex == "M"] <- "F1"
+#    df_Fam$sex[df_Fam$sex == "F"] <- "M"
+#    df_Fam$sex[df_Fam$sex == "F1"] <- "F"
+#  }
   # print(df_Fam)
   return(df_Fam)
 }

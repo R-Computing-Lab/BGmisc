@@ -78,6 +78,7 @@ If you wish to compare different pedigrees side by side, you can plot them toget
 
 
 ```{r,fig.width=8, fig.height=6}
+set.seed(8)
 # Simulate a family with 3 generations
 df_ped_3 <- simulatePedigree(Ngen = 3)
 

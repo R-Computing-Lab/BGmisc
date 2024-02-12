@@ -120,8 +120,7 @@ makeInbreeding <- function(ped,
                            verbose = FALSE,
                            gen_inbred = 2,
                            type_inbred = "sib") {
-  # A support function
-  resample <- function(x, ...) x[sample.int(length(x), ...)]
+
   # check if the ped is the same format as the output of simulatePedigree
   if (paste0(colnames(ped), collapse = "") != paste0(c("fam", "ID", "gen", "dadID", "momID", "spt", "sex"), collapse = "")) {
     ped <- standardize_colnames(ped)
