@@ -28,5 +28,8 @@ test_that("calculateRelatedness function with empirical", {
 test_that("inferRelatedness performs as expected", {
   result <- inferRelatedness(0, ace_A = .9, ace_C = 0, shared_C = 0)
   expect_equal(result, 0)
-  expect_error(inferRelatedness(0, ace_A = 2, ace_C = 0, shared_C = 0), "ace_A and ace_C must be proportions between 0 and 1")
+  expect_error(
+    inferRelatedness(0, ace_A = 2, ace_C = 0, shared_C = 0),
+    "ace_A and ace_C must be proportions between 0 and 1"
+  )
 })

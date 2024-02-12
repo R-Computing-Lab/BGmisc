@@ -22,16 +22,18 @@ test_that("checkIDs with a duplicate", {
 test_that("repair with a duplicate", {
   # Create a sample dataset
   df <- standardize_colnames(ped2fam(potter, famID = "newFamID", personID = "personID"))
-  df_bound <- rbind(df,df[df$name == "Vernon Dursley",])
+  df_bound <- rbind(df, df[df$name == "Vernon Dursley", ])
   result <- checkIDs(df_bound, repair = TRUE)
   expect_equal(df, result)
 })
 
 test_that("checkIDs verbose prints updates", {
   df <- ped2fam(potter, famID = "newFamID", personID = "personID")
-  df_bound <- rbind(df,df[df$name == "Vernon Dursley",])
-  expect_output(checkIDs(df, verbose = TRUE,repair=TRUE),
-                regexp = "Step 1: Checking for unique IDs")
-  expect_output(checkIDs(df_bound, verbose = TRUE,repair=TRUE),
-                regexp = "Step 2: Attempting to repair non-unique IDs")
+  df_bound <- rbind(df, df[df$name == "Vernon Dursley", ])
+  expect_output(checkIDs(df, verbose = TRUE, repair = TRUE),
+    regexp = "Step 1: Checking for unique IDs"
+  )
+  expect_output(checkIDs(df_bound, verbose = TRUE, repair = TRUE),
+    regexp = "Step 2: Attempting to repair non-unique IDs"
+  )
 })
