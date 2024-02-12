@@ -60,34 +60,9 @@ simulatePedigree <- function(kpc = 3,
 
     ### Let's deal with the sex in each generation first
 
-    if (runif(1) > .5) {
-      sexVec1 <- rep(
-        "g1",
-        floor(length(idGen) * sexR)
-      )
-      sexVec2 <- rep(
-        "g2",
-        length(idGen) - length(sexVec1)
-      )
-      sexVec <- sample(c(sexVec1, sexVec2))
+    df_Ngen$sex <- determineSex(idGen = idGen, sexR = sexR)
 
-      sexVec[sexVec == "g1"] <- "M"
-      sexVec[sexVec == "g2"] <- "F"
-    } else {
-      sexVec1 <- rep(
-        "g1",
-        floor(length(idGen) * (1 - sexR))
-      )
-      sexVec2 <- rep(
-        "g2",
-        length(idGen) - length(sexVec1)
-      )
-      sexVec <- sample(c(sexVec1, sexVec2))
 
-      sexVec[sexVec == "g1"] <- "F"
-      sexVec[sexVec == "g2"] <- "M"
-    }
-    df_Ngen$sex <- sexVec
     # print(paste("tiger",i))
     # The first generation
     if (i == 1) {

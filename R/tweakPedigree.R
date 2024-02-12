@@ -224,14 +224,6 @@ dropLink <- function(ped,
                      gen_drop = 2,
                      sex_drop = NA_character_,
                      n_drop = 1) {
-  # a supporting function
-  resample <- function(x, ...) {
-    # print(length(x))
-    if (length(x) == 0) {
-      return(NA_integer_)
-    }
-    x[sample.int(length(x), ...)]
-  }
   # check if the ID_drop is specified
   if (is.na(ID_drop)) {
     # check if the sex_drop is specified
