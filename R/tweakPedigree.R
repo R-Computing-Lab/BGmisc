@@ -180,7 +180,7 @@ makeInbreeding <- function(ped,
       }
     }
   }
-  # save the two individfual's former mates' IDs if they have any
+  # save the two individual's former mates' IDs if they have any
   ID_mate1_former_mate <- ped$spt[ped$ID == ID_mate1]
   cat(ID_mate1, "\n")
   ID_mate2_former_mate <- ped$spt[ped$ID == ID_mate2]

@@ -41,5 +41,6 @@ The \code{adjacent} argument allows for different kinds of graph structures.
 When using \code{parents} for adjacency, the graph shows all parent-child relationships.
 When using \code{mother} for adjacency, the graph only shows mother-child relationships.
 Similarly when using \code{father} for adjacency, only father-child relationships appear in the graph.
-Extended families can be constructed from the parent graph, maternal lines from the mothers graph, and paternal lines from the fathers graph.
+Construct extended families from the parent graph, maternal lines from the mothers graph, 
+and paternal lines from the fathers graph.
 }

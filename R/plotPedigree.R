@@ -82,7 +82,7 @@ plotPedigree <- function(ped,
       id = p$id,
       dadid = p$father,
       momid = p$mother,
-      sex = p$sex_recode,
+      sex = p$sex,
       famid = p$ped
     )
     p3 <- p2["1"]
