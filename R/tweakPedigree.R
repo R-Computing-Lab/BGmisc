@@ -39,7 +39,7 @@ makeTwins <- function(ped, ID_twin1 = NA_integer_, ID_twin2 = NA_integer_, gen_t
       } else {
         idx <- nrow(ped[ped$gen == gen_twin & !is.na(ped$dadID), ])
         usedID <- c()
-        # randomly loop through all the indivuduals in the generation until find an individual who is the same sex and shares the same dadID and momID with another individual
+        # randomly loop through all the individuals in the generation until find an individual who is the same sex and shares the same dadID and momID with another individual
         for (i in 1:idx) {
           cat("loop", i)
           # check if i is equal to the number of individuals in the generation
@@ -120,7 +120,6 @@ makeInbreeding <- function(ped,
                            verbose = FALSE,
                            gen_inbred = 2,
                            type_inbred = "sib") {
-
   # check if the ped is the same format as the output of simulatePedigree
   if (paste0(colnames(ped), collapse = "") != paste0(c("fam", "ID", "gen", "dadID", "momID", "spt", "sex"), collapse = "")) {
     ped <- standardize_colnames(ped)
@@ -214,38 +213,40 @@ makeInbreeding <- function(ped,
 #' The function can seperate one pedigree into two pedigrees. Seperating into small pieces should be done by running the function multiple times.
 #' This is a supplementary function for \code{simulatePedigree}.
 #' @param ped a pedigree simulated from simulatePedigree function or the same format
-#' @param ID_drop the ID of the person to be dropped from his/her parents. 
+#' @param ID_drop the ID of the person to be dropped from his/her parents.
 #' @param gen_drop the generation in which the randomly dropped person is. Will work if ID_drop is not specified.
 #' @param sex_drop the biological sex of the randomly dropped person.
 #' @param n_drop the number of times the mutation happens.
 #' @return a pedigree with the dropped person's dadID and momID set to NA.
 #' @export
-dropLink = function(ped, 
-                    ID_drop = NA_integer_,
-                    gen_drop = 2,
-                    sex_drop = NA_character_,
-                    n_drop = 1){ 
-                        # a supporting function 
-                        resample = function(x, ...){
-                          #print(length(x))
-                          if(length(x) == 0) return(NA_integer_)
-                          x[sample.int(length(x), ...)]
-                          } 
-                         # check if the ID_drop is specified
-                        if(is.na(ID_drop)){
-                            # check if the sex_drop is specified
-                            if(is.na(sex_drop)){
-                                ID_drop = resample(ped$ID[ped$gen == gen_drop & !is.na(ped$dadID) & !is.na(ped$momID)], n_drop)
-                            } else {
-                                ID_drop = resample(ped$ID[ped$gen == gen_drop & !is.na(ped$dadID) & !is.na(ped$momID) & ped$sex == sex_drop], n_drop)
-                            }
-                            if(!is.na(ID_drop)){
-                              ped[ped$ID %in% ID_drop, c("dadID", "momID")] = NA_integer_
-                            } else {
-                               warning("No individual is dropped from his/her parents.")
-                            }
-                        } else {
-                            ped[ped$ID == ID_drop, c("dadID", "momID")] = NA_integer_
-                        }
-                        return(ped)
-                    }
+dropLink <- function(ped,
+                     ID_drop = NA_integer_,
+                     gen_drop = 2,
+                     sex_drop = NA_character_,
+                     n_drop = 1) {
+  # a supporting function
+  resample <- function(x, ...) {
+    # print(length(x))
+    if (length(x) == 0) {
+      return(NA_integer_)
+    }
+    x[sample.int(length(x), ...)]
+  }
+  # check if the ID_drop is specified
+  if (is.na(ID_drop)) {
+    # check if the sex_drop is specified
+    if (is.na(sex_drop)) {
+      ID_drop <- resample(ped$ID[ped$gen == gen_drop & !is.na(ped$dadID) & !is.na(ped$momID)], n_drop)
+    } else {
+      ID_drop <- resample(ped$ID[ped$gen == gen_drop & !is.na(ped$dadID) & !is.na(ped$momID) & ped$sex == sex_drop], n_drop)
+    }
+    if (!is.na(ID_drop)) {
+      ped[ped$ID %in% ID_drop, c("dadID", "momID")] <- NA_integer_
+    } else {
+      warning("No individual is dropped from his/her parents.")
+    }
+  } else {
+    ped[ped$ID == ID_drop, c("dadID", "momID")] <- NA_integer_
+  }
+  return(ped)
+}

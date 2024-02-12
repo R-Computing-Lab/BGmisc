@@ -58,7 +58,7 @@ plotPedigree(potter, code_male = 1, verbose = TRUE)
 We will use the `potter` pedigree data as an example. For convenience, we've renamed the family ID variable to `oldfam` to avoid confusion with the new family ID variable we will create.
 
 ```{r}
-df_potter<-potter
+df_potter <- potter
 names(df_potter)[names(df_potter) == "famID"] <- "oldfam"
 
 ds <- ped2fam(df_potter, famID = "famID", personID = "personID")

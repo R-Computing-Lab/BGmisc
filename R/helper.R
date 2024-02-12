@@ -83,9 +83,11 @@ Null <- function(M) {
 #'
 #'
 #' @export
-resample = function(x, ...){
-  #print(length(x))
-  if(length(x) == 0) return(NA_integer_)
+resample <- function(x, ...) {
+  # print(length(x))
+  if (length(x) == 0) {
+    return(NA_integer_)
+  }
   x[sample.int(length(x), ...)]
 }
 
@@ -158,4 +160,3 @@ relatedness <- function(...) {
   warning("The 'relatedness' function is deprecated. Please use 'inferRelatedness' instead.")
   inferRelatedness(...)
 }
-
