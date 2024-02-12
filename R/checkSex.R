@@ -166,7 +166,8 @@ recodeSex <- function(
     ped$sex <- ped$sex_recode
     ped$sex_recode <- NULL
   } else {
-    warning(" both code male and code female are empty. No recoding was done.")
+    if(verbose){warning(" both code male and code female are empty. No recoding was done.")
+    }
   }
   return(ped)
 }

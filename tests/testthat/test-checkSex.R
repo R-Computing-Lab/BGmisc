@@ -34,4 +34,3 @@ test_that("Functions handle missing values gracefully", {
   expect_silent(recodeSex(ped_with_na, verbose = FALSE, code_male = "M", code_female = "F"))
 })
 
-TODO pedsim test is not liking the sex recoding. gives warning message. seems to be in the plotPedigree
