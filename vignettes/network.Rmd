@@ -17,8 +17,7 @@ options(rmarkdown.html_vignette.check_title = FALSE)
 
 # Introduction
 
-This vignette showcases two key features that capitalize on the network
-structure inherent in pedigrees:
+This vignette showcases two key features that capitalize on the network structure inherent in pedigrees:
 
 1.  Finding extended families with *any* connecting relationships
     between members. This feature strictly uses a person's ID, mother's
@@ -36,8 +35,10 @@ structure inherent in pedigrees:
 
 ```{r setup}
 library(BGmisc)
-data(hazard)
+data(potter)
 ```
+
+
 
 # Finding Extended Families
 
@@ -49,18 +50,22 @@ all the extended families. People within the same extended family have
 at least some form of relation, however distant, while those in
 different extended families have no relations.
 
-```{r, echo=FALSE, results='hide', out.width='50%', fig.cap="Hazard Pedigree"}
-plotPedigree(hazard, code_male = 0, verbose = TRUE, )
+
+```{r, echo=FALSE, results='hide', out.width='50%', fig.cap="Potter Family Pedigree"}
+plotPedigree(potter, code_male = 1, verbose = TRUE)
 ```
 
-We will use the `hazard` pedigree data as an example.
+We will use the `potter` pedigree data as an example. For convenience, we've renamed the family ID variable to `oldfam` to avoid confusion with the new family ID variable we will create.
 
 ```{r}
-ds <- ped2fam(hazard, famID = "newFamID")
-table(ds$FamID, ds$newFamID)
+names(potter)[names(potter) == "famID"] <- "oldfam"
+
+ds <- ped2fam(potter, famID = "oldfam", personID = "personID")
+
+table(ds$famID, ds$fam)
 ```
 
-Because the `hazard` data already had a family ID variable we compare
+Because the `potter` data already had a family ID variable, we compare 
 our newly created variable to the pre-existing one. They match!
 
 # Computing Relatedness
@@ -70,7 +75,7 @@ you'll likely want to know how much. For additive genetic relatedness,
 you can use the `ped2add()` function.
 
 ```{r}
-add <- ped2add(hazard)
+add <- ped2add(potter)
 ```
 
 This computes the additive genetic relatedness for everyone in the data.
@@ -83,7 +88,7 @@ add[1:7, 1:7]
 
 The entry in the ith row and the jth column gives the relatedness
 between person i and person j. For example, person 1 and person 11 share
-`r add[1,11]`
+`r add[1,11]` of their nuclear DNA.
 
 ```{r}
 table(add)
@@ -96,9 +101,9 @@ family.
 
 ```{r}
 add_list <- lapply(
-  unique(hazard$FamID),
+  unique(potter$famID),
   function(d) {
-    tmp <- hazard[hazard$FamID %in% d, ]
+    tmp <- potter[potter$famID %in% d, ]
     ped2add(tmp)
   }
 )
@@ -112,11 +117,13 @@ extended family environment (`ped2ce`).
 
 ### Computing mitochondrial relatedness
 
+
 Here we calculate the mitochondrial relatedness between all pairs of
-individuals in the `hazard` dataset.
+individuals in the `potter` dataset.
+
 
 ```{r}
-mit <- ped2mit(hazard)
+mit <- ped2mit(potter)
 mit[1:7, 1:7]
 table(mit)
 ```
@@ -128,10 +135,10 @@ not.
 ### Computing relatedness through common nuclear environment
 
 Here we calculate the relatedness between all pairs of individuals in
-the `hazard` dataset through sharing both parents.
+the `potter` dataset through sharing both parents.
 
 ```{r}
-commonNuclear <- ped2cn(hazard)
+commonNuclear <- ped2cn(potter)
 commonNuclear[1:7, 1:7]
 
 table(commonNuclear)
@@ -140,10 +147,40 @@ table(commonNuclear)
 ### Computing relatedness through common extended family environment
 
 Here we calculate the relatedness between all pairs of individuals in
-the `hazard` dataset through sharing an extended family.
+the `potter` dataset through sharing an extended family.
 
 ```{r}
-extendedFamilyEnvironment <- ped2ce(hazard)
+extendedFamilyEnvironment <- ped2ce(potter)
 extendedFamilyEnvironment[1:7, 1:7]
 table(extendedFamilyEnvironment)
+```
+
+# Subsetting Pedigrees
+
+Subsetting a pedigree allows researchers to focus on specific family lines or individuals within a larger dataset. This can be particularly useful for data validation as well as simplifying complex pedigrees for visualization. However, subsetting a pedigree can result in the underestimation of relatedness between individuals. This is because the subsetted pedigree may not contain all the individuals that connect two people together. For example if we were to remove Arthur Weasley (person 9) and Molly Prewett (person 10) from the `potter` dataset, we would lose the connections amoungst their children. 
+
+
+```{r, echo=FALSE, results='hide', out.width='50%', fig.cap="Potter Pedigree"}
+names(potter)[names(potter) == "oldfam"] <- "famID"
+subset_rows <- c(1:8, 11:36)
+subset_potter <- potter[subset_rows, ]
+
+subset_potter$dadID[subset_potter$dadID %in% c(9, 10)] <- NA
+subset_potter$momID[subset_potter$momID %in% c(9, 10)] <- NA
+
+plotPedigree(subset_potter, code_male = 1, verbose = TRUE)
+```
+
+In the plot above, we have removed Arthur Weasley (person 9) and Molly Prewett (person 10) from the `potter` dataset. As a result, the connections between their children are lost. 
+
+Similarly, if we remove the children of Vernon Dursey (1) and Petunia Evans(3) from the `potter` dataset, we would lose the connections between the two individuals.
+
+However, this subset does not plot the relationship between spouses (such as the marriage between ), as there are not children to connect the two individuals together yet.
+
+```{r}
+subset_rows <- c(1:5, 31:36)
+subset_potter <- potter[subset_rows, ]
+```
+```{r, echo=FALSE, results='hide', out.width='50%', fig.cap="Potter Pedigree"}
+plotPedigree(subset_potter, code_male = 1, verbose = TRUE)
 ```

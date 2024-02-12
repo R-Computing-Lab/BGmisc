@@ -25,7 +25,7 @@ identifyComponentModel <- function(..., silent = FALSE) {
   dots <- list(...)
   nam <- names(dots)
   if (is.null(nam)) {
-    nam <- paste0("Comp", 1:length(dots))
+    nam <- paste0("Comp", seq_along(dots))
   }
   # Convert components to vectorized form
   compl <- lapply(dots, comp2vech, include.zeros = TRUE)

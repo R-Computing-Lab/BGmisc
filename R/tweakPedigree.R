@@ -180,7 +180,7 @@ makeInbreeding <- function(ped,
       }
     }
   }
-  # save the two individfual's former mates' IDs if they have any
+  # save the two individual's former mates' IDs if they have any
   ID_mate1_former_mate <- ped$spt[ped$ID == ID_mate1]
   cat(ID_mate1, "\n")
   ID_mate2_former_mate <- ped$spt[ped$ID == ID_mate2]
@@ -192,7 +192,7 @@ makeInbreeding <- function(ped,
   ped$spt[ped$ID == ID_mate1] <- ID_mate2
   ped$spt[ped$ID == ID_mate2] <- ID_mate1
   # change the individuals in next generation whoes dadID and momID are ID_mate1 and ID_mate2's former mates to ID_mate1 and ID_mate2
-  for (j in 1:nrow(ped)) {
+  for (j in seq_len(nrow(ped))) {
     if (!is.na(ped$dadID[j]) & !is.na(ID_mate1_former_mate) & ped$dadID[j] == ID_mate1_former_mate) {
       ped$dadID[j] <- ID_mate2
     }

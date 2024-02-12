@@ -22,7 +22,7 @@
 #'
 ped2fam <- function(ped, personID = "ID", momID = "momID", dadID = "dadID", famID = "famID") {
   # Call to wrapper function
-  .ped2id(ped = ped, personID = personID, momID = momID, dadID = dadID, famID = famID, type = 'parents')
+  .ped2id(ped = ped, personID = personID, momID = momID, dadID = dadID, famID = famID, type = "parents")
 }
 
 .ped2id <- function(ped,
@@ -40,7 +40,7 @@ ped2fam <- function(ped, personID = "ID", momID = "momID", dadID = "dadID", famI
   )
   names(fam) <- c(personID, famID)
   ped2 <- merge(fam, ped,
-                by = personID, all.x = FALSE, all.y = TRUE
+    by = personID, all.x = FALSE, all.y = TRUE
   )
 
   return(ped2)
@@ -61,7 +61,8 @@ ped2fam <- function(ped, personID = "ID", momID = "momID", dadID = "dadID", famI
 #' When using \code{parents} for adjacency, the graph shows all parent-child relationships.
 #' When using \code{mother} for adjacency, the graph only shows mother-child relationships.
 #' Similarly when using \code{father} for adjacency, only father-child relationships appear in the graph.
-#' Extended families can be constructed from the parent graph, maternal lines from the mothers graph, and paternal lines from the fathers graph.
+#' Construct extended families from the parent graph, maternal lines from the mothers graph,
+#' and paternal lines from the fathers graph.
 #'
 #' @returns
 #' A graph
@@ -73,35 +74,37 @@ ped2graph <- function(ped,
                       momID = "momID",
                       dadID = "dadID",
                       directed = TRUE,
-                      adjacent = c('parents', 'mothers', 'fathers')) {
+                      adjacent = c("parents", "mothers", "fathers")) {
   # Check ped/data.fram
   if (!inherits(ped, "data.frame")) stop("ped should be a data.frame or inherit to a data.frame")
   # Handle adjacent argument
   adjacent <- match.arg(tolower(adjacent)[1],
-                         choices = c(
-                           "parents",
-                           "mothers",
-                           "fathers"
-                         )
+    choices = c(
+      "parents",
+      "mothers",
+      "fathers"
+    )
   )
   # Check the needed IDs are in the data
-  if(adjacent == 'parents'){
+  if (adjacent == "parents") {
     needIds <- c(personID, momID, dadID)
-  } else if(adjacent == 'mothers'){
+  } else if (adjacent == "mothers") {
     needIds <- c(personID, momID)
-  } else if(adjacent == 'fathers') {
+  } else if (adjacent == "fathers") {
     needIds <- c(personID, dadID)
   }
-  if (!all(c(needIds) %in% names(ped))){
-    msg <- paste0("The following ID variables are needed but were not found:\n",
-                  paste(needIds[!(c(needIds) %in% names(ped))], collapse=', '),
-                  "\n",
-                  "Make sure you have the variable names correct.")
+  if (!all(c(needIds) %in% names(ped))) {
+    msg <- paste0(
+      "The following ID variables are needed but were not found:\n",
+      paste(needIds[!(c(needIds) %in% names(ped))], collapse = ", "),
+      "\n",
+      "Make sure you have the variable names correct."
+    )
     stop(msg)
   }
 
   # Create nodes and edges
-  if(adjacent == 'parents'){
+  if (adjacent == "parents") {
     nodes <- unique(
       stats::na.omit(
         as.character(c(ped[[personID]], ped[[momID]], ped[[dadID]]))
@@ -111,14 +114,14 @@ ped2graph <- function(ped,
       as.matrix(sapply(ped[, c(personID, momID)], as.character)),
       as.matrix(sapply(ped[, c(personID, dadID)], as.character))
     )
-  } else if(adjacent == 'mothers'){
+  } else if (adjacent == "mothers") {
     nodes <- unique(
       stats::na.omit(
         as.character(c(ped[[personID]], ped[[momID]]))
       )
     )
     edges <- as.matrix(sapply(ped[, c(personID, momID)], as.character))
-  } else if(adjacent == 'fathers') {
+  } else if (adjacent == "fathers") {
     nodes <- unique(
       stats::na.omit(
         as.character(c(ped[[personID]], ped[[dadID]]))
@@ -151,9 +154,9 @@ ped2graph <- function(ped,
 #' for creating paternal line IDs
 #' @export
 #'
-ped2maternal <- function(ped, personID = "ID", momID = "momID", dadID = "dadID", matID = "matID"){
+ped2maternal <- function(ped, personID = "ID", momID = "momID", dadID = "dadID", matID = "matID") {
   # Call to wrapper function
-  .ped2id(ped = ped, personID = personID, momID = momID, dadID = dadID, famID = matID, type = 'mothers')
+  .ped2id(ped = ped, personID = personID, momID = momID, dadID = dadID, famID = matID, type = "mothers")
 }
 
 #' Add a paternal line ID variable to a pedigree
@@ -169,7 +172,7 @@ ped2maternal <- function(ped, personID = "ID", momID = "momID", dadID = "dadID",
 #' for creating maternal line IDs
 #' @export
 #'
-ped2paternal <- function(ped, personID = "ID", momID = "momID", dadID = "dadID", patID = "patID"){
+ped2paternal <- function(ped, personID = "ID", momID = "momID", dadID = "dadID", patID = "patID") {
   # Call to wrapper function
-  .ped2id(ped = ped, personID = personID, momID = momID, dadID = dadID, famID = patID, type = 'fathers')
+  .ped2id(ped = ped, personID = personID, momID = momID, dadID = dadID, famID = patID, type = "fathers")
 }

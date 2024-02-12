@@ -135,13 +135,13 @@ simulatePedigree <- function(kpc = 3,
       UsedId <- c(UsedIdFemale, UsedIdMale)
 
       # Create spouses
-      for (j in 1:nrow(df_Ngen)) {
+      for (j in seq_len(nrow(df_Ngen))) {
         if (df_Ngen$id[j] %in% UsedId) {
           next
         } else {
           # idx <- j+1
           if (df_Ngen$sex[j] == "F") {
-            for (k in 1:nrow(df_Ngen)) {
+            for (k in seq_len(nrow(df_Ngen))) {
               idr <- df_Ngen$id[k]
               tgt <- (!(idr %in% UsedId)) & df_Ngen$sex[k] == "M"
               # tgt <- ifelse(is.na(tgt),FALSE,TRUE)
@@ -155,7 +155,7 @@ simulatePedigree <- function(kpc = 3,
               }
             }
           } else {
-            for (k in 1:nrow(df_Ngen)) {
+            for (k in seq_len(nrow(df_Ngen))) {
               idr <- df_Ngen$id[k]
               tgt <- (!(idr %in% UsedId)) & df_Ngen$sex[k] == "F"
               # tgt <- ifelse(is.na(tgt),FALSE,TRUE)
@@ -422,7 +422,7 @@ simulatePedigree <- function(kpc = 3,
         # print(IdOfp)
         
         # put the IdMa and IdPa into the dfFam with correspondent OfpId
-        for (m in 1:length(IdOfp)) {
+        for (m in seq_along(IdOfp)) {
           df_Ngen[df_Ngen$id == IdOfp[m], "pat"] <- IdPa[m]
           df_Ngen[df_Ngen$id == IdOfp[m], "mat"] <- IdMa[m]
         }

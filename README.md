@@ -14,8 +14,8 @@ version](https://www.r-pkg.org/badges/version/BGmisc)](https://cran.r-project.or
 downloads](https://cranlogs.r-pkg.org/badges/grand-total/BGmisc)](https://cran.r-project.org/package=BGmisc)</br>
 [![.github/workflows/draft-pdf.yml](https://github.com/R-Computing-Lab/BGmisc/actions/workflows/draft-pdf.yml/badge.svg)](https://github.com/R-Computing-Lab/BGmisc/actions/workflows/draft-pdf.yml)
 [![R-CMD-check](https://github.com/R-Computing-Lab/BGmisc/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/R-Computing-Lab/BGmisc/actions/workflows/R-CMD-check.yaml)
-[![Dev
-branch](https://github.com/R-Computing-Lab/BGmisc/actions/workflows/R-CMD-devcheck.yaml/badge.svg)](https://github.com/R-Computing-Lab/BGmisc/actions/workflows/R-CMD-devcheck.yaml)
+[![Dev Main
+branch](https://github.com/R-Computing-Lab/BGmisc/actions/workflows/R-CMD-dev_maincheck.yaml/badge.svg)](https://github.com/R-Computing-Lab/BGmisc/actions/workflows/R-CMD-dev_maincheck.yaml)
 ![License](https://img.shields.io/badge/License-GPL_v3-blue.svg)
 <!-- badges: end -->
 
