@@ -190,16 +190,16 @@ makeInbreeding <- function(ped,
   ped$spt[ped$ID == ID_mate2] <- ID_mate1
   # change the individuals in next generation whoes dadID and momID are ID_mate1 and ID_mate2's former mates to ID_mate1 and ID_mate2
   for (j in seq_len(nrow(ped))) {
-    if (!is.na(ped$dadID[j]) && !is.na(ID_mate1_former_mate) && ped$dadID[j] == ID_mate1_former_mate) {
+    if (!is.na(ped$dadID[j]) & !is.na(ID_mate1_former_mate) & ped$dadID[j] == ID_mate1_former_mate) {
       ped$dadID[j] <- ID_mate2
     }
-    if (!is.na(ped$momID[j]) && !is.na(ID_mate1_former_mate) && ped$momID[j] == ID_mate1_former_mate) {
+    if (!is.na(ped$momID[j]) & !is.na(ID_mate1_former_mate) & ped$momID[j] == ID_mate1_former_mate) {
       ped$momID[j] <- ID_mate2
     }
-    if (!is.na(ped$dadID[j]) && !is.na(ID_mate2_former_mate) && ped$dadID[j] == ID_mate2_former_mate) {
+    if (!is.na(ped$dadID[j]) & !is.na(ID_mate2_former_mate) & ped$dadID[j] == ID_mate2_former_mate) {
       ped$dadID[j] <- ID_mate1
     }
-    if (!is.na(ped$momID[j]) && !is.na(ID_mate2_former_mate) && ped$momID[j] == ID_mate2_former_mate) {
+    if (!is.na(ped$momID[j]) & !is.na(ID_mate2_former_mate) & ped$momID[j] == ID_mate2_former_mate) {
       ped$momID[j] <- ID_mate1
     }
   }
@@ -229,15 +229,12 @@ dropLink <- function(ped,
     if (is.na(sex_drop)) {
       ID_drop <- resample(ped$ID[ped$gen == gen_drop & !is.na(ped$dadID) & !is.na(ped$momID)], n_drop)
     } else {
-      ID_drop <- resample(
-        ped$ID[ped$gen == gen_drop & !is.na(ped$dadID) & !is.na(ped$momID) & ped$sex == sex_drop],
-        n_drop
-      )
+      ID_drop <- resample(ped$ID[ped$gen == gen_drop & !is.na(ped$dadID) & !is.na(ped$momID) & ped$sex == sex_drop], n_drop)
     }
     if (!is.na(ID_drop)) {
       ped[ped$ID %in% ID_drop, c("dadID", "momID")] <- NA_integer_
     } else {
-      warning("No individual is dropped from their parents.")
+      warning("No individual is dropped from his/her parents.")
     }
   } else {
     ped[ped$ID == ID_drop, c("dadID", "momID")] <- NA_integer_
