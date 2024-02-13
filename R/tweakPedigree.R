@@ -13,8 +13,7 @@
 # A function to impute twins in the simulated pedigree \code{data.frame}.
 # Twins can be imputed by specifying their IDs or by specifying the generation the twin should be imputed.
 makeTwins <- function(ped, ID_twin1 = NA_integer_, ID_twin2 = NA_integer_, gen_twin = 2, verbose = FALSE) {
-  # a support function
-  resample <- function(x, ...) x[sample.int(length(x), ...)]
+
   # Check if the ped is the same format as the output of simulatePedigree
   if (paste0(colnames(ped), collapse = "") != paste0(c(
     "fam", "ID", "gen",
@@ -100,7 +99,7 @@ makeTwins <- function(ped, ID_twin1 = NA_integer_, ID_twin2 = NA_integer_, gen_t
 
 #' makeInbreeding
 #' A function to create inbred mates in the simulated pedigree \code{data.frame}.
-#' Inbred mates can be created by specifying their IDs or by specifying the generation the inbred mate should be created.
+#' Inbred mates can be created by specifying their IDs or the generation the inbred mate should be created.
 #' When specifying the generation, inbreeding between siblings or 1st cousin needs to be specified.
 #' This is a supplementary function for \code{simulatePedigree}.
 #' @param ped A \code{data.frame} in the same format as the output of \code{simulatePedigree}.
@@ -191,16 +190,16 @@ makeInbreeding <- function(ped,
   ped$spt[ped$ID == ID_mate2] <- ID_mate1
   # change the individuals in next generation whoes dadID and momID are ID_mate1 and ID_mate2's former mates to ID_mate1 and ID_mate2
   for (j in seq_len(nrow(ped))) {
-    if (!is.na(ped$dadID[j]) & !is.na(ID_mate1_former_mate) & ped$dadID[j] == ID_mate1_former_mate) {
+    if (!is.na(ped$dadID[j]) && !is.na(ID_mate1_former_mate) && ped$dadID[j] == ID_mate1_former_mate) {
       ped$dadID[j] <- ID_mate2
     }
-    if (!is.na(ped$momID[j]) & !is.na(ID_mate1_former_mate) & ped$momID[j] == ID_mate1_former_mate) {
+    if (!is.na(ped$momID[j]) && !is.na(ID_mate1_former_mate) && ped$momID[j] == ID_mate1_former_mate) {
       ped$momID[j] <- ID_mate2
     }
-    if (!is.na(ped$dadID[j]) & !is.na(ID_mate2_former_mate) & ped$dadID[j] == ID_mate2_former_mate) {
+    if (!is.na(ped$dadID[j]) && !is.na(ID_mate2_former_mate) && ped$dadID[j] == ID_mate2_former_mate) {
       ped$dadID[j] <- ID_mate1
     }
-    if (!is.na(ped$momID[j]) & !is.na(ID_mate2_former_mate) & ped$momID[j] == ID_mate2_former_mate) {
+    if (!is.na(ped$momID[j]) && !is.na(ID_mate2_former_mate) && ped$momID[j] == ID_mate2_former_mate) {
       ped$momID[j] <- ID_mate1
     }
   }
@@ -230,12 +229,15 @@ dropLink <- function(ped,
     if (is.na(sex_drop)) {
       ID_drop <- resample(ped$ID[ped$gen == gen_drop & !is.na(ped$dadID) & !is.na(ped$momID)], n_drop)
     } else {
-      ID_drop <- resample(ped$ID[ped$gen == gen_drop & !is.na(ped$dadID) & !is.na(ped$momID) & ped$sex == sex_drop], n_drop)
+      ID_drop <- resample(
+        ped$ID[ped$gen == gen_drop & !is.na(ped$dadID) & !is.na(ped$momID) & ped$sex == sex_drop],
+        n_drop
+      )
     }
     if (!is.na(ID_drop)) {
       ped[ped$ID %in% ID_drop, c("dadID", "momID")] <- NA_integer_
     } else {
-      warning("No individual is dropped from his/her parents.")
+      warning("No individual is dropped from their parents.")
     }
   } else {
     ped[ped$ID == ID_drop, c("dadID", "momID")] <- NA_integer_

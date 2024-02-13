@@ -5,12 +5,12 @@
 \title{identifyComponentModel
 Determine if a variance components model is identified}
 \usage{
-identifyComponentModel(..., silent = FALSE)
+identifyComponentModel(..., verbose = TRUE)
 }
 \arguments{
 \item{...}{Comma-separated relatedness component matrices representing the variance components of the model.}
 
-\item{silent}{logical. If TRUE, suppresses messages about identification; FALSE by default.}
+\item{verbose}{logical. If FALSE, suppresses messages about identification; TRUE by default.}
 }
 \value{
 A list of length 2 containing:

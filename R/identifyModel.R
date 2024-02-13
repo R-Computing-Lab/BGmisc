@@ -2,7 +2,7 @@
 #' Determine if a variance components model is identified
 #'
 #' @param ... Comma-separated relatedness component matrices representing the variance components of the model.
-#' @param silent logical. If TRUE, suppresses messages about identification; FALSE by default.
+#' @param verbose logical. If FALSE, suppresses messages about identification; TRUE by default.
 #' @return A list of length 2 containing:
 #'   \itemize{
 #'     \item \code{identified}: TRUE if the model is identified, FALSE otherwise.
@@ -20,7 +20,7 @@
 #'
 #' identifyComponentModel(A = list(matrix(1, 2, 2)), C = list(matrix(1, 2, 2)), E = diag(1, 2))
 #'
-identifyComponentModel <- function(..., silent = FALSE) {
+identifyComponentModel <- function(..., verbose = TRUE) {
   # Collect the relatedness components
   dots <- list(...)
   nam <- names(dots)
@@ -32,12 +32,12 @@ identifyComponentModel <- function(..., silent = FALSE) {
   compm <- do.call(cbind, compl)
   rank <- qr(compm)$rank
   if (rank != length(dots)) {
-    if (!silent) cat("Component model is not identified.\n")
+    if (verbose) cat("Component model is not identified.\n")
     jacOC <- Null(t(compm))
     nidp <- nam[apply(jacOC, 1, function(x) {
       sum(x^2)
     }) > 1e-17]
-    if (!silent) {
+    if (verbose) {
       cat(
         "Non-identified parameters are ",
         paste(nidp, collapse = ", "), "\n"
@@ -45,7 +45,7 @@ identifyComponentModel <- function(..., silent = FALSE) {
     }
     return(list(identified = FALSE, nidp = nidp))
   } else {
-    if (!silent) cat("Component model is identified.\n")
+    if (verbose) cat("Component model is identified.\n")
     return(list(identified = TRUE, nidp = character(0)))
   }
 }

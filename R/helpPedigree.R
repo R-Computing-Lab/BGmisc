@@ -62,28 +62,72 @@ determineSex <- function(idGen, sexR) {
 #' @param df_Ngen The dataframe for the current generation, including columns for individual IDs and spouse IDs.
 #' @return The input dataframe augmented with a 'coupleId' column, where each mated pair has a unique identifier.
 assignCoupleIds <- function(df_Ngen) {
-  df_Ngen$coupleId <- NA_character_  # Initialize the coupleId column with NAs
-  usedCoupleIds <- character()  # Initialize an empty character vector to track used IDs
-  
+  df_Ngen$coupleId <- NA_character_ # Initialize the coupleId column with NAs
+  usedCoupleIds <- character() # Initialize an empty character vector to track used IDs
+
   for (j in seq_len(nrow(df_Ngen))) {
     if (!is.na(df_Ngen$spt[j]) && is.na(df_Ngen$coupleId[j])) {
       # Construct a potential couple ID from sorted individual and spouse IDs
       sortedIds <- sort(c(df_Ngen$id[j], df_Ngen$spt[j]))
       potentialCoupleId <- paste(sortedIds[1], sortedIds[2], sep = "_")
-      
+
       # Check if the potentialCoupleId has not already been used
       if (!potentialCoupleId %in% usedCoupleIds) {
         # Assign the new couple ID to both partners
         df_Ngen$coupleId[j] <- potentialCoupleId
         spouseIndex <- which(df_Ngen$id == df_Ngen$spt[j])
         df_Ngen$coupleId[spouseIndex] <- potentialCoupleId
-        
+
         # Add the new couple ID to the list of used IDs
         usedCoupleIds <- c(usedCoupleIds, potentialCoupleId)
       }
     }
   }
-  
+
   return(df_Ngen)
 }
+
+#' Generate or Adjust Number of Kids per Couple Based on Mating Rate
+#'
+#' This function generates or adjusts the number of kids per couple in a generation
+#' based on the specified average and whether the count should be randomly determined.
+#'
+#' @param nMates Integer, the number of mated pairs in the generation.
+#' @inheritParams simulatePedigree
+#'
+#' @return A numeric vector with the generated or adjusted number of kids per couple.
+adjustKidsPerCouple <- function(nMates, kpc, rd_kpc) {
+  if (rd_kpc) {
+    # cat("number of mates",nMates, "\n")
+
+    diff <- nMates + 1
+    while (diff > nMates) {
+      random_numbers <- stats::rpois(nMates, kpc)
+      # cat("original random numbers", random_numbers, "\n")
+      diff <- abs(nMates * kpc - sum(random_numbers))
+    }
+    # make sure the sum of kids per couple is equal to the number of kids in the i th generation
+    if (sum(random_numbers) < nMates * kpc) {
+      names(random_numbers) <- seq_along(random_numbers)
+      random_numbers <- sort(random_numbers)
+      random_numbers[1:diff] <- random_numbers[1:diff] + 1
+      random_numbers <- random_numbers[order(names(random_numbers))]
+    } else if (sum(random_numbers) > nMates * kpc) {
+      names(random_numbers) <- seq_along(random_numbers)
+      random_numbers <- sort(random_numbers, decreasing = TRUE)
+      random_numbers[1:diff] <- random_numbers[1:diff] - 1
+      random_numbers <- random_numbers[order(names(random_numbers))]
+    }
+  } else {
+    random_numbers <- rep(kpc, nMates)
+  }
+
+  if (min(random_numbers) < 0) {
+    random_numbers[random_numbers == -1] <- 0
+    random_numbers[random_numbers == max(random_numbers)] <- max(random_numbers) - 1
+  }
+
+  return(random_numbers)
+}
+
 
