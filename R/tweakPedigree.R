@@ -109,6 +109,8 @@ makeTwins <- function(ped, ID_twin1 = NA_integer_, ID_twin2 = NA_integer_, gen_t
 #' @param gen_inbred A vector of \code{generation} of the twin to be imputed.
 #' @param type_inbred A character vector indicating the type of inbreeding. "sib" for sibling inbreeding and "cousin" for cousin inbreeding.
 #' @return Returns a \code{data.frame} with some inbred mates.
+#' @details
+#' This function creates inbred mates in the simulated pedigree \code{data.frame}. This function's purpose is to evaluate the effect of inbreeding on model fitting and parameter estimation. In case it needs to be said, we do not condone inbreeding in real life. But we recognize that it is a common practice in some fields to create inbred strains for research purposes.
 #' @export
 
 # A function to create inbred mates in the simulated pedigree.
@@ -179,9 +181,9 @@ makeInbreeding <- function(ped,
   }
   # save the two individual's former mates' IDs if they have any
   ID_mate1_former_mate <- ped$spt[ped$ID == ID_mate1]
-  cat(ID_mate1, "\n")
+#  cat(ID_mate1, "\n")
   ID_mate2_former_mate <- ped$spt[ped$ID == ID_mate2]
-  cat(ID_mate2, "\n")
+#  cat(ID_mate2, "\n")
   # remove two individuals' former mates from the pedigree if they have any
   ped$spt[ped$ID == ID_mate1] <- NA_integer_
   ped$spt[ped$ID == ID_mate2] <- NA_integer_

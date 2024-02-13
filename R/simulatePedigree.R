@@ -168,8 +168,14 @@ buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose, marR, sexR,
       df_Ngen$ifdau <- FALSE
       df_Ngen$coupleId <- NA_character_
       df_Ngen <- df_Ngen[sample(nrow(df_Ngen)), ]
+      
       # Start to connect children with mother and father
-      # Step 2.1: mark a group of potential sons and daughters in the i th generation
+      # 
+      if (verbose) {
+        print(
+          "Step 2.1: mark a group of potential sons and daughters in the i th generation"
+        )
+      }
 
       # try to rewrite the code
       # count the number of couples in the i th gen
@@ -187,38 +193,10 @@ buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose, marR, sexR,
       CoupleF <- N_LinkedFemale - SingleF
       SingleM <- sum(df_Ngen$sex == "M" & is.na(df_Ngen$spt))
       CoupleM <- N_LinkedMale - SingleM
-      # get all couple ids
-      coupleID <- unique(df_Ngen$coupleId[!is.na(df_Ngen$coupleId)])
-      if (i == Ngen) {
-        CoupleF <- 0
-      }
-      coupleGirl <- sample(coupleID, CoupleF)
-      coupleBoy <- coupleID[!coupleID %in% coupleGirl]
-      # single person should all be sons or daus
-      # change the ifson and ifdau based on coupleGirl and coupleBoy
-      for (j in 1:sizeGens[i]) {
-        if (is.na(df_Ngen$spt[j])) {
-          if (df_Ngen$sex[j] == "F") {
-            df_Ngen$ifdau[j] <- TRUE
-            # usedIds <- c(usedIds, df_Ngen$id[j])
-          } else {
-            df_Ngen$ifson[j] <- TRUE
-            # usedIds <- c(usedIds, df_Ngen$id[j])
-          }
-        } else {
-          if (df_Ngen$coupleId[j] %in% coupleBoy && df_Ngen$sex[j] == "M") {
-            df_Ngen$ifson[j] <- TRUE
-          } else if (df_Ngen$coupleId[j] %in% coupleGirl && df_Ngen$sex[j] == "F") {
-            df_Ngen$ifdau[j] <- TRUE
-          } else {
-            next
-          }
-        }
-      }
 
-      df_Ngen <- df_Ngen[order(as.numeric(rownames(df_Ngen))), , drop = FALSE]
-      df_Ngen <- df_Ngen[, -ncol(df_Ngen)]
-      df_Fam[df_Fam$gen == i, ] <- df_Ngen
+      df_Fam[df_Fam$gen == i, ] <- markPotentialChildren(df_Ngen=df_Ngen, i=i, Ngen = Ngen, sizeGens = sizeGens,CoupleF=CoupleF)
+
+
       if (verbose) {
         print(
           "Step 2.2: mark a group of potential parents in the i-1 th generation"
@@ -428,3 +406,6 @@ simulatePedigree <- function(kpc = 3,
   # print(df_Fam)
   return(df_Fam)
 }
+
+
+

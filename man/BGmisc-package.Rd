@@ -8,6 +8,14 @@
 \description{
 The BGmisc R package offers a comprehensive suite of functions tailored for extended behavior genetics analysis, including model identification, calculating relatedness, pedigree conversion, pedigree simulation, and more.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/R-Computing-Lab/BGmisc/}
+  \item Report bugs at \url{https://github.com/R-Computing-Lab/BGmisc/issues}
+}
+
+}
 \author{
 \strong{Maintainer}: S. Mason Garrison \email{garrissm@wfu.edu} (\href{https://orcid.org/0000-0002-4804-6003}{ORCID})
 
