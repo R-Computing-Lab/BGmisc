@@ -21,7 +21,7 @@ test_that("checkIDs with a duplicate", {
 
 test_that("repair with a duplicate", {
   # Create a sample dataset
-  df <- standardize_colnames(ped2fam(potter, famID = "newFamID", personID = "personID"))
+  df <- standardizeColnames(ped2fam(potter, famID = "newFamID", personID = "personID"))
   df_bound <- rbind(df, df[df$name == "Vernon Dursley", ])
   result <- checkIDs(df_bound, repair = TRUE)
   expect_equal(df, result)

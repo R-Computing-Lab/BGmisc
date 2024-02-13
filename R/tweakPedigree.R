@@ -20,7 +20,7 @@ makeTwins <- function(ped, ID_twin1 = NA_integer_, ID_twin2 = NA_integer_, gen_t
     "fam", "ID", "gen",
     "dadID", "momID", "spt", "sex"
   ), collapse = "")) {
-    ped <- standardize_colnames(ped)
+    ped <- standardizeColnames(ped)
     if (verbose) {
       cat("The input pedigree is not in the same format as the output of simulatePedigree\n")
     }
@@ -122,7 +122,7 @@ makeInbreeding <- function(ped,
                            type_inbred = "sib") {
   # check if the ped is the same format as the output of simulatePedigree
   if (paste0(colnames(ped), collapse = "") != paste0(c("fam", "ID", "gen", "dadID", "momID", "spt", "sex"), collapse = "")) {
-    ped <- standardize_colnames(ped)
+    ped <- standardizeColnames(ped)
     if (verbose) {
       cat("The input pedigree is not in the same format as the output of simulatePedigree\n")
     }
@@ -210,7 +210,7 @@ makeInbreeding <- function(ped,
 #' dropLink
 #' A function to drop a person from his/her parents in the simulated pedigree \code{data.frame}.
 #' The person can be dropped by specifying his/her ID or by specifying the generation which the randomly to be dropeed person is in.
-#' The function can seperate one pedigree into two pedigrees. Seperating into small pieces should be done by running the function multiple times.
+#' The function can separate one pedigree into two pedigrees. Seperating into small pieces should be done by running the function multiple times.
 #' This is a supplementary function for \code{simulatePedigree}.
 #' @param ped a pedigree simulated from simulatePedigree function or the same format
 #' @param ID_drop the ID of the person to be dropped from his/her parents.

@@ -5,7 +5,7 @@
 \title{dropLink
 A function to drop a person from his/her parents in the simulated pedigree \code{data.frame}.
 The person can be dropped by specifying his/her ID or by specifying the generation which the randomly to be dropeed person is in.
-The function can seperate one pedigree into two pedigrees. Seperating into small pieces should be done by running the function multiple times.
+The function can separate one pedigree into two pedigrees. Seperating into small pieces should be done by running the function multiple times.
 This is a supplementary function for \code{simulatePedigree}.}
 \usage{
 dropLink(
@@ -34,6 +34,6 @@ a pedigree with the dropped person's dadID and momID set to NA.
 dropLink
 A function to drop a person from his/her parents in the simulated pedigree \code{data.frame}.
 The person can be dropped by specifying his/her ID or by specifying the generation which the randomly to be dropeed person is in.
-The function can seperate one pedigree into two pedigrees. Seperating into small pieces should be done by running the function multiple times.
+The function can separate one pedigree into two pedigrees. Seperating into small pieces should be done by running the function multiple times.
 This is a supplementary function for \code{simulatePedigree}.
 }

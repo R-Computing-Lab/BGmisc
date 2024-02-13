@@ -20,7 +20,7 @@
 #'
 checkSex <- function(ped, code_male = NULL, code_female = NULL, verbose = FALSE, repair = FALSE) {
   # Standardize column names in the input dataframe
-  ped <- standardize_colnames(ped)
+  ped <- standardizeColnames(ped)
 
   # TO DO bypass the rest of the function if recode_only is TRUE
 

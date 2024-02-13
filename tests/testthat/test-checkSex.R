@@ -2,7 +2,7 @@
 test_that("checkSex identifies sex coding correctly in potter dataset", {
   results <- checkSex(potter,
     code_male = 1,
-    code_female = 0, verbose = FALSE, repair = FALSE
+    code_female = 0, verbose = TRUE, repair = FALSE
   )
   expect_true("sex_unique" %in% names(results))
   expect_equal(results$sex_unique, c(1, 0))
