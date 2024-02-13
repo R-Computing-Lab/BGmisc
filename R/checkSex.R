@@ -20,7 +20,7 @@
 #'
 checkSex <- function(ped, code_male = NULL, code_female = NULL, verbose = FALSE, repair = FALSE) {
   # Standardize column names in the input dataframe
-  ped <- standardize_colnames(ped)
+  ped <- standardizeColnames(ped)
 
   # TO DO bypass the rest of the function if recode_only is TRUE
 
@@ -140,7 +140,7 @@ recodeSex <- function(
   }
 
   # Recode as "F" or "M" based on code_male, preserving NAs
-  if(!is.null(code_male) & !is.null(code_female)){
+  if (!is.null(code_male) & !is.null(code_female)) {
     # Initialize sex_recode as NA, preserving the length of the 'sex' column
     ped$sex_recode <- recode_na
     ped$sex_recode[ped$sex == code_female] <- recode_female
@@ -148,8 +148,7 @@ recodeSex <- function(
     # overwriting temp recode variable
     ped$sex <- ped$sex_recode
     ped$sex_recode <- NULL
-
- } else if(!is.null(code_male) & is.null(code_female)) {
+  } else if (!is.null(code_male) & is.null(code_female)) {
     # Initialize sex_recode as NA, preserving the length of the 'sex' column
     ped$sex_recode <- recode_na
     ped$sex_recode[ped$sex != code_male & !is.na(ped$sex)] <- recode_female
@@ -166,7 +165,8 @@ recodeSex <- function(
     ped$sex <- ped$sex_recode
     ped$sex_recode <- NULL
   } else {
-    if(verbose){warning(" both code male and code female are empty. No recoding was done.")
+    if (verbose) {
+      warning(" both code male and code female are empty. No recoding was done.")
     }
   }
   return(ped)

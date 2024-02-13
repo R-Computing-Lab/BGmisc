@@ -1,10 +1,9 @@
 # Test Case 1: Basic functionality with m < n
 test_that("evenInsert inserts elements of m into n when m < n", {
-
   result_observed <- evenInsert(1:3, 4:6)
   result_expected <- c(1, 4, 2, 5, 3, 6)
 
-  expect_equal(result_observed,result_expected)
+  expect_equal(result_observed, result_expected)
 })
 
 # # Test Case 2: Functionality with m > n (should swap m and n)
@@ -32,9 +31,9 @@ test_that("evenInsert inserts elements of m into n when m < n", {
 
 # Test Case 5: Verbose mode
 test_that("Verbose mode work for evenInsert", {
-
-  expect_output(evenInsert(1:3, 4:6,verbose=TRUE),
-                regexp = "1 2 3 \\n1 2 3 \\n1 2 3 \\n4 5 6 ")
+  expect_output(evenInsert(1:3, 4:6, verbose = TRUE),
+    regexp = "1 2 3 \\n1 2 3 \\n1 2 3 \\n4 5 6 "
+  )
 })
 
 
@@ -44,6 +43,5 @@ test_that("evenInsert handles vectors of equal length correctly", {
   result_expected <- c(1, 4, 2, 5, 3, 6)
 
 
-  expect_equal(result_observed,result_expected)
-
+  expect_equal(result_observed, result_expected)
 })

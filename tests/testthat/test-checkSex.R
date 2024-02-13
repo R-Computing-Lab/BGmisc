@@ -1,7 +1,9 @@
-
 # Test Case 1: Validate sex coding without repair
 test_that("checkSex identifies sex coding correctly in potter dataset", {
-  results <- checkSex(potter, code_male = 1, code_female = 0, verbose = FALSE, repair = FALSE)
+  results <- checkSex(potter,
+    code_male = 1,
+    code_female = 0, verbose = TRUE, repair = FALSE
+  )
   expect_true("sex_unique" %in% names(results))
   expect_equal(results$sex_unique, c(1, 0))
   expect_equal(results$sex_length, 2)
@@ -33,4 +35,3 @@ test_that("Functions handle missing values gracefully", {
   expect_silent(repairSex(ped_with_na, verbose = FALSE, code_male = "M"))
   expect_silent(recodeSex(ped_with_na, verbose = FALSE, code_male = "M", code_female = "F"))
 })
-

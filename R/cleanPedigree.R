@@ -10,14 +10,16 @@
 #' @return A dataframe with standardized column names.
 #'
 #' @keywords internal
-standardize_colnames <- function(df, verbose = FALSE) {
+standardizeColnames <- function(df, verbose = FALSE) {
   # Internal mapping of standardized names to possible variants
   mapping <- list(
     "fam" = "^(?:fam(?:ily)?(?:id)?)",
     "ID" = "^(?:i(?:d$|ndiv(?:idual)?)|p(?:erson)?id)",
     "gen" = "^(?:gen(?:s|eration)?)",
     "dadID" = "^(?:d(?:ad)?id|paid|fatherid)",
+    "patID" = "^(?:datid|patid|paternal(?:id)?)",
     "momID" = "^(?:m(?:om|a|other)?id)",
+    "matID" = "^(?:matid|maternal(?:id)?)",
     "spt" = "^(?:s(?:pt)?id|spouse(?:id)?|partner(?:id)?)",
     "twinID" = "^(?:twin(?:id)?)",
     "sex" = "^(?:sex|gender|female|m(?:a(?:le|n)|en)|wom[ae]n)"
@@ -58,7 +60,7 @@ standardize_colnames <- function(df, verbose = FALSE) {
 # check_sex = TRUE,
 # check_parents = TRUE,
 # verbose = FALSE) {
-# corrected_ped <- ped <- standardize_colnames(ped)
+# corrected_ped <- ped <- standardizeColnames(ped)
 # if (verbose) {
 # print("Repairing pedigree...")
 # }
