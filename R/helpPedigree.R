@@ -53,3 +53,37 @@ determineSex <- function(idGen, sexR) {
   sexVec <- sample(c(sexVec1, sexVec2))
   return(sexVec)
 }
+
+#' Assign Couple IDs
+#'
+#' This subfunction assigns a unique couple ID to each mated pair in the generation.
+#' Unmated individuals are assigned NA for their couple ID.
+#'
+#' @param df_Ngen The dataframe for the current generation, including columns for individual IDs and spouse IDs.
+#' @return The input dataframe augmented with a 'coupleId' column, where each mated pair has a unique identifier.
+assignCoupleIds <- function(df_Ngen) {
+  df_Ngen$coupleId <- NA_character_  # Initialize the coupleId column with NAs
+  usedCoupleIds <- character()  # Initialize an empty character vector to track used IDs
+  
+  for (j in seq_len(nrow(df_Ngen))) {
+    if (!is.na(df_Ngen$spt[j]) && is.na(df_Ngen$coupleId[j])) {
+      # Construct a potential couple ID from sorted individual and spouse IDs
+      sortedIds <- sort(c(df_Ngen$id[j], df_Ngen$spt[j]))
+      potentialCoupleId <- paste(sortedIds[1], sortedIds[2], sep = "_")
+      
+      # Check if the potentialCoupleId has not already been used
+      if (!potentialCoupleId %in% usedCoupleIds) {
+        # Assign the new couple ID to both partners
+        df_Ngen$coupleId[j] <- potentialCoupleId
+        spouseIndex <- which(df_Ngen$id == df_Ngen$spt[j])
+        df_Ngen$coupleId[spouseIndex] <- potentialCoupleId
+        
+        # Add the new couple ID to the list of used IDs
+        usedCoupleIds <- c(usedCoupleIds, potentialCoupleId)
+      }
+    }
+  }
+  
+  return(df_Ngen)
+}
+

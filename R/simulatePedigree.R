@@ -181,7 +181,7 @@ simulatePedigree <- function(kpc = 3,
       df_Ngen$ifparent <- FALSE
       df_Ngen$ifson <- FALSE
       df_Ngen$ifdau <- FALSE
-      df_Ngen$IdCouple <- as.character(NA)
+      df_Ngen$coupleId <- NA_character_
       df_Ngen <- df_Ngen[sample(nrow(df_Ngen)), ]
       # Start to connect children with mother and father
       # Step 2.1: mark a group of potential sons and daughters in the i th generation
@@ -190,23 +190,11 @@ simulatePedigree <- function(kpc = 3,
       # count the number of couples in the i th gen
       countCouple <- (nrow(df_Ngen) - sum(is.na(df_Ngen$spt))) * .5
 
-      # give each member a coupleId
-      UsedCoupleId <- character()
-      for (j in 1:sizeGens[i]) {
-        if (df_Ngen$IdCouple[j] %in% UsedCoupleId) {
-          next
-        } else {
-          if (is.na(df_Ngen$spt[j])) {
-            df_Ngen$IdCouple[j] <- as.character(NA)
-          } else {
-            df_Ngen$IdCouple[j] <- paste(sort(c(df_Ngen$id[j], df_Ngen$spt[j]))[1],
-              sort(c(df_Ngen$id[j], df_Ngen$spt[j]))[2],
-              sep = "_"
-            )
-            UsedCoupleId <- c(UsedCoupleId, df_Ngen$IdCouple[j])
-          }
-        }
-      }
+      
+    # Now, assign couple IDs for the current generation
+     df_Ngen <- assignCoupleIds(df_Ngen)
+
+
       # get the number of linked female and male children after excluding the single children
       # get a vector of single person id in the ith generation
       IdSingle <- df_Ngen$id[is.na(df_Ngen$spt)]
@@ -215,7 +203,7 @@ simulatePedigree <- function(kpc = 3,
       SingleM <- sum(df_Ngen$sex == "M" & is.na(df_Ngen$spt))
       CoupleM <- N_LinkedMale - SingleM
       # get all couple ids
-      coupleID <- unique(df_Ngen$IdCouple[!is.na(df_Ngen$IdCouple)])
+      coupleID <- unique(df_Ngen$coupleId[!is.na(df_Ngen$coupleId)])
       if (i == Ngen) {
         CoupleF <- 0
       }
@@ -233,9 +221,9 @@ simulatePedigree <- function(kpc = 3,
             # UsedId <- c(UsedId, df_Ngen$id[j])
           }
         } else {
-          if (df_Ngen$IdCouple[j] %in% coupleBoy & df_Ngen$sex[j] == "M") {
+          if (df_Ngen$coupleId[j] %in% coupleBoy && df_Ngen$sex[j] == "M") {
             df_Ngen$ifson[j] <- TRUE
-          } else if (df_Ngen$IdCouple[j] %in% coupleGirl & df_Ngen$sex[j] == "F") {
+          } else if (df_Ngen$coupleId[j] %in% coupleGirl && df_Ngen$sex[j] == "F") {
             df_Ngen$ifdau[j] <- TRUE
           } else {
             next
@@ -257,7 +245,7 @@ simulatePedigree <- function(kpc = 3,
       df_Ngen$ifdau <- FALSE
       df_Ngen <- df_Ngen[sample(nrow(df_Ngen)), ]
       # Create a pool for the used parents
-      UsedIdParents <- numeric()
+      usedParentIds <- numeric()
 
       for (k in 1:sizeGens[i - 1]) {
         # first check if the number of married couples surpass the marriage rate
@@ -265,10 +253,10 @@ simulatePedigree <- function(kpc = 3,
           break
         } else {
           # check if the id is used and if the member has married
-          if (!(df_Ngen$id[k] %in% UsedIdParents) & !is.na(df_Ngen$spt[k])) {
+          if (!(df_Ngen$id[k] %in% usedParentIds) & !is.na(df_Ngen$spt[k])) {
             df_Ngen$ifparent[k] <- TRUE
             df_Ngen$ifparent[df_Ngen$spt == df_Ngen$id[k]] <- TRUE
-            UsedIdParents <- c(UsedIdParents, df_Ngen$id[k], df_Ngen$spt[k])
+            usedParentIds <- c(usedParentIds, df_Ngen$id[k], df_Ngen$spt[k])
           } else {
             next
           }
@@ -311,12 +299,12 @@ simulatePedigree <- function(kpc = 3,
           # diff = abs(length(IdOfp) - sum(random_numbers))
           # make sure the sum of kids per couple is equal to the number of kids in the i th generation
           if (sum(random_numbers) < nMates * kpc) {
-            names(random_numbers) <- seq(length(random_numbers))
+            names(random_numbers) <- seq_along(random_numbers)
             random_numbers <- sort(random_numbers)
             random_numbers[1:diff] <- random_numbers[1:diff] + 1
             random_numbers <- random_numbers[order(names(random_numbers))]
           } else if (sum(random_numbers) > nMates * kpc) {
-            names(random_numbers) <- seq(length(random_numbers))
+            names(random_numbers) <- seq_along(random_numbers)
             random_numbers <- sort(random_numbers, decreasing = TRUE)
             random_numbers[1:diff] <- random_numbers[1:diff] - 1
             random_numbers <- random_numbers[order(names(random_numbers))]
@@ -341,12 +329,12 @@ simulatePedigree <- function(kpc = 3,
           # check if the id is used
           if (!df_Ngen$id[l] %in% UsedId) {
             # check if the member can be a parent
-            if (df_Ngen$ifparent[l] == TRUE & df_Ngen$sex[l] == "F") {
+            if (df_Ngen$ifparent[l] == TRUE && df_Ngen$sex[l] == "F") {
               UsedId <- c(UsedId, df_Ngen$id[l], df_Ngen$spt[l])
               IdMa <- c(IdMa, rep(df_Ngen$id[l], random_numbers[idx]))
               IdPa <- c(IdPa, rep(df_Ngen$spt[l], random_numbers[idx]))
               idx <- idx + 1
-            } else if (df_Ngen$ifparent[l] == TRUE & df_Ngen$sex[l] == "M") {
+            } else if (df_Ngen$ifparent[l] == TRUE && df_Ngen$sex[l] == "M") {
               UsedId <- c(UsedId, df_Ngen$id[l], df_Ngen$spt[l])
               IdPa <- c(IdPa, rep(df_Ngen$id[l], random_numbers[idx]))
               IdMa <- c(IdMa, rep(df_Ngen$spt[l], random_numbers[idx]))
