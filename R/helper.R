@@ -25,17 +25,16 @@ rmvn <- function(n, sigma) {
 #' @return replaces null values in a vector to NA
 #'
 nullToNA <- function(x) {
-
   if (length(x) == 0) {
     x <- NA
 
-# Handle case when x is a list
-  } else if (is.list(x)){
+    # Handle case when x is a list
+  } else if (is.list(x)) {
     for (i in seq_along(x)) {
-    if (is.null(x[[i]])) {
-      x[[i]] <- NA
+      if (is.null(x[[i]])) {
+        x[[i]] <- NA
+      }
     }
-  }
   }
   return(x)
 }

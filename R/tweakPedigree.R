@@ -13,7 +13,6 @@
 # A function to impute twins in the simulated pedigree \code{data.frame}.
 # Twins can be imputed by specifying their IDs or by specifying the generation the twin should be imputed.
 makeTwins <- function(ped, ID_twin1 = NA_integer_, ID_twin2 = NA_integer_, gen_twin = 2, verbose = FALSE) {
-
   # Check if the ped is the same format as the output of simulatePedigree
   if (paste0(colnames(ped), collapse = "") != paste0(c(
     "fam", "ID", "gen",
@@ -122,11 +121,28 @@ makeInbreeding <- function(ped,
                            gen_inbred = 2,
                            type_inbred = "sib") {
   # check if the ped is the same format as the output of simulatePedigree
-  if (paste0(colnames(ped), collapse = "") != paste0(c("fam", "ID", "gen", "dadID", "momID", "spt", "sex"), collapse = "")) {
+
+  if (paste0(colnames(ped),
+    collapse = ""
+  ) != paste0(
+    c("fam", "ID", "gen", "dadID", "momID", "spt", "sex"),
+    collapse = ""
+  )) {
     ped <- standardizeColnames(ped)
     if (verbose) {
       cat("The input pedigree is not in the same format as the output of simulatePedigree\n")
     }
+  }
+  # check if the type of inbreeding is valid
+  if (type_inbred %in% c("siblings", "sib", "sibling")) {
+    type_inbred <- "sib"
+  } else if (type_inbred %in% c("cousins", "cousin")) {
+    type_inbred <- "cousin"
+    stop("Cousin inbreeding is not supported yet. Please use 'sib' for sibling inbreeding.")
+    return()
+  } else {
+    stop("The type of inbreeding should be either 'sib' or 'cousin'")
+    return()
   }
   # check if the two IDs are provided
   if (is.na(ID_mate1) || is.na(ID_mate2)) {
@@ -136,7 +152,7 @@ makeInbreeding <- function(ped,
     } else {
       # Check if the generation is valid
       if (gen_inbred < 2 || gen_inbred > max(ped$gen)) {
-        stop("The generation of the twins should be an integer between 2 and the maximum generation in the pedigree")
+        stop("The generation of the mates should be an integer between 2 and the maximum generation in the pedigree")
       } else {
         if (type_inbred == "sib") {
           # loop through all the nuclear families in the generation
@@ -172,7 +188,7 @@ makeInbreeding <- function(ped,
             }
           }
         } else if (type_inbred == "cousin") {
-          cat("cousin inbreeding is not supported yet\n")
+          stop("cousin inbreeding is not supported yet\n")
         } else {
           stop("The type of inbreeding should be either sib or cousin")
         }
@@ -181,16 +197,16 @@ makeInbreeding <- function(ped,
   }
   # save the two individual's former mates' IDs if they have any
   ID_mate1_former_mate <- ped$spt[ped$ID == ID_mate1]
-#  cat(ID_mate1, "\n")
+  #  cat(ID_mate1, "\n")
   ID_mate2_former_mate <- ped$spt[ped$ID == ID_mate2]
-#  cat(ID_mate2, "\n")
+  #  cat(ID_mate2, "\n")
   # remove two individuals' former mates from the pedigree if they have any
   ped$spt[ped$ID == ID_mate1] <- NA_integer_
   ped$spt[ped$ID == ID_mate2] <- NA_integer_
   # change the spouseID of ID_mate1 and ID_mate2 to each other
   ped$spt[ped$ID == ID_mate1] <- ID_mate2
   ped$spt[ped$ID == ID_mate2] <- ID_mate1
-  # change the individuals in next generation whoes dadID and momID are ID_mate1 and ID_mate2's former mates to ID_mate1 and ID_mate2
+  # change the individuals in next generation whose dadID and momID are ID_mate1 and ID_mate2's former mates to ID_mate1 and ID_mate2
   for (j in seq_len(nrow(ped))) {
     if (!is.na(ped$dadID[j]) & !is.na(ID_mate1_former_mate) & ped$dadID[j] == ID_mate1_former_mate) {
       ped$dadID[j] <- ID_mate2

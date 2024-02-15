@@ -168,9 +168,9 @@ buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose, marR, sexR,
       df_Ngen$ifdau <- FALSE
       df_Ngen$coupleId <- NA_character_
       df_Ngen <- df_Ngen[sample(nrow(df_Ngen)), ]
-      
+
       # Start to connect children with mother and father
-      # 
+      #
       if (verbose) {
         print(
           "Step 2.1: mark a group of potential sons and daughters in the i th generation"
@@ -194,7 +194,7 @@ buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose, marR, sexR,
       SingleM <- sum(df_Ngen$sex == "M" & is.na(df_Ngen$spt))
       CoupleM <- N_LinkedMale - SingleM
 
-      df_Fam[df_Fam$gen == i, ] <- markPotentialChildren(df_Ngen=df_Ngen, i=i, Ngen = Ngen, sizeGens = sizeGens,CoupleF=CoupleF)
+      df_Fam[df_Fam$gen == i, ] <- markPotentialChildren(df_Ngen = df_Ngen, i = i, Ngen = Ngen, sizeGens = sizeGens, CoupleF = CoupleF)
 
 
       if (verbose) {
@@ -406,6 +406,3 @@ simulatePedigree <- function(kpc = 3,
   # print(df_Fam)
   return(df_Fam)
 }
-
-
-

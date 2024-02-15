@@ -132,7 +132,7 @@ adjustKidsPerCouple <- function(nMates, kpc, rd_kpc) {
 
 #' Mark and Assign children
 #'
-#' This subfunction marks individuals in a generation as potential sons, daughters, 
+#' This subfunction marks individuals in a generation as potential sons, daughters,
 #' or parents based on their relationships and assigns unique couple IDs. It processes
 #' the assignment of roles and relationships within and between generations in a pedigree simulation.
 #'
@@ -144,47 +144,46 @@ adjustKidsPerCouple <- function(nMates, kpc, rd_kpc) {
 #' @param sizeGens Numeric vector, containing the size (number of individuals) of each generation.
 #' @param CoupleF Integer, IT MIGHT BE the number of couples in the current generation.
 #'
-#' 
+#'
 #' @return Modifies `df_Ngen` in place by updating or adding columns related to individual roles
 #'         (`ifparent`, `ifson`, `ifdau`) and couple IDs (`coupleId`). The updated data frame is
 #'         also returned for integration into the larger pedigree data frame (`df_Fam`).
 #'
 
-markPotentialChildren <- function(df_Ngen, i, Ngen, sizeGens,CoupleF) {
+markPotentialChildren <- function(df_Ngen, i, Ngen, sizeGens, CoupleF) {
+  # Step 2.1: mark a group of potential sons and daughters in the i th generation
 
-     # Step 2.1: mark a group of potential sons and daughters in the i th generation
-
-      # get all couple ids
-      coupleID <- unique(df_Ngen$coupleId[!is.na(df_Ngen$coupleId)])
-      if (i == Ngen) {
-        CoupleF <- 0
+  # get all couple ids
+  coupleID <- unique(df_Ngen$coupleId[!is.na(df_Ngen$coupleId)])
+  if (i == Ngen) {
+    CoupleF <- 0
+  }
+  coupleGirl <- sample(coupleID, CoupleF)
+  coupleBoy <- coupleID[!coupleID %in% coupleGirl]
+  # single person should all be sons or daus
+  # change the ifson and ifdau based on coupleGirl and coupleBoy
+  for (j in 1:sizeGens[i]) {
+    if (is.na(df_Ngen$spt[j])) {
+      if (df_Ngen$sex[j] == "F") {
+        df_Ngen$ifdau[j] <- TRUE
+        # usedIds <- c(usedIds, df_Ngen$id[j])
+      } else {
+        df_Ngen$ifson[j] <- TRUE
+        # usedIds <- c(usedIds, df_Ngen$id[j])
       }
-      coupleGirl <- sample(coupleID, CoupleF)
-      coupleBoy <- coupleID[!coupleID %in% coupleGirl]
-      # single person should all be sons or daus
-      # change the ifson and ifdau based on coupleGirl and coupleBoy
-      for (j in 1:sizeGens[i]) {
-        if (is.na(df_Ngen$spt[j])) {
-          if (df_Ngen$sex[j] == "F") {
-            df_Ngen$ifdau[j] <- TRUE
-            # usedIds <- c(usedIds, df_Ngen$id[j])
-          } else {
-            df_Ngen$ifson[j] <- TRUE
-            # usedIds <- c(usedIds, df_Ngen$id[j])
-          }
-        } else {
-          if (df_Ngen$coupleId[j] %in% coupleBoy && df_Ngen$sex[j] == "M") {
-            df_Ngen$ifson[j] <- TRUE
-          } else if (df_Ngen$coupleId[j] %in% coupleGirl && df_Ngen$sex[j] == "F") {
-            df_Ngen$ifdau[j] <- TRUE
-          } else {
-            next
-          }
-        }
+    } else {
+      if (df_Ngen$coupleId[j] %in% coupleBoy && df_Ngen$sex[j] == "M") {
+        df_Ngen$ifson[j] <- TRUE
+      } else if (df_Ngen$coupleId[j] %in% coupleGirl && df_Ngen$sex[j] == "F") {
+        df_Ngen$ifdau[j] <- TRUE
+      } else {
+        next
       }
+    }
+  }
 
-      df_Ngen <- df_Ngen[order(as.numeric(rownames(df_Ngen))), , drop = FALSE]
-      df_Ngen <- df_Ngen[, -ncol(df_Ngen)]
+  df_Ngen <- df_Ngen[order(as.numeric(rownames(df_Ngen))), , drop = FALSE]
+  df_Ngen <- df_Ngen[, -ncol(df_Ngen)]
 
-      return(df_Ngen)
+  return(df_Ngen)
 }

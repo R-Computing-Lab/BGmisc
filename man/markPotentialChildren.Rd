@@ -25,7 +25,7 @@ Modifies `df_Ngen` in place by updating or adding columns related to individual 
         also returned for integration into the larger pedigree data frame (`df_Fam`).
 }
 \description{
-This subfunction marks individuals in a generation as potential sons, daughters, 
+This subfunction marks individuals in a generation as potential sons, daughters,
 or parents based on their relationships and assigns unique couple IDs. It processes
 the assignment of roles and relationships within and between generations in a pedigree simulation.
 }
