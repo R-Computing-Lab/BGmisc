@@ -98,6 +98,11 @@ checkSex <- function(ped, code_male = NULL, code_female = NULL, verbose = FALSE,
     }
     return(repaired_ped)
   } else {
+    if (verbose) {
+      cat("Checks Made:\n")
+      print(validation_results)
+    }
+
     return(validation_results)
   }
 }

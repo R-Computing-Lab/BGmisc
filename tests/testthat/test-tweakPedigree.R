@@ -114,22 +114,68 @@ test_that("makeInbreeding - Inbred mates specified by generation and cousin", {
     type_inbred = type_inbred
   ), regexp = "Cousin inbreedin")
 })
-# test_that("makeInbreeding - Inbred mates specified by generation", {
-#     ped <- data.frame(fam = c(1, 1, 2, 2),
-#                                         ID = c(1, 2, 3, 4),
-#                                         gen = c(1, 1, 2, 2),
-#                                         dadID = c(NA, NA, 1, 1),
-#                                         momID = c(NA, NA, 2, 2),
-#                                         spt = c(NA, NA, NA, NA),
-#                                         sex = c("M", "F", "M", "F"))
-#     expected_result <- data.frame(fam = c(1, 1, 2, 2),
-#                                                                 ID = c(1, 2, 3, 4),
-#                                                                 gen = c(1, 1, 2, 2),
-#                                                                 dadID = c(NA, NA, 1, 1),
-#                                                                 momID = c(NA, NA, 2, 2),
-#                                                                 spt = c(NA, NA, NA, NA),
-#                                                                 sex = c("M", "F", "M", "F"),
-#                                                                 inbred_mate = c(2, 1, NA, NA))
-#     result <- makeInbreeding(ped, gen_inbred = 1)
-#     expect_equal(result, expected_result)
-# })
+
+test_that("dropLink - Drop specified by ID", {
+  set.seed(15)
+  Ngen <- 4
+  kpc <- 4
+  sexR <- .50
+  marR <- .7
+  ID_drop <- 10021
+
+  ped <- simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR)
+  result <- dropLink(ped, ID_drop = ID_drop)
+
+
+  # are the dataframes the same in both the undropped and dropepd relationships for all but the dropped ID?
+  expect_equal(result[result$ID!=ID_drop,], ped[ped$ID!=ID_drop,])
+
+    # are the families of the dropped ID in the original?
+  expect_true(!is.na(ped$dadID[ped$ID==ID_drop]) & !is.na(ped$momID[ped$ID==ID_drop]))
+
+  # are the families dropped from the dropped
+  expect_true(is.na(result$dadID[result$ID==ID_drop])&is.na(result$momID[result$ID==ID_drop]))
+})
+
+
+test_that("dropLink - Drop specified by ID", {
+  set.seed(15)
+  Ngen <- 4
+  kpc <- 4
+  sexR <- .50
+  marR <- .7
+  ID_drop <- 10021
+
+  ped <- simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR)
+  result <- dropLink(ped, ID_drop = ID_drop)
+
+
+  # are the dataframes the same in both the undropped and dropepd relationships for all but the dropped ID?
+  expect_equal(result[result$ID!=ID_drop,], ped[ped$ID!=ID_drop,])
+
+    # are the families of the dropped ID in the original?
+  expect_true(!is.na(ped$dadID[ped$ID==ID_drop]) & !is.na(ped$momID[ped$ID==ID_drop]))
+
+  # are the families dropped from the dropped
+  expect_true(is.na(result$dadID[result$ID==ID_drop])&is.na(result$momID[result$ID==ID_drop]))
+})
+
+test_that("dropLink - Drop specified by generation", {
+  set.seed(15)
+  Ngen <- 4
+  kpc <- 4
+  sexR <- .50
+  marR <- .7
+  gen_drop = 2
+
+  ped <- simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR)
+  result <- dropLink(ped, gen_drop = gen_drop)
+
+  # are the dataframes the same in both the undropped and droppd relationships for all but the dropped gen?
+  expect_equal(result[result$gen!=gen_drop,], ped[ped$gen!=gen_drop,])
+
+  # are there more missing dads?
+  expect_lt(sum(is.na(ped$dadID[ped$gen==gen_drop])),sum(is.na(result$dadID[result$gen==gen_drop])))
+  # are there more missing moms?
+  expect_lt(sum(is.na(ped$momID[ped$gen==gen_drop])),sum(is.na(result$momID[result$gen==gen_drop])))
+})
