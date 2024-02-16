@@ -160,7 +160,7 @@ table(extendedFamilyEnvironment)
 Subsetting a pedigree allows researchers to focus on specific family lines or individuals within a larger dataset. This can be particularly useful for data validation as well as simplifying complex pedigrees for visualization. However, subsetting a pedigree can result in the underestimation of relatedness between individuals. This is because the subsetted pedigree may not contain all the individuals that connect two people together. For example if we were to remove Arthur Weasley (person 9) and Molly Prewett (person 10) from the `potter` dataset, we would lose the connections amoungst their children. 
 
 
-```{r, echo=FALSE, results='hide', out.width='50%', fig.cap="Potter Pedigree"}
+```{r, echo=FALSE, results='hide', out.width='50%', fig.cap="Potter Subset Pedigree"}
 names(potter)[names(potter) == "oldfam"] <- "famID"
 subset_rows <- c(1:8, 11:36)
 subset_potter <- potter[subset_rows, ]
@@ -181,6 +181,6 @@ However, this subset does not plot the relationship between spouses (such as the
 subset_rows <- c(1:5, 31:36)
 subset_potter <- potter[subset_rows, ]
 ```
-```{r, echo=FALSE, results='hide', out.width='50%', fig.cap="Potter Pedigree"}
+```{r, echo=FALSE, results='hide', out.width='50%', fig.cap="Potter Subset Pedigree"}
 plotPedigree(subset_potter, code_male = 1, verbose = TRUE)
 ```

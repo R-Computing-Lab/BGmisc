@@ -164,3 +164,17 @@ test_that("ped2add verbose prints updates", {
   data(hazard)
   expect_output(ped2add(hazard, verbose = TRUE), regexp = "Family Size =")
 })
+
+
+
+test_that("ped2maternal/paternal produces correct matrix dims", {
+  data(hazard)
+  mat <- ped2maternal(hazard)
+  expect_equal(dim(mat), c(nrow(hazard), ncol(hazard)+1))
+  data(hazard)
+  pat <- ped2paternal(hazard)
+  expect_equal(dim(pat), c(nrow(hazard), ncol(hazard)+1))
+
+  expect_less_than(cor(pat$patID, mat$matID), 1)
+})
+
