@@ -70,14 +70,23 @@ Acknowledgment of any financial support.
 
 <!--  A summary describing the high-level functionality and purpose of the software for a diverse, non-specialist audience. -->
 
-The field of behavior genetics focuses on illuminating genetic and environmental influences on individual differences.
-Traditionally, twin studies have been at the forefront of this discipline. However, research has moved beyond the classical twin design to embrace more complex family structures such as children of twins (CoT) [@DOnofrio2003], mother-daughter-aunt-niece (MDAN) [@rodgers_mdan], and other extended family designs. These expansions allow for a deeper, more nuanced exploration of genetic and environmental influences, but it also introduces challenges, particularly in data structuring and modeling. In particular, the data structures inherent in these more complicated family designs are orders of magnitude larger than traditional designs. In the classical twin study, for example, a family will consist of a single pair of twins (i.e., two people), whereas in the MDAN design, a family consists of two mother-daughter pairs (i.e., four people). This problem quickly becomes intractable when applied to very extended family pedigrees, where a single family can be of any size.  The `BGmisc` package addresses this gap by offering a comprehensive suite of functions for structuring and modeling extended family pedigree data.
+Behavior genetics explores how our genes and environment shape our individual differences. 
+
+Although twin studies have long been a cornerstone of this field, the `BGmisc` R package introduces advanced tools for analyzing more complex family structures (e.g., children of twins (CoT) [@DOnofrio2003], mother-daughter-aunt-niece (MDAN) [@rodgers_mdan]). 
+This expansions allows for a deeper, more nuanced exploration of genetic and environmental influences, accommodating families of any size, from twins to extensive pedigrees. 
+`BGmisc` simplifies the analysis of these complex data structures by offering a comprehensive suite of functions for structuring and modeling extended family pedigree data.
 
 
 # Statement of need
 <!-- A Statement of need section that clearly illustrates the research purpose of the software and places it in the context of related work. -->
 
-As behavior genetics delves into more complex data structures like extended pedigrees, the limitations of current tools become evident. Understandably, packages like `OpenMx` [@Neale2016], `EasyMx` [@easy], and `kinship2` [@kinship2; @kinship2R]  were built for  smaller families and classical designs. In contrast, the `BGmisc` R package was specifically developed to structure and model extended family pedigree data.
+The move towards analyzing complex family structures in behavior genetics introduces challenges, particularly in data structuring and modeling. The data structures inherent in these more complicated family designs are orders of magnitude larger than traditional designs. 
+In the classical twin study, for example, a family will consist of a single pair of twins (i.e., two people), whereas in the MDAN design, 
+a family consists of two mother-daughter pairs (i.e., four people). This problem quickly becomes intractable when applied to very extended family pedigrees, where a single family can be of any size.  The `BGmisc` package addresses this gap by offering a comprehensive suite of functions for structuring and modeling extended family pedigree data.
+
+Moreover, this shift highlights the limitations of existing software, which were designed for simpler family models.
+
+Understandably, packages like `OpenMx` [@Neale2016], `EasyMx` [@easy], and `kinship2` [@kinship2; @kinship2R]  were built for  smaller families and classical designs. In contrast, the `BGmisc` R package was specifically developed to structure and model extended family pedigree data.
 
 Two widely-used R packages in genetic modeling are `OpenMx` [@Neale2016] and `kinship2` [@kinship2; @kinship2R]. The `OpenMx` [@Neale2016] package is a general-purpose software for structural equation modeling that is popular among behavior geneticists [@Garrison2018] for its unique features, like the `mxCheckIdentification()` function. This function checks whether a model is identified, determining if there is a unique solution to estimate the model's parameters based on the observed data. In addition, `EasyMx` [@easy] is a more user-friendly package that streamlines the process of building and estimating structural equation models. It seamlessly integrates with `OpenMx`'s infrastructure. Its functionalities range from foundational matrix builders like `emxCholeskyVariance` and `emxGeneticFactorVariance` to more specialized functions like `emxTwinModel` designed for classical twin models. Despite their strengths, `EasyMx` and `OpenMx` have limitations when handling extended family data. Notably, they lack functions for handling modern molecular designs [@kirkpatrick_combining_2021], modeling complex genetic relationships, inferring relatedness, and simulating pedigrees.
 
