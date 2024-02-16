@@ -5,7 +5,7 @@
 \alias{potter}
 \title{Fictional pedigree data on a wizarding family}
 \format{
-A data frame (and ped object) with 24 rows and 5 variables
+A data frame (and ped object) with 36 rows and 8 variables
 }
 \usage{
 data(potter)
@@ -17,13 +17,17 @@ A dataset created purely from imagination that includes a subset of the Potter e
 The variables are as follows:
 
 \itemize{
-  \item ID.  Person identification variable
+  \item personID.  Person identification variable
+  \item famID. Family identification variable
+  \item name.  Name of the person
+  \item gen. Generation of the person
+  \item momID.  ID of the mother
+  \item dadID.  ID of the father
+  \item spouseID. ID of the spouse
   \item sex.  Sex of the ID: 1 is male; 0 is female
-  \item maID.  ID of the mother
-  \item paID.  ID of the father
-  \item Name.  Name of the person
+
 }
 
-Negative \code{maID}s and \code{paID}s are for people not in the dataset.
+IDs in the 100s \code{momID}s and \code{dadID}s are for people not in the dataset.
 }
 \keyword{datasets}

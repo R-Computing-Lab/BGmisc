@@ -31,8 +31,8 @@ ped2com <- function(ped, component,
     )
   )
   # standardize colnames
-  if(standardize.colnames){
-  ped <-  standardize_colnames(ped)
+  if (standardize.colnames) {
+    ped <- standardizeColnames(ped)
   }
   # Get the number of rows in the pedigree dataset, representing the size of the family
   nr <- nrow(ped)
