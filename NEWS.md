@@ -1,8 +1,12 @@
 # BGmisc 1.2.0
-* Added numerous code checks, replaced sapply usage, and added additional data validation checks.
-* 
+* Added numerous code checks, increased code coverage to 85%
+* replaced sapply usage
+* added additional data validation checks.
+
 # BGmisc 1.1.0
-* Added ability to simulate twins, trace paternal and maternal lines, and a Harry Potter pedigree
+* Added ability to simulate twins
+* Can now trace paternal and maternal lines
+* There's now a Harry Potter pedigree
 
 # BGmisc 1.0.1
 * Hot fix to resolve plotPedigree wrapper function breaking for pedigrees that contained multiple families
