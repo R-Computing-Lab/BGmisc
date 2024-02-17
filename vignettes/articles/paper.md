@@ -30,9 +30,9 @@ affiliations:
    index: 1
  - name:  Department of Human Development and Family Studies, Pennsylvania State University, Pennsylvania, USA
    index: 2
- - name: Institute for Behavioral Genetics, University of Colorado at Boulder, Boulder, USA 
+ - name: Institute for Behavioral Genetics, University of Colorado at Boulder, Colorado, USA 
    index: 3
- - name: Department of Psychology \& Neuroscience, University of Colorado at Boulder, Boulder, USA
+ - name: Department of Psychology \& Neuroscience, University of Colorado at Boulder, Colorado, USA
    index: 4
  - name: Department of Psychology, Michigan State University, Michigan, USA
    index: 5
