@@ -114,6 +114,6 @@ The `BGmisc` package is open-source and available on both GitHub at [https://git
 
 # Acknowledgments
 
-The current research is supported by the National Institute on Aging (NIA), RF1-AG073189. We want to acknowledge assistance from Carlos Santos.
+The current research is supported by the National Institute on Aging (NIA), RF1-AG073189. We want to acknowledge assistance from Rachel Good and Carlos Santos.
 
 # References
