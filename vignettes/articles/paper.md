@@ -68,7 +68,7 @@ Acknowledgment of any financial support.
 
 Behavior genetics is a field that studies how our genes and environment contribute to differences in behavior and traits among individuals.
 Traditionally, twin studies have long been a cornerstone of this field, helping researchers understand how genetics influence behavior.
-Recently, the focus has expanded to include studies with more complex family structures, e.g., children of twins [CoT, @DOnofrio2003] and mother-daughter-aunt-niece, [MDAN, @rodgers_mdan].
+Recently, the focus has expanded to include studies with more complex family structures, e.g., children of twins [CoT, @DOnofrio2003] and mother-daughter-aunt-niece [MDAN, @rodgers_mdan].
 These broader studies offer more detailed insights into how our genes and environment shape us, but they also make analyzing and organizing the data more complex.
 `BGmisc` simplifies the analysis of these complex data structures by offering a comprehensive suite of functions for accommodating families of any size, from twins to extensive pedigrees.
 
