@@ -19,7 +19,8 @@ knitr::opts_chunk$set(
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![R package version](https://www.r-pkg.org/badges/version/BGmisc)](https://cran.r-project.org/package=BGmisc)
 [![Package downloads](https://cranlogs.r-pkg.org/badges/grand-total/BGmisc)](https://cran.r-project.org/package=BGmisc)</br>
-[![.github/workflows/draft-pdf.yml](https://github.com/R-Computing-Lab/BGmisc/actions/workflows/draft-pdf.yml/badge.svg)](https://github.com/R-Computing-Lab/BGmisc/actions/workflows/draft-pdf.yml)
+[![status](https://joss.theoj.org/papers/ee3a025be4f61584f977a7657d936187/status.svg)](https://joss.theoj.org/papers/ee3a025be4f61584f977a7657d936187)
+
 [![R-CMD-check](https://github.com/R-Computing-Lab/BGmisc/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/R-Computing-Lab/BGmisc/actions/workflows/R-CMD-check.yaml)
 [![Dev Main
 branch](https://github.com/R-Computing-Lab/BGmisc/actions/workflows/R-CMD-dev_maincheck.yaml/badge.svg)](https://github.com/R-Computing-Lab/BGmisc/actions/workflows/R-CMD-dev_maincheck.yaml)
@@ -38,10 +39,20 @@ install.packages("BGmisc")
 
 To install the development version of BGmisc from [GitHub](https://github.com/) use:
 
-``` r
+```r
 # install.packages("devtools")
 devtools::install_github("R-Computing-Lab/BGmisc")
 ```
+
+## Citation
+
+If you use BGmisc in your research or wish to refer to it, please cite the following paper:
+
+
+```{r eval=TRUE, comment=NA}
+citation(package="BGmisc")
+```
+
 
 ## Contributing
 Contributions to the BGmisc project are welcome. For guidelines on how to contribute, please refer to the [Contributing Guidelines](https://github.com/R-Computing-Lab/BGmisc/blob/main/CONTRIBUTING.md). Issues and pull requests should be submitted on the GitHub repository. For support, please use the GitHub issues page.

@@ -1,7 +1,8 @@
 # BGmisc 1.2.0
 * Added numerous code checks, increased code coverage to 85%
-* replaced sapply usage
-* added additional data validation checks.
+* Replaced sapply usage
+* Added additional data validation checks
+* Accompanying paper published in the Journal of Open Source Software
 
 # BGmisc 1.1.0
 * Added ability to simulate twins
