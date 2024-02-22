@@ -15,9 +15,9 @@ checkSex(
 \arguments{
 \item{ped}{A dataframe representing the pedigree data with a 'sex' column.}
 
-\item{code_male}{The code used to represent males in the 'sex' column. If both male and female are NULL, no recoding is performed.}
+\item{code_male}{The current code used to represent males in the 'sex' column. At least one is needed.}
 
-\item{code_female}{The code used to represent females in the 'sex' column. If both male and female are NULL, no recoding is performed.}
+\item{code_female}{The current code used to represent females in the 'sex' column. If both male and female are NULL, no recoding is performed.}
 
 \item{verbose}{A logical flag indicating whether to print progress and validation messages to the console.}
 

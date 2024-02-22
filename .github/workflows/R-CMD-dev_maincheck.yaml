@@ -1,14 +1,14 @@
 on:
   push:
-    branches: [dev,dev_main]
+    branches: [dev_main]
     paths:
       - '**.Rmd'
       - '**.Rd'
       - '**.R'
   pull_request:
-    branches: [dev,dev_main]
+    branches: [dev_main]
 
-name: Dev Branch
+name: Dev Main Branch
 
 jobs:
   R-CMD-check:

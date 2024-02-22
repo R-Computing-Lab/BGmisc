@@ -14,6 +14,7 @@ simulatePedigree(
   Ngen = 4,
   sexR = 0.5,
   marR = 2/3,
+  rd_kpc = FALSE,
   balancedSex = TRUE,
   balancedMar = TRUE,
   verbose = FALSE
@@ -27,6 +28,8 @@ simulatePedigree(
 \item{sexR}{Sex ratio of offspring. A numeric value ranging from 0 to 1 that determines the proportion of males in all offspring in this pedigree. For instance, 0.4 means 40 percent of the offspring will be male.}
 
 \item{marR}{Mating rate. A numeric value ranging from 0 to 1 which determines the proportion of mated (fertilized) couples in the pedigree within each generation. For instance, marR = 0.5 suggests 50 percent of the offspring in a specific generation will be mated and have their offspring.}
+
+\item{rd_kpc}{logical. If TRUE, the number of kids per mate will be randomly generated from a poisson distribution with mean kpc. If FALSE, the number of kids per mate will be fixed at kpc.}
 
 \item{balancedSex}{Not fully developed yet. Always \code{TRUE} in the current version.}
 
