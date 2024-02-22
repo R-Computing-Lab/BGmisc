@@ -1,9 +1,9 @@
-This is XeTeX, Version 3.141592653-2.6-0.999994 (TeX Live 2022) (preloaded format=xelatex 2022.12.21)  28 SEP 2023 11:43
+This is XeTeX, Version 3.141592653-2.6-0.999994 (TeX Live 2022) (preloaded format=xelatex 2022.12.21)  16 FEB 2024 13:40
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**paper.tex
-(./paper.tex
+**C:/Users/smaso/AppData/Local/Temp/Rtmpcv0Syp/preview-8ea872f864fb.dir/paper.tex
+(c:/Users/smaso/AppData/Local/Temp/Rtmpcv0Syp/preview-8ea872f864fb.dir/paper.tex
 LaTeX2e <2022-11-01> patch level 1
 L3 programming layer <2022-12-17> (c:/Users/smaso/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2022/07/02 v1.4n Standard LaTeX document class
@@ -980,7 +980,7 @@ Package fancyhdr Warning: \headheight is too small (62.59596pt):
 (fancyhdr)                \addtolength{\topmargin}{-0.95425pt}.
 
 LaTeX Font Info:    Font shape `TU/lmss/m/it' in size <8> not available
-(Font)              Font shape `TU/lmss/m/sl' tried instead on input line 323.
+(Font)              Font shape `TU/lmss/m/sl' tried instead on input line 327.
 [1
 
 ]
@@ -1021,12 +1021,12 @@ Package logreq Info: Writing requests to 'paper.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 36052 strings out of 478777
- 747133 string characters out of 5849314
- 1871973 words of memory out of 5000000
+ 36054 strings out of 478777
+ 747411 string characters out of 5849314
+ 1872973 words of memory out of 5000000
  55520 multiletter control sequences out of 15000+600000
  519159 words of font info for 80 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 84i,12n,81p,1194b,848s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 84i,12n,81p,1264b,848s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
 Output written on paper.pdf (4 pages).

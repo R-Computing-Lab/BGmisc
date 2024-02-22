@@ -10,7 +10,7 @@
 #' @return A dataframe with standardized column names.
 #'
 #' @keywords internal
-standardize_colnames <- function(df, verbose = FALSE) {
+standardizeColnames <- function(df, verbose = FALSE) {
   # Internal mapping of standardized names to possible variants
   mapping <- list(
     "fam" = "^(?:fam(?:ily)?(?:id)?)",
@@ -60,7 +60,7 @@ standardize_colnames <- function(df, verbose = FALSE) {
 # check_sex = TRUE,
 # check_parents = TRUE,
 # verbose = FALSE) {
-# corrected_ped <- ped <- standardize_colnames(ped)
+# corrected_ped <- ped <- standardizeColnames(ped)
 # if (verbose) {
 # print("Repairing pedigree...")
 # }

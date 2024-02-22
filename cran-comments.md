@@ -1,11 +1,13 @@
-Description
------------------------------------------------
+
+# Description
+
+
 This is a hotfix for the BGmisc package, as we discovered that the plotPedigree wrapper function broke for pedigrees that contained multiple families.
 
-Test environments
------------------------------------------------
-1. Local OS: Windows 10, R version 4.2.3 
-2. Local OS: Windows 10, R version 4.3.1 
+# Test Environments
+
+1. Local OS: Windows 10, R version 4.2.3
+2. Local OS: Windows 10, R version 4.3.1
 3. **GitHub Actions**:  
     - [Link](https://github.com/R-Computing-Lab/BGmisc/actions/runs/6317831880)
     - macOS (latest version) with the latest R release.
@@ -15,7 +17,7 @@ Test environments
         - The latest R release.
         - The penultimate release of R.
 
-## R CMD check results
+# R CMD check results
 
 ──────────────────────── BGmisc 1.0.1 ────
 Duration: 1m 1.4s

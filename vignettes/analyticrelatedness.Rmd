@@ -50,6 +50,6 @@ The `inferRelatedness` function is designed to infer the relatedness coefficient
 ```{r}
 # Example usage:
 # Infer the relatedness coefficient:
-inferRelatedness(cor_obs = 0.5, ace_A = 0.9, ace_C = 0, shared_C = 0)
+inferRelatedness(obsR = 0.5, aceA = 0.9, aceC = 0, sharedC = 0)
 ```
 

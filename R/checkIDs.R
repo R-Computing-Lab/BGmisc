@@ -8,7 +8,7 @@
 #' @param verbose A logical flag indicating whether to print progress and validation messages to the console.
 #' @param repair A logical flag indicating whether to attempt repairs on non-unique IDs.
 #'
-#' @return Depending on the value of `repair`, either a list containing validation results or a repaired dataframe is returned.
+#' @return Depending on `repair` value, either returns a list containing validation results or a repaired dataframe
 #' @examples
 #' \dontrun{
 #' ped <- data.frame(ID = c(1, 2, 2, 3), dadID = c(NA, 1, 1, 2), momID = c(NA, NA, 2, 2))
@@ -17,7 +17,7 @@
 #' @export
 checkIDs <- function(ped, verbose = FALSE, repair = FALSE) {
   # Standardize column names in the input dataframe
-  ped <- standardize_colnames(ped)
+  ped <- standardizeColnames(ped)
 
   # Initialize a list to store validation results
   validation_results <- list()
@@ -29,14 +29,22 @@ checkIDs <- function(ped, verbose = FALSE, repair = FALSE) {
   # Identify non-unique IDs
   duplicated_ids <- ped$ID[duplicated(ped$ID) | duplicated(ped$ID, fromLast = TRUE)]
 
+
   # Update the validation_results list
   if (length(duplicated_ids) > 0) {
+    if (verbose) {
+      cat("Non-unique IDs found.\n")
+    }
+    validation_results$all_unique_ids <- FALSE
+    validation_results$total_non_unique_ids <- length(duplicated_ids)
     validation_results$non_unique_ids <- unique(duplicated_ids)
   } else {
     if (verbose) {
       cat("All IDs are unique.\n")
     }
-    validation_results$unique_ids <- TRUE
+    validation_results$all_unique_ids <- TRUE
+    validation_results$total_non_unique_ids <- 0
+    validation_results$non_unique_ids <- NULL
   }
 
   if (repair) {

@@ -5,8 +5,13 @@
 #' 2. Optionally repairs the sex coding based on a specified logic.
 #'
 #' @param ped A dataframe representing the pedigree data with a 'sex' column.
+<<<<<<< HEAD
 #' @param code_male The code used to represent males in the 'sex' column. If both male and female are NULL, no recoding is performed.
 #' @param code_female The code used to represent females in the 'sex' column. If both male and female are NULL, no recoding is performed.
+=======
+#' @param code_male The current code used to represent males in the 'sex' column. At least one is needed.
+#' @param code_female The current code used to represent females in the 'sex' column. If both male and female are NULL, no recoding is performed.
+>>>>>>> main
 #' @param verbose A logical flag indicating whether to print progress and validation messages to the console.
 #' @param repair A logical flag indicating whether to attempt repairs on the sex coding.
 #'
@@ -18,18 +23,25 @@
 #' }
 #' @export
 #'
+<<<<<<< HEAD
 checkSex <- function(ped, code_male = NULL, code_female = NULL,verbose = FALSE, repair = FALSE) {
+=======
+checkSex <- function(ped, code_male = NULL, code_female = NULL, verbose = FALSE, repair = FALSE) {
+>>>>>>> main
   # Standardize column names in the input dataframe
-  ped <- standardize_colnames(ped)
+  ped <- standardizeColnames(ped)
 
-  # bypass the rest of the function if recode_only is TRUE
+  # TO DO bypass the rest of the function if recode_only is TRUE
 
   # Initialize a list to store validation results
   validation_results <- list()
 
+<<<<<<< HEAD
   # Initialize a list to track changes made during repair
   changes <- list()
 
+=======
+>>>>>>> main
 
   if (verbose) {
     cat("Step 1: Checking how many genders...\n")
@@ -44,26 +56,73 @@ checkSex <- function(ped, code_male = NULL, code_female = NULL,verbose = FALSE, 
     ),
     paste0(validation_results$sex_unique))
   }
+<<<<<<< HEAD
   validation_results$all_sex_dad <- names(sort(table(ped$sex[ped$ID %in% ped$dadID]), decreasing = TRUE))
   validation_results$all_sex_mom <- names(sort(table(ped$sex[ped$ID %in% ped$momID]), decreasing = TRUE))
   validation_results$most_frequent_sex_dad <- validation_results$all_sex_dad[1]
   validation_results$most_frequent_sex_mom <- validation_results$all_sex_mom[1]
+=======
+  # are there multiple genders in the list of dads and moms?
+
+
+  table_sex_dad <- sort(table(ped$sex[ped$ID %in% ped$dadID]), decreasing = TRUE)
+  table_sex_mom <- sort(table(ped$sex[ped$ID %in% ped$momID]), decreasing = TRUE)
+
+  validation_results$all_sex_dad <- names(table_sex_dad)
+  validation_results$all_sex_mom <- names(table_sex_mom)
+
+  validation_results$most_frequent_sex_dad <- validation_results$all_sex_dad[1]
+  validation_results$most_frequent_sex_mom <- validation_results$all_sex_mom[1]
+
+  # list ids for dads that are female, moms that are male
+  if (length(validation_results$all_sex_dad) > 1) {
+    df_dads <- ped[ped$ID %in% ped$dadID, ]
+    validation_results$ID_female_dads <- df_dads$ID[df_dads$sex != validation_results$most_frequent_sex_dad]
+    validation_results$ID_child_female_dads <- ped$ID[ped$dadID %in% validation_results$ID_female_dads]
+    remove(df_dads)
+  }
+  if (length(validation_results$all_sex_mom) > 1) {
+    df_moms <- ped[ped$ID %in% ped$momID, ]
+    validation_results$ID_male_moms <- df_moms$ID[df_moms$sex != validation_results$most_frequent_sex_mom]
+    validation_results$ID_child_male_moms <- ped$ID[ped$momID %in% validation_results$ID_female_moms]
+    remove(df_moms)
+  }
+
+
+>>>>>>> main
   if (repair) {
     if (verbose) {
       cat("Step 2: Attempting to repair sex coding...\n")
     }
+<<<<<<< HEAD
 
     # [Insert logic to repair sex coding here]
     if (validation_results$sex_length == 2) {
       most_frequent_sex_dad <- names(sort(table(ped$sex[ped$ID %in% ped$dadID]), decreasing = TRUE))[1]
       original_ped <- ped
       ped <- recodeSex(ped, code_male = most_frequent_sex_dad)
+=======
+    # Initialize a list to track changes made during repair
+    changes <- list()
+    original_ped <- ped
+
+    if (validation_results$sex_length == 2) {
+      # if length of all_sex_dad >1, then recode all the dads to the most frequent male value
+
+
+      ped <- recodeSex(ped, code_male = validation_results$most_frequent_sex_dad)
+>>>>>>> main
       # Count and record the change
       num_changes <- sum(original_ped$sex != ped$sex)
       # Record the change and the count
       changes[[length(changes) + 1]] <- sprintf(
         "Recode sex based on most frequent sex in dads: %s. Total gender changes made: %d",
+<<<<<<< HEAD
         most_frequent_sex_dad, num_changes)
+=======
+        validation_results$most_frequent_sex_dad, num_changes
+      )
+>>>>>>> main
     }
     # Update the pedigree dataframe after repair
     repaired_ped <- ped
@@ -74,6 +133,11 @@ checkSex <- function(ped, code_male = NULL, code_female = NULL,verbose = FALSE, 
     }
     return(list(validation_results, repaired_ped, changes))
   } else {
+    if (verbose) {
+      cat("Checks Made:\n")
+      print(validation_results)
+    }
+
     return(validation_results)
   }
 }
@@ -85,7 +149,8 @@ checkSex <- function(ped, code_male = NULL, code_female = NULL,verbose = FALSE, 
 #' the repair of the sex coding in a pedigree dataframe.
 #'
 #' @inheritParams checkSex
-#' @return A dataframe where the sex coding has been repaired.
+#' @inheritParams plotPedigree
+#' @return A modified version of the input data.frame \code{ped}, containing an additional or modified 'sex_recode' column where the 'sex' values are recoded according to \code{code_male}. NA values in the 'sex' column are preserved.
 #' @examples
 #' \dontrun{
 #' ped <- data.frame(ID = c(1, 2, 3), sex = c("M", "F", "M"))
@@ -108,13 +173,30 @@ repairSex <- function(ped, verbose = FALSE, code_male = NULL, code_female = NULL
 #' @keywords internal
 #' @seealso \code{\link{plotPedigree}}
 recodeSex <- function(
+<<<<<<< HEAD
     ped, verbose = FALSE, code_male = NULL, code_female = NULL, code_na = NULL,
+=======
+    ped, verbose = FALSE, code_male = NULL, code_na = NULL, code_female = NULL,
+>>>>>>> main
     recode_male = "M", recode_female = "F", recode_na = NA_character_) {
   if (!is.null(code_na)) {
     ped$sex[ped$sex == code_na] <- NA
   }
+
   # Recode as "F" or "M" based on code_male, preserving NAs
+<<<<<<< HEAD
   if (!is.null(code_male) & is.null(code_female)) {
+=======
+  if (!is.null(code_male) & !is.null(code_female)) {
+    # Initialize sex_recode as NA, preserving the length of the 'sex' column
+    ped$sex_recode <- recode_na
+    ped$sex_recode[ped$sex == code_female] <- recode_female
+    ped$sex_recode[ped$sex == code_male] <- recode_male
+    # overwriting temp recode variable
+    ped$sex <- ped$sex_recode
+    ped$sex_recode <- NULL
+  } else if (!is.null(code_male) & is.null(code_female)) {
+>>>>>>> main
     # Initialize sex_recode as NA, preserving the length of the 'sex' column
     ped$sex_recode <- recode_na
     ped$sex_recode[ped$sex != code_male & !is.na(ped$sex)] <- recode_female
@@ -122,8 +204,12 @@ recodeSex <- function(
     # overwriting temp recode variable
     ped$sex <- ped$sex_recode
     ped$sex_recode <- NULL
+<<<<<<< HEAD
 
   } else if(is.null(code_male) & !is.null(code_female)) {
+=======
+  } else if (is.null(code_male) & !is.null(code_female)) {
+>>>>>>> main
     # Initialize sex_recode as NA, preserving the length of the 'sex' column
     ped$sex_recode <- recode_na
     ped$sex_recode[ped$sex != code_female & !is.na(ped$sex)] <- recode_male
@@ -131,6 +217,13 @@ recodeSex <- function(
     # overwriting temp recode variable
     ped$sex <- ped$sex_recode
     ped$sex_recode <- NULL
+<<<<<<< HEAD
+=======
+  } else {
+    if (verbose) {
+      warning(" both code male and code female are empty. No recoding was done.")
+    }
+>>>>>>> main
   }
   return(ped)
 }

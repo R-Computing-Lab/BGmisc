@@ -26,7 +26,7 @@ plotPedigree <- function(ped,
                          ...) {
 
   # Standardize column names in the input dataframe
-  ped <- standardize_colnames(ped)
+  ped <- standardizeColnames(ped)
 
   # Define required columns
   simulated_vars <- c("fam", "ID", "dadID", "momID", "sex")
@@ -51,18 +51,17 @@ plotPedigree <- function(ped,
         } else {
           stop(paste("Column", affected, "does not exist in the DataFrame"))
         }
-      }
-      # Check if 'affected' is a numeric or logical vector
-      else if (is.numeric(affected) || is.logical(affected)) {
+
+        # Check if 'affected' is a numeric or logical vector
+      } else if (is.numeric(affected) || is.logical(affected)) {
         # Check if the length of the vector matches the number of rows in the DataFrame
         if (length(affected) == nrow(p)) {
           p$affected <- affected
         } else {
           stop("Length of the 'affected' vector does not match the number of rows in the DataFrame")
         }
-      }
-      # If 'affected' is neither a string nor a numeric/logical vector
-      else {
+        # If 'affected' is neither a string nor a numeric/logical vector
+      } else {
         stop("The 'affected' parameter must be either a string (column name) or a numeric/logical vector")
       }
     }
@@ -77,7 +76,7 @@ plotPedigree <- function(ped,
     } else {
       # Assign a unique string pattern "ped #" for each unique family
       unique_families <- unique(p$ped)
-      named_families <- 1:length(unique_families)
+      named_families <- seq_along(unique_families)
       p$ped <- named_families[match(p$ped, unique_families)]
     }
     p2 <- kinship2::pedigree(
@@ -103,7 +102,7 @@ plotPedigree <- function(ped,
         mar = mar,
         ...
       ))
-    } else { # TODO: consisently suppress the printing of the pedigree comments
+    } else { # TODO: consistently suppress the printing of the pedigree comments
       # Determine the null device based on the OS
       #     null_device <- ifelse(.Platform$OS.type == "windows", "nul", "/dev/null")
 

@@ -31,7 +31,6 @@
 #' }
 #' @export
 #'
-# lint-disable
 calculateRelatedness <- function(
     generations = 2, path = NULL, full = TRUE, maternal = FALSE,
     empirical = FALSE, segregating = TRUE, total_a = 6800 * 1000000, total_m = 16500,
@@ -67,10 +66,10 @@ calculateRelatedness <- function(
 #' @description
 #' The function uses the ACE framework to infer the relatedness between two individuals.
 #'
-#' @param cor_obs Numeric. Observed correlation between the two groups. Must be between -1 and 1.
-#' @param ace_A Numeric. Proportion of variance attributable to additive genetic variance. Must be between 0 and 1. Default is 0.9.
-#' @param ace_C Numeric. Proportion of variance attributable to shared environmental variance. Must be between 0 and 1. Default is 0.
-#' @param shared_C Numeric. Proportion of shared environment shared between the two individuals. Must be between 0 and 1. Default is 0.
+#' @param obsR Numeric. Observed correlation between the two groups. Must be between -1 and 1.
+#' @param aceA Numeric. Proportion of variance attributable to additive genetic variance. Must be between 0 and 1. Default is 0.9.
+#' @param aceC Numeric. Proportion of variance attributable to shared environmental variance. Must be between 0 and 1. Default is 0.
+#' @param sharedC Numeric. Proportion of shared environment shared between the two individuals. Must be between 0 and 1. Default is 0.
 #'
 #' @return
 #' Calculated relatedness coefficient (`est_r`).
@@ -78,13 +77,13 @@ calculateRelatedness <- function(
 #' @examples
 #' \dontrun{
 #' # Infer the relatedness coefficient:
-#' inferRelatedness(cor_obs = 0.5, ace_A = 0.9, ace_C = 0, shared_C = 0)
+#' inferRelatedness(obsR = 0.5, aceA = 0.9, aceC = 0, sharedC = 0)
 #' }
 #' @export
-inferRelatedness <- function(cor_obs, ace_A = .9, ace_C = 0, shared_C = 0) {
-  if (ace_A > 1 || ace_A < 0 || ace_C > 1 || ace_C < 0) {
-    stop("ace_A and ace_C must be proportions between 0 and 1")
+inferRelatedness <- function(obsR, aceA = .9, aceC = 0, sharedC = 0) {
+  if (aceA > 1 || aceA < 0 || aceC > 1 || aceC < 0) {
+    stop("aceA and aceC must be proportions between 0 and 1")
   }
-  calc_r <- (cor_obs - shared_C * ace_C) / ace_A
+  calc_r <- (obsR - sharedC * aceC) / aceA
   return(calc_r)
 }
