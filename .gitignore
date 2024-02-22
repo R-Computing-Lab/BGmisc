@@ -13,3 +13,4 @@ BGmisc.code-workspace
 .lintr
 
 tests/testthat/Rplots.pdf
+docs
