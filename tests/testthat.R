@@ -10,3 +10,4 @@ library(testthat)
 library(BGmisc)
 
 test_check("BGmisc")
+

@@ -39,7 +39,7 @@ makeTwins <- function(ped, ID_twin1 = NA_integer_, ID_twin2 = NA_integer_, gen_t
         usedID <- c()
         # randomly loop through all the individuals in the generation until find an individual who is the same sex and shares the same dadID and momID with another individual
         for (i in 1:idx) {
-          cat("loop", i)
+          #cat("loop", i, "\n")
           # check if i is equal to the number of individuals in the generation
           usedID <- c(usedID, ID_twin1)
           # print(usedID)
@@ -66,8 +66,11 @@ makeTwins <- function(ped, ID_twin1 = NA_integer_, ID_twin2 = NA_integer_, gen_t
             # randomly select all males or females in the generation and put them in a vector
             selectGender <- ped$ID[ped$gen == gen_twin & ped$sex == resample(c("M", "F"), 1) & !is.na(ped$dadID) & !is.na(ped$momID)]
             # print(selectGender)
+            if(length(selectGender) < 2){
+              stop("There are no available same-sex people in the generation to make twins")
+            }
             # randomly select two individuals from the vector
-            ID_DoubleTwin <- sample(selectGender, 2)
+            ID_DoubleTwin <- resample(selectGender, 2)
             # print(ID_DoubleTwin)
             # change the second person's dadID and momID to the first person's dadID and momID
             ped$dadID[ped$ID == ID_DoubleTwin[2]] <- ped$dadID[ped$ID == ID_DoubleTwin[1]]
