@@ -40,17 +40,16 @@ install.packages("BGmisc")
 To install the development version of BGmisc from [GitHub](https://github.com/) use:
 
 ```r
+# If devtools is not installed, uncomment the line below to install it before installing BGmisc.
 # install.packages("devtools")
 devtools::install_github("R-Computing-Lab/BGmisc")
 ```
 
 ## Citation
-
 If you use BGmisc in your research or wish to refer to it, please cite the following paper:
 
-
 ```{r eval=TRUE, comment=NA}
-citation(package="BGmisc")
+citation(package = "BGmisc")
 ```
 
 
