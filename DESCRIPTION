@@ -1,7 +1,7 @@
 Package: BGmisc
 Title: An R Package for Extended Behavior Genetics Analysis
 Version: 1.2.0
-URL: https://github.com/R-Computing-Lab/BGmisc/
+URL: https://github.com/R-Computing-Lab/BGmisc/, https://r-computing-lab.github.io/BGmisc/
 BugReports: https://github.com/R-Computing-Lab/BGmisc/issues
 Authors@R: 
   c(person("S. Mason", "Garrison", email = "garrissm@wfu.edu", role = c("aut", "cre"), comment=c(ORCID = "0000-0002-4804-6003")),

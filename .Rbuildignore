@@ -15,5 +15,6 @@
 ^\.lintr$
 ^CODE_OF_CONDUCT\.md$
 ^CONTRIBUTING\.md$
-^R/checkParents\.X$
-^R/checkIDs\.X$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
