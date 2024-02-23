@@ -2,15 +2,15 @@
 Description
 -----------------------------------------------
 
-This is a hotfix for the BGmisc package, as we discovered that the plotPedigree wrapper function broke for pedigrees that contained multiple families.
+This update reflects a substantial improvement in the codebase as part of the peer review process for JOSS, including the addition of numerous function checks, increased code coverage to 85%, and the replacement of sapply usage. We also added a new function to simulate twins and the ability to trace paternal and maternal lines. We also added a Harry Potter pedigree.
+
 
 Test Environments
 -----------------------------------------------
 
-1. Local OS: Windows 10, R version 4.2.3
-2. Local OS: Windows 10, R version 4.3.1
-3. **GitHub Actions**:  
-    - [Link](https://github.com/R-Computing-Lab/BGmisc/actions/runs/6317831880)
+1. Local OS: Windows 11, R version 4.3.2
+2. **GitHub Actions**:  
+    - [Link](https://github.com/R-Computing-Lab/BGmisc/actions/runs/8023395953)
     - macOS (latest version) with the latest R release.
     - Windows (latest version) with the latest R release.
     - Ubuntu (latest version) with:
@@ -20,8 +20,8 @@ Test Environments
 
 ## R CMD check results
 
-──────────────────────── BGmisc 1.0.1 ────
-Duration: 1m 1.4s
+── R CMD check results  BGmisc 1.2.0 ────
+Duration: 1m 0.6s
 
 0 errors ✔ | 0 warnings ✔ | 0 notes ✔
 

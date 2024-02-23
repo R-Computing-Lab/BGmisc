@@ -24,7 +24,7 @@ test_that("famSizeCal throws error when numbers out of bounds", {
   Ngen <- 0
   marR <- 0.8
 
-  expect_error(famSizeCal(kpc = kpc, Ngen = Ngen, marR = marR))
+  expect_error(famSizeCal(kpc = kpc, Ngen = Ngen, marR = marR),"number of generations")
 })
 test_that("famSizeCal returns increasingly large  numbers for multi-generation data", {
   set.seed(123)
