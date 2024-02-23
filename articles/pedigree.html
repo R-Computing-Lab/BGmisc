@@ -87,18 +87,6 @@
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p>This vignette provides a detailed guide to the pedigree-related
-functions within the <code>BGmisc</code> package.</p>
-<div class="section level3">
-<h3 id="loading-required-libraries">Loading Required Libraries<a class="anchor" aria-label="anchor" href="#loading-required-libraries"></a>
-</h3>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/R-Computing-Lab/BGmisc/" class="external-link">BGmisc</a></span><span class="op">)</span></span></code></pre></div>
-</div>
-</div>
-<div class="section level2">
-<h2 id="simulating-pedigrees">Simulating Pedigrees<a class="anchor" aria-label="anchor" href="#simulating-pedigrees"></a>
-</h2>
 <p>Unlike Tolstoy, where <em>only</em> happy families are alike, all
 pedigrees are alike – or at least, all simulated pedigrees are alike.
 The <code>simulatePedigree</code> function generates a pedigree with a
@@ -113,14 +101,20 @@ efficient tool for researchers. These simulated pedigrees are useful for
 building family-based statistical models, and evaluating their
 statistical properties, such as power, bias, and computational
 efficiency.</p>
-<p>To illustrate this, let us generate a pedigree. This pedigree has a
-total of four generations, in which each person who “mates”, grows a
-family with four offspring. In our scenario, the number of male and
-female newborns is equal. In this illustration 70% of individuals will
-mate and bear offspring. Such a pedigree structure can be simulated by
-running:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span>
+<p>To illustrate this functionality, let us generate a pedigree. This
+pedigree has a total of four generations (<code>Ngen</code>), in which
+each person who “mates”, grows a family with four offspring
+(<code>kpc</code>). In our scenario, the number of male and female
+newborns is equal, but can be adjusted via (<code>sexR</code>). In this
+illustration 70% of individuals will mate and bear offspring
+(<code>marR</code>). Such a pedigree structure can be simulated by
+running the following code:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="co">## Loading Required Libraries</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/R-Computing-Lab/BGmisc/" class="external-link">BGmisc</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span>
 <span><span class="va">df_ped</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulatePedigree.html">simulatePedigree</a></span><span class="op">(</span></span>
 <span>  kpc <span class="op">=</span> <span class="fl">4</span>,</span>
 <span>  Ngen <span class="op">=</span> <span class="fl">4</span>,</span>
@@ -146,7 +140,7 @@ running:</p>
 <span><span class="co">#&gt;  NA's   :13       NA's   :33</span></span></code></pre></div>
 <p>The simulation output is a <code>data.frame</code> with 57 rows and 7
 columns. Each row corresponds to a simulated individual.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">df_ped</span><span class="op">[</span><span class="fl">21</span>, <span class="op">]</span></span>
 <span><span class="co">#&gt;      fam     ID gen dadID momID    spt sex</span></span>
 <span><span class="co">#&gt; 21 fam 1 100312   3 10024 10022 100317   M</span></span></code></pre></div>
@@ -162,13 +156,13 @@ across generations. They are commonly used in genetics to trace the
 inheritance of specific traits or conditions. This vignette will guide
 you through visualizing simulated pedigrees using the
 <code>plotPedigree</code> function. This function is a wrapper function
-for Kinship2’s base R plotting.</p>
+for <code>Kinship2</code>’s base R plotting.</p>
 <div class="section level4">
 <h4 id="single-pedigree-visualization">Single Pedigree Visualization<a class="anchor" aria-label="anchor" href="#single-pedigree-visualization"></a>
 </h4>
 <p>To visualize a single simulated pedigree, use the
 <code><a href="../reference/plotPedigree.html">plotPedigree()</a></code> function.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Plot the simulated pedigree</span></span>
 <span><span class="fu"><a href="../reference/plotPedigree.html">plotPedigree</a></span><span class="op">(</span><span class="va">df_ped</span><span class="op">)</span></span></code></pre></div>
 <p><img src="pedigree_files/figure-html/unnamed-chunk-4-1.png" width="768"></p>
@@ -291,7 +285,7 @@ standard pedigree conventions.</p>
 <p>If you wish to compare different pedigrees side by side, you can plot
 them together. For instance, let’s visualize pedigrees for families
 spanning three and four generations, respectively.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">8</span><span class="op">)</span></span>
 <span><span class="co"># Simulate a family with 3 generations</span></span>
 <span><span class="va">df_ped_3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulatePedigree.html">simulatePedigree</a></span><span class="op">(</span>Ngen <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
