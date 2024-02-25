@@ -157,7 +157,7 @@ table(extendedFamilyEnvironment)
 
 # Subsetting Pedigrees
 
-Subsetting a pedigree allows researchers to focus on specific family lines or individuals within a larger dataset. This can be particularly useful for data validation as well as simplifying complex pedigrees for visualization. However, subsetting a pedigree can result in the underestimation of relatedness between individuals. This is because the subsetted pedigree may not contain all the individuals that connect two people together. For example if we were to remove Arthur Weasley (person 9) and Molly Prewett (person 10) from the `potter` dataset, we would lose the connections amoungst their children. 
+Subsetting a pedigree allows researchers to focus on specific family lines or individuals within a larger dataset. This can be particularly useful for data validation as well as simplifying complex pedigrees for visualization. However, subsetting a pedigree can result in the underestimation of relatedness between individuals. This is because the subsetted pedigree may not contain all the individuals that connect two people together. For example if we were to remove Arthur Weasley (person 9) and Molly Prewett (person 10) from the `potter` dataset, we would lose the connections amongst their children. 
 
 
 ```{r, echo=FALSE, results='hide', out.width='50%', fig.cap="Potter Subset Pedigree"}
@@ -173,9 +173,9 @@ plotPedigree(subset_potter, code_male = 1, verbose = TRUE)
 
 In the plot above, we have removed Arthur Weasley (person 9) and Molly Prewett (person 10) from the `potter` dataset. As a result, the connections between their children are lost. 
 
-Similarly, if we remove the children of Vernon Dursey (1) and Petunia Evans(3) from the `potter` dataset, we would lose the connections between the two individuals.
+Similarly, if we remove the children of Vernon Dursey (1) and Petunia Evans (3) from the `potter` dataset, we would lose the connections between the two individuals.
 
-However, this subset does not plot the relationship between spouses (such as the marriage between ), as there are not children to connect the two individuals together yet.
+However, this subset does not plot the relationship between spouses (such as the marriage between Vernon Dursey and Petunia Evans), as there are not children to connect the two individuals together yet.
 
 ```{r}
 subset_rows <- c(1:5, 31:36)

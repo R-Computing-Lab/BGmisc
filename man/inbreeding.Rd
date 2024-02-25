@@ -33,13 +33,13 @@ Although not all of the above structures are technically inbreeding, they aim to
 The variables are as follows:
 
 \itemize{
-  \item ID.  Person identification variable
-  \item sex.  Sex of the ID: 1 is female; 0 is male
-  \item dadID.  ID of the father
-  \item momID.  ID of the mother
-  \item FamID.  ID of the extended family
-  \item Gen.  Generation of the person
-  \item proband.  Always FALSE
+  \item \code{ID}.  Person identification variable
+  \item \code{sex}.  Sex of the ID: 1 is female; 0 is male
+  \item \code{dadID}.  ID of the father
+  \item \code{momID}.  ID of the mother
+  \item \code{FamID}.  ID of the extended family
+  \item \code{Gen}.  Generation of the person
+  \item \code{proband}.  Always FALSE
 }
 }
 \keyword{datasets}

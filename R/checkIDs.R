@@ -4,7 +4,7 @@
 #' 1. Checks for the uniqueness of individual IDs.
 #' 2. Optionally repairs non-unique IDs based on a specified logic.
 #'
-#' @param ped A dataframe representing the pedigree data with columns 'ID', 'dadID', and 'momID'.
+#' @param ped A dataframe representing the pedigree data with columns `ID`, `dadID`, and `momID`.
 #' @param verbose A logical flag indicating whether to print progress and validation messages to the console.
 #' @param repair A logical flag indicating whether to attempt repairs on non-unique IDs.
 #'
