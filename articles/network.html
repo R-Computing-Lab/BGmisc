@@ -271,7 +271,7 @@ underestimation of relatedness between individuals. This is because the
 subsetted pedigree may not contain all the individuals that connect two
 people together. For example if we were to remove Arthur Weasley (person
 9) and Molly Prewett (person 10) from the <code>potter</code> dataset,
-we would lose the connections amoungst their children.</p>
+we would lose the connections amongst their children.</p>
 <div class="figure">
 <img src="network_files/figure-html/unnamed-chunk-11-1.png" alt="Potter Subset Pedigree" width="50%"><p class="caption">
 Potter Subset Pedigree
@@ -281,11 +281,11 @@ Potter Subset Pedigree
 Molly Prewett (person 10) from the <code>potter</code> dataset. As a
 result, the connections between their children are lost.</p>
 <p>Similarly, if we remove the children of Vernon Dursey (1) and Petunia
-Evans(3) from the <code>potter</code> dataset, we would lose the
+Evans (3) from the <code>potter</code> dataset, we would lose the
 connections between the two individuals.</p>
 <p>However, this subset does not plot the relationship between spouses
-(such as the marriage between ), as there are not children to connect
-the two individuals together yet.</p>
+(such as the marriage between Vernon Dursey and Petunia Evans), as there
+are not children to connect the two individuals together yet.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">subset_rows</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">31</span><span class="op">:</span><span class="fl">36</span><span class="op">)</span></span>
 <span><span class="va">subset_potter</span> <span class="op">&lt;-</span> <span class="va">potter</span><span class="op">[</span><span class="va">subset_rows</span>, <span class="op">]</span></span></code></pre></div>
