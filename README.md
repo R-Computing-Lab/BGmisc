@@ -12,7 +12,7 @@ developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.re
 version](https://www.r-pkg.org/badges/version/BGmisc)](https://cran.r-project.org/package=BGmisc)
 [![Package
 downloads](https://cranlogs.r-pkg.org/badges/grand-total/BGmisc)](https://cran.r-project.org/package=BGmisc)</br>
-[![status](https://joss.theoj.org/papers/ee3a025be4f61584f977a7657d936187/status.svg)](https://joss.theoj.org/papers/ee3a025be4f61584f977a7657d936187)
+[![status](https://joss.theoj.org/papers/ee3a025be4f61584f977a7657d936187/status.svg)](https://joss.theoj.org/papers/10.21105/joss.06203)
 
 [![R-CMD-check](https://github.com/R-Computing-Lab/BGmisc/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/R-Computing-Lab/BGmisc/actions/workflows/R-CMD-check.yaml)
 [![Dev Main

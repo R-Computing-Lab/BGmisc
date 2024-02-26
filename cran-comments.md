@@ -8,9 +8,9 @@ This update reflects a substantial improvement in the codebase as part of the pe
 Test Environments
 -----------------------------------------------
 
-1. Local OS: Windows 11, R version 4.3.2
+1. Local OS: Windows 11 x64 (build 22635), R version 4.3.2 (2023-10-31 ucrt)
 2. **GitHub Actions**:  
-    - [Link](https://github.com/R-Computing-Lab/BGmisc/actions/runs/8023395953)
+    - [Link](https://github.com/R-Computing-Lab/BGmisc/actions/runs/8051963961)
     - macOS (latest version) with the latest R release.
     - Windows (latest version) with the latest R release.
     - Ubuntu (latest version) with:
@@ -20,8 +20,8 @@ Test Environments
 
 ## R CMD check results
 
-── R CMD check results  BGmisc 1.2.0 ────
-Duration: 1m 0.6s
+── R CMD check results ─────────────── BGmisc 1.2.0 ────
+Duration: 1m 6.2s
 
 0 errors ✔ | 0 warnings ✔ | 0 notes ✔
 
