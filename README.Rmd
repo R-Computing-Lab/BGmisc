@@ -11,6 +11,7 @@ knitr::opts_chunk$set(
   fig.path = "man/figures/README-",
   out.width = "100%"
 )
+options(citation.bibtex.max=0)
 ```
 
 # BGmisc
@@ -19,7 +20,7 @@ knitr::opts_chunk$set(
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![R package version](https://www.r-pkg.org/badges/version/BGmisc)](https://cran.r-project.org/package=BGmisc)
 [![Package downloads](https://cranlogs.r-pkg.org/badges/grand-total/BGmisc)](https://cran.r-project.org/package=BGmisc)</br>
-[![status](https://joss.theoj.org/papers/ee3a025be4f61584f977a7657d936187/status.svg)](https://joss.theoj.org/papers/ee3a025be4f61584f977a7657d936187)
+[![status](https://joss.theoj.org/papers/ee3a025be4f61584f977a7657d936187/status.svg)](https://joss.theoj.org/papers/10.21105/joss.06203)
 
 [![R-CMD-check](https://github.com/R-Computing-Lab/BGmisc/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/R-Computing-Lab/BGmisc/actions/workflows/R-CMD-check.yaml)
 [![Dev Main
@@ -40,18 +41,25 @@ install.packages("BGmisc")
 To install the development version of BGmisc from [GitHub](https://github.com/) use:
 
 ```r
-# If devtools is not installed, uncomment the line below to install it before installing BGmisc.
 # install.packages("devtools")
 devtools::install_github("R-Computing-Lab/BGmisc")
 ```
 
 ## Citation
+
 If you use BGmisc in your research or wish to refer to it, please cite the following paper:
 
-```{r eval=TRUE, comment=NA}
+```
 citation(package = "BGmisc")
 ```
+```{r,comment='',results='asis',echo=FALSE} 
+print(citation(package = "BGmisc"),style = "text", bibtex = FALSE)
+```
 
+A BibTeX entry for LaTeX users is
+```{r,comment='',echo=FALSE}
+toBibtex(citation(package = "BGmisc"))
+```
 
 ## Contributing
 Contributions to the BGmisc project are welcome. For guidelines on how to contribute, please refer to the [Contributing Guidelines](https://github.com/R-Computing-Lab/BGmisc/blob/main/CONTRIBUTING.md). Issues and pull requests should be submitted on the GitHub repository. For support, please use the GitHub issues page.

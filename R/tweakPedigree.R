@@ -7,7 +7,7 @@
 #' @param ID_twin2 A vector of \code{ID} of the second twin.
 #' @param verbose logical.  If TRUE, print progress through stages of algorithm
 #' @param gen_twin A vector of \code{generation} of the twin to be imputed.
-#' @return Returns a \code{data.frame} with MZ twins infomration added as a new column.
+#' @return Returns a \code{data.frame} with MZ twins information added as a new column.
 #' @export
 
 # A function to impute twins in the simulated pedigree \code{data.frame}.
@@ -226,15 +226,15 @@ makeInbreeding <- function(ped,
 
 #' dropLink
 #' A function to drop a person from his/her parents in the simulated pedigree \code{data.frame}.
-#' The person can be dropped by specifying his/her ID or by specifying the generation which the randomly to be dropeed person is in.
-#' The function can separate one pedigree into two pedigrees. Seperating into small pieces should be done by running the function multiple times.
+#' The person can be dropped by specifying his/her ID or by specifying the generation which the randomly to-be-dropped person is in.
+#' The function can separate one pedigree into two pedigrees. Separating into small pieces should be done by running the function multiple times.
 #' This is a supplementary function for \code{simulatePedigree}.
 #' @param ped a pedigree simulated from simulatePedigree function or the same format
 #' @param ID_drop the ID of the person to be dropped from his/her parents.
-#' @param gen_drop the generation in which the randomly dropped person is. Will work if ID_drop is not specified.
+#' @param gen_drop the generation in which the randomly dropped person is. Will work if `ID_drop` is not specified.
 #' @param sex_drop the biological sex of the randomly dropped person.
 #' @param n_drop the number of times the mutation happens.
-#' @return a pedigree with the dropped person's dadID and momID set to NA.
+#' @return a pedigree with the dropped person's `dadID` and `momID` set to NA.
 #' @export
 dropLink <- function(ped,
                      ID_drop = NA_integer_,
