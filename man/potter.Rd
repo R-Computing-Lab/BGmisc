@@ -17,14 +17,14 @@ A dataset created purely from imagination that includes a subset of the Potter e
 The variables are as follows:
 
 \itemize{
-  \item personID.  Person identification variable
-  \item famID. Family identification variable
-  \item name.  Name of the person
-  \item gen. Generation of the person
-  \item momID.  ID of the mother
-  \item dadID.  ID of the father
-  \item spouseID. ID of the spouse
-  \item sex.  Sex of the ID: 1 is male; 0 is female
+  \item \code{personID}:  Person identification variable
+  \item \code{famID}: Family identification variable
+  \item \code{name}:  Name of the person
+  \item \code{gen}: Generation of the person
+  \item \code{momID}:  ID of the mother
+  \item \code{dadID}:  ID of the father
+  \item \code{spouseID}: ID of the spouse
+  \item \code{sex}:  Sex of the ID: 1 is male; 0 is female
 
 }
 

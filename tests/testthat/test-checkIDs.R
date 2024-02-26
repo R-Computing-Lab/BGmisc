@@ -28,6 +28,7 @@ test_that("repair with a duplicate", {
 })
 
 test_that("checkIDs verbose prints updates", {
+#  skip_on_cran(message = "Skipping test that only checks for verbose output")
   df <- ped2fam(potter, famID = "newFamID", personID = "personID")
   df_bound <- rbind(df, df[df$name == "Vernon Dursley", ])
   expect_output(checkIDs(df, verbose = TRUE, repair = TRUE),

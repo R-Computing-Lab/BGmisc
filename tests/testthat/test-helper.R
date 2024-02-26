@@ -61,14 +61,11 @@ test_that("resample with specific size returns correct length", {
   expect_equal(length(result), 7)
 })
 
-test_that("SimPed issues a deprecation warning", {
+test_that("functions issue a deprecation warning", {
+#  skip_on_cran(message = "Skipping test that only checks for warning message")
   expect_warning(SimPed(), "deprecated")
-})
-
-test_that("related_coef issues a deprecation warning", {
   expect_warning(related_coef(), "deprecated")
-})
-
-test_that("relatedness issues a deprecation warning", {
   expect_warning(relatedness(obsR = .5), "deprecated")
+
+
 })

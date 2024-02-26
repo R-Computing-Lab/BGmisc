@@ -175,6 +175,6 @@ test_that("ped2maternal/paternal produces correct matrix dims", {
   pat <- ped2paternal(hazard)
   expect_equal(dim(pat), c(nrow(hazard), ncol(hazard)+1))
 
-  expect_less_than(cor(pat$patID, mat$matID), 1)
+  expect_lt(cor(pat$patID, mat$matID), 1)
 })
 

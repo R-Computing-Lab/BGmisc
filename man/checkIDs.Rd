@@ -7,7 +7,7 @@
 checkIDs(ped, verbose = FALSE, repair = FALSE)
 }
 \arguments{
-\item{ped}{A dataframe representing the pedigree data with columns 'ID', 'dadID', and 'momID'.}
+\item{ped}{A dataframe representing the pedigree data with columns `ID`, `dadID`, and `momID`.}
 
 \item{verbose}{A logical flag indicating whether to print progress and validation messages to the console.}
 

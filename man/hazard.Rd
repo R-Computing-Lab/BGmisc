@@ -18,20 +18,20 @@ There are two extended families that are sampled from the same population.
 The variables are as follows:
 
 \itemize{
-  \item FamID.  ID of the extended family
-  \item ID.  Person identification variable
-  \item sex.  Sex of the ID: 1 is female; 0 is male
-  \item dadID.  ID of the father
-  \item momID.  ID of the mother
-  \item affected.  logical.  Whether the person is affected or not
-  \item DA1.  Binary variable signifying the meaninglessness of life
-  \item DA2.  Binary variable signifying the fundamental unknowability of existence
-  \item birthYr.  Birth year for person
-  \item onsetYr.  Year of onset for person
-  \item deathYr.  Death year for person
-  \item available.  logical.  Whether
-  \item Gen.  Generation of the person
-  \item proband.  logical.  Whether the person is a proband or not
+  \item \code{FamID}:  ID of the extended family
+  \item \code{ID}:  Person identification variable
+  \item \code{sex}:  Sex of the ID: 1 is female; 0 is male
+  \item \code{dadID}:  ID of the father
+  \item \code{momID}:  ID of the mother
+  \item \code{affected}:  logical.  Whether the person is affected or not
+  \item \code{DA1}:  Binary variable signifying the meaninglessness of life
+  \item \code{DA2}:  Binary variable signifying the fundamental unknowability of existence
+  \item \code{birthYr}:  Birth year for person
+  \item \code{onsetYr}:  Year of onset for person
+  \item \code{deathYr}:  Death year for person
+  \item \code{available}:  logical.  Whether
+  \item \code{Gen}:  Generation of the person
+  \item \code{proband}:  logical.  Whether the person is a proband or not
 }
 }
 \keyword{datasets}

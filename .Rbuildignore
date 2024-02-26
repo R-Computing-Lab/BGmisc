@@ -3,6 +3,7 @@
 ^LICENSE\.md$
 ^R/\.Rhistory$
 ^R/paper$
+CITATION.cff$
 ^doc$
 ^data-raw$
 ^Meta$

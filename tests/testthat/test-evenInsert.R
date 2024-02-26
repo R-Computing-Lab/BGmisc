@@ -31,6 +31,7 @@ test_that("evenInsert inserts elements of m into n when m < n", {
 
 # Test Case 5: Verbose mode
 test_that("Verbose mode work for evenInsert", {
+# skip_on_cran(message = "Skipping test that only checks for verbose output")
   expect_output(evenInsert(1:3, 4:6, verbose = TRUE),
     regexp = "1 2 3 \\n1 2 3 \\n1 2 3 \\n4 5 6 "
   )

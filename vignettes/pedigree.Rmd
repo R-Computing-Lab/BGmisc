@@ -15,28 +15,20 @@ knitr::opts_chunk$set(
 options(rmarkdown.html_vignette.check_title = FALSE)
 ```
 
-
 # Introduction
-
-This vignette provides a detailed guide to the pedigree-related functions within the `BGmisc` package. 
-
-## Loading Required Libraries
-
-```{r setup}
-library(BGmisc)
-```
-
-# Simulating Pedigrees
-
-
 
 Unlike Tolstoy, where *only* happy families are alike, all pedigrees are alike -- or at least, all simulated pedigrees are alike. The `simulatePedigree` function generates a pedigree with a user-specified number of generations and individuals per generation. This function provides users the opportunity to test family models in pedigrees with a customized pedigree length and width.
 
 These pedigrees can be simulated as a function of several parameters, including the number of children per mate, generations, sex ratio of newborns, and mating rate. Given that large family pedigrees are difficult to collect or access, simulated pedigrees serve as an efficient tool for researchers. These simulated pedigrees are useful for building family-based statistical models, and evaluating their statistical properties, such as power, bias, and computational efficiency.
 
-To illustrate this, let us generate a pedigree. This pedigree has a total of four generations, in which each person who "mates", grows a family with four offspring. In our scenario, the number of male and female newborns is equal. In this illustration 70% of individuals will mate and bear offspring. Such a pedigree structure can be simulated by running:
+
+To illustrate this functionality, let us generate a pedigree. This pedigree has a total of four generations (`Ngen`), in which each person who "mates", grows a family with four offspring (`kpc`). In our scenario, the number of male and female newborns is equal, but can be adjusted via (`sexR`). In this illustration 70% of individuals will mate and bear offspring (`marR`). Such a pedigree structure can be simulated by running the following code:
 
 ```{r}
+
+## Loading Required Libraries
+library(BGmisc)
+
 set.seed(5)
 df_ped <- simulatePedigree(
   kpc = 4,
@@ -58,7 +50,7 @@ The columns represents the individual's family ID, the individual's personal ID,
 ## Plotting Pedigree
 
 
-Pedigrees are visual diagrams that represent family relationships across generations. They are commonly used in genetics to trace the inheritance of specific traits or conditions. This vignette will guide you through visualizing simulated pedigrees using the `plotPedigree` function. This function is a wrapper function for Kinship2's base R plotting.
+Pedigrees are visual diagrams that represent family relationships across generations. They are commonly used in genetics to trace the inheritance of specific traits or conditions. This vignette will guide you through visualizing simulated pedigrees using the `plotPedigree` function. This function is a wrapper function for `Kinship2`'s base R plotting.
 
 ### Single Pedigree Visualization
 

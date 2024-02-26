@@ -27,7 +27,7 @@ makeTwins(
 \item{verbose}{logical.  If TRUE, print progress through stages of algorithm}
 }
 \value{
-Returns a \code{data.frame} with MZ twins infomration added as a new column.
+Returns a \code{data.frame} with MZ twins information added as a new column.
 }
 \description{
 makeTwins

@@ -4,8 +4,8 @@
 \alias{dropLink}
 \title{dropLink
 A function to drop a person from his/her parents in the simulated pedigree \code{data.frame}.
-The person can be dropped by specifying his/her ID or by specifying the generation which the randomly to be dropeed person is in.
-The function can separate one pedigree into two pedigrees. Seperating into small pieces should be done by running the function multiple times.
+The person can be dropped by specifying his/her ID or by specifying the generation which the randomly to-be-dropped person is in.
+The function can separate one pedigree into two pedigrees. Separating into small pieces should be done by running the function multiple times.
 This is a supplementary function for \code{simulatePedigree}.}
 \usage{
 dropLink(
@@ -21,19 +21,19 @@ dropLink(
 
 \item{ID_drop}{the ID of the person to be dropped from his/her parents.}
 
-\item{gen_drop}{the generation in which the randomly dropped person is. Will work if ID_drop is not specified.}
+\item{gen_drop}{the generation in which the randomly dropped person is. Will work if `ID_drop` is not specified.}
 
 \item{sex_drop}{the biological sex of the randomly dropped person.}
 
 \item{n_drop}{the number of times the mutation happens.}
 }
 \value{
-a pedigree with the dropped person's dadID and momID set to NA.
+a pedigree with the dropped person's `dadID` and `momID` set to NA.
 }
 \description{
 dropLink
 A function to drop a person from his/her parents in the simulated pedigree \code{data.frame}.
-The person can be dropped by specifying his/her ID or by specifying the generation which the randomly to be dropeed person is in.
-The function can separate one pedigree into two pedigrees. Seperating into small pieces should be done by running the function multiple times.
+The person can be dropped by specifying his/her ID or by specifying the generation which the randomly to-be-dropped person is in.
+The function can separate one pedigree into two pedigrees. Separating into small pieces should be done by running the function multiple times.
 This is a supplementary function for \code{simulatePedigree}.
 }
