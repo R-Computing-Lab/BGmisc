@@ -87,3 +87,33 @@ inferRelatedness <- function(obsR, aceA = .9, aceC = 0, sharedC = 0) {
   calc_r <- (obsR - sharedC * aceC) / aceA
   return(calc_r)
 }
+
+#' Falconer's Formula
+#' Use Falconer's formula to solve for H using the observed correlations for two groups of any two relatednesses.
+#' @param r1 Relatedness coefficient of the first group.
+#' @param r2 Relatedness coefficient of the second group.
+#' @param obsR1 Observed correlation between members of the first group.
+#' @param obsR2 Observed correlation between members of the second group.
+#'
+#' @return Heritability estimates (`heritability_estimates`).
+
+calculateH <- function(r1, r2, obsR1, obsR2) {
+  # Check for equal relatedness coefficients to avoid division by zero
+  if (any(r1 - r2 == 0)) {
+    stop("Relatedness coefficients r1 and r2 must not be equal for any pair.")
+  }
+
+  # Calculate heritability estimates (H^2) for all pairs
+  heritability_estimates <- (obsR1 - obsR2) / (r1 - r2)
+  # Check for unrealistic heritability estimates and warn the user
+  if (any(heritability_estimates < 0)) {
+    warning("Some calculated heritability values are negative, which may indicate non-genetic influences or measurement errors.")
+  }
+
+  if (any(heritability_estimates > 1)) {
+    warning("Some calculated heritability values are greater than 1, which may suggest overestimation or errors in the observed correlations or relatedness coefficients.")
+  }
+
+
+  return(heritability_estimates)
+}
