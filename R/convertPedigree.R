@@ -10,7 +10,7 @@
 #' @param flatten.diag logical. If TRUE, overwrite the diagonal of the final relatedness matrix with ones
 #' @param standardize.colnames logical. If TRUE, standardize the column names of the pedigree dataset
 #' @param tcross.alt.crossprod logical. If TRUE, use alternative method of using Crossprod function for computing the transpose
-#' @param tcross.alt.star logical. If TRUE, use alternative method of using %*% for computing the transpose
+#' @param tcross.alt.star logical. If TRUE, use alternative method of using \%\*\% for computing the transpose
 #' @param ... additional arguments to be passed to \code{\link{ped2com}}
 #' @details The algorithms and methodologies used in this function are further discussed and exemplified in the vignette titled "examplePedigreeFunctions".
 #' @export
@@ -242,9 +242,6 @@ ped2mit <- ped2mt <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALS
     tcross.alt.star = tcross.alt.star
   )
 }
-
-
-
 
 #' Take a pedigree and turn it into a common nuclear environmental relatedness matrix
 #' @inheritParams ped2com

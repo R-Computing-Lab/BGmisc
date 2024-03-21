@@ -3,6 +3,7 @@
 ^LICENSE\.md$
 ^R/\.Rhistory$
 ^R/paper$
+^checkParents\.X
 CITATION.cff$
 ^doc$
 ^data-raw$

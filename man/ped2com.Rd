@@ -39,7 +39,7 @@ generations as there are in the data.}
 
 \item{tcross.alt.crossprod}{logical. If TRUE, use alternative method of using Crossprod function for computing the transpose}
 
-\item{tcross.alt.star}{logical. If TRUE, use alternative method of using %*% for computing the transpose}
+\item{tcross.alt.star}{logical. If TRUE, use alternative method of using \%\*\% for computing the transpose}
 
 \item{...}{additional arguments to be passed to \code{\link{ped2com}}}
 }
