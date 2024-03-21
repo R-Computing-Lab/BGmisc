@@ -1,12 +1,10 @@
 
-Description
------------------------------------------------
+# Description
 
 This update reflects a substantial improvement in the codebase as part of the peer review process for JOSS, including the addition of numerous function checks, increased code coverage to 85%, and the replacement of sapply usage. We also added a new function to simulate twins and the ability to trace paternal and maternal lines. We also added a Harry Potter pedigree.
 
 
-Test Environments
------------------------------------------------
+# Test Environments
 
 1. Local OS: Windows 11 x64 (build 22635), R version 4.3.2 (2023-10-31 ucrt)
 2. **GitHub Actions**:  
