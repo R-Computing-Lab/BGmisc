@@ -54,7 +54,7 @@ test_that("ped2add produces correct matrix dims, values, and dimnames for hazard
 
 test_that("ped2add produces correct matrix dims, values, and dimnames for alternative transpose", {
   data(hazard)
-  add <- ped2add(hazard, alt.tcross1 = TRUE)
+  add <- ped2add(hazard, tcross.alt.crossprod = TRUE)
   # Check dimension
   expect_equal(dim(add), c(nrow(hazard), nrow(hazard)))
   # Check several values
@@ -92,7 +92,7 @@ test_that("ped2add produces correct matrix dims, values, and dimnames for inbree
 
 test_that("ped2add produces correct matrix dims, values, and dimnames for inbreeding data with alternative transpose", {
   data(inbreeding)
-  add <- ped2add(inbreeding, alt.tcross2 = TRUE)
+  add <- ped2add(inbreeding, tcross.alt.star = TRUE)
   # Check dimension
   expect_equal(dim(add), c(nrow(inbreeding), nrow(inbreeding)))
   # Check several values

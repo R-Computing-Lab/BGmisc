@@ -12,8 +12,8 @@ ped2add(
   gc = FALSE,
   flatten.diag = FALSE,
   standardize.colnames = TRUE,
-  alt.tcross1 = FALSE,
-  alt.tcross2 = FALSE
+  tcross.alt.crossprod = FALSE,
+  tcross.alt.star = FALSE
 )
 }
 \arguments{
@@ -33,9 +33,9 @@ generations as there are in the data.}
 
 \item{standardize.colnames}{logical. If TRUE, standardize the column names of the pedigree dataset}
 
-\item{alt.tcross1}{logical. If TRUE, use an alternative method for computing the transpose}
+\item{tcross.alt.crossprod}{logical. If TRUE, use alternative method of using Crossprod function for computing the transpose}
 
-\item{alt.tcross2}{logical. If TRUE, use an alternative method for computing the transpose}
+\item{tcross.alt.star}{logical. If TRUE, use alternative method of using %*% for computing the transpose}
 }
 \description{
 Take a pedigree and turn it into an additive genetics relatedness matrix
