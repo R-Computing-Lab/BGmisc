@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BGmisc</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -69,6 +69,8 @@
 <span>  gc <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  flatten.diag <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  standardize.colnames <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  tcross.alt.crossprod <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  tcross.alt.star <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -107,6 +109,14 @@ generations as there are in the data.</p></dd>
 
 <dt>standardize.colnames</dt>
 <dd><p>logical. If TRUE, standardize the column names of the pedigree dataset</p></dd>
+
+
+<dt>tcross.alt.crossprod</dt>
+<dd><p>logical. If TRUE, use alternative method of using Crossprod function for computing the transpose</p></dd>
+
+
+<dt>tcross.alt.star</dt>
+<dd><p>logical. If TRUE, use alternative method of using %\*% for computing the transpose</p></dd>
 
 
 <dt>...</dt>
