@@ -84,3 +84,9 @@ test_that("calculateH handles both negative and positive correlations", {
                  regexp = "The correlations should not have opposite signs."),
     regexp = "Some calculated heritability values are greater than 1")
 })
+
+# Test 6: illegal correlation values
+test_that("calculateH stops for illegal coefficients", {
+  expect_warning(calculateH(0.5, 0.25, 1.4, 1.4),
+               "The observed correlations should be between -1 and 1")
+})
