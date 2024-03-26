@@ -87,3 +87,45 @@ inferRelatedness <- function(obsR, aceA = .9, aceC = 0, sharedC = 0) {
   calc_r <- (obsR - sharedC * aceC) / aceA
   return(calc_r)
 }
+
+#' Falconer's Formula
+#' Use Falconer's formula to solve for H using the observed correlations for two groups of any two relatednesses.
+#' @param r1 Relatedness coefficient of the first group.
+#' @param r2 Relatedness coefficient of the second group.
+#' @param obsR1 Observed correlation between members of the first group.
+#' @param obsR2 Observed correlation between members of the second group.
+#'
+#' @return Heritability estimates (`heritability_estimates`).
+
+calculateH <- function(r1, r2, obsR1, obsR2) {
+  # Check for equal relatedness coefficients to avoid division by zero
+  if (any(r1 - r2 == 0)) {
+    stop("Relatedness coefficients r1 and r2 must not be equal for any pair.")
+  }
+  if (any(abs(obsR1) > 1) || any(abs(obsR2) > 1)) {
+    warning("The observed correlations should be between -1 and 1.")
+  }
+
+  if (any(obsR1 * obsR2 < 0)) {
+    warning("The correlations should not have opposite signs.")
+  }
+
+  if(any(obsR1 < 0 & obsR2 < 0)){
+    message("Your scale might be reverse coded because you have negative correlations. Please check your data. ")
+  }
+
+
+  # Calculate heritability estimates (H^2) for all pairs
+  heritability_estimates <- (obsR1 - obsR2) / (r1 - r2)
+  # Check for unrealistic heritability estimates and warn the user
+  if (any(heritability_estimates < 0)) {
+    warning("Some calculated heritability values are negative, which may indicate assumption violations or questions about directionality.")
+  }
+
+  if (any(heritability_estimates > 1)) {
+    warning("Some calculated heritability values are greater than 1, which may suggest overestimation or errors in the observed correlations or relatedness coefficients.")
+  }
+
+
+  return(heritability_estimates)
+}

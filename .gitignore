@@ -4,13 +4,9 @@ R/plane.txt
 R/.Rhistory
 .Rhistory
 paper/paper.html
-inst/doc
-/doc/
 /Meta/
 *.knit.md
 vignettes/articles/paper.html
 BGmisc.code-workspace
-.lintr
-
 tests/testthat/Rplots.pdf
-docs
+

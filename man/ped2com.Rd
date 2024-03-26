@@ -13,6 +13,8 @@ ped2com(
   gc = FALSE,
   flatten.diag = FALSE,
   standardize.colnames = TRUE,
+  tcross.alt.crossprod = FALSE,
+  tcross.alt.star = FALSE,
   ...
 )
 }
@@ -34,6 +36,10 @@ generations as there are in the data.}
 \item{flatten.diag}{logical. If TRUE, overwrite the diagonal of the final relatedness matrix with ones}
 
 \item{standardize.colnames}{logical. If TRUE, standardize the column names of the pedigree dataset}
+
+\item{tcross.alt.crossprod}{logical. If TRUE, use alternative method of using Crossprod function for computing the transpose}
+
+\item{tcross.alt.star}{logical. If TRUE, use alternative method of using \%\*\% for computing the transpose}
 
 \item{...}{additional arguments to be passed to \code{\link{ped2com}}}
 }

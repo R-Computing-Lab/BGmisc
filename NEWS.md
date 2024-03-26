@@ -1,3 +1,8 @@
+# BGmisc 1.2.1
+
+* Added alternative transpose options for the matrix
+* Added generalization of Falconer's formula
+
 # BGmisc 1.2.0
 
 * Added numerous code checks, increased code coverage to 85%

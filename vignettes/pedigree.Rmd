@@ -49,7 +49,6 @@ The columns represents the individual's family ID, the individual's personal ID,
 
 ## Plotting Pedigree
 
-
 Pedigrees are visual diagrams that represent family relationships across generations. They are commonly used in genetics to trace the inheritance of specific traits or conditions. This vignette will guide you through visualizing simulated pedigrees using the `plotPedigree` function. This function is a wrapper function for `Kinship2`'s base R plotting.
 
 ### Single Pedigree Visualization

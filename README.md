@@ -13,6 +13,7 @@ developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.re
 version](https://www.r-pkg.org/badges/version/BGmisc)](https://cran.r-project.org/package=BGmisc)
 [![Package
 downloads](https://cranlogs.r-pkg.org/badges/grand-total/BGmisc)](https://cran.r-project.org/package=BGmisc)</br>
+
 [![R-CMD-check](https://github.com/R-Computing-Lab/BGmisc/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/R-Computing-Lab/BGmisc/actions/workflows/R-CMD-check.yaml)
 [![Dev Main
 branch](https://github.com/R-Computing-Lab/BGmisc/actions/workflows/R-CMD-dev_maincheck.yaml/badge.svg)](https://github.com/R-Computing-Lab/BGmisc/actions/workflows/R-CMD-dev_maincheck.yaml)

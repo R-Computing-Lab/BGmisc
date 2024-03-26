@@ -52,9 +52,47 @@ test_that("ped2add produces correct matrix dims, values, and dimnames for hazard
   expect_equal(dn[[1]], as.character(hazard$ID))
 })
 
+test_that("ped2add produces correct matrix dims, values, and dimnames for alternative transpose", {
+  data(hazard)
+  add <- ped2add(hazard, tcross.alt.crossprod = TRUE)
+  # Check dimension
+  expect_equal(dim(add), c(nrow(hazard), nrow(hazard)))
+  # Check several values
+  expect_true(all(diag(add) == 1))
+  expect_equal(add, t(add))
+  expect_equal(add[2, 1], 0)
+  expect_equal(add[10, 1], .25)
+  expect_equal(add[9, 1], 0)
+  expect_equal(add["5", "6"], .5)
+  # Check that dimnames are correct
+  dn <- dimnames(add)
+  expect_equal(dn[[1]], dn[[2]])
+  expect_equal(dn[[1]], as.character(hazard$ID))
+})
+# to do, combine the sets that are equalivant. shouldn't need to run 1000 expect equals
+
 test_that("ped2add produces correct matrix dims, values, and dimnames for inbreeding data", {
   data(inbreeding)
   add <- ped2add(inbreeding)
+  # Check dimension
+  expect_equal(dim(add), c(nrow(inbreeding), nrow(inbreeding)))
+  # Check several values
+  expect_true(all(diag(add) >= 1))
+  expect_equal(add, t(add))
+  expect_equal(add[2, 1], 0)
+  expect_equal(add[6, 1], .5)
+  expect_equal(add[113, 113], 1.1250)
+  expect_equal(add["113", "112"], 0.62500)
+  # Check that dimnames are correct
+  dn <- dimnames(add)
+  expect_equal(dn[[1]], dn[[2]])
+  expect_equal(dn[[1]], as.character(inbreeding$ID))
+})
+
+
+test_that("ped2add produces correct matrix dims, values, and dimnames for inbreeding data with alternative transpose", {
+  data(inbreeding)
+  add <- ped2add(inbreeding, tcross.alt.star = TRUE)
   # Check dimension
   expect_equal(dim(add), c(nrow(inbreeding), nrow(inbreeding)))
   # Check several values

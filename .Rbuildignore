@@ -3,6 +3,8 @@
 ^LICENSE\.md$
 ^R/\.Rhistory$
 ^R/paper$
+^checkParents\.X
+^test-clean\.X
 CITATION.cff$
 ^doc$
 ^data-raw$
