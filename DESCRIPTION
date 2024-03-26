@@ -1,6 +1,6 @@
 Package: BGmisc
 Title: An R Package for Extended Behavior Genetics Analysis
-Version: 1.2.0
+Version: 1.2.1
 Authors@R: c(
     person("S. Mason", "Garrison", , email= "garrissm@wfu.edu", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-4804-6003")),
@@ -8,8 +8,7 @@ Authors@R: c(
            comment = c(ORCID = "0000-0002-3651-6709")),
     person("Xuanyu", "Lyu", role = "aut",
            comment = c(ORCID = "0000-0002-2841-5529")),
-    person(c("Rachel", "N."), "Good", role = "ctb",
-           comment = c(ORCID = "0000-0000-0000-0000")),
+    person(c("Rachel", "N."), "Good", role = "ctb"),
     person(c("Jonathan", "D."), "Trattner", role = "aut", email = "code@jdtrat.com", 
            comment = c(ORCID = "0000-0002-1097-7603",
                        url = "https://www.jdtrat.com/")),

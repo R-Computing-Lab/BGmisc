@@ -24,9 +24,13 @@ Authors:
 \itemize{
   \item Michael D. Hunter (\href{https://orcid.org/0000-0002-3651-6709}{ORCID})
   \item Xuanyu Lyu (\href{https://orcid.org/0000-0002-2841-5529}{ORCID})
-  \item Rachel N. Good (\href{https://orcid.org/0000-0000-0000-0000}{ORCID})
   \item Jonathan D. Trattner \email{code@jdtrat.com} (\href{https://orcid.org/0000-0002-1097-7603}{ORCID}) (https://www.jdtrat.com/)
   \item S. Alexandra Burt (\href{https://orcid.org/0000-0001-5538-7431}{ORCID})
+}
+
+Other contributors:
+\itemize{
+  \item Rachel N. Good [contributor]
 }
 
 }
