@@ -1,12 +1,16 @@
 #' Validates and Optionally Repairs Sex Coding in a Pedigree Dataframe
 #'
 #' This function performs two main tasks:
-#' 1. Optionally recodes the 'sex' variable based on a given code for males.
-#' 2. Optionally repairs the sex coding based on a specified logic.
+#' 1. Optionally recodes the 'sex' variable based on given codes for males and females.
+#' 2. Optionally repairs the sex coding based on specified logic, facilitating the accurate construction of genetic pedigrees.
+#'
+#' @details The developers of this package wish to express unequivocal support for folx in the transgender and LGBTQ+ communities. We understand and respect the complexity of gender identity and the distinction between the biological aspect of sex used for genetic analysis (genotype) and the broader, richer concept of gender identity (phenotype). Although this function focuses on chromosomal information necessary for constructing genetic pedigrees, we acknowledge that gender is a spectrum, encompassing a wide range of identities beyond binary categories.
+#'
+#' In the context of this function, the terms 'male' and 'female' are used strictly in a biological sense based on chromosomal configurations relevant to genetic studies. This usage is not intended to negate the personal gender identity of any individual. We recognize the importance of using language and methodologies that affirm and respect all gender identities, aiming to contribute to a more inclusive and supportive scientific community.
 #'
 #' @param ped A dataframe representing the pedigree data with a 'sex' column.
-#' @param code_male The current code used to represent males in the 'sex' column. At least one is needed.
-#' @param code_female The current code used to represent females in the 'sex' column. If both male and female are NULL, no recoding is performed.
+#' @param code_male The current code used to represent males in the 'sex' column.
+#' @param code_female The current code used to represent females in the 'sex' column. If both are NULL, no recoding is performed.
 #' @param verbose A logical flag indicating whether to print progress and validation messages to the console.
 #' @param repair A logical flag indicating whether to attempt repairs on the sex coding.
 #'
@@ -29,9 +33,9 @@ checkSex <- function(ped, code_male = NULL, code_female = NULL, verbose = FALSE,
 
 
   if (verbose) {
-    cat("Step 1: Checking how many genders...\n")
+    cat("Step 1: Checking how many sexes/genders...\n")
   }
-  # check how many genders
+  # check how many sexes/genders
 
   validation_results$sex_unique <- unique(ped$sex)
   validation_results$sex_length <- length(unique(ped$sex))
@@ -41,8 +45,7 @@ checkSex <- function(ped, code_male = NULL, code_female = NULL, verbose = FALSE,
       paste0(validation_results$sex_unique)
     ))
   }
-  # are there multiple genders in the list of dads and moms?
-
+  # are there multiple sexes/genders in the list of dads and moms?
 
   table_sex_dad <- sort(table(ped$sex[ped$ID %in% ped$dadID]), decreasing = TRUE)
   table_sex_mom <- sort(table(ped$sex[ped$ID %in% ped$momID]), decreasing = TRUE)
@@ -115,6 +118,7 @@ checkSex <- function(ped, code_male = NULL, code_female = NULL, verbose = FALSE,
 #'
 #' @inheritParams checkSex
 #' @inheritParams plotPedigree
+#' @inherit checkSex details
 #' @return A modified version of the input data.frame \code{ped}, containing an additional or modified 'sex_recode' column where the 'sex' values are recoded according to \code{code_male}. NA values in the 'sex' column are preserved.
 #' @examples
 #' \dontrun{
@@ -134,6 +138,7 @@ repairSex <- function(ped, verbose = FALSE, code_male = NULL) {
 #' the recoding of the 'sex' variable in a pedigree dataframe.
 #' @inheritParams checkSex
 #' @inheritParams plotPedigree
+#' @inherit checkSex details
 #' @return A modified version of the input data.frame \code{ped}, containing an additional or modified 'sex_recode' column where the 'sex' values are recoded according to \code{code_male}. NA values in the 'sex' column are preserved.
 #' @keywords internal
 #' @seealso \code{\link{plotPedigree}}
@@ -171,7 +176,7 @@ recodeSex <- function(
     ped$sex_recode <- NULL
   } else {
     if (verbose) {
-      warning(" both code male and code female are empty. No recoding was done.")
+      warning("Both code male and code female are empty. No recoding was done.")
     }
   }
   return(ped)

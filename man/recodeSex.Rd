@@ -20,9 +20,9 @@ recodeSex(
 
 \item{verbose}{A logical flag indicating whether to print progress and validation messages to the console.}
 
-\item{code_male}{The current code used to represent males in the 'sex' column. At least one is needed.}
+\item{code_male}{The current code used to represent males in the 'sex' column.}
 
-\item{code_female}{The current code used to represent females in the 'sex' column. If both male and female are NULL, no recoding is performed.}
+\item{code_female}{The current code used to represent females in the 'sex' column. If both are NULL, no recoding is performed.}
 }
 \value{
 A modified version of the input data.frame \code{ped}, containing an additional or modified 'sex_recode' column where the 'sex' values are recoded according to \code{code_male}. NA values in the 'sex' column are preserved.
@@ -30,6 +30,11 @@ A modified version of the input data.frame \code{ped}, containing an additional 
 \description{
 This function serves as a wrapper around `checkSex` to specifically handle
 the recoding of the 'sex' variable in a pedigree dataframe.
+}
+\details{
+The developers of this package wish to express unequivocal support for folx in the transgender and LGBTQ+ communities. We understand and respect the complexity of gender identity and the distinction between the biological aspect of sex used for genetic analysis (genotype) and the broader, richer concept of gender identity (phenotype). Although this function focuses on chromosomal information necessary for constructing genetic pedigrees, we acknowledge that gender is a spectrum, encompassing a wide range of identities beyond binary categories.
+
+In the context of this function, the terms 'male' and 'female' are used strictly in a biological sense based on chromosomal configurations relevant to genetic studies. This usage is not intended to negate the personal gender identity of any individual. We recognize the importance of using language and methodologies that affirm and respect all gender identities, aiming to contribute to a more inclusive and supportive scientific community.
 }
 \seealso{
 \code{\link{plotPedigree}}
