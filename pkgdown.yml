@@ -1,12 +1,12 @@
 pandoc: 3.1.11
-pkgdown: 2.0.7
+pkgdown: 2.0.9
 pkgdown_sha: ~
 articles:
   analyticrelatedness: analyticrelatedness.html
   modelingrelatedness: modelingrelatedness.html
   network: network.html
   pedigree: pedigree.html
-last_built: 2024-03-26T17:10Z
+last_built: 2024-05-02T14:20Z
 urls:
   reference: https://r-computing-lab.github.io/BGmisc/reference
   article: https://r-computing-lab.github.io/BGmisc/articles
