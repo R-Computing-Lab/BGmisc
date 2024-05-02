@@ -1,3 +1,7 @@
+# BGmisc 1.2.2
+
+* Harmonized function names
+
 # BGmisc 1.2.1
 
 * Added alternative transpose options for the matrix
