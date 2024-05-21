@@ -15,7 +15,8 @@ summarizePedigrees(
   byr = NULL,
   type = c("fathers", "mothers", "families"),
   nbiggest = 5,
-  noldest = 5
+  noldest = 5,
+  skipvar = NULL
 )
 }
 \arguments{
@@ -40,6 +41,8 @@ summarizePedigrees(
 \item{nbiggest}{The number of biggest lines to return.}
 
 \item{noldest}{The number of oldest lines to return.}
+
+\item{skipvar}{A character vector of variables to skip when calculating summary statistics.}
 }
 \value{
 A list containing summary statistics for family, maternal, and paternal lines, as well as the 5 oldest and biggest lines.

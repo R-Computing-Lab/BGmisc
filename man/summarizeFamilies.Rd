@@ -14,7 +14,8 @@ summarizeFamilies(
   patID = "patID",
   byr = NULL,
   nbiggest = 5,
-  noldest = 5
+  noldest = 5,
+  skipvar = NULL
 )
 }
 \arguments{
@@ -37,6 +38,8 @@ summarizeFamilies(
 \item{nbiggest}{The number of biggest lines to return.}
 
 \item{noldest}{The number of oldest lines to return.}
+
+\item{skipvar}{A character vector of variables to skip when calculating summary statistics.}
 }
 \description{
 Summarize the families in a pedigree
