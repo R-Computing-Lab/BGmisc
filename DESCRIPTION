@@ -29,7 +29,8 @@ Imports:
     igraph,
     kinship2,
     Matrix,
-    stats
+    stats,
+    data.table
 Suggests: 
     dplyr,
     EasyMx,
