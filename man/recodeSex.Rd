@@ -29,7 +29,8 @@ A modified version of the input data.frame \code{ped}, containing an additional 
 }
 \description{
 This function serves as a wrapper around `checkSex` to specifically handle
-the recoding of the 'sex' variable in a pedigree dataframe.
+the repair of the sex coding in a pedigree dataframe. 
+It sets the `repair` flag to TRUE automatically and forwards any additional parameters to `checkSex`.
 }
 \details{
 The developers of this package wish to express unequivocal support for folx in the transgender and LGBTQ+ communities. We understand and respect the complexity of gender identity and the distinction between the biological aspect of sex used for genetic analysis (genotype) and the broader, richer concept of gender identity (phenotype). Although this function focuses on chromosomal information necessary for constructing genetic pedigrees, we acknowledge that gender is a spectrum, encompassing a wide range of identities beyond binary categories.
