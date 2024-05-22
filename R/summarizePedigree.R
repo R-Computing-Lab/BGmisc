@@ -130,6 +130,7 @@ summarizePedigrees <- function(ped, famID = "famID", personID = "ID",
                                by = famID, suffixes = c("", "_founder"))
     output$family_summary <- family_summary_dt
     n_families <- nrow(family_summary_dt)
+    if(verbose) message("Summarized ", n_families, " families.")
   }
 
   if("mothers" %in% type) {
@@ -139,6 +140,7 @@ summarizePedigrees <- function(ped, famID = "famID", personID = "ID",
     maternal_summary_dt <- merge(maternal_summary_dt, originating_member_maternal, by = matID, suffixes = c("", "_founder"))
     output$maternal_summary <- maternal_summary_dt
     n_mothers <- nrow(maternal_summary_dt)
+    if(verbose) message("Summarized ", n_mothers, " maternal lines.")
   }
   if("fathers" %in% type) {
     if(verbose) message("Summarizing paternal lines...")
@@ -147,6 +149,7 @@ summarizePedigrees <- function(ped, famID = "famID", personID = "ID",
     paternal_summary_dt <- merge(paternal_summary_dt, originating_member_paternal, by = patID, suffixes = c("", "_founder"))
     output$paternal_summary <- paternal_summary_dt
     n_fathers <- nrow(paternal_summary_dt)
+    if(verbose) message("Summarized ", n_fathers, " paternal lines.")
   }
 
   # Optionally find the superlative lines
@@ -158,28 +161,28 @@ summarizePedigrees <- function(ped, famID = "famID", personID = "ID",
   if(!is.null(byr) & noldest > 0) {
     if(!is.null(n_families) & "families" %in% type) {
       if(verbose) message("Finding oldest families...")
-      output$oldest_families <- family_summary_dt[order(get(byr))][1:min(c(noldest,n_families),na.rm = TRUE)]
+      output$oldest_families <- try_na(family_summary_dt[order(get(byr))][1:min(c(noldest,n_families),na.rm = TRUE)])
     }
     if(!is.null(n_mothers) & "mothers" %in% type ) {
       if(verbose) message("Finding oldest maternal lines...")
-      output$oldest_maternal <- maternal_summary_dt[order(get(byr))][1:min(c(noldest,n_mothers),na.rm = TRUE)]
+      output$oldest_maternal <- try_na(maternal_summary_dt[order(get(byr))][1:min(c(noldest,n_mothers),na.rm = TRUE)])
     }
     if(!is.null(n_fathers) & "fathers" %in% type) {
       if(verbose) message("Finding oldest paternal lines...")
-      output$oldest_paternal <- paternal_summary_dt[order(get(byr))][1:min(c(noldest,n_fathers),na.rm = TRUE)]
+      output$oldest_paternal <- try_na(paternal_summary_dt[order(get(byr))][1:min(c(noldest,n_fathers),na.rm = TRUE)])
     }
   }
 
   # biggest lines
   if(!is.null(nbiggest) & nbiggest > 0) {
     if(!is.null(n_families) & "families" %in% type) {
-      output$biggest_families <- family_summary_dt[order(-get("count"))][1:min(c(nbiggest,n_families),na.rm = TRUE)]
+      output$biggest_families <- try_na(family_summary_dt[order(-get("count"))][1:min(c(nbiggest,n_families),na.rm = TRUE)])
     }
     if(!is.null(n_mothers) & "mothers" %in% type  ) {
-      output$biggest_maternal <- maternal_summary_dt[order(-get("count"))][1:min(c(nbiggest,n_mothers),na.rm = TRUE)]
+      output$biggest_maternal <- try_na(maternal_summary_dt[order(-get("count"))][1:min(c(nbiggest,n_mothers),na.rm = TRUE)])
     }
     if(!is.null(n_fathers) & "fathers" %in% type ) {
-      output$biggest_paternal <- paternal_summary_dt[order(-get("count"))][1:min(c(nbiggest,n_fathers),na.rm = TRUE)]
+      output$biggest_paternal <- try_na(paternal_summary_dt[order(-get("count"))][1:min(c(nbiggest,n_fathers),na.rm = TRUE)])
     }
   }
 
