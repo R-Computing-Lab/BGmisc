@@ -1,6 +1,7 @@
 # BGmisc 1.2.2
 
 * Harmonized function names
+* Added function to summarize variables by family, matrilinael, and patrilineal lines
 
 # BGmisc 1.2.1
 

@@ -12,11 +12,14 @@ summarizePedigrees(
   dadID = "dadID",
   matID = "matID",
   patID = "patID",
-  byr = NULL,
   type = c("fathers", "mothers", "families"),
+  byr = NULL,
+  founder_sort_var = NULL,
   nbiggest = 5,
   noldest = 5,
-  skipvar = NULL
+  skip_var = NULL,
+  five_num_summary = FALSE,
+  verbose = FALSE
 )
 }
 \arguments{
@@ -34,18 +37,22 @@ summarizePedigrees(
 
 \item{patID}{Character.  Paternal line ID variable to be created and added to the pedigree}
 
-\item{byr}{The column name for birth year.}
-
 \item{type}{The type of summary statistics to calculate. Options are "fathers", "mothers", and "families".}
+
+\item{byr}{Optional column name for birth year.}
+
+\item{founder_sort_var}{The variable to sort the founders by. If NULL, the founders will be sorted by birth year (`byr`) if that's present and by `personID` otherwise.}
 
 \item{nbiggest}{The number of biggest lines to return.}
 
 \item{noldest}{The number of oldest lines to return.}
 
-\item{skipvar}{A character vector of variables to skip when calculating summary statistics.}
+\item{skip_var}{A character vector of variables to skip when calculating summary statistics.}
+
+\item{five_num_summary}{Logical, if TRUE, include the 5-number summary (min, Q1, median, Q3, max) in the summary statistics.}
 }
 \value{
-A list containing summary statistics for family, maternal, and paternal lines, as well as the 5 oldest and biggest lines.
+A data.frame (or list) containing summary statistics for family, maternal, and paternal lines, as well as the 5 oldest and biggest lines.
 }
 \description{
 This function summarizes pedigree data, including calculating summary statistics for all numeric variables,

@@ -406,18 +406,12 @@ individual, respectively.</p>
 <h2>Summarizing Pedigrees</h2>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">summarizeFamilies</span>(df_ped, <span class="at">famID =</span> <span class="st">&quot;fam&quot;</span>)<span class="sc">$</span>family_summary</span>
 <span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co">#&gt; Key: &lt;fam&gt;</span></span>
-<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#&gt;       fam count  ID_mean ID_median ID_min ID_max    ID_sd gen_mean gen_median</span></span>
-<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co">#&gt;    &lt;char&gt; &lt;int&gt;    &lt;num&gt;     &lt;num&gt;  &lt;num&gt;  &lt;num&gt;    &lt;num&gt;    &lt;num&gt;      &lt;num&gt;</span></span>
-<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#&gt; 1:  fam 1    57 59170.89    100312  10011 100432 45400.91 3.298246          3</span></span>
-<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="co">#&gt;    gen_min gen_max    gen_sd dadID_mean dadID_median dadID_min dadID_max</span></span>
-<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co">#&gt;      &lt;num&gt;   &lt;num&gt;     &lt;num&gt;      &lt;num&gt;        &lt;num&gt;     &lt;num&gt;     &lt;num&gt;</span></span>
-<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="co">#&gt; 1:       1       4 0.8229935      42859        10037     10012    100320</span></span>
-<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co">#&gt;    dadID_sd momID_mean momID_median momID_min momID_max momID_sd spt_mean</span></span>
-<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="co">#&gt;       &lt;num&gt;      &lt;num&gt;        &lt;num&gt;     &lt;num&gt;     &lt;num&gt;    &lt;num&gt;    &lt;num&gt;</span></span>
-<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="co">#&gt; 1: 43933.44   42859.27        10036     10011    100318 43935.34  40123.5</span></span>
-<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a><span class="co">#&gt;    spt_median spt_min spt_max   spt_sd    ID   gen dadID momID   spt    sex</span></span>
-<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a><span class="co">#&gt;         &lt;num&gt;   &lt;num&gt;   &lt;num&gt;    &lt;num&gt; &lt;num&gt; &lt;int&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;char&gt;</span></span>
-<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a><span class="co">#&gt; 1:    10035.5   10011  100320 43476.96 10011     1    NA    NA 10012      F</span></span></code></pre></div>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#&gt;       fam count gen_mean gen_median gen_min gen_max    gen_sd spt_mean</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co">#&gt;    &lt;char&gt; &lt;int&gt;    &lt;num&gt;      &lt;num&gt;   &lt;num&gt;   &lt;num&gt;     &lt;num&gt;    &lt;num&gt;</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#&gt; 1:  fam 1    57 3.298246          3       1       4 0.8229935  40123.5</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="co">#&gt;    spt_median spt_min spt_max   spt_sd    ID   gen dadID momID   spt    sex</span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co">#&gt;         &lt;num&gt;   &lt;num&gt;   &lt;num&gt;    &lt;num&gt; &lt;num&gt; &lt;int&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;char&gt;</span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="co">#&gt; 1:    10035.5   10011  100320 43476.96 10011     1    NA    NA 10012      F</span></span></code></pre></div>
 </div>
 <div id="plotting-pedigree" class="section level2">
 <h2>Plotting Pedigree</h2>
