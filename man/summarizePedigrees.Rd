@@ -50,6 +50,8 @@ summarizePedigrees(
 \item{skip_var}{A character vector of variables to skip when calculating summary statistics.}
 
 \item{five_num_summary}{Logical, if TRUE, include the 5-number summary (min, Q1, median, Q3, max) in the summary statistics.}
+
+\item{verbose}{Logical, if TRUE, print progress messages.}
 }
 \value{
 A data.frame (or list) containing summary statistics for family, maternal, and paternal lines, as well as the 5 oldest and biggest lines.

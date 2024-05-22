@@ -47,6 +47,8 @@ summarizeMatrilines(
 \item{skip_var}{A character vector of variables to skip when calculating summary statistics.}
 
 \item{five_num_summary}{Logical, if TRUE, include the 5-number summary (min, Q1, median, Q3, max) in the summary statistics.}
+
+\item{verbose}{Logical, if TRUE, print progress messages.}
 }
 \description{
 Summarize the maternal lines in a pedigree

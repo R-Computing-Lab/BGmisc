@@ -12,7 +12,7 @@
 #' @param skip_var A character vector of variables to skip when calculating summary statistics.
 #' @param five_num_summary Logical, if TRUE, include the 5-number summary (min, Q1, median, Q3, max) in the summary statistics.
 #' @param founder_sort_var The variable to sort the founders by. If NULL, the founders will be sorted by birth year (`byr`) if that's present and by `personID` otherwise.
-
+#' @param verbose Logical, if TRUE, print progress messages.
 #' @returns A data.frame (or list) containing summary statistics for family, maternal, and paternal lines, as well as the 5 oldest and biggest lines.
 #' @import data.table
 #' @export
