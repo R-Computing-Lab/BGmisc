@@ -23,6 +23,7 @@ checkIDs <- function(ped, verbose = FALSE, repair = FALSE) {
   validation_results <- list()
 
   if (verbose) {
+    cat("Checking IDs...\n")
     cat("Step 1: Checking for unique IDs...\n")
   }
 
@@ -33,7 +34,7 @@ checkIDs <- function(ped, verbose = FALSE, repair = FALSE) {
   # Update the validation_results list
   if (length(duplicated_ids) > 0) {
     if (verbose) {
-      cat("Non-unique IDs found.\n")
+      cat(paste0(length(duplicated_ids)," Non-unique IDs found.\n"))
     }
     validation_results$all_unique_ids <- FALSE
     validation_results$total_non_unique_ids <- length(duplicated_ids)
@@ -46,12 +47,48 @@ checkIDs <- function(ped, verbose = FALSE, repair = FALSE) {
     validation_results$total_non_unique_ids <- 0
     validation_results$non_unique_ids <- NULL
   }
+  if (verbose) {
+    cat("Step 2: Checking for within row duplicats...\n")
+    cat("Is own father?\n")
+  }
+    is_own_father <- ped$ID[ped$ID == ped$dadID]
+  if (verbose) {
+      cat("Is own mother?\n")
+    }
+    is_own_mother <- ped$ID[ped$ID == ped$momID]
+    if (verbose) {
+      cat("Is mother father?\n")
+    }
+    duplicated_parents <-  ped$ID[ped$dadID == ped$momID]
 
-  if (repair) {
+    if(length(is_own_father) > 0| length(is_own_mother) > 0 | length(duplicated_parents) > 0){
+      if (verbose) {
+        cat("Within row duplicates found.\n")
+      }
+      validation_results$within_row_duplicates <- TRUE
+      validation_results$total_within_row_duplicates <- length(is_own_father)+length(is_own_mother)+length(duplicated_parents)
+
+      validation_results$is_own_father_ids <- unique(is_own_father)
+      validation_results$is_own_mother_ids <- unique(is_own_mother)
+      validation_results$duplicated_parents_ids <- unique(duplicated_parents)
+    } else {
+      if (verbose) {
+        cat("No within row duplicates found.\n")
+      }
+      validation_results$within_row_duplicates <- FALSE
+      validation_results$total_within_row_duplicates <- 0
+      validation_results$is_own_father_ids <- NULL
+      validation_results$is_own_mother_ids <- NULL
+      validation_results$duplicated_parents_ids <- NULL
+    }
     if (verbose) {
       cat("Validation Results:\n")
       print(validation_results)
-      cat("Step 2: Attempting to repair non-unique IDs...\n")
+    }
+  if (repair) {
+    if (verbose) {
+      cat("Attempting to repair:\n")
+      cat("Step 1: Attempting to repair non-unique IDs...\n")
     }
 
     # Initialize a list to track changes made during repair
@@ -76,6 +113,9 @@ checkIDs <- function(ped, verbose = FALSE, repair = FALSE) {
           changes[[paste0("ID", id)]] <- "Kept duplicates"
         }
       }
+    }
+    if (verbose) {
+      cat("Step 2: No repair for parents who are their children at this time\n")
     }
 
     if (verbose) {
