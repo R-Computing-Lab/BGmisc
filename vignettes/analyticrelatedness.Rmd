@@ -17,7 +17,7 @@ options(rmarkdown.html_vignette.check_title = FALSE)
 
 # Introduction
 
-This vignette focuses on the calculation and inference of relatedness coefficients using the `BGmisc` package. The relatedness coefficient is a measure of the genetic relationship between two individuals. Here, we introduce two functions: `calculateRelatedness` and `inferRelatedness`, which allow users to compute and infer the relatedness coefficient respectively.
+This vignette demonstrates analytic methods for determining relatedness in a pedigree. The relatedness coefficient is a measure of the genetic overlap between two individuals. In the simplest terms, it quantifies the genetic overlap between two individuals. The relatedness coefficient ranges from 0 to 1, with 1 indicating a perfect genetic match (which occurs when comparing an individual to themselves, their identical twin, or their clone), whereas 0 indicates no genetic overlap. We introduce two functions: `calculateRelatedness` and `inferRelatedness`, which allow users to compute and infer the relatedness coefficient, respectively.
 
 ## Loading Required Libraries
 
@@ -25,7 +25,7 @@ This vignette focuses on the calculation and inference of relatedness coefficien
 library(BGmisc)
 ```
 
-# Calculating Relatedness Coefficient
+## Calculating Relatedness Coefficient
 
 The `calculateRelatedness` function offers a method to compute the relatedness coefficient based on shared ancestry, as described by Wright (1922). This function utilizes the formula:
 
@@ -34,6 +34,7 @@ r_{bc} = \sum \left(\frac{1}{2}\right)^{n+n'+1} (1+f_a)
 \]
 
 Where \( n \) and \( n' \) represent the number of generations back of common ancestors the pair share.
+
 
 ```{r}
 # Example usage:

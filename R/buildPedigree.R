@@ -1,4 +1,9 @@
-#' Add an extended family ID variable to a pedigree
+#' Segment Pedigree into Extended Families
+#'
+#' This function adds an extended family ID variable to a pedigree by segmenting that dataset into independent extended families
+#' using the weakly connected components algorithm.
+#'
+#'
 #' @param ped a pedigree dataset.  Needs ID, momID, and dadID columns
 #' @param personID character.  Name of the column in ped for the person ID variable
 #' @param momID character.  Name of the column in ped for the mother ID variable
