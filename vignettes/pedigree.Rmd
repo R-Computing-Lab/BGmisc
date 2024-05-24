@@ -25,7 +25,6 @@ These pedigrees can be simulated as a function of several parameters, including 
 To illustrate this functionality, let us generate a pedigree. This pedigree has a total of four generations (`Ngen`), in which each person who "mates", grows a family with four offspring (`kpc`). In our scenario, the number of male and female newborns is equal, but can be adjusted via (`sexR`). In this illustration 70% of individuals will mate and bear offspring (`marR`). Such a pedigree structure can be simulated by running the following code:
 
 ```{r}
-
 ## Loading Required Libraries
 library(BGmisc)
 

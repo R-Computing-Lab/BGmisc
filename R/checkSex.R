@@ -135,7 +135,7 @@ repairSex <- function(ped, verbose = FALSE, code_male = NULL) {
 #' Recodes Sex Variable in a Pedigree Dataframe
 #'
 #' This function serves as a wrapper around `checkSex` to specifically handle
-#' the repair of the sex coding in a pedigree dataframe. 
+#' the repair of the sex coding in a pedigree dataframe.
 #' It sets the `repair` flag to TRUE automatically and forwards any additional parameters to `checkSex`.
 #'
 #' @inheritParams checkSex

@@ -110,7 +110,7 @@ calculateH <- function(r1, r2, obsR1, obsR2) {
     warning("The correlations should not have opposite signs.")
   }
 
-  if(any(obsR1 < 0 & obsR2 < 0)){
+  if (any(obsR1 < 0 & obsR2 < 0)) {
     message("Your scale might be reverse coded because you have negative correlations. Please check your data. ")
   }
 

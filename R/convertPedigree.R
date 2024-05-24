@@ -169,18 +169,18 @@ ped2com <- function(ped, component,
   if (verbose) {
     cat("Doing tcrossprod\n")
   }
-  if(tcross.alt.crossprod){
-    if (verbose){
+  if (tcross.alt.crossprod) {
+    if (verbose) {
       cat("Doing alt tcrossprod crossprod t \n")
-      }
-    r <-    crossprod(t(as.matrix(r2)))
-    }else if(tcross.alt.star){
-    if (verbose){
-	  cat("Doing alt tcrossprod %*% t \n")
     }
-     r <-       r2 %*% t(as.matrix(r2))
-  }else{
-     r <- Matrix::tcrossprod(r2)
+    r <- crossprod(t(as.matrix(r2)))
+  } else if (tcross.alt.star) {
+    if (verbose) {
+      cat("Doing alt tcrossprod %*% t \n")
+    }
+    r <- r2 %*% t(as.matrix(r2))
+  } else {
+    r <- Matrix::tcrossprod(r2)
   }
   if (component == "generation") {
     return(gen)

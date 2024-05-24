@@ -208,11 +208,10 @@ test_that("ped2add verbose prints updates", {
 test_that("ped2maternal/paternal produces correct matrix dims", {
   data(hazard)
   mat <- ped2maternal(hazard)
-  expect_equal(dim(mat), c(nrow(hazard), ncol(hazard)+1))
+  expect_equal(dim(mat), c(nrow(hazard), ncol(hazard) + 1))
   data(hazard)
   pat <- ped2paternal(hazard)
-  expect_equal(dim(pat), c(nrow(hazard), ncol(hazard)+1))
+  expect_equal(dim(pat), c(nrow(hazard), ncol(hazard) + 1))
 
   expect_lt(cor(pat$patID, mat$matID), 1)
 })
-
