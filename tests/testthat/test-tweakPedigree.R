@@ -149,8 +149,7 @@ test_that("dropLink - Drop specified by ID", {
   ped <- simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR)
   result <- dropLink(ped, ID_drop = ID_drop)
 
-
-  # are the dataframes the same in both the undropped and dropepd relationships for all but the dropped ID?
+  # are the dataframes the same in both the undropped and dropped relationships for all but the dropped ID?
   expect_equal(result[result$ID != ID_drop, ], ped[ped$ID != ID_drop, ])
 
   # are the families of the dropped ID in the original?
@@ -171,7 +170,7 @@ test_that("dropLink - Drop specified by generation", {
   ped <- simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR)
   result <- dropLink(ped, gen_drop = gen_drop)
 
-  # are the dataframes the same in both the undropped and droppd relationships for all but the dropped gen?
+  # are the dataframes the same in both the undropped and dropped relationships for all but the dropped gen?
   expect_equal(result[result$gen != gen_drop, ], ped[ped$gen != gen_drop, ])
 
   # are there more missing dads?

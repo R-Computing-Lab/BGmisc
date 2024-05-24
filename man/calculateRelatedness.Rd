@@ -48,11 +48,11 @@ calculateRelatedness(
 Relatedness Coefficient (`coef`): A measure of the genetic relationship between two individuals.
 }
 \description{
-The relatedness coefficient between two people (b & c) is defined in relation to their common ancestors:
-\eqn{r_{bc} = \sum \left(\frac{1}{2}\right)^{n+n'+1} (1+f_a)}
+This function calculates the relatedness coefficient between two individuals based on their shared ancestry, as described by Wright (1922).
 }
 \details{
-This function calculates the relatedness coefficient between two individuals based on their shared ancestry, as described by Wright (1922).
+The relatedness coefficient between two people (b & c) is defined in relation to their common ancestors:
+\eqn{r_{bc} = \sum \left(\frac{1}{2}\right)^{n+n'+1} (1+f_a)}
 }
 \examples{
 \dontrun{

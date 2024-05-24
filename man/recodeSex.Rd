@@ -29,7 +29,7 @@ A modified version of the input data.frame \code{ped}, containing an additional 
 }
 \description{
 This function serves as a wrapper around `checkSex` to specifically handle
-the repair of the sex coding in a pedigree dataframe. 
+the repair of the sex coding in a pedigree dataframe.
 It sets the `repair` flag to TRUE automatically and forwards any additional parameters to `checkSex`.
 }
 \details{

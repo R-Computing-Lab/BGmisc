@@ -77,7 +77,7 @@ summarizePedigrees <- function(ped, famID = "famID", personID = "ID",
   # Function to calculate summary statistics for all numeric variables
   calculate_summary_dt <- function(data, group_var, skip_var, five_num_summary = FALSE) {
     # Identify numeric columns excluding the group_var and skip_var
-    numeric_cols <- setdiff(names(data)[sapply(data, is.numeric)], c(group_var, skip_var))
+    numeric_cols <- setdiff(names(data)[vapply(data, is.numeric, logical(1))], c(group_var, skip_var))
     summary_stats <- data[,
       {
         count <- .N # Calculate count once per group

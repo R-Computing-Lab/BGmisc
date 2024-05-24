@@ -16,13 +16,15 @@ inferRelatedness(obsR, aceA = 0.9, aceC = 0, sharedC = 0)
 \item{sharedC}{Numeric. Proportion of shared environment shared between the two individuals. Must be between 0 and 1. Default is 0.}
 }
 \value{
-Calculated relatedness coefficient (`est_r`).
+Numeric. The calculated relatedness coefficient (`est_r`).
 }
 \description{
-The function uses the ACE framework to infer the relatedness between two individuals.
+This function infers the relatedness coefficient between two groups based on
+the observed correlation between their additive genetic variance and shared environmental variance.
 }
 \details{
-Infers the relatedness coefficient between two groups based on the observed correlation between their additive genetic variance and shared environmental variance.
+The function uses the ACE (Additive genetic, Common environmental, and Unique environmental) model to infer the relatedness between two individuals or groups.
+By considering the observed correlation (`obsR`), the proportion of variance attributable to additive genetic variance (`aceA`), and the proportion of shared environmental variance (`aceC`), it calculates the relatedness coefficient.
 }
 \examples{
 \dontrun{
