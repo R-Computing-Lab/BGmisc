@@ -61,22 +61,48 @@ checkIDs <- function(ped, verbose = FALSE, repair = FALSE) {
   }
   duplicated_parents <- ped$ID[ped$dadID == ped$momID & !is.na(ped$dadID) & !is.na(ped$momID)]
 
-  if (length(is_own_father) > 0 | length(is_own_mother) > 0 | length(duplicated_parents) > 0) {
+  # get the total number of within row duplicates
+  validation_results$total_own_father <- length(is_own_father)
+  validation_results$total_own_mother <- length(is_own_mother)
+  validation_results$total_duplicated_parents <- length(duplicated_parents)
+  validation_results$total_within_row_duplicates <- sum(length(is_own_father), length(is_own_mother), length(duplicated_parents))
+  # Update the validation_results list
+
+  if (validation_results$total_within_row_duplicates > 0) {
     if (verbose) {
       cat(paste0(
-        sum(length(is_own_father), length(is_own_mother), length(duplicated_parents)),
+        validation_results$total_within_row_duplicates,
         " within row duplicates found.\n"
       ))
     }
     validation_results$within_row_duplicates <- TRUE
-    validation_results$total_own_father <- length(is_own_father)
-    validation_results$total_own_mother <- length(is_own_mother)
-    validation_results$total_duplicated_parents <- length(duplicated_parents)
-    validation_results$total_within_row_duplicates <- length(is_own_father) + length(is_own_mother) + length(duplicated_parents)
-
-    validation_results$is_own_father_ids <- unique(is_own_father)
-    validation_results$is_own_mother_ids <- unique(is_own_mother)
-    validation_results$duplicated_parents_ids <- unique(duplicated_parents)
+ if(validation_results$total_own_father > 0){
+     validation_results$is_own_father_ids <- unique(is_own_father)
+      if (verbose) {
+        cat(paste0(
+          validation_results$total_own_father,
+          " individuals are their own fathers.\n"
+        ))
+      }
+    }
+if(validation_results$total_own_mother > 0){
+     validation_results$is_own_mother_ids <- unique(is_own_mother)
+      if (verbose) {
+        cat(paste0(
+          validation_results$total_own_mother,
+          " individuals are their own mothers.\n"
+        ))
+      }
+    }
+if(validation_results$total_duplicated_parents > 0){
+     validation_results$duplicated_parents_ids <- unique(duplicated_parents)
+      if (verbose) {
+        cat(paste0(
+          validation_results$total_duplicated_parents,
+          " individuals have the same mother and father.\n"
+        ))
+      }
+    }
   } else {
     if (verbose) {
       cat("No within row duplicates found.\n")
