@@ -121,6 +121,7 @@ summarizePedigrees <- function(ped, famID = "famID", personID = "ID",
   output <- list()
   ## Size of families
   n_fathers <- n_mothers <- n_families <- NULL
+  
   # Calculate summary statistics for families, maternal lines, and paternal lines
 
   if ("families" %in% type) {
