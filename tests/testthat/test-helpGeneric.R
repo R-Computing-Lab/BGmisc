@@ -62,10 +62,8 @@ test_that("resample with specific size returns correct length", {
 })
 
 test_that("functions issue a deprecation warning", {
-#  skip_on_cran(message = "Skipping test that only checks for warning message")
+  #  skip_on_cran(message = "Skipping test that only checks for warning message")
   expect_warning(SimPed(), "deprecated")
   expect_warning(related_coef(), "deprecated")
   expect_warning(relatedness(obsR = .5), "deprecated")
-
-
 })

@@ -1,4 +1,9 @@
-#' Add an extended family ID variable to a pedigree
+#' Segment Pedigree into Extended Families
+#'
+#' This function adds an extended family ID variable to a pedigree by segmenting that dataset into independent extended families
+#' using the weakly connected components algorithm.
+#'
+#'
 #' @param ped a pedigree dataset.  Needs ID, momID, and dadID columns
 #' @param personID character.  Name of the column in ped for the person ID variable
 #' @param momID character.  Name of the column in ped for the mother ID variable
@@ -111,10 +116,14 @@ ped2graph <- function(ped,
       )
     )
     edges <- rbind(
-      as.matrix(data.frame(personID = as.character(ped[[personID]]),
-                           momID = as.character(ped[[momID]]))),
-      as.matrix(data.frame(personID = as.character(ped[[personID]]),
-                           dadID = as.character(ped[[dadID]])))
+      as.matrix(data.frame(
+        personID = as.character(ped[[personID]]),
+        momID = as.character(ped[[momID]])
+      )),
+      as.matrix(data.frame(
+        personID = as.character(ped[[personID]]),
+        dadID = as.character(ped[[dadID]])
+      ))
     )
   } else if (adjacent == "mothers") {
     nodes <- unique(
@@ -122,16 +131,20 @@ ped2graph <- function(ped,
         as.character(c(ped[[personID]], ped[[momID]]))
       )
     )
-    edges <- as.matrix(data.frame(personID = as.character(ped[[personID]]),
-                                  momID = as.character(ped[[momID]])))
+    edges <- as.matrix(data.frame(
+      personID = as.character(ped[[personID]]),
+      momID = as.character(ped[[momID]])
+    ))
   } else if (adjacent == "fathers") {
     nodes <- unique(
       stats::na.omit(
         as.character(c(ped[[personID]], ped[[dadID]]))
       )
     )
-    edges <-as.matrix(data.frame(personID = as.character(ped[[personID]]),
-                                 dadID = as.character(ped[[dadID]])))
+    edges <- as.matrix(data.frame(
+      personID = as.character(ped[[personID]]),
+      dadID = as.character(ped[[dadID]])
+    ))
   }
   edges <- edges[stats::complete.cases(edges), ]
 

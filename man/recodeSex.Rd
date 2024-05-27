@@ -33,9 +33,11 @@ the repair of the sex coding in a pedigree dataframe.
 It sets the `repair` flag to TRUE automatically and forwards any additional parameters to `checkSex`.
 }
 \details{
-The developers of this package wish to express unequivocal support for folx in the transgender and LGBTQ+ communities. We understand and respect the complexity of gender identity and the distinction between the biological aspect of sex used for genetic analysis (genotype) and the broader, richer concept of gender identity (phenotype). Although this function focuses on chromosomal information necessary for constructing genetic pedigrees, we acknowledge that gender is a spectrum, encompassing a wide range of identities beyond binary categories.
+This function uses the terms 'male' and 'female' in a biological context, based on chromosomes and other biologically-based characteristics relevant to genetic studies. 
+This usage is not intended to negate the personal gender identity of any individual.
 
-In the context of this function, the terms 'male' and 'female' are used strictly in a biological sense based on chromosomal configurations relevant to genetic studies. This usage is not intended to negate the personal gender identity of any individual. We recognize the importance of using language and methodologies that affirm and respect all gender identities, aiming to contribute to a more inclusive and supportive scientific community.
+We recognize the importance of using language and methodologies that affirm and respect all gender identities.  While this function focuses on chromosomal information necessary for constructing genetic pedigrees, we affirm that gender is a spectrum, encompassing a wide range of identities beyond the binary. 
+The developers of this package express unequivocal support for folx in the transgender and LGBTQ+ communities. We respect the complexity of gender identity and acknowledge the distinction between the biological aspect of sex used for genetic analysis (genotype) and the broader, richer concept of gender identity (phenotype).
 }
 \seealso{
 \code{\link{plotPedigree}}

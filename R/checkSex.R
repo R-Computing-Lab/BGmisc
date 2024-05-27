@@ -4,9 +4,12 @@
 #' 1. Optionally recodes the 'sex' variable based on given codes for males and females.
 #' 2. Optionally repairs the sex coding based on specified logic, facilitating the accurate construction of genetic pedigrees.
 #'
-#' @details The developers of this package wish to express unequivocal support for folx in the transgender and LGBTQ+ communities. We understand and respect the complexity of gender identity and the distinction between the biological aspect of sex used for genetic analysis (genotype) and the broader, richer concept of gender identity (phenotype). Although this function focuses on chromosomal information necessary for constructing genetic pedigrees, we acknowledge that gender is a spectrum, encompassing a wide range of identities beyond binary categories.
+#' @details This function uses the terms 'male' and 'female' in a biological context, based on chromosomes and other biologically-based characteristics relevant to genetic studies. 
+#' This usage is not intended to negate the personal gender identity of any individual.
+#' 
+#' We recognize the importance of using language and methodologies that affirm and respect all gender identities.  While this function focuses on chromosomal information necessary for constructing genetic pedigrees, we affirm that gender is a spectrum, encompassing a wide range of identities beyond the binary. 
+#' The developers of this package express unequivocal support for folx in the transgender and LGBTQ+ communities. We respect the complexity of gender identity and acknowledge the distinction between the biological aspect of sex used for genetic analysis (genotype) and the broader, richer concept of gender identity (phenotype). 
 #'
-#' In the context of this function, the terms 'male' and 'female' are used strictly in a biological sense based on chromosomal configurations relevant to genetic studies. This usage is not intended to negate the personal gender identity of any individual. We recognize the importance of using language and methodologies that affirm and respect all gender identities, aiming to contribute to a more inclusive and supportive scientific community.
 #'
 #' @param ped A dataframe representing the pedigree data with a 'sex' column.
 #' @param code_male The current code used to represent males in the 'sex' column.
@@ -26,7 +29,7 @@ checkSex <- function(ped, code_male = NULL, code_female = NULL, verbose = FALSE,
   # Standardize column names in the input dataframe
   ped <- standardizeColnames(ped)
 
-  # TO DO bypass the rest of the function if recode_only is TRUE
+  # TO DO: bypass the rest of the function if recode_only is TRUE
 
   # Initialize a list to store validation results
   validation_results <- list()
@@ -35,8 +38,8 @@ checkSex <- function(ped, code_male = NULL, code_female = NULL, verbose = FALSE,
   if (verbose) {
     cat("Step 1: Checking how many sexes/genders...\n")
   }
-  # check how many sexes/genders
-
+  
+  # Check unique values in 'sex'
   validation_results$sex_unique <- unique(ped$sex)
   validation_results$sex_length <- length(unique(ped$sex))
   if (verbose) {
@@ -45,7 +48,7 @@ checkSex <- function(ped, code_male = NULL, code_female = NULL, verbose = FALSE,
       paste0(validation_results$sex_unique)
     ))
   }
-  # are there multiple sexes/genders in the list of dads and moms?
+  # Are there multiple sexes/genders in the list of dads and moms?
 
   table_sex_dad <- sort(table(ped$sex[ped$ID %in% ped$dadID]), decreasing = TRUE)
   table_sex_mom <- sort(table(ped$sex[ped$ID %in% ped$momID]), decreasing = TRUE)
@@ -56,7 +59,7 @@ checkSex <- function(ped, code_male = NULL, code_female = NULL, verbose = FALSE,
   validation_results$most_frequent_sex_dad <- validation_results$all_sex_dad[1]
   validation_results$most_frequent_sex_mom <- validation_results$all_sex_mom[1]
 
-  # list ids for dads that are female, moms that are male
+  # List ids for dads that are female, moms that are male
   if (length(validation_results$all_sex_dad) > 1) {
     df_dads <- ped[ped$ID %in% ped$dadID, ]
     validation_results$ID_female_dads <- df_dads$ID[df_dads$sex != validation_results$most_frequent_sex_dad]
@@ -66,7 +69,7 @@ checkSex <- function(ped, code_male = NULL, code_female = NULL, verbose = FALSE,
   if (length(validation_results$all_sex_mom) > 1) {
     df_moms <- ped[ped$ID %in% ped$momID, ]
     validation_results$ID_male_moms <- df_moms$ID[df_moms$sex != validation_results$most_frequent_sex_mom]
-    validation_results$ID_child_male_moms <- ped$ID[ped$momID %in% validation_results$ID_female_moms]
+    validation_results$ID_child_male_moms <- ped$ID[ped$momID %in% validation_results$ID_male_moms]
     remove(df_moms)
   }
 
@@ -80,9 +83,7 @@ checkSex <- function(ped, code_male = NULL, code_female = NULL, verbose = FALSE,
     original_ped <- ped
 
     if (validation_results$sex_length == 2) {
-      # if length of all_sex_dad >1, then recode all the dads to the most frequent male value
-
-
+      # Recode all dads to the most frequent male value
       ped <- recodeSex(ped, code_male = validation_results$most_frequent_sex_dad)
       # Count and record the change
       num_changes <- sum(original_ped$sex != ped$sex)
@@ -92,14 +93,13 @@ checkSex <- function(ped, code_male = NULL, code_female = NULL, verbose = FALSE,
         validation_results$most_frequent_sex_dad, num_changes
       )
     }
-    # Update the pedigree dataframe after repair
-    repaired_ped <- ped
+    # Return the repaired pedigree dataframe
 
     if (verbose) {
       cat("Changes Made:\n")
       print(changes)
     }
-    return(repaired_ped)
+    return(ped)
   } else {
     if (verbose) {
       cat("Checks Made:\n")
@@ -157,7 +157,7 @@ recodeSex <- function(
     ped$sex_recode <- recode_na
     ped$sex_recode[ped$sex == code_female] <- recode_female
     ped$sex_recode[ped$sex == code_male] <- recode_male
-    # overwriting temp recode variable
+    # Overwriting temp recode variable
     ped$sex <- ped$sex_recode
     ped$sex_recode <- NULL
   } else if (!is.null(code_male) & is.null(code_female)) {
@@ -165,7 +165,7 @@ recodeSex <- function(
     ped$sex_recode <- recode_na
     ped$sex_recode[ped$sex != code_male & !is.na(ped$sex)] <- recode_female
     ped$sex_recode[ped$sex == code_male] <- recode_male
-    # overwriting temp recode variable
+    # Overwriting temp recode variable
     ped$sex <- ped$sex_recode
     ped$sex_recode <- NULL
   } else if (is.null(code_male) & !is.null(code_female)) {
@@ -173,7 +173,7 @@ recodeSex <- function(
     ped$sex_recode <- recode_na
     ped$sex_recode[ped$sex != code_female & !is.na(ped$sex)] <- recode_male
     ped$sex_recode[ped$sex == code_female] <- recode_female
-    # overwriting temp recode variable
+    # Overwriting temp recode variable
     ped$sex <- ped$sex_recode
     ped$sex_recode <- NULL
   } else {

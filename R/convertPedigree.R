@@ -2,8 +2,8 @@
 #' @param ped a pedigree dataset.  Needs ID, momID, and dadID columns
 #' @param component character.  Which component of the pedigree to return.  See Details.
 #' @param max.gen the maximum number of generations to compute
-#'  (e.g., only up to 4th degree relatives).  The default of Inf uses as many
-#'  generations as there are in the data.
+#'  (e.g., only up to 4th degree relatives).  The default is 25. However it can be set to infinity.
+#'   `Inf` uses as many generations as there are in the data.
 #' @param sparse logical.  If TRUE, use and return sparse matrices from Matrix package
 #' @param verbose logical.  If TRUE, print progress through stages of algorithm
 #' @param gc logical. If TRUE, do frequent garbage collection via \code{\link{gc}} to save memory
@@ -16,7 +16,7 @@
 #' @export
 #'
 ped2com <- function(ped, component,
-                    max.gen = Inf,
+                    max.gen = 25,
                     sparse = FALSE,
                     verbose = FALSE,
                     gc = FALSE,
@@ -169,18 +169,18 @@ ped2com <- function(ped, component,
   if (verbose) {
     cat("Doing tcrossprod\n")
   }
-  if(tcross.alt.crossprod){
-    if (verbose){
+  if (tcross.alt.crossprod) {
+    if (verbose) {
       cat("Doing alt tcrossprod crossprod t \n")
-      }
-    r <-    crossprod(t(as.matrix(r2)))
-    }else if(tcross.alt.star){
-    if (verbose){
-	  cat("Doing alt tcrossprod %*% t \n")
     }
-     r <-       r2 %*% t(as.matrix(r2))
-  }else{
-     r <- Matrix::tcrossprod(r2)
+    r <- crossprod(t(as.matrix(r2)))
+  } else if (tcross.alt.star) {
+    if (verbose) {
+      cat("Doing alt tcrossprod %*% t \n")
+    }
+    r <- r2 %*% t(as.matrix(r2))
+  } else {
+    r <- Matrix::tcrossprod(r2)
   }
   if (component == "generation") {
     return(gen)
@@ -204,7 +204,7 @@ ped2com <- function(ped, component,
 #' @inherit ped2com details
 #' @export
 #'
-ped2add <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FALSE, flatten.diag = FALSE, standardize.colnames = TRUE,
+ped2add <- function(ped, max.gen = 25, sparse = FALSE, verbose = FALSE, gc = FALSE, flatten.diag = FALSE, standardize.colnames = TRUE,
                     tcross.alt.crossprod = FALSE, tcross.alt.star = FALSE) {
   ped2com(
     ped = ped,
@@ -226,7 +226,7 @@ ped2add <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FA
 #' @export
 #' @aliases ped2mt
 #'
-ped2mit <- ped2mt <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FALSE, flatten.diag = FALSE, standardize.colnames = TRUE, tcross.alt.crossprod = FALSE, tcross.alt.star = FALSE) {
+ped2mit <- ped2mt <- function(ped, max.gen = 25, sparse = FALSE, verbose = FALSE, gc = FALSE, flatten.diag = FALSE, standardize.colnames = TRUE, tcross.alt.crossprod = FALSE, tcross.alt.star = FALSE) {
   ped2com(
     ped = ped,
     max.gen = max.gen,
@@ -246,7 +246,7 @@ ped2mit <- ped2mt <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALS
 #' @inherit ped2com details
 #' @export
 #'
-ped2cn <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FALSE, flatten.diag = FALSE, standardize.colnames = TRUE, tcross.alt.crossprod = FALSE, tcross.alt.star = FALSE) {
+ped2cn <- function(ped, max.gen = 25, sparse = FALSE, verbose = FALSE, gc = FALSE, flatten.diag = FALSE, standardize.colnames = TRUE, tcross.alt.crossprod = FALSE, tcross.alt.star = FALSE) {
   ped2com(
     ped = ped,
     max.gen = max.gen,

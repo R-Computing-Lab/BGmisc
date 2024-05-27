@@ -16,7 +16,6 @@ test_that("famSizeCal returns correct number for single generation data", {
 
   result <- famSizeCal(kpc = kpc, Ngen = Ngen, marR = marR)
   expect_equal(result, 2)
-
 })
 test_that("famSizeCal throws error when numbers out of bounds", {
   set.seed(1231)
@@ -24,7 +23,7 @@ test_that("famSizeCal throws error when numbers out of bounds", {
   Ngen <- 0
   marR <- 0.8
 
-  expect_error(famSizeCal(kpc = kpc, Ngen = Ngen, marR = marR),"number of generations")
+  expect_error(famSizeCal(kpc = kpc, Ngen = Ngen, marR = marR), "number of generations")
 })
 test_that("famSizeCal returns increasingly large  numbers for multi-generation data", {
   set.seed(123)
@@ -37,11 +36,10 @@ test_that("famSizeCal returns increasingly large  numbers for multi-generation d
   result_B <- famSizeCal(kpc = kpc, Ngen = Ngen, marR = marR)
 
   expect_gt(result_B, result_A)
-
 })
 test_that("famSizeCal returns increasingly large  numbers for increased kpc", {
   set.seed(123)
- kpc <- 0
+  kpc <- 0
   Ngen <- 3
   marR <- 0.8
   result <- famSizeCal(kpc = kpc, Ngen = Ngen, marR = marR)
@@ -54,5 +52,4 @@ test_that("famSizeCal returns increasingly large  numbers for increased kpc", {
   result_B <- famSizeCal(kpc = kpc, Ngen = Ngen, marR = marR)
 
   expect_gt(result_B, result_A)
-
 })

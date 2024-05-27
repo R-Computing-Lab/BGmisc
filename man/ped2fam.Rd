@@ -2,7 +2,7 @@
 % Please edit documentation in R/buildPedigree.R
 \name{ped2fam}
 \alias{ped2fam}
-\title{Add an extended family ID variable to a pedigree}
+\title{Segment Pedigree into Extended Families}
 \usage{
 ped2fam(
   ped,
@@ -27,7 +27,8 @@ ped2fam(
 A pedigree dataset with one additional column for the newly created extended family ID
 }
 \description{
-Add an extended family ID variable to a pedigree
+This function adds an extended family ID variable to a pedigree by segmenting that dataset into independent extended families
+using the weakly connected components algorithm.
 }
 \details{
 The general idea of this function is to use person ID, mother ID, and father ID to

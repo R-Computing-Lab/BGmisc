@@ -6,7 +6,7 @@
 \usage{
 ped2add(
   ped,
-  max.gen = Inf,
+  max.gen = 25,
   sparse = FALSE,
   verbose = FALSE,
   gc = FALSE,
@@ -20,8 +20,8 @@ ped2add(
 \item{ped}{a pedigree dataset.  Needs ID, momID, and dadID columns}
 
 \item{max.gen}{the maximum number of generations to compute
-(e.g., only up to 4th degree relatives).  The default of Inf uses as many
-generations as there are in the data.}
+(e.g., only up to 4th degree relatives).  The default is 25. However it can be set to infinity.
+ `Inf` uses as many generations as there are in the data.}
 
 \item{sparse}{logical.  If TRUE, use and return sparse matrices from Matrix package}
 

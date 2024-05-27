@@ -1,10 +1,8 @@
-# BGmisc 1.2.2
+# BGmisc 1.3.0
 
 * Harmonized function names
 * Added function to summarize variables by family, matrilinael, and patrilineal lines
-
-# BGmisc 1.2.1
-
+* Added within row duplicate ID checks
 * Added alternative transpose options for the matrix
 * Added generalization of Falconer's formula
 

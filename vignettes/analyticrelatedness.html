@@ -49,7 +49,7 @@ overflow: visible;
 </style>
 <style type="text/css" data-origin="pandoc">
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -368,10 +368,10 @@ generations back of common ancestors the pair share.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># Example usage:</span></span>
 <span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co"># For full siblings, the relatedness coefficient is expected to be 0.5:</span></span>
 <span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="fu">calculateRelatedness</span>(<span class="at">generations =</span> <span class="dv">1</span>, <span class="at">full =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co">#&gt; [1] 0.5</span></span>
-<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co"># For half siblings, the relatedness coefficient is expected to be 0.25:</span></span>
-<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="fu">calculateRelatedness</span>(<span class="at">generations =</span> <span class="dv">1</span>, <span class="at">full =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="co">#&gt; [1] 0.25</span></span></code></pre></div>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co">#&gt; [1] 0.5</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co"># For half siblings, the relatedness coefficient is expected to be 0.25:</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="fu">calculateRelatedness</span>(<span class="at">generations =</span> <span class="dv">1</span>, <span class="at">full =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#&gt; [1] 0.25</span></span></code></pre></div>
 </div>
 <div id="inferring-relatedness-coefficient" class="section level1">
 <h1>Inferring Relatedness Coefficient</h1>
@@ -379,10 +379,10 @@ generations back of common ancestors the pair share.</p>
 relatedness coefficient between two groups based on the observed
 correlation between their additive genetic variance and shared
 environmental variance. This function leverages the ACE framework.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co"># Example usage:</span></span>
-<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co"># Infer the relatedness coefficient:</span></span>
-<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="fu">inferRelatedness</span>(<span class="at">obsR =</span> <span class="fl">0.5</span>, <span class="at">aceA =</span> <span class="fl">0.9</span>, <span class="at">aceC =</span> <span class="dv">0</span>, <span class="at">sharedC =</span> <span class="dv">0</span>)</span>
-<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co">#&gt; [1] 0.5555556</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co"># Example usage:</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co"># Infer the relatedness coefficient:</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="fu">inferRelatedness</span>(<span class="at">obsR =</span> <span class="fl">0.5</span>, <span class="at">aceA =</span> <span class="fl">0.9</span>, <span class="at">aceC =</span> <span class="dv">0</span>, <span class="at">sharedC =</span> <span class="dv">0</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&gt; [1] 0.5555556</span></span></code></pre></div>
 </div>
 
 
