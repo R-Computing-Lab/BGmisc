@@ -1,8 +1,14 @@
+
 # BGmisc 1.3.0
 
-* Harmonized function names
+* Fixed incorrectly spelled last name in potter pedigre
 * Added function to summarize variables by family, matrilinael, and patrilineal lines
 * Added within row duplicate ID checks
+* Added data validation vignettes
+
+# BGmisc 1.2.2
+
+* Harmonized function names
 * Added alternative transpose options for the matrix
 * Added generalization of Falconer's formula
 

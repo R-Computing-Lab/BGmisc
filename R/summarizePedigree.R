@@ -71,6 +71,8 @@ summarizePedigrees <- function(ped, famID = "famID", personID = "ID",
     ped <- ped2paternal(ped, personID = personID, momID = momID, dadID = dadID, patID = patID)
   }
 
+
+
   # Convert to data.table
   ped_dt <- data.table::as.data.table(ped)
 
@@ -121,7 +123,7 @@ summarizePedigrees <- function(ped, famID = "famID", personID = "ID",
   output <- list()
   ## Size of families
   n_fathers <- n_mothers <- n_families <- NULL
-  
+
   # Calculate summary statistics for families, maternal lines, and paternal lines
 
   if ("families" %in% type) {
@@ -156,6 +158,14 @@ summarizePedigrees <- function(ped, famID = "famID", personID = "ID",
     n_fathers <- nrow(paternal_summary_dt)
     if (verbose) message("Summarized ", n_fathers, " paternal lines.")
   }
+
+  ## Check errors
+#  if (check_errors) {
+ #   if (verbose) message("Checking for errors...")
+#    output$checkIDs <- checkIDs(ped,
+#                                repair = FALSE, verbose = verbose)
+#  }
+
 
   # Optionally find the superlative lines
   # & noldest <= unique(ped_dt[[famID]])

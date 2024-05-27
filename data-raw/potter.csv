@@ -29,8 +29,8 @@ personID,famID,name,gen,momID,dadID,spouseID,sex
 28,1,Louis Weasley,3,18,16,NA,1
 29,1,Molly Weasley,3,20,14,NA,0
 30,1,Lucy Weasley,3,20,14,NA,0
-101,1,Mother Durseley,0,NA,NA,102,0
-102,1,Father Durseley,0,NA,NA,101,1
+101,1,Mother Dursley,0,NA,NA,102,0
+102,1,Father Dursley,0,NA,NA,101,1
 104,1,Father Evans,0,NA,NA,103,1
 103,1,Mother Evans,0,NA,NA,104,0
 106,1,Father Delacour,0,NA,NA,105,1

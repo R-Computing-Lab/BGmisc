@@ -19,7 +19,8 @@ summarizePedigrees(
   noldest = 5,
   skip_var = NULL,
   five_num_summary = FALSE,
-  verbose = FALSE
+  verbose = FALSE,
+  check_errors = TRUE
 )
 }
 \arguments{
