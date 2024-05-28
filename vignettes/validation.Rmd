@@ -165,22 +165,7 @@ print(df_fix)
 
 When the repair argument is set to TRUE, the function attempts to repair the sex coding based on specified logic. It recodes the sex variable based on the most frequent sex values found among parents. This ensures that the sex coding is consistent and accurate, which is essential for constructing valid genetic pedigrees.
 
-
-### Recode Sex Variable
-
-To recode the sex variable, you can use the `recodeSex` function, which serves as a wrapper around `checkSex` to specifically handle the recoding of the sex variable. This function sets the repair flag to TRUE automatically and forwards any additional parameters to `checkSex`.
-
-
-```{r}
-
-# Recode sex variable
-recoded_potter <- recodeSex(potter, code_male = 1, code_female = 0, recode_male = "M", recode_female = "F")
-print(recoded_potter)
-```
-
-In this example, the `recodeSex` function recodes the sex variable based on the specified codes for males and females. It preserves NA values in the sex column and recodes them as specified. This ensures that the sex coding is consistent with the specified codes, facilitating accurate genetic analysis.
-
-
+<!--
 ## Practical Example: Cleaning a Pedigree
 
 Below is an example of how to clean and repair a pedigree dataset using the BGmisc package. This example is based on the approach Mason typically takes for data cleaning.
@@ -190,41 +175,39 @@ Below is an example of how to clean and repair a pedigree dataset using the BGmi
 # Load necessary libraries and datasets
 library(tidyverse)
 library(BGmisc)
-
+set.seed(123)
 # Create a sample dataset similar to the one used in Mason's approach
 sample_data <- data.frame(
   ID = 1:10,
   name = c("Person1", "Person2", "Person3", "Person4", "Person5", "Person6", "Person7", "Person8", "Person9", "Person10"),
   dadID = c(NA, NA, 1, 1, 3, 3, 5, 5, 7, 7),
-  momID = c(NA, NA, 2, 2, 4, 4, 6, 6, 8, 8),
+  momID = c(NA, NA, 2, 2, 4, 4, 6, 6, 7, 8),
   sex = c(1, 0, 1, 0, 1, 0, 1, 0, 1, 0),
-  byr = c(1950, 1955, 1975, 1980, 2000, 2005, 2020, 2025, 2040, 2045),
+  byr = runif(10, 1900, 2000),
   dyr = c(NA, NA, NA, NA, NA, NA, NA, NA, NA, NA)
 )
 
+
+
+summarizePedigrees(sample_data)
+
+
 # Clean the sample dataset
 cleaned_data <- sample_data %>%
-  janitor::clean_names() %>%
-  rename(ID = id, dadID = dadid, momID = momid) %>%
   janitor::remove_empty(c("rows", "cols")) %>%
   mutate(
-    sex_factor = as.factor(case_when(sex == 1 ~ "male", sex == 0 ~ "female")),
-    year_max = pmax(byr, dyr, na.rm = TRUE),
-    year_min = pmin(byr, dyr, na.rm = TRUE),
-    year_range = year_max - year_min,
-    flag_year_range = ifelse(year_range > 100 | year_range == 0, 1, 0),
-    flag_after_death = ifelse(dyr != year_max, 1, 0),
-    year_flag = ifelse(flag_year_range == 1 | flag_after_death == 1, 1, 0)
+    sex_factor = as.factor(case_when(sex == 1 ~ "male", sex == 0 ~ "female"))
   )
 
 # Check for duplicate IDs
 temp_check <- checkIDs(cleaned_data, verbose = TRUE, repair = FALSE)
+ all_duplicated_ids   <- cbind(temp_check$non_unique_ids, temp_check$duplicated_parents_ids)
+
 cleaned_data <- cleaned_data %>%
   mutate(
     duplicated = case_when(ID %in% temp_check$non_unique_ids ~ 1, TRUE ~ 0),
-    duplicated_parent = case_when(dadID %in% temp_check$non_unique_ids | momID %in% temp_check$non_unique_ids ~ 1, TRUE ~ 0),
-    duplicated_source_ID = case_when(ID %in% temp_check$non_unique_ids ~ ID, dadID %in% temp_check$non_unique_ids ~ dadID, momID %in% temp_check$non_unique_ids ~ momID, TRUE ~ NA_integer_),
-    removedyr = 0,
+    duplicated_parent = case_when(dadID %in% all_duplicated_ids  | momID %in% all_duplicated_ids  ~ 1, TRUE ~ 0),
+    duplicated_source_ID = case_when(ID %in% all_duplicated_ids ~ ID, dadID %in% all_duplicated_ids  ~ dadID, momID %in% all_duplicated_ids  ~ momID, TRUE ~ NA_integer_),
     alteredlinks = 0
   )
 
@@ -237,7 +220,7 @@ cleaned_data %>%
 # Perform specific corrections
 cleaned_data <- cleaned_data %>%
   mutate(
-    alteredlinks = case_when(ID == 7 & round(byr, digits = 0) == 2020 ~ 1, TRUE ~ alteredlinks),
+    alteredlinks = case_when(ID == 9  ~ 1, TRUE ~ alteredlinks),
     ID = case_when(ID == 7 & round(byr, digits = 0) == 2020 ~ ID + 1e6, TRUE ~ ID)
   )
 
@@ -246,7 +229,7 @@ final_check <- checkIDs(cleaned_data, verbose = TRUE, repair = FALSE)
 print(final_check)
 
 ```
-
+-->
 
 # Conclusion
 This vignette demonstrates how to use the BGmisc package to identify and repair errors in pedigrees. By leveraging functions like checkIDs, checkSex, and recodeSex, you can ensure the integrity of your pedigree data, facilitating accurate analysis and research.

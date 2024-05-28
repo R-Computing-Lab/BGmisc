@@ -480,7 +480,7 @@ what the dataset looks like.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a></span>
 <span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="fu">summarizeFamilies</span>(df, <span class="at">famID =</span> <span class="st">&quot;newFamID&quot;</span>, <span class="at">personID =</span> <span class="st">&quot;personID&quot;</span>)<span class="sc">$</span>family_summary <span class="sc">%&gt;%</span> <span class="fu">glimpse</span>()</span>
 <span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="co">#&gt; Rows: 1</span></span>
-<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co">#&gt; Columns: 25</span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co">#&gt; Columns: 17</span></span>
 <span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="co">#&gt; $ newFamID        &lt;dbl&gt; 1</span></span>
 <span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="co">#&gt; $ count           &lt;int&gt; 37</span></span>
 <span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="co">#&gt; $ gen_mean        &lt;dbl&gt; 1.756757</span></span>
@@ -497,15 +497,7 @@ what the dataset looks like.</p>
 <span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a><span class="co">#&gt; $ sex_median      &lt;dbl&gt; 1</span></span>
 <span id="cb5-19"><a href="#cb5-19" tabindex="-1"></a><span class="co">#&gt; $ sex_min         &lt;dbl&gt; 0</span></span>
 <span id="cb5-20"><a href="#cb5-20" tabindex="-1"></a><span class="co">#&gt; $ sex_max         &lt;dbl&gt; 1</span></span>
-<span id="cb5-21"><a href="#cb5-21" tabindex="-1"></a><span class="co">#&gt; $ sex_sd          &lt;dbl&gt; 0.5067117</span></span>
-<span id="cb5-22"><a href="#cb5-22" tabindex="-1"></a><span class="co">#&gt; $ personID        &lt;dbl&gt; 2</span></span>
-<span id="cb5-23"><a href="#cb5-23" tabindex="-1"></a><span class="co">#&gt; $ famID           &lt;chr&gt; &quot;1&quot;</span></span>
-<span id="cb5-24"><a href="#cb5-24" tabindex="-1"></a><span class="co">#&gt; $ name            &lt;chr&gt; &quot;Vernon Dursley&quot;</span></span>
-<span id="cb5-25"><a href="#cb5-25" tabindex="-1"></a><span class="co">#&gt; $ gen             &lt;dbl&gt; 1</span></span>
-<span id="cb5-26"><a href="#cb5-26" tabindex="-1"></a><span class="co">#&gt; $ momID           &lt;dbl&gt; 101</span></span>
-<span id="cb5-27"><a href="#cb5-27" tabindex="-1"></a><span class="co">#&gt; $ dadID           &lt;dbl&gt; 102</span></span>
-<span id="cb5-28"><a href="#cb5-28" tabindex="-1"></a><span class="co">#&gt; $ spouseID        &lt;dbl&gt; 3</span></span>
-<span id="cb5-29"><a href="#cb5-29" tabindex="-1"></a><span class="co">#&gt; $ sex             &lt;dbl&gt; 1</span></span></code></pre></div>
+<span id="cb5-21"><a href="#cb5-21" tabindex="-1"></a><span class="co">#&gt; $ sex_sd          &lt;dbl&gt; 0.5067117</span></span></code></pre></div>
 <p>If we didn’t know to look for duplicates, we might not notice the
 issue. Indeed, only of the duplicates was selected as are founder
 member. However, the <code>checkIDs</code> function can help us identify
@@ -757,124 +749,72 @@ repair the sex coding based on specified logic. It recodes the sex
 variable based on the most frequent sex values found among parents. This
 ensures that the sex coding is consistent and accurate, which is
 essential for constructing valid genetic pedigrees.</p>
-<div id="recode-sex-variable" class="section level3">
-<h3>Recode Sex Variable</h3>
-<p>To recode the sex variable, you can use the <code>recodeSex</code>
-function, which serves as a wrapper around <code>checkSex</code> to
-specifically handle the recoding of the sex variable. This function sets
-the repair flag to TRUE automatically and forwards any additional
-parameters to <code>checkSex</code>.</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a></span>
-<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a><span class="co"># Recode sex variable</span></span>
-<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a>recoded_potter <span class="ot">&lt;-</span> <span class="fu">recodeSex</span>(potter, <span class="at">code_male =</span> <span class="dv">1</span>, <span class="at">code_female =</span> <span class="dv">0</span>, <span class="at">recode_male =</span> <span class="st">&quot;M&quot;</span>, <span class="at">recode_female =</span> <span class="st">&quot;F&quot;</span>)</span>
-<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a><span class="fu">print</span>(recoded_potter)</span>
-<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a><span class="co">#&gt;    personID famID               name gen momID dadID spouseID sex</span></span>
-<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a><span class="co">#&gt; 1         1     1     Vernon Dursley   1   101   102        3   M</span></span>
-<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a><span class="co">#&gt; 2         2     1   Marjorie Dursley   1   101   102       NA   F</span></span>
-<span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a><span class="co">#&gt; 3         3     1      Petunia Evans   1   103   104        1   F</span></span>
-<span id="cb15-9"><a href="#cb15-9" tabindex="-1"></a><span class="co">#&gt; 4         4     1         Lily Evans   1   103   104        5   F</span></span>
-<span id="cb15-10"><a href="#cb15-10" tabindex="-1"></a><span class="co">#&gt; 5         5     1       James Potter   1    NA    NA        4   M</span></span>
-<span id="cb15-11"><a href="#cb15-11" tabindex="-1"></a><span class="co">#&gt; 6         6     1     Dudley Dursley   2     3     1       NA   M</span></span>
-<span id="cb15-12"><a href="#cb15-12" tabindex="-1"></a><span class="co">#&gt; 7         7     1       Harry Potter   2     4     5        8   M</span></span>
-<span id="cb15-13"><a href="#cb15-13" tabindex="-1"></a><span class="co">#&gt; 8         8     1      Ginny Weasley   2    10     9        7   F</span></span>
-<span id="cb15-14"><a href="#cb15-14" tabindex="-1"></a><span class="co">#&gt; 9         9     1     Arthur Weasley   1    NA    NA       10   M</span></span>
-<span id="cb15-15"><a href="#cb15-15" tabindex="-1"></a><span class="co">#&gt; 10       10     1      Molly Prewett   1    NA    NA        9   F</span></span>
-<span id="cb15-16"><a href="#cb15-16" tabindex="-1"></a><span class="co">#&gt; 11       11     1        Ron Weasley   2    10     9       17   M</span></span>
-<span id="cb15-17"><a href="#cb15-17" tabindex="-1"></a><span class="co">#&gt; 12       12     1       Fred Weasley   2    10     9       NA   M</span></span>
-<span id="cb15-18"><a href="#cb15-18" tabindex="-1"></a><span class="co">#&gt; 13       13     1     George Weasley   2    10     9       NA   M</span></span>
-<span id="cb15-19"><a href="#cb15-19" tabindex="-1"></a><span class="co">#&gt; 14       14     1      Percy Weasley   2    10     9       20   M</span></span>
-<span id="cb15-20"><a href="#cb15-20" tabindex="-1"></a><span class="co">#&gt; 15       15     1    Charlie Weasley   2    10     9       NA   M</span></span>
-<span id="cb15-21"><a href="#cb15-21" tabindex="-1"></a><span class="co">#&gt; 16       16     1       Bill Weasley   2    10     9       18   M</span></span>
-<span id="cb15-22"><a href="#cb15-22" tabindex="-1"></a><span class="co">#&gt; 17       17     1   Hermione Granger   2    NA    NA       11   F</span></span>
-<span id="cb15-23"><a href="#cb15-23" tabindex="-1"></a><span class="co">#&gt; 18       18     1     Fleur Delacour   2   105   106       16   F</span></span>
-<span id="cb15-24"><a href="#cb15-24" tabindex="-1"></a><span class="co">#&gt; 19       19     1 Gabrielle Delacour   2   105   106       NA   F</span></span>
-<span id="cb15-25"><a href="#cb15-25" tabindex="-1"></a><span class="co">#&gt; 20       20     1     Audrey UNKNOWN   2    NA    NA       14   F</span></span>
-<span id="cb15-26"><a href="#cb15-26" tabindex="-1"></a><span class="co">#&gt; 21       21     1    James Potter II   3     8     7       NA   M</span></span>
-<span id="cb15-27"><a href="#cb15-27" tabindex="-1"></a><span class="co">#&gt; 22       22     1       Albus Potter   3     8     7       NA   M</span></span>
-<span id="cb15-28"><a href="#cb15-28" tabindex="-1"></a><span class="co">#&gt; 23       23     1        Lily Potter   3     8     7       NA   F</span></span>
-<span id="cb15-29"><a href="#cb15-29" tabindex="-1"></a><span class="co">#&gt; 24       24     1       Rose Weasley   3    17    11       NA   F</span></span>
-<span id="cb15-30"><a href="#cb15-30" tabindex="-1"></a><span class="co">#&gt; 25       25     1       Hugo Weasley   3    17    11       NA   M</span></span>
-<span id="cb15-31"><a href="#cb15-31" tabindex="-1"></a><span class="co">#&gt; 26       26     1   Victoire Weasley   3    18    16       NA   F</span></span>
-<span id="cb15-32"><a href="#cb15-32" tabindex="-1"></a><span class="co">#&gt; 27       27     1  Dominique Weasley   3    18    16       NA   F</span></span>
-<span id="cb15-33"><a href="#cb15-33" tabindex="-1"></a><span class="co">#&gt; 28       28     1      Louis Weasley   3    18    16       NA   M</span></span>
-<span id="cb15-34"><a href="#cb15-34" tabindex="-1"></a><span class="co">#&gt; 29       29     1      Molly Weasley   3    20    14       NA   F</span></span>
-<span id="cb15-35"><a href="#cb15-35" tabindex="-1"></a><span class="co">#&gt; 30       30     1       Lucy Weasley   3    20    14       NA   F</span></span>
-<span id="cb15-36"><a href="#cb15-36" tabindex="-1"></a><span class="co">#&gt; 31      101     1     Mother Dursley   0    NA    NA      102   F</span></span>
-<span id="cb15-37"><a href="#cb15-37" tabindex="-1"></a><span class="co">#&gt; 32      102     1     Father Dursley   0    NA    NA      101   M</span></span>
-<span id="cb15-38"><a href="#cb15-38" tabindex="-1"></a><span class="co">#&gt; 33      104     1       Father Evans   0    NA    NA      103   M</span></span>
-<span id="cb15-39"><a href="#cb15-39" tabindex="-1"></a><span class="co">#&gt; 34      103     1       Mother Evans   0    NA    NA      104   F</span></span>
-<span id="cb15-40"><a href="#cb15-40" tabindex="-1"></a><span class="co">#&gt; 35      106     1    Father Delacour   0    NA    NA      105   M</span></span>
-<span id="cb15-41"><a href="#cb15-41" tabindex="-1"></a><span class="co">#&gt; 36      105     1    Mother Delacour   0    NA    NA      106   F</span></span></code></pre></div>
-<p>In this example, the <code>recodeSex</code> function recodes the sex
-variable based on the specified codes for males and females. It
-preserves NA values in the sex column and recodes them as specified.
-This ensures that the sex coding is consistent with the specified codes,
-facilitating accurate genetic analysis.</p>
-</div>
-</div>
-<div id="practical-example-cleaning-a-pedigree" class="section level2">
-<h2>Practical Example: Cleaning a Pedigree</h2>
-<p>Below is an example of how to clean and repair a pedigree dataset
-using the BGmisc package. This example is based on the approach Mason
-typically takes for data cleaning.</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="co"># note, is broken right now</span></span>
-<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a><span class="co"># Load necessary libraries and datasets</span></span>
-<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a><span class="fu">library</span>(BGmisc)</span>
-<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a></span>
-<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a><span class="co"># Create a sample dataset similar to the one used in Mason&#39;s approach</span></span>
-<span id="cb16-7"><a href="#cb16-7" tabindex="-1"></a>sample_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb16-8"><a href="#cb16-8" tabindex="-1"></a>  <span class="at">ID =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>,</span>
-<span id="cb16-9"><a href="#cb16-9" tabindex="-1"></a>  <span class="at">name =</span> <span class="fu">c</span>(<span class="st">&quot;Person1&quot;</span>, <span class="st">&quot;Person2&quot;</span>, <span class="st">&quot;Person3&quot;</span>, <span class="st">&quot;Person4&quot;</span>, <span class="st">&quot;Person5&quot;</span>, <span class="st">&quot;Person6&quot;</span>, <span class="st">&quot;Person7&quot;</span>, <span class="st">&quot;Person8&quot;</span>, <span class="st">&quot;Person9&quot;</span>, <span class="st">&quot;Person10&quot;</span>),</span>
-<span id="cb16-10"><a href="#cb16-10" tabindex="-1"></a>  <span class="at">dadID =</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="cn">NA</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">7</span>),</span>
-<span id="cb16-11"><a href="#cb16-11" tabindex="-1"></a>  <span class="at">momID =</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="cn">NA</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">6</span>, <span class="dv">8</span>, <span class="dv">8</span>),</span>
-<span id="cb16-12"><a href="#cb16-12" tabindex="-1"></a>  <span class="at">sex =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>),</span>
-<span id="cb16-13"><a href="#cb16-13" tabindex="-1"></a>  <span class="at">byr =</span> <span class="fu">c</span>(<span class="dv">1950</span>, <span class="dv">1955</span>, <span class="dv">1975</span>, <span class="dv">1980</span>, <span class="dv">2000</span>, <span class="dv">2005</span>, <span class="dv">2020</span>, <span class="dv">2025</span>, <span class="dv">2040</span>, <span class="dv">2045</span>),</span>
-<span id="cb16-14"><a href="#cb16-14" tabindex="-1"></a>  <span class="at">dyr =</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>)</span>
-<span id="cb16-15"><a href="#cb16-15" tabindex="-1"></a>)</span>
-<span id="cb16-16"><a href="#cb16-16" tabindex="-1"></a></span>
-<span id="cb16-17"><a href="#cb16-17" tabindex="-1"></a><span class="co"># Clean the sample dataset</span></span>
-<span id="cb16-18"><a href="#cb16-18" tabindex="-1"></a>cleaned_data <span class="ot">&lt;-</span> sample_data <span class="sc">%&gt;%</span></span>
-<span id="cb16-19"><a href="#cb16-19" tabindex="-1"></a>  janitor<span class="sc">::</span><span class="fu">clean_names</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb16-20"><a href="#cb16-20" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">ID =</span> id, <span class="at">dadID =</span> dadid, <span class="at">momID =</span> momid) <span class="sc">%&gt;%</span></span>
-<span id="cb16-21"><a href="#cb16-21" tabindex="-1"></a>  janitor<span class="sc">::</span><span class="fu">remove_empty</span>(<span class="fu">c</span>(<span class="st">&quot;rows&quot;</span>, <span class="st">&quot;cols&quot;</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb16-22"><a href="#cb16-22" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb16-23"><a href="#cb16-23" tabindex="-1"></a>    <span class="at">sex_factor =</span> <span class="fu">as.factor</span>(<span class="fu">case_when</span>(sex <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="st">&quot;male&quot;</span>, sex <span class="sc">==</span> <span class="dv">0</span> <span class="sc">~</span> <span class="st">&quot;female&quot;</span>)),</span>
-<span id="cb16-24"><a href="#cb16-24" tabindex="-1"></a>    <span class="at">year_max =</span> <span class="fu">pmax</span>(byr, dyr, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb16-25"><a href="#cb16-25" tabindex="-1"></a>    <span class="at">year_min =</span> <span class="fu">pmin</span>(byr, dyr, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb16-26"><a href="#cb16-26" tabindex="-1"></a>    <span class="at">year_range =</span> year_max <span class="sc">-</span> year_min,</span>
-<span id="cb16-27"><a href="#cb16-27" tabindex="-1"></a>    <span class="at">flag_year_range =</span> <span class="fu">ifelse</span>(year_range <span class="sc">&gt;</span> <span class="dv">100</span> <span class="sc">|</span> year_range <span class="sc">==</span> <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>),</span>
-<span id="cb16-28"><a href="#cb16-28" tabindex="-1"></a>    <span class="at">flag_after_death =</span> <span class="fu">ifelse</span>(dyr <span class="sc">!=</span> year_max, <span class="dv">1</span>, <span class="dv">0</span>),</span>
-<span id="cb16-29"><a href="#cb16-29" tabindex="-1"></a>    <span class="at">year_flag =</span> <span class="fu">ifelse</span>(flag_year_range <span class="sc">==</span> <span class="dv">1</span> <span class="sc">|</span> flag_after_death <span class="sc">==</span> <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>)</span>
-<span id="cb16-30"><a href="#cb16-30" tabindex="-1"></a>  )</span>
-<span id="cb16-31"><a href="#cb16-31" tabindex="-1"></a></span>
-<span id="cb16-32"><a href="#cb16-32" tabindex="-1"></a><span class="co"># Check for duplicate IDs</span></span>
-<span id="cb16-33"><a href="#cb16-33" tabindex="-1"></a>temp_check <span class="ot">&lt;-</span> <span class="fu">checkIDs</span>(cleaned_data, <span class="at">verbose =</span> <span class="cn">TRUE</span>, <span class="at">repair =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb16-34"><a href="#cb16-34" tabindex="-1"></a>cleaned_data <span class="ot">&lt;-</span> cleaned_data <span class="sc">%&gt;%</span></span>
-<span id="cb16-35"><a href="#cb16-35" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb16-36"><a href="#cb16-36" tabindex="-1"></a>    <span class="at">duplicated =</span> <span class="fu">case_when</span>(ID <span class="sc">%in%</span> temp_check<span class="sc">$</span>non_unique_ids <span class="sc">~</span> <span class="dv">1</span>, <span class="cn">TRUE</span> <span class="sc">~</span> <span class="dv">0</span>),</span>
-<span id="cb16-37"><a href="#cb16-37" tabindex="-1"></a>    <span class="at">duplicated_parent =</span> <span class="fu">case_when</span>(dadID <span class="sc">%in%</span> temp_check<span class="sc">$</span>non_unique_ids <span class="sc">|</span> momID <span class="sc">%in%</span> temp_check<span class="sc">$</span>non_unique_ids <span class="sc">~</span> <span class="dv">1</span>, <span class="cn">TRUE</span> <span class="sc">~</span> <span class="dv">0</span>),</span>
-<span id="cb16-38"><a href="#cb16-38" tabindex="-1"></a>    <span class="at">duplicated_source_ID =</span> <span class="fu">case_when</span>(ID <span class="sc">%in%</span> temp_check<span class="sc">$</span>non_unique_ids <span class="sc">~</span> ID, dadID <span class="sc">%in%</span> temp_check<span class="sc">$</span>non_unique_ids <span class="sc">~</span> dadID, momID <span class="sc">%in%</span> temp_check<span class="sc">$</span>non_unique_ids <span class="sc">~</span> momID, <span class="cn">TRUE</span> <span class="sc">~</span> <span class="cn">NA_integer_</span>),</span>
-<span id="cb16-39"><a href="#cb16-39" tabindex="-1"></a>    <span class="at">removedyr =</span> <span class="dv">0</span>,</span>
-<span id="cb16-40"><a href="#cb16-40" tabindex="-1"></a>    <span class="at">alteredlinks =</span> <span class="dv">0</span></span>
-<span id="cb16-41"><a href="#cb16-41" tabindex="-1"></a>  )</span>
-<span id="cb16-42"><a href="#cb16-42" tabindex="-1"></a></span>
-<span id="cb16-43"><a href="#cb16-43" tabindex="-1"></a><span class="co"># Display and manually correct specific errors</span></span>
-<span id="cb16-44"><a href="#cb16-44" tabindex="-1"></a>cleaned_data <span class="sc">%&gt;%</span></span>
-<span id="cb16-45"><a href="#cb16-45" tabindex="-1"></a>  <span class="fu">filter</span>(duplicated <span class="sc">==</span> <span class="dv">1</span> <span class="sc">|</span> duplicated_parent <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb16-46"><a href="#cb16-46" tabindex="-1"></a>  <span class="fu">arrange</span>(duplicated_source_ID, ID) <span class="sc">%&gt;%</span></span>
-<span id="cb16-47"><a href="#cb16-47" tabindex="-1"></a>  <span class="fu">print</span>(<span class="at">n =</span> <span class="cn">Inf</span>)</span>
-<span id="cb16-48"><a href="#cb16-48" tabindex="-1"></a></span>
-<span id="cb16-49"><a href="#cb16-49" tabindex="-1"></a><span class="co"># Perform specific corrections</span></span>
-<span id="cb16-50"><a href="#cb16-50" tabindex="-1"></a>cleaned_data <span class="ot">&lt;-</span> cleaned_data <span class="sc">%&gt;%</span></span>
-<span id="cb16-51"><a href="#cb16-51" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb16-52"><a href="#cb16-52" tabindex="-1"></a>    <span class="at">alteredlinks =</span> <span class="fu">case_when</span>(ID <span class="sc">==</span> <span class="dv">7</span> <span class="sc">&amp;</span> <span class="fu">round</span>(byr, <span class="at">digits =</span> <span class="dv">0</span>) <span class="sc">==</span> <span class="dv">2020</span> <span class="sc">~</span> <span class="dv">1</span>, <span class="cn">TRUE</span> <span class="sc">~</span> alteredlinks),</span>
-<span id="cb16-53"><a href="#cb16-53" tabindex="-1"></a>    <span class="at">ID =</span> <span class="fu">case_when</span>(ID <span class="sc">==</span> <span class="dv">7</span> <span class="sc">&amp;</span> <span class="fu">round</span>(byr, <span class="at">digits =</span> <span class="dv">0</span>) <span class="sc">==</span> <span class="dv">2020</span> <span class="sc">~</span> ID <span class="sc">+</span> <span class="fl">1e6</span>, <span class="cn">TRUE</span> <span class="sc">~</span> ID)</span>
-<span id="cb16-54"><a href="#cb16-54" tabindex="-1"></a>  )</span>
-<span id="cb16-55"><a href="#cb16-55" tabindex="-1"></a></span>
-<span id="cb16-56"><a href="#cb16-56" tabindex="-1"></a><span class="co"># Final check for remaining duplicates</span></span>
-<span id="cb16-57"><a href="#cb16-57" tabindex="-1"></a>final_check <span class="ot">&lt;-</span> <span class="fu">checkIDs</span>(cleaned_data, <span class="at">verbose =</span> <span class="cn">TRUE</span>, <span class="at">repair =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb16-58"><a href="#cb16-58" tabindex="-1"></a><span class="fu">print</span>(final_check)</span></code></pre></div>
+<!--
+## Practical Example: Cleaning a Pedigree
+
+Below is an example of how to clean and repair a pedigree dataset using the BGmisc package. This example is based on the approach Mason typically takes for data cleaning.
+
+
+``` r
+# note, is broken right now
+# Load necessary libraries and datasets
+library(tidyverse)
+library(BGmisc)
+set.seed(123)
+# Create a sample dataset similar to the one used in Mason's approach
+sample_data <- data.frame(
+  ID = 1:10,
+  name = c("Person1", "Person2", "Person3", "Person4", "Person5", "Person6", "Person7", "Person8", "Person9", "Person10"),
+  dadID = c(NA, NA, 1, 1, 3, 3, 5, 5, 7, 7),
+  momID = c(NA, NA, 2, 2, 4, 4, 6, 6, 7, 8),
+  sex = c(1, 0, 1, 0, 1, 0, 1, 0, 1, 0),
+  byr = runif(10, 1900, 2000),
+  dyr = c(NA, NA, NA, NA, NA, NA, NA, NA, NA, NA)
+)
+
+
+
+summarizePedigrees(sample_data)
+
+
+# Clean the sample dataset
+cleaned_data <- sample_data %>%
+  janitor::remove_empty(c("rows", "cols")) %>%
+  mutate(
+    sex_factor = as.factor(case_when(sex == 1 ~ "male", sex == 0 ~ "female"))
+  )
+
+# Check for duplicate IDs
+temp_check <- checkIDs(cleaned_data, verbose = TRUE, repair = FALSE)
+ all_duplicated_ids   <- cbind(temp_check$non_unique_ids, temp_check$duplicated_parents_ids)
+
+cleaned_data <- cleaned_data %>%
+  mutate(
+    duplicated = case_when(ID %in% temp_check$non_unique_ids ~ 1, TRUE ~ 0),
+    duplicated_parent = case_when(dadID %in% all_duplicated_ids  | momID %in% all_duplicated_ids  ~ 1, TRUE ~ 0),
+    duplicated_source_ID = case_when(ID %in% all_duplicated_ids ~ ID, dadID %in% all_duplicated_ids  ~ dadID, momID %in% all_duplicated_ids  ~ momID, TRUE ~ NA_integer_),
+    alteredlinks = 0
+  )
+
+# Display and manually correct specific errors
+cleaned_data %>%
+  filter(duplicated == 1 | duplicated_parent == 1) %>%
+  arrange(duplicated_source_ID, ID) %>%
+  print(n = Inf)
+
+# Perform specific corrections
+cleaned_data <- cleaned_data %>%
+  mutate(
+    alteredlinks = case_when(ID == 9  ~ 1, TRUE ~ alteredlinks),
+    ID = case_when(ID == 7 & round(byr, digits = 0) == 2020 ~ ID + 1e6, TRUE ~ ID)
+  )
+
+# Final check for remaining duplicates
+final_check <- checkIDs(cleaned_data, verbose = TRUE, repair = FALSE)
+print(final_check)
+
+```
+-->
 </div>
 </div>
 <div id="conclusion" class="section level1">
