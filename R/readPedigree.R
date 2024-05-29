@@ -177,12 +177,30 @@ if(verbose) { print("Parsing GEDCOM file") }
     df_temp <- processParents(df_temp)
   }
 
-  # Remove empty columns
-  if(verbose) { print("Removing empty columns") }
-  if(remove_empty_cols) {
-    df_temp <- df_temp[, colSums(is.na(df_temp)) < nrow(df_temp)]
+  if(verbose) { print("Removing Duplicate Columns")}
+
+  # checking if names match and if not, replacing missing values
+ if(mean(stringr::str_to_lower(df_temp$firstname) ==  stringr::str_to_lower(df_temp$firstname_alt) == 1)) {
+    df_temp$firstname_alt <- NULL
+  } else if(mean(stringr::str_to_lower(df_temp$firstname) ==  stringr::str_to_lower(df_temp$firstname_alt) == 1, na.rm = TRUE)){
+
+    df_temp$firstname[is.na(df_temp$firstname)] <- df_temp$firstname_alt[is.na(df_temp$firstname)]
+    df_temp$firstname_alt <- NULL
+
+  }
+ if(mean(stringr::str_to_lower(df_temp$lastname) ==  stringr::str_to_lower(df_temp$lastname_alt) == 1)) {
+    df_temp$lastname_alt <- NULL
+  } else if(mean(stringr::str_to_lower(df_temp$lastname) ==  stringr::str_to_lower(df_temp$lastname_alt) == 1, na.rm = TRUE)){
+    df_temp$lastname[is.na(df_temp$lastname)] <- df_temp$lastname_alt[is.na(df_temp$lastname)]
+    df_temp$lastname_alt <- NULL
   }
 
+
+  if(remove_empty_cols) {
+  # Remove empty columns
+  if(verbose) { print("Removing empty columns") }
+    df_temp <- df_temp[, colSums(is.na(df_temp)) < nrow(df_temp)]
+  }
 
   return(df_temp)
 }

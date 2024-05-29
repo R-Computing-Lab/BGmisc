@@ -30,7 +30,8 @@ Imports:
     kinship2,
     Matrix,
     stats,
-    data.table
+    data.table,
+    stringr
 Suggests: 
     dplyr,
     EasyMx,
