@@ -1,5 +1,5 @@
 # BGmisc 1.3.0
-
+* Added gedcom importer
 * Harmonized function names
 * Added function to summarize variables by family, matrilinael, and patrilineal lines
 * Added within row duplicate ID checks

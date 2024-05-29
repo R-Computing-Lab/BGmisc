@@ -22,26 +22,31 @@ readGedcom(
 }
 \value{
 A data frame containing information about individuals, with the following columns:
-\itemize{
-  \item{id}{ID of the individual.}
-  \item{firstname}{First name of the individual.}
-  \item{lastname}{Last name of the individual.}
-  \item{birthdate}{Birth date of the individual.}
-  \item{birthplace}{Birthplace of the individual.}
-  \item{birthlat}{Latitude of the birthplace.}
-  \item{birthlong}{Longitude of the birthplace.}
-  \item{deathdate}{Death date of the individual.}
-  \item{deathplace}{Place of death of the individual.}
-  \item{deathlat}{Latitude of the place of death.}
-  \item{deathlong}{Longitude of the place of death.}
-  \item{sex}{Sex of the individual.}
-  \item{FAMC}{ID(s) of the family where the individual is a child.}
-  \item{FAMS}{ID(s) of the family where the individual is a spouse.}
-  \item{momID}{ID of the individual's mother.}
-  \item{dadID}{ID of the individual's father.}
-}
+- `id`: ID of the individual
+- `firstname`: First name of the individual
+- `lastname`: Last name of the individual
+- `birthdate`: Birth date of the individual
+- `birthplace`: Birthplace of the individual
+- `birthlat`: Latitude of the birthplace
+- `birthlong`: Longitude of the birthplace
+- `deathdate`: Death date of the individual
+- `deathplace`: Place of death of the individual
+- `deathlat`: Latitude of the place of death
+- `deathlong`: Longitude of the place of death
+- `sex`: Sex of the individual
+- `FAMC`: ID(s) of the family where the individual is a child
+- `FAMS`: ID(s) of the family where the individual is a spouse
+- `momID`: ID of the individual's mother
+- `dadID`: ID of the individual's father
+- `MARNM`: Married Name
+- `NPFX`: Name Prefix
+- `CAUS`: Cause of death
+- `title`: Title of the individual
+- `occupation`: Occupation of the individual
+- `religion`: Religion of the individual
+- `education`: Education of the individual
 }
 \description{
 This function reads a GEDCOM file and parses it into a structured data frame of individuals.
-adapted from: https://raw.githubusercontent.com/jjfitz/readgedcom/master/R/read_gedcom.R
+inpired by https://raw.githubusercontent.com/jjfitz/readgedcom/master/R/read_gedcom.R
 }
