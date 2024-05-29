@@ -23,7 +23,7 @@
 
 
 
-read_gedcombase <- function(file_path) {
+readGedcom <- function(file_path) {
   #file_path <- "E:/Dropbox/Lab/Research/Projects/2024/BGMiscJoss/BGmisc_main/data-raw/ASOIAF.ged"
 
   file <- data.frame(X1 = readLines(file_path))
@@ -127,11 +127,24 @@ read_gedcombase <- function(file_path) {
     }
   }
 
- # df_temp <- as_tibble(df_temp)
-
-  #df_temp$FAMS <- gsub("NA ", "", df_temp$FAMS)
-
   df_temp <- df_temp[!is.na(df_temp$id), ]
+
+# recover mom and dad ids
+  for (i in 1:nrow(df_temp)) {
+    if (!is.na(df_temp$FAMC[i])) {
+      famc_ids <- unlist(strsplit(df_temp$FAMC[i], ", "))
+      for (famc_id in famc_ids) {
+        family_record <- df_temp[df_temp$id == famc_id, ]
+        if (nrow(family_record) > 0) {
+          if (family_record$sex == "M") {
+            df_temp$father_id[i] <- famc_id
+          } else if (family_record$sex == "F") {
+            df_temp$mother_id[i] <- famc_id
+          }
+        }
+      }
+    }
+  }
 
   return(df_temp)
 }
