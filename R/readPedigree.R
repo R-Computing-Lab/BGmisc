@@ -24,6 +24,9 @@
 #'   \item{FAMS}{ID(s) of the family where the individual is a spouse.}
 #'   \item{momID}{ID of the individual's mother.}
 #'   \item{dadID}{ID of the individual's father.}
+#'   \item{MARNM}{Married Name.}
+#'   \item{NPFX}{Name Prefix.}
+#'   \item{CAUS}{Cause of death.}
 #' }
 
 
@@ -41,10 +44,13 @@ readGedcom <- function(file_path, verbose = FALSE, add_parents = TRUE, remove_em
   birthdate <- birthplace <- birthlat <- birthlong <- NA
   firstname <- lastname <- sex <- famc <- fams <- id <- NA
   deathdate <- deathplace <- deathlat <- deathlong <- NA
+  firstname_alt <- lastname_alt <- marnm <- npfx <- caus <- NA
 
   var_names <- c("id",
                  "firstname",
+                 "firstname_alt",
                  "lastname",
+                 "lastname_alt",
                  "birthdate",
                  "birthplace",
                  "birthlat",
@@ -55,7 +61,8 @@ readGedcom <- function(file_path, verbose = FALSE, add_parents = TRUE, remove_em
                  "deathlong",
                  "sex",
                  "FAMC",
-                 "FAMS")
+                 "FAMS",
+                 "marnm", "npfx", "caus")
   df_temp <- as.data.frame(matrix(nrow=1,
                                  ncol=length(var_names)))
   names(df_temp) <- var_names
@@ -65,9 +72,12 @@ if(verbose) { print("Parsing GEDCOM file") }
     tmpv <- file[1][[1]][[i]]
 
     if(grepl("@ INDI",tmpv)) {
-      line_to_write <- data.frame(id, firstname, lastname, birthdate, birthplace,
-                                  birthlat, birthlong, deathdate, deathplace,
-                                  deathlat, deathlong, sex, famc, fams)
+      line_to_write <- data.frame(id, firstname, firstname_alt, lastname, lastname_alt,
+                                  birthdate, birthplace,
+                                  birthlat, birthlong,
+                                  deathdate, deathplace,
+                                  deathlat, deathlong, sex, famc, fams,
+                                  marnm, npfx, caus)
       names(line_to_write) <- var_names
       df_temp <- rbind(df_temp, line_to_write)
       birthdate <-  NA
@@ -79,18 +89,31 @@ if(verbose) { print("Parsing GEDCOM file") }
       deathlat <-  NA
       deathlong <-  NA
       firstname <- NA
+      firstname_alt <- NA
       lastname <- NA
+      lastname_alt <- NA
       sex <- NA
       famc <- NA
       fams <- NA
+      marnm <- NA
+      npfx <- NA
+      caus <- NA
 
       id <- stringr::str_extract(tmpv,"(?<=@.)\\d*(?=@)")
       next
     }
 
     if(grepl(" NAME", tmpv)) {
-      firstname <- stringr::str_extract(tmpv,"(?<=NAME ).+(?= /+.)")
-      lastname <- stringr::str_extract(tmpv,"(?<=/).+(?=/)")
+      firstname <- stringr::str_squish(stringr::str_extract(tmpv,"(?<=NAME ).+(?= ?/+.)"))
+      lastname <- stringr::str_squish(stringr::str_extract(tmpv,"(?<=/).*(?=/)"))
+      next
+    }
+    if(grepl(" GIVN", tmpv)) {
+      firstname_alt <- stringr::str_squish(stringr::str_extract(tmpv,"(?<=GIVN ).+"))
+      next
+    }
+    if(grepl(" SURN", tmpv)) {
+      lastname_alt <- stringr::str_squish(stringr::str_extract(tmpv,"(?<=SURN ).+"))
       next
     }
 
@@ -107,6 +130,7 @@ if(verbose) { print("Parsing GEDCOM file") }
       deathplace <- stringr::str_extract(file[1][[1]][[i+2]],"(?<=PLAC ).+")
       deathlat <- stringr::str_extract(file[1][[1]][[i+4]],"(?<=LATI ).+")
       deathlong <- stringr::str_extract(file[1][[1]][[i+5]],"(?<=LONG ).+")
+      caus <- stringr::str_extract(file[1][[1]][[i+3]],"(?<=CAUS ).+")
       next
     }
 
@@ -114,7 +138,15 @@ if(verbose) { print("Parsing GEDCOM file") }
       sex <- stringr::str_extract(tmpv,"(?<=SEX ).+")
       next
     }
+    if(grepl(" _MARNM", tmpv)) {
+      marnm <- stringr::str_extract(tmpv,"(?<=_MARNM ).+")
+      next
+    }
 
+    if(grepl(" NPFX", tmpv)) {
+      npfx <- stringr::str_extract(tmpv,"(?<=NPFX ).+")
+      next
+    }
     if(grepl(" FAMC", tmpv)) {
       if(is.na(famc)) {
         famc <- stringr::str_extract(tmpv,"(?<=@.)\\d*(?=@)")
