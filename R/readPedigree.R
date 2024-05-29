@@ -3,6 +3,9 @@
 #' This function reads a GEDCOM file and parses it into a structured data frame of individuals.
 #' adapted from: https://raw.githubusercontent.com/jjfitz/readgedcom/master/R/read_gedcom.R
 #' @param file_path The path to the GEDCOM file.
+#' @param add_parents A logical value indicating whether to add parents to the data frame.
+#' @param remove_empty_cols A logical value indicating whether to remove columns with all missing values.
+#' @param verbose A logical value indicating whether to print messages.
 #' @return A data frame containing information about individuals, with the following columns:
 #' \itemize{
 #'   \item{id}{ID of the individual.}
@@ -19,16 +22,21 @@
 #'   \item{sex}{Sex of the individual.}
 #'   \item{FAMC}{ID(s) of the family where the individual is a child.}
 #'   \item{FAMS}{ID(s) of the family where the individual is a spouse.}
+#'   \item{momID}{ID of the individual's mother.}
+#'   \item{dadID}{ID of the individual's father.}
 #' }
 
 
 
-readGedcom <- function(file_path) {
+readGedcom <- function(file_path, verbose = FALSE, add_parents = TRUE, remove_empty_cols = TRUE) {
   #file_path <- "E:/Dropbox/Lab/Research/Projects/2024/BGMiscJoss/BGmisc_main/data-raw/ASOIAF.ged"
-
+  if(verbose) {
+    print(paste("Reading file:", file_path))
+  }
   file <- data.frame(X1 = readLines(file_path))
-  start_recording <- FALSE
-  is_first <- 0
+  if(verbose) {
+    print(paste0("File is ",nrow(file)," lines long"))
+  }
   # Initialize variables to store data
   birthdate <- birthplace <- birthlat <- birthlong <- NA
   firstname <- lastname <- sex <- famc <- fams <- id <- NA
@@ -52,6 +60,7 @@ readGedcom <- function(file_path) {
                                  ncol=length(var_names)))
   names(df_temp) <- var_names
 
+if(verbose) { print("Parsing GEDCOM file") }
   for (i in 1:length(file[1][[1]])) {
     tmpv <- file[1][[1]][[i]]
 
@@ -129,17 +138,72 @@ readGedcom <- function(file_path) {
 
   df_temp <- df_temp[!is.na(df_temp$id), ]
 
-# recover mom and dad ids
+  if(verbose) { print(paste0("File has ",nrow(df_temp)," people")) }
+  # Add mom and dad ids
+  if(add_parents) {
+    if(verbose) { print("Processing parents") }
+    df_temp <- processParents(df_temp)
+  }
+
+  # Remove empty columns
+  if(verbose) { print("Removing empty columns") }
+  if(remove_empty_cols) {
+    df_temp <- df_temp[, colSums(is.na(df_temp)) < nrow(df_temp)]
+  }
+
+
+  return(df_temp)
+}
+
+#' Process parents information
+#'
+#' This function processes the dataframe to add momID and dadID columns.
+#'
+#' @param df_temp A data frame containing information about individuals.
+#' @return A data frame with added momID and dadID columns.
+#'
+processParents <- function(df_temp) {
+  # Adding momID and dadID columns
+  df_temp$momID <- NA_character_
+  df_temp$dadID <- NA_character_
+
+  # Identify parents and their respective family IDs
+  # Create a mapping of family IDs to parent IDs
+  family_to_parents <- list()
+
+  for (i in 1:nrow(df_temp)) {
+    if (!is.na(df_temp$FAMS[i])) {
+      fams_ids <- unlist(strsplit(df_temp$FAMS[i], ", "))
+      for (fams_id in fams_ids) {
+        if (!is.null(family_to_parents[[fams_id]])) {
+          if (df_temp$sex[i] == "M") {
+            family_to_parents[[fams_id]]$father <- df_temp$id[i]
+          } else if (df_temp$sex[i] == "F") {
+            family_to_parents[[fams_id]]$mother <- df_temp$id[i]
+          }
+        } else {
+          family_to_parents[[fams_id]] <- list()
+          if (df_temp$sex[i] == "M") {
+            family_to_parents[[fams_id]]$father <- df_temp$id[i]
+          } else if (df_temp$sex[i] == "F") {
+            family_to_parents[[fams_id]]$mother <- df_temp$id[i]
+          }
+        }
+      }
+    }
+  }
+
+  # Assign momID and dadID based on family mapping
   for (i in 1:nrow(df_temp)) {
     if (!is.na(df_temp$FAMC[i])) {
       famc_ids <- unlist(strsplit(df_temp$FAMC[i], ", "))
       for (famc_id in famc_ids) {
-        family_record <- df_temp[df_temp$id == famc_id, ]
-        if (nrow(family_record) > 0) {
-          if (family_record$sex == "M") {
-            df_temp$father_id[i] <- famc_id
-          } else if (family_record$sex == "F") {
-            df_temp$mother_id[i] <- famc_id
+        if (!is.null(family_to_parents[[famc_id]])) {
+          if (!is.null(family_to_parents[[famc_id]]$father)) {
+            df_temp$dadID[i] <- family_to_parents[[famc_id]]$father
+          }
+          if (!is.null(family_to_parents[[famc_id]]$mother)) {
+            df_temp$momID[i] <- family_to_parents[[famc_id]]$mother
           }
         }
       }
@@ -148,4 +212,3 @@ readGedcom <- function(file_path) {
 
   return(df_temp)
 }
-
