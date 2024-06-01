@@ -13,6 +13,7 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 options(rmarkdown.html_vignette.check_title = FALSE)
+
 ```
 
 # Introduction
@@ -31,6 +32,7 @@ One common issue in pedigree data is the presence of duplicate IDs. There are tw
  The `checkIDs` function in BGmisc helps identify by kinds of duplicates. Here's how to use it:
 
 ```{r,checkIDs}
+library(BGmisc)
 # Create a sample dataset
 df <- ped2fam(potter, famID = "newFamID", personID = "personID")
 
