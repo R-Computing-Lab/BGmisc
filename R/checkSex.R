@@ -139,6 +139,10 @@ repairSex <- function(ped, verbose = FALSE, code_male = NULL) {
 #'
 #' @inheritParams checkSex
 #' @inheritParams plotPedigree
+#' @param code_na The value that is presently used for missing values
+#' @param recode_na The value to use for missing values in the recoded column
+#' @param recode_male The value to use for coding males
+#' @param recode_female The value to use for coding females
 #' @inherit checkSex details
 #' @return A modified version of the input data.frame \code{ped}, containing an additional or modified 'sex_recode' column where the 'sex' values are recoded according to \code{code_male}. NA values in the 'sex' column are preserved.
 #' @seealso \code{\link{plotPedigree}}
