@@ -32,10 +32,10 @@ This function performs two main tasks:
 2. Optionally repairs the sex coding based on specified logic, facilitating the accurate construction of genetic pedigrees.
 }
 \details{
-This function uses the terms 'male' and 'female' in a biological context, based on chromosomes and other biologically-based characteristics relevant to genetic studies. 
+This function uses the terms 'male' and 'female' in a biological context, based on chromosomes and other biologically-based characteristics relevant to genetic studies.
 This usage is not intended to negate the personal gender identity of any individual.
 
-We recognize the importance of using language and methodologies that affirm and respect all gender identities.  While this function focuses on chromosomal information necessary for constructing genetic pedigrees, we affirm that gender is a spectrum, encompassing a wide range of identities beyond the binary. 
+We recognize the importance of using language and methodologies that affirm and respect all gender identities.  While this function focuses on chromosomal information necessary for constructing genetic pedigrees, we affirm that gender is a spectrum, encompassing a wide range of identities beyond the binary.
 The developers of this package express unequivocal support for folx in the transgender and LGBTQ+ communities. We respect the complexity of gender identity and acknowledge the distinction between the biological aspect of sex used for genetic analysis (genotype) and the broader, richer concept of gender identity (phenotype).
 }
 \examples{
