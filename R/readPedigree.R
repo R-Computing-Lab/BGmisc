@@ -135,7 +135,7 @@ readGedcom <- function(file_path, verbose = FALSE, add_parents = TRUE, remove_em
                  "FAMS")
 
   # Initialize all variables to NA
-  vars <- stats::setNames(as.list(rep(NA, length(var_names))), var_names)
+  vars <- stats::setNames(as.list(rep(NA_character_, length(var_names))), var_names)
 
   df_temp <- as.data.frame(matrix(nrow = 1, ncol = length(var_names)))
   names(df_temp) <- var_names
@@ -149,7 +149,7 @@ readGedcom <- function(file_path, verbose = FALSE, add_parents = TRUE, remove_em
       df_temp <- rbind(df_temp, line_to_write)
 
       # Reset all variables to NA
-      vars <- stats::setNames(as.list(rep(NA, length(var_names))), var_names)
+      vars <- stats::setNames(as.list(rep(NA_character_, length(var_names))), var_names)
 
       vars$id <- stringr::str_extract(tmpv, "(?<=@.)\\d*(?=@)")
       next
@@ -211,7 +211,7 @@ readGedcom <- function(file_path, verbose = FALSE, add_parents = TRUE, remove_em
     }
 
     # Death event related information
-  # the ifs are nested so that there is no need to check if you've already run out of lines
+  # the ifs are nested so that there is no need to check if you've already run out of
     if(num_deat_rows > 0 && grepl(" DEAT", tmpv)) {
       if(num_date_rows > 0 && i+1<=file_length) {
         vars$death_date <- extract_info(file[1][[1]][[i+1]], "DATE")
@@ -465,7 +465,7 @@ processParents <- function(df_temp) {
 #' @return A character string with the extracted information.
 #' @keywords internal
 extract_info <- function(line, type) {
-  try_na(stringr::str_squish(stringr::str_extract(line, paste0("(?<=", type, " ).+"))))
+  stringr::str_squish(stringr::str_extract(line, paste0("(?<=", type, " ).+")))
 }
 
 #' Combine Columns
