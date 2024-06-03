@@ -8,7 +8,9 @@ readGedcom(
   file_path,
   verbose = FALSE,
   add_parents = TRUE,
-  remove_empty_cols = TRUE
+  remove_empty_cols = TRUE,
+  combine_col = TRUE,
+  skinny = FALSE
 )
 }
 \arguments{
@@ -19,34 +21,50 @@ readGedcom(
 \item{add_parents}{A logical value indicating whether to add parents to the data frame.}
 
 \item{remove_empty_cols}{A logical value indicating whether to remove columns with all missing values.}
+
+\item{skinny}{A logical value indicating whether to return a skinny data frame.}
+
+\item{combine_cols}{A logical value indicating whether to combine columns with duplicate values.}
 }
 \value{
-A data frame containing information about individuals, with the following columns:
+A data frame containing information about individuals, with the following potential columns:
 - `id`: ID of the individual
-- `firstname`: First name of the individual
-- `lastname`: Last name of the individual
-- `birthdate`: Birth date of the individual
-- `birthplace`: Birthplace of the individual
-- `birthlat`: Latitude of the birthplace
-- `birthlong`: Longitude of the birthplace
-- `deathdate`: Death date of the individual
-- `deathplace`: Place of death of the individual
-- `deathlat`: Latitude of the place of death
-- `deathlong`: Longitude of the place of death
-- `sex`: Sex of the individual
-- `FAMC`: ID(s) of the family where the individual is a child
-- `FAMS`: ID(s) of the family where the individual is a spouse
 - `momID`: ID of the individual's mother
 - `dadID`: ID of the individual's father
-- `MARNM`: Married Name
-- `NPFX`: Name Prefix
-- `CAUS`: Cause of death
-- `title`: Title of the individual
-- `occupation`: Occupation of the individual
-- `religion`: Religion of the individual
-- `education`: Education of the individual
+- `sex`: Sex of the individual
+- `name`: Full name of the individual
+- `name_given`: First name of the individual
+- `name_surn`: Last name of the individual
+- `name_marriedsurn`: Married name of the individual
+- `name_nick`: Nickname of the individual
+- `name_npfx`: Name prefix
+- `name_nsfx`: Name suffix
+- `birth_date`: Birth date of the individual
+- `birth_lat`: Latitude of the birthplace
+- `birth_long`: Longitude of the birthplace
+- `birth_place`: Birthplace of the individual
+- `death_caus`: Cause of death
+- `death_date`: Death date of the individual
+- `death_lat`: Latitude of the place of death
+- `death_long`: Longitude of the place of death
+- `death_place`: Place of death of the individual
+- `attribute_caste`: Caste of the individual
+- `attribute_children`: Number of children of the individual
+- `attribute_description`: Description of the individual
+- `attribute_education`: Education of the individual
+- `attribute_idnumber`: Identification number of the individual
+- `attribute_marriages`: Number of marriages of the individual
+- `attribute_nationality`: Nationality of the individual
+- `attribute_occupation`: Occupation of the individual
+- `attribute_property`: Property owned by the individual
+- `attribute_religion`: Religion of the individual
+- `attribute_residence`: Residence of the individual
+- `attribute_ssn`: Social security number of the individual
+- `attribute_title`: Title of the individual
+- `FAMC`: ID(s) of the family where the individual is a child
+- `FAMS`: ID(s) of the family where the individual is a spouse
 }
 \description{
 This function reads a GEDCOM file and parses it into a structured data frame of individuals.
-inpired by https://raw.githubusercontent.com/jjfitz/readgedcom/master/R/read_gedcom.R
+Inspired by https://raw.githubusercontent.com/jjfitz/readgedcom/master/R/read_gedcom.R
 }
