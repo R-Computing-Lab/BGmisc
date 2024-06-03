@@ -5,12 +5,13 @@
 #' @param file_path The path to the GEDCOM file.
 #' @param add_parents A logical value indicating whether to add parents to the data frame.
 #' @param remove_empty_cols A logical value indicating whether to remove columns with all missing values.
+#' @param remove_duplicate_cols A logical value indicating whether to remove columns with duplicate values.
 #' @param verbose A logical value indicating whether to print messages.
 #' @return A data frame containing information about individuals, with the following columns:
 #' - `id`: ID of the individual
-#' - `firstname`: First name of the individual
-#' - `lastname`: Last name of the individual
-#' - `birthdate`: Birth date of the individual
+#' - `name_given`: First name of the individual
+#' - `name_surn`: Last name of the individual
+#' - `birth_date`: Birth date of the individual
 #' - `birthplace`: Birthplace of the individual
 #' - `birthlat`: Latitude of the birthplace
 #' - `birthlong`: Longitude of the birthplace
@@ -23,15 +24,15 @@
 #' - `FAMS`: ID(s) of the family where the individual is a spouse
 #' - `momID`: ID of the individual's mother
 #' - `dadID`: ID of the individual's father
-#' - `MARNM`: Married Name
+#' - `name_marriedsurn`: Married Name
 #' - `NPFX`: Name Prefix
 #' - `CAUS`: Cause of death
-#' - `title`: Title of the individual
+#' - `name_title`: Title of the individual
 #' - `occupation`: Occupation of the individual
 #' - `religion`: Religion of the individual
 #' - `education`: Education of the individual
 #' @export
-readGedcom <- function(file_path, verbose = FALSE, add_parents = TRUE, remove_empty_cols = TRUE) {
+readGedcom <- function(file_path, verbose = FALSE, add_parents = TRUE, remove_empty_cols = TRUE, remove_duplicate_cols) {
   if(verbose) {
     print(paste("Reading file:", file_path))
   }
@@ -42,23 +43,28 @@ readGedcom <- function(file_path, verbose = FALSE, add_parents = TRUE, remove_em
 
   # List of variables to initialize
   var_names <- c("id",
-                 "firstname",
-                 "firstname_alt",
-                 "lastname",
-                 "lastname_alt",
-                 "birthdate",
-                 "birthplace",
-                 "birthlat",
-                 "birthlong",
-                 "deathdate",
-                 "deathplace",
-                 "deathlat",
-                 "deathlong",
-                 "title",
+                 "name",
                  "sex",
                  "FAMC",
                  "FAMS",
-                 "marnm", "npfx", "caus",
+                 "name_given",
+                 "name_given_pieces",
+                 "name_surn",
+                 "name_surn_pieces",
+                 "name_marriedsurn",
+                 "name_nick",
+                 "name_npfx",
+                 "name_nsfx",
+                 "name_title",
+                 "birth_date",
+                 "birth_place",
+                 "birth_lat",
+                 "birth_long",
+                 "death_date",
+                 "death_place",
+                 "death_lat",
+                 "death_long",
+                 "death_caus",
                  "occupation", "religion", "education")
 
   # Initialize all variables to NA
@@ -89,20 +95,40 @@ readGedcom <- function(file_path, verbose = FALSE, add_parents = TRUE, remove_em
     }
 
     if(grepl(" NAME", tmpv)) {
-      vars$firstname <- extract_info(tmpv, "NAME")
-      vars$lastname <- extract_info(tmpv, "/")
+      vars$name <- extract_info(tmpv, "NAME")
+      vars$name_given <- stringr::str_extract(vars$name, ".*(?= /)")
+      vars$name_surn <- stringr::str_extract(vars$name, "(?<=/).*(?=/)")
+   #   vars$name <- stringr::str_extract(tmpv,"(?<= NAME ).*")
       next
     }
+    # PERSONAL_NAME_PIECES := NAME | NPFX | GIVN | NICK | SPFX | SURN | NSFX
     if(grepl(" GIVN", tmpv)) {
-      vars$firstname_alt <- extract_info(tmpv, "GIVN")
+      vars$name_given_pieces <- extract_info(tmpv, "GIVN")
       next
     }
+    # npfx := Name Prefix
+    if(grepl(" NPFX", tmpv)) {
+      vars$name_npfx <- extract_info(tmpv, "NPFX")
+      next
+    }
+    # NICK := Nickname
+    if(grepl(" NICK", tmpv)) {
+      vars$name_nick <- extract_info(tmpv, "NICK")
+      next
+    }
+    # surn := Surname
     if(grepl(" SURN", tmpv)) {
-      vars$lastname_alt <- extract_info(tmpv, "SURN")
+      vars$name_surn_pieces <- extract_info(tmpv, "SURN")
       next
     }
+    # nsfx := Name suffix
+    if(grepl(" NSFX", tmpv)) {
+      vars$name_nsfx <- extract_info(tmpv, "NSFX")
+      next
+    }
+
     if(grepl(" TITL", tmpv)) {
-      vars$title <- extract_info(tmpv, "TITL")
+      vars$name_title <- extract_info(tmpv, "TITL")
       next
     }
     if(grepl(" OCCU", tmpv)) {
@@ -118,19 +144,19 @@ readGedcom <- function(file_path, verbose = FALSE, add_parents = TRUE, remove_em
       next
     }
     if(grepl(" BIRT", tmpv)) {
-      vars$birthdate <- extract_info(file[1][[1]][[i+1]], "DATE")
-      vars$birthplace <- extract_info(file[1][[1]][[i+2]], "PLAC")
-      vars$birthlat <- extract_info(file[1][[1]][[i+4]], "LATI")
-      vars$birthlong <- extract_info(file[1][[1]][[i+5]], "LONG")
+      vars$birth_date <- extract_info(file[1][[1]][[i+1]], "DATE")
+      vars$birth_place <- extract_info(file[1][[1]][[i+2]], "PLAC")
+      vars$birth_lat <- extract_info(file[1][[1]][[i+4]], "LATI")
+      vars$birth_long <- extract_info(file[1][[1]][[i+5]], "LONG")
       next
     }
 
     if(grepl(" DEAT", tmpv)) {
-      vars$deathdate <- extract_info(file[1][[1]][[i + 1]], "DATE")
-      vars$deathplace <- extract_info(file[1][[1]][[i + 2]], "PLAC")
-      vars$deathlat <- extract_info(file[1][[1]][[i + 4]], "LATI")
-      vars$deathlong <- extract_info(file[1][[1]][[i + 5]], "LONG")
-      vars$caus <- extract_info(file[1][[1]][[i + 3]], "CAUS")
+      vars$death_date <- extract_info(file[1][[1]][[i + 1]], "DATE")
+      vars$death_place <- extract_info(file[1][[1]][[i + 2]], "PLAC")
+      vars$death_lat <- extract_info(file[1][[1]][[i + 4]], "LATI")
+      vars$death_long <- extract_info(file[1][[1]][[i + 5]], "LONG")
+      vars$death_caus <- extract_info(file[1][[1]][[i + 3]], "CAUS")
       next
     }
 
@@ -139,12 +165,7 @@ readGedcom <- function(file_path, verbose = FALSE, add_parents = TRUE, remove_em
       next
     }
     if(grepl(" _MARNM", tmpv)) {
-      vars$marnm <- extract_info(tmpv, "_MARNM")
-      next
-    }
-
-    if(grepl(" NPFX", tmpv)) {
-      vars$npfx <- extract_info(tmpv, "NPFX")
+      vars$name_marriedsurn <- extract_info(tmpv, "_MARNM")
       next
     }
 
@@ -178,26 +199,32 @@ readGedcom <- function(file_path, verbose = FALSE, add_parents = TRUE, remove_em
     if(verbose) { print("Processing parents") }
     df_temp <- processParents(df_temp)
   }
-
+if(remove_duplicate_cols){
   if(verbose) { print("Removing Duplicate Columns")}
+  df_temp$name <- NULL
+  df_temp$FAMC <- NULL
+  df_temp$FAMS <- NULL
 
-  # need to check if any values aren't NA in firstname_alt and lastname_alt
-  if(!all(is.na(df_temp$firstname_alt)) | !all(is.na(df_temp$firstname))) {
+  # need to check if any values aren't NA in name_given_pieces and name_surn_pieces
+  if(!all(is.na(df_temp$name_given_pieces)) | !all(is.na(df_temp$name_given))) {
   # checking if names match and if not, replacing missing values
-  if( mean(stringr::str_to_lower(df_temp$firstname) ==  stringr::str_to_lower(df_temp$firstname_alt)) == 1) {
-    df_temp$firstname_alt <- NULL
-  } else if(mean(stringr::str_to_lower(df_temp$firstname) ==  stringr::str_to_lower(df_temp$firstname_alt), na.rm = TRUE) == 1) {
-    df_temp$firstname[is.na(df_temp$firstname)] <- df_temp$firstname_alt[is.na(df_temp$firstname)]
-    df_temp$firstname_alt <- NULL
+    given_fn <- try_na(mean(stringr::str_to_lower(df_temp$name_given) ==  stringr::str_to_lower(df_temp$name_given_pieces)))
+  if(given_fn == 1&!is.na( given_fn )) {
+    df_temp$name_given_pieces <- NULL
+  } else if(mean(stringr::str_to_lower(df_temp$name_given) ==  stringr::str_to_lower(df_temp$name_given_pieces), na.rm = TRUE) == 1) {
+    df_temp$name_given[is.na(df_temp$name_given)] <- df_temp$name_given_pieces[is.na(df_temp$name_given)]
+    df_temp$name_given_pieces <- NULL
   }
   }
 
-  if(!all(is.na(df_temp$lastname_alt))|!all(is.na(df_temp$lastname))){
-  if( mean(stringr::str_to_lower(df_temp$lastname) ==  stringr::str_to_lower(df_temp$lastname_alt)) == 1) {
-    df_temp$lastname_alt <- NULL
-  } else if(mean(stringr::str_to_lower(df_temp$lastname) ==  stringr::str_to_lower(df_temp$lastname_alt), na.rm = TRUE)  == 1) {
-    df_temp$lastname[is.na(df_temp$lastname)] <- df_temp$lastname_alt[is.na(df_temp$lastname)]
-    df_temp$lastname_alt <- NULL
+  if(!all(is.na(df_temp$name_surn_pieces))|!all(is.na(df_temp$name_surn))){
+    surname_fn <- try_na(mean(stringr::str_to_lower(df_temp$name_surn) ==  stringr::str_to_lower(df_temp$name_surn_pieces)))
+    if(surname_fn == 1&!is.na(surname_fn)) {
+      df_temp$name_surn_pieces <- NULL
+    } else if(mean(stringr::str_to_lower(df_temp$name_surn) ==  stringr::str_to_lower(df_temp$name_surn_pieces), na.rm = TRUE)  == 1) {
+    df_temp$name_surn[is.na(df_temp$name_surn)] <- df_temp$name_surn_pieces[is.na(df_temp$name_surn)]
+    df_temp$name_surn_pieces <- NULL
+  }
   }
 }
   if(remove_empty_cols) {
