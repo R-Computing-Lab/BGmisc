@@ -20,7 +20,7 @@ standardizeColnames <- function(df, verbose = FALSE) {
     "patID" = "^(?:dat[\\.\\-_]?id|pat[\\.\\-_]?id|paternal[\\.\\-_]?(?:id)?)",
     "momID" = "^(?:m(?:om|a|other)?[\\.\\-_]?id|pid[\\.\\-_]?moth[er]*)",
     "matID" = "^(?:mat[\\.\\-_]?id|maternal[\\.\\-_]?(?:id)?)",
-    "spt" = "^(?:s(?:pt)?id|spouse[\\.\\-_]?(?:id)?|partner[\\.\\-_]?(?:id)?|husb(?:and)?[\\.\\-_]?id|wife[\\.\\-_]?(?:id)?|pid[\\.\\-_]?spouse1?)",
+    "spID" = "^(?:s(?:pt)?id|spouse[\\.\\-_]?(?:id)?|partner[\\.\\-_]?(?:id)?|husb(?:and)?[\\.\\-_]?id|wife[\\.\\-_]?(?:id)?|pid[\\.\\-_]?spouse1?)",
     "twinID" = "^(?:twin[\\.\\-_]?(?:id)?)",
     "sex" = "^(?:sex|gender|female|m(?:a(?:le|n)|en)|wom[ae]n)"
   )

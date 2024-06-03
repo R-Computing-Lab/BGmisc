@@ -17,7 +17,7 @@ buildBetweenGenerations(
 }
 \arguments{
 \item{df_Fam}{A data frame containing the simulated pedigree information up to the current generation.
-Must include columns for family ID, individual ID, generation number, spouse ID (spt),
+Must include columns for family ID, individual ID, generation number, spouse ID (spID),
 and sex. This data frame is updated in place to include flags for parental status (ifparent),
 son status (ifson), and daughter status (ifdau), as well as couple IDs.}
 

@@ -7,7 +7,7 @@ test_that("makeTwins - Twins specified by IDs", {
     gen = c(1, 1, 2, 2),
     dadID = c(NA, NA, 1, 1),
     momID = c(NA, NA, 2, 2),
-    spt = c(NA, NA, NA, NA),
+    spID = c(NA, NA, NA, NA),
     sex = c("M", "F", "M", "F")
   )
   expected_result <- data.frame(
@@ -16,7 +16,7 @@ test_that("makeTwins - Twins specified by IDs", {
     gen = c(1, 1, 2, 2),
     dadID = c(NA, NA, 1, 1),
     momID = c(NA, NA, 2, 2),
-    spt = c(NA, NA, NA, NA),
+    spID = c(NA, NA, NA, NA),
     sex = c("M", "F", "M", "F"),
     MZtwin = c(2, 1, NA, NA)
   )
@@ -34,7 +34,7 @@ test_that("makeTwins - Twins specified by generation", {
   ped <- simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR)
   #
   result <- makeTwins(ped, gen_twin = gen_twin)
-  expect_equal(names(result), c("fam", "ID", "gen", "dadID", "momID", "spt", "sex", "MZtwin"))
+  expect_equal(names(result), c("fam", "ID", "gen", "dadID", "momID", "spID", "sex", "MZtwin"))
   # do we have the same people?
   expect_equal(result$ID, ped$ID)
   # did it make one pair of twins?
@@ -59,7 +59,7 @@ test_that("makeInbreeding - Inbred mates specified by IDs", {
     gen = c(1, 1, 2, 2),
     dadID = c(NA, NA, 1, 1),
     momID = c(NA, NA, 2, 2),
-    spt = c(NA, NA, NA, NA),
+    spID = c(NA, NA, NA, NA),
     sex = c("M", "F", "M", "F")
   )
   expected_result <- data.frame(
@@ -68,7 +68,7 @@ test_that("makeInbreeding - Inbred mates specified by IDs", {
     gen = c(1, 1, 2, 2),
     dadID = c(NA, NA, 1, 1),
     momID = c(NA, NA, 2, 2),
-    spt = c(2, 1, NA, NA),
+    spID = c(2, 1, NA, NA),
     sex = c("M", "F", "M", "F")
   )
   result <- makeInbreeding(ped, ID_mate1 = 1, ID_mate2 = 2)
@@ -90,13 +90,13 @@ test_that("makeInbreeding - Inbred mates specified by generation and sibling", {
   ped <- simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR)
   #
   result <- makeInbreeding(ped, gen_inbred = gen_inbred, type_inbred = type_inbred)
-  expect_equal(names(result), c("fam", "ID", "gen", "dadID", "momID", "spt", "sex"))
+  expect_equal(names(result), c("fam", "ID", "gen", "dadID", "momID", "spID", "sex"))
 
   # do we have the same people?
   expect_equal(result$ID, ped$ID)
 
-  # did we get more spt values than we started with?
-  expect_gt(sum(!is.na(result$spt)), sum(!is.na(ped$spt)))
+  # did we get more spID values than we started with?
+  expect_gt(sum(!is.na(result$spID)), sum(!is.na(ped$spID)))
 })
 
 test_that("makeInbreeding - Inbred mates specified by generation and cousin", {

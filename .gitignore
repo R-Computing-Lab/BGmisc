@@ -9,5 +9,5 @@ paper/paper.html
 vignettes/articles/paper.html
 BGmisc.code-workspace
 tests/testthat/Rplots.pdf
-
+*.ASOIAF.ged
 ASOIAF.ged
