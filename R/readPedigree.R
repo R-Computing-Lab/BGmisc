@@ -186,7 +186,7 @@ readGedcom <- function(file_path, verbose = FALSE, add_parents = TRUE, remove_em
       vars$name_surn_pieces <- extract_info(tmpv, "SURN")
       next
     }
-    }
+
     # nsfx := Name suffix
     if(num_nsfx_rows>0 &&  grepl(" NSFX", tmpv)) {
       vars$name_nsfx <- extract_info(tmpv, "NSFX")
@@ -341,6 +341,7 @@ readGedcom <- function(file_path, verbose = FALSE, add_parents = TRUE, remove_em
       }
       next
     }
+  }
 # write file line
   df_temp <- rbind(df_temp, line_to_write)
   df_temp <- df_temp[!is.na(df_temp$id), ]
