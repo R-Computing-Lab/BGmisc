@@ -342,7 +342,8 @@ readGedcom <- function(file_path, verbose = FALSE, add_parents = TRUE, remove_em
       next
     }
   }
-# write file line
+# write final file line
+  line_to_write <- as.data.frame(vars)
   df_temp <- rbind(df_temp, line_to_write)
   df_temp <- df_temp[!is.na(df_temp$id), ]
 
@@ -408,6 +409,10 @@ if(combine_cols){
 #' @return A data frame with added momID and dadID columns.
 #' @keywords internal
 processParents <- function(df_temp) {
+  if (!all(c("FAMS", "FAMC","sex") %in% colnames(df_temp))) {
+    warning("The data frame does not contain the necessary columns to process parents")
+    return(df_temp)
+  }
   # Adding momID and dadID columns
   df_temp$momID <- NA_character_
   df_temp$dadID <- NA_character_

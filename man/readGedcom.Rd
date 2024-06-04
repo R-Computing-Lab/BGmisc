@@ -9,7 +9,7 @@ readGedcom(
   verbose = FALSE,
   add_parents = TRUE,
   remove_empty_cols = TRUE,
-  combine_col = TRUE,
+  combine_cols = TRUE,
   skinny = FALSE
 )
 }
@@ -22,9 +22,9 @@ readGedcom(
 
 \item{remove_empty_cols}{A logical value indicating whether to remove columns with all missing values.}
 
-\item{skinny}{A logical value indicating whether to return a skinny data frame.}
-
 \item{combine_cols}{A logical value indicating whether to combine columns with duplicate values.}
+
+\item{skinny}{A logical value indicating whether to return a skinny data frame.}
 }
 \value{
 A data frame containing information about individuals, with the following potential columns:

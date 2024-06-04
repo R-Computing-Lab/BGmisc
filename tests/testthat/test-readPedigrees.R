@@ -132,6 +132,7 @@ test_that("processParents adds momID and dadID correctly", {
     id = c("I1", "I2", "I3"),
     sex = c("M", "F", "M"),
     FAMS = c("@F1@", "@F1@", NA),
+    FAMC = c(NA, NA, "@F1@"),
     stringsAsFactors = FALSE
   )
 
@@ -143,12 +144,12 @@ test_that("processParents adds momID and dadID correctly", {
   expect_true("dadID" %in% colnames(df_temp))
 
   # Check the contents of the data frame
-  expect_equal(df_temp$momID[1], NA)
-  expect_equal(df_temp$dadID[1], NA)
-  expect_equal(df_temp$momID[2], NA)
-  expect_equal(df_temp$dadID[2], NA)
-  expect_equal(df_temp$momID[3], NA)
-  expect_equal(df_temp$dadID[3], NA)
+  expect_equal(df_temp$momID[1], NA_character_)
+  expect_equal(df_temp$dadID[1],  NA_character_)
+  expect_equal(df_temp$momID[2],  NA_character_)
+  expect_equal(df_temp$dadID[2],  NA_character_)
+  expect_equal(df_temp$momID[3],  "I2")
+  expect_equal(df_temp$dadID[3],  "I1")
 
   # Create a more complex data frame for testing
   df_temp <- data.frame(
