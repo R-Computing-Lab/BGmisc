@@ -7,7 +7,7 @@
 \usage{
 ped2mit(
   ped,
-  max.gen = Inf,
+  max.gen = 25,
   sparse = FALSE,
   verbose = FALSE,
   gc = FALSE,
@@ -21,8 +21,8 @@ ped2mit(
 \item{ped}{a pedigree dataset.  Needs ID, momID, and dadID columns}
 
 \item{max.gen}{the maximum number of generations to compute
-(e.g., only up to 4th degree relatives).  The default of Inf uses as many
-generations as there are in the data.}
+(e.g., only up to 4th degree relatives).  The default is 25. However it can be set to infinity.
+ `Inf` uses as many generations as there are in the data.}
 
 \item{sparse}{logical.  If TRUE, use and return sparse matrices from Matrix package}
 
@@ -42,5 +42,5 @@ generations as there are in the data.}
 Take a pedigree and turn it into a mitochondrial relatedness matrix
 }
 \details{
-The algorithms and methodologies used in this function are further discussed and exemplified in the vignette titled "examplePedigreeFunctions".
+The algorithms and methodologies used in this function are further discussed and exemplified in the vignette titled "examplePedigreeFunctions". For more advanced scenarios and detailed explanations, consult this vignette.
 }

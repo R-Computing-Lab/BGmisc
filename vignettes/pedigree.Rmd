@@ -25,7 +25,6 @@ These pedigrees can be simulated as a function of several parameters, including 
 To illustrate this functionality, let us generate a pedigree. This pedigree has a total of four generations (`Ngen`), in which each person who "mates", grows a family with four offspring (`kpc`). In our scenario, the number of male and female newborns is equal, but can be adjusted via (`sexR`). In this illustration 70% of individuals will mate and bear offspring (`marR`). Such a pedigree structure can be simulated by running the following code:
 
 ```{r}
-
 ## Loading Required Libraries
 library(BGmisc)
 
@@ -47,6 +46,11 @@ df_ped[21, ]
 
 The columns represents the individual's family ID, the individual's personal ID, the generation the individual is in, the IDs of their father and mother, the ID of their spouse, and the biological sex of the individual, respectively.
 
+## Summarizing Pedigrees
+
+```{r}
+summarizeFamilies(df_ped, famID = "fam")$family_summary
+```
 ## Plotting Pedigree
 
 Pedigrees are visual diagrams that represent family relationships across generations. They are commonly used in genetics to trace the inheritance of specific traits or conditions. This vignette will guide you through visualizing simulated pedigrees using the `plotPedigree` function. This function is a wrapper function for `Kinship2`'s base R plotting.
@@ -87,3 +91,5 @@ plotPedigree(df_ped_4, width = 1)
 ```   
 
 By examining the side-by-side plots, you can contrast and analyze the structures of different families, tracing the inheritance of specific traits or conditions if needed.
+
+

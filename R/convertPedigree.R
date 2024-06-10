@@ -2,8 +2,8 @@
 #' @param ped a pedigree dataset.  Needs ID, momID, and dadID columns
 #' @param component character.  Which component of the pedigree to return.  See Details.
 #' @param max.gen the maximum number of generations to compute
-#'  (e.g., only up to 4th degree relatives).  The default of Inf uses as many
-#'  generations as there are in the data.
+#'  (e.g., only up to 4th degree relatives).  The default is 25. However it can be set to infinity.
+#'   `Inf` uses as many generations as there are in the data.
 #' @param sparse logical.  If TRUE, use and return sparse matrices from Matrix package
 #' @param verbose logical.  If TRUE, print progress through stages of algorithm
 #' @param gc logical. If TRUE, do frequent garbage collection via \code{\link{gc}} to save memory
@@ -12,11 +12,11 @@
 #' @param tcross.alt.crossprod logical. If TRUE, use alternative method of using Crossprod function for computing the transpose
 #' @param tcross.alt.star logical. If TRUE, use alternative method of using \%\*\% for computing the transpose
 #' @param ... additional arguments to be passed to \code{\link{ped2com}}
-#' @details The algorithms and methodologies used in this function are further discussed and exemplified in the vignette titled "examplePedigreeFunctions".
+#' @details The algorithms and methodologies used in this function are further discussed and exemplified in the vignette titled "examplePedigreeFunctions". For more advanced scenarios and detailed explanations, consult this vignette.
 #' @export
 #'
 ped2com <- function(ped, component,
-                    max.gen = Inf,
+                    max.gen = 25,
                     sparse = FALSE,
                     verbose = FALSE,
                     gc = FALSE,
@@ -156,8 +156,6 @@ ped2com <- function(ped, component,
   # compute rel <- tcrossprod(rsq)
   if (gc) {
     rm(isPar, newIsPar)
-  }
-  if (gc) {
     gc()
   }
   if (verbose) {
@@ -166,21 +164,23 @@ ped2com <- function(ped, component,
   r2 <- r %*% Matrix::Diagonal(x = sqrt(isChild), n = nr)
   if (gc) {
     rm(r, isChild)
-  }
-  if (gc) {
     gc()
   }
   if (verbose) {
     cat("Doing tcrossprod\n")
   }
-  if(tcross.alt.crossprod){
-    cat("Doing alt tcrossprod crossprod t \n")
-    r <-    crossprod(t(as.matrix(r2)))
-    }else if(tcross.alt.star){
-	  cat("Doing alt tcrossprod %*% t \n")
-     r <-       r2 %*% t(as.matrix(r2))
-  }else{
-     r <- Matrix::tcrossprod(r2)
+  if (tcross.alt.crossprod) {
+    if (verbose) {
+      cat("Doing alt tcrossprod crossprod t \n")
+    }
+    r <- crossprod(t(as.matrix(r2)))
+  } else if (tcross.alt.star) {
+    if (verbose) {
+      cat("Doing alt tcrossprod %*% t \n")
+    }
+    r <- r2 %*% t(as.matrix(r2))
+  } else {
+    r <- Matrix::tcrossprod(r2)
   }
   if (component == "generation") {
     return(gen)
@@ -201,12 +201,10 @@ ped2com <- function(ped, component,
 
 #' Take a pedigree and turn it into an additive genetics relatedness matrix
 #' @inheritParams ped2com
-#' @details The algorithms and methodologies used in this function are further discussed and exemplified in the vignette titled "examplePedigreeFunctions".
-#' For more advanced scenarios and detailed explanations, consult this vignette.
-
+#' @inherit ped2com details
 #' @export
 #'
-ped2add <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FALSE, flatten.diag = FALSE, standardize.colnames = TRUE,
+ped2add <- function(ped, max.gen = 25, sparse = FALSE, verbose = FALSE, gc = FALSE, flatten.diag = FALSE, standardize.colnames = TRUE,
                     tcross.alt.crossprod = FALSE, tcross.alt.star = FALSE) {
   ped2com(
     ped = ped,
@@ -224,11 +222,11 @@ ped2add <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FA
 
 #' Take a pedigree and turn it into a mitochondrial relatedness matrix
 #' @inheritParams ped2com
-#' @details The algorithms and methodologies used in this function are further discussed and exemplified in the vignette titled "examplePedigreeFunctions".
+#' @inherit ped2com details
 #' @export
 #' @aliases ped2mt
 #'
-ped2mit <- ped2mt <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FALSE, flatten.diag = FALSE, standardize.colnames = TRUE, tcross.alt.crossprod = FALSE, tcross.alt.star = FALSE) {
+ped2mit <- ped2mt <- function(ped, max.gen = 25, sparse = FALSE, verbose = FALSE, gc = FALSE, flatten.diag = FALSE, standardize.colnames = TRUE, tcross.alt.crossprod = FALSE, tcross.alt.star = FALSE) {
   ped2com(
     ped = ped,
     max.gen = max.gen,
@@ -245,10 +243,10 @@ ped2mit <- ped2mt <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALS
 
 #' Take a pedigree and turn it into a common nuclear environmental relatedness matrix
 #' @inheritParams ped2com
-#' @details The algorithms and methodologies used in this function are further discussed and exemplified in the vignette titled "examplePedigreeFunctions".
+#' @inherit ped2com details
 #' @export
 #'
-ped2cn <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FALSE, flatten.diag = FALSE, standardize.colnames = TRUE, tcross.alt.crossprod = FALSE, tcross.alt.star = FALSE) {
+ped2cn <- function(ped, max.gen = 25, sparse = FALSE, verbose = FALSE, gc = FALSE, flatten.diag = FALSE, standardize.colnames = TRUE, tcross.alt.crossprod = FALSE, tcross.alt.star = FALSE) {
   ped2com(
     ped = ped,
     max.gen = max.gen,
@@ -265,7 +263,7 @@ ped2cn <- function(ped, max.gen = Inf, sparse = FALSE, verbose = FALSE, gc = FAL
 
 #' Take a pedigree and turn it into an extended environmental relatedness matrix
 #' @inheritParams ped2com
-#' @details The algorithms and methodologies used in this function are further discussed and exemplified in the vignette titled "examplePedigreeFunctions".
+#' @inherit ped2com details
 #' @export
 #'
 ped2ce <- function(ped) {

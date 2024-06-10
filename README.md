@@ -13,7 +13,6 @@ developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.re
 version](https://www.r-pkg.org/badges/version/BGmisc)](https://cran.r-project.org/package=BGmisc)
 [![Package
 downloads](https://cranlogs.r-pkg.org/badges/grand-total/BGmisc)](https://cran.r-project.org/package=BGmisc)</br>
-
 [![R-CMD-check](https://github.com/R-Computing-Lab/BGmisc/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/R-Computing-Lab/BGmisc/actions/workflows/R-CMD-check.yaml)
 [![Dev Main
 branch](https://github.com/R-Computing-Lab/BGmisc/actions/workflows/R-CMD-dev_maincheck.yaml/badge.svg)](https://github.com/R-Computing-Lab/BGmisc/actions/workflows/R-CMD-dev_maincheck.yaml)
@@ -74,6 +73,29 @@ to contribute, please refer to the [Contributing
 Guidelines](https://github.com/R-Computing-Lab/BGmisc/blob/main/CONTRIBUTING.md).
 Issues and pull requests should be submitted on the GitHub repository.
 For support, please use the GitHub issues page.
+
+### Branching and Versioning System
+
+The development of BGmisc follows a [GitFlow branching
+strategy](https://tilburgsciencehub.com/topics/automation/version-control/advanced-git/git-branching-strategies/):
+
+- **Feature Branches**: All major changes and new features should be
+  developed on separate branches created from the dev_main branch. Name
+  these branches according to the feature or change they are meant to
+  address.
+- **Development Branches**: Our approach includes two development
+  branches, each serving distinct roles:
+  - **`dev_main`**: This branch is the final integration stage before
+    changes are merged into the `main` branch. It is considered stable,
+    and only well-tested features and updates that are ready for the
+    next release cycle are merged here.
+  - **`dev`**: This branch serves as a less stable, active development
+    environment. Feature branches are merged here. Changes here are more
+    fluid and this branch is at a higher risk of breaking.
+- **Main Branch** (`main`): The main branch mirrors the stable state of
+  the project as seen on CRAN. Only fully tested and approved changes
+  from the dev_main branch are merged into main to prepare for a new
+  release.
 
 ## License
 

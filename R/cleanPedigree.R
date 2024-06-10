@@ -16,11 +16,11 @@ standardizeColnames <- function(df, verbose = FALSE) {
     "fam" = "^(?:fam(?:ily)?(?:id)?)",
     "ID" = "^(?:i(?:d$|ndiv(?:idual)?)|p(?:erson)?id)",
     "gen" = "^(?:gen(?:s|eration)?)",
-    "dadID" = "^(?:d(?:ad)?id|paid|fatherid)",
+    "dadID" = "^(?:d(?:ad)?id|paid|fatherid|pid_fath[er]*)",
     "patID" = "^(?:datid|patid|paternal(?:id)?)",
-    "momID" = "^(?:m(?:om|a|other)?id)",
+    "momID" = "^(?:m(?:om|a|other)?id|pid_moth[er]*)",
     "matID" = "^(?:matid|maternal(?:id)?)",
-    "spt" = "^(?:s(?:pt)?id|spouse(?:id)?|partner(?:id)?)",
+    "spt" = "^(?:s(?:pt)?id|spouse(?:id)?|partner(?:id)?|husb(?:and)?id|wife(?:id)?)|pid_spouse1?)",
     "twinID" = "^(?:twin(?:id)?)",
     "sex" = "^(?:sex|gender|female|m(?:a(?:le|n)|en)|wom[ae]n)"
   )

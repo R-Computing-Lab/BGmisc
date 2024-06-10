@@ -79,7 +79,7 @@ potter <- data.frame(
 potter[nrow(potter) + 1, ] <- list(
   101,
   "1",
-  "Mother Durseley",
+  "Mother Dursley",
   0,
   NA,
   NA,
@@ -89,7 +89,7 @@ potter[nrow(potter) + 1, ] <- list(
 potter[nrow(potter) + 1, ] <- list(
   102,
   "1",
-  "Father Durseley",
+  "Father Dursley",
   0,
   NA,
   NA,
