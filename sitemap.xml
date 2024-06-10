@@ -28,6 +28,9 @@
     <loc>https://r-computing-lab.github.io/BGmisc/articles/pedigree.html</loc>
   </url>
   <url>
+    <loc>https://r-computing-lab.github.io/BGmisc/articles/validation.html</loc>
+  </url>
+  <url>
     <loc>https://r-computing-lab.github.io/BGmisc/authors.html</loc>
   </url>
   <url>
@@ -185,6 +188,18 @@
   </url>
   <url>
     <loc>https://r-computing-lab.github.io/BGmisc/reference/standardizeColnames.html</loc>
+  </url>
+  <url>
+    <loc>https://r-computing-lab.github.io/BGmisc/reference/summarizeFamilies.html</loc>
+  </url>
+  <url>
+    <loc>https://r-computing-lab.github.io/BGmisc/reference/summarizeMatrilines.html</loc>
+  </url>
+  <url>
+    <loc>https://r-computing-lab.github.io/BGmisc/reference/summarizePatrilines.html</loc>
+  </url>
+  <url>
+    <loc>https://r-computing-lab.github.io/BGmisc/reference/summarizePedigrees.html</loc>
   </url>
   <url>
     <loc>https://r-computing-lab.github.io/BGmisc/reference/try_na.html</loc>

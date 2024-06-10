@@ -12,7 +12,7 @@ the repair of the sex coding in a pedigree dataframe."><!-- mathjax --><script s
     
     <a class="navbar-brand me-2" href="../index.html">BGmisc</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.0.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -30,6 +30,7 @@ the repair of the sex coding in a pedigree dataframe."><!-- mathjax --><script s
     <a class="dropdown-item" href="../articles/modelingrelatedness.html">Modeling and Relatedness</a>
     <a class="dropdown-item" href="../articles/network.html">Network tools for finding extended pedigrees and path tracing</a>
     <a class="dropdown-item" href="../articles/pedigree.html">Pedigree Simulation and Visualization with BGmisc</a>
+    <a class="dropdown-item" href="../articles/validation.html">Validation tools for identifying and repairing errors in pedigrees</a>
   </div>
 </li>
 <li class="nav-item">
@@ -77,7 +78,7 @@ the repair of the sex coding in a pedigree dataframe.</p>
 
 
 <dt>code_male</dt>
-<dd><p>The current code used to represent males in the 'sex' column. At least one is needed.</p></dd>
+<dd><p>The current code used to represent males in the 'sex' column.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -85,6 +86,13 @@ the repair of the sex coding in a pedigree dataframe.</p>
     
 
 <p>A modified version of the input data.frame <code>ped</code>, containing an additional or modified 'sex_recode' column where the 'sex' values are recoded according to <code>code_male</code>. NA values in the 'sex' column are preserved.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p>This function uses the terms 'male' and 'female' in a biological context, based on chromosomes and other biologically-based characteristics relevant to genetic studies. 
+This usage is not intended to negate the personal gender identity of any individual.</p>
+<p>We recognize the importance of using language and methodologies that affirm and respect all gender identities.  While this function focuses on chromosomal information necessary for constructing genetic pedigrees, we affirm that gender is a spectrum, encompassing a wide range of identities beyond the binary. 
+The developers of this package express unequivocal support for folx in the transgender and LGBTQ+ communities. We respect the complexity of gender identity and acknowledge the distinction between the biological aspect of sex used for genetic analysis (genotype) and the broader, richer concept of gender identity (phenotype).</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

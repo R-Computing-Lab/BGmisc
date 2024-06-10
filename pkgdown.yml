@@ -6,7 +6,8 @@ articles:
   modelingrelatedness: modelingrelatedness.html
   network: network.html
   pedigree: pedigree.html
-last_built: 2024-05-02T14:20Z
+  validation: validation.html
+last_built: 2024-06-10T16:07Z
 urls:
   reference: https://r-computing-lab.github.io/BGmisc/reference
   article: https://r-computing-lab.github.io/BGmisc/articles
