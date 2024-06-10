@@ -14,6 +14,7 @@ summarizePedigrees(
   patID = "patID",
   type = c("fathers", "mothers", "families"),
   byr = NULL,
+  include_founder = FALSE,
   founder_sort_var = NULL,
   nbiggest = 5,
   noldest = 5,
@@ -40,6 +41,8 @@ summarizePedigrees(
 \item{type}{The type of summary statistics to calculate. Options are "fathers", "mothers", and "families".}
 
 \item{byr}{Optional column name for birth year.}
+
+\item{include_founder}{Logical, if TRUE, include the founder of each line in the summary statistics.}
 
 \item{founder_sort_var}{The variable to sort the founders by. If NULL, the founders will be sorted by birth year (`byr`) if that's present and by `personID` otherwise.}
 

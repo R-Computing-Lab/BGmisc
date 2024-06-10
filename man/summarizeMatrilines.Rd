@@ -13,6 +13,7 @@ summarizeMatrilines(
   matID = "matID",
   patID = "patID",
   byr = NULL,
+  include_founder = FALSE,
   founder_sort_var = NULL,
   nbiggest = 5,
   noldest = 5,
@@ -37,6 +38,8 @@ summarizeMatrilines(
 \item{patID}{Character.  Paternal line ID variable to be created and added to the pedigree}
 
 \item{byr}{Optional column name for birth year.}
+
+\item{include_founder}{Logical, if TRUE, include the founder of each line in the summary statistics.}
 
 \item{founder_sort_var}{The variable to sort the founders by. If NULL, the founders will be sorted by birth year (`byr`) if that's present and by `personID` otherwise.}
 

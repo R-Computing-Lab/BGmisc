@@ -14,6 +14,7 @@ summarizePatrilines(
   patID = "patID",
   byr = NULL,
   founder_sort_var = NULL,
+  include_founder = FALSE,
   nbiggest = 5,
   noldest = 5,
   skip_var = NULL,
@@ -39,6 +40,8 @@ summarizePatrilines(
 \item{byr}{Optional column name for birth year.}
 
 \item{founder_sort_var}{The variable to sort the founders by. If NULL, the founders will be sorted by birth year (`byr`) if that's present and by `personID` otherwise.}
+
+\item{include_founder}{Logical, if TRUE, include the founder of each line in the summary statistics.}
 
 \item{nbiggest}{The number of biggest lines to return.}
 
