@@ -4,11 +4,11 @@
 #' 1. Optionally recodes the 'sex' variable based on given codes for males and females.
 #' 2. Optionally repairs the sex coding based on specified logic, facilitating the accurate construction of genetic pedigrees.
 #'
-#' @details This function uses the terms 'male' and 'female' in a biological context, based on chromosomes and other biologically-based characteristics relevant to genetic studies. 
+#' @details This function uses the terms 'male' and 'female' in a biological context, based on chromosomes and other biologically-based characteristics relevant to genetic studies.
 #' This usage is not intended to negate the personal gender identity of any individual.
-#' 
-#' We recognize the importance of using language and methodologies that affirm and respect all gender identities.  While this function focuses on chromosomal information necessary for constructing genetic pedigrees, we affirm that gender is a spectrum, encompassing a wide range of identities beyond the binary. 
-#' The developers of this package express unequivocal support for folx in the transgender and LGBTQ+ communities. We respect the complexity of gender identity and acknowledge the distinction between the biological aspect of sex used for genetic analysis (genotype) and the broader, richer concept of gender identity (phenotype). 
+#'
+#' We recognize the importance of using language and methodologies that affirm and respect all gender identities.  While this function focuses on chromosomal information necessary for constructing genetic pedigrees, we affirm that gender is a spectrum, encompassing a wide range of identities beyond the binary.
+#' The developers of this package express unequivocal support for folx in the transgender and LGBTQ+ communities. We respect the complexity of gender identity and acknowledge the distinction between the biological aspect of sex used for genetic analysis (genotype) and the broader, richer concept of gender identity (phenotype).
 #'
 #'
 #' @param ped A dataframe representing the pedigree data with a 'sex' column.
@@ -38,7 +38,7 @@ checkSex <- function(ped, code_male = NULL, code_female = NULL, verbose = FALSE,
   if (verbose) {
     cat("Step 1: Checking how many sexes/genders...\n")
   }
-  
+
   # Check unique values in 'sex'
   validation_results$sex_unique <- unique(ped$sex)
   validation_results$sex_length <- length(unique(ped$sex))
@@ -135,14 +135,18 @@ repairSex <- function(ped, verbose = FALSE, code_male = NULL) {
 #' Recodes Sex Variable in a Pedigree Dataframe
 #'
 #' This function serves as a wrapper around `checkSex` to specifically handle
-#' the repair of the sex coding in a pedigree dataframe. 
+#' the repair of the sex coding in a pedigree dataframe.
 #' It sets the `repair` flag to TRUE automatically and forwards any additional parameters to `checkSex`.
 #'
 #' @inheritParams checkSex
 #' @inheritParams plotPedigree
+#' @param code_na The current value used for missing values.
+#' @param recode_na The value to use for missing values. Default is NA_character_
+#' @param recode_male The value to use for males. Default is "M"
+#' @param recode_female The value to use for females. Default is "F"
 #' @inherit checkSex details
 #' @return A modified version of the input data.frame \code{ped}, containing an additional or modified 'sex_recode' column where the 'sex' values are recoded according to \code{code_male}. NA values in the 'sex' column are preserved.
-#' @keywords internal
+#' @export
 #' @seealso \code{\link{plotPedigree}}
 recodeSex <- function(
     ped, verbose = FALSE, code_male = NULL, code_na = NULL, code_female = NULL,

@@ -22,24 +22,31 @@ recodeSex(
 
 \item{code_male}{The current code used to represent males in the 'sex' column.}
 
+\item{code_na}{The current value used for missing values.}
+
 \item{code_female}{The current code used to represent females in the 'sex' column. If both are NULL, no recoding is performed.}
+
+\item{recode_male}{The value to use for males. Default is "M"}
+
+\item{recode_female}{The value to use for females. Default is "F"}
+
+\item{recode_na}{The value to use for missing values. Default is NA_character_}
 }
 \value{
 A modified version of the input data.frame \code{ped}, containing an additional or modified 'sex_recode' column where the 'sex' values are recoded according to \code{code_male}. NA values in the 'sex' column are preserved.
 }
 \description{
 This function serves as a wrapper around `checkSex` to specifically handle
-the repair of the sex coding in a pedigree dataframe. 
+the repair of the sex coding in a pedigree dataframe.
 It sets the `repair` flag to TRUE automatically and forwards any additional parameters to `checkSex`.
 }
 \details{
-This function uses the terms 'male' and 'female' in a biological context, based on chromosomes and other biologically-based characteristics relevant to genetic studies. 
+This function uses the terms 'male' and 'female' in a biological context, based on chromosomes and other biologically-based characteristics relevant to genetic studies.
 This usage is not intended to negate the personal gender identity of any individual.
 
-We recognize the importance of using language and methodologies that affirm and respect all gender identities.  While this function focuses on chromosomal information necessary for constructing genetic pedigrees, we affirm that gender is a spectrum, encompassing a wide range of identities beyond the binary. 
+We recognize the importance of using language and methodologies that affirm and respect all gender identities.  While this function focuses on chromosomal information necessary for constructing genetic pedigrees, we affirm that gender is a spectrum, encompassing a wide range of identities beyond the binary.
 The developers of this package express unequivocal support for folx in the transgender and LGBTQ+ communities. We respect the complexity of gender identity and acknowledge the distinction between the biological aspect of sex used for genetic analysis (genotype) and the broader, richer concept of gender identity (phenotype).
 }
 \seealso{
 \code{\link{plotPedigree}}
 }
-\keyword{internal}
