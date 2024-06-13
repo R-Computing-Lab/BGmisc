@@ -22,15 +22,15 @@ recodeSex(
 
 \item{code_male}{The current code used to represent males in the 'sex' column.}
 
-\item{code_na}{The value that is presently used for missing values}
+\item{code_na}{The current value used for missing values.}
 
 \item{code_female}{The current code used to represent females in the 'sex' column. If both are NULL, no recoding is performed.}
 
-\item{recode_male}{The value to use for coding males}
+\item{recode_male}{The value to use for males. Default is "M"}
 
-\item{recode_female}{The value to use for coding females}
+\item{recode_female}{The value to use for females. Default is "F"}
 
-\item{recode_na}{The value to use for missing values in the recoded column}
+\item{recode_na}{The value to use for missing values. Default is NA_character_}
 }
 \value{
 A modified version of the input data.frame \code{ped}, containing an additional or modified 'sex_recode' column where the 'sex' values are recoded according to \code{code_male}. NA values in the 'sex' column are preserved.
