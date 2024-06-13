@@ -35,13 +35,12 @@ createGenDataFrame <- function(sizeGens, genIndex, idGen) {
 
 #' Determine Sex of Offspring
 #'
-#' This function assigns sexes to the offspring in a generation based on the specified sex ratio.
+#' This internal function assigns sexes to the offspring in a generation based on the specified sex ratio.
 #'
 #' @param idGen Vector of IDs for the generation.
 #' @param sexR Numeric value indicating the sex ratio (proportion of males).
 #' @return Vector of sexes ("M" for male, "F" for female) for the offspring.
 #' @importFrom stats runif
-#' @export
 determineSex <- function(idGen, sexR) {
   if (runif(1) > .5) {
     sexVec1 <- rep("M", floor(length(idGen) * sexR))

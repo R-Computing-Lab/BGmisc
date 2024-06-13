@@ -43,7 +43,7 @@ buildWithinGenerations <- function(sizeGens, marR, sexR, Ngen) {
     if (i != 1 && i != Ngen) {
       nMerriedFemale <- round(sum(df_Ngen$sex == "F") * marR_crt)
       nMerriedMale <- round(sum(df_Ngen$sex == "M") * marR_crt)
-      # make sure there are same numbers of merried males and females
+      # make sure there are same numbers of married males and females
       if (nMerriedFemale >= nMerriedMale) {
         nMerriedFemale <- nMerriedMale
       } else {

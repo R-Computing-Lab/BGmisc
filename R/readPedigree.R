@@ -47,7 +47,7 @@
 #' - `FAMS`: ID(s) of the family where the individual is a spouse
 #' @export
 readGedcom <- function(file_path, verbose = FALSE, add_parents = TRUE, remove_empty_cols = TRUE,
-                       combine_cols=TRUE,skinny=FALSE) {
+                       combine_cols=TRUE, skinny=FALSE) {
   if(verbose) {
     print(paste("Reading file:", file_path))
   }
@@ -56,44 +56,9 @@ readGedcom <- function(file_path, verbose = FALSE, add_parents = TRUE, remove_em
   if(verbose) {
     print(paste0("File is ", file_length, " lines long"))
   }
-  # Count the number of rows containing specific patterns
-  pattern_counts <- sapply(c("@ INDI", " NAME", " GIVN", " NPFX", " NICK", " SURN", " NSFX", " _MARNM",
-                             " BIRT", " DEAT", " SEX", " CAST", " DSCR", " EDUC", " IDNO", " NATI",
-                             " NCHI", " NMR", " OCCU", " PROP", " RELI", " RESI", " SSN", " TITL",
-                             " FAMC", " FAMS", " PLAC", " LATI", " LONG", " DATE", " CAUS"),
-                           function(pat) sum(grepl(pat, file$X1)))
 
-  num_indi_rows <- pattern_counts["@ INDI"]
-  num_name_rows <- pattern_counts[" NAME"]
-  num_givn_rows <- pattern_counts[" GIVN"]
-  num_npfx_rows <- pattern_counts[" NPFX"]
-  num_nick_rows <- pattern_counts[" NICK"]
-  num_surn_rows <- pattern_counts[" SURN"]
-  num_nsfx_rows <- pattern_counts[" NSFX"]
-  num_marnm_rows <- pattern_counts[" _MARNM"]
-  num_birt_rows <- pattern_counts[" BIRT"]
-  num_deat_rows <- pattern_counts[" DEAT"]
-  num_sex_rows <- pattern_counts[" SEX"]
-  num_cast_rows <- pattern_counts[" CAST"]
-  num_dscr_rows <- pattern_counts[" DSCR"]
-  num_educ_rows <- pattern_counts[" EDUC"]
-  num_idno_rows <- pattern_counts[" IDNO"]
-  num_nati_rows <- pattern_counts[" NATI"]
-  num_nchi_rows <- pattern_counts[" NCHI"]
-  num_nmr_rows <- pattern_counts[" NMR"]
-  num_occu_rows <- pattern_counts[" OCCU"]
-  num_prop_rows <- pattern_counts[" PROP"]
-  num_reli_rows <- pattern_counts[" RELI"]
-  num_resi_rows <- pattern_counts[" RESI"]
-  num_ssn_rows <- pattern_counts[" SSN"]
-  num_titl_rows <- pattern_counts[" TITL"]
-  num_famc_rows <- pattern_counts[" FAMC"]
-  num_fams_rows <- pattern_counts[" FAMS"]
-  num_plac_rows <- pattern_counts[" PLAC"]
-  num_lati_rows <- pattern_counts[" LATI"]
-  num_long_rows <- pattern_counts[" LONG"]
-  num_date_rows <- pattern_counts[" DATE"]
-  num_caus_rows <- pattern_counts[" CAUS"]
+  # Count the number of rows containing specific patterns
+  num_rows <-  countPatternRows(file)
 
   # List of variables to initialize
   var_names <- c("id",
@@ -156,7 +121,7 @@ readGedcom <- function(file_path, verbose = FALSE, add_parents = TRUE, remove_em
     }
 
 # names
-    if(num_name_rows>0 && grepl(" NAME", tmpv)) {
+    if(num_rows$num_name_rows>0 && grepl(" NAME", tmpv)) {
       vars$name <- extract_info(tmpv, "NAME")
       vars$name_given <- stringr::str_extract(vars$name, ".*(?= /)")
       vars$name_surn <- stringr::str_extract(vars$name, "(?<=/).*(?=/)")
@@ -164,47 +129,47 @@ readGedcom <- function(file_path, verbose = FALSE, add_parents = TRUE, remove_em
       next
     }
     # PERSONAL_NAME_PIECES := NAME | NPFX | GIVN | NICK | SPFX | SURN | NSFX
-    if(num_givn_rows > 0 && grepl(" GIVN", tmpv)) {
+    if(num_rows$num_givn_rows > 0 && grepl(" GIVN", tmpv)) {
       vars$name_given_pieces <- extract_info(tmpv, "GIVN")
       next
     }
 
     # npfx := Name Prefix
-    if(num_npfx_rows > 0 && grepl(" NPFX", tmpv)) {
+    if(num_rows$num_npfx_rows > 0 && grepl(" NPFX", tmpv)) {
       vars$name_npfx <- extract_info(tmpv, "NPFX")
       next
     }
 
     # NICK := Nickname
-    if(num_nick_rows > 0 && grepl(" NICK", tmpv)) {
+    if(num_rows$num_nick_rows > 0 && grepl(" NICK", tmpv)) {
       vars$name_nick <- extract_info(tmpv, "NICK")
       next
     }
 
     # surn := Surname
-    if(num_surn_rows > 0 && grepl(" SURN", tmpv)) {
+    if(num_rows$num_surn_rows > 0 && grepl(" SURN", tmpv)) {
       vars$name_surn_pieces <- extract_info(tmpv, "SURN")
       next
     }
 
     # nsfx := Name suffix
-    if(num_nsfx_rows>0 &&  grepl(" NSFX", tmpv)) {
+    if(num_rows$num_nsfx_rows>0 &&  grepl(" NSFX", tmpv)) {
       vars$name_nsfx <- extract_info(tmpv, "NSFX")
       next
     }
-    if(num_marnm_rows>0 &&  grepl(" _MARNM", tmpv)) {
+    if(num_rows$num_marnm_rows>0 &&  grepl(" _MARNM", tmpv)) {
       vars$name_marriedsurn <- extract_info(tmpv, "_MARNM")
       next
     }
     # Birth event related information
-    if(num_birt_rows > 0 && grepl(" BIRT", tmpv)) {
-      if(num_date_rows > 0 && i+1<=file_length) {
+    if(num_rows$num_birt_rows > 0 && grepl(" BIRT", tmpv)) {
+      if(num_rows$num_date_rows > 0 && i+1<=file_length) {
         vars$birth_date <- extract_info(file[1][[1]][[i+1]], "DATE")
-      if(num_plac_rows > 0 && i+2<=file_length) {
+      if(num_rows$num_plac_rows > 0 && i+2<=file_length) {
         vars$birth_place <- extract_info(file[1][[1]][[i+2]], "PLAC")
-      if(num_lati_rows > 0 && i+4<=file_length) {
+      if(num_rows$num_lati_rows > 0 && i+4<=file_length) {
         vars$birth_lat <- extract_info(file[1][[1]][[i+4]], "LATI")
-      if(num_long_rows > 0 && i+5<=file_length) {
+      if(num_rows$num_long_rows > 0 && i+5<=file_length) {
         vars$birth_long <- extract_info(file[1][[1]][[i+5]], "LONG")
         }}}}
       next
@@ -212,16 +177,16 @@ readGedcom <- function(file_path, verbose = FALSE, add_parents = TRUE, remove_em
 
     # Death event related information
   # the ifs are nested so that there is no need to check if you've already run out of
-    if(num_deat_rows > 0 && grepl(" DEAT", tmpv)) {
-      if(num_date_rows > 0 && i+1<=file_length) {
+    if(num_rows$num_deat_rows > 0 && grepl(" DEAT", tmpv)) {
+      if(num_rows$num_date_rows > 0 && i+1<=file_length) {
         vars$death_date <- extract_info(file[1][[1]][[i+1]], "DATE")
-      if(num_plac_rows > 0&& i+2<=file_length) {
+      if(num_rows$num_plac_rows > 0&& i+2<=file_length) {
       vars$death_place <- extract_info(file[1][[1]][[i + 2]], "PLAC")
-      if(num_caus_rows > 0&&i+3<=file_length) {
+      if(num_rows$num_caus_rows > 0&&i+3<=file_length) {
         vars$death_caus <- extract_info(file[1][[1]][[i + 3]], "CAUS")
-      if(num_lati_rows > 0 && i+4<=file_length) {
+      if(num_rows$num_lati_rows > 0 && i+4<=file_length) {
       vars$death_lat <- extract_info(file[1][[1]][[i + 4]], "LATI")
-      if(num_long_rows > 0 && i+5<=file_length) {
+      if(num_rows$num_long_rows > 0 && i+5<=file_length) {
       vars$death_long <- extract_info(file[1][[1]][[i + 5]], "LONG")
       }}}}}
       next
@@ -236,84 +201,84 @@ readGedcom <- function(file_path, verbose = FALSE, add_parents = TRUE, remove_em
 
    # CAST	caste
   #  g7:CAST	The name of an individual’s rank or status in society which is sometimes based on racial or religious differences, or differences in wealth, inherited rank, profession, or occupation.
-    if(num_cast_rows > 0 && grepl(" CAST", tmpv)) {
+    if(num_rows$num_cast_rows > 0 && grepl(" CAST", tmpv)) {
       vars$attribute_caste <- extract_info(tmpv, "CAST")
       next
     }
     # DSCR	physical description
    # g7:DSCR	The physical characteristics of a person.
-    if( num_dscr_rows > 0 && grepl(" DSCR", tmpv)) {
+    if(num_rows$num_dscr_rows > 0 && grepl(" DSCR", tmpv)) {
       vars$attribute_description <- extract_info(tmpv, "DSCR")
       next
     }
     # EDUC	education
   #  g7:EDUC	Indicator of a level of education attained.
-    if( num_educ_rows > 0 && grepl(" EDUC", tmpv)) {
+    if(num_rows$num_educ_rows > 0 && grepl(" EDUC", tmpv)) {
       vars$attribute_education <- extract_info(tmpv, "EDUC")
       next
     }
    # IDNO	identifying number
    # g7:IDNO	A number or other string assigned to identify a person within some significant external system. It must have a TYPE substructure to define what kind of identification number is being provided.
-    if(num_idno_rows > 0 && grepl(" IDNO", tmpv)) {
+    if(num_rows$num_idno_rows > 0 && grepl(" IDNO", tmpv)) {
       vars$attribute_idnumber <- extract_info(tmpv, "IDNO")
       next
     }
     # NATI	nationality
     # g7:NATI	An individual’s national heritage or origin, or other folk, house, kindred, lineage, or tribal interest.
-    if(num_nati_rows > 0 && grepl(" NATI", tmpv)) {
+    if(num_rows$num_nati_rows > 0 && grepl(" NATI", tmpv)) {
       vars$attribute_nationality <- extract_info(tmpv, "NATI")
       next
     }
     # NCHI	number of children
     # g7:INDI-NCHI	The number of children that this person is known to be the parent of (all marriages).
-    if(num_nchi_rows > 0 && grepl(" NCHI", tmpv)) {
+    if(num_rows$num_nchi_rows > 0 && grepl(" NCHI", tmpv)) {
       vars$attribute_children <- extract_info(tmpv, "NCHI")
       next
     }
 
     # NMR	number of marriages
    # g7:NMR	The number of times this person has participated in a family as a spouse or parent.
-    if(num_nmr_rows > 0 && grepl(" NMR", tmpv)) {
+    if(num_rows$num_nmr_rows > 0 && grepl(" NMR", tmpv)) {
       vars$attribute_marriages <- extract_info(tmpv, "NMR")
       next
     }
 
     # OCCU	occupation
    # g7:OCCU	The type of work or profession of an individual.
-    if(num_occu_rows > 0 && grepl(" OCCU", tmpv)) {
+    if(num_rows$num_occu_rows > 0 && grepl(" OCCU", tmpv)) {
       vars$attribute_occupation <- extract_info(tmpv, "OCCU")
       next
     }
   # PROP	property
   # g7:PROP	Pertaining to possessions such as real estate or other property of interest.
 
-   if(num_prop_rows > 0 && grepl(" PROP", tmpv)) {
+   if(num_rows$num_prop_rows > 0 && grepl(" PROP", tmpv)) {
       vars$attribute_property <- extract_info(tmpv, "PROP")
       next
     }
 
    # RELI	religion
    #  g7:INDI-RELI	A religious denomination to which a person is affiliated or for which a record applies.
-    if(num_reli_rows > 0 && grepl(" RELI", tmpv)) {
+    if(num_rows$num_reli_rows > 0 && grepl(" RELI", tmpv)) {
       vars$attribute_religion <- extract_info(tmpv, "RELI")
       next
     }
     #RESI	residence
     #g7:INDI-RESI	An address or place of residence where an individual resided.
-  if(num_resi_rows > 0 && grepl(" RESI", tmpv)) {
+  if(num_rows$num_resi_rows > 0 && grepl(" RESI", tmpv)) {
       vars$attribute_residence <- extract_info(tmpv, "RESI")
       next
     }
 
    # SSN	social security number
    # g7:SSN	A number assigned by the United States Social Security Administration, used for tax identification purposes. It is a type of IDNO.
-  if(num_ssn_rows > 0 && grepl(" SSN", tmpv)) {
+  if(num_rows$num_ssn_rows > 0 && grepl(" SSN", tmpv)) {
       vars$attribute_ssn <- extract_info(tmpv, "SSN")
       next
     }
     # TITL	title
     # g7:INDI-TITL	A formal designation used by an individual in connection with positions of royalty or other social status, such as Grand Duke.
-    if(num_titl_rows > 0 && grepl(" TITL", tmpv)) {
+    if(num_rows$num_titl_rows > 0 && grepl(" TITL", tmpv)) {
       vars$attribute_title <- extract_info(tmpv, "TITL")
       next
     }
@@ -323,7 +288,7 @@ readGedcom <- function(file_path, verbose = FALSE, add_parents = TRUE, remove_em
     # relationship data
     # g7:INDI-FAMC
     ## The family in which an individual appears as a child. It is also used with a g7:FAMC-STAT substructure to show individuals who are not children of the family. See FAMILY_RECORD for more details.
-    if(num_famc_rows > 0 && grepl(" FAMC", tmpv)) {
+    if(num_rows$num_famc_rows > 0 && grepl(" FAMC", tmpv)) {
       if(is.na(vars$FAMC)) {
         vars$FAMC <- stringr::str_extract(tmpv, "(?<=@.)\\d*(?=@)")
       } else {
@@ -333,7 +298,7 @@ readGedcom <- function(file_path, verbose = FALSE, add_parents = TRUE, remove_em
     }
    # FAMS (Family spouse) g7:FAMS
   #  The family in which an individual appears as a partner. See FAMILY_RECORD for more details.
-    if(num_fams_rows > 0 && grepl(" FAMS", tmpv)) {
+    if(num_rows$num_fams_rows > 0 && grepl(" FAMS", tmpv)) {
       if(is.na(vars$FAMS)) {
         vars$FAMS <- stringr::str_extract(tmpv, "(?<=@.)\\d*(?=@)")
       } else {
@@ -352,7 +317,7 @@ if(nrow(df_temp) == 0) {
     warning("No people found in file")
     return(NULL)
 }
-  if(nrow(df_temp) != num_indi_rows) {
+  if(nrow(df_temp) != num_rows$num_indi_rows) {
     warning("The number of people found in the processed file does not match the number of individuals raw data")
   }
   # Add mom and dad ids
@@ -401,26 +366,20 @@ if(combine_cols){
   return(df_temp)
 }
 
-#' Process parents information
+
+#' Create a mapping of family IDs to parent IDs
 #'
-#' This function processes the dataframe to add momID and dadID columns.
+#' This function creates a mapping from family IDs to the IDs of the parents.
 #'
 #' @param df_temp A data frame containing information about individuals.
-#' @return A data frame with added momID and dadID columns.
+#' @return A list mapping family IDs to parent IDs.
 #' @keywords internal
-processParents <- function(df_temp) {
-  if (!all(c("FAMS", "FAMC","sex") %in% colnames(df_temp))) {
-    warning("The data frame does not contain the necessary columns to process parents")
-    return(df_temp)
+createFamilyToParentsMapping <- function(df_temp) {
+  if (!all(c("FAMS", "sex") %in% colnames(df_temp))) {
+    warning("The data frame does not contain the necessary columns (FAMS, sex)")
+    return(NULL)
   }
-  # Adding momID and dadID columns
-  df_temp$momID <- NA_character_
-  df_temp$dadID <- NA_character_
-
-  # Identify parents and their respective family IDs
-  # Create a mapping of family IDs to parent IDs
   family_to_parents <- list()
-
   for (i in 1:nrow(df_temp)) {
     if (!is.na(df_temp$FAMS[i])) {
       fams_ids <- unlist(strsplit(df_temp$FAMS[i], ", "))
@@ -442,8 +401,22 @@ processParents <- function(df_temp) {
       }
     }
   }
+  return(family_to_parents)
+}
 
-  # Assign momID and dadID based on family mapping
+#' Assign momID and dadID based on family mapping
+#'
+#' This function assigns mother and father IDs to individuals in the data frame
+#' based on the mapping of family IDs to parent IDs.
+#'
+#' @param df_temp A data frame containing individual information.
+#' @param family_to_parents A list mapping family IDs to parent IDs.
+#' @return A data frame with added momID and dad_ID columns.
+#' @keywords internal
+assignParentIDs <- function(df_temp, family_to_parents) {
+  df_temp$momID <- NA_character_
+  df_temp$dadID <- NA_character_
+
   for (i in 1:nrow(df_temp)) {
     if (!is.na(df_temp$FAMC[i])) {
       famc_ids <- unlist(strsplit(df_temp$FAMC[i], ", "))
@@ -459,9 +432,32 @@ processParents <- function(df_temp) {
       }
     }
   }
-
   return(df_temp)
 }
+
+#' Process parents information
+#'
+#' This function processes the dataframe to add momID and dadID columns.
+#'
+#' @param df_temp A data frame containing information about individuals.
+#' @return A data frame with added momID and dadID columns.
+#' @keywords internal
+processParents <- function(df_temp) {
+  if (!all(c("FAMC", "sex","FAMS") %in% colnames(df_temp))) {
+    warning("The data frame does not contain the necessary columns (FAMC,FAMS, sex) to process parents")
+    return(df_temp)
+  }
+  family_to_parents <- createFamilyToParentsMapping(df_temp)
+  if (is.null(family_to_parents)) {
+    return(df_temp)
+  }
+  df_temp <- assignParentIDs(df_temp, family_to_parents)
+  return(df_temp)
+}
+
+
+
+
 
 #' Extract Information from Line
 #'
@@ -496,4 +492,54 @@ extract_info <- function(line, type) {
       combined <- ifelse(is.na(col1), col2, col1)
       return(list(combined = combined, retain_col2 = FALSE))
     }
+  }
+
+#' Check for Pattern Rows
+#'
+#' This function counts the number of rows containing specific patterns.
+#' @param file A data frame containing the GEDCOM file.
+#' @return A list with the number of rows containing each pattern.
+#' @keywords internal
+#'
+  countPatternRows <- function(file) {
+    # Count the number of rows containing specific patterns
+  pattern_counts <- sapply(c("@ INDI", " NAME", " GIVN", " NPFX", " NICK", " SURN", " NSFX", " _MARNM",
+                             " BIRT", " DEAT", " SEX", " CAST", " DSCR", " EDUC", " IDNO", " NATI",
+                             " NCHI", " NMR", " OCCU", " PROP", " RELI", " RESI", " SSN", " TITL",
+                             " FAMC", " FAMS", " PLAC", " LATI", " LONG", " DATE", " CAUS"),
+                           function(pat) sum(grepl(pat, file$X1)))
+  num_rows <- list(
+  num_indi_rows = pattern_counts["@ INDI"],
+  num_name_rows = pattern_counts[" NAME"],
+  num_givn_rows = pattern_counts[" GIVN"],
+  num_npfx_rows = pattern_counts[" NPFX"],
+  num_nick_rows = pattern_counts[" NICK"],
+  num_surn_rows = pattern_counts[" SURN"],
+  num_nsfx_rows = pattern_counts[" NSFX"],
+  num_marnm_rows = pattern_counts[" _MARNM"],
+  num_birt_rows = pattern_counts[" BIRT"],
+  num_deat_rows = pattern_counts[" DEAT"],
+  num_sex_rows = pattern_counts[" SEX"],
+  num_cast_rows = pattern_counts[" CAST"],
+  num_dscr_rows = pattern_counts[" DSCR"],
+  num_educ_rows = pattern_counts[" EDUC"],
+  num_idno_rows = pattern_counts[" IDNO"],
+  num_nati_rows = pattern_counts[" NATI"],
+  num_nchi_rows = pattern_counts[" NCHI"],
+  num_nmr_rows = pattern_counts[" NMR"],
+  num_occu_rows = pattern_counts[" OCCU"],
+  num_prop_rows = pattern_counts[" PROP"],
+  num_reli_rows = pattern_counts[" RELI"],
+  num_resi_rows = pattern_counts[" RESI"],
+  num_ssn_rows = pattern_counts[" SSN"],
+  num_titl_rows = pattern_counts[" TITL"],
+  num_famc_rows = pattern_counts[" FAMC"],
+  num_fams_rows = pattern_counts[" FAMS"],
+  num_plac_rows = pattern_counts[" PLAC"],
+  num_lati_rows = pattern_counts[" LATI"],
+  num_long_rows = pattern_counts[" LONG"],
+  num_date_rows = pattern_counts[" DATE"],
+  num_caus_rows = pattern_counts[" CAUS"]
+)
+    return(num_rows)
   }

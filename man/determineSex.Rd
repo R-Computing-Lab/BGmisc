@@ -15,5 +15,5 @@ determineSex(idGen, sexR)
 Vector of sexes ("M" for male, "F" for female) for the offspring.
 }
 \description{
-This function assigns sexes to the offspring in a generation based on the specified sex ratio.
+This internal function assigns sexes to the offspring in a generation based on the specified sex ratio.
 }
