@@ -11,7 +11,7 @@
 #' @return A data frame representing the initial structure for the individuals in the specified generation
 #'         before any relationships (parental, spousal) are defined. The columns include family ID (`fam`),
 #'         individual ID (`id`), generation number (`gen`), father's ID (`pat`), mother's ID (`mat`),
-#'         spouse's ID (`spt`), and sex (`sex`), with NA values for paternal, maternal, and spouse IDs, and sex.
+#'         spouse's ID (`spID`), and sex (`sex`), with NA values for paternal, maternal, and spouse IDs, and sex.
 #' @examples
 #' sizeGens <- c(3, 5, 4) # Example sizes for 3 generations
 #' genIndex <- 2 # Creating data frame for the 2nd generation
@@ -26,7 +26,7 @@ createGenDataFrame <- function(sizeGens, genIndex, idGen) {
     gen = rep(genIndex, sizeGens[genIndex]),
     pat = rep(NA, sizeGens[genIndex]), # father id
     mat = rep(NA, sizeGens[genIndex]), # mother id
-    spt = rep(NA, sizeGens[genIndex]), # spouse id
+    spID = rep(NA, sizeGens[genIndex]), # spouse id
     sex = rep(NA, sizeGens[genIndex])
   )
   return(df_Ngen)
@@ -35,13 +35,12 @@ createGenDataFrame <- function(sizeGens, genIndex, idGen) {
 
 #' Determine Sex of Offspring
 #'
-#' This function assigns sexes to the offspring in a generation based on the specified sex ratio.
+#' This internal function assigns sexes to the offspring in a generation based on the specified sex ratio.
 #'
 #' @param idGen Vector of IDs for the generation.
 #' @param sexR Numeric value indicating the sex ratio (proportion of males).
 #' @return Vector of sexes ("M" for male, "F" for female) for the offspring.
 #' @importFrom stats runif
-#' @export
 determineSex <- function(idGen, sexR) {
   if (runif(1) > .5) {
     sexVec1 <- rep("M", floor(length(idGen) * sexR))
@@ -66,16 +65,16 @@ assignCoupleIds <- function(df_Ngen) {
   usedCoupleIds <- character() # Initialize an empty character vector to track used IDs
 
   for (j in seq_len(nrow(df_Ngen))) {
-    if (!is.na(df_Ngen$spt[j]) && is.na(df_Ngen$coupleId[j])) {
+    if (!is.na(df_Ngen$spID[j]) && is.na(df_Ngen$coupleId[j])) {
       # Construct a potential couple ID from sorted individual and spouse IDs
-      sortedIds <- sort(c(df_Ngen$id[j], df_Ngen$spt[j]))
+      sortedIds <- sort(c(df_Ngen$id[j], df_Ngen$spID[j]))
       potentialCoupleId <- paste(sortedIds[1], sortedIds[2], sep = "_")
 
       # Check if the potentialCoupleId has not already been used
       if (!potentialCoupleId %in% usedCoupleIds) {
         # Assign the new couple ID to both partners
         df_Ngen$coupleId[j] <- potentialCoupleId
-        spouseIndex <- which(df_Ngen$id == df_Ngen$spt[j])
+        spouseIndex <- which(df_Ngen$id == df_Ngen$spID[j])
         df_Ngen$coupleId[spouseIndex] <- potentialCoupleId
 
         # Add the new couple ID to the list of used IDs
@@ -137,7 +136,7 @@ adjustKidsPerCouple <- function(nMates, kpc, rd_kpc) {
 #' the assignment of roles and relationships within and between generations in a pedigree simulation.
 #'
 #' @param df_Ngen A data frame for the current generation being processed.
-#'        It must include columns for individual IDs (`id`), spouse IDs (`spt`), sex (`sex`),
+#'        It must include columns for individual IDs (`id`), spouse IDs (`spID`), sex (`sex`),
 #'        and any previously assigned roles (`ifparent`, `ifson`, `ifdau`).
 #' @param i Integer, the index of the current generation being processed.
 #' @param Ngen Integer, the total number of generations in the simulation.
@@ -163,7 +162,7 @@ markPotentialChildren <- function(df_Ngen, i, Ngen, sizeGens, CoupleF) {
   # single person should all be sons or daus
   # change the ifson and ifdau based on coupleGirl and coupleBoy
   for (j in 1:sizeGens[i]) {
-    if (is.na(df_Ngen$spt[j])) {
+    if (is.na(df_Ngen$spID[j])) {
       if (df_Ngen$sex[j] == "F") {
         df_Ngen$ifdau[j] <- TRUE
         # usedIds <- c(usedIds, df_Ngen$id[j])

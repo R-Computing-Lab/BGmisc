@@ -1,7 +1,12 @@
+# BGmisc 1.3.1
+* Confirmed that all orcids are correct
+* Added gedcom importer
+
 # BGmisc 1.3.0.1
 * Created subfunctions to reduce function complexity
 
 # BGmisc 1.3.0
+* Harmonized function names
 * Fixed incorrectly spelled last name in potter pedigree
 * Added function to summarize variables by family, matrilinael, and patrilineal lines
 * Added within row duplicate ID checks
@@ -9,6 +14,7 @@
 * Harmonized function names and arguments
 
 # BGmisc 1.2.1
+
 * Added alternative transpose options for the matrix
 * Added generalization of Falconer's formula
 

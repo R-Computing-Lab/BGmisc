@@ -134,8 +134,7 @@ repairSex <- function(ped, verbose = FALSE, code_male = NULL) {
 
 #' Recodes Sex Variable in a Pedigree Dataframe
 #'
-#' This function serves as a wrapper around `checkSex` to specifically handle
-#' the repair of the sex coding in a pedigree dataframe.
+#' This function serves as is primarily used internally, by plotting functions etc.
 #' It sets the `repair` flag to TRUE automatically and forwards any additional parameters to `checkSex`.
 #'
 #' @inheritParams checkSex
@@ -148,6 +147,7 @@ repairSex <- function(ped, verbose = FALSE, code_male = NULL) {
 #' @return A modified version of the input data.frame \code{ped}, containing an additional or modified 'sex_recode' column where the 'sex' values are recoded according to \code{code_male}. NA values in the 'sex' column are preserved.
 #' @export
 #' @seealso \code{\link{plotPedigree}}
+#' @export
 recodeSex <- function(
     ped, verbose = FALSE, code_male = NULL, code_na = NULL, code_female = NULL,
     recode_male = "M", recode_female = "F", recode_na = NA_character_) {

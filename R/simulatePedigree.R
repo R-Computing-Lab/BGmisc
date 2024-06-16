@@ -28,8 +28,8 @@ buildWithinGenerations <- function(sizeGens, marR, sexR, Ngen) {
     # print(paste("tiger",i))
     # The first generation
     if (i == 1) {
-      df_Ngen$spt[1] <- df_Ngen$id[2]
-      df_Ngen$spt[2] <- df_Ngen$id[1]
+      df_Ngen$spID[1] <- df_Ngen$id[2]
+      df_Ngen$spID[2] <- df_Ngen$id[1]
 
       df_Ngen$sex[1] <- "F"
       df_Ngen$sex[2] <- "M"
@@ -43,7 +43,7 @@ buildWithinGenerations <- function(sizeGens, marR, sexR, Ngen) {
     if (i != 1 && i != Ngen) {
       nMerriedFemale <- round(sum(df_Ngen$sex == "F") * marR_crt)
       nMerriedMale <- round(sum(df_Ngen$sex == "M") * marR_crt)
-      # make sure there are same numbers of merried males and females
+      # make sure there are same numbers of married males and females
       if (nMerriedFemale >= nMerriedMale) {
         nMerriedFemale <- nMerriedMale
       } else {
@@ -74,8 +74,8 @@ buildWithinGenerations <- function(sizeGens, marR, sexR, Ngen) {
               tgt <- (!(idr %in% usedIds)) & df_Ngen$sex[k] == "M"
               # tgt <- ifelse(is.na(tgt),FALSE,TRUE)
               if (tgt) {
-                df_Ngen$spt[j] <- df_Ngen$id[k]
-                df_Ngen$spt[k] <- df_Ngen$id[j]
+                df_Ngen$spID[j] <- df_Ngen$id[k]
+                df_Ngen$spID[k] <- df_Ngen$id[j]
                 usedIds <- c(usedIds, df_Ngen$id[j], df_Ngen$id[k])
                 break
               } else {
@@ -88,8 +88,8 @@ buildWithinGenerations <- function(sizeGens, marR, sexR, Ngen) {
               tgt <- (!(idr %in% usedIds)) & df_Ngen$sex[k] == "F"
               # tgt <- ifelse(is.na(tgt),FALSE,TRUE)
               if (tgt) {
-                df_Ngen$spt[j] <- df_Ngen$id[k]
-                df_Ngen$spt[k] <- df_Ngen$id[j]
+                df_Ngen$spID[j] <- df_Ngen$id[k]
+                df_Ngen$spID[k] <- df_Ngen$id[j]
                 usedIds <- c(usedIds, df_Ngen$id[j], df_Ngen$id[k])
                 break
               } else {
@@ -118,7 +118,7 @@ buildWithinGenerations <- function(sizeGens, marR, sexR, Ngen) {
 #' The function also handles the assignment of couple IDs, manages single and coupled individuals,
 #' and establishes parent-offspring links across generations.
 #' @param df_Fam A data frame containing the simulated pedigree information up to the current generation.
-#'               Must include columns for family ID, individual ID, generation number, spouse ID (spt),
+#'               Must include columns for family ID, individual ID, generation number, spouse ID (spID),
 #'               and sex. This data frame is updated in place to include flags for parental status (ifparent),
 #'               son status (ifson), and daughter status (ifdau), as well as couple IDs.
 #' @inheritParams simulatePedigree
@@ -149,7 +149,7 @@ buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose, marR, sexR,
       df_Fam[df_Fam$gen == i, ] <- df_Ngen
     } else {
       # calculate the number of couples in the i-1 th generation
-      N_couples <- (sizeGens[i - 1] - sum(is.na(df_Fam$spt[df_Fam$gen == i - 1]))) * 0.5
+      N_couples <- (sizeGens[i - 1] - sum(is.na(df_Fam$spID[df_Fam$gen == i - 1]))) * 0.5
       # calculate the number of members in the i th generation that have a link to the couples in the i-1 th generation
       N_LinkedMem <- N_couples * kpc
       # decompose the linked members into females and males respectively
@@ -179,7 +179,7 @@ buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose, marR, sexR,
 
       # try to rewrite the code
       # count the number of couples in the i th gen
-      countCouple <- (nrow(df_Ngen) - sum(is.na(df_Ngen$spt))) * .5
+      countCouple <- (nrow(df_Ngen) - sum(is.na(df_Ngen$spID))) * .5
 
 
       # Now, assign couple IDs for the current generation
@@ -188,10 +188,10 @@ buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose, marR, sexR,
 
       # get the number of linked female and male children after excluding the single children
       # get a vector of single person id in the ith generation
-      IdSingle <- df_Ngen$id[is.na(df_Ngen$spt)]
-      SingleF <- sum(df_Ngen$sex == "F" & is.na(df_Ngen$spt))
+      IdSingle <- df_Ngen$id[is.na(df_Ngen$spID)]
+      SingleF <- sum(df_Ngen$sex == "F" & is.na(df_Ngen$spID))
       CoupleF <- N_LinkedFemale - SingleF
-      SingleM <- sum(df_Ngen$sex == "M" & is.na(df_Ngen$spt))
+      SingleM <- sum(df_Ngen$sex == "M" & is.na(df_Ngen$spID))
       CoupleM <- N_LinkedMale - SingleM
 
       df_Fam[df_Fam$gen == i, ] <- markPotentialChildren(df_Ngen = df_Ngen, i = i, Ngen = Ngen, sizeGens = sizeGens, CoupleF = CoupleF)
@@ -216,10 +216,10 @@ buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose, marR, sexR,
           break
         } else {
           # check if the id is used and if the member has married
-          if (!(df_Ngen$id[k] %in% usedParentIds) & !is.na(df_Ngen$spt[k])) {
+          if (!(df_Ngen$id[k] %in% usedParentIds) & !is.na(df_Ngen$spID[k])) {
             df_Ngen$ifparent[k] <- TRUE
-            df_Ngen$ifparent[df_Ngen$spt == df_Ngen$id[k]] <- TRUE
-            usedParentIds <- c(usedParentIds, df_Ngen$id[k], df_Ngen$spt[k])
+            df_Ngen$ifparent[df_Ngen$spID == df_Ngen$id[k]] <- TRUE
+            usedParentIds <- c(usedParentIds, df_Ngen$id[k], df_Ngen$spID[k])
           } else {
             next
           }
@@ -265,14 +265,14 @@ buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose, marR, sexR,
           if (!df_Ngen$id[l] %in% usedIds) {
             # check if the member can be a parent
             if (df_Ngen$ifparent[l] == TRUE && df_Ngen$sex[l] == "F") {
-              usedIds <- c(usedIds, df_Ngen$id[l], df_Ngen$spt[l])
+              usedIds <- c(usedIds, df_Ngen$id[l], df_Ngen$spID[l])
               IdMa <- c(IdMa, rep(df_Ngen$id[l], random_numbers[idx]))
-              IdPa <- c(IdPa, rep(df_Ngen$spt[l], random_numbers[idx]))
+              IdPa <- c(IdPa, rep(df_Ngen$spID[l], random_numbers[idx]))
               idx <- idx + 1
             } else if (df_Ngen$ifparent[l] == TRUE && df_Ngen$sex[l] == "M") {
-              usedIds <- c(usedIds, df_Ngen$id[l], df_Ngen$spt[l])
+              usedIds <- c(usedIds, df_Ngen$id[l], df_Ngen$spID[l])
               IdPa <- c(IdPa, rep(df_Ngen$id[l], random_numbers[idx]))
-              IdMa <- c(IdMa, rep(df_Ngen$spt[l], random_numbers[idx]))
+              IdMa <- c(IdMa, rep(df_Ngen$spID[l], random_numbers[idx]))
               idx <- idx + 1
             } else {
               next
@@ -349,7 +349,7 @@ buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose, marR, sexR,
 #'   \item{gen: The generation the simulated individual is in.}
 #'   \item{dadID: Personal ID of the individual's father.}
 #'   \item{momID: Personal ID of the individual's mother.}
-#'   \item{spt: Personal ID of the individual's mate.}
+#'   \item{spID: Personal ID of the individual's mate.}
 #'   \item{sex: Biological sex of the individual. F - female; M - male.}
 #' }
 #' @export
@@ -391,7 +391,7 @@ simulatePedigree <- function(kpc = 3,
 
 
   df_Fam <- df_Fam[, 1:7]
-  df_Fam <- df_Fam[!(is.na(df_Fam$pat) & is.na(df_Fam$mat) & is.na(df_Fam$spt)), ]
+  df_Fam <- df_Fam[!(is.na(df_Fam$pat) & is.na(df_Fam$mat) & is.na(df_Fam$spID)), ]
   colnames(df_Fam)[c(2, 4, 5)] <- c("ID", "dadID", "momID")
 
   # connect the detached members

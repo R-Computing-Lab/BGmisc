@@ -16,7 +16,7 @@ makeTwins <- function(ped, ID_twin1 = NA_integer_, ID_twin2 = NA_integer_, gen_t
   # Check if the ped is the same format as the output of simulatePedigree
   if (paste0(colnames(ped), collapse = "") != paste0(c(
     "fam", "ID", "gen",
-    "dadID", "momID", "spt", "sex"
+    "dadID", "momID", "spID", "sex"
   ), collapse = "")) {
     ped <- standardizeColnames(ped)
     if (verbose) {
@@ -128,7 +128,7 @@ makeInbreeding <- function(ped,
   if (paste0(colnames(ped),
     collapse = ""
   ) != paste0(
-    c("fam", "ID", "gen", "dadID", "momID", "spt", "sex"),
+    c("fam", "ID", "gen", "dadID", "momID", "spID", "sex"),
     collapse = ""
   )) {
     ped <- standardizeColnames(ped)
@@ -167,7 +167,7 @@ makeInbreeding <- function(ped,
             if (!is.na(ID_mate2)) {
               break
             }
-            ID_pool_mate1 <- ped$ID[ped$gen == gen_inbred & !is.na(ped$dadID) & !is.na(ped$momID) & is.na(ped$spt) & !(ped$ID %in% usedID)]
+            ID_pool_mate1 <- ped$ID[ped$gen == gen_inbred & !is.na(ped$dadID) & !is.na(ped$momID) & is.na(ped$spID) & !(ped$ID %in% usedID)]
             # if the pool is empty, find all individuals who have the same dadID and momID as the selected individual but mated
             if (length(ID_pool_mate1) == 0) {
               ID_pool_mate1 <- ped$ID[ped$gen == gen_inbred & !is.na(ped$dadID) & !is.na(ped$momID) & !(ped$ID %in% usedID)]
@@ -175,7 +175,7 @@ makeInbreeding <- function(ped,
             ID_mate1 <- resample(ID_pool_mate1, 1)
             usedID <- c(usedID, ID_mate1)
             # try to find one opposite-sex individual who has the same dadID and momID as the selected individual, preferalbly not mated
-            ID_pool_mate2 <- ped$ID[ped$gen == gen_inbred & ped$sex != ped$sex[ped$ID == ID_mate1] & ped$dadID == ped$dadID[ped$ID == ID_mate1] & ped$momID == ped$momID[ped$ID == ID_mate1] & is.na(ped$spt)]
+            ID_pool_mate2 <- ped$ID[ped$gen == gen_inbred & ped$sex != ped$sex[ped$ID == ID_mate1] & ped$dadID == ped$dadID[ped$ID == ID_mate1] & ped$momID == ped$momID[ped$ID == ID_mate1] & is.na(ped$spID)]
             # if the pool is not empty, randomly select one individual from the pool
             if (length(ID_pool_mate2) > 0) {
               ID_mate2 <- resample(ID_pool_mate2, 1)
@@ -199,16 +199,16 @@ makeInbreeding <- function(ped,
     }
   }
   # save the two individual's former mates' IDs if they have any
-  ID_mate1_former_mate <- ped$spt[ped$ID == ID_mate1]
+  ID_mate1_former_mate <- ped$spID[ped$ID == ID_mate1]
   #  cat(ID_mate1, "\n")
-  ID_mate2_former_mate <- ped$spt[ped$ID == ID_mate2]
+  ID_mate2_former_mate <- ped$spID[ped$ID == ID_mate2]
   #  cat(ID_mate2, "\n")
   # remove two individuals' former mates from the pedigree if they have any
-  ped$spt[ped$ID == ID_mate1] <- NA_integer_
-  ped$spt[ped$ID == ID_mate2] <- NA_integer_
+  ped$spID[ped$ID == ID_mate1] <- NA_integer_
+  ped$spID[ped$ID == ID_mate2] <- NA_integer_
   # change the spouseID of ID_mate1 and ID_mate2 to each other
-  ped$spt[ped$ID == ID_mate1] <- ID_mate2
-  ped$spt[ped$ID == ID_mate2] <- ID_mate1
+  ped$spID[ped$ID == ID_mate1] <- ID_mate2
+  ped$spID[ped$ID == ID_mate2] <- ID_mate1
   # change the individuals in next generation whose dadID and momID are ID_mate1 and ID_mate2's former mates to ID_mate1 and ID_mate2
   for (j in seq_len(nrow(ped))) {
     if (!is.na(ped$dadID[j]) & !is.na(ID_mate1_former_mate) & ped$dadID[j] == ID_mate1_former_mate) {

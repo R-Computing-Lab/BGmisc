@@ -36,8 +36,7 @@ recodeSex(
 A modified version of the input data.frame \code{ped}, containing an additional or modified 'sex_recode' column where the 'sex' values are recoded according to \code{code_male}. NA values in the 'sex' column are preserved.
 }
 \description{
-This function serves as a wrapper around `checkSex` to specifically handle
-the repair of the sex coding in a pedigree dataframe.
+This function serves as is primarily used internally, by plotting functions etc.
 It sets the `repair` flag to TRUE automatically and forwards any additional parameters to `checkSex`.
 }
 \details{
