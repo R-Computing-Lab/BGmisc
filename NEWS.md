@@ -1,3 +1,6 @@
+# BGmisc 1.3.1.1
+* Added some more tests of identifyModel.R
+
 # BGmisc 1.3.1
 * Confirmed that all orcids are correct
 * Added gedcom importer

@@ -46,7 +46,7 @@ calculateRelatedness(generations = 1, full = FALSE)
 
 # Inferring Relatedness Coefficient
 
-The `inferRelatedness` function is designed to infer the relatedness coefficient between two groups based on the observed correlation between their additive genetic variance and shared environmental variance. This function leverages the ACE framework.
+The `inferRelatedness` function is designed to infer the relatedness coefficient between two groups based on the observed correlation between their additive genetic variance and shared environmental variance. This function leverages the `ACE` framework.
 
 ```{r}
 # Example usage:

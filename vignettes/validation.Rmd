@@ -89,6 +89,7 @@ library(tidyverse)
 
 summarizeFamilies(df, famID = "newFamID", personID = "personID")$family_summary %>% glimpse()
 ```
+
 If we didn't know to look for duplicates, we might not notice the issue. Indeed, only of the duplicates was selected as are founder member. However, the `checkIDs` function can help us identify and repair these errors:
 
 ```{r}
@@ -106,6 +107,7 @@ df %>% filter(personID %in% result$non_unique_ids) %>%
   arrange(personID)
 
 ```
+
 Yep, these are  definitely the duplicates.
 
 ```{r}
@@ -155,7 +157,7 @@ results <- checkSex(potter, code_male = 1, code_female = 0, verbose = TRUE, repa
 print(results)
 ```
 
-In this example, the checkSex function checks the unique values in the sex column and identifies any inconsistencies in the sex coding of parents. The function returns a list containing validation results, such as the unique values found in the sex column and any inconsistencies in the sex coding of parents.
+In this example, the `checkSex` function checks the unique values in the sex column and identifies any inconsistencies in the sex coding of parents. The function returns a list containing validation results, such as the unique values found in the sex column and any inconsistencies in the sex coding of parents.
 
 If incorrect sex codes are found, you can attempt to repair them automatically using the repair argument:
 
