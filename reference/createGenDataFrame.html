@@ -16,7 +16,7 @@ maternal, spouse IDs, and sex, awaiting further assignment."><!-- mathjax --><sc
     
     <a class="navbar-brand me-2" href="../index.html">BGmisc</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -94,7 +94,7 @@ maternal, spouse IDs, and sex, awaiting further assignment.</p>
 <p>A data frame representing the initial structure for the individuals in the specified generation
         before any relationships (parental, spousal) are defined. The columns include family ID (`fam`),
         individual ID (`id`), generation number (`gen`), father's ID (`pat`), mother's ID (`mat`),
-        spouse's ID (`spt`), and sex (`sex`), with NA values for paternal, maternal, and spouse IDs, and sex.</p>
+        spouse's ID (`spID`), and sex (`sex`), with NA values for paternal, maternal, and spouse IDs, and sex.</p>
     </div>
 
     <div class="section level2">
@@ -104,12 +104,12 @@ maternal, spouse IDs, and sex, awaiting further assignment.</p>
 <span class="r-in"><span><span class="va">idGen</span> <span class="op">&lt;-</span> <span class="fl">101</span><span class="op">:</span><span class="fl">105</span> <span class="co"># Example IDs for the 2nd generation</span></span></span>
 <span class="r-in"><span><span class="va">df_Ngen</span> <span class="op">&lt;-</span> <span class="fu">createGenDataFrame</span><span class="op">(</span><span class="va">sizeGens</span>, <span class="va">genIndex</span>, <span class="va">idGen</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">df_Ngen</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     fam  id gen pat mat spt sex</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 fam 1 101   2  NA  NA  NA  NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 fam 1 102   2  NA  NA  NA  NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 fam 1 103   2  NA  NA  NA  NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 fam 1 104   2  NA  NA  NA  NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 fam 1 105   2  NA  NA  NA  NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     fam  id gen pat mat spID sex</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 fam 1 101   2  NA  NA   NA  NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 fam 1 102   2  NA  NA   NA  NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 fam 1 103   2  NA  NA   NA  NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 fam 1 104   2  NA  NA   NA  NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 fam 1 105   2  NA  NA   NA  NA</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

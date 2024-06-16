@@ -58,6 +58,9 @@
     <loc>https://r-computing-lab.github.io/BGmisc/reference/assignCoupleIds.html</loc>
   </url>
   <url>
+    <loc>https://r-computing-lab.github.io/BGmisc/reference/assignParentIDs.html</loc>
+  </url>
+  <url>
     <loc>https://r-computing-lab.github.io/BGmisc/reference/buildBetweenGenerations.html</loc>
   </url>
   <url>
@@ -70,13 +73,25 @@
     <loc>https://r-computing-lab.github.io/BGmisc/reference/calculateRelatedness.html</loc>
   </url>
   <url>
+    <loc>https://r-computing-lab.github.io/BGmisc/reference/calculateSummaryDT.html</loc>
+  </url>
+  <url>
     <loc>https://r-computing-lab.github.io/BGmisc/reference/checkIDs.html</loc>
   </url>
   <url>
     <loc>https://r-computing-lab.github.io/BGmisc/reference/checkSex.html</loc>
   </url>
   <url>
+    <loc>https://r-computing-lab.github.io/BGmisc/reference/combine_columns.html</loc>
+  </url>
+  <url>
     <loc>https://r-computing-lab.github.io/BGmisc/reference/comp2vech.html</loc>
+  </url>
+  <url>
+    <loc>https://r-computing-lab.github.io/BGmisc/reference/countPatternRows.html</loc>
+  </url>
+  <url>
+    <loc>https://r-computing-lab.github.io/BGmisc/reference/createFamilyToParentsMapping.html</loc>
   </url>
   <url>
     <loc>https://r-computing-lab.github.io/BGmisc/reference/createGenDataFrame.html</loc>
@@ -94,7 +109,13 @@
     <loc>https://r-computing-lab.github.io/BGmisc/reference/evenInsert.html</loc>
   </url>
   <url>
+    <loc>https://r-computing-lab.github.io/BGmisc/reference/extract_info.html</loc>
+  </url>
+  <url>
     <loc>https://r-computing-lab.github.io/BGmisc/reference/famSizeCal.html</loc>
+  </url>
+  <url>
+    <loc>https://r-computing-lab.github.io/BGmisc/reference/findFounder.html</loc>
   </url>
   <url>
     <loc>https://r-computing-lab.github.io/BGmisc/reference/fitComponentModel.html</loc>
@@ -158,6 +179,12 @@
   </url>
   <url>
     <loc>https://r-computing-lab.github.io/BGmisc/reference/potter.html</loc>
+  </url>
+  <url>
+    <loc>https://r-computing-lab.github.io/BGmisc/reference/processParents.html</loc>
+  </url>
+  <url>
+    <loc>https://r-computing-lab.github.io/BGmisc/reference/readGedcom.html</loc>
   </url>
   <url>
     <loc>https://r-computing-lab.github.io/BGmisc/reference/recodeSex.html</loc>

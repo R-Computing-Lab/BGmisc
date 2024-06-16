@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BGmisc</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -129,7 +129,7 @@ running the following code:</p>
 <span><span class="co">#&gt;                     3rd Qu.:100416   3rd Qu.:4.000   3rd Qu.:100311  </span></span>
 <span><span class="co">#&gt;                     Max.   :100432   Max.   :4.000   Max.   :100320  </span></span>
 <span><span class="co">#&gt;                                                      NA's   :13      </span></span>
-<span><span class="co">#&gt;      momID             spt             sex           </span></span>
+<span><span class="co">#&gt;      momID             spID            sex           </span></span>
 <span><span class="co">#&gt;  Min.   : 10011   Min.   : 10011   Length:57         </span></span>
 <span><span class="co">#&gt;  1st Qu.: 10022   1st Qu.: 10025   Class :character  </span></span>
 <span><span class="co">#&gt;  Median : 10036   Median : 10036   Mode  :character  </span></span>
@@ -141,7 +141,7 @@ running the following code:</p>
 columns. Each row corresponds to a simulated individual.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">df_ped</span><span class="op">[</span><span class="fl">21</span>, <span class="op">]</span></span>
-<span><span class="co">#&gt;      fam     ID gen dadID momID    spt sex</span></span>
+<span><span class="co">#&gt;      fam     ID gen dadID momID   spID sex</span></span>
 <span><span class="co">#&gt; 21 fam 1 100312   3 10024 10022 100317   M</span></span></code></pre></div>
 <p>The columns represents the individual’s family ID, the individual’s
 personal ID, the generation the individual is in, the IDs of their
@@ -152,12 +152,12 @@ individual, respectively.</p>
 </h3>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/summarizeFamilies.html">summarizeFamilies</a></span><span class="op">(</span><span class="va">df_ped</span>, famID <span class="op">=</span> <span class="st">"fam"</span><span class="op">)</span><span class="op">$</span><span class="va">family_summary</span></span>
-<span><span class="co">#&gt;       fam count gen_mean gen_median gen_min gen_max    gen_sd spt_mean</span></span>
-<span><span class="co">#&gt;    &lt;char&gt; &lt;int&gt;    &lt;num&gt;      &lt;num&gt;   &lt;num&gt;   &lt;num&gt;     &lt;num&gt;    &lt;num&gt;</span></span>
-<span><span class="co">#&gt; 1:  fam 1    57 3.298246          3       1       4 0.8229935  40123.5</span></span>
-<span><span class="co">#&gt;    spt_median spt_min spt_max   spt_sd</span></span>
-<span><span class="co">#&gt;         &lt;num&gt;   &lt;num&gt;   &lt;num&gt;    &lt;num&gt;</span></span>
-<span><span class="co">#&gt; 1:    10035.5   10011  100320 43476.96</span></span></code></pre></div>
+<span><span class="co">#&gt;       fam count gen_mean gen_median gen_min gen_max    gen_sd spID_mean</span></span>
+<span><span class="co">#&gt;    &lt;char&gt; &lt;int&gt;    &lt;num&gt;      &lt;num&gt;   &lt;num&gt;   &lt;num&gt;     &lt;num&gt;     &lt;num&gt;</span></span>
+<span><span class="co">#&gt; 1:  fam 1    57 3.298246          3       1       4 0.8229935   40123.5</span></span>
+<span><span class="co">#&gt;    spID_median spID_min spID_max  spID_sd</span></span>
+<span><span class="co">#&gt;          &lt;num&gt;    &lt;num&gt;    &lt;num&gt;    &lt;num&gt;</span></span>
+<span><span class="co">#&gt; 1:     10035.5    10011   100320 43476.96</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="plotting-pedigree">Plotting Pedigree<a class="anchor" aria-label="anchor" href="#plotting-pedigree"></a>
