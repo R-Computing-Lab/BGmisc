@@ -8,7 +8,7 @@ Thanks Kurt Hornik for pointing it out to me! I'm also using this as an excuse t
 
 1. Local OS: Windows 11 x64 (build 22635), R version 4.4.0 (2024-04-24 ucrt)
 2. **GitHub Actions**:  
-    - [Link](https://github.com/R-Computing-Lab/BGmisc/actions/runs/9537543756)
+    - [Link](https://github.com/R-Computing-Lab/BGmisc/actions/runs/9537687414)
     - macOS (latest version) with the latest R release.
     - Windows (latest version) with the latest R release.
     - Ubuntu (latest version) with:
