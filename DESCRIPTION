@@ -1,6 +1,6 @@
 Package: BGmisc
 Title: An R Package for Extended Behavior Genetics Analysis
-Version: 1.3.0.1
+Version: 1.3.1
 Authors@R: c(
     person("S. Mason", "Garrison", , email= "garrissm@wfu.edu", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-4804-6003")),
@@ -30,7 +30,8 @@ Imports:
     kinship2,
     Matrix,
     stats,
-    data.table
+    data.table,
+    stringr
 Suggests: 
     dplyr,
     EasyMx,

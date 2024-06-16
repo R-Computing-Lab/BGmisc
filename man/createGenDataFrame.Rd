@@ -17,7 +17,7 @@ createGenDataFrame(sizeGens, genIndex, idGen)
 A data frame representing the initial structure for the individuals in the specified generation
         before any relationships (parental, spousal) are defined. The columns include family ID (`fam`),
         individual ID (`id`), generation number (`gen`), father's ID (`pat`), mother's ID (`mat`),
-        spouse's ID (`spt`), and sex (`sex`), with NA values for paternal, maternal, and spouse IDs, and sex.
+        spouse's ID (`spID`), and sex (`sex`), with NA values for paternal, maternal, and spouse IDs, and sex.
 }
 \description{
 This function creates a data frame for a specific generation within the simulated pedigree.

@@ -8,7 +8,7 @@ markPotentialChildren(df_Ngen, i, Ngen, sizeGens, CoupleF)
 }
 \arguments{
 \item{df_Ngen}{A data frame for the current generation being processed.
-It must include columns for individual IDs (`id`), spouse IDs (`spt`), sex (`sex`),
+It must include columns for individual IDs (`id`), spouse IDs (`spID`), sex (`sex`),
 and any previously assigned roles (`ifparent`, `ifson`, `ifdau`).}
 
 \item{i}{Integer, the index of the current generation being processed.}

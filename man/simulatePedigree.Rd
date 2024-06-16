@@ -45,7 +45,7 @@ A \code{data.frame} with each row representing a simulated individual. The colum
   \item{gen: The generation the simulated individual is in.}
   \item{dadID: Personal ID of the individual's father.}
   \item{momID: Personal ID of the individual's mother.}
-  \item{spt: Personal ID of the individual's mate.}
+  \item{spID: Personal ID of the individual's mate.}
   \item{sex: Biological sex of the individual. F - female; M - male.}
 }
 }
