@@ -1,4 +1,5 @@
 # BGmisc 1.3.1
+* Confirmed that all orcids are correct
 * Added gedcom importer
 
 # BGmisc 1.3.0.1
