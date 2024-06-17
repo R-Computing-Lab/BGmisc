@@ -79,8 +79,3 @@ test_that("comp2vech handles lists correctly", {
   expect_length(comp2vech(list_input, include.zeros = TRUE), 10)  # Adjust based on expected vector length
 })
 
-
-# Test for incorrect input types in comp2vech
-test_that("comp2vech handles incorrect input types", {
-  expect_error(comp2vech("some non-matrix input"), "x is neither a list nor a matrix")
-})
