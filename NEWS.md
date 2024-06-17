@@ -1,4 +1,4 @@
-# BGmisc 1.3.1.1
+# BGmisc 1.3.2
 * Added some more tests of identifyModel.R
 * Modified tests to be MKL friendly
 

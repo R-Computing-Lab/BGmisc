@@ -1,7 +1,7 @@
 
 # Description
 
-This update tweaks how one test is handled for the MKL check. ( https://www.stats.ox.ac.uk/pub/bdr/Rblas/MKL/BGmisc.out  ) We have changed the test from  expect_true(all(diag(add) == 1)) to expect_true(sum((diag(add) - 1)^2) < 1e-10). This test should work on all platforms. While we were at it, we also allowed some of the expect_equal tests to have a tolerance of 1e-10.
+Thanks Brian Ripley for letting me know about the MKL test failure ( https://www.stats.ox.ac.uk/pub/bdr/Rblas/MKL/BGmisc.out  ). We have changed the test from  expect_true(all(diag(add) == 1)) to expect_true(sum((diag(add) - 1)^2) < 1e-10). This test should work on all platforms, as we believe that this was the result of a floating point error. While we were at it, we also allowed some of the expect_equal tests to have a tolerance of 1e-10.
 
 
 
@@ -9,7 +9,7 @@ This update tweaks how one test is handled for the MKL check. ( https://www.stat
 
 1. Local OS: Windows 11 x64 (build 22635), R version 4.4.1 (2024-06-14 ucrt)
 2. **GitHub Actions**:  
-    - [Link](https://github.com/R-Computing-Lab/BGmisc/actions/runs/9555870410)
+    - [Link](https://github.com/R-Computing-Lab/BGmisc/actions/runs/9555923086)
     - macOS (latest version) with the latest R release.
     - Windows (latest version) with the latest R release.
     - Ubuntu (latest version) with:
@@ -30,10 +30,10 @@ This update tweaks how one test is handled for the MKL check. ( https://www.stat
 ─  using session charset: UTF-8
 ─  using options '--no-manual --as-cran'
 ✔  checking for file 'BGmisc/DESCRIPTION'
-─  this is package 'BGmisc' version '1.3.1.1'
+─  this is package 'BGmisc' version '1.3.2'
 ─  package encoding: UTF-8
 .... boring stuff
-── R CMD check results ──────────── BGmisc 1.3.1.1 ────
+── R CMD check results ──────────── BGmisc 1.3.2 ────
 Duration: 54s
 
 0 errors ✔ | 0 warnings ✔ | 0 notes ✔
