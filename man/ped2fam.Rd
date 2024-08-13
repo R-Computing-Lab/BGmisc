@@ -9,7 +9,8 @@ ped2fam(
   personID = "ID",
   momID = "momID",
   dadID = "dadID",
-  famID = "famID"
+  famID = "famID",
+  ...
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ ped2fam(
 \item{dadID}{character.  Name of the column in ped for the father ID variable}
 
 \item{famID}{character.  Name of the column to be created in ped for the family ID variable}
+
+\item{...}{additional arguments to be passed to \code{\link{ped2com}}}
 }
 \value{
 A pedigree dataset with one additional column for the newly created extended family ID
