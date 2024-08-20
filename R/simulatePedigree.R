@@ -285,7 +285,7 @@ buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose, marR, sexR,
         # the length of IdMa and IdPa can be longer than the vector of offspring, so truncated it
         ### making sure sampling out the single people instead of couples
         if (length(IdPa) - length(IdOfp) > 0) {
-          # cat("length of IdPa", length(IdPa), "\n")
+          if(verbose){ print("length of IdPa", length(IdPa), "\n")}
           IdRm <- sample.int(length(IdPa), size = length(IdPa) - length(IdOfp))
           IdPa <- IdPa[-IdRm]
           IdMa <- IdMa[-IdRm]

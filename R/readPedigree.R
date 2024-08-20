@@ -284,8 +284,6 @@ readGedcom <- function(file_path, verbose = FALSE, add_parents = TRUE, remove_em
     }
 
     # relationship data
-
-    # relationship data
     # g7:INDI-FAMC
     ## The family in which an individual appears as a child. It is also used with a g7:FAMC-STAT substructure to show individuals who are not children of the family. See FAMILY_RECORD for more details.
     if(num_rows$num_famc_rows > 0 && grepl(" FAMC", tmpv)) {
