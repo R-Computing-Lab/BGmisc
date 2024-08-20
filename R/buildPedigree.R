@@ -177,7 +177,7 @@ ped2graph <- function(ped,
 #' @export
 #'
 ped2maternal <- function(ped, personID = "ID",
-                         momID = "momID", dadID = "dadID", matID = "matID",...) {
+                         momID = "momID", dadID = "dadID", matID = "matID", ...) {
   # Call to wrapper function
   .ped2id(ped = ped, personID = personID, momID = momID, dadID = dadID, famID = matID, type = "mothers")
 }
@@ -197,7 +197,7 @@ ped2maternal <- function(ped, personID = "ID",
 #'
 ped2paternal <- function(ped, personID = "ID",
                          momID = "momID", dadID = "dadID",
-                         patID = "patID",...) {
+                         patID = "patID", ...) {
   # Call to wrapper function
   .ped2id(ped = ped, personID = personID, momID = momID, dadID = dadID, famID = patID, type = "fathers")
 }
