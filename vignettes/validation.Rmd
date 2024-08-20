@@ -13,7 +13,6 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 options(rmarkdown.html_vignette.check_title = FALSE)
-
 ```
 
 # Introduction
@@ -42,22 +41,22 @@ print(result)
 
 #> $all_unique_ids
 #> [1] TRUE
-#> 
+#>
 #> $total_non_unique_ids
 #> [1] 0
-#> 
+#>
 #> $total_own_father
 #> [1] 0
-#> 
+#>
 #> $total_own_mother
 #> [1] 0
-#> 
+#>
 #> $total_duplicated_parents
 #> [1] 0
-#> 
+#>
 #> $total_within_row_duplicates
 #> [1] 0
-#> 
+#>
 #> $within_row_duplicates
 #> [1] FALSE
 ```
@@ -79,7 +78,7 @@ df <- ped2fam(potter, famID = "newFamID", personID = "personID")
 df$personID[df$name == "Vernon Dursley"] <- df$personID[df$name == "Marjorie Dursley"]
 
 # Add a copy of Dudley Dursley
-df <- rbind(df, df[df$name == "Dudley Dursley",])
+df <- rbind(df, df[df$name == "Dudley Dursley", ])
 ```
 
 Now, let's call the `sumarizeFamilies` function to see what the dataset looks like.
@@ -102,10 +101,9 @@ print(result)
 As we can see from this output, there are `r result$total_non_unique_ids` non-unique IDs in the dataset, specifically `r result$non_unique_ids`. Let's take a peek at the duplicates:
 
 ```{r}
-
-df %>% filter(personID %in% result$non_unique_ids) %>%
+df %>%
+  filter(personID %in% result$non_unique_ids) %>%
   arrange(personID)
-
 ```
 
 Yep, these are  definitely the duplicates.
@@ -113,7 +111,8 @@ Yep, these are  definitely the duplicates.
 ```{r}
 df_repair <- checkIDs(df, repair = TRUE)
 
-df_repair %>% filter(ID %in% result$non_unique_ids) %>%
+df_repair %>%
+  filter(ID %in% result$non_unique_ids) %>%
   arrange(ID)
 
 result <- checkIDs(df_repair)
@@ -205,13 +204,13 @@ cleaned_data <- sample_data %>%
 
 # Check for duplicate IDs
 temp_check <- checkIDs(cleaned_data, verbose = TRUE, repair = FALSE)
- all_duplicated_ids   <- cbind(temp_check$non_unique_ids, temp_check$duplicated_parents_ids)
+all_duplicated_ids <- cbind(temp_check$non_unique_ids, temp_check$duplicated_parents_ids)
 
 cleaned_data <- cleaned_data %>%
   mutate(
     duplicated = case_when(ID %in% temp_check$non_unique_ids ~ 1, TRUE ~ 0),
-    duplicated_parent = case_when(dadID %in% all_duplicated_ids  | momID %in% all_duplicated_ids  ~ 1, TRUE ~ 0),
-    duplicated_source_ID = case_when(ID %in% all_duplicated_ids ~ ID, dadID %in% all_duplicated_ids  ~ dadID, momID %in% all_duplicated_ids  ~ momID, TRUE ~ NA_integer_),
+    duplicated_parent = case_when(dadID %in% all_duplicated_ids | momID %in% all_duplicated_ids ~ 1, TRUE ~ 0),
+    duplicated_source_ID = case_when(ID %in% all_duplicated_ids ~ ID, dadID %in% all_duplicated_ids ~ dadID, momID %in% all_duplicated_ids ~ momID, TRUE ~ NA_integer_),
     alteredlinks = 0
   )
 
@@ -224,14 +223,13 @@ cleaned_data %>%
 # Perform specific corrections
 cleaned_data <- cleaned_data %>%
   mutate(
-    alteredlinks = case_when(ID == 9  ~ 1, TRUE ~ alteredlinks),
+    alteredlinks = case_when(ID == 9 ~ 1, TRUE ~ alteredlinks),
     ID = case_when(ID == 7 & round(byr, digits = 0) == 2020 ~ ID + 1e6, TRUE ~ ID)
   )
 
 # Final check for remaining duplicates
 final_check <- checkIDs(cleaned_data, verbose = TRUE, repair = FALSE)
 print(final_check)
-
 ```
 -->
 

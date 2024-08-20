@@ -24,8 +24,8 @@ test_that("readGedcom reads and parses a GEDCOM file correctly", {
   writeLines(gedcom_content, temp_file)
 
   # Call readGedcom
-  df <- readGedcom(temp_file, verbose = TRUE,skinny = FALSE)
-# note to self, the code is not reading in the 2nd person. and is also not reading in the birth date and place
+  df <- readGedcom(temp_file, verbose = TRUE, skinny = FALSE)
+  # note to self, the code is not reading in the 2nd person. and is also not reading in the birth date and place
   # Check that the data frame has the expected structure
   expect_true("id" %in% colnames(df))
   expect_true("name_given" %in% colnames(df))
@@ -145,11 +145,11 @@ test_that("processParents adds momID and dadID correctly", {
 
   # Check the contents of the data frame
   expect_equal(df_temp$momID[1], NA_character_)
-  expect_equal(df_temp$dadID[1],  NA_character_)
-  expect_equal(df_temp$momID[2],  NA_character_)
-  expect_equal(df_temp$dadID[2],  NA_character_)
-  expect_equal(df_temp$momID[3],  "I2")
-  expect_equal(df_temp$dadID[3],  "I1")
+  expect_equal(df_temp$dadID[1], NA_character_)
+  expect_equal(df_temp$momID[2], NA_character_)
+  expect_equal(df_temp$dadID[2], NA_character_)
+  expect_equal(df_temp$momID[3], "I2")
+  expect_equal(df_temp$dadID[3], "I1")
 
   # Create a more complex data frame for testing
   df_temp <- data.frame(
@@ -171,4 +171,3 @@ test_that("processParents adds momID and dadID correctly", {
   expect_equal(df_temp$momID[5], "I4")
   expect_equal(df_temp$dadID[5], "I3")
 })
-

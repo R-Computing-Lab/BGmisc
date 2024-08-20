@@ -64,11 +64,11 @@ summarizePedigrees <- function(ped, famID = "famID", personID = "ID",
     if (verbose) message("Counting families...")
     ped <- ped2fam(ped, personID = personID, momID = momID, dadID = dadID, famID = famID)
   }
-  if ( "mothers" %in% type && !matID %in% names(ped)) {
+  if ("mothers" %in% type && !matID %in% names(ped)) {
     if (verbose) message("Counting mothers...")
     ped <- ped2maternal(ped, personID = personID, momID = momID, dadID = dadID, matID = matID)
   }
-  if ("fathers" %in% type && !patID %in% names(ped) ) {
+  if ("fathers" %in% type && !patID %in% names(ped)) {
     if (verbose) message("Counting fathers...")
     ped <- ped2paternal(ped, personID = personID, momID = momID, dadID = dadID, patID = patID)
   }
@@ -88,13 +88,14 @@ summarizePedigrees <- function(ped, famID = "famID", personID = "ID",
     if (verbose) message("Summarizing families...")
     family_summary_dt <- calculateSummaryDT(ped_dt, famID, skip_var = skip_var, five_num_summary = five_num_summary)
     # Find the originating member for each line
-    if(include_founder){
+    if (include_founder) {
       if (verbose) message("Finding originating members for families...")
       originating_member_family <- findFounder(ped_dt, group_var = famID, sort_var = founder_sort_var)
       # Merge summary statistics with originating members for additional information
       family_summary_dt <- merge(family_summary_dt, originating_member_family,
-                                 by = famID, suffixes = c("", "_founder")
-      )    }
+        by = famID, suffixes = c("", "_founder")
+      )
+    }
     output$family_summary <- family_summary_dt
     n_families <- nrow(family_summary_dt)
     if (verbose) message("Summarized ", n_families, " families.")
@@ -103,10 +104,10 @@ summarizePedigrees <- function(ped, famID = "famID", personID = "ID",
   if ("mothers" %in% type) {
     if (verbose) message("Summarizing maternal lines...")
     maternal_summary_dt <- calculateSummaryDT(ped_dt, matID, skip_var = skip_var, five_num_summary = five_num_summary)
-    if(include_founder){
+    if (include_founder) {
       if (verbose) message("Finding originating members for matrilineal lines...")
-    originating_member_maternal <- findFounder(ped_dt, group_var = matID, sort_var = founder_sort_var)
-    maternal_summary_dt <- merge(maternal_summary_dt, originating_member_maternal, by = matID, suffixes = c("", "_founder"))
+      originating_member_maternal <- findFounder(ped_dt, group_var = matID, sort_var = founder_sort_var)
+      maternal_summary_dt <- merge(maternal_summary_dt, originating_member_maternal, by = matID, suffixes = c("", "_founder"))
     }
     output$maternal_summary <- maternal_summary_dt
     n_mothers <- nrow(maternal_summary_dt)
@@ -115,10 +116,10 @@ summarizePedigrees <- function(ped, famID = "famID", personID = "ID",
   if ("fathers" %in% type) {
     if (verbose) message("Summarizing paternal lines...")
     paternal_summary_dt <- calculateSummaryDT(ped_dt, patID, skip_var = skip_var, five_num_summary = five_num_summary)
-    if(include_founder){
+    if (include_founder) {
       if (verbose) message("Finding originating members for patrilineal lines...")
-    originating_member_paternal <- findFounder(ped_dt, group_var = patID, sort_var = founder_sort_var)
-    paternal_summary_dt <- merge(paternal_summary_dt, originating_member_paternal, by = patID, suffixes = c("", "_founder"))
+      originating_member_paternal <- findFounder(ped_dt, group_var = patID, sort_var = founder_sort_var)
+      paternal_summary_dt <- merge(paternal_summary_dt, originating_member_paternal, by = patID, suffixes = c("", "_founder"))
     }
 
     output$paternal_summary <- paternal_summary_dt
@@ -127,11 +128,11 @@ summarizePedigrees <- function(ped, famID = "famID", personID = "ID",
   }
 
   ## Check errors
-#  if (check_errors) {
- #   if (verbose) message("Checking for errors...")
-#    output$checkIDs <- checkIDs(ped,
-#                                repair = FALSE, verbose = verbose)
-#  }
+  #  if (check_errors) {
+  #   if (verbose) message("Checking for errors...")
+  #    output$checkIDs <- checkIDs(ped,
+  #                                repair = FALSE, verbose = verbose)
+  #  }
 
 
   # Optionally find the superlative lines
@@ -181,37 +182,36 @@ summarizePedigrees <- function(ped, famID = "famID", personID = "ID",
 #' @keywords internal
 #'
 calculateSummaryDT <- function(data, group_var, skip_var,
-                                 five_num_summary = FALSE) {
+                               five_num_summary = FALSE) {
   # Identify numeric columns excluding the group_var and skip_var
   numeric_cols <- setdiff(names(data)[vapply(data, is.numeric, logical(1))], c(group_var, skip_var))
   summary_stats <- data[,
-                        {
-                          count <- .N # Calculate count once per group
-                          stats_list <- lapply(numeric_cols, function(colname) {
-                            x <- .SD[[colname]]
-                            stats <- list(
-                              #   count = .N,
-                              mean = as.double(base::mean(x, na.rm = TRUE)),
-                              median = as.double(stats::median(x, na.rm = TRUE)),
-                              min = ifelse(all(is.na(x)), as.double(NA), as.double(base::min(x, na.rm = TRUE))),
-                              max = ifelse(all(is.na(x)), as.double(NA), as.double(base::max(x, na.rm = TRUE))),
-
-                              sd = as.double(stats::sd(x, na.rm = TRUE))
-                            )
-                            if (five_num_summary) {
-                              stats <- c(stats, list(
-                                Q1 = as.double(stats::quantile(x, 0.25, na.rm = TRUE)),
-                                Q3 = as.double(stats::quantile(x, 0.75, na.rm = TRUE))
-                              ))
-                            }
-                            names(stats) <- paste0(colname, "_", names(stats))
-                            stats
-                          })
-                          stats <- unlist(stats_list, recursive = FALSE)
-                          c(list(count = count), stats)
-                        },
-                        by = group_var,
-                        .SDcols = numeric_cols
+    {
+      count <- .N # Calculate count once per group
+      stats_list <- lapply(numeric_cols, function(colname) {
+        x <- .SD[[colname]]
+        stats <- list(
+          #   count = .N,
+          mean = as.double(base::mean(x, na.rm = TRUE)),
+          median = as.double(stats::median(x, na.rm = TRUE)),
+          min = ifelse(all(is.na(x)), as.double(NA), as.double(base::min(x, na.rm = TRUE))),
+          max = ifelse(all(is.na(x)), as.double(NA), as.double(base::max(x, na.rm = TRUE))),
+          sd = as.double(stats::sd(x, na.rm = TRUE))
+        )
+        if (five_num_summary) {
+          stats <- c(stats, list(
+            Q1 = as.double(stats::quantile(x, 0.25, na.rm = TRUE)),
+            Q3 = as.double(stats::quantile(x, 0.75, na.rm = TRUE))
+          ))
+        }
+        names(stats) <- paste0(colname, "_", names(stats))
+        stats
+      })
+      stats <- unlist(stats_list, recursive = FALSE)
+      c(list(count = count), stats)
+    },
+    by = group_var,
+    .SDcols = numeric_cols
   ]
   # Flatten the nested lists
   summary_stats <- data.table::as.data.table(summary_stats[, lapply(.SD, unlist), by = group_var])
@@ -241,7 +241,7 @@ findFounder <- function(data, group_var, sort_var) {
 summarizeMatrilines <- function(ped, famID = "famID", personID = "ID",
                                 momID = "momID", dadID = "dadID",
                                 matID = "matID", patID = "patID",
-                                byr = NULL,  include_founder = FALSE,
+                                byr = NULL, include_founder = FALSE,
                                 founder_sort_var = NULL,
                                 nbiggest = 5, noldest = 5, skip_var = NULL, five_num_summary = FALSE, verbose = FALSE) {
   # Call to wrapper function
