@@ -401,22 +401,22 @@ of duplicates. Here’s how to use it:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a></span>
 <span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co">#&gt; $all_unique_ids</span></span>
 <span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co">#&gt; [1] TRUE</span></span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co">#&gt;</span></span>
 <span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co">#&gt; $total_non_unique_ids</span></span>
 <span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="co">#&gt; [1] 0</span></span>
-<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="co">#&gt;</span></span>
 <span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="co">#&gt; $total_own_father</span></span>
 <span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="co">#&gt; [1] 0</span></span>
-<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="co">#&gt;</span></span>
 <span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="co">#&gt; $total_own_mother</span></span>
 <span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a><span class="co">#&gt; [1] 0</span></span>
-<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a><span class="co">#&gt;</span></span>
 <span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a><span class="co">#&gt; $total_duplicated_parents</span></span>
 <span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a><span class="co">#&gt; [1] 0</span></span>
-<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a><span class="co">#&gt;</span></span>
 <span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a><span class="co">#&gt; $total_within_row_duplicates</span></span>
 <span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a><span class="co">#&gt; [1] 0</span></span>
-<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a><span class="co">#&gt;</span></span>
 <span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a><span class="co">#&gt; $within_row_duplicates</span></span>
 <span id="cb2-21"><a href="#cb2-21" tabindex="-1"></a><span class="co">#&gt; [1] FALSE</span></span></code></pre></div>
 <p>In this example, the <code>checkIDs</code> function returns a list
@@ -449,7 +449,7 @@ ID. Second, we have added a copy of Dudley Dursley to the dataset.</p>
 <span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>df<span class="sc">$</span>personID[df<span class="sc">$</span>name <span class="sc">==</span> <span class="st">&quot;Vernon Dursley&quot;</span>] <span class="ot">&lt;-</span> df<span class="sc">$</span>personID[df<span class="sc">$</span>name <span class="sc">==</span> <span class="st">&quot;Marjorie Dursley&quot;</span>]</span>
 <span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a></span>
 <span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co"># Add a copy of Dudley Dursley</span></span>
-<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">rbind</span>(df, df[df<span class="sc">$</span>name <span class="sc">==</span> <span class="st">&quot;Dudley Dursley&quot;</span>,])</span></code></pre></div>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">rbind</span>(df, df[df<span class="sc">$</span>name <span class="sc">==</span> <span class="st">&quot;Dudley Dursley&quot;</span>, ])</span></code></pre></div>
 <p>Now, let’s call the <code>sumarizeFamilies</code> function to see
 what the dataset looks like.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
@@ -460,24 +460,9 @@ what the dataset looks like.</p>
 <span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co">#&gt; ✔ lubridate 1.9.3     ✔ tidyr     1.3.1</span></span>
 <span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="co">#&gt; ✔ purrr     1.0.2     </span></span>
 <span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="co">#&gt; ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──</span></span>
-<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="co">#&gt; ✖ dplyr::between()     masks BGmisc::between()</span></span>
-<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="co">#&gt; ✖ dplyr::filter()      masks stats::filter()</span></span>
-<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="co">#&gt; ✖ dplyr::first()       masks BGmisc::first()</span></span>
-<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a><span class="co">#&gt; ✖ lubridate::hour()    masks BGmisc::hour()</span></span>
-<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a><span class="co">#&gt; ✖ lubridate::isoweek() masks BGmisc::isoweek()</span></span>
-<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a><span class="co">#&gt; ✖ dplyr::lag()         masks stats::lag()</span></span>
-<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a><span class="co">#&gt; ✖ dplyr::last()        masks BGmisc::last()</span></span>
-<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a><span class="co">#&gt; ✖ lubridate::mday()    masks BGmisc::mday()</span></span>
-<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a><span class="co">#&gt; ✖ lubridate::minute()  masks BGmisc::minute()</span></span>
-<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a><span class="co">#&gt; ✖ lubridate::month()   masks BGmisc::month()</span></span>
-<span id="cb4-19"><a href="#cb4-19" tabindex="-1"></a><span class="co">#&gt; ✖ lubridate::quarter() masks BGmisc::quarter()</span></span>
-<span id="cb4-20"><a href="#cb4-20" tabindex="-1"></a><span class="co">#&gt; ✖ lubridate::second()  masks BGmisc::second()</span></span>
-<span id="cb4-21"><a href="#cb4-21" tabindex="-1"></a><span class="co">#&gt; ✖ purrr::transpose()   masks BGmisc::transpose()</span></span>
-<span id="cb4-22"><a href="#cb4-22" tabindex="-1"></a><span class="co">#&gt; ✖ lubridate::wday()    masks BGmisc::wday()</span></span>
-<span id="cb4-23"><a href="#cb4-23" tabindex="-1"></a><span class="co">#&gt; ✖ lubridate::week()    masks BGmisc::week()</span></span>
-<span id="cb4-24"><a href="#cb4-24" tabindex="-1"></a><span class="co">#&gt; ✖ lubridate::yday()    masks BGmisc::yday()</span></span>
-<span id="cb4-25"><a href="#cb4-25" tabindex="-1"></a><span class="co">#&gt; ✖ lubridate::year()    masks BGmisc::year()</span></span>
-<span id="cb4-26"><a href="#cb4-26" tabindex="-1"></a><span class="co">#&gt; ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</span></span></code></pre></div>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="co">#&gt; ✖ dplyr::filter() masks stats::filter()</span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="co">#&gt; ✖ dplyr::lag()    masks stats::lag()</span></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="co">#&gt; ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</span></span></code></pre></div>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a></span>
 <span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="fu">summarizeFamilies</span>(df, <span class="at">famID =</span> <span class="st">&quot;newFamID&quot;</span>, <span class="at">personID =</span> <span class="st">&quot;personID&quot;</span>)<span class="sc">$</span>family_summary <span class="sc">%&gt;%</span> <span class="fu">glimpse</span>()</span>
 <span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="co">#&gt; Rows: 1</span></span>
@@ -532,8 +517,8 @@ and repair these errors:</p>
 <span id="cb6-27"><a href="#cb6-27" tabindex="-1"></a><span class="co">#&gt; [1] FALSE</span></span></code></pre></div>
 <p>As we can see from this output, there are 4 non-unique IDs in the
 dataset, specifically 2, 6. Let’s take a peek at the duplicates:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a></span>
-<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>df <span class="sc">%&gt;%</span> <span class="fu">filter</span>(personID <span class="sc">%in%</span> result<span class="sc">$</span>non_unique_ids) <span class="sc">%&gt;%</span></span>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>  <span class="fu">filter</span>(personID <span class="sc">%in%</span> result<span class="sc">$</span>non_unique_ids) <span class="sc">%&gt;%</span></span>
 <span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>  <span class="fu">arrange</span>(personID)</span>
 <span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co">#&gt;    personID newFamID famID             name gen momID dadID spouseID sex</span></span>
 <span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co">#&gt; 1         2        1     1   Vernon Dursley   1   101   102        3   1</span></span>
@@ -543,12 +528,13 @@ dataset, specifically 2, 6. Let’s take a peek at the duplicates:</p>
 <p>Yep, these are definitely the duplicates.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>df_repair <span class="ot">&lt;-</span> <span class="fu">checkIDs</span>(df, <span class="at">repair =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a></span>
-<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>df_repair <span class="sc">%&gt;%</span> <span class="fu">filter</span>(ID <span class="sc">%in%</span> result<span class="sc">$</span>non_unique_ids) <span class="sc">%&gt;%</span></span>
-<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>  <span class="fu">arrange</span>(ID)</span>
-<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="co">#&gt;   ID newFamID fam             name gen momID dadID spID sex</span></span>
-<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="co">#&gt; 1  2        1   1   Vernon Dursley   1   101   102    3   1</span></span>
-<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="co">#&gt; 2  2        1   1 Marjorie Dursley   1   101   102   NA   0</span></span>
-<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="co">#&gt; 6  6        1   1   Dudley Dursley   2     3     1   NA   1</span></span></code></pre></div>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>df_repair <span class="sc">%&gt;%</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>  <span class="fu">filter</span>(ID <span class="sc">%in%</span> result<span class="sc">$</span>non_unique_ids) <span class="sc">%&gt;%</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>  <span class="fu">arrange</span>(ID)</span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="co">#&gt;   ID newFamID fam             name gen momID dadID spID sex</span></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="co">#&gt; 1  2        1   1   Vernon Dursley   1   101   102    3   1</span></span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="co">#&gt; 2  2        1   1 Marjorie Dursley   1   101   102   NA   0</span></span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a><span class="co">#&gt; 6  6        1   1   Dudley Dursley   2     3     1   NA   1</span></span></code></pre></div>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a></span>
 <span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">checkIDs</span>(df_repair)</span>
 <span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a></span>
@@ -625,54 +611,62 @@ function correctly identifies this error.</p>
 </div>
 <div id="verifying-sex-coding" class="section level2">
 <h2>Verifying Sex Coding</h2>
-<p>Another common issue in pedigree data is incorrect coding of
-biological sex. In genetic studies, ensuring accurate recording of
-biological sex in pedigree data is crucial for analyses that rely on
-this information. The <code>checkSex</code> function in
-<code>BGmisc</code> helps identify and repair errors related to
-biological sex coding, such as inconsistencies where an individual’s sex
-is incorrectly recorded. An example of this would be a parent who is
-biologically male, but listed as a mother. The <code>checkSex</code>
-function can help identify and correct such errors.</p>
-<p>It is essential to distinguish between biological sex (genotype) and
-gender identity (phenotype). Biological sex is based on chromosomes and
-other biological characteristics, while gender identity is a broader,
-richer, personal, deeply-held sense of being male, female, a blend of
-both, neither, or another gender entirely. While <code>checkSex</code>
-focuses on biological sex necessary for genetic analysis, we respect and
-recognize the full spectrum of gender identities beyond the binary. The
+<p>Inconsistent coding of biological sex is a common issue in pedigree
+data. The <code>checkSex</code> function in <code>BGmisc</code> is
+designed to identify and address these errors, particularly
+inconsistencies where an individual’s sex is incorrectly recorded. For
+instance, it can detect cases where a parent listed as biologically male
+is erroneously recorded as a mother.</p>
+<p>In genetic studies, we distinguish between biological sex (genotype)
+and gender identity (phenotype):</p>
+<ul>
+<li>Biological sex (genotype) refers to an individual’s chromosomal
+configuration, typically XX for female and XY for male in humans, though
+variations exist.</li>
+<li>Gender identity (phenotype) encompasses a broader, richer, personal,
+deeply-held sense of being male, female, a blend of both, neither, or
+another gender entirely.</li>
+</ul>
+<p>The <code>checkSex</code> function focuses on validating biological
+sex because it corresponds with the inheritance patterns of sex
+chromosomes and mitochondrial DNA. While the <code>checkSex</code>
+function centers on the genetic aspect of biological sex, we respect and
+celebrate the full spectrum of gender identities beyond the binary. The
 developers of this package affirm their support for folx in the LGBTQ+
 community.</p>
-<p>The <code>checkSex</code> function in <code>BGmisc</code> performs
-two main tasks: identifying possible errors and inconsistencies for
-variables related to biological sex. The function is capable of
-validating the sex coding in a pedigree and optionally repairing the sex
-coding based on specified logic. Here’s how you can use the
-<code>checkSex</code> function to validate and optionally repair sex
-coding in a pedigree dataset:</p>
+<div id="using-the-checksex-function" class="section level3">
+<h3>Using the checkSex Function</h3>
+<p>The <code>checkSex</code> function identifies inconsistencies in sex
+coding within a pedigree and can optionally repair them based on
+predefined logic. Below is an example of how to use this function to
+validate and, if necessary, repair sex coding in a pedigree:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="co"># Validate sex coding</span></span>
-<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">checkSex</span>(potter, <span class="at">code_male =</span> <span class="dv">1</span>, <span class="at">code_female =</span> <span class="dv">0</span>, <span class="at">verbose =</span> <span class="cn">TRUE</span>, <span class="at">repair =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a><span class="co">#&gt; Step 1: Checking how many sexes/genders...</span></span>
-<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a><span class="co">#&gt; 2 unique values found.</span></span>
-<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="co">#&gt;  1 2 unique values found.</span></span>
-<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a><span class="co">#&gt;  0Checks Made:</span></span>
-<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a><span class="co">#&gt; $sex_unique</span></span>
-<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a><span class="co">#&gt; [1] 1 0</span></span>
-<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a><span class="co">#&gt; $sex_length</span></span>
-<span id="cb11-11"><a href="#cb11-11" tabindex="-1"></a><span class="co">#&gt; [1] 2</span></span>
-<span id="cb11-12"><a href="#cb11-12" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb11-13"><a href="#cb11-13" tabindex="-1"></a><span class="co">#&gt; $all_sex_dad</span></span>
-<span id="cb11-14"><a href="#cb11-14" tabindex="-1"></a><span class="co">#&gt; [1] &quot;1&quot;</span></span>
-<span id="cb11-15"><a href="#cb11-15" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb11-16"><a href="#cb11-16" tabindex="-1"></a><span class="co">#&gt; $all_sex_mom</span></span>
-<span id="cb11-17"><a href="#cb11-17" tabindex="-1"></a><span class="co">#&gt; [1] &quot;0&quot;</span></span>
-<span id="cb11-18"><a href="#cb11-18" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb11-19"><a href="#cb11-19" tabindex="-1"></a><span class="co">#&gt; $most_frequent_sex_dad</span></span>
-<span id="cb11-20"><a href="#cb11-20" tabindex="-1"></a><span class="co">#&gt; [1] &quot;1&quot;</span></span>
-<span id="cb11-21"><a href="#cb11-21" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb11-22"><a href="#cb11-22" tabindex="-1"></a><span class="co">#&gt; $most_frequent_sex_mom</span></span>
-<span id="cb11-23"><a href="#cb11-23" tabindex="-1"></a><span class="co">#&gt; [1] &quot;0&quot;</span></span></code></pre></div>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">checkSex</span>(potter, </span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>                    <span class="at">code_male =</span> <span class="dv">1</span>, </span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a>                    <span class="at">code_female =</span> <span class="dv">0</span>, </span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a>                    <span class="at">verbose =</span> <span class="cn">TRUE</span>, <span class="at">repair =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a><span class="co">#&gt; Step 1: Checking how many sexes/genders...</span></span>
+<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a><span class="co">#&gt; 2 unique values found.</span></span>
+<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a><span class="co">#&gt;  1 2 unique values found.</span></span>
+<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a><span class="co">#&gt;  0Checks Made:</span></span>
+<span id="cb11-11"><a href="#cb11-11" tabindex="-1"></a><span class="co">#&gt; $sex_unique</span></span>
+<span id="cb11-12"><a href="#cb11-12" tabindex="-1"></a><span class="co">#&gt; [1] 1 0</span></span>
+<span id="cb11-13"><a href="#cb11-13" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb11-14"><a href="#cb11-14" tabindex="-1"></a><span class="co">#&gt; $sex_length</span></span>
+<span id="cb11-15"><a href="#cb11-15" tabindex="-1"></a><span class="co">#&gt; [1] 2</span></span>
+<span id="cb11-16"><a href="#cb11-16" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb11-17"><a href="#cb11-17" tabindex="-1"></a><span class="co">#&gt; $all_sex_dad</span></span>
+<span id="cb11-18"><a href="#cb11-18" tabindex="-1"></a><span class="co">#&gt; [1] &quot;1&quot;</span></span>
+<span id="cb11-19"><a href="#cb11-19" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb11-20"><a href="#cb11-20" tabindex="-1"></a><span class="co">#&gt; $all_sex_mom</span></span>
+<span id="cb11-21"><a href="#cb11-21" tabindex="-1"></a><span class="co">#&gt; [1] &quot;0&quot;</span></span>
+<span id="cb11-22"><a href="#cb11-22" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb11-23"><a href="#cb11-23" tabindex="-1"></a><span class="co">#&gt; $most_frequent_sex_dad</span></span>
+<span id="cb11-24"><a href="#cb11-24" tabindex="-1"></a><span class="co">#&gt; [1] &quot;1&quot;</span></span>
+<span id="cb11-25"><a href="#cb11-25" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb11-26"><a href="#cb11-26" tabindex="-1"></a><span class="co">#&gt; $most_frequent_sex_mom</span></span>
+<span id="cb11-27"><a href="#cb11-27" tabindex="-1"></a><span class="co">#&gt; [1] &quot;0&quot;</span></span></code></pre></div>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="fu">print</span>(results)</span>
 <span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="co">#&gt; $sex_unique</span></span>
 <span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="co">#&gt; [1] 1 0</span></span>
@@ -696,17 +690,20 @@ values in the sex column and identifies any inconsistencies in the sex
 coding of parents. The function returns a list containing validation
 results, such as the unique values found in the sex column and any
 inconsistencies in the sex coding of parents.</p>
-<p>If incorrect sex codes are found, you can attempt to repair them
-automatically using the repair argument:</p>
+<p>If the function identifies inconsistent sex codes, you can attempt to
+repair them automatically:</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="co"># Repair sex coding</span></span>
-<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>df_fix <span class="ot">&lt;-</span> <span class="fu">checkSex</span>(potter, <span class="at">code_male =</span> <span class="dv">1</span>, <span class="at">code_female =</span> <span class="dv">0</span>, <span class="at">verbose =</span> <span class="cn">TRUE</span>, <span class="at">repair =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a><span class="co">#&gt; Step 1: Checking how many sexes/genders...</span></span>
-<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a><span class="co">#&gt; 2 unique values found.</span></span>
-<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a><span class="co">#&gt;  1 2 unique values found.</span></span>
-<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a><span class="co">#&gt;  0Step 2: Attempting to repair sex coding...</span></span>
-<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a><span class="co">#&gt; Changes Made:</span></span>
-<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a><span class="co">#&gt; [[1]]</span></span>
-<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Recode sex based on most frequent sex in dads: 1. Total gender changes made: 36&quot;</span></span></code></pre></div>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>df_fix <span class="ot">&lt;-</span> <span class="fu">checkSex</span>(potter, </span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a>                   <span class="at">code_male =</span> <span class="dv">1</span>, </span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a>                   <span class="at">code_female =</span> <span class="dv">0</span>, </span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a>                   <span class="at">verbose =</span> <span class="cn">TRUE</span>, <span class="at">repair =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a><span class="co">#&gt; Step 1: Checking how many sexes/genders...</span></span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a><span class="co">#&gt; 2 unique values found.</span></span>
+<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a><span class="co">#&gt;  1 2 unique values found.</span></span>
+<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a><span class="co">#&gt;  0Step 2: Attempting to repair sex coding...</span></span>
+<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a><span class="co">#&gt; Changes Made:</span></span>
+<span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a><span class="co">#&gt; [[1]]</span></span>
+<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Recode sex based on most frequent sex in dads: 1. Total gender changes made: 36&quot;</span></span></code></pre></div>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="fu">print</span>(df_fix)</span>
 <span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="co">#&gt;     ID fam               name gen momID dadID spID sex</span></span>
 <span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="co">#&gt; 1    1   1     Vernon Dursley   1   101   102    3   M</span></span>
@@ -745,11 +742,11 @@ automatically using the repair argument:</p>
 <span id="cb14-36"><a href="#cb14-36" tabindex="-1"></a><span class="co">#&gt; 34 103   1       Mother Evans   0    NA    NA  104   F</span></span>
 <span id="cb14-37"><a href="#cb14-37" tabindex="-1"></a><span class="co">#&gt; 35 106   1    Father Delacour   0    NA    NA  105   M</span></span>
 <span id="cb14-38"><a href="#cb14-38" tabindex="-1"></a><span class="co">#&gt; 36 105   1    Mother Delacour   0    NA    NA  106   F</span></span></code></pre></div>
-<p>When the repair argument is set to TRUE, the function attempts to
-repair the sex coding based on specified logic. It recodes the sex
-variable based on the most frequent sex values found among parents. This
-ensures that the sex coding is consistent and accurate, which is
-essential for constructing valid genetic pedigrees.</p>
+<p>When the repair argument is set to <code>TRUE</code>, the function
+attempts to repair the sex coding based on repair sex coding based on
+the most frequent sex values found among parents. This approach helps
+ensure that the sex coding in your dataset is consistent and
+accurate.</p>
 <!--
 ## Practical Example: Cleaning a Pedigree
 
@@ -787,13 +784,13 @@ cleaned_data <- sample_data %>%
 
 # Check for duplicate IDs
 temp_check <- checkIDs(cleaned_data, verbose = TRUE, repair = FALSE)
- all_duplicated_ids   <- cbind(temp_check$non_unique_ids, temp_check$duplicated_parents_ids)
+all_duplicated_ids <- cbind(temp_check$non_unique_ids, temp_check$duplicated_parents_ids)
 
 cleaned_data <- cleaned_data %>%
   mutate(
     duplicated = case_when(ID %in% temp_check$non_unique_ids ~ 1, TRUE ~ 0),
-    duplicated_parent = case_when(dadID %in% all_duplicated_ids  | momID %in% all_duplicated_ids  ~ 1, TRUE ~ 0),
-    duplicated_source_ID = case_when(ID %in% all_duplicated_ids ~ ID, dadID %in% all_duplicated_ids  ~ dadID, momID %in% all_duplicated_ids  ~ momID, TRUE ~ NA_integer_),
+    duplicated_parent = case_when(dadID %in% all_duplicated_ids | momID %in% all_duplicated_ids ~ 1, TRUE ~ 0),
+    duplicated_source_ID = case_when(ID %in% all_duplicated_ids ~ ID, dadID %in% all_duplicated_ids ~ dadID, momID %in% all_duplicated_ids ~ momID, TRUE ~ NA_integer_),
     alteredlinks = 0
   )
 
@@ -806,16 +803,16 @@ cleaned_data %>%
 # Perform specific corrections
 cleaned_data <- cleaned_data %>%
   mutate(
-    alteredlinks = case_when(ID == 9  ~ 1, TRUE ~ alteredlinks),
+    alteredlinks = case_when(ID == 9 ~ 1, TRUE ~ alteredlinks),
     ID = case_when(ID == 7 & round(byr, digits = 0) == 2020 ~ ID + 1e6, TRUE ~ ID)
   )
 
 # Final check for remaining duplicates
 final_check <- checkIDs(cleaned_data, verbose = TRUE, repair = FALSE)
 print(final_check)
-
 ```
 -->
+</div>
 </div>
 </div>
 <div id="conclusion" class="section level1">
