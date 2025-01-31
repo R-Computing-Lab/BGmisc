@@ -76,8 +76,8 @@ checkIDs <- function(ped, verbose = FALSE, repair = FALSE) {
       ))
     }
     validation_results$within_row_duplicates <- TRUE
- if(validation_results$total_own_father > 0){
-     validation_results$is_own_father_ids <- unique(is_own_father)
+    if (validation_results$total_own_father > 0) {
+      validation_results$is_own_father_ids <- unique(is_own_father)
       if (verbose) {
         cat(paste0(
           validation_results$total_own_father,
@@ -85,8 +85,8 @@ checkIDs <- function(ped, verbose = FALSE, repair = FALSE) {
         ))
       }
     }
-if(validation_results$total_own_mother > 0){
-     validation_results$is_own_mother_ids <- unique(is_own_mother)
+    if (validation_results$total_own_mother > 0) {
+      validation_results$is_own_mother_ids <- unique(is_own_mother)
       if (verbose) {
         cat(paste0(
           validation_results$total_own_mother,
@@ -94,8 +94,8 @@ if(validation_results$total_own_mother > 0){
         ))
       }
     }
-if(validation_results$total_duplicated_parents > 0){
-     validation_results$duplicated_parents_ids <- unique(duplicated_parents)
+    if (validation_results$total_duplicated_parents > 0) {
+      validation_results$duplicated_parents_ids <- unique(duplicated_parents)
       if (verbose) {
         cat(paste0(
           validation_results$total_duplicated_parents,

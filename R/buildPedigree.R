@@ -9,6 +9,7 @@
 #' @param momID character.  Name of the column in ped for the mother ID variable
 #' @param dadID character.  Name of the column in ped for the father ID variable
 #' @param famID character.  Name of the column to be created in ped for the family ID variable
+#' @param ... additional arguments to be passed to \code{\link{ped2com}}
 #' @details
 #' The general idea of this function is to use person ID, mother ID, and father ID to
 #' create an extended family ID such that everyone with the same family ID is in the
@@ -25,14 +26,17 @@
 #'
 #' @export
 #'
-ped2fam <- function(ped, personID = "ID", momID = "momID", dadID = "dadID", famID = "famID") {
+ped2fam <- function(ped, personID = "ID",
+                    momID = "momID", dadID = "dadID", famID = "famID",
+                    ...) {
   # Call to wrapper function
   .ped2id(ped = ped, personID = personID, momID = momID, dadID = dadID, famID = famID, type = "parents")
 }
 
 .ped2id <- function(ped,
                     personID = "ID", momID = "momID", dadID = "dadID",
-                    famID = "famID", type) {
+                    famID = "famID", type,
+                    ...) {
   # Turn pedigree into family
   pg <- ped2graph(ped = ped, personID = personID, momID = momID, dadID = dadID, adjacent = type)
 
@@ -79,7 +83,8 @@ ped2graph <- function(ped,
                       momID = "momID",
                       dadID = "dadID",
                       directed = TRUE,
-                      adjacent = c("parents", "mothers", "fathers")) {
+                      adjacent = c("parents", "mothers", "fathers"),
+                      ...) {
   # Check ped/data.fram
   if (!inherits(ped, "data.frame")) stop("ped should be a data.frame or inherit to a data.frame")
   # Handle adjacent argument
@@ -171,7 +176,8 @@ ped2graph <- function(ped,
 #' for creating paternal line IDs
 #' @export
 #'
-ped2maternal <- function(ped, personID = "ID", momID = "momID", dadID = "dadID", matID = "matID") {
+ped2maternal <- function(ped, personID = "ID",
+                         momID = "momID", dadID = "dadID", matID = "matID", ...) {
   # Call to wrapper function
   .ped2id(ped = ped, personID = personID, momID = momID, dadID = dadID, famID = matID, type = "mothers")
 }
@@ -189,7 +195,9 @@ ped2maternal <- function(ped, personID = "ID", momID = "momID", dadID = "dadID",
 #' for creating maternal line IDs
 #' @export
 #'
-ped2paternal <- function(ped, personID = "ID", momID = "momID", dadID = "dadID", patID = "patID") {
+ped2paternal <- function(ped, personID = "ID",
+                         momID = "momID", dadID = "dadID",
+                         patID = "patID", ...) {
   # Call to wrapper function
   .ped2id(ped = ped, personID = personID, momID = momID, dadID = dadID, famID = patID, type = "fathers")
 }

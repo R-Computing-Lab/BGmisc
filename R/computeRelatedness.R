@@ -59,7 +59,7 @@ calculateRelatedness <- function(
     denom_emp <- denom_m * total_m * weight_m + total_a * weight_a
     if (denom_emp == 0) stop("Denominator in empirical adjustment is zero.")
 
-    coef <- (coef * total_a * weight_a + maternal * total_m * weight_m)/denom_emp
+    coef <- (coef * total_a * weight_a + maternal * total_m * weight_m) / denom_emp
   }
   return(coef)
 }

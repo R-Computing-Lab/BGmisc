@@ -13,7 +13,6 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 options(rmarkdown.html_vignette.check_title = FALSE)
-
 ```
 
 # Introduction
@@ -42,22 +41,22 @@ print(result)
 
 #> $all_unique_ids
 #> [1] TRUE
-#> 
+#>
 #> $total_non_unique_ids
 #> [1] 0
-#> 
+#>
 #> $total_own_father
 #> [1] 0
-#> 
+#>
 #> $total_own_mother
 #> [1] 0
-#> 
+#>
 #> $total_duplicated_parents
 #> [1] 0
-#> 
+#>
 #> $total_within_row_duplicates
 #> [1] 0
-#> 
+#>
 #> $within_row_duplicates
 #> [1] FALSE
 ```
@@ -79,7 +78,7 @@ df <- ped2fam(potter, famID = "newFamID", personID = "personID")
 df$personID[df$name == "Vernon Dursley"] <- df$personID[df$name == "Marjorie Dursley"]
 
 # Add a copy of Dudley Dursley
-df <- rbind(df, df[df$name == "Dudley Dursley",])
+df <- rbind(df, df[df$name == "Dudley Dursley", ])
 ```
 
 Now, let's call the `sumarizeFamilies` function to see what the dataset looks like.
@@ -102,18 +101,18 @@ print(result)
 As we can see from this output, there are `r result$total_non_unique_ids` non-unique IDs in the dataset, specifically `r result$non_unique_ids`. Let's take a peek at the duplicates:
 
 ```{r}
-
-df %>% filter(personID %in% result$non_unique_ids) %>%
+df %>%
+  filter(personID %in% result$non_unique_ids) %>%
   arrange(personID)
-
 ```
 
-Yep, these are  definitely the duplicates.
+Yep, these are definitely the duplicates.
 
 ```{r}
 df_repair <- checkIDs(df, repair = TRUE)
 
-df_repair %>% filter(ID %in% result$non_unique_ids) %>%
+df_repair %>%
+  filter(ID %in% result$non_unique_ids) %>%
   arrange(ID)
 
 result <- checkIDs(df_repair)
@@ -144,30 +143,45 @@ In this example, we have created a within-row duplicate by setting the momID of 
 
 ## Verifying Sex Coding
 
-Another common issue in pedigree data is incorrect coding of biological sex. In genetic studies, ensuring accurate recording of biological sex in pedigree data is crucial for analyses that rely on this information. The `checkSex` function in `BGmisc` helps identify and repair errors related to biological sex coding, such as inconsistencies where an individual's sex is incorrectly recorded. An example of this would be a parent who is biologically male, but listed as a mother. The `checkSex` function can help identify and correct such errors. 
+Inconsistent coding of biological sex is a common issue in pedigree data. The `checkSex` function in `BGmisc` is designed to identify and address these errors, particularly inconsistencies where an individual's sex is incorrectly recorded. For instance, it can detect cases where a parent listed as biologically male is erroneously recorded as a mother.
 
-It is essential to distinguish between biological sex (genotype) and gender identity (phenotype). Biological sex is based on chromosomes and other biological characteristics, while gender identity is a broader, richer, personal, deeply-held sense of being male, female, a blend of both, neither, or another gender entirely. While `checkSex` focuses on biological sex necessary for genetic analysis, we respect and recognize the full spectrum of gender identities beyond the binary. The developers of this package affirm their support for folx in the LGBTQ+ community.
+In genetic studies, we distinguish between biological sex (genotype) and gender identity (phenotype):
+
+- Biological sex (genotype) refers to an individual's chromosomal configuration, typically XX for female and XY for male in humans, though variations exist.
+- Gender identity (phenotype) encompasses a broader, richer, personal, deeply-held sense of being male, female, a blend of both, neither, or another gender entirely.
+
+The `checkSex` function focuses on validating biological sex because it corresponds with the inheritance patterns of sex chromosomes and mitochondrial DNA. While the `checkSex` function centers on the genetic aspect of biological sex, we respect and celebrate the full spectrum of gender identities beyond the binary. The developers of this package affirm their support for folx in the LGBTQ+ community.
 
 
-The `checkSex` function in `BGmisc` performs two main tasks: identifying possible errors and inconsistencies for variables related to biological sex. The function is capable of validating the sex coding in a pedigree and optionally repairing the sex coding based on specified logic. Here’s how you can use the `checkSex` function to validate and optionally repair sex coding in a pedigree dataset:
+
+### Using the checkSex Function
+
+The `checkSex` function identifies inconsistencies in sex coding within a pedigree and can optionally repair them based on predefined logic. Below is an example of how to use this function to validate and, if necessary, repair sex coding in a pedigree:
 
 ```{r}
 # Validate sex coding
-results <- checkSex(potter, code_male = 1, code_female = 0, verbose = TRUE, repair = FALSE)
+
+results <- checkSex(potter, 
+                    code_male = 1, 
+                    code_female = 0, 
+                    verbose = TRUE, repair = FALSE)
 print(results)
 ```
 
 In this example, the `checkSex` function checks the unique values in the sex column and identifies any inconsistencies in the sex coding of parents. The function returns a list containing validation results, such as the unique values found in the sex column and any inconsistencies in the sex coding of parents.
 
-If incorrect sex codes are found, you can attempt to repair them automatically using the repair argument:
+If the function identifies inconsistent sex codes, you can attempt to repair them automatically:
 
 ```{r}
 # Repair sex coding
-df_fix <- checkSex(potter, code_male = 1, code_female = 0, verbose = TRUE, repair = TRUE)
+df_fix <- checkSex(potter, 
+                   code_male = 1, 
+                   code_female = 0, 
+                   verbose = TRUE, repair = TRUE)
 print(df_fix)
 ```
 
-When the repair argument is set to TRUE, the function attempts to repair the sex coding based on specified logic. It recodes the sex variable based on the most frequent sex values found among parents. This ensures that the sex coding is consistent and accurate, which is essential for constructing valid genetic pedigrees.
+When the repair argument is set to `TRUE`, the function attempts to repair the sex coding based on repair sex coding based on the most frequent sex values found among parents. This approach helps ensure that the sex coding in your dataset is consistent and accurate.
 
 <!--
 ## Practical Example: Cleaning a Pedigree
@@ -205,13 +219,13 @@ cleaned_data <- sample_data %>%
 
 # Check for duplicate IDs
 temp_check <- checkIDs(cleaned_data, verbose = TRUE, repair = FALSE)
- all_duplicated_ids   <- cbind(temp_check$non_unique_ids, temp_check$duplicated_parents_ids)
+all_duplicated_ids <- cbind(temp_check$non_unique_ids, temp_check$duplicated_parents_ids)
 
 cleaned_data <- cleaned_data %>%
   mutate(
     duplicated = case_when(ID %in% temp_check$non_unique_ids ~ 1, TRUE ~ 0),
-    duplicated_parent = case_when(dadID %in% all_duplicated_ids  | momID %in% all_duplicated_ids  ~ 1, TRUE ~ 0),
-    duplicated_source_ID = case_when(ID %in% all_duplicated_ids ~ ID, dadID %in% all_duplicated_ids  ~ dadID, momID %in% all_duplicated_ids  ~ momID, TRUE ~ NA_integer_),
+    duplicated_parent = case_when(dadID %in% all_duplicated_ids | momID %in% all_duplicated_ids ~ 1, TRUE ~ 0),
+    duplicated_source_ID = case_when(ID %in% all_duplicated_ids ~ ID, dadID %in% all_duplicated_ids ~ dadID, momID %in% all_duplicated_ids ~ momID, TRUE ~ NA_integer_),
     alteredlinks = 0
   )
 
@@ -224,16 +238,16 @@ cleaned_data %>%
 # Perform specific corrections
 cleaned_data <- cleaned_data %>%
   mutate(
-    alteredlinks = case_when(ID == 9  ~ 1, TRUE ~ alteredlinks),
+    alteredlinks = case_when(ID == 9 ~ 1, TRUE ~ alteredlinks),
     ID = case_when(ID == 7 & round(byr, digits = 0) == 2020 ~ ID + 1e6, TRUE ~ ID)
   )
 
 # Final check for remaining duplicates
 final_check <- checkIDs(cleaned_data, verbose = TRUE, repair = FALSE)
 print(final_check)
-
 ```
 -->
 
 # Conclusion
-This vignette demonstrates how to use the BGmisc package to identify and repair errors in pedigrees. By leveraging functions like checkIDs, checkSex, and recodeSex, you can ensure the integrity of your pedigree data, facilitating accurate analysis and research.
+
+This vignette demonstrates how to use the BGmisc package to identify and repair errors in pedigrees. By leveraging functions like `checkIDs`, `checkSex`, and `recodeSex`, you can ensure the integrity of your pedigree data, facilitating accurate analysis and research.

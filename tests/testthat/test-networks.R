@@ -41,7 +41,7 @@ test_that("ped2add produces correct matrix dims, values, and dimnames for hazard
   # Check dimension
   expect_equal(dim(add), c(nrow(hazard), nrow(hazard)))
   # Check several values
-  #expect_true(all(diag(add) == 1))
+  # expect_true(all(diag(add) == 1))
   expect_true(sum((diag(add) - 1)^2) < tolerance)
   expect_equal(add, t(add))
   expect_equal(add[2, 1], 0)
@@ -59,14 +59,14 @@ test_that("ped2add produces correct matrix dims, values, and dimnames for altern
   data(hazard)
   add <- ped2add(hazard, tcross.alt.crossprod = TRUE)
   # Check dimension
-  expect_equal(dim(add), c(nrow(hazard), nrow(hazard)),tolerance = tolerance)
+  expect_equal(dim(add), c(nrow(hazard), nrow(hazard)), tolerance = tolerance)
   # Check several values
-  #expect_true(all(diag(add) == 1))
+  # expect_true(all(diag(add) == 1))
   expect_true(sum((diag(add) - 1)^2) < tolerance)
-  expect_equal(add, t(add),tolerance = tolerance)
-  expect_equal(add[2, 1], 0,tolerance = tolerance)
-  expect_equal(add[10, 1], .25,tolerance = tolerance)
-  expect_equal(add[9, 1], 0,tolerance = tolerance)
+  expect_equal(add, t(add), tolerance = tolerance)
+  expect_equal(add[2, 1], 0, tolerance = tolerance)
+  expect_equal(add[10, 1], .25, tolerance = tolerance)
+  expect_equal(add[9, 1], 0, tolerance = tolerance)
   expect_equal(add["5", "6"], .5)
   # Check that dimnames are correct
   dn <- dimnames(add)
@@ -80,13 +80,13 @@ test_that("ped2add produces correct matrix dims, values, and dimnames for inbree
   data(inbreeding)
   add <- ped2add(inbreeding)
   # Check dimension
-  expect_equal(dim(add), c(nrow(inbreeding), nrow(inbreeding)),tolerance = tolerance)
+  expect_equal(dim(add), c(nrow(inbreeding), nrow(inbreeding)), tolerance = tolerance)
   # Check several values
-  expect_true(all(diag(add) >= 1-tolerance))
-  expect_equal(add, t(add),tolerance = tolerance)
-  expect_equal(add[2, 1], 0,tolerance = tolerance)
-  expect_equal(add[6, 1], .5,tolerance = tolerance)
-  expect_equal(add[113, 113], 1.1250,tolerance = tolerance)
+  expect_true(all(diag(add) >= 1 - tolerance))
+  expect_equal(add, t(add), tolerance = tolerance)
+  expect_equal(add[2, 1], 0, tolerance = tolerance)
+  expect_equal(add[6, 1], .5, tolerance = tolerance)
+  expect_equal(add[113, 113], 1.1250, tolerance = tolerance)
   expect_equal(add["113", "112"], 0.62500)
   # Check that dimnames are correct
   dn <- dimnames(add)
@@ -120,7 +120,7 @@ test_that("ped2add flattens diagonal for inbreeding data", {
   # Check dimension
   expect_equal(dim(add), c(nrow(inbreeding), nrow(inbreeding)), tolerance = tolerance)
   # Check several values
- # expect_true(all(diag(add) == 1))
+  # expect_true(all(diag(add) == 1))
   expect_true(sum((diag(add) - 1)^2) < tolerance)
   expect_equal(add, t(add), tolerance = tolerance)
   expect_equal(add[2, 1], 0, tolerance = tolerance)
@@ -140,7 +140,7 @@ test_that("ped2mit produces correct matrix dims, values, and dimnames for inbree
   # Check dimension
   expect_equal(dim(mit), c(nrow(inbreeding), nrow(inbreeding)))
   # Check several values
- # expect_true(all(diag(mit) == 1))
+  # expect_true(all(diag(mit) == 1))
   expect_true(sum((diag(mit) - 1)^2) < tolerance)
   expect_equal(mit, t(mit), tolerance = tolerance)
   expect_equal(mit[2, 1], 0, tolerance = tolerance)
@@ -182,7 +182,7 @@ test_that("ped2cn produces correct matrix dims, values, and dimnames", {
   cn <- ped2cn(inbreeding)
   expect_equal(dim(cn), c(nrow(inbreeding), nrow(inbreeding)), tolerance = tolerance)
   # Check several values
- # expect_true(all(diag(cn) == 1))
+  # expect_true(all(diag(cn) == 1))
   expect_true(sum((diag(cn) - 1)^2) < tolerance)
   expect_equal(cn, t(cn), tolerance = tolerance)
   expect_equal(cn[2, 1], 0, tolerance = tolerance)
@@ -202,7 +202,7 @@ test_that("ped2ce produces correct matrix dims, values, and dimnames", {
   ce <- ped2ce(inbreeding)
   expect_equal(dim(ce), c(nrow(inbreeding), nrow(inbreeding)), tolerance = tolerance)
   # Check several values
- # expect_true(all(diag(ce) == 1))
+  # expect_true(all(diag(ce) == 1))
   expect_true(sum((diag(ce) - 1)^2) < tolerance)
   expect_equal(ce, t(ce), tolerance = tolerance)
   expect_equal(ce[2, 1], 1, tolerance = tolerance)

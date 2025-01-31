@@ -13,7 +13,8 @@ ped2cn(
   flatten.diag = FALSE,
   standardize.colnames = TRUE,
   tcross.alt.crossprod = FALSE,
-  tcross.alt.star = FALSE
+  tcross.alt.star = FALSE,
+  ...
 )
 }
 \arguments{
@@ -36,6 +37,8 @@ ped2cn(
 \item{tcross.alt.crossprod}{logical. If TRUE, use alternative method of using Crossprod function for computing the transpose}
 
 \item{tcross.alt.star}{logical. If TRUE, use alternative method of using \%\*\% for computing the transpose}
+
+\item{...}{additional arguments to be passed to \code{\link{ped2com}}}
 }
 \description{
 Take a pedigree and turn it into a common nuclear environmental relatedness matrix

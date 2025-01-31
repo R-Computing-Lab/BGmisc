@@ -10,7 +10,8 @@ ped2graph(
   momID = "momID",
   dadID = "dadID",
   directed = TRUE,
-  adjacent = c("parents", "mothers", "fathers")
+  adjacent = c("parents", "mothers", "fathers"),
+  ...
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ ped2graph(
 \item{directed}{Logical scalar. Default is TRUE. Indicates whether or not to create a directed graph.}
 
 \item{adjacent}{Character.  Relationship that defines adjacency in the graph: parents, mothers, or fathers}
+
+\item{...}{additional arguments to be passed to \code{\link{ped2com}}}
 }
 \value{
 A graph

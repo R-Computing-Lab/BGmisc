@@ -204,8 +204,11 @@ ped2com <- function(ped, component,
 #' @inherit ped2com details
 #' @export
 #'
-ped2add <- function(ped, max.gen = 25, sparse = FALSE, verbose = FALSE, gc = FALSE, flatten.diag = FALSE, standardize.colnames = TRUE,
-                    tcross.alt.crossprod = FALSE, tcross.alt.star = FALSE) {
+ped2add <- function(ped, max.gen = 25, sparse = FALSE, verbose = FALSE,
+                    gc = FALSE,
+                    flatten.diag = FALSE, standardize.colnames = TRUE,
+                    tcross.alt.crossprod = FALSE, tcross.alt.star = FALSE,
+                    ...) {
   ped2com(
     ped = ped,
     max.gen = max.gen,
@@ -226,7 +229,13 @@ ped2add <- function(ped, max.gen = 25, sparse = FALSE, verbose = FALSE, gc = FAL
 #' @export
 #' @aliases ped2mt
 #'
-ped2mit <- ped2mt <- function(ped, max.gen = 25, sparse = FALSE, verbose = FALSE, gc = FALSE, flatten.diag = FALSE, standardize.colnames = TRUE, tcross.alt.crossprod = FALSE, tcross.alt.star = FALSE) {
+ped2mit <- ped2mt <- function(ped, max.gen = 25,
+                              sparse = FALSE,
+                              verbose = FALSE, gc = FALSE,
+                              flatten.diag = FALSE,
+                              standardize.colnames = TRUE,
+                              tcross.alt.crossprod = FALSE, tcross.alt.star = FALSE,
+                              ...) {
   ped2com(
     ped = ped,
     max.gen = max.gen,
@@ -246,7 +255,11 @@ ped2mit <- ped2mt <- function(ped, max.gen = 25, sparse = FALSE, verbose = FALSE
 #' @inherit ped2com details
 #' @export
 #'
-ped2cn <- function(ped, max.gen = 25, sparse = FALSE, verbose = FALSE, gc = FALSE, flatten.diag = FALSE, standardize.colnames = TRUE, tcross.alt.crossprod = FALSE, tcross.alt.star = FALSE) {
+ped2cn <- function(ped, max.gen = 25, sparse = FALSE, verbose = FALSE,
+                   gc = FALSE, flatten.diag = FALSE,
+                   standardize.colnames = TRUE,
+                   tcross.alt.crossprod = FALSE, tcross.alt.star = FALSE,
+                   ...) {
   ped2com(
     ped = ped,
     max.gen = max.gen,
@@ -266,6 +279,7 @@ ped2cn <- function(ped, max.gen = 25, sparse = FALSE, verbose = FALSE, gc = FALS
 #' @inherit ped2com details
 #' @export
 #'
-ped2ce <- function(ped) {
+ped2ce <- function(ped,
+                   ...) {
   matrix(1, nrow = nrow(ped), ncol = nrow(ped), dimnames = list(ped$ID, ped$ID))
 }

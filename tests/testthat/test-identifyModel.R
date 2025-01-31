@@ -76,6 +76,5 @@ test_that("default names are assigned correctly", {
 # Test for list handling in comp2vech
 test_that("comp2vech handles lists correctly", {
   list_input <- list(matrix(c(1, 0.5, 0.5, 1), 2, 2), matrix(1, 2, 2))
-  expect_length(comp2vech(list_input, include.zeros = TRUE), 10)  # Adjust based on expected vector length
+  expect_length(comp2vech(list_input, include.zeros = TRUE), 10) # Adjust based on expected vector length
 })
-
