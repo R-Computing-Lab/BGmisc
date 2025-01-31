@@ -1,237 +1,81 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/404.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/CODE_OF_CONDUCT.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/CONTRIBUTING.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/articles/analyticrelatedness.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/articles/modelingrelatedness.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/articles/network.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/articles/pedigree.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/articles/validation.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/index.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/BGmisc-package.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/Null.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/SimPed.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/adjustKidsPerCouple.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/allGens.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/assignCoupleIds.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/assignParentIDs.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/buildBetweenGenerations.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/buildWithinGenerations.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/calculateH.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/calculateRelatedness.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/calculateSummaryDT.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/checkIDs.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/checkSex.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/combine_columns.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/comp2vech.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/countPatternRows.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/createFamilyToParentsMapping.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/createGenDataFrame.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/determineSex.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/dropLink.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/efunc.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/evenInsert.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/extract_info.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/famSizeCal.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/findFounder.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/fitComponentModel.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/hazard.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/identifyComponentModel.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/inbreeding.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/inferRelatedness.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/makeInbreeding.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/makeTwins.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/markPotentialChildren.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/nullToNA.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/ped2add.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/ped2ce.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/ped2cn.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/ped2com.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/ped2fam.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/ped2graph.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/ped2maternal.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/ped2mit.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/ped2paternal.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/plotPedigree.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/potter.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/processParents.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/readGedcom.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/recodeSex.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/related_coef.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/relatedness.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/repairIDs.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/repairSex.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/resample.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/rmvn.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/simulatePedigree.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/sizeAllGens.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/standardizeColnames.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/summarizeFamilies.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/summarizeMatrilines.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/summarizePatrilines.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/summarizePedigrees.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/try_na.html</loc>
-  </url>
-  <url>
-    <loc>https://r-computing-lab.github.io/BGmisc/reference/vech.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://r-computing-lab.github.io/BGmisc/404.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/CODE_OF_CONDUCT.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/CONTRIBUTING.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/LICENSE.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/articles/analyticrelatedness.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/articles/index.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/articles/modelingrelatedness.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/articles/network.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/articles/pedigree.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/articles/validation.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/authors.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/index.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/news/index.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/BGmisc-package.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/Null.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/SimPed.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/adjustKidsPerCouple.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/allGens.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/assignCoupleIds.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/assignParentIDs.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/buildBetweenGenerations.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/buildWithinGenerations.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/calculateH.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/calculateRelatedness.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/calculateSummaryDT.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/checkIDs.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/checkSex.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/combine_columns.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/comp2vech.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/countPatternRows.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/createFamilyToParentsMapping.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/createGenDataFrame.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/determineSex.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/dropLink.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/efunc.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/evenInsert.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/extract_info.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/famSizeCal.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/findFounder.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/fitComponentModel.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/hazard.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/identifyComponentModel.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/inbreeding.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/index.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/inferRelatedness.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/makeInbreeding.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/makeTwins.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/markPotentialChildren.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/nullToNA.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/ped2add.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/ped2ce.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/ped2cn.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/ped2com.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/ped2fam.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/ped2graph.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/ped2maternal.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/ped2mit.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/ped2paternal.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/plotPedigree.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/potter.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/processParents.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/readGedcom.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/recodeSex.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/related_coef.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/relatedness.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/repairIDs.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/repairSex.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/resample.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/rmvn.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/simulatePedigree.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/sizeAllGens.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/standardizeColnames.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/summarizeFamilies.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/summarizeMatrilines.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/summarizePatrilines.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/summarizePedigrees.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/try_na.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/vech.html</loc></url>
 </urlset>
+
