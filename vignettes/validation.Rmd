@@ -106,7 +106,7 @@ df %>%
   arrange(personID)
 ```
 
-Yep, these are  definitely the duplicates.
+Yep, these are definitely the duplicates.
 
 ```{r}
 df_repair <- checkIDs(df, repair = TRUE)
@@ -249,4 +249,5 @@ print(final_check)
 -->
 
 # Conclusion
-This vignette demonstrates how to use the BGmisc package to identify and repair errors in pedigrees. By leveraging functions like checkIDs, checkSex, and recodeSex, you can ensure the integrity of your pedigree data, facilitating accurate analysis and research.
+
+This vignette demonstrates how to use the BGmisc package to identify and repair errors in pedigrees. By leveraging functions like `checkIDs`, `checkSex`, and `recodeSex`, you can ensure the integrity of your pedigree data, facilitating accurate analysis and research.
