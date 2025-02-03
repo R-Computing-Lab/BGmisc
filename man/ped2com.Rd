@@ -15,6 +15,10 @@ ped2com(
   standardize.colnames = TRUE,
   tcross.alt.crossprod = FALSE,
   tcross.alt.star = FALSE,
+  saveable = FALSE,
+  resume = FALSE,
+  save_rate = 5,
+  save_path = "checkpoint/",
   ...
 )
 }
@@ -40,6 +44,14 @@ ped2com(
 \item{tcross.alt.crossprod}{logical. If TRUE, use alternative method of using Crossprod function for computing the transpose}
 
 \item{tcross.alt.star}{logical. If TRUE, use alternative method of using \%\*\% for computing the transpose}
+
+\item{saveable}{logical. If TRUE, save the intermediate results to disk}
+
+\item{resume}{logical. If TRUE, resume from a checkpoint}
+
+\item{save_rate}{numeric. The rate at which to save the intermediate results}
+
+\item{save_path}{character. The path to save the checkpoint files}
 
 \item{...}{additional arguments to be passed to \code{\link{ped2com}}}
 }
