@@ -238,23 +238,24 @@ if (resume && file.exists(checkpoint_files$isChild)) {
   }
 
 # --- Step 2: Compute Relatedness Matrix ---
-    if (resume && file.exists(checkpoint_files$r_checkpoint)) {
+    if (resume && file.exists(checkpoint_files$r_checkpoint) && file.exists(checkpoint_files$gen_checkpoint) && file.exists(checkpoint_files$mtSum_checkpoint) && file.exists(checkpoint_files$newIsPar_checkpoint)
+        && file.exists(checkpoint_files$count_checkpoint)
+        ) {
       if (verbose) cat("Resuming: Loading previous computation...\n")
       r <- readRDS(checkpoint_files$r_checkpoint)
       gen <- readRDS(checkpoint_files$gen_checkpoint)
       mtSum <- readRDS(checkpoint_files$mtSum_checkpoint)
       newIsPar <- readRDS(checkpoint_files$newIsPar_checkpoint)
       count <- readRDS(checkpoint_files$count_checkpoint)
-      maxCount <- max.gen + 1
     } else {
       r <- Matrix::Diagonal(x = 1, n = nr)
       gen <- rep(1, nr)
       mtSum <- sum(r, na.rm = TRUE)
       newIsPar <- isPar
       count <- 0
-      maxCount <- max.gen + 1
-    }
 
+    }
+  maxCount <- max.gen + 1
   if (verbose) {
     cat("About to do RAM path tracing\n")
   }
@@ -287,8 +288,8 @@ if (resume && file.exists(checkpoint_files$isChild)) {
   }
  # --- Step 3: I-A inverse times diagonal multiplication ---
   if(resume && file.exists(checkpoint_files$final_matrix)){
-    if (verbose) cat("Resuming: Loading I-A inverse...\n")
-    return(readRDS(checkpoint_files$r2_checkpoint))
+  if (verbose) cat("Resuming: Loading I-A inverse...\n")
+    r2 <- readRDS(checkpoint_files$r2_checkpoint)
   } else {
   if (verbose) {
     cat("Doing I-A inverse times diagonal multiplication\n")
@@ -333,7 +334,6 @@ if (resume && file.exists(checkpoint_files$tcrossprod_checkpoint)) {
   }
 }
 
-
   if (component == "generation") {
     return(gen)
   } else {
@@ -341,11 +341,15 @@ if (resume && file.exists(checkpoint_files$tcrossprod_checkpoint)) {
       r@x <- rep(1, length(r@x))
       # Assign 1 to all nonzero elements for mitochondrial component
     }
+
     if (!sparse) {
       r <- as.matrix(r)
     }
     if (flatten.diag) { # flattens diagonal if you don't want to deal with inbreeding
       diag(r) <- 1
+    }
+    if(saveable){
+      saveRDS(r, file = checkpoint_files$final_matrix)
     }
     return(r)
   }

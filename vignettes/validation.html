@@ -349,7 +349,7 @@ model identification, calculating relatedness, pedigree conversion, and
 pedigree simulation. This vignette provides an overview of the
 validation tools available in the package, designed to identify and
 repair errors in pedigrees.</p>
-<p>In an ideal world, you would have perfect pedigrees with no errors.
+<p>In an ideal world, you would have flawless error-free pedigrees.
 However, in the real world, pedigrees are often incomplete, contain
 errors, or are missing data. The <code>BGmisc</code> package provides
 tools to identify these errors, which is particularly useful for large
@@ -397,28 +397,7 @@ of duplicates. Here’s how to use it:</p>
 <span id="cb1-24"><a href="#cb1-24" tabindex="-1"></a><span class="co">#&gt; [1] 0</span></span>
 <span id="cb1-25"><a href="#cb1-25" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb1-26"><a href="#cb1-26" tabindex="-1"></a><span class="co">#&gt; $within_row_duplicates</span></span>
-<span id="cb1-27"><a href="#cb1-27" tabindex="-1"></a><span class="co">#&gt; [1] FALSE</span></span>
-<span id="cb1-28"><a href="#cb1-28" tabindex="-1"></a></span>
-<span id="cb1-29"><a href="#cb1-29" tabindex="-1"></a><span class="co">#&gt; $all_unique_ids</span></span>
-<span id="cb1-30"><a href="#cb1-30" tabindex="-1"></a><span class="co">#&gt; [1] TRUE</span></span>
-<span id="cb1-31"><a href="#cb1-31" tabindex="-1"></a><span class="co">#&gt;</span></span>
-<span id="cb1-32"><a href="#cb1-32" tabindex="-1"></a><span class="co">#&gt; $total_non_unique_ids</span></span>
-<span id="cb1-33"><a href="#cb1-33" tabindex="-1"></a><span class="co">#&gt; [1] 0</span></span>
-<span id="cb1-34"><a href="#cb1-34" tabindex="-1"></a><span class="co">#&gt;</span></span>
-<span id="cb1-35"><a href="#cb1-35" tabindex="-1"></a><span class="co">#&gt; $total_own_father</span></span>
-<span id="cb1-36"><a href="#cb1-36" tabindex="-1"></a><span class="co">#&gt; [1] 0</span></span>
-<span id="cb1-37"><a href="#cb1-37" tabindex="-1"></a><span class="co">#&gt;</span></span>
-<span id="cb1-38"><a href="#cb1-38" tabindex="-1"></a><span class="co">#&gt; $total_own_mother</span></span>
-<span id="cb1-39"><a href="#cb1-39" tabindex="-1"></a><span class="co">#&gt; [1] 0</span></span>
-<span id="cb1-40"><a href="#cb1-40" tabindex="-1"></a><span class="co">#&gt;</span></span>
-<span id="cb1-41"><a href="#cb1-41" tabindex="-1"></a><span class="co">#&gt; $total_duplicated_parents</span></span>
-<span id="cb1-42"><a href="#cb1-42" tabindex="-1"></a><span class="co">#&gt; [1] 0</span></span>
-<span id="cb1-43"><a href="#cb1-43" tabindex="-1"></a><span class="co">#&gt;</span></span>
-<span id="cb1-44"><a href="#cb1-44" tabindex="-1"></a><span class="co">#&gt; $total_within_row_duplicates</span></span>
-<span id="cb1-45"><a href="#cb1-45" tabindex="-1"></a><span class="co">#&gt; [1] 0</span></span>
-<span id="cb1-46"><a href="#cb1-46" tabindex="-1"></a><span class="co">#&gt;</span></span>
-<span id="cb1-47"><a href="#cb1-47" tabindex="-1"></a><span class="co">#&gt; $within_row_duplicates</span></span>
-<span id="cb1-48"><a href="#cb1-48" tabindex="-1"></a><span class="co">#&gt; [1] FALSE</span></span></code></pre></div>
+<span id="cb1-27"><a href="#cb1-27" tabindex="-1"></a><span class="co">#&gt; [1] FALSE</span></span></code></pre></div>
 <p>In this example, the <code>checkIDs</code> function returns a list
 with several elements. The <code>all_unique_ids</code> element indicates
 whether all IDs in the dataset are unique. The
@@ -453,52 +432,27 @@ ID. Second, we have added a copy of Dudley Dursley to the dataset.</p>
 <p>Now, let’s call the <code>sumarizeFamilies</code> function to see
 what the dataset looks like.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co">#&gt; ── Attaching core tidyverse packages ──────────────────── tidyverse 2.0.0 ──</span></span>
-<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#&gt; ✔ dplyr     1.1.4     ✔ readr     2.1.5</span></span>
-<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co">#&gt; ✔ forcats   1.0.0     ✔ stringr   1.5.1</span></span>
-<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#&gt; ✔ ggplot2   3.5.1     ✔ tibble    3.2.1</span></span>
-<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="co">#&gt; ✔ lubridate 1.9.3     ✔ tidyr     1.3.1</span></span>
-<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co">#&gt; ✔ purrr     1.0.2     </span></span>
-<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="co">#&gt; ── Conflicts ────────────────────────────────────── tidyverse_conflicts() ──</span></span>
-<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co">#&gt; ✖ dplyr::between()     masks BGmisc::between()</span></span>
-<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="co">#&gt; ✖ dplyr::filter()      masks stats::filter()</span></span>
-<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="co">#&gt; ✖ dplyr::first()       masks BGmisc::first()</span></span>
-<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a><span class="co">#&gt; ✖ lubridate::hour()    masks BGmisc::hour()</span></span>
-<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a><span class="co">#&gt; ✖ lubridate::isoweek() masks BGmisc::isoweek()</span></span>
-<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a><span class="co">#&gt; ✖ dplyr::lag()         masks stats::lag()</span></span>
-<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a><span class="co">#&gt; ✖ dplyr::last()        masks BGmisc::last()</span></span>
-<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a><span class="co">#&gt; ✖ lubridate::mday()    masks BGmisc::mday()</span></span>
-<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a><span class="co">#&gt; ✖ lubridate::minute()  masks BGmisc::minute()</span></span>
-<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a><span class="co">#&gt; ✖ lubridate::month()   masks BGmisc::month()</span></span>
-<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a><span class="co">#&gt; ✖ lubridate::quarter() masks BGmisc::quarter()</span></span>
-<span id="cb3-20"><a href="#cb3-20" tabindex="-1"></a><span class="co">#&gt; ✖ lubridate::second()  masks BGmisc::second()</span></span>
-<span id="cb3-21"><a href="#cb3-21" tabindex="-1"></a><span class="co">#&gt; ✖ purrr::transpose()   masks BGmisc::transpose()</span></span>
-<span id="cb3-22"><a href="#cb3-22" tabindex="-1"></a><span class="co">#&gt; ✖ lubridate::wday()    masks BGmisc::wday()</span></span>
-<span id="cb3-23"><a href="#cb3-23" tabindex="-1"></a><span class="co">#&gt; ✖ lubridate::week()    masks BGmisc::week()</span></span>
-<span id="cb3-24"><a href="#cb3-24" tabindex="-1"></a><span class="co">#&gt; ✖ lubridate::yday()    masks BGmisc::yday()</span></span>
-<span id="cb3-25"><a href="#cb3-25" tabindex="-1"></a><span class="co">#&gt; ✖ lubridate::year()    masks BGmisc::year()</span></span>
-<span id="cb3-26"><a href="#cb3-26" tabindex="-1"></a><span class="co">#&gt; ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</span></span>
-<span id="cb3-27"><a href="#cb3-27" tabindex="-1"></a></span>
-<span id="cb3-28"><a href="#cb3-28" tabindex="-1"></a><span class="fu">summarizeFamilies</span>(df, <span class="at">famID =</span> <span class="st">&quot;newFamID&quot;</span>, <span class="at">personID =</span> <span class="st">&quot;personID&quot;</span>)<span class="sc">$</span>family_summary <span class="sc">%&gt;%</span> <span class="fu">glimpse</span>()</span>
-<span id="cb3-29"><a href="#cb3-29" tabindex="-1"></a><span class="co">#&gt; Rows: 1</span></span>
-<span id="cb3-30"><a href="#cb3-30" tabindex="-1"></a><span class="co">#&gt; Columns: 17</span></span>
-<span id="cb3-31"><a href="#cb3-31" tabindex="-1"></a><span class="co">#&gt; $ newFamID        &lt;dbl&gt; 1</span></span>
-<span id="cb3-32"><a href="#cb3-32" tabindex="-1"></a><span class="co">#&gt; $ count           &lt;int&gt; 37</span></span>
-<span id="cb3-33"><a href="#cb3-33" tabindex="-1"></a><span class="co">#&gt; $ gen_mean        &lt;dbl&gt; 1.756757</span></span>
-<span id="cb3-34"><a href="#cb3-34" tabindex="-1"></a><span class="co">#&gt; $ gen_median      &lt;dbl&gt; 2</span></span>
-<span id="cb3-35"><a href="#cb3-35" tabindex="-1"></a><span class="co">#&gt; $ gen_min         &lt;dbl&gt; 0</span></span>
-<span id="cb3-36"><a href="#cb3-36" tabindex="-1"></a><span class="co">#&gt; $ gen_max         &lt;dbl&gt; 3</span></span>
-<span id="cb3-37"><a href="#cb3-37" tabindex="-1"></a><span class="co">#&gt; $ gen_sd          &lt;dbl&gt; 1.038305</span></span>
-<span id="cb3-38"><a href="#cb3-38" tabindex="-1"></a><span class="co">#&gt; $ spouseID_mean   &lt;dbl&gt; 38.2</span></span>
-<span id="cb3-39"><a href="#cb3-39" tabindex="-1"></a><span class="co">#&gt; $ spouseID_median &lt;dbl&gt; 15</span></span>
-<span id="cb3-40"><a href="#cb3-40" tabindex="-1"></a><span class="co">#&gt; $ spouseID_min    &lt;dbl&gt; 1</span></span>
-<span id="cb3-41"><a href="#cb3-41" tabindex="-1"></a><span class="co">#&gt; $ spouseID_max    &lt;dbl&gt; 106</span></span>
-<span id="cb3-42"><a href="#cb3-42" tabindex="-1"></a><span class="co">#&gt; $ spouseID_sd     &lt;dbl&gt; 44.15118</span></span>
-<span id="cb3-43"><a href="#cb3-43" tabindex="-1"></a><span class="co">#&gt; $ sex_mean        &lt;dbl&gt; 0.5135135</span></span>
-<span id="cb3-44"><a href="#cb3-44" tabindex="-1"></a><span class="co">#&gt; $ sex_median      &lt;dbl&gt; 1</span></span>
-<span id="cb3-45"><a href="#cb3-45" tabindex="-1"></a><span class="co">#&gt; $ sex_min         &lt;dbl&gt; 0</span></span>
-<span id="cb3-46"><a href="#cb3-46" tabindex="-1"></a><span class="co">#&gt; $ sex_max         &lt;dbl&gt; 1</span></span>
-<span id="cb3-47"><a href="#cb3-47" tabindex="-1"></a><span class="co">#&gt; $ sex_sd          &lt;dbl&gt; 0.5067117</span></span></code></pre></div>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="fu">summarizeFamilies</span>(df, <span class="at">famID =</span> <span class="st">&quot;newFamID&quot;</span>, <span class="at">personID =</span> <span class="st">&quot;personID&quot;</span>)<span class="sc">$</span>family_summary <span class="sc">%&gt;%</span> <span class="fu">glimpse</span>()</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co">#&gt; Rows: 1</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#&gt; Columns: 17</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="co">#&gt; $ newFamID        &lt;dbl&gt; 1</span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co">#&gt; $ count           &lt;int&gt; 37</span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="co">#&gt; $ gen_mean        &lt;dbl&gt; 1.756757</span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co">#&gt; $ gen_median      &lt;dbl&gt; 2</span></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="co">#&gt; $ gen_min         &lt;dbl&gt; 0</span></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="co">#&gt; $ gen_max         &lt;dbl&gt; 3</span></span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a><span class="co">#&gt; $ gen_sd          &lt;dbl&gt; 1.038305</span></span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a><span class="co">#&gt; $ spouseID_mean   &lt;dbl&gt; 38.2</span></span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a><span class="co">#&gt; $ spouseID_median &lt;dbl&gt; 15</span></span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a><span class="co">#&gt; $ spouseID_min    &lt;dbl&gt; 1</span></span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a><span class="co">#&gt; $ spouseID_max    &lt;dbl&gt; 106</span></span>
+<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a><span class="co">#&gt; $ spouseID_sd     &lt;dbl&gt; 44.15118</span></span>
+<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a><span class="co">#&gt; $ sex_mean        &lt;dbl&gt; 0.5135135</span></span>
+<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a><span class="co">#&gt; $ sex_median      &lt;dbl&gt; 1</span></span>
+<span id="cb3-20"><a href="#cb3-20" tabindex="-1"></a><span class="co">#&gt; $ sex_min         &lt;dbl&gt; 0</span></span>
+<span id="cb3-21"><a href="#cb3-21" tabindex="-1"></a><span class="co">#&gt; $ sex_max         &lt;dbl&gt; 1</span></span>
+<span id="cb3-22"><a href="#cb3-22" tabindex="-1"></a><span class="co">#&gt; $ sex_sd          &lt;dbl&gt; 0.5067117</span></span></code></pre></div>
 <p>If we didn’t know to look for duplicates, we might not notice the
 issue. Indeed, only of the duplicates was selected as are founder
 member. However, the <code>checkIDs</code> function can help us identify
