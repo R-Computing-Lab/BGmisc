@@ -125,10 +125,17 @@ if(verbose) cat("Preparing checkpointing...\n")
     if (component %in% c("generation", "additive")) {
       # Code for 'generation' and 'additive' components
       # Checks if is mom of ID or is dad of ID
-      sMom <- (as.numeric(x["ID"]) == as.numeric(ped$momID))
-      sDad <- (as.numeric(x["ID"]) == as.numeric(ped$dadID))
-      val <- sMom | sDad
+      # do once
+     # xID <- as.numeric(x["ID"])
+     # sMom <- (xID == as.numeric(ped$momID))
+     # sDad <- (xID == as.numeric(ped$dadID))
+     # val <- sMom | sDad
+     # val[is.na(val)] <- FALSE
+      # reduces computations
+      xID <- as.numeric(x["ID"])
+      val <- (xID == as.numeric(ped$momID)) | (xID == as.numeric(ped$dadID))
       val[is.na(val)] <- FALSE
+
     } else if (component %in% c("common nuclear")) {
       # Code for 'common nuclear' component
       # IDs have the Same mom and Same dad
@@ -139,9 +146,13 @@ if(verbose) cat("Preparing checkpointing...\n")
       val <- sMom & sDad
     } else if (component %in% c("mitochondrial")) {
       # Code for 'mitochondrial' component
-      sMom <- (as.numeric(x["ID"]) == as.numeric(ped$momID))
-      sDad <- TRUE
-      val <- sMom & sDad
+     #  sMom <- (as.numeric(x["ID"]) == as.numeric(ped$momID))
+    #  sDad <- TRUE
+     # val <- sMom & sDad
+      #val[is.na(val)] <- FALSE
+
+      # reduces computations
+      val <- (as.numeric(x["ID"]) == as.numeric(ped$momID))
       val[is.na(val)] <- FALSE
     } else {
       stop("Unknown relatedness component requested")
@@ -364,6 +375,10 @@ ped2add <- function(ped, max.gen = 25, sparse = FALSE, verbose = FALSE,
                     gc = FALSE,
                     flatten.diag = FALSE, standardize.colnames = TRUE,
                     tcross.alt.crossprod = FALSE, tcross.alt.star = FALSE,
+                    saveable = FALSE,
+                    resume = FALSE,
+                    save_rate = 5,
+                    save_path = "checkpoint/",
                     ...) {
   ped2com(
     ped = ped,
@@ -375,7 +390,11 @@ ped2add <- function(ped, max.gen = 25, sparse = FALSE, verbose = FALSE,
     flatten.diag = flatten.diag,
     standardize.colnames = standardize.colnames,
     tcross.alt.crossprod = tcross.alt.crossprod,
-    tcross.alt.star = tcross.alt.star
+    tcross.alt.star = tcross.alt.star,
+    saveable = saveable,
+    resume = resume,
+    save_rate = save_rate,
+    save_path = save_path
   )
 }
 
@@ -391,6 +410,10 @@ ped2mit <- ped2mt <- function(ped, max.gen = 25,
                               flatten.diag = FALSE,
                               standardize.colnames = TRUE,
                               tcross.alt.crossprod = FALSE, tcross.alt.star = FALSE,
+                              saveable = FALSE,
+                              resume = FALSE,
+                              save_rate = 5,
+                              save_path = "checkpoint/",
                               ...) {
   ped2com(
     ped = ped,
@@ -402,7 +425,11 @@ ped2mit <- ped2mt <- function(ped, max.gen = 25,
     flatten.diag = flatten.diag,
     standardize.colnames = standardize.colnames,
     tcross.alt.crossprod = tcross.alt.crossprod,
-    tcross.alt.star = tcross.alt.star
+    tcross.alt.star = tcross.alt.star,
+    saveable = saveable,
+    resume = resume,
+    save_rate = save_rate,
+    save_path = save_path
   )
 }
 
@@ -415,6 +442,10 @@ ped2cn <- function(ped, max.gen = 25, sparse = FALSE, verbose = FALSE,
                    gc = FALSE, flatten.diag = FALSE,
                    standardize.colnames = TRUE,
                    tcross.alt.crossprod = FALSE, tcross.alt.star = FALSE,
+                   saveable = FALSE,
+                   resume = FALSE,
+                   save_rate = 5,
+                   save_path = "checkpoint/",
                    ...) {
   ped2com(
     ped = ped,
@@ -426,9 +457,12 @@ ped2cn <- function(ped, max.gen = 25, sparse = FALSE, verbose = FALSE,
     flatten.diag = flatten.diag,
     standardize.colnames = standardize.colnames,
     tcross.alt.crossprod = tcross.alt.crossprod,
-    tcross.alt.star = tcross.alt.star
-
-  )
+    tcross.alt.star = tcross.alt.star,
+    saveable = saveable,
+    resume = resume,
+    save_rate = save_rate,
+    save_path = save_path
+)
 }
 
 #' Take a pedigree and turn it into an extended environmental relatedness matrix
