@@ -13,13 +13,14 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 options(rmarkdown.html_vignette.check_title = FALSE)
+library(tidyverse)
 ```
 
 # Introduction
 
 The `BGmisc` R package offers a comprehensive suite of functions tailored for extended behavior genetics analysis, including model identification, calculating relatedness, pedigree conversion, and pedigree simulation. This vignette provides an overview of the validation tools available in the package, designed to identify and repair errors in pedigrees. 
 
-In an ideal world, you would have perfect pedigrees with no errors. However, in the real world, pedigrees are often incomplete, contain errors, or are missing data. The `BGmisc` package provides tools to identify these errors, which is particularly useful for large pedigrees where manual inspection is not feasible. 
+In an ideal world, you would have flawless error-free pedigrees. However, in the real world, pedigrees are often incomplete, contain errors, or are missing data. The `BGmisc` package provides tools to identify these errors, which is particularly useful for large pedigrees where manual inspection is not feasible. 
 While some errors in the package can be automatically repaired, the vast majority require manual inspection. It is often not possible to automatically repair errors in pedigrees, as the correct solution may not be obvious, or may depend on additional information that is not universally available.
 
 # Identifying and Repairing Errors in Pedigrees
@@ -38,27 +39,6 @@ df <- ped2fam(potter, famID = "newFamID", personID = "personID")
 # Call the checkIDs function
 result <- checkIDs(df, repair = FALSE)
 print(result)
-
-#> $all_unique_ids
-#> [1] TRUE
-#>
-#> $total_non_unique_ids
-#> [1] 0
-#>
-#> $total_own_father
-#> [1] 0
-#>
-#> $total_own_mother
-#> [1] 0
-#>
-#> $total_duplicated_parents
-#> [1] 0
-#>
-#> $total_within_row_duplicates
-#> [1] 0
-#>
-#> $within_row_duplicates
-#> [1] FALSE
 ```
 
 In this example, the `checkIDs` function returns a list with several elements. The `all_unique_ids` element indicates whether all IDs in the dataset are unique. The `total_non_unique_ids` element indicates the total number of non-unique IDs. The `total_own_father` and `total_own_mother` elements indicate the total number of individuals whose father's and mother's IDs match their own ID, respectively. The `total_duplicated_parents` element indicates the total number of individuals with duplicated parent IDs. The `total_within_row_duplicates` element indicates the total number of within-row duplicates. The `within_row_duplicates` element indicates whether there are any within-row duplicates in the dataset. As the output shows, there are no duplicates in the sample dataset. 
@@ -161,10 +141,11 @@ The `checkSex` function identifies inconsistencies in sex coding within a pedigr
 ```{r}
 # Validate sex coding
 
-results <- checkSex(potter, 
-                    code_male = 1, 
-                    code_female = 0, 
-                    verbose = TRUE, repair = FALSE)
+results <- checkSex(potter,
+  code_male = 1,
+  code_female = 0,
+  verbose = TRUE, repair = FALSE
+)
 print(results)
 ```
 
@@ -174,10 +155,11 @@ If the function identifies inconsistent sex codes, you can attempt to repair the
 
 ```{r}
 # Repair sex coding
-df_fix <- checkSex(potter, 
-                   code_male = 1, 
-                   code_female = 0, 
-                   verbose = TRUE, repair = TRUE)
+df_fix <- checkSex(potter,
+  code_male = 1,
+  code_female = 0,
+  verbose = TRUE, repair = TRUE
+)
 print(df_fix)
 ```
 
