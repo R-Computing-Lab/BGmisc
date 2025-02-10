@@ -69,16 +69,20 @@ readGedcom <- function(file_path,
   # List of variables to initialize
   var_names <- list(
     identifiers = c("id", "momID", "dadID"),
-    names = c("name", "name_given","name_given_pieces",
-              "name_surn","name_surn_pieces","name_marriedsurn","name_nick","name_npfx","name_nsfx"),
+    names = c(
+      "name", "name_given", "name_given_pieces",
+      "name_surn", "name_surn_pieces", "name_marriedsurn", "name_nick", "name_npfx", "name_nsfx"
+    ),
     sex = c("sex"),
     birth = c("birth_date", "birth_lat", "birth_long", "birth_place"),
-    death = c("death_caus","death_date", "death_lat", "death_long", "death_place"),
-    attributes = c("attribute_caste","attribute_children","attribute_description",
-                   "attribute_education","attribute_idnumber","attribute_marriages",
-                   "attribute_nationality","attribute_occupation",
-                   "attribute_property","attribute_religion","attribute_residence",
-                   "attribute_ssn","attribute_title"),
+    death = c("death_caus", "death_date", "death_lat", "death_long", "death_place"),
+    attributes = c(
+      "attribute_caste", "attribute_children", "attribute_description",
+      "attribute_education", "attribute_idnumber", "attribute_marriages",
+      "attribute_nationality", "attribute_occupation",
+      "attribute_property", "attribute_religion", "attribute_residence",
+      "attribute_ssn", "attribute_title"
+    ),
     relationships = c("FAMC", "FAMS")
   )
 
@@ -448,13 +452,12 @@ assignParentIDs <- function(df_temp, family_to_parents) {
 #' @return A data frame with added momID and dadID columns.
 #' @keywords internal
 processParents <- function(df_temp) {
-
   # Ensure required columns are present
   required_cols <- c("FAMC", "sex", "FAMS")
 
   if (!all(required_cols %in% colnames(df_temp))) {
     missing_cols <- setdiff(required_cols, colnames(df_temp))
-    warning("Missing necessary columns: ", paste(missing_cols, collapse=", "))
+    warning("Missing necessary columns: ", paste(missing_cols, collapse = ", "))
     return(df_temp)
   }
   family_to_parents <- createFamilyToParentsMapping(df_temp)

@@ -1,5 +1,6 @@
 # BGmisc 1.3.3
 * Added ability to save and reload pedigree objects that are used by ped2Com
+* Optimized generation calculation
 
 # BGmisc 1.3.2.1
 * Added ability to pass additional arguments to the ped2FOO functions
@@ -17,7 +18,7 @@
 
 # BGmisc 1.3.0
 * Harmonized function names
-* Fixed incorrectly spelled last name in potter pedigree
+* Fixed incorrectly spelled last name in Potter pedigree
 * Added function to summarize variables by family, matrilinael, and patrilineal lines
 * Added within row duplicate ID checks
 * Added data validation vignettes

@@ -13,11 +13,13 @@ ped2com(
   gc = FALSE,
   flatten.diag = FALSE,
   standardize.colnames = TRUE,
-  tcross.alt.crossprod = FALSE,
-  tcross.alt.star = FALSE,
+  transpose_method = "tcrossprod",
   saveable = FALSE,
   resume = FALSE,
   save_rate = 5,
+  save_rate_gen = save_rate,
+  save_rate_parlist = 1000 * save_rate,
+  update_rate = 100,
   save_path = "checkpoint/",
   ...
 )
@@ -41,15 +43,19 @@ ped2com(
 
 \item{standardize.colnames}{logical. If TRUE, standardize the column names of the pedigree dataset}
 
-\item{tcross.alt.crossprod}{logical. If TRUE, use alternative method of using Crossprod function for computing the transpose}
-
-\item{tcross.alt.star}{logical. If TRUE, use alternative method of using \%\*\% for computing the transpose}
+\item{transpose_method}{character. The method to use for computing the transpose.  Options are "tcrossprod", "crossprod", or "star"}
 
 \item{saveable}{logical. If TRUE, save the intermediate results to disk}
 
 \item{resume}{logical. If TRUE, resume from a checkpoint}
 
 \item{save_rate}{numeric. The rate at which to save the intermediate results}
+
+\item{save_rate_gen}{numeric. The rate at which to save the intermediate results by generation. If NULL, defaults to save_rate}
+
+\item{save_rate_parlist}{numeric. The rate at which to save the intermediate results by parent list. If NULL, defaults to save_rate*1000}
+
+\item{update_rate}{numeric. The rate at which to print progress}
 
 \item{save_path}{character. The path to save the checkpoint files}
 

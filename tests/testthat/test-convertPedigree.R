@@ -1,4 +1,3 @@
-
 test_that("ped2add produces correct matrix dims, values, and dimnames for hazard", {
   tolerance <- 1e-10
   data(hazard)
@@ -63,7 +62,7 @@ test_that("ped2add produces correct matrix dims, values, and dimnames for inbree
 test_that("ped2add produces correct matrix dims, values, and dimnames for inbreeding data with alternative transpose", {
   tolerance <- 1e-10
   data(inbreeding)
-  add <- ped2add(inbreeding, tcross.alt.star = TRUE)
+  add <- ped2add(inbreeding, transpose_method = "star")
   # Check dimension
   expect_equal(dim(add), c(nrow(inbreeding), nrow(inbreeding)))
   # Check several values
@@ -78,6 +77,27 @@ test_that("ped2add produces correct matrix dims, values, and dimnames for inbree
   expect_equal(dn[[1]], dn[[2]])
   expect_equal(dn[[1]], as.character(inbreeding$ID))
 })
+
+test_that("ped2add produces correct matrix dims, values, and dimnames for inbreeding data with 2nd alternative transpose", {
+  tolerance <- 1e-10
+  data(inbreeding)
+  add <- ped2add(inbreeding, transpose_method = "crossprod")
+  # Check dimension
+  expect_equal(dim(add), c(nrow(inbreeding), nrow(inbreeding)))
+  # Check several values
+  expect_true(all(diag(add) >= 1))
+  expect_equal(add, t(add), tolerance = tolerance)
+  expect_equal(add[2, 1], 0, tolerance = tolerance)
+  expect_equal(add[6, 1], .5, tolerance = tolerance)
+  expect_equal(add[113, 113], 1.1250, tolerance = tolerance)
+  expect_equal(add["113", "112"], 0.62500)
+  # Check that dimnames are correct
+  dn <- dimnames(add)
+  expect_equal(dn[[1]], dn[[2]])
+  expect_equal(dn[[1]], as.character(inbreeding$ID))
+})
+
+
 test_that("ped2add flattens diagonal for inbreeding data", {
   tolerance <- 1e-10
   data(inbreeding)
@@ -145,9 +165,12 @@ test_that("ped2cn produces correct matrix dims, values, and dimnames", {
   # Check dimension
   data(inbreeding)
   cn <- ped2cn(inbreeding)
-  expect_equal(dim(cn), c(nrow(inbreeding),
-                          nrow(inbreeding)),
-               tolerance = tolerance)
+  expect_equal(dim(cn), c(
+    nrow(inbreeding),
+    nrow(inbreeding)
+  ),
+  tolerance = tolerance
+  )
   # Check several values
   # expect_true(all(diag(cn) == 1))
   expect_true(sum((diag(cn) - 1)^2) < tolerance)
@@ -202,30 +225,34 @@ test_that("ped2maternal/paternal produces correct matrix dims", {
 })
 
 test_that("ped2com handles checkpoint saving and resuming", {
-  save_path <- tempdir()  # Use temporary directory for saving checkpoints
+  save_path <- tempdir() # Use temporary directory for saving checkpoints
   data(hazard)
 
-  ped_add_saved <-  ped2com(hazard, component = "additive", saveable = TRUE, save_path = save_path, save_rate =1)
+  ped_add_saved <- ped2com(hazard,
+    component = "additive", saveable = TRUE, save_path = save_path,
+    save_rate_gen = 1,
+    save_rate_parlist = 1
+  )
 
   checkpoint_files_v0 <- list(
-      parList = file.path(save_path, "parList.rds"),
-      lens = file.path(save_path, "lens.rds"),
-      isPar = file.path(save_path, "isPar.rds"),
-      iss = file.path(save_path, "iss.rds"),
-      jss = file.path(save_path, "jss.rds"),
-      isChild = file.path(save_path, "isChild.rds"),
-      r_checkpoint = file.path(save_path, "r_checkpoint.rds"),
-      gen_checkpoint = file.path(save_path, "gen_checkpoint.rds"),
-      newIsPar_checkpoint = file.path(save_path, "newIsPar_checkpoint.rds"),
-      mtSum_checkpoint = file.path(save_path, "mtSum_checkpoint.rds"),
-      r2_checkpoint = file.path(save_path, "r2_checkpoint.rds"),
-      tcrossprod_checkpoint = file.path(save_path, "tcrossprod_checkpoint.rds"),
-      count_checkpoint = file.path(save_path, "count_checkpoint.rds"),
-      final_matrix = file.path(save_path, "final_matrix.rds")
-    )
+    parList = file.path(save_path, "parList.rds"),
+    lens = file.path(save_path, "lens.rds"),
+    isPar = file.path(save_path, "isPar.rds"),
+    iss = file.path(save_path, "iss.rds"),
+    jss = file.path(save_path, "jss.rds"),
+    isChild = file.path(save_path, "isChild.rds"),
+    r_checkpoint = file.path(save_path, "r_checkpoint.rds"),
+    gen_checkpoint = file.path(save_path, "gen_checkpoint.rds"),
+    newIsPar_checkpoint = file.path(save_path, "newIsPar_checkpoint.rds"),
+    mtSum_checkpoint = file.path(save_path, "mtSum_checkpoint.rds"),
+    r2_checkpoint = file.path(save_path, "r2_checkpoint.rds"),
+    tcrossprod_checkpoint = file.path(save_path, "tcrossprod_checkpoint.rds"),
+    count_checkpoint = file.path(save_path, "count_checkpoint.rds"),
+    final_matrix = file.path(save_path, "final_matrix.rds")
+  )
 
   # Check if checkpoint files exist
-  checkpoint_files_v1 <- list.files(save_path, full.names = TRUE)
+  checkpoint_files_v1 <- list.files(save_path, pattern = "\\.rds$", full.names = TRUE)
 
   expect_equal(length(checkpoint_files_v1), length(checkpoint_files_v0))
 
