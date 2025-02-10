@@ -16,8 +16,7 @@
 #' @param save_path character. The path to save the checkpoint files
 #' @param flatten.diag logical. If TRUE, overwrite the diagonal of the final relatedness matrix with ones
 #' @param standardize.colnames logical. If TRUE, standardize the column names of the pedigree dataset
-#' @param tcross.alt.crossprod logical. If TRUE, use alternative method of using Crossprod function for computing the transpose
-#' @param tcross.alt.star logical. If TRUE, use alternative method of using \%\*\% for computing the transpose
+#' @param transpose_method character. The method to use for computing the transpose.  Options are "tcrossprod", "crossprod", or "star"
 #' @param ... additional arguments to be passed to \code{\link{ped2com}}
 #' @details The algorithms and methodologies used in this function are further discussed and exemplified in the vignette titled "examplePedigreeFunctions". For more advanced scenarios and detailed explanations, consult this vignette.
 #' @export
@@ -29,8 +28,7 @@ ped2com <- function(ped, component,
                     gc = FALSE,
                     flatten.diag = FALSE,
                     standardize.colnames = TRUE,
-                    tcross.alt.crossprod = FALSE,
-                    tcross.alt.star = FALSE,
+                    transpose_method = "tcrossprod",
                     saveable = FALSE,
                     resume = FALSE,
                     save_rate = 5,
@@ -83,6 +81,11 @@ ped2com <- function(ped, component,
       "mitochondrial"
     )
   )
+
+  if (!transpose_method %in% c("tcrossprod", "crossprod", "star","tcross.alt.crossprod","tcross.alt.star")) {
+    stop("Invalid method specified. Choose from 'tcrossprod', 'crossprod', or 'star' or 'tcross.alt.crossprod' or 'tcross.alt.star'.")
+  }
+
 
   # standardize colnames
   if (standardize.colnames) {
@@ -344,23 +347,8 @@ ped2com <- function(ped, component,
     if (verbose) cat("Resuming: Loading tcrossprod...\n")
     r <- readRDS(checkpoint_files$tcrossprod_checkpoint)
   } else {
-    if (tcross.alt.crossprod) {
-      if (verbose) {
-        cat("Doing alt tcrossprod crossprod t \n")
-      }
-      r <- crossprod(t(as.matrix(r2)))
-    } else if (tcross.alt.star) {
-      if (verbose) {
-        cat("Doing alt tcrossprod %*% t \n")
-      }
-      r <- r2 %*% t(as.matrix(r2))
-    } else {
-      if (verbose) {
-        cat("Doing tcrossprod\n")
-      }
-      # failed here
-      r <- Matrix::tcrossprod(r2)
-    }
+
+    r <- compute_transpose(r2=r2, transpose_method=transpose_method, verbose=verbose)
     if (saveable) {
       saveRDS(r, file = checkpoint_files$tcrossprod_checkpoint)
     }
@@ -395,7 +383,7 @@ ped2com <- function(ped, component,
 ped2add <- function(ped, max.gen = 25, sparse = FALSE, verbose = FALSE,
                     gc = FALSE,
                     flatten.diag = FALSE, standardize.colnames = TRUE,
-                    tcross.alt.crossprod = FALSE, tcross.alt.star = FALSE,
+                    transpose_method = "tcrossprod",
                     saveable = FALSE,
                     resume = FALSE,
                     save_rate = 5,
@@ -412,8 +400,7 @@ ped2add <- function(ped, max.gen = 25, sparse = FALSE, verbose = FALSE,
     component = "additive",
     flatten.diag = flatten.diag,
     standardize.colnames = standardize.colnames,
-    tcross.alt.crossprod = tcross.alt.crossprod,
-    tcross.alt.star = tcross.alt.star,
+    transpose_method = transpose_method,
     saveable = saveable,
     resume = resume,
     save_rate_gen = save_rate_gen,
@@ -433,7 +420,7 @@ ped2mit <- ped2mt <- function(ped, max.gen = 25,
                               verbose = FALSE, gc = FALSE,
                               flatten.diag = FALSE,
                               standardize.colnames = TRUE,
-                              tcross.alt.crossprod = FALSE, tcross.alt.star = FALSE,
+                              transpose_method = "tcrossprod",
                               saveable = FALSE,
                               resume = FALSE,
                               save_rate = 5,
@@ -450,8 +437,7 @@ ped2mit <- ped2mt <- function(ped, max.gen = 25,
     component = "mitochondrial",
     flatten.diag = flatten.diag,
     standardize.colnames = standardize.colnames,
-    tcross.alt.crossprod = tcross.alt.crossprod,
-    tcross.alt.star = tcross.alt.star,
+    transpose_method = transpose_method,
     saveable = saveable,
     resume = resume,
     save_rate_gen = save_rate_gen,
@@ -468,7 +454,7 @@ ped2mit <- ped2mt <- function(ped, max.gen = 25,
 ped2cn <- function(ped, max.gen = 25, sparse = FALSE, verbose = FALSE,
                    gc = FALSE, flatten.diag = FALSE,
                    standardize.colnames = TRUE,
-                   tcross.alt.crossprod = FALSE, tcross.alt.star = FALSE,
+                   transpose_method = "tcrossprod",
                    saveable = FALSE,
                    resume = FALSE,
                    save_rate = 5,
@@ -485,8 +471,7 @@ ped2cn <- function(ped, max.gen = 25, sparse = FALSE, verbose = FALSE,
     component = "common nuclear",
     flatten.diag = flatten.diag,
     standardize.colnames = standardize.colnames,
-    tcross.alt.crossprod = tcross.alt.crossprod,
-    tcross.alt.star = tcross.alt.star,
+    transpose_method = transpose_method,
     saveable = saveable,
     resume = resume,
     save_rate_gen = save_rate_gen,
@@ -504,3 +489,26 @@ ped2ce <- function(ped,
                    ...) {
   matrix(1, nrow = nrow(ped), ncol = nrow(ped), dimnames = list(ped$ID, ped$ID))
 }
+
+
+#' Compute the transpose multiplication for the relatedness matrix
+#' @inheritParams ped2com
+#' @inherit ped2com details
+#' @param r2 a relatedness matrix
+#'
+compute_transpose <- function(r2, transpose_method = "tcrossprod", verbose = FALSE) {
+  if (!transpose_method %in% c("tcrossprod", "crossprod", "star","tcross.alt.crossprod","tcross.alt.star")) {
+    stop("Invalid method specified. Choose from 'tcrossprod', 'crossprod', or 'star'.")
+  }
+  if (transpose_method %in% c("crossprod", "tcross.alt.crossprod")) {
+    if (verbose) cat("Doing alt tcrossprod crossprod t \n")
+    return(crossprod(t(as.matrix(r2))))
+  } else if (transpose_method  %in% c("star", "tcross.alt.star")) {
+    if (verbose) cat("Doing alt tcrossprod %*% t \n")
+    return(r2 %*% t(as.matrix(r2)))
+  } else {
+    if (verbose) cat("Doing tcrossprod\n")
+    return(Matrix::tcrossprod(r2))
+  }
+}
+

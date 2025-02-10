@@ -63,7 +63,7 @@ test_that("ped2add produces correct matrix dims, values, and dimnames for inbree
 test_that("ped2add produces correct matrix dims, values, and dimnames for inbreeding data with alternative transpose", {
   tolerance <- 1e-10
   data(inbreeding)
-  add <- ped2add(inbreeding, tcross.alt.star = TRUE)
+  add <- ped2add(inbreeding, transpose_method = "star")
   # Check dimension
   expect_equal(dim(add), c(nrow(inbreeding), nrow(inbreeding)))
   # Check several values
@@ -78,6 +78,27 @@ test_that("ped2add produces correct matrix dims, values, and dimnames for inbree
   expect_equal(dn[[1]], dn[[2]])
   expect_equal(dn[[1]], as.character(inbreeding$ID))
 })
+
+test_that("ped2add produces correct matrix dims, values, and dimnames for inbreeding data with 2nd alternative transpose", {
+  tolerance <- 1e-10
+  data(inbreeding)
+  add <- ped2add(inbreeding, transpose_method = "crossprod")
+  # Check dimension
+  expect_equal(dim(add), c(nrow(inbreeding), nrow(inbreeding)))
+  # Check several values
+  expect_true(all(diag(add) >= 1))
+  expect_equal(add, t(add), tolerance = tolerance)
+  expect_equal(add[2, 1], 0, tolerance = tolerance)
+  expect_equal(add[6, 1], .5, tolerance = tolerance)
+  expect_equal(add[113, 113], 1.1250, tolerance = tolerance)
+  expect_equal(add["113", "112"], 0.62500)
+  # Check that dimnames are correct
+  dn <- dimnames(add)
+  expect_equal(dn[[1]], dn[[2]])
+  expect_equal(dn[[1]], as.character(inbreeding$ID))
+})
+
+
 test_that("ped2add flattens diagonal for inbreeding data", {
   tolerance <- 1e-10
   data(inbreeding)
