@@ -17,7 +17,9 @@ ped2com(
   tcross.alt.star = FALSE,
   saveable = FALSE,
   resume = FALSE,
-  save_rate = 5,
+  save_rate_gen = 5,
+  save_rate_parlist = 100,
+  update_rate = 100,
   save_path = "checkpoint/",
   ...
 )
@@ -49,7 +51,11 @@ ped2com(
 
 \item{resume}{logical. If TRUE, resume from a checkpoint}
 
-\item{save_rate}{numeric. The rate at which to save the intermediate results}
+\item{save_rate_gen}{numeric. The rate at which to save the intermediate results by generation}
+
+\item{save_rate_parlist}{numeric. The rate at which to save the intermediate results by parent list}
+
+\item{update_rate}{numeric. The rate at which to print progress}
 
 \item{save_path}{character. The path to save the checkpoint files}
 

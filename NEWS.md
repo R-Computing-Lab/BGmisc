@@ -18,7 +18,7 @@
 
 # BGmisc 1.3.0
 * Harmonized function names
-* Fixed incorrectly spelled last name in potter pedigree
+* Fixed incorrectly spelled last name in Potter pedigree
 * Added function to summarize variables by family, matrilinael, and patrilineal lines
 * Added within row duplicate ID checks
 * Added data validation vignettes

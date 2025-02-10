@@ -6,9 +6,11 @@
 #'   `Inf` uses as many generations as there are in the data.
 #' @param sparse logical.  If TRUE, use and return sparse matrices from Matrix package
 #' @param verbose logical.  If TRUE, print progress through stages of algorithm
+#' @param update_rate numeric. The rate at which to print progress
 #' @param gc logical. If TRUE, do frequent garbage collection via \code{\link{gc}} to save memory
 #' @param saveable logical. If TRUE, save the intermediate results to disk
-#' @param save_rate numeric. The rate at which to save the intermediate results
+#' @param save_rate_gen  numeric. The rate at which to save the intermediate results by generation
+#' @param save_rate_parlist numeric. The rate at which to save the intermediate results by parent list
 #' @param resume logical. If TRUE, resume from a checkpoint
 #' @param save_path character. The path to save the checkpoint files
 #' @param flatten.diag logical. If TRUE, overwrite the diagonal of the final relatedness matrix with ones
@@ -30,7 +32,9 @@ ped2com <- function(ped, component,
                     tcross.alt.star = FALSE,
                     saveable = FALSE,
                     resume = FALSE,
-                    save_rate = 5,
+                    save_rate_gen = 5,
+                    save_rate_parlist= 100,
+                    update_rate = 100,
                     save_path = "checkpoint/",
                     ...) {
   #------
@@ -109,16 +113,21 @@ if(verbose) cat("Preparing checkpointing...\n")
     if (verbose) cat("Resuming: Loading parent-child adjacency data...\n")
     parList <- readRDS(checkpoint_files$parList)
     lens <- readRDS(checkpoint_files$lens)
-
+    computed_indices <- which(!sapply(parList, is.null))
+    lastComputed <- if (length(computed_indices) > 0) max(computed_indices) else 0
+    if (verbose) cat("Resuming from iteration", lastComputed + 1, "\n")
   } else {
+    ## Initialize variables
+    parList <- vector("list", nr)
+    lens <- integer(nr)
+    lastComputed <- 0
+  }
 
-  ## Initialize variables
-  parList <- list()
-  lens <- integer(nr)
-
+  # Resume loop from the next uncomputed index
+if (lastComputed < nr) {
   # Loop through each individual in the pedigree build the adjacency matrix for parent-child relationships
   # Is person in column j the parent of the person in row i? .5 for yes, 0 for no.
-  for (i in 1:nr) {
+  for (i in (lastComputed + 1):nr) {
     x <- ped[i, , drop = FALSE]
 
     # Handle parentage according to the 'component' specified
@@ -163,13 +172,24 @@ if(verbose) cat("Preparing checkpointing...\n")
     parList[[i]] <- wv
     lens[i] <- length(wv)
     # Print progress if verbose is TRUE
-    if (verbose && !(i %% 100)) {
+    if (verbose && (i %% update_rate == 0)) {
       cat(paste0("Done with ", i, " of ", nr, "\n"))
     }
+    # Checkpointing every save_rate iterations
+    if (saveable && (i %% save_rate_parlist == 0)) {
+      saveRDS(parList, file = checkpoint_files$parList)
+      saveRDS(lens, file = checkpoint_files$lens)
+      if (verbose) cat("Checkpointed parlist saved at iteration", i, "\n")
+    }
   }
+
+
+
   if(saveable){
     saveRDS(parList, file =  checkpoint_files$parList)
     saveRDS(lens, file = checkpoint_files$lens)
+    if (verbose) cat("parList saved\n")
+
   }
   }
 
@@ -282,8 +302,8 @@ if (resume && file.exists(checkpoint_files$isChild)) {
     if (verbose) {
       cat(paste0("Completed ", count - 1, " degree relatives\n"))
     }
-    # Save progress every 5 iterations
-    if (saveable && (count %% save_rate  == 0)) {
+    # Save progress every save_rate iterations
+    if (saveable && (count %% save_rate_gen  == 0)) {
       saveRDS(r, file = checkpoint_files$r_checkpoint)
       saveRDS(gen, file = checkpoint_files$gen_checkpoint)
       saveRDS(newIsPar, file = checkpoint_files$newIsPar_checkpoint)
@@ -378,7 +398,8 @@ ped2add <- function(ped, max.gen = 25, sparse = FALSE, verbose = FALSE,
                     tcross.alt.crossprod = FALSE, tcross.alt.star = FALSE,
                     saveable = FALSE,
                     resume = FALSE,
-                    save_rate = 5,
+                    save_rate_gen = 5,
+                    save_rate_parlist= 100,
                     save_path = "checkpoint/",
                     ...) {
   ped2com(
@@ -394,7 +415,8 @@ ped2add <- function(ped, max.gen = 25, sparse = FALSE, verbose = FALSE,
     tcross.alt.star = tcross.alt.star,
     saveable = saveable,
     resume = resume,
-    save_rate = save_rate,
+    save_rate_gen = save_rate_gen,
+    save_rate_parlist = save_rate_parlist,
     save_path = save_path
   )
 }
@@ -413,7 +435,8 @@ ped2mit <- ped2mt <- function(ped, max.gen = 25,
                               tcross.alt.crossprod = FALSE, tcross.alt.star = FALSE,
                               saveable = FALSE,
                               resume = FALSE,
-                              save_rate = 5,
+                              save_rate_gen = 5,
+                              save_rate_parlist= 100,
                               save_path = "checkpoint/",
                               ...) {
   ped2com(
@@ -429,7 +452,8 @@ ped2mit <- ped2mt <- function(ped, max.gen = 25,
     tcross.alt.star = tcross.alt.star,
     saveable = saveable,
     resume = resume,
-    save_rate = save_rate,
+    save_rate_gen = save_rate_gen,
+    save_rate_parlist = save_rate_parlist,
     save_path = save_path
   )
 }
@@ -445,7 +469,8 @@ ped2cn <- function(ped, max.gen = 25, sparse = FALSE, verbose = FALSE,
                    tcross.alt.crossprod = FALSE, tcross.alt.star = FALSE,
                    saveable = FALSE,
                    resume = FALSE,
-                   save_rate = 5,
+                   save_rate_gen = 5,
+                   save_rate_parlist= 100,
                    save_path = "checkpoint/",
                    ...) {
   ped2com(
@@ -461,7 +486,8 @@ ped2cn <- function(ped, max.gen = 25, sparse = FALSE, verbose = FALSE,
     tcross.alt.star = tcross.alt.star,
     saveable = saveable,
     resume = resume,
-    save_rate = save_rate,
+    save_rate_gen = save_rate_gen,
+    save_rate_parlist = save_rate_parlist,
     save_path = save_path
 )
 }

@@ -205,7 +205,9 @@ test_that("ped2com handles checkpoint saving and resuming", {
   save_path <- tempdir()  # Use temporary directory for saving checkpoints
   data(hazard)
 
-  ped_add_saved <-  ped2com(hazard, component = "additive", saveable = TRUE, save_path = save_path, save_rate =1)
+  ped_add_saved <-  ped2com(hazard, component = "additive", saveable = TRUE, save_path = save_path,
+                            save_rate_gen = 1,
+                            save_rate_parlist= 1)
 
   checkpoint_files_v0 <- list(
       parList = file.path(save_path, "parList.rds"),
@@ -225,7 +227,7 @@ test_that("ped2com handles checkpoint saving and resuming", {
     )
 
   # Check if checkpoint files exist
-  checkpoint_files_v1 <- list.files(save_path, full.names = TRUE)
+  checkpoint_files_v1 <- list.files(save_path, pattern = "\\.rds$", full.names = TRUE)
 
   expect_equal(length(checkpoint_files_v1), length(checkpoint_files_v0))
 
