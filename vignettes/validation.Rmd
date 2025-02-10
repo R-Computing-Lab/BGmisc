@@ -39,7 +39,6 @@ df <- ped2fam(potter, famID = "newFamID", personID = "personID")
 # Call the checkIDs function
 result <- checkIDs(df, repair = FALSE)
 print(result)
-
 ```
 
 In this example, the `checkIDs` function returns a list with several elements. The `all_unique_ids` element indicates whether all IDs in the dataset are unique. The `total_non_unique_ids` element indicates the total number of non-unique IDs. The `total_own_father` and `total_own_mother` elements indicate the total number of individuals whose father's and mother's IDs match their own ID, respectively. The `total_duplicated_parents` element indicates the total number of individuals with duplicated parent IDs. The `total_within_row_duplicates` element indicates the total number of within-row duplicates. The `within_row_duplicates` element indicates whether there are any within-row duplicates in the dataset. As the output shows, there are no duplicates in the sample dataset. 
@@ -142,10 +141,11 @@ The `checkSex` function identifies inconsistencies in sex coding within a pedigr
 ```{r}
 # Validate sex coding
 
-results <- checkSex(potter, 
-                    code_male = 1, 
-                    code_female = 0, 
-                    verbose = TRUE, repair = FALSE)
+results <- checkSex(potter,
+  code_male = 1,
+  code_female = 0,
+  verbose = TRUE, repair = FALSE
+)
 print(results)
 ```
 
@@ -155,10 +155,11 @@ If the function identifies inconsistent sex codes, you can attempt to repair the
 
 ```{r}
 # Repair sex coding
-df_fix <- checkSex(potter, 
-                   code_male = 1, 
-                   code_female = 0, 
-                   verbose = TRUE, repair = TRUE)
+df_fix <- checkSex(potter,
+  code_male = 1,
+  code_female = 0,
+  verbose = TRUE, repair = TRUE
+)
 print(df_fix)
 ```
 

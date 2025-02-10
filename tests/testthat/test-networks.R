@@ -37,5 +37,3 @@ test_that("ped2graph produces a graph for inbreeding data", {
   g <- ped2graph(inbreeding)
   expect_true(inherits(g, "igraph"))
 })
-
-

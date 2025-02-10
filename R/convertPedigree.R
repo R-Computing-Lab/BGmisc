@@ -33,7 +33,7 @@ ped2com <- function(ped, component,
                     resume = FALSE,
                     save_rate = 5,
                     save_rate_gen = save_rate,
-                    save_rate_parlist = 1000*save_rate,
+                    save_rate_parlist = 1000 * save_rate,
                     update_rate = 100,
                     save_path = "checkpoint/",
                     ...) {
@@ -82,7 +82,7 @@ ped2com <- function(ped, component,
     )
   )
 
-  if (!transpose_method %in% c("tcrossprod", "crossprod", "star","tcross.alt.crossprod","tcross.alt.star")) {
+  if (!transpose_method %in% c("tcrossprod", "crossprod", "star", "tcross.alt.crossprod", "tcross.alt.star")) {
     stop("Invalid method specified. Choose from 'tcrossprod', 'crossprod', or 'star' or 'tcross.alt.crossprod' or 'tcross.alt.star'.")
   }
 
@@ -347,8 +347,7 @@ ped2com <- function(ped, component,
     if (verbose) cat("Resuming: Loading tcrossprod...\n")
     r <- readRDS(checkpoint_files$tcrossprod_checkpoint)
   } else {
-
-    r <- compute_transpose(r2=r2, transpose_method=transpose_method, verbose=verbose)
+    r <- compute_transpose(r2 = r2, transpose_method = transpose_method, verbose = verbose)
     if (saveable) {
       saveRDS(r, file = checkpoint_files$tcrossprod_checkpoint)
     }
@@ -388,7 +387,7 @@ ped2add <- function(ped, max.gen = 25, sparse = FALSE, verbose = FALSE,
                     resume = FALSE,
                     save_rate = 5,
                     save_rate_gen = save_rate,
-                    save_rate_parlist = 1000*save_rate,
+                    save_rate_parlist = 1000 * save_rate,
                     save_path = "checkpoint/",
                     ...) {
   ped2com(
@@ -425,7 +424,7 @@ ped2mit <- ped2mt <- function(ped, max.gen = 25,
                               resume = FALSE,
                               save_rate = 5,
                               save_rate_gen = save_rate_gen,
-                              save_rate_parlist = 1000*save_rate,
+                              save_rate_parlist = 1000 * save_rate,
                               save_path = "checkpoint/",
                               ...) {
   ped2com(
@@ -459,7 +458,7 @@ ped2cn <- function(ped, max.gen = 25, sparse = FALSE, verbose = FALSE,
                    resume = FALSE,
                    save_rate = 5,
                    save_rate_gen = save_rate,
-                   save_rate_parlist = 1000*save_rate,
+                   save_rate_parlist = 1000 * save_rate,
                    save_path = "checkpoint/",
                    ...) {
   ped2com(
@@ -497,13 +496,13 @@ ped2ce <- function(ped,
 #' @param r2 a relatedness matrix
 #'
 compute_transpose <- function(r2, transpose_method = "tcrossprod", verbose = FALSE) {
-  if (!transpose_method %in% c("tcrossprod", "crossprod", "star","tcross.alt.crossprod","tcross.alt.star")) {
+  if (!transpose_method %in% c("tcrossprod", "crossprod", "star", "tcross.alt.crossprod", "tcross.alt.star")) {
     stop("Invalid method specified. Choose from 'tcrossprod', 'crossprod', or 'star'.")
   }
   if (transpose_method %in% c("crossprod", "tcross.alt.crossprod")) {
     if (verbose) cat("Doing alt tcrossprod crossprod t \n")
     return(crossprod(t(as.matrix(r2))))
-  } else if (transpose_method  %in% c("star", "tcross.alt.star")) {
+  } else if (transpose_method %in% c("star", "tcross.alt.star")) {
     if (verbose) cat("Doing alt tcrossprod %*% t \n")
     return(r2 %*% t(as.matrix(r2)))
   } else {
@@ -511,4 +510,3 @@ compute_transpose <- function(r2, transpose_method = "tcrossprod", verbose = FAL
     return(Matrix::tcrossprod(r2))
   }
 }
-
