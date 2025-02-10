@@ -174,7 +174,7 @@ if(verbose) cat("Preparing checkpointing...\n")
   }
 
     # Construct sparse matrix
-if (resume && file.exists(checkpoint_files$isPar)) {
+if (resume && file.exists(checkpoint_files$isPar)) { # fix to check actual
   if (verbose) cat("Resuming: Constructed matrix..\n")
   jss <- readRDS(checkpoint_files$jss)
   iss <- readRDS(checkpoint_files$iss)
@@ -316,8 +316,8 @@ if (resume && file.exists(checkpoint_files$isChild)) {
   }
 
   # --- Step 4: T crossproduct  ---
-  # failed here
-if (resume && file.exists(checkpoint_files$tcrossprod_checkpoint)) {
+
+if (resume && file.exists(checkpoint_files$tcrossprod_checkpoint) && component != "generation") {
 
 
   if (verbose) cat("Resuming: Loading tcrossprod...\n")
@@ -338,6 +338,7 @@ if (resume && file.exists(checkpoint_files$tcrossprod_checkpoint)) {
     if (verbose) {
       cat("Doing tcrossprod\n")
     }
+      # failed here
     r <- Matrix::tcrossprod(r2)
   }
   if(saveable){
