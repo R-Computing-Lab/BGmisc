@@ -33,7 +33,7 @@ ped2com <- function(ped, component,
                     saveable = FALSE,
                     resume = FALSE,
                     save_rate_gen = 5,
-                    save_rate_parlist= 100,
+                    save_rate_parlist= 10000,
                     update_rate = 100,
                     save_path = "checkpoint/",
                     ...) {
@@ -127,6 +127,11 @@ if(verbose) cat("Preparing checkpointing...\n")
 if (lastComputed < nr) {
   # Loop through each individual in the pedigree build the adjacency matrix for parent-child relationships
   # Is person in column j the parent of the person in row i? .5 for yes, 0 for no.
+
+  ped$momID<- as.numeric(ped$momID)
+  ped$dadID <- as.numeric(ped$dadID)
+  ped$ID <- as.numeric(ped$ID)
+
   for (i in (lastComputed + 1):nr) {
     x <- ped[i, , drop = FALSE]
 
@@ -141,16 +146,18 @@ if (lastComputed < nr) {
      # val <- sMom | sDad
      # val[is.na(val)] <- FALSE
       # reduces computations
-      xID <- as.numeric(x["ID"])
-      val <- (xID == as.numeric(ped$momID)) | (xID == as.numeric(ped$dadID))
+      xID <-  as.numeric(x["ID"])
+      sMom <- (xID == ped$momID)
+      sDad <- (xID == ped$dadID)
+      val <- sMom | sDad
       val[is.na(val)] <- FALSE
 
     } else if (component %in% c("common nuclear")) {
       # Code for 'common nuclear' component
       # IDs have the Same mom and Same dad
-      sMom <- (as.numeric(x["momID"]) == as.numeric(ped$momID))
+      sMom <- (as.numeric(x["momID"]) == ped$momID)
       sMom[is.na(sMom)] <- FALSE
-      sDad <- (as.numeric(x["dadID"]) == as.numeric(ped$dadID))
+      sDad <- (as.numeric(x["dadID"]) == ped$dadID)
       sDad[is.na(sDad)] <- FALSE
       val <- sMom & sDad
     } else if (component %in% c("mitochondrial")) {
@@ -161,7 +168,7 @@ if (lastComputed < nr) {
       #val[is.na(val)] <- FALSE
 
       # reduces computations
-      val <- (as.numeric(x["ID"]) == as.numeric(ped$momID))
+      val <- (as.numeric(x["ID"]) == ped$momID)
       val[is.na(val)] <- FALSE
     } else {
       stop("Unknown relatedness component requested")

@@ -18,7 +18,7 @@ ped2com(
   saveable = FALSE,
   resume = FALSE,
   save_rate_gen = 5,
-  save_rate_parlist = 100,
+  save_rate_parlist = 10000,
   update_rate = 100,
   save_path = "checkpoint/",
   ...
