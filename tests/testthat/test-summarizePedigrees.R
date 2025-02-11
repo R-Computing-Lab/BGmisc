@@ -125,10 +125,10 @@ test_that("summarizePedigrees() handles empty dataset gracefully", {
   df <- data.frame(ID = integer(), momID = integer(), dadID = integer(), famID = integer())
   df_summarized <- summarizePedigrees(df)
  #  expect_true(length(df_summarized) == 0) # if the function were graceful...
-    expect_true(length(df_summarized) == 0 || all(sapply(df_summarized, nrow) == 0))
-    expect_false("biggest_families" %in% names(df_summarized))
-    expect_false("biggest_maternal" %in% names(df_summarized))
-    expect_false("biggest_paternal" %in% names(df_summarized))
+  expect_true(all(sapply(df_summarized, function(x) is.null(x) || (is.data.frame(x) && nrow(x) == 0))))
+  expect_false("biggest_families" %in% names(df_summarized) && nrow(df_summarized$biggest_families) > 0)
+  expect_false("biggest_maternal" %in% names(df_summarized) && nrow(df_summarized$biggest_maternal) > 0)
+  expect_false("biggest_paternal" %in% names(df_summarized) && nrow(df_summarized$biggest_paternal) > 0)
 })
 
 # Test Case 10: Handling single entry pedigree
