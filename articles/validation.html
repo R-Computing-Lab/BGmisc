@@ -337,13 +337,8 @@ variations exist.</li>
 deeply-held sense of being male, female, a blend of both, neither, or
 another gender entirely.</li>
 </ul>
-<p>The <code>checkSex</code> function focuses on validating biological
-sex because it corresponds with the inheritance patterns of sex
-chromosomes and mitochondrial DNA. While the <code>checkSex</code>
-function centers on the genetic aspect of biological sex, we respect and
-celebrate the full spectrum of gender identities beyond the binary. The
-developers of this package affirm their support for folx in the LGBTQ+
-community.</p>
+<p>The function can also identify cases where an individual is listed as
+both a parent and a child in the same pedigree.</p>
 <div class="section level4">
 <h4 id="using-the-checksex-function">Using the checkSex Function<a class="anchor" aria-label="anchor" href="#using-the-checksex-function"></a>
 </h4>
@@ -460,8 +455,8 @@ repair them automatically:</p>
 <p>When the repair argument is set to <code>TRUE</code>, the function
 attempts to repair the sex coding based on repair sex coding based on
 the most frequent sex values found among parents. This approach helps
-ensure that the sex coding in your dataset is consistent and
-accurate.</p>
+ensure that the sex coding in your dataset is consistent and won’t cause
+recursion.</p>
 <!--
 ## Practical Example: Cleaning a Pedigree
 

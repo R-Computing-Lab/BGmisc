@@ -99,31 +99,33 @@
 
 
 <dt id="arg-byr">byr<a class="anchor" aria-label="anchor" href="#arg-byr"></a></dt>
-<dd><p>Optional column name for birth year.</p></dd>
+<dd><p>Character. Optional column name for birth year. Used to determine the oldest lineages.</p></dd>
 
 
 <dt id="arg-founder-sort-var">founder_sort_var<a class="anchor" aria-label="anchor" href="#arg-founder-sort-var"></a></dt>
-<dd><p>The variable to sort the founders by. If NULL, the founders will be sorted by birth year (`byr`) if that's present and by `personID` otherwise.</p></dd>
+<dd><p>Character. Column used to determine the founder of each lineage.
+Defaults to `byr` (if available) or `personID` otherwise.</p></dd>
 
 
 <dt id="arg-include-founder">include_founder<a class="anchor" aria-label="anchor" href="#arg-include-founder"></a></dt>
-<dd><p>Logical, if TRUE, include the founder of each line in the summary statistics.</p></dd>
+<dd><p>Logical. If `TRUE`, includes the founder (originating member) of each lineage in the output.</p></dd>
 
 
 <dt id="arg-nbiggest">nbiggest<a class="anchor" aria-label="anchor" href="#arg-nbiggest"></a></dt>
-<dd><p>The number of biggest lines to return.</p></dd>
+<dd><p>Integer. Number of largest lineages to return (sorted by count).</p></dd>
 
 
 <dt id="arg-noldest">noldest<a class="anchor" aria-label="anchor" href="#arg-noldest"></a></dt>
-<dd><p>The number of oldest lines to return.</p></dd>
+<dd><p>Integer. Number of oldest lineages to return (sorted by birth year).</p></dd>
 
 
 <dt id="arg-skip-var">skip_var<a class="anchor" aria-label="anchor" href="#arg-skip-var"></a></dt>
-<dd><p>A character vector of variables to skip when calculating summary statistics.</p></dd>
+<dd><p>Character vector. Variables to exclude from summary calculations.</p></dd>
 
 
 <dt id="arg-five-num-summary">five_num_summary<a class="anchor" aria-label="anchor" href="#arg-five-num-summary"></a></dt>
-<dd><p>Logical, if TRUE, include the 5-number summary (min, Q1, median, Q3, max) in the summary statistics.</p></dd>
+<dd><p>Logical. If `TRUE`, includes the first quartile (Q1) and third quartile (Q3) in addition to
+the minimum, median, and maximum values.</p></dd>
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
