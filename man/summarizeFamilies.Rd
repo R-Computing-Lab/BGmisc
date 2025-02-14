@@ -37,19 +37,21 @@ summarizeFamilies(
 
 \item{patID}{Character.  Paternal line ID variable to be created and added to the pedigree}
 
-\item{byr}{Optional column name for birth year.}
+\item{byr}{Character. Optional column name for birth year. Used to determine the oldest lineages.}
 
-\item{founder_sort_var}{The variable to sort the founders by. If NULL, the founders will be sorted by birth year (`byr`) if that's present and by `personID` otherwise.}
+\item{founder_sort_var}{Character. Column used to determine the founder of each lineage.
+Defaults to `byr` (if available) or `personID` otherwise.}
 
-\item{include_founder}{Logical, if TRUE, include the founder of each line in the summary statistics.}
+\item{include_founder}{Logical. If `TRUE`, includes the founder (originating member) of each lineage in the output.}
 
-\item{nbiggest}{The number of biggest lines to return.}
+\item{nbiggest}{Integer. Number of largest lineages to return (sorted by count).}
 
-\item{noldest}{The number of oldest lines to return.}
+\item{noldest}{Integer. Number of oldest lineages to return (sorted by birth year).}
 
-\item{skip_var}{A character vector of variables to skip when calculating summary statistics.}
+\item{skip_var}{Character vector. Variables to exclude from summary calculations.}
 
-\item{five_num_summary}{Logical, if TRUE, include the 5-number summary (min, Q1, median, Q3, max) in the summary statistics.}
+\item{five_num_summary}{Logical. If `TRUE`, includes the first quartile (Q1) and third quartile (Q3) in addition to
+the minimum, median, and maximum values.}
 
 \item{verbose}{Logical, if TRUE, print progress messages.}
 }

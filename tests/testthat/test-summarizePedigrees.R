@@ -83,3 +83,58 @@ test_that("summarizePatrilines() works", {
   result_observed <- nrow(df_summarized$biggest_paternal)
   expect_equal(result_observed, nbiggest)
 })
+
+# Test Case 6: Handling of missing values in critical columns
+test_that("summarizePedigrees() handles missing values correctly", {
+  df <- data.frame(
+    ID = 1:6,
+    momID = c(NA, 1, 1, NA, 4, 4),
+    dadID = c(NA, 2, 2, NA, 5, 5),
+    famID = c(1, 1, 1, 2, 2, 2),
+    byr = c(1920, 1945, 1950, 1930, 1960, 1965)
+  )
+
+  df_summarized <- summarizePedigrees(df, byr = "byr")
+
+  expect_true(!any(is.na(df_summarized$family_summary$count)))
+  expect_true(!any(is.na(df_summarized$oldest_families$byr)))
+})
+
+# Test Case 7: When all variables are skipped
+test_that("summarizePedigrees() works when all numeric variables are skipped", {
+  df <- data.frame(
+    ID = 1:5,
+    momID = c(NA, 1, 1, NA, 4),
+    dadID = c(NA, 2, 2, NA, 5),
+    famID = c(1, 1, 1, 2, 2),
+    age = c(30, 40, 50, 60, 70)
+  )
+
+  df_summarized <- summarizePedigrees(df, skip_var = c("age"))
+  expect_true(all(!grepl("age", names(df_summarized$family_summary))))
+})
+
+# Test Case 8: Handling invalid column names
+test_that("summarizePedigrees() throws error on invalid column names", {
+  df <- data.frame(ID = 1:5, momID = c(NA, 1, 1, NA, 4), dadID = c(NA, 2, 2, NA, 5), famID = c(1, 1, 1, 2, 2))
+  expect_error(summarizePedigrees(df, byr = "unknown_column"))
+})
+
+# Test Case 9: Handling empty dataset
+# test_that("summarizePedigrees() handles empty dataset gracefully", {
+#  df <- data.frame(ID = integer(), momID = integer(), dadID = integer(), famID = integer())
+#  df_summarized <- summarizePedigrees(df)
+#  expect_true(length(df_summarized) == 0) # if the function were graceful...
+#  expect_true(all(sapply(df_summarized, function(x) is.null(x) || (is.data.frame(x) && nrow(x) == 0))))
+#  expect_false("biggest_families" %in% names(df_summarized) && nrow(df_summarized$biggest_families) > 0)
+#  expect_false("biggest_maternal" %in% names(df_summarized) && nrow(df_summarized$biggest_maternal) > 0)
+#  expect_false("biggest_paternal" %in% names(df_summarized) && nrow(df_summarized$biggest_paternal) > 0)
+# })
+
+# Test Case 10: Handling single entry pedigree
+test_that("summarizePedigrees() works for single-entry pedigree", {
+  df <- data.frame(ID = 1, momID = NA, dadID = NA, famID = 1, byr = 1920)
+  df_summarized <- summarizePedigrees(df, byr = "byr")
+  expect_equal(nrow(df_summarized$family_summary), 1)
+  expect_equal(df_summarized$oldest_families$byr_mean, 1920)
+})

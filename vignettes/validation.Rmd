@@ -123,14 +123,14 @@ In this example, we have created a within-row duplicate by setting the momID of 
 
 ## Verifying Sex Coding
 
-Inconsistent coding of biological sex is a common issue in pedigree data. The `checkSex` function in `BGmisc` is designed to identify and address these errors, particularly inconsistencies where an individual's sex is incorrectly recorded. For instance, it can detect cases where a parent listed as biologically male is erroneously recorded as a mother.
+Inconsistent coding of biological sex is a common issue in pedigree data. The `checkSex` function in `BGmisc` is designed to identify and address these errors, particularly inconsistencies where an individual's sex is incorrectly recorded. For instance, it can detect cases where a parent listed as biologically male is erroneously recorded as a mother. 
 
 In genetic studies, we distinguish between biological sex (genotype) and gender identity (phenotype):
 
 - Biological sex (genotype) refers to an individual's chromosomal configuration, typically XX for female and XY for male in humans, though variations exist.
 - Gender identity (phenotype) encompasses a broader, richer, personal, deeply-held sense of being male, female, a blend of both, neither, or another gender entirely.
 
-The `checkSex` function focuses on validating biological sex because it corresponds with the inheritance patterns of sex chromosomes and mitochondrial DNA. While the `checkSex` function centers on the genetic aspect of biological sex, we respect and celebrate the full spectrum of gender identities beyond the binary. The developers of this package affirm their support for folx in the LGBTQ+ community.
+The function can also identify cases where an individual is listed as both a parent and a child in the same pedigree.
 
 
 
@@ -163,7 +163,7 @@ df_fix <- checkSex(potter,
 print(df_fix)
 ```
 
-When the repair argument is set to `TRUE`, the function attempts to repair the sex coding based on repair sex coding based on the most frequent sex values found among parents. This approach helps ensure that the sex coding in your dataset is consistent and accurate.
+When the repair argument is set to `TRUE`, the function attempts to repair the sex coding based on repair sex coding based on the most frequent sex values found among parents. This approach helps ensure that the sex coding in your dataset is consistent and won't cause recursion.
 
 <!--
 ## Practical Example: Cleaning a Pedigree

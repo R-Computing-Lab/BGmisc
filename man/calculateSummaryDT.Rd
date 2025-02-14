@@ -11,9 +11,10 @@ calculateSummaryDT(data, group_var, skip_var, five_num_summary = FALSE)
 
 \item{group_var}{A character string specifying the column name of the grouping variable.}
 
-\item{skip_var}{A character vector of variables to skip when calculating summary statistics.}
+\item{skip_var}{Character vector. Variables to exclude from summary calculations.}
 
-\item{five_num_summary}{Logical, if TRUE, include the 5-number summary (min, Q1, median, Q3, max) in the summary statistics.}
+\item{five_num_summary}{Logical. If `TRUE`, includes the first quartile (Q1) and third quartile (Q3) in addition to
+the minimum, median, and maximum values.}
 }
 \value{
 A data.table containing the summary statistics for all numeric variables.
