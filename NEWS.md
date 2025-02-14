@@ -1,6 +1,7 @@
 # BGmisc 1.3.3
 * Added ability to save and reload pedigree objects that are used by ped2Com
 * Optimized generation calculation
+* Added more tests for summarizePedigree
 
 # BGmisc 1.3.2.1
 * Added ability to pass additional arguments to the ped2FOO functions
