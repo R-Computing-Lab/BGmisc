@@ -38,21 +38,24 @@ summarizePedigrees(
 
 \item{patID}{Character.  Paternal line ID variable to be created and added to the pedigree}
 
-\item{type}{The type of summary statistics to calculate. Options are "fathers", "mothers", and "families".}
+\item{type}{Character vector. Specifies which summaries to compute.
+Options: `"fathers"`, `"mothers"`, `"families"`. Default includes all three.}
 
-\item{byr}{Optional column name for birth year.}
+\item{byr}{Character. Optional column name for birth year. Used to determine the oldest lineages.}
 
-\item{include_founder}{Logical, if TRUE, include the founder of each line in the summary statistics.}
+\item{include_founder}{Logical. If `TRUE`, includes the founder (originating member) of each lineage in the output.}
 
-\item{founder_sort_var}{The variable to sort the founders by. If NULL, the founders will be sorted by birth year (`byr`) if that's present and by `personID` otherwise.}
+\item{founder_sort_var}{Character. Column used to determine the founder of each lineage.
+Defaults to `byr` (if available) or `personID` otherwise.}
 
-\item{nbiggest}{The number of biggest lines to return.}
+\item{nbiggest}{Integer. Number of largest lineages to return (sorted by count).}
 
-\item{noldest}{The number of oldest lines to return.}
+\item{noldest}{Integer. Number of oldest lineages to return (sorted by birth year).}
 
-\item{skip_var}{A character vector of variables to skip when calculating summary statistics.}
+\item{skip_var}{Character vector. Variables to exclude from summary calculations.}
 
-\item{five_num_summary}{Logical, if TRUE, include the 5-number summary (min, Q1, median, Q3, max) in the summary statistics.}
+\item{five_num_summary}{Logical. If `TRUE`, includes the first quartile (Q1) and third quartile (Q3) in addition to
+the minimum, median, and maximum values.}
 
 \item{verbose}{Logical, if TRUE, print progress messages.}
 }
@@ -60,6 +63,19 @@ summarizePedigrees(
 A data.frame (or list) containing summary statistics for family, maternal, and paternal lines, as well as the 5 oldest and biggest lines.
 }
 \description{
-This function summarizes pedigree data, including calculating summary statistics for all numeric variables,
-and finding the originating member for each family, maternal, and paternal line.
+This function summarizes pedigree data, by
+computing key summary statistics for all numeric variables and identifying the
+originating member (founder) for each family, maternal, and paternal lineage.
+}
+\details{
+The function calculates standard descriptive statistics, including the count of individuals in
+each lineage, means, medians, minimum and maximum values, and standard deviations.
+Additionally, if `five_num_summary = TRUE`, the function includes the first and third quartiles (Q1, Q3)
+to provide a more detailed distributional summary. Users can also specify variables to exclude from
+the analysis via `skip_var`.
+
+Beyond summary statistics, the function identifies the founding member of each lineage
+based on the specified sorting variable (`founder_sort_var`), defaulting to birth year (`byr`)
+when available or `personID` otherwise. Users can retrieve the largest and oldest
+lineages by setting `nbiggest` and `noldest`, respectively.
 }

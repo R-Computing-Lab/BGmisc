@@ -176,5 +176,3 @@ test_that("if file does not exist, readGedcom throws an error", {
   # Call readGedcom with a non-existent file
   expect_error(readGedcom("nonexistent.ged"))
 })
-
-

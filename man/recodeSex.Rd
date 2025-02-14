@@ -40,11 +40,20 @@ This function serves as is primarily used internally, by plotting functions etc.
 It sets the `repair` flag to TRUE automatically and forwards any additional parameters to `checkSex`.
 }
 \details{
-This function uses the terms 'male' and 'female' in a biological context, based on chromosomes and other biologically-based characteristics relevant to genetic studies.
-This usage is not intended to negate the personal gender identity of any individual.
+The validation process identifies:
+- The unique sex codes present in the dataset.
+- Whether individuals listed as fathers or mothers have inconsistent sex codes.
+- Instances where an individual's recorded sex does not align with their parental role.
 
-We recognize the importance of using language and methodologies that affirm and respect all gender identities.  While this function focuses on chromosomal information necessary for constructing genetic pedigrees, we affirm that gender is a spectrum, encompassing a wide range of identities beyond the binary.
-The developers of this package express unequivocal support for folx in the transgender and LGBTQ+ communities. We respect the complexity of gender identity and acknowledge the distinction between the biological aspect of sex used for genetic analysis (genotype) and the broader, richer concept of gender identity (phenotype).
+If `repair = TRUE`, the function standardizes sex coding by:
+- Assigning individuals listed as fathers the most common male code in the dataset.
+- Assigning individuals listed as mothers the most common female code.
+
+This function uses the terms 'male' and 'female' in a biological context, referring to chromosomal and other biologically-based characteristics necessary for constructing genetic pedigrees. The biological aspect of sex used in genetic analysis (genotype) is distinct from the broader, richer concept of gender identity (phenotype).
+
+We recognize the importance of using language and methodologies that affirm and respect the full spectrum of gender identities.  The developers of this
+package express unequivocal support for folx in the transgender
+and LGBTQ+ communities.
 }
 \seealso{
 \code{\link{plotPedigree}}
