@@ -52,6 +52,8 @@ readGedcom <- function(file_path,
                        remove_empty_cols = TRUE,
                        combine_cols = TRUE,
                        skinny = FALSE) {
+  # Checks
+  if (!file.exists(file_path)) stop("File does not exist: ", file_path)
   if (verbose) {
     print(paste("Reading file:", file_path))
   }
@@ -65,51 +67,32 @@ readGedcom <- function(file_path,
   num_rows <- countPatternRows(file)
 
   # List of variables to initialize
-  var_names <- c(
-    "id",
-    "momID",
-    "dadID",
-    "sex",
-    "name",
-    "name_given",
-    "name_given_pieces",
-    "name_surn",
-    "name_surn_pieces",
-    "name_marriedsurn",
-    "name_nick",
-    "name_npfx",
-    "name_nsfx",
-    "birth_date",
-    "birth_lat",
-    "birth_long",
-    "birth_place",
-    "death_caus",
-    "death_date",
-    "death_lat",
-    "death_long",
-    "death_place",
-    "attribute_caste",
-    "attribute_children",
-    "attribute_description",
-    "attribute_education",
-    "attribute_idnumber",
-    "attribute_marriages",
-    "attribute_nationality",
-    "attribute_occupation",
-    "attribute_property",
-    "attribute_religion",
-    "attribute_residence",
-    "attribute_ssn",
-    "attribute_title",
-    "FAMC",
-    "FAMS"
+  var_names <- list(
+    identifiers = c("id", "momID", "dadID"),
+    names = c(
+      "name", "name_given", "name_given_pieces",
+      "name_surn", "name_surn_pieces", "name_marriedsurn", "name_nick", "name_npfx", "name_nsfx"
+    ),
+    sex = c("sex"),
+    birth = c("birth_date", "birth_lat", "birth_long", "birth_place"),
+    death = c("death_caus", "death_date", "death_lat", "death_long", "death_place"),
+    attributes = c(
+      "attribute_caste", "attribute_children", "attribute_description",
+      "attribute_education", "attribute_idnumber", "attribute_marriages",
+      "attribute_nationality", "attribute_occupation",
+      "attribute_property", "attribute_religion", "attribute_residence",
+      "attribute_ssn", "attribute_title"
+    ),
+    relationships = c("FAMC", "FAMS")
   )
 
-  # Initialize all variables to NA
-  vars <- stats::setNames(as.list(rep(NA_character_, length(var_names))), var_names)
+  all_var_names <- unlist(var_names, use.names = FALSE)
 
-  df_temp <- as.data.frame(matrix(nrow = 1, ncol = length(var_names)))
-  names(df_temp) <- var_names
+  # Initialize all variables to NA
+  vars <- stats::setNames(as.list(rep(NA_character_, length(all_var_names))), all_var_names)
+
+  df_temp <- as.data.frame(matrix(nrow = 1, ncol = length(all_var_names)))
+  names(df_temp) <- all_var_names
 
   if (verbose) {
     print("Parsing GEDCOM file")
@@ -122,7 +105,7 @@ readGedcom <- function(file_path,
       df_temp <- rbind(df_temp, line_to_write)
 
       # Reset all variables to NA
-      vars <- stats::setNames(as.list(rep(NA_character_, length(var_names))), var_names)
+      vars <- stats::setNames(as.list(rep(NA_character_, length(all_var_names))), all_var_names)
 
       vars$id <- stringr::str_extract(tmpv, "(?<=@.)\\d*(?=@)")
       next
@@ -469,12 +452,16 @@ assignParentIDs <- function(df_temp, family_to_parents) {
 #' @return A data frame with added momID and dadID columns.
 #' @keywords internal
 processParents <- function(df_temp) {
-  if (!all(c("FAMC", "sex", "FAMS") %in% colnames(df_temp))) {
-    warning("The data frame does not contain the necessary columns (FAMC,FAMS, sex) to process parents")
+  # Ensure required columns are present
+  required_cols <- c("FAMC", "sex", "FAMS")
+
+  if (!all(required_cols %in% colnames(df_temp))) {
+    missing_cols <- setdiff(required_cols, colnames(df_temp))
+    warning("Missing necessary columns: ", paste(missing_cols, collapse = ", "))
     return(df_temp)
   }
   family_to_parents <- createFamilyToParentsMapping(df_temp)
-  if (is.null(family_to_parents)) {
+  if (is.null(family_to_parents) || length(family_to_parents) == 0) {
     return(df_temp)
   }
   df_temp <- assignParentIDs(df_temp, family_to_parents)
