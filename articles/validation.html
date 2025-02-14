@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">BGmisc</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.2.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -78,7 +78,7 @@ model identification, calculating relatedness, pedigree conversion, and
 pedigree simulation. This vignette provides an overview of the
 validation tools available in the package, designed to identify and
 repair errors in pedigrees.</p>
-<p>In an ideal world, you would have perfect pedigrees with no errors.
+<p>In an ideal world, you would have flawless error-free pedigrees.
 However, in the real world, pedigrees are often incomplete, contain
 errors, or are missing data. The <code>BGmisc</code> package provides
 tools to identify these errors, which is particularly useful for large
@@ -129,27 +129,6 @@ of duplicates. Here’s how to use it:</p>
 <span><span class="co">#&gt; [1] 0</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $within_row_duplicates</span></span>
-<span><span class="co">#&gt; [1] FALSE</span></span>
-<span></span>
-<span><span class="co">#&gt; $all_unique_ids</span></span>
-<span><span class="co">#&gt; [1] TRUE</span></span>
-<span><span class="co">#&gt;</span></span>
-<span><span class="co">#&gt; $total_non_unique_ids</span></span>
-<span><span class="co">#&gt; [1] 0</span></span>
-<span><span class="co">#&gt;</span></span>
-<span><span class="co">#&gt; $total_own_father</span></span>
-<span><span class="co">#&gt; [1] 0</span></span>
-<span><span class="co">#&gt;</span></span>
-<span><span class="co">#&gt; $total_own_mother</span></span>
-<span><span class="co">#&gt; [1] 0</span></span>
-<span><span class="co">#&gt;</span></span>
-<span><span class="co">#&gt; $total_duplicated_parents</span></span>
-<span><span class="co">#&gt; [1] 0</span></span>
-<span><span class="co">#&gt;</span></span>
-<span><span class="co">#&gt; $total_within_row_duplicates</span></span>
-<span><span class="co">#&gt; [1] 0</span></span>
-<span><span class="co">#&gt;</span></span>
-<span><span class="co">#&gt; $within_row_duplicates</span></span>
 <span><span class="co">#&gt; [1] FALSE</span></span></code></pre></div>
 <p>In this example, the <code>checkIDs</code> function returns a list
 with several elements. The <code>all_unique_ids</code> element indicates
@@ -188,16 +167,6 @@ ID. Second, we have added a copy of Dudley Dursley to the dataset.</p>
 what the dataset looks like.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; ── <span style="font-weight: bold;">Attaching core tidyverse packages</span> ──────────────────────── tidyverse 2.0.0 ──</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">dplyr    </span> 1.1.4     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">readr    </span> 2.1.5</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">forcats  </span> 1.0.0     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">stringr  </span> 1.5.1</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">ggplot2  </span> 3.5.1     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">tibble   </span> 3.2.1</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">lubridate</span> 1.9.4     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">tidyr    </span> 1.3.1</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">purrr    </span> 1.0.2     </span></span>
-<span><span class="co">#&gt; ── <span style="font-weight: bold;">Conflicts</span> ────────────────────────────────────────── tidyverse_conflicts() ──</span></span>
-<span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">dplyr</span>::<span style="color: #00BB00;">filter()</span> masks <span style="color: #0000BB;">stats</span>::filter()</span></span>
-<span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">dplyr</span>::<span style="color: #00BB00;">lag()</span>    masks <span style="color: #0000BB;">stats</span>::lag()</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Use the conflicted package (<span style="color: #0000BB; font-style: italic;">&lt;http://conflicted.r-lib.org/&gt;</span>) to force all conflicts to become errors</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/summarizeFamilies.html">summarizeFamilies</a></span><span class="op">(</span><span class="va">df</span>, famID <span class="op">=</span> <span class="st">"newFamID"</span>, personID <span class="op">=</span> <span class="st">"personID"</span><span class="op">)</span><span class="op">$</span><span class="va">family_summary</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: 1</span></span>
@@ -385,10 +354,11 @@ validate and, if necessary, repair sex coding in a pedigree:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Validate sex coding</span></span>
 <span></span>
-<span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/checkSex.html">checkSex</a></span><span class="op">(</span><span class="va">potter</span>, </span>
-<span>                    code_male <span class="op">=</span> <span class="fl">1</span>, </span>
-<span>                    code_female <span class="op">=</span> <span class="fl">0</span>, </span>
-<span>                    verbose <span class="op">=</span> <span class="cn">TRUE</span>, repair <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/checkSex.html">checkSex</a></span><span class="op">(</span><span class="va">potter</span>,</span>
+<span>  code_male <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  code_female <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>, repair <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
 <span><span class="co">#&gt; Step 1: Checking how many sexes/genders...</span></span>
 <span><span class="co">#&gt; 2 unique values found.</span></span>
 <span><span class="co">#&gt;  1 2 unique values found.</span></span>
@@ -437,10 +407,11 @@ inconsistencies in the sex coding of parents.</p>
 repair them automatically:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Repair sex coding</span></span>
-<span><span class="va">df_fix</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/checkSex.html">checkSex</a></span><span class="op">(</span><span class="va">potter</span>, </span>
-<span>                   code_male <span class="op">=</span> <span class="fl">1</span>, </span>
-<span>                   code_female <span class="op">=</span> <span class="fl">0</span>, </span>
-<span>                   verbose <span class="op">=</span> <span class="cn">TRUE</span>, repair <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">df_fix</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/checkSex.html">checkSex</a></span><span class="op">(</span><span class="va">potter</span>,</span>
+<span>  code_male <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  code_female <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>, repair <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
 <span><span class="co">#&gt; Step 1: Checking how many sexes/genders...</span></span>
 <span><span class="co">#&gt; 2 unique values found.</span></span>
 <span><span class="co">#&gt;  1 2 unique values found.</span></span>
