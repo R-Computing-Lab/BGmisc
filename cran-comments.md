@@ -8,7 +8,7 @@ This update adds functionality as well as improves documentation. The package no
 
 1. Local OS: Windows 11 x64 (build 22635), R version 4.4.1 (2024-06-14 ucrt)
 2. **GitHub Actions**:  
-    - [Link](https://github.com/R-Computing-Lab/BGmisc/actions/runs/9555923086)
+    - [Link](https://github.com/R-Computing-Lab/BGmisc/actions/runs/13376514760)
     - macOS (latest version) with the latest R release.
     - Windows (latest version) with the latest R release.
     - Ubuntu (latest version) with:
