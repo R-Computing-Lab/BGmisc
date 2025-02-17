@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">BGmisc</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.2.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -22,7 +22,7 @@
     <li><a class="dropdown-item" href="../articles/modelingrelatedness.html">Modeling and Relatedness</a></li>
     <li><a class="dropdown-item" href="../articles/network.html">Network tools for finding extended pedigrees and path tracing</a></li>
     <li><a class="dropdown-item" href="../articles/pedigree.html">Pedigree Simulation and Visualization with BGmisc</a></li>
-    <li><a class="dropdown-item" href="../articles/validation.html">Validation tools for identifying and repairing errors in pedigrees</a></li>
+    <li><a class="dropdown-item" href="../articles/validation.html">Validating and Repairing Pedigree Data with BGmisc</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -37,7 +37,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Take a pedigree and turn it into a mitochondrial relatedness matrix</h1>
-      <small class="dont-index">Source: <a href="https://github.com/R-Computing-Lab/BGmisc/blob/v1.3.3/R/convertPedigree.R" class="external-link"><code>R/convertPedigree.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/R-Computing-Lab/BGmisc/blob/main/R/convertPedigree.R" class="external-link"><code>R/convertPedigree.R</code></a></small>
       <div class="d-none name"><code>ped2mit.Rd</code></div>
     </div>
 
@@ -55,8 +55,13 @@
 <span>  gc <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  flatten.diag <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  standardize.colnames <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  tcross.alt.crossprod <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  tcross.alt.star <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  transpose_method <span class="op">=</span> <span class="st">"tcrossprod"</span>,</span>
+<span>  saveable <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  resume <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  save_rate <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>  save_rate_gen <span class="op">=</span> <span class="va">save_rate_gen</span>,</span>
+<span>  save_rate_parlist <span class="op">=</span> <span class="fl">1000</span> <span class="op">*</span> <span class="va">save_rate</span>,</span>
+<span>  save_path <span class="op">=</span> <span class="st">"checkpoint/"</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -95,12 +100,32 @@
 <dd><p>logical. If TRUE, standardize the column names of the pedigree dataset</p></dd>
 
 
-<dt id="arg-tcross-alt-crossprod">tcross.alt.crossprod<a class="anchor" aria-label="anchor" href="#arg-tcross-alt-crossprod"></a></dt>
-<dd><p>logical. If TRUE, use alternative method of using Crossprod function for computing the transpose</p></dd>
+<dt id="arg-transpose-method">transpose_method<a class="anchor" aria-label="anchor" href="#arg-transpose-method"></a></dt>
+<dd><p>character. The method to use for computing the transpose.  Options are "tcrossprod", "crossprod", or "star"</p></dd>
 
 
-<dt id="arg-tcross-alt-star">tcross.alt.star<a class="anchor" aria-label="anchor" href="#arg-tcross-alt-star"></a></dt>
-<dd><p>logical. If TRUE, use alternative method of using %\*% for computing the transpose</p></dd>
+<dt id="arg-saveable">saveable<a class="anchor" aria-label="anchor" href="#arg-saveable"></a></dt>
+<dd><p>logical. If TRUE, save the intermediate results to disk</p></dd>
+
+
+<dt id="arg-resume">resume<a class="anchor" aria-label="anchor" href="#arg-resume"></a></dt>
+<dd><p>logical. If TRUE, resume from a checkpoint</p></dd>
+
+
+<dt id="arg-save-rate">save_rate<a class="anchor" aria-label="anchor" href="#arg-save-rate"></a></dt>
+<dd><p>numeric. The rate at which to save the intermediate results</p></dd>
+
+
+<dt id="arg-save-rate-gen">save_rate_gen<a class="anchor" aria-label="anchor" href="#arg-save-rate-gen"></a></dt>
+<dd><p>numeric. The rate at which to save the intermediate results by generation. If NULL, defaults to save_rate</p></dd>
+
+
+<dt id="arg-save-rate-parlist">save_rate_parlist<a class="anchor" aria-label="anchor" href="#arg-save-rate-parlist"></a></dt>
+<dd><p>numeric. The rate at which to save the intermediate results by parent list. If NULL, defaults to save_rate*1000</p></dd>
+
+
+<dt id="arg-save-path">save_path<a class="anchor" aria-label="anchor" href="#arg-save-path"></a></dt>
+<dd><p>character. The path to save the checkpoint files</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
