@@ -82,7 +82,7 @@ validation functions.</p>
 <div class="section level2">
 <h2 id="identifying-and-repairing-id-issues">Identifying and Repairing ID Issues<a class="anchor" aria-label="anchor" href="#identifying-and-repairing-id-issues"></a>
 </h2>
-<p>The <code><a href="../reference/checkIDs.html">checkIDs()</a></code> function identifies two types of ID
+<p>The <code><a href="../reference/checkIDs.html">checkIDs()</a></code> function detects two types of ID
 duplication:</p>
 <ul>
 <li>Between-row duplication: When two or more individuals share the same
@@ -90,9 +90,8 @@ ID</li>
 <li>Within-row duplication: When an individual’s parents’ IDs are
 incorrectly listed as their own ID</li>
 </ul>
-<p>Let’s explore how to identify and handle these issues using the
-checkIDs function. We’ll start with a clean example from the Potter
-family dataset:</p>
+<p>To illustrate <code><a href="../reference/checkIDs.html">checkIDs()</a></code> in action, we will examine a
+clean example using the Potter family dataset.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/R-Computing-Lab/BGmisc/" class="external-link">BGmisc</a></span><span class="op">)</span></span>
 <span></span>
@@ -122,7 +121,7 @@ family dataset:</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $within_row_duplicates</span></span>
 <span><span class="co">#&gt; [1] FALSE</span></span></code></pre></div>
-<p>In this example, the checkIDs function examines:</p>
+<p>The checkIDs() function checks for:</p>
 <ul>
 <li>Whether all IDs are unique (reported by <code>all_unique_ids</code>,
 which tells you if all IDs in the dataset are unique, and
@@ -144,14 +143,11 @@ dataset.</p>
 <div class="section level3">
 <h3 id="a-tale-of-two-duplicates">A Tale of Two Duplicates<a class="anchor" aria-label="anchor" href="#a-tale-of-two-duplicates"></a>
 </h3>
-<div class="section level4">
-<h4 id="handling-between-row-duplicates">Handling Between-Row Duplicates<a class="anchor" aria-label="anchor" href="#handling-between-row-duplicates"></a>
-</h4>
 <p>To understand how these tools work in practice, let’s create a
 dataset with two common real-world problems. First, we’ll accidentally
 give Vernon Dursley the same ID as his sister Marjorie (a common issue
 when merging family records). Then, we’ll add a complete duplicate of
-Dudley Dursley (as might happen during data entry)</p>
+Dudley Dursley (as might happen during data entry).</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># Create our problematic dataset</span></span>
@@ -231,11 +227,9 @@ dataset, specifically 2, 6. Let’s take a peek at the duplicates:</p>
 <span><span class="co">#&gt; 6         6        1     1   Dudley Dursley   2     3     1       NA   1</span></span>
 <span><span class="co">#&gt; 61        6        1     1   Dudley Dursley   2     3     1       NA   1</span></span></code></pre></div>
 <p>Yep, these are definitely the duplicates.</p>
-</div>
-</div>
-<div class="section level3">
-<h3 id="repairing-between-row-duplicates">Repairing Between-Row Duplicates<a class="anchor" aria-label="anchor" href="#repairing-between-row-duplicates"></a>
-</h3>
+<div class="section level4">
+<h4 id="repairing-between-row-duplicates">Repairing Between-Row Duplicates<a class="anchor" aria-label="anchor" href="#repairing-between-row-duplicates"></a>
+</h4>
 <p>Some ID issues can be fixed automatically. Let’s try the repair
 option:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
@@ -276,12 +270,10 @@ full duplicate, without any manual intervention. That still leaves us
 with the sibling ID conflict, but that’s a more complex issue that would
 require manual intervention. We’ll leave that for now.</p>
 </div>
+</div>
 <div class="section level3">
 <h3 id="oedipus-id">Oedipus ID<a class="anchor" aria-label="anchor" href="#oedipus-id"></a>
 </h3>
-<div class="section level4">
-<h4 id="handling-within-row-duplicates">Handling Within-Row Duplicates<a class="anchor" aria-label="anchor" href="#handling-within-row-duplicates"></a>
-</h4>
 <p>Just as Oedipus discovered his true relationship was not what records
 suggested, our data can reveal its own confused parentage when an ID is
 incorrectly listed as its own parent. Let’s examine this error:</p>
@@ -332,29 +324,18 @@ these errors in your dataset.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Find the problematic entry</span></span>
 <span></span>
-<span><span class="va">df_within</span><span class="op">[</span><span class="va">df_within</span><span class="op">$</span><span class="va">momID</span><span class="op">==</span><span class="va">result</span><span class="op">$</span><span class="va">is_own_mother_ids</span>,<span class="op">]</span> </span>
-<span><span class="co">#&gt;       personID newFamID famID           name gen momID dadID spouseID sex</span></span>
-<span><span class="co">#&gt; 1            1        1     1 Vernon Dursley   1     1   102        3   1</span></span>
-<span><span class="co">#&gt; NA          NA       NA  &lt;NA&gt;           &lt;NA&gt;  NA    NA    NA       NA  NA</span></span>
-<span><span class="co">#&gt; NA.1        NA       NA  &lt;NA&gt;           &lt;NA&gt;  NA    NA    NA       NA  NA</span></span>
-<span><span class="co">#&gt; NA.2        NA       NA  &lt;NA&gt;           &lt;NA&gt;  NA    NA    NA       NA  NA</span></span>
-<span><span class="co">#&gt; NA.3        NA       NA  &lt;NA&gt;           &lt;NA&gt;  NA    NA    NA       NA  NA</span></span>
-<span><span class="co">#&gt; NA.4        NA       NA  &lt;NA&gt;           &lt;NA&gt;  NA    NA    NA       NA  NA</span></span>
-<span><span class="co">#&gt; NA.5        NA       NA  &lt;NA&gt;           &lt;NA&gt;  NA    NA    NA       NA  NA</span></span>
-<span><span class="co">#&gt; NA.6        NA       NA  &lt;NA&gt;           &lt;NA&gt;  NA    NA    NA       NA  NA</span></span>
-<span><span class="co">#&gt; NA.7        NA       NA  &lt;NA&gt;           &lt;NA&gt;  NA    NA    NA       NA  NA</span></span>
-<span><span class="co">#&gt; NA.8        NA       NA  &lt;NA&gt;           &lt;NA&gt;  NA    NA    NA       NA  NA</span></span>
-<span><span class="co">#&gt; NA.9        NA       NA  &lt;NA&gt;           &lt;NA&gt;  NA    NA    NA       NA  NA</span></span>
-<span><span class="co">#&gt; NA.10       NA       NA  &lt;NA&gt;           &lt;NA&gt;  NA    NA    NA       NA  NA</span></span></code></pre></div>
+<span><span class="va">df_within</span><span class="op">[</span><span class="va">df_within</span><span class="op">$</span><span class="va">momID</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">result</span><span class="op">$</span><span class="va">is_own_mother_ids</span>, <span class="op">]</span></span>
+<span><span class="co">#&gt;   personID newFamID famID           name gen momID dadID spouseID sex</span></span>
+<span><span class="co">#&gt; 1        1        1     1 Vernon Dursley   1     1   102        3   1</span></span></code></pre></div>
 <p>There are several ways to correct this issue, depending on the
 specifics of your dataset. In this case, you could correct the momID for
 Vernon Dursley to the correct value, resolving the within-row duplicate,
 likely by assuming that his sister Marjorie shares the same mother.</p>
 </div>
 </div>
-<div class="section level3">
-<h3 id="verifying-sex-coding">Verifying Sex Coding<a class="anchor" aria-label="anchor" href="#verifying-sex-coding"></a>
-</h3>
+<div class="section level2">
+<h2 id="identifying-and-repairing-sex-coding-issues">Identifying and Repairing Sex Coding Issues<a class="anchor" aria-label="anchor" href="#identifying-and-repairing-sex-coding-issues"></a>
+</h2>
 <p>Another critical aspect of pedigree validation is ensuring the
 consistency of sex coding. This brings us to an important distinction in
 genetic studies between biological sex (genotype) and gender identity
@@ -548,7 +529,6 @@ final_check <- checkIDs(cleaned_data, verbose = TRUE, repair = FALSE)
 print(final_check)
 ```
 -->
-</div>
 </div>
 <div class="section level2">
 <h2 id="best-practices-for-pedigree-validation">Best Practices for Pedigree Validation<a class="anchor" aria-label="anchor" href="#best-practices-for-pedigree-validation"></a>
