@@ -140,7 +140,7 @@ ped2com <- function(ped, component,
     for (i in (lastComputed + 1):nr) {
       x <- ped[i, , drop = FALSE]
 
-      # Handle parentage according to the 'component' specified
+      # Handle parentage according to the 'component' specified # povitch algorymn
       if (component %in% c("generation", "additive")) {
         # Code for 'generation' and 'additive' components
         # Checks if is mom of ID or is dad of ID
@@ -298,7 +298,7 @@ ped2com <- function(ped, component,
   }
 
   # r is I + A + A^2 + ... = (I-A)^-1 from RAM
-
+# could trim, here
   while (mtSum != 0 & count < maxCount) {
     r <- r + newIsPar
     gen <- gen + (Matrix::rowSums(newIsPar) > 0)
@@ -478,7 +478,6 @@ ped2cn <- function(ped, max.gen = 25, sparse = FALSE, verbose = FALSE,
     save_path = save_path
   )
 }
-
 #' Take a pedigree and turn it into an extended environmental relatedness matrix
 #' @inheritParams ped2com
 #' @inherit ped2com details
