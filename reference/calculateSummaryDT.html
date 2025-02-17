@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">BGmisc</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.2.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -22,7 +22,7 @@
     <li><a class="dropdown-item" href="../articles/modelingrelatedness.html">Modeling and Relatedness</a></li>
     <li><a class="dropdown-item" href="../articles/network.html">Network tools for finding extended pedigrees and path tracing</a></li>
     <li><a class="dropdown-item" href="../articles/pedigree.html">Pedigree Simulation and Visualization with BGmisc</a></li>
-    <li><a class="dropdown-item" href="../articles/validation.html">Validating and Repairing Pedigree Data with BGmisc</a></li>
+    <li><a class="dropdown-item" href="../articles/validation.html">Validation tools for identifying and repairing errors in pedigrees</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -37,7 +37,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>This function calculates summary statistics for all numeric variables in a data.table. It is supposed to be used internally by the <code>summarize_pedigree</code> function.</h1>
-      <small class="dont-index">Source: <a href="https://github.com/R-Computing-Lab/BGmisc/blob/main/R/summarizePedigree.R" class="external-link"><code>R/summarizePedigree.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/R-Computing-Lab/BGmisc/blob/v1.3.3/R/summarizePedigree.R" class="external-link"><code>R/summarizePedigree.R</code></a></small>
       <div class="d-none name"><code>calculateSummaryDT.Rd</code></div>
     </div>
 
@@ -63,12 +63,11 @@
 
 
 <dt id="arg-skip-var">skip_var<a class="anchor" aria-label="anchor" href="#arg-skip-var"></a></dt>
-<dd><p>Character vector. Variables to exclude from summary calculations.</p></dd>
+<dd><p>A character vector of variables to skip when calculating summary statistics.</p></dd>
 
 
 <dt id="arg-five-num-summary">five_num_summary<a class="anchor" aria-label="anchor" href="#arg-five-num-summary"></a></dt>
-<dd><p>Logical. If `TRUE`, includes the first quartile (Q1) and third quartile (Q3) in addition to
-the minimum, median, and maximum values.</p></dd>
+<dd><p>Logical, if TRUE, include the 5-number summary (min, Q1, median, Q3, max) in the summary statistics.</p></dd>
 
 </dl></div>
     <div class="section level2">
