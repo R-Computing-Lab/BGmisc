@@ -4,7 +4,7 @@
 This update adds functionality as well as improves documentation. The package now includes the ability to save and reload pedigree objects that are used by ped2Com, optimized generation calculation, and more tests for summarizePedigree. The documentation has been enhanced to include more examples and explanations.
 
 ## Pretest Notes
-
+BGmisc is spelled correctly.
 As recommended by Uwe Ligges, I've now rebuilt the package using R Under development (unstable) (2025-02-17 r87739 ucrt). This should fix 
 "Author field differs from that derived from Authors@R", which is due to use of an ORCID identifier.
 
