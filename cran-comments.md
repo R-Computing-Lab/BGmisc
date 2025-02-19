@@ -8,7 +8,7 @@ This update adds functionality as well as improves documentation. The package no
 As recommended by Uwe Ligges, I've now rebuilt the package using R Under development (unstable) (2025-02-17 r87739 ucrt). This should fix 
 "Author field differs from that derived from Authors@R", which is due to use of an ORCID identifier. 
 
-I've also updated the description to include methods citations and be less redundant.
+As requested by Uwe Ligges, I've also updated the description to include methods citations and be less redundant.
 
 # Test Environments
 
