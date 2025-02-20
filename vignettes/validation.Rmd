@@ -1,5 +1,5 @@
 ---
-title: "Validation tools for identifying and repairing errors in pedigrees"
+title: "Validating and Repairing Pedigree Data with BGmisc"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Validation}
@@ -13,100 +13,102 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 options(rmarkdown.html_vignette.check_title = FALSE)
+library(tidyverse)
 ```
 
 # Introduction
 
-The `BGmisc` R package offers a comprehensive suite of functions tailored for extended behavior genetics analysis, including model identification, calculating relatedness, pedigree conversion, and pedigree simulation. This vignette provides an overview of the validation tools available in the package, designed to identify and repair errors in pedigrees. 
 
-In an ideal world, you would have perfect pedigrees with no errors. However, in the real world, pedigrees are often incomplete, contain errors, or are missing data. The `BGmisc` package provides tools to identify these errors, which is particularly useful for large pedigrees where manual inspection is not feasible. 
-While some errors in the package can be automatically repaired, the vast majority require manual inspection. It is often not possible to automatically repair errors in pedigrees, as the correct solution may not be obvious, or may depend on additional information that is not universally available.
+Working with pedigree data often involves dealing with inconsistencies, missing information, and errors. The `BGmisc` package provides tools to identify and, where possible, repair these issues automatically. This vignette demonstrates how to validate and clean pedigree data using `BGmisc`'s validation functions.
 
-# Identifying and Repairing Errors in Pedigrees
 
-## ID Validation
+# Identifying and Repairing ID Issues
 
-One common issue in pedigree data is the presence of duplicate IDs. There are two main types of ID duplication: within-row duplication and across-row duplication. Within-row duplication occurs when an individual's parents' IDs are incorrectly listed as their own ID. Across-row duplication occurs when two or more individuals share the same ID.
+The `checkIDs()` function detects two types of ID duplication:
 
- The `checkIDs` function in BGmisc helps identify by kinds of duplicates. Here's how to use it:
+- Between-row duplication: When two or more individuals share the same ID
+- Within-row duplication: When an individual's parents' IDs are incorrectly listed as their own ID
+
+
+To illustrate `checkIDs()` in action, we will examine a clean example using the Potter family dataset.
+
 
 ```{r,checkIDs}
 library(BGmisc)
-# Create a sample dataset
+
+# Load our example dataset
 df <- ped2fam(potter, famID = "newFamID", personID = "personID")
 
-# Call the checkIDs function
+# Check for ID issues
 result <- checkIDs(df, repair = FALSE)
 print(result)
-
-#> $all_unique_ids
-#> [1] TRUE
-#>
-#> $total_non_unique_ids
-#> [1] 0
-#>
-#> $total_own_father
-#> [1] 0
-#>
-#> $total_own_mother
-#> [1] 0
-#>
-#> $total_duplicated_parents
-#> [1] 0
-#>
-#> $total_within_row_duplicates
-#> [1] 0
-#>
-#> $within_row_duplicates
-#> [1] FALSE
 ```
 
-In this example, the `checkIDs` function returns a list with several elements. The `all_unique_ids` element indicates whether all IDs in the dataset are unique. The `total_non_unique_ids` element indicates the total number of non-unique IDs. The `total_own_father` and `total_own_mother` elements indicate the total number of individuals whose father's and mother's IDs match their own ID, respectively. The `total_duplicated_parents` element indicates the total number of individuals with duplicated parent IDs. The `total_within_row_duplicates` element indicates the total number of within-row duplicates. The `within_row_duplicates` element indicates whether there are any within-row duplicates in the dataset. As the output shows, there are no duplicates in the sample dataset. 
+The checkIDs() function checks for:
+
+- Whether all IDs are unique (reported by `all_unique_ids`, which tells you if all IDs in the dataset are unique, and `total_non_unique_ids`, which gives you the count of non-unique IDs found)
+- Cases where someone's ID matches their parent's ID (shown in `total_own_father` and `total_own_mother`, which count individuals whose father's or mother's ID matches their own ID)
+- Total duplicated parent IDs (tracked by `total_duplicated_parents`, which counts individuals with duplicated parent IDs)
+- Within-row duplicates (measured by `total_within_row_duplicates` showing the count and `within_row_duplicates` indicating their presence)
+
+As the output shows, there are no duplicates in our sample dataset.
 
 
-### Between-Person Duplicates
+## A Tale of Two Duplicates
 
-Let us now consider a scenario where there are between-person duplicates in the dataset. The `checkIDs` function can identify these duplicates and, if the `repair` argument is set to `TRUE`, attempt to repair them. In the example below, we have created two between-person duplicates. First, we have overwritten the `personID` of one person with their sibling's ID. Second, we have added a copy of Dudley Dursley to the dataset.
+To understand how these tools work in practice, let's create a dataset with two common real-world problems. First, we'll accidentally give Vernon Dursley the same ID as his sister Marjorie (a common issue when merging family records). Then, we'll add a complete duplicate of Dudley Dursley (as might happen during data entry).
 
 
+```{r datamade}
 
-```{r, repair}
-# Create a sample dataset with duplicates
-df <- ped2fam(potter, famID = "newFamID", personID = "personID")
+# Create our problematic dataset
+df_duplicates <- df
+# Sibling ID conflict
+df_duplicates$personID[df_duplicates$name == "Vernon Dursley"] <- 
+  df_duplicates$personID[df_duplicates$name == "Marjorie Dursley"]
+# Duplicate entry
+df_duplicates <- rbind(df_duplicates, 
+                       df_duplicates[df_duplicates$name == "Dudley Dursley", ])
 
-# Sibling overwrite
-df$personID[df$name == "Vernon Dursley"] <- df$personID[df$name == "Marjorie Dursley"]
-
-# Add a copy of Dudley Dursley
-df <- rbind(df, df[df$name == "Dudley Dursley", ])
 ```
 
-Now, let's call the `sumarizeFamilies` function to see what the dataset looks like.
+
+If we look at the data using standard tools, the problems aren't immediately obvious:
 
 ```{r}
 library(tidyverse)
 
-summarizeFamilies(df, famID = "newFamID", personID = "personID")$family_summary %>% glimpse()
+summarizeFamilies(df_duplicates, 
+                  famID = "newFamID", 
+                  personID = "personID")$family_summary %>% 
+  glimpse()
+
 ```
 
-If we didn't know to look for duplicates, we might not notice the issue. Indeed, only of the duplicates was selected as are founder member. However, the `checkIDs` function can help us identify and repair these errors:
+This is where `checkIDs` becomes invaluable:
 
 ```{r}
-# Call the checkIDs
-result <- checkIDs(df)
-
+# Identify duplicates
+result <- checkIDs(df_duplicates)
 print(result)
 ```
 
 As we can see from this output, there are `r result$total_non_unique_ids` non-unique IDs in the dataset, specifically `r result$non_unique_ids`. Let's take a peek at the duplicates:
 
 ```{r}
-df %>%
+# Let's examine the problematic entries
+df_duplicates %>%
   filter(personID %in% result$non_unique_ids) %>%
   arrange(personID)
 ```
 
-Yep, these are  definitely the duplicates.
+
+Yep, these are definitely the duplicates.
+
+### Repairing Between-Row Duplicates
+
+Some ID issues can be fixed automatically. Let's try the repair option:
+
 
 ```{r}
 df_repair <- checkIDs(df, repair = TRUE)
@@ -120,68 +122,88 @@ result <- checkIDs(df_repair)
 print(result)
 ```
 
-Great! The function was able to repair the full duplicate, without any manual intervention. That still leaves us with the sibling overwrite, but that's a more complex issue that would require manual intervention. We'll leave that for now.
+Great! Notice what happened here: the function was able to repair the full duplicate, without any manual intervention. That still leaves us with the sibling ID conflict, but that's a more complex issue that would require manual intervention. We'll leave that for now.
 
 
-### Handling Within-Row Duplicates
+## Oedipus ID
+
+
+Just as Oedipus discovered his true relationship was not what records suggested, our data can reveal its own confused parentage when an ID is incorrectly listed as its own parent. Let's examine this error:
+
 
 Sometimes, an individual's parents' IDs may be incorrectly listed as their own ID, leading to within-row duplicates. The checkIDs function can also identify these errors:
 
 ```{r within}
 # Create a sample dataset with within-person duplicate parent IDs
 
-df <- ped2fam(potter, famID = "newFamID", personID = "personID")
+df_within <- ped2fam(potter, famID = "newFamID", personID = "personID")
 
-df$momID[df$name == "Vernon Dursley"] <- df$personID[df$name == "Vernon Dursley"]
+df_within$momID[df_within$name == "Vernon Dursley"] <- df_within$personID[df_within$name == "Vernon Dursley"]
 
 # Check for within-row duplicates
-result <- checkIDs(df, repair = FALSE)
+result <- checkIDs(df_within, repair = FALSE)
 print(result)
 ```
 
-In this example, we have created a within-row duplicate by setting the momID of Vernon Dursley to his own ID. The `checkIDs` function correctly identifies this error. 
+In this example, we have created a within-row duplicate by setting the momID of Vernon Dursley to his own ID. The `checkIDs` function correctly identifies that this error is present.
 
-## Verifying Sex Coding
+To repair within-row duplicates, you will be able to set the repair argument to `TRUE`, eventually. This feature is currently under development and will be available in future versions of the package. In the meantime, you can manually inspect and then correct these errors in your dataset.
 
-Inconsistent coding of biological sex is a common issue in pedigree data. The `checkSex` function in `BGmisc` is designed to identify and address these errors, particularly inconsistencies where an individual's sex is incorrectly recorded. For instance, it can detect cases where a parent listed as biologically male is erroneously recorded as a mother.
+```{r}
+# Find the problematic entry
 
-In genetic studies, we distinguish between biological sex (genotype) and gender identity (phenotype):
+df_within[df_within$momID %in% result$is_own_mother_ids, ]
+```
+
+There are several ways to correct this issue, depending on the specifics of your dataset. In this case, you could correct the momID for Vernon Dursley to the correct value, resolving the within-row duplicate, likely by assuming that his sister Marjorie shares the same mother.
+
+# Identifying and Repairing Sex Coding Issues
+
+Another critical aspect of pedigree validation is ensuring the consistency of sex coding. This brings us to an important distinction in genetic studies between biological sex (genotype) and gender identity (phenotype):
 
 - Biological sex (genotype) refers to an individual's chromosomal configuration, typically XX for female and XY for male in humans, though variations exist.
 - Gender identity (phenotype) encompasses a broader, richer, personal, deeply-held sense of being male, female, a blend of both, neither, or another gender entirely.
 
-The `checkSex` function focuses on validating biological sex because it corresponds with the inheritance patterns of sex chromosomes and mitochondrial DNA. While the `checkSex` function centers on the genetic aspect of biological sex, we respect and celebrate the full spectrum of gender identities beyond the binary. The developers of this package affirm their support for folx in the LGBTQ+ community.
+The `checkSex` function focuses on biological sex coding consistency, particularly looking for:
+- Mismatches between parent roles and recorded sex
+- Individuals listed as both parent and child
+- Inconsistent sex coding across the dataset
 
+Let's examine how it works:
 
-
-### Using the checkSex Function
-
-The `checkSex` function identifies inconsistencies in sex coding within a pedigree and can optionally repair them based on predefined logic. Below is an example of how to use this function to validate and, if necessary, repair sex coding in a pedigree:
 
 ```{r}
 # Validate sex coding
 
-results <- checkSex(potter, 
-                    code_male = 1, 
-                    code_female = 0, 
-                    verbose = TRUE, repair = FALSE)
+results <- checkSex(potter,
+  code_male = 1,
+  code_female = 0,
+  verbose = TRUE, repair = FALSE
+)
 print(results)
 ```
 
-In this example, the `checkSex` function checks the unique values in the sex column and identifies any inconsistencies in the sex coding of parents. The function returns a list containing validation results, such as the unique values found in the sex column and any inconsistencies in the sex coding of parents.
 
-If the function identifies inconsistent sex codes, you can attempt to repair them automatically:
+When inconsistencies are found, you can attempt automatic repair:
 
 ```{r}
 # Repair sex coding
-df_fix <- checkSex(potter, 
-                   code_male = 1, 
-                   code_female = 0, 
-                   verbose = TRUE, repair = TRUE)
+df_fix <- checkSex(potter,
+  code_male = 1,
+  code_female = 0,
+  verbose = TRUE, repair = TRUE
+)
 print(df_fix)
 ```
 
-When the repair argument is set to `TRUE`, the function attempts to repair the sex coding based on repair sex coding based on the most frequent sex values found among parents. This approach helps ensure that the sex coding in your dataset is consistent and accurate.
+
+When the repair argument is set to `TRUE`, repair process follows several rules:
+- Parents listed as mothers must be female
+- Parents listed as fathers must be male
+- Sex codes are standardized to the specified code_male and code_female values
+- If no sex code is provided, the function will attempt to infer what male and female are coded with. The most frequently assigned sex for mothers and fathers will be used as the standard.
+
+Note that automatic repairs should be carefully reviewed, as they may not always reflect the correct biological relationships. In cases where the sex coding is ambiguous or conflicts with known relationships, manual inspection and domain knowledge may be required.
 
 <!--
 ## Practical Example: Cleaning a Pedigree
@@ -248,5 +270,15 @@ print(final_check)
 ```
 -->
 
-# Conclusion
-This vignette demonstrates how to use the BGmisc package to identify and repair errors in pedigrees. By leveraging functions like checkIDs, checkSex, and recodeSex, you can ensure the integrity of your pedigree data, facilitating accurate analysis and research.
+# Best Practices for Pedigree Validation
+
+Through extensive work with pedigree data, we've learned several key principles:
+
+- Always inspect your data before applying automatic repairs
+- Use summarizeFamilies() to get an overview of family structures
+- Keep detailed records of changes made during cleaning
+- Validate after each repair step
+- Create backups before applying repairs
+- Trust your domain knowledge - automatic repairs are helpful but not infallible
+
+By following these best practices, and leveraging functions like `checkIDs`, `checkSex`, and `recodeSex`, you can ensure the integrity of your pedigree data, facilitating accurate analysis and research.

@@ -171,3 +171,8 @@ test_that("processParents adds momID and dadID correctly", {
   expect_equal(df_temp$momID[5], "I4")
   expect_equal(df_temp$dadID[5], "I3")
 })
+
+test_that("if file does not exist, readGedcom throws an error", {
+  # Call readGedcom with a non-existent file
+  expect_error(readGedcom("nonexistent.ged"))
+})
