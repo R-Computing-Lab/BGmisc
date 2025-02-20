@@ -11,4 +11,5 @@ BGmisc.code-workspace
 tests/testthat/Rplots.pdf
 *.ASOIAF.ged
 ASOIAF.ged
-BGmisc.Rproj
+*.Rproj
+
