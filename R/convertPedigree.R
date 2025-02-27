@@ -42,7 +42,7 @@ ped2com <- function(ped, component,
   #------
   # Checkpointing
   #------
-  if (saveable | resume) { # prepare checkpointing
+  if (saveable || resume) { # prepare checkpointing
     if (verbose) cat("Preparing checkpointing...\n")
     # Ensure save path exists
     if (saveable && !dir.exists(save_path)) {
