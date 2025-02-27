@@ -264,3 +264,29 @@ test_that("ped2com handles checkpoint saving and resuming", {
   # Cleanup
   unlink(save_path, recursive = TRUE)
 })
+
+#  adjacency_method = "indexed" and "loop" produce the same results", {
+test_that("adjacency_method = 'indexed' and 'loop' produce the same results", {
+  data(hazard)
+  tolerance <- 1e-10
+  ped_add_indexed <- ped2com(hazard, component = "additive", adjacency_method = "indexed")
+  ped_add_loop <- ped2com(hazard, component = "additive", adjacency_method = "loop")
+  expect_equal(ped_add_indexed, ped_add_loop, tolerance = tolerance)
+
+  ped_mit_indexed <- ped2com(hazard, component = "mitochondrial", adjacency_method = "indexed")
+  ped_mit_loop <- ped2com(hazard, component = "mitochondrial", adjacency_method = "loop")
+  expect_equal(ped_mit_indexed, ped_mit_loop, tolerance = tolerance)
+
+  # common nuclear
+  ped_common_indexed <- ped2com(hazard, component = "common nuclear", adjacency_method = "indexed")
+  ped_common_loop <- ped2com(hazard, component = "common nuclear", adjacency_method = "loop")
+  expect_equal(ped_common_indexed, ped_common_loop, tolerance = tolerance)
+
+  #  generation
+  ped_gen_indexed <- ped2com(hazard, component = "generation", adjacency_method = "indexed")
+  ped_gen_loop <- ped2com(hazard, component = "generation", adjacency_method = "loop")
+  expect_equal(ped_gen_indexed, ped_gen_loop, tolerance = tolerance)
+
+})
+
+

@@ -14,28 +14,38 @@ compute_parent_adjacency(
   verbose,
   lastComputed,
   nr,
+  checkpoint_files,
+  update_rate,
   parList,
-  lens
+  lens,
+  save_rate_parlist,
+  ...
 )
 }
 \arguments{
-\item{ped}{Pedigree dataset with ID, momID, and dadID columns}
+\item{ped}{a pedigree dataset.  Needs ID, momID, and dadID columns}
 
-\item{component}{Which relatedness component to compute}
+\item{component}{character.  Which component of the pedigree to return.  See Details.}
 
-\item{saveable}{If TRUE, saves intermediate results}
+\item{adjacency_method}{character. The method to use for computing the adjacency matrix.  Options are "loop" or "indexed"}
 
-\item{resume}{If TRUE, resumes from a checkpoint}
+\item{saveable}{logical. If TRUE, save the intermediate results to disk}
 
-\item{save_path}{Path to save checkpoint files}
+\item{resume}{logical. If TRUE, resume from a checkpoint}
 
-\item{verbose}{If TRUE, prints progress updates}
+\item{save_path}{character. The path to save the checkpoint files}
 
-\item{method}{Character, method to use ("loop", "vectorized")}
-}
-\value{
-Sparse parent adjacency matrix
+\item{verbose}{logical.  If TRUE, print progress through stages of algorithm}
+
+\item{update_rate}{numeric. The rate at which to print progress}
+
+\item{save_rate_parlist}{numeric. The rate at which to save the intermediate results by parent list. If NULL, defaults to save_rate*1000}
+
+\item{...}{additional arguments to be passed to \code{\link{ped2com}}}
 }
 \description{
 Compute Parent Adjacency Matrix with Multiple Approaches
+}
+\details{
+The algorithms and methodologies used in this function are further discussed and exemplified in the vignette titled "examplePedigreeFunctions". For more advanced scenarios and detailed explanations, consult this vignette.
 }
