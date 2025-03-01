@@ -7,7 +7,7 @@
 compute_parent_adjacency(
   ped,
   component,
-  adjacency_method = "loop",
+  adjacency_method = "indexed",
   saveable,
   resume,
   save_path,
