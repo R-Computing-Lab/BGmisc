@@ -469,13 +469,19 @@ compute_transpose <- function(r2, transpose_method = "tcrossprod", verbose = FAL
 #' Compute Parent Adjacency Matrix with Multiple Approaches
 #' @inheritParams ped2com
 #' @inherit ped2com details
+#' @param nr the number of rows in the pedigree dataset
+#' @param lastComputed the last computed index
+#' @param parList a list of parent-child relationships
+#' @param lens a vector of the lengths of the parent-child relationships
+#' @param checkpoint_files a list of checkpoint files
 
 compute_parent_adjacency <- function(ped, component,
                                      adjacency_method = "loop",
                                      saveable, resume,
                                      save_path, verbose,
                                      lastComputed, nr,checkpoint_files,update_rate,
-                                     parList, lens, save_rate_parlist,...) {
+                                     parList, lens, save_rate_parlist,
+                                     ...) {
   if (adjacency_method == "loop") {
     # old
     if (lastComputed < nr) {

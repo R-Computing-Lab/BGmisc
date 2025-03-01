@@ -37,7 +37,17 @@ compute_parent_adjacency(
 
 \item{verbose}{logical.  If TRUE, print progress through stages of algorithm}
 
+\item{lastComputed}{the last computed index}
+
+\item{nr}{the number of rows in the pedigree dataset}
+
+\item{checkpoint_files}{a list of checkpoint files}
+
 \item{update_rate}{numeric. The rate at which to print progress}
+
+\item{parList}{a list of parent-child relationships}
+
+\item{lens}{a vector of the lengths of the parent-child relationships}
 
 \item{save_rate_parlist}{numeric. The rate at which to save the intermediate results by parent list. If NULL, defaults to save_rate*1000}
 
