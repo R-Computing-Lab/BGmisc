@@ -604,13 +604,13 @@ compute_parent_adjacency <- function(ped, component,
             saveRDS(lens, file = checkpoint_files$lens)
             if (verbose) cat("Checkpointed parlist saved at iteration", i, "\n")
           }
-
+  }}
         if (saveable) {
           saveRDS(parList, file = checkpoint_files$parList)
           saveRDS(lens, file = checkpoint_files$lens)
           if (verbose) cat("Final checkpoint saved for adjacency matrix.\n")
         }
-  }}} else {
+} else {
     stop("Invalid method specified. Choose from 'loop' or 'indexed'.")
   }
   list_of_adjacency <- list(parList = parList, lens = lens)
