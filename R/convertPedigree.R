@@ -479,140 +479,140 @@ compute_parent_adjacency <- function(ped, component,
                                      adjacency_method = "indexed",
                                      saveable, resume,
                                      save_path, verbose,
-                                     lastComputed, nr,checkpoint_files,update_rate,
+                                     lastComputed, nr, checkpoint_files, update_rate,
                                      parList, lens, save_rate_parlist,
                                      ...) {
-  if (adjacency_method == "loop") {
-    # old
-    if (lastComputed < nr) {
-      # Loop through each individual in the pedigree build the adjacency matrix for parent-child relationships
-      # Is person in column j the parent of the person in row i? .5 for yes, 0 for no.
+    if (adjacency_method == "loop") {
+        # old
+        if (lastComputed < nr) {
+            # Loop through each individual in the pedigree build the adjacency matrix for parent-child relationships
+            # Is person in column j the parent of the person in row i? .5 for yes, 0 for no.
 
-      ped$momID <- as.numeric(ped$momID)
-      ped$dadID <- as.numeric(ped$dadID)
-      ped$ID <- as.numeric(ped$ID)
+            ped$momID <- as.numeric(ped$momID)
+            ped$dadID <- as.numeric(ped$dadID)
+            ped$ID <- as.numeric(ped$ID)
 
-      for (i in (lastComputed + 1):nr) {
-        x <- ped[i, , drop = FALSE]
+            for (i in (lastComputed + 1):nr) {
+                x <- ped[i, , drop = FALSE]
 
-        # Handle parentage according to the 'component' specified # povitch algorymn
-        if (component %in% c("generation", "additive")) {
-          # Code for 'generation' and 'additive' components
-          # Checks if is mom of ID or is dad of ID
-          # do once
-          # xID <- as.numeric(x["ID"])
-          # sMom <- (xID == as.numeric(ped$momID))
-          # sDad <- (xID == as.numeric(ped$dadID))
-          # val <- sMom | sDad
-          # val[is.na(val)] <- FALSE
-          # reduces computations
-          xID <- as.numeric(x["ID"])
-          sMom <- (xID == ped$momID)
-          sDad <- (xID == ped$dadID)
-          val <- sMom | sDad
-          val[is.na(val)] <- FALSE
-        } else if (component %in% c("common nuclear")) {
-          # Code for 'common nuclear' component
-          # IDs have the Same mom and Same dad
-          sMom <- (as.numeric(x["momID"]) == ped$momID)
-          sMom[is.na(sMom)] <- FALSE
-          sDad <- (as.numeric(x["dadID"]) == ped$dadID)
-          sDad[is.na(sDad)] <- FALSE
-          val <- sMom & sDad
-        } else if (component %in% c("mitochondrial")) {
-          # Code for 'mitochondrial' component
-          #  sMom <- (as.numeric(x["ID"]) == as.numeric(ped$momID))
-          #  sDad <- TRUE
-          # val <- sMom & sDad
-          # val[is.na(val)] <- FALSE
+                # Handle parentage according to the 'component' specified # povitch algorymn
+                if (component %in% c("generation", "additive")) {
+                    # Code for 'generation' and 'additive' components
+                    # Checks if is mom of ID or is dad of ID
+                    # do once
+                    # xID <- as.numeric(x["ID"])
+                    # sMom <- (xID == as.numeric(ped$momID))
+                    # sDad <- (xID == as.numeric(ped$dadID))
+                    # val <- sMom | sDad
+                    # val[is.na(val)] <- FALSE
+                    # reduces computations
+                    xID <- as.numeric(x["ID"])
+                    sMom <- (xID == ped$momID)
+                    sDad <- (xID == ped$dadID)
+                    val <- sMom | sDad
+                    val[is.na(val)] <- FALSE
+                } else if (component %in% c("common nuclear")) {
+                    # Code for 'common nuclear' component
+                    # IDs have the Same mom and Same dad
+                    sMom <- (as.numeric(x["momID"]) == ped$momID)
+                    sMom[is.na(sMom)] <- FALSE
+                    sDad <- (as.numeric(x["dadID"]) == ped$dadID)
+                    sDad[is.na(sDad)] <- FALSE
+                    val <- sMom & sDad
+                } else if (component %in% c("mitochondrial")) {
+                    # Code for 'mitochondrial' component
+                    #  sMom <- (as.numeric(x["ID"]) == as.numeric(ped$momID))
+                    #  sDad <- TRUE
+                    # val <- sMom & sDad
+                    # val[is.na(val)] <- FALSE
 
-          # reduces computations
-          val <- (as.numeric(x["ID"]) == ped$momID)
-          val[is.na(val)] <- FALSE
-        } else {
-          stop("Unknown relatedness component requested")
+                    # reduces computations
+                    val <- (as.numeric(x["ID"]) == ped$momID)
+                    val[is.na(val)] <- FALSE
+                } else {
+                    stop("Unknown relatedness component requested")
+                }
+                # Storing the indices of the parent-child relationships
+                # keep track of indices only, and then initialize a single sparse matrix
+                wv <- which(val)
+                parList[[i]] <- wv
+                lens[i] <- length(wv)
+                # Print progress if verbose is TRUE
+                if (verbose && (i %% update_rate == 0)) {
+                    cat(paste0("Done with ", i, " of ", nr, "\n"))
+                }
+                # Checkpointing every save_rate iterations
+                if (saveable && (i %% save_rate_parlist == 0)) {
+                    saveRDS(parList, file = checkpoint_files$parList)
+                    saveRDS(lens, file = checkpoint_files$lens)
+                    if (verbose) cat("Checkpointed parlist saved at iteration", i, "\n")
+                }
+            }
+            if (saveable) {
+                saveRDS(parList, file = checkpoint_files$parList)
+                saveRDS(lens, file = checkpoint_files$lens)
+                if (verbose) cat("Final checkpoint saved for adjacency matrix.\n")
+            }
         }
-        # Storing the indices of the parent-child relationships
-        # keep track of indices only, and then initialize a single sparse matrix
-        wv <- which(val)
-        parList[[i]] <- wv
-        lens[i] <- length(wv)
-        # Print progress if verbose is TRUE
-        if (verbose && (i %% update_rate == 0)) {
-          cat(paste0("Done with ", i, " of ", nr, "\n"))
-        }
-        # Checkpointing every save_rate iterations
-        if (saveable && (i %% save_rate_parlist == 0)) {
-          saveRDS(parList, file = checkpoint_files$parList)
-          saveRDS(lens, file = checkpoint_files$lens)
-          if (verbose) cat("Checkpointed parlist saved at iteration", i, "\n")
-        }
-      }
-      if (saveable) {
-        saveRDS(parList, file = checkpoint_files$parList)
-        saveRDS(lens, file = checkpoint_files$lens)
-        if (verbose) cat("Final checkpoint saved for adjacency matrix.\n")
-      }
-    }
-  } else if (adjacency_method == "indexed") {
-    if (lastComputed < nr) {
-      # Loop through each individual in the pedigree build the adjacency matrix for parent-child relationships
-      # Is person in column j the parent of the person in row i? .5 for yes, 0 for no.
-      # Convert IDs
-      ped$ID <- as.numeric(ped$ID)
-      ped$momID <- as.numeric(ped$momID)
-      ped$dadID <- as.numeric(ped$dadID)
+    } else if (adjacency_method == "indexed") {
+        if (lastComputed < nr) {
+            # Loop through each individual in the pedigree build the adjacency matrix for parent-child relationships
+            # Is person in column j the parent of the person in row i? .5 for yes, 0 for no.
+            # Convert IDs
+            ped$ID <- as.numeric(ped$ID)
+            ped$momID <- as.numeric(ped$momID)
+            ped$dadID <- as.numeric(ped$dadID)
 
-      # parent-child lookup
-      mom_index <- match(ped$momID, ped$ID, nomatch = 0)
-      dad_index <- match(ped$dadID, ped$ID, nomatch = 0)
+                                        # parent-child lookup
+            mom_index <- match(ped$momID, ped$ID, nomatch = 0)
+            dad_index <- match(ped$dadID, ped$ID, nomatch = 0)
 
 
-        for (i in (lastComputed + 1):nr) {
-          if (component %in% c("generation", "additive")) {
-            sMom <- (mom_index == i)
-            sDad <-  (dad_index == i)
-            val <- sMom | sDad
-           # val <- (mom_index == i) | (dad_index == i)
-          } else if (component %in% c("common nuclear")) {
-            # Code for 'common nuclear' component
-            # IDs have the Same mom and Same dad
-            sMom <- (ped$momID[i] == ped$momID)
-            sMom[is.na(sMom)] <- FALSE
-            sDad <- (ped$dadID[i] == ped$dadID)
-            sDad[is.na(sDad)] <- FALSE
-            val <- sMom & sDad
-            #val <- (ped$momID[i] == ped$momID) & (ped$dadID[i] == ped$dadID)
-          } else if (component %in% c("mitochondrial")) {
-            val <- (mom_index == i)
-          } else {
-            stop("Unknown relatedness component requested")
-          }
+            for (i in (lastComputed + 1):nr) {
+                if (component %in% c("generation", "additive")) {
+                    sMom <- (mom_index == i)
+                    sDad <-  (dad_index == i)
+                    val <- sMom | sDad
+                    # val <- (mom_index == i) | (dad_index == i)
+                } else if (component %in% c("common nuclear")) {
+                    # Code for 'common nuclear' component
+                    # IDs have the Same mom and Same dad
+                    sMom <- (ped$momID[i] == ped$momID)
+                    sMom[is.na(sMom)] <- FALSE
+                    sDad <- (ped$dadID[i] == ped$dadID)
+                    sDad[is.na(sDad)] <- FALSE
+                    val <- sMom & sDad
+                    #val <- (ped$momID[i] == ped$momID) & (ped$dadID[i] == ped$dadID)
+                } else if (component %in% c("mitochondrial")) {
+                    val <- (mom_index == i)
+                } else {
+                    stop("Unknown relatedness component requested")
+                }
 
-          val[is.na(val)] <- FALSE
-          parList[[i]] <- which(val)
-          lens[i] <- length(parList[[i]])
+                val[is.na(val)] <- FALSE
+                parList[[i]] <- which(val)
+                lens[i] <- length(parList[[i]])
 
-          # Print progress if verbose is TRUE
-          if (verbose && (i %% update_rate == 0)) {
-            cat(paste0("Done with ", i, " of ", nr, "\n"))
-          }
+                # Print progress if verbose is TRUE
+                if (verbose && (i %% update_rate == 0)) {
+                    cat(paste0("Done with ", i, " of ", nr, "\n"))
+                }
 
-          # Checkpointing every save_rate iterations
-          if (saveable && (i %% save_rate_parlist == 0)) {
+                # Checkpointing every save_rate iterations
+                if (saveable && (i %% save_rate_parlist == 0)) {
+                    saveRDS(parList, file = checkpoint_files$parList)
+                    saveRDS(lens, file = checkpoint_files$lens)
+                    if (verbose) cat("Checkpointed parlist saved at iteration", i, "\n")
+                }
+            }}
+        if (saveable) {
             saveRDS(parList, file = checkpoint_files$parList)
             saveRDS(lens, file = checkpoint_files$lens)
-            if (verbose) cat("Checkpointed parlist saved at iteration", i, "\n")
-          }
-  }}
-        if (saveable) {
-          saveRDS(parList, file = checkpoint_files$parList)
-          saveRDS(lens, file = checkpoint_files$lens)
-          if (verbose) cat("Final checkpoint saved for adjacency matrix.\n")
+            if (verbose) cat("Final checkpoint saved for adjacency matrix.\n")
         }
-} else {
-    stop("Invalid method specified. Choose from 'loop' or 'indexed'.")
-  }
-  list_of_adjacency <- list(parList = parList, lens = lens)
-  return(list_of_adjacency)
-  }
+    } else {
+        stop("Invalid method specified. Choose from 'loop' or 'indexed'.")
+    }
+    list_of_adjacency <- list(parList = parList, lens = lens)
+    return(list_of_adjacency)
+}
