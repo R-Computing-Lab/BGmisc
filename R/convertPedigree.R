@@ -588,7 +588,30 @@ compute_transpose <- function(r2, transpose_method = "tcrossprod", verbose = FAL
                         nr, checkpoint_files, update_rate,
                         parList, lens, save_rate_parlist,
                         ...){
+    # Loop through each individual in the pedigree
+    # Build the adjacency matrix for parent-child relationships
+    # Is person in column j the parent of the person in row i? .5 for yes, 0 for no.
+    uniID <- ped$ID # live dangerously without sort(unique(ped$ID))
+    ped$ID <- as.numeric(factor(ped$ID, levels=uniID))
+    ped$momID <- as.numeric(factor(ped$momID, levels=uniID))
+    ped$dadID <- as.numeric(factor(ped$dadID, levels=uniID))
 
+    if (component %in% c("generation", "additive")) {
+        mIDs <- na.omit(data.frame(rID=ped$ID, cID=ped$momID))
+        dIDs <- na.omit(data.frame(rID=ped$ID, cID=ped$dadID))
+        iss <- c(mIDs$rID, dIDs$rID)
+        jss <- c(mIDs$cID, dIDs$cID)
+    } else if (component %in% c("common nuclear")) {
+        stop("Common Nuclear component is not yet implemented for direct method.  Use loop method.\n")
+    } else if (component %in% c("mitochondrial")) {
+        mIDs <- na.omit(data.frame(rID=ped$ID, cID=ped$momID))
+        iss <- c(mIDs$rID)
+        jss <- c(mIDs$cID)
+    } else {
+        stop("Unknown relatedness component requested")
+    }
+    list_of_adjacency <- list(iss=iss, jss=jss)
+    return(list_of_adjacency)
 }
 
 #' Compute Parent Adjacency Matrix with Multiple Approaches
@@ -625,12 +648,11 @@ compute_parent_adjacency <- function(ped, component,
         }
     } else if (adjacency <- method == "direct"){ # Hunter version
         if (lastComputed < nr){
-            #list_of_adjacency <- .adjDirect(ped, component, saveable, resume,
-                                          #save_path, verbose, lastComputed,
-                                          #nr, checkpoint_files, update_rate,
-                                          #parList, lens, save_rate_parlist,
-                                          #...)
-            list_of_adjacency <- NULL
+            list_of_adjacency <- .adjDirect(ped, component, saveable, resume,
+                                          save_path, verbose, lastComputed,
+                                          nr, checkpoint_files, update_rate,
+                                          parList, lens, save_rate_parlist,
+                                          ...)
         }
     } else {
         stop("Invalid method specified. Choose from 'loop' or 'indexed'.")
