@@ -153,8 +153,6 @@ ped2com <- function(ped, component,
     nr = nr,
     parList = parList, lens = lens
   )
-  parList <- list_of_adjacencies$parList
-  lens <- list_of_adjacencies$lens
   # Construct sparse matrix
   if (resume && file.exists(checkpoint_files$isPar)) { # fix to check actual
     if (verbose) cat("Resuming: Constructed matrix...\n")
@@ -162,8 +160,8 @@ ped2com <- function(ped, component,
     iss <- readRDS(checkpoint_files$iss)
   } else {
     # Construct sparse matrix
-    jss <- rep(1L:nr, times = lens)
-    iss <- unlist(parList)
+    iss <- list_of_adjacencies$iss
+    jss <- list_of_adjacencies$jss
 
     if (verbose) {
       cat("Constructed sparse matrix\n")
@@ -520,7 +518,9 @@ compute_transpose <- function(r2, transpose_method = "tcrossprod", verbose = FAL
             if (verbose) cat("Checkpointed parlist saved at iteration", i, "\n")
         }
     }
-    list_of_adjacency <- list(parList = parList, lens = lens)
+    jss <- rep(1L:nr, times = lens)
+    iss <- unlist(parList)
+    list_of_adjacency <- list(iss=iss, jss=jss)
     return(list_of_adjacency)
 }
 
@@ -577,7 +577,9 @@ compute_transpose <- function(r2, transpose_method = "tcrossprod", verbose = FAL
             if (verbose) cat("Checkpointed parlist saved at iteration", i, "\n")
         }
     }
-    list_of_adjacency <- list(parList = parList, lens = lens)
+    jss <- rep(1L:nr, times = lens)
+    iss <- unlist(parList)
+    list_of_adjacency <- list(iss=iss, jss=jss)
     return(list_of_adjacency)
 }
 
@@ -623,7 +625,11 @@ compute_parent_adjacency <- function(ped, component,
         }
     } else if (adjacency <- method == "direct"){ # Hunter version
         if (lastComputed < nr){
-            #.adjDirect()
+            #list_of_adjacency <- .adjDirect(ped, component, saveable, resume,
+                                          #save_path, verbose, lastComputed,
+                                          #nr, checkpoint_files, update_rate,
+                                          #parList, lens, save_rate_parlist,
+                                          #...)
             list_of_adjacency <- NULL
         }
     } else {
