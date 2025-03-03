@@ -271,7 +271,9 @@ test_that("adjacency_method = 'indexed' and 'loop' produce the same results", {
   tolerance <- 1e-10
   ped_add_indexed <- ped2com(hazard, component = "additive", adjacency_method = "indexed")
   ped_add_loop <- ped2com(hazard, component = "additive", adjacency_method = "loop")
+  ped_add_direct <- ped2com(hazard, component = "additive", adjacency_method = "direct")
   expect_equal(ped_add_indexed, ped_add_loop, tolerance = tolerance)
+  expect_equal(ped_add_indexed, ped_add_direct, tolerance = tolerance)
 
   ped_mit_indexed <- ped2com(hazard, component = "mitochondrial", adjacency_method = "indexed")
   ped_mit_loop <- ped2com(hazard, component = "mitochondrial", adjacency_method = "loop")

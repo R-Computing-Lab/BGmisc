@@ -87,8 +87,8 @@ ped2com <- function(ped, component,
   if (!transpose_method %in% c("tcrossprod", "crossprod", "star", "tcross.alt.crossprod", "tcross.alt.star")) {
     stop("Invalid method specified. Choose from 'tcrossprod', 'crossprod', or 'star' or 'tcross.alt.crossprod' or 'tcross.alt.star'.")
   }
-  if (!adjacency_method %in% c("indexed", "loop")) {
-    stop("Invalid method specified. Choose from 'indexed' or 'loop'.")
+  if (!adjacency_method %in% c("indexed", "loop", "direct")) {
+    stop("Invalid method specified. Choose from 'indexed', 'loop', or 'direct'.")
   }
 
   # standardize colnames
@@ -646,7 +646,7 @@ compute_parent_adjacency <- function(ped, component,
                                           parList, lens, save_rate_parlist,
                                           ...)
         }
-    } else if (adjacency <- method == "direct"){ # Hunter version
+    } else if (adjacency_method == "direct"){ # Hunter version
         if (lastComputed < nr){
             list_of_adjacency <- .adjDirect(ped, component, saveable, resume,
                                           save_path, verbose, lastComputed,
