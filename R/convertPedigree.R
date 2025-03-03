@@ -220,7 +220,7 @@ ped2com <- function(ped, component,
   } else {
     # isChild is the 'S' matrix from RAM
     isChild <- apply(ped[, c("momID", "dadID")], 1, function(x) {
-      2^(-!all(is.na(x)))
+      .5 + .25*sum(is.na(x)) # 2 parents -> .5, 1 parent -> .75, 0 parents -> 1
     })
     if (saveable) {
       saveRDS(isChild, file = checkpoint_files$isChild)
