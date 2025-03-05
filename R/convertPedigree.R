@@ -35,7 +35,7 @@ ped2com <- function(ped, component,
                     resume = FALSE,
                     save_rate = 5,
                     save_rate_gen = save_rate,
-                    save_rate_parlist = 1000 * save_rate,
+                    save_rate_parlist = 100000 * save_rate,
                     update_rate = 100,
                     save_path = "checkpoint/",
                     ...) {
@@ -604,7 +604,7 @@ compute_transpose <- function(r2, transpose_method = "tcrossprod", verbose = FAL
         iss <- c(mIDs$rID, dIDs$rID)
         jss <- c(mIDs$cID, dIDs$cID)
     } else if (component %in% c("common nuclear")) {
-        stop("Common Nuclear component is not yet implemented for direct method.  Use loop method.\n")
+        stop("Common Nuclear component is not yet implemented for direct method.  Use index method.\n")
     } else if (component %in% c("mitochondrial")) {
         mIDs <- na.omit(data.frame(rID=ped$ID, cID=ped$momID))
         iss <- c(mIDs$rID)
@@ -657,7 +657,7 @@ compute_parent_adjacency <- function(ped, component,
                                           ...)
         }
     } else {
-        stop("Invalid method specified. Choose from 'loop' or 'indexed'.")
+        stop("Invalid method specified. Choose from 'loop', 'direct',  or 'indexed'.")
     }
     if (saveable) {
         saveRDS(parList, file = checkpoint_files$parList)
