@@ -1,5 +1,5 @@
 # BGmisc 1.3.4
-* Added alternative methods to create the adjacency matrix
+* Added alternative (and faster) methods to create the adjacency matrix
 * Add tests for comparison of adjacency matrix methods
 * Added Royal Family pedigree
 
