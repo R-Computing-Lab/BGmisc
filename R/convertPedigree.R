@@ -616,6 +616,7 @@ ped2ce <- function(ped,
         jss <- c(mIDs$cID, dIDs$cID)
     } else if (component %in% c("common nuclear")) {
         stop("Common Nuclear component is not yet implemented for direct method.  Use index method.\n")
+      # change to warning and call indexed version
     } else if (component %in% c("mitochondrial")) {
         mIDs <- stats::na.omit(data.frame(rID=ped$ID, cID=ped$momID))
         iss <- c(mIDs$rID)
