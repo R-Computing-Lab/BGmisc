@@ -137,6 +137,13 @@ ped2com <- function(ped, component,
   ## B. Resume loop from the next uncomputed index
 
   if (verbose) cat("Computing parent-child adjacency matrix...\n")
+  # Construct sparse matrix
+  if (resume && file.exists(checkpoint_files$iss)&&file.exists(checkpoint_files$jss)) { # fix to check actual
+    if (verbose) cat("Resuming: Constructed matrix...\n")
+    jss <- readRDS(checkpoint_files$jss)
+    iss <- readRDS(checkpoint_files$iss)
+    list_of_adjacencies <- list(iss=iss, jss=jss)
+  } else {
 
   list_of_adjacencies <- compute_parent_adjacency(
     ped = ped,
@@ -151,14 +158,10 @@ ped2com <- function(ped, component,
     verbose = verbose,
     lastComputed = lastComputed,
     nr = nr,
-    parList = parList, lens = lens
+    parList = parList,
+    lens = lens
   )
-  # Construct sparse matrix
-  if (resume && file.exists(checkpoint_files$isPar)) { # fix to check actual
-    if (verbose) cat("Resuming: Constructed matrix...\n")
-    jss <- readRDS(checkpoint_files$jss)
-    iss <- readRDS(checkpoint_files$iss)
-  } else {
+
     # Construct sparse matrix
     iss <- list_of_adjacencies$iss
     jss <- list_of_adjacencies$jss
@@ -599,14 +602,14 @@ compute_transpose <- function(r2, transpose_method = "tcrossprod", verbose = FAL
     ped$dadID <- as.numeric(factor(ped$dadID, levels=uniID))
 
     if (component %in% c("generation", "additive")) {
-        mIDs <- na.omit(data.frame(rID=ped$ID, cID=ped$momID))
-        dIDs <- na.omit(data.frame(rID=ped$ID, cID=ped$dadID))
+        mIDs <- stats::na.omit(data.frame(rID=ped$ID, cID=ped$momID))
+        dIDs <- stats::na.omit(data.frame(rID=ped$ID, cID=ped$dadID))
         iss <- c(mIDs$rID, dIDs$rID)
         jss <- c(mIDs$cID, dIDs$cID)
     } else if (component %in% c("common nuclear")) {
         stop("Common Nuclear component is not yet implemented for direct method.  Use index method.\n")
     } else if (component %in% c("mitochondrial")) {
-        mIDs <- na.omit(data.frame(rID=ped$ID, cID=ped$momID))
+        mIDs <- stats::na.omit(data.frame(rID=ped$ID, cID=ped$momID))
         iss <- c(mIDs$rID)
         jss <- c(mIDs$cID)
     } else {
