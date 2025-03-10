@@ -1,5 +1,6 @@
 # BGmisc 1.3.4.1
 * Hot fix to resolve issue with list of adjacency matrix not loading saved version
+* Reoptimized generation calculation
 
 # BGmisc 1.3.4
 * Added alternative (and faster) methods to create the adjacency matrix

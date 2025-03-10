@@ -175,7 +175,7 @@ ped2com <- function(ped, component,
     }
     # Garbage collection if gc is TRUE
     if (gc) {
-      rm(parList, lens)
+      rm(parList, lens,list_of_adjacencies)
       gc()
     }
   }
@@ -278,8 +278,17 @@ ped2com <- function(ped, component,
     rm(isPar, newIsPar)
     gc()
   }
+
+  if (component == "generation") { # no need to do the rest
+    return(gen)
+  } else {
+    if (verbose) {
+      cat("Completed RAM path tracing\n")
+    }
+  }
+
   # --- Step 3: I-A inverse times diagonal multiplication ---
-  if (resume && file.exists(checkpoint_files$final_matrix)) {
+  if (resume && file.exists(checkpoint_files$r2_checkpoint)) {
     if (verbose) cat("Resuming: Loading I-A inverse...\n")
     r2 <- readRDS(checkpoint_files$r2_checkpoint)
   } else {
@@ -302,15 +311,13 @@ ped2com <- function(ped, component,
     if (verbose) cat("Resuming: Loading tcrossprod...\n")
     r <- readRDS(checkpoint_files$tcrossprod_checkpoint)
   } else {
-    r <- compute_transpose(r2 = r2, transpose_method = transpose_method, verbose = verbose)
+    r <- .computeTranspose(r2 = r2, transpose_method = transpose_method, verbose = verbose)
     if (saveable) {
       saveRDS(r, file = checkpoint_files$tcrossprod_checkpoint)
     }
   }
 
-  if (component == "generation") {
-    return(gen)
-  } else {
+
     if (component == "mitochondrial") {
       r@x <- rep(1, length(r@x))
       # Assign 1 to all nonzero elements for mitochondrial component
@@ -326,7 +333,6 @@ ped2com <- function(ped, component,
       saveRDS(r, file = checkpoint_files$final_matrix)
     }
     return(r)
-  }
 }
 
 #' Take a pedigree and turn it into an additive genetics relatedness matrix
@@ -338,7 +344,7 @@ ped2add <- function(ped, max.gen = 25, sparse = FALSE, verbose = FALSE,
                     gc = FALSE,
                     flatten.diag = FALSE, standardize.colnames = TRUE,
                     transpose_method = "tcrossprod",
-                    adjacency_method = "indexed",
+                    adjacency_method = "direct",
                     saveable = FALSE,
                     resume = FALSE,
                     save_rate = 5,
@@ -377,7 +383,7 @@ ped2mit <- ped2mt <- function(ped, max.gen = 25,
                               flatten.diag = FALSE,
                               standardize.colnames = TRUE,
                               transpose_method = "tcrossprod",
-                              adjacency_method = "indexed",
+                              adjacency_method = "direct",
                               saveable = FALSE,
                               resume = FALSE,
                               save_rate = 5,
@@ -416,6 +422,7 @@ ped2cn <- function(ped, max.gen = 25, sparse = FALSE, verbose = FALSE,
                    saveable = FALSE,
                    resume = FALSE,
                    save_rate = 5,
+                   adjacency_method = "indexed",
                    save_rate_gen = save_rate,
                    save_rate_parlist = 1000 * save_rate,
                    save_path = "checkpoint/",
@@ -427,6 +434,7 @@ ped2cn <- function(ped, max.gen = 25, sparse = FALSE, verbose = FALSE,
     verbose = verbose,
     gc = gc,
     component = "common nuclear",
+    adjacency_method = adjacency_method,
     flatten.diag = flatten.diag,
     standardize.colnames = standardize.colnames,
     transpose_method = transpose_method,
@@ -453,7 +461,7 @@ ped2ce <- function(ped,
 #' @inherit ped2com details
 #' @param r2 a relatedness matrix
 #'
-compute_transpose <- function(r2, transpose_method = "tcrossprod", verbose = FALSE) {
+.computeTranspose <- function(r2, transpose_method = "tcrossprod", verbose = FALSE) {
   if (!transpose_method %in% c("tcrossprod", "crossprod", "star", "tcross.alt.crossprod", "tcross.alt.star")) {
     stop("Invalid method specified. Choose from 'tcrossprod', 'crossprod', or 'star'.")
   }

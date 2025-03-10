@@ -13,7 +13,7 @@ ped2add(
   flatten.diag = FALSE,
   standardize.colnames = TRUE,
   transpose_method = "tcrossprod",
-  adjacency_method = "indexed",
+  adjacency_method = "direct",
   saveable = FALSE,
   resume = FALSE,
   save_rate = 5,
