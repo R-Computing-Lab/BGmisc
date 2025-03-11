@@ -1,3 +1,12 @@
+#' Take a component and turn it into kinship links
+#' @param rel_pairs_file File to write related pairs to
+#' @param ad_ped_matrix Matrix of additive genetic relatedness coefficients
+#' @param mt_ped_matrix Matrix of mitochondrial relatedness coefficients
+#' @param cn_ped_matrix Matrix of common nuclear relatedness coefficients
+#' @param pat_ped_matrix Matrix of paternal relatedness coefficients
+#' @param mat_ped_matrix Matrix of maternal relatedness coefficients
+#' @param mapa_id_file File to write the map of parental IDs to individual IDs
+
 com2links <- function(
     rel_pairs_file = "dataRelatedPairs.csv",
     ad_ped_matrix = NULL,
@@ -39,7 +48,7 @@ com2links <- function(
     mt_ped_matrix@x[mt_ped_matrix@x > 0] <- 1
   }
 
-sum_nulls <- sum(is.null(ad_ped_matrix), is.null(mt_ped_matrix), is.null(cn_ped_matrix))
+sum_nulls <- sum(is.null(ad_ped_matrix), is.null(mt_ped_matrix), is.null(cn_ped_matrix), na.rm = TRUE)
 
 
   # File names
@@ -57,7 +66,7 @@ sum_nulls <- sum(is.null(ad_ped_matrix), is.null(mt_ped_matrix), is.null(cn_ped_
 
 
   # Extract matrix pointers (directly)
-  if (!is.null( ad_ped_matrix)){
+  if (!is.null(ad_ped_matrix)){
   ad_ped_p <- ad_ped_matrix@p + 1L
   ad_ped_i <- ad_ped_matrix@i + 1L
   ad_ped_x <- ad_ped_matrix@x
@@ -86,6 +95,10 @@ sum_nulls <- sum(is.null(ad_ped_matrix), is.null(mt_ped_matrix), is.null(cn_ped_
   newColPos3 <- cn_p
   iss3 <- cn_i
   x3 <- cn_x
+  # cleanup
+  if(gc==TRUE){
+remove(ad_ped_p, ad_ped_i, ad_ped_x, mt_p, mt_i, mt_x, cn_p, cn_i, cn_x)
+  }
 
   for (j in 1L:nc) {
     ID2 <- ids[j]
