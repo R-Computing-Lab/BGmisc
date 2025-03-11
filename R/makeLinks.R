@@ -51,7 +51,6 @@ com2links <- function(
     }
   }
   if (!is.null(mit_ped_matrix)) {
-    mit_ped_matrix <- as(mit_ped_matrix, "dgCMatrix")
     if (!inherits(ad_ped_matrix, c("matrix", "dgCMatrix", "dsCMatrix")) {
       stop("The 'mit_ped_matrix' must be a matrix or dgCMatrix.")
     }
