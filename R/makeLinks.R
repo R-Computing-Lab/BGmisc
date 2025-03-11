@@ -8,6 +8,8 @@
 #' @param mapa_id_file File to write the map of parental IDs to individual IDs
 #' @param gc logical. If TRUE, do frequent garbage collection via \code{\link{gc}} to save memory
 #' @param writetodisk logical. If TRUE, write the related pairs to disk
+#' @param verbose logical. If TRUE, print progress messages
+#' @param ... Additional arguments to be passed to \code{\link{com2links}}
 #' @return A data frame of related pairs
 
 com2links <- function(
@@ -20,6 +22,7 @@ com2links <- function(
     mapa_id_file = "data_mapaID.csv",
     gc = TRUE,
     writetodisk = TRUE,
+    verbose = TRUE,
     ...) {
   require(Matrix)
   require(igraph)
@@ -38,22 +41,28 @@ com2links <- function(
   }
   # Check for matrix type
   if (!is.null(ad_ped_matrix)) {
-    if (!class(ad_ped_matrix) %in% c("matrix", "dgCMatrix", "dsCMatrix")) {
+    if (!inherits(ad_ped_matrix, c("matrix", "dgCMatrix", "dsCMatrix"))) {
       stop("The 'ad_ped_matrix' must be a matrix or dgCMatrix.")
     }
   }
   if (!is.null(cn_ped_matrix)) {
-    if (!class(cn_ped_matrix) %in% c("matrix", "dgCMatrix", "dsCMatrix")) {
+    if (!inherits(ad_ped_matrix, c("matrix", "dgCMatrix", "dsCMatrix")) {
       stop("The 'cn_ped_matrix' must be a matrix or dgCMatrix.")
     }
   }
   if (!is.null(mit_ped_matrix)) {
     mit_ped_matrix <- as(mit_ped_matrix, "dgCMatrix")
-    if (!class(mit_ped_matrix) %in% c("matrix", "dgCMatrix", "dsCMatrix")) {
+    if (!inherits(ad_ped_matrix, c("matrix", "dgCMatrix", "dsCMatrix")) {
       stop("The 'mit_ped_matrix' must be a matrix or dgCMatrix.")
     }
+    if (!inherits(mit_ped_matrix, "dgCMatrix")) {
+      mit_ped_matrix <- as(mit_ped_matrix, "dgCMatrix")
+    }
+    # Ensure mitochondrial matrix values are binary (0/1)
+    mit_ped_matrix@x[mit_ped_matrix@x > 0] <- 1
   }
 
+  # build IDs
   # Extract IDs from the first available matrix
   ids <- NULL
   if (!is.null(cn_ped_matrix)) {
@@ -72,10 +81,6 @@ com2links <- function(
   if (is.null(ids)) {
     stop("Could not extract IDs from the provided matrices.")
   }
-  if (!is.null(mit_ped_matrix)) {
-    # Ensure mitochondrial matrix values are binary (0/1)
-    mit_ped_matrix@x[mit_ped_matrix@x > 0] <- 1
-  }
 
   # check which matrices are provided
   sum_nulls <- sum(!is.null(ad_ped_matrix),
@@ -83,31 +88,9 @@ com2links <- function(
     !is.null(cn_ped_matrix),
     na.rm = TRUE
   )
-
+if(verbose){
   print(sum_nulls)
-  # File names
-  #  rel_pairs_file <- paste0(outcome_name, "_dataRelatedPairs.csv")
-  # mapa_id_file <- paste0(outcome_name, "_data_mapaID.csv")
-  if (writetodisk == TRUE) {
-    # Initialize related pairs file
-    write.table(
-      data.frame(
-        ID1 = numeric(0), ID2 = numeric(0),
-        addRel = numeric(0),
-        mitRel = numeric(0),
-        cnuRel = numeric(0)
-      ),
-      file = rel_pairs_file, sep = ",", append = FALSE, row.names = FALSE
-    )
-  } else {
-    df_relpairs <- data.frame(
-      ID1 = numeric(0), ID2 = numeric(0),
-      addRel = numeric(0),
-      mitRel = numeric(0),
-      cnuRel = numeric(0)
-    )
-  }
-
+}
   # Extract matrix pointers (directly)
   if (!is.null(ad_ped_matrix)) {
     ad_ped_p <- ad_ped_matrix@p + 1L
@@ -142,8 +125,28 @@ com2links <- function(
     if (gc == TRUE) {
       remove(ad_ped_p, ad_ped_i, ad_ped_x, mt_p, mt_i, mt_x, cn_p, cn_i, cn_x)
     }
-    print("Only 3 matrix is present")
+    if(verbose){
+      print("All 3 matrix is present")
+    }
 
+    # File names
+    #  rel_pairs_file <- paste0(outcome_name, "_dataRelatedPairs.csv")
+    # mapa_id_file <- paste0(outcome_name, "_data_mapaID.csv")
+
+    # Initialize related pairs file
+    df_relpairs <- data.frame(
+      ID1 = numeric(0), ID2 = numeric(0)
+    )
+    df_relpairs[[relNames[1]]] <- numeric(0)
+    df_relpairs[[relNames[2]]] <- numeric(0)
+    df_relpairs[[relNames[3]]] <- numeric(0)
+    if (writetodisk == TRUE) {
+      write.table(
+        df_relpairs,
+        file = rel_pairs_file, sep = ",", append = FALSE, row.names = FALSE
+      )
+      remove(df_relpairs)
+    }
     for (j in 1L:nc) {
       ID2 <- ids[j]
 
@@ -249,9 +252,19 @@ com2links <- function(
       }
     }
     # Matrix index adjustments
-
-
-
+    # Initialize related pairs file
+    df_relpairs <- data.frame(
+      ID1 = numeric(0), ID2 = numeric(0)
+    )
+    df_relpairs[[relNames[1]]] <- numeric(0)
+    df_relpairs[[relNames[2]]] <- numeric(0)
+    if (writetodisk == TRUE) {
+      write.table(
+        df_relpairs,
+        file = rel_pairs_file, sep = ",", append = FALSE, row.names = FALSE
+      )
+      remove(df_relpairs)
+    }
     for (j in 1L:nc) {
       ID2 <- ids[j]
 
@@ -308,6 +321,86 @@ com2links <- function(
     }
   } else if (sum_nulls == 1) {
     print("Only one matrix is present")
+
+    if (!is.null(ad_ped_matrix)) {
+      newColPos1 <- ad_ped_p
+      iss1 <- ad_ped_i
+      x1 <- ad_ped_x
+      relNames <- c("addRel")
+      if (gc == TRUE) {
+        remove(ad_ped_p, ad_ped_i, ad_ped_x)
+      }
+    }
+    if (!is.null(mit_ped_matrix)) {
+      newColPos1 <- mt_p
+      iss1 <- mt_i
+      x1 <- mt_x
+      relNames <- c("mitRel")
+      if (gc == TRUE) {
+        remove(mt_p, mt_i, mt_x)
+      }
+    }
+    if (!is.null(cn_ped_matrix)) {
+      newColPos1 <- cn_p
+      iss1 <- cn_i
+      x1 <- cn_x
+      relNames <- c("cnuRel")
+      if (gc == TRUE) {
+        remove(cn_p, cn_i, cn_x)
+      }
+    }
+
+    # Initialize related pairs file
+    df_relpairs <- data.frame(
+      ID1 = numeric(0), ID2 = numeric(0)
+    )
+    df_relpairs[[relNames[1]]] <- numeric(0)
+    if (writetodisk == TRUE) {
+      write.table(
+        df_relpairs,
+        file = rel_pairs_file, sep = ",", append = FALSE, row.names = FALSE
+      )
+      remove(df_relpairs)
+    }
+
+    for (j in 1L:nc) {
+      ID2 <- ids[j]
+
+      # Extract column indices
+      ncp1 <- newColPos1[j]
+      ncp1p <- newColPos1[j + 1L]
+      cond1 <- ncp1 < ncp1p
+      if (cond1) {
+        vv1 <- ncp1:(ncp1p - 1L)
+        iss1vv <- iss1[vv1]
+      }
+
+      u <- sort(iss1vv)
+
+      if (cond1) {
+        ID1 <- ids[u]
+        tds <- data.frame(ID1 = ID1, ID2 = ID2)
+        tds[[relNames[1]]] <- 0
+
+        if (cond1) {
+          tds[u %in% iss1vv, relNames[1]] <- x1[vv1]
+        }
+        if (writetodisk == TRUE) {
+          write.table(tds,
+            file = rel_pairs_file, row.names = FALSE,
+            col.names = FALSE, append = TRUE, sep = ","
+          )
+        } else {
+          df_relpairs <- rbind(df_relpairs, tds)
+        }
+      }
+
+      if (!(j %% 500)) {
+        cat(paste0("Done with ", j, " of ", nc, "\n"))
+      }
+    }
+
+
   }
   if (writetodisk == FALSE) {
     return(df_relpairs)
