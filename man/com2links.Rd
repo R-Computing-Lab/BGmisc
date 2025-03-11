@@ -7,7 +7,8 @@
 com2links(
   rel_pairs_file = "dataRelatedPairs.csv",
   ad_ped_matrix = NULL,
-  mit_ped_matrix = NULL,
+  mit_ped_matrix = mt_ped_matrix,
+  mt_ped_matrix = NULL,
   cn_ped_matrix = NULL,
   pat_ped_matrix = NULL,
   mat_ped_matrix = NULL,

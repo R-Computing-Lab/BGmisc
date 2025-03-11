@@ -1,5 +1,6 @@
 # BGmisc 1.3.5
 * Add com2links function that converts components to kinship links
+* Add tests for com2links
 
 # BGmisc 1.3.4.1
 * Hot fix to resolve issue with list of adjacency matrix not loading saved version

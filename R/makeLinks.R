@@ -15,7 +15,8 @@
 com2links <- function(
     rel_pairs_file = "dataRelatedPairs.csv",
     ad_ped_matrix = NULL,
-    mit_ped_matrix = NULL,
+    mit_ped_matrix = mt_ped_matrix,
+    mt_ped_matrix = NULL,
     cn_ped_matrix = NULL,
     pat_ped_matrix = NULL,
     mat_ped_matrix = NULL,
@@ -29,12 +30,6 @@ com2links <- function(
 
   # Fast fails
 
-  ## Check for deprecated arguments
-  if (exists("mt_ped_matrix", inherits = F)) {
-    mit_ped_matrix <- mt_ped_matrix
-    remove(mt_ped_matrix)
-  }
-
   # Ensure at least one relationship matrix is provided
   if (is.null(ad_ped_matrix) && is.null(mit_ped_matrix) && is.null(cn_ped_matrix)) {
     stop("At least one of 'ped_matrix', 'mit_ped_matrix', or 'cn_ped_matrix' must be provided.")
@@ -46,12 +41,12 @@ com2links <- function(
     }
   }
   if (!is.null(cn_ped_matrix)) {
-    if (!inherits(ad_ped_matrix, c("matrix", "dgCMatrix", "dsCMatrix"))) {
+    if (!inherits(cn_ped_matrix, c("matrix", "dgCMatrix", "dsCMatrix"))) {
       stop("The 'cn_ped_matrix' must be a matrix or dgCMatrix.")
     }
   }
   if (!is.null(mit_ped_matrix)) {
-    if (!inherits(ad_ped_matrix, c("matrix", "dgCMatrix", "dsCMatrix"))) {
+    if (!inherits(mit_ped_matrix, c("matrix", "dgCMatrix", "dsCMatrix"))) {
       stop("The 'mit_ped_matrix' must be a matrix or dgCMatrix.")
     }
     if (!inherits(mit_ped_matrix, "dgCMatrix")) {
@@ -214,9 +209,10 @@ if(verbose){
           df_relpairs <- rbind(df_relpairs, tds)
         }
       }
-
+      if(verbose){
       if (!(j %% 500)) {
         cat(paste0("Done with ", j, " of ", nc, "\n"))
+      }
       }
     }
   } else if (sum_nulls == 2) {
@@ -325,9 +321,10 @@ if(verbose){
           df_relpairs <- rbind(df_relpairs, tds)
         }
       }
-
+      if(verbose){
       if (!(j %% 500)) {
         cat(paste0("Done with ", j, " of ", nc, "\n"))
+      }
       }
     }
   } else if (sum_nulls == 1) {
@@ -416,9 +413,10 @@ if(verbose){
           df_relpairs <- rbind(df_relpairs, tds)
         }
       }
-
+      if(verbose){
       if (!(j %% 500)) {
         cat(paste0("Done with ", j, " of ", nc, "\n"))
+      }
       }
     }
   }
