@@ -22,7 +22,7 @@ com2links <- function(
     mapa_id_file = "data_mapaID.csv",
     gc = TRUE,
     writetodisk = TRUE,
-    verbose = TRUE,
+    verbose = FALSE,
     ...) {
   require(Matrix)
   require(igraph)
@@ -46,12 +46,12 @@ com2links <- function(
     }
   }
   if (!is.null(cn_ped_matrix)) {
-    if (!inherits(ad_ped_matrix, c("matrix", "dgCMatrix", "dsCMatrix")) {
+    if (!inherits(ad_ped_matrix, c("matrix", "dgCMatrix", "dsCMatrix"))) {
       stop("The 'cn_ped_matrix' must be a matrix or dgCMatrix.")
     }
   }
   if (!is.null(mit_ped_matrix)) {
-    if (!inherits(ad_ped_matrix, c("matrix", "dgCMatrix", "dsCMatrix")) {
+    if (!inherits(ad_ped_matrix, c("matrix", "dgCMatrix", "dsCMatrix"))) {
       stop("The 'mit_ped_matrix' must be a matrix or dgCMatrix.")
     }
     if (!inherits(mit_ped_matrix, "dgCMatrix")) {
@@ -144,6 +144,8 @@ if(verbose){
         df_relpairs,
         file = rel_pairs_file, sep = ",", append = FALSE, row.names = FALSE
       )
+      # initial buffer
+      write_buffer <- list()
       remove(df_relpairs)
     }
     for (j in 1L:nc) {
@@ -199,10 +201,15 @@ if(verbose){
           tds[u %in% iss3vv, relNames[3]] <- x3[vv3]
         }
         if (writetodisk == TRUE) {
-          write.table(tds,
-            file = rel_pairs_file, row.names = FALSE,
-            col.names = FALSE, append = TRUE, sep = ","
-          )
+          write_buffer[[length(write_buffer) + 1]] <- tds
+
+          if (length(write_buffer) >= 1000) { # Write in batches
+            write.table(do.call(rbind, write_buffer),
+              file = rel_pairs_file,
+              row.names = FALSE, col.names = FALSE, append = TRUE, sep = ","
+            )
+            write_buffer <- list()
+          }
         } else {
           df_relpairs <- rbind(df_relpairs, tds)
         }
@@ -262,6 +269,8 @@ if(verbose){
         df_relpairs,
         file = rel_pairs_file, sep = ",", append = FALSE, row.names = FALSE
       )
+      # initial buffer
+      write_buffer <- list()
       remove(df_relpairs)
     }
     for (j in 1L:nc) {
@@ -284,8 +293,6 @@ if(verbose){
         iss2vv <- iss2[vv2]
       }
 
-
-
       u <- sort(igraph::union(if (cond1) {
         iss1vv
       }, if (cond2) {
@@ -305,10 +312,15 @@ if(verbose){
           tds[u %in% iss2vv, relNames[2]] <- x2[vv2]
         }
         if (writetodisk == TRUE) {
-          write.table(tds,
-            file = rel_pairs_file, row.names = FALSE,
-            col.names = FALSE, append = TRUE, sep = ","
-          )
+          write_buffer[[length(write_buffer) + 1]] <- tds
+
+          if (length(write_buffer) >= 1000) { # Write in batches
+            write.table(do.call(rbind, write_buffer),
+              file = rel_pairs_file,
+              row.names = FALSE, col.names = FALSE, append = TRUE, sep = ","
+            )
+            write_buffer <- list()
+          }
         } else {
           df_relpairs <- rbind(df_relpairs, tds)
         }
@@ -319,8 +331,10 @@ if(verbose){
       }
     }
   } else if (sum_nulls == 1) {
-    print("Only one matrix is present")
 
+    if (verbose) {
+      print("Only one matrix is present")
+    }
     if (!is.null(ad_ped_matrix)) {
       newColPos1 <- ad_ped_p
       iss1 <- ad_ped_i
@@ -359,12 +373,15 @@ if(verbose){
         df_relpairs,
         file = rel_pairs_file, sep = ",", append = FALSE, row.names = FALSE
       )
+
+      # initial buffer
+      write_buffer <- list()
+
       remove(df_relpairs)
     }
 
     for (j in 1L:nc) {
       ID2 <- ids[j]
-
       # Extract column indices
       ncp1 <- newColPos1[j]
       ncp1p <- newColPos1[j + 1L]
@@ -385,10 +402,16 @@ if(verbose){
           tds[u %in% iss1vv, relNames[1]] <- x1[vv1]
         }
         if (writetodisk == TRUE) {
-          write.table(tds,
-            file = rel_pairs_file, row.names = FALSE,
-            col.names = FALSE, append = TRUE, sep = ","
-          )
+
+          write_buffer[[length(write_buffer) + 1]] <- tds
+
+          if (length(write_buffer) >= 1000) { # Write in batches
+            write.table(do.call(rbind, write_buffer),
+              file = rel_pairs_file,
+              row.names = FALSE, col.names = FALSE, append = TRUE, sep = ","
+            )
+            write_buffer <- list()
+          }
         } else {
           df_relpairs <- rbind(df_relpairs, tds)
         }
@@ -398,11 +421,16 @@ if(verbose){
         cat(paste0("Done with ", j, " of ", nc, "\n"))
       }
     }
-
-
   }
   if (writetodisk == FALSE) {
     return(df_relpairs)
+  } else {
+    if (length(write_buffer) > 0) {
+      write.table(do.call(rbind, write_buffer),
+        file = rel_pairs_file,
+        row.names = FALSE, col.names = FALSE, append = TRUE, sep = ","
+      )
+    }
   }
   # Merge and write the parentage matrices
   #  df <- full_join(mat_ped_matrix %>% arrange(ID), pat_ped_matrix %>% arrange(ID))
