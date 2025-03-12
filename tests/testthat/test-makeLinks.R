@@ -50,7 +50,7 @@ test_that("com2links processes multiple matrices correctly (hazard dataset)", {
 
 test_that("com2links correctly handles missing matrices", {
   data(hazard)
-  ad_ped_matrix <- ped2add(hazard)
+#  ad_ped_matrix <- ped2add(hazard)
 
   expect_error(com2links(ad_ped_matrix = NULL, mit_ped_matrix = NULL, cn_ped_matrix = NULL),
                "At least one of 'ped_matrix', 'mit_ped_matrix', or 'cn_ped_matrix' must be provided.")

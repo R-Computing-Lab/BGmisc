@@ -2,10 +2,9 @@
 #' @param rel_pairs_file File to write related pairs to
 #' @param ad_ped_matrix Matrix of additive genetic relatedness coefficients
 #' @param mit_ped_matrix Matrix of mitochondrial relatedness coefficients
+#' @param mt_ped_matrix (alternative) Matrix of mitochondrial relatedness coefficients
 #' @param cn_ped_matrix Matrix of common nuclear relatedness coefficients
-#' @param pat_ped_matrix Matrix of paternal relatedness coefficients
-#' @param mat_ped_matrix Matrix of maternal relatedness coefficients
-#' @param mapa_id_file File to write the map of parental IDs to individual IDs
+#' @param write_buffer_size Number of related pairs to write to disk at a time
 #' @param gc logical. If TRUE, do frequent garbage collection via \code{\link{gc}} to save memory
 #' @param writetodisk logical. If TRUE, write the related pairs to disk
 #' @param verbose logical. If TRUE, print progress messages
@@ -18,9 +17,10 @@ com2links <- function(
     mit_ped_matrix = mt_ped_matrix,
     mt_ped_matrix = NULL,
     cn_ped_matrix = NULL,
-    pat_ped_matrix = NULL,
-    mat_ped_matrix = NULL,
-    mapa_id_file = "data_mapaID.csv",
+  #  pat_ped_matrix = NULL,
+  #  mat_ped_matrix = NULL,
+  #  mapa_id_file = "data_mapaID.csv",
+    write_buffer_size = 1000,
     gc = TRUE,
     writetodisk = TRUE,
     verbose = FALSE,
@@ -28,6 +28,24 @@ com2links <- function(
   require(Matrix)
   require(igraph)
 
+  # match arguments
+#  a <- match.call()
+# alternative names
+#  mit_ped_names <- c("mit_ped_matrix","mt_ped_matrix","mtdna_ped_matrix")
+ # cn_ped_names <- c("cn_ped_matrix","comn_ped_matrix","nuc_ped_matrix")
+#  ad_ped_names <- c("ad_ped_matrix","add_ped_matrix","additive_ped_matrix")
+
+#  if (sum(names(a) %in% mit_ped_names)>0) {
+#  mit_ped_matrix <- unlist(as.list(match.call())[mit_ped_names])[1]
+ # print(inherits(mit_ped_matrix))
+ # }
+#  if (sum(names(a) %in% cn_ped_names) > 0) {
+#  cn_ped_matrix <- unlist(as.list(match.call())[cn_ped_names])[1]
+#  }
+#
+#  if (sum(names(a) %in% ad_ped_names) > 0) {
+#  ad_ped_matrix <- unlist(as.list(match.call())[ad_ped_names])[1]
+#}
   # Fast fails
 
   # Ensure at least one relationship matrix is provided
@@ -39,10 +57,18 @@ com2links <- function(
     if (!inherits(ad_ped_matrix, c("matrix", "dgCMatrix", "dsCMatrix"))) {
       stop("The 'ad_ped_matrix' must be a matrix or dgCMatrix.")
     }
+    # convert to sparse
+    if (!inherits(ad_ped_matrix, "dgCMatrix")) {
+      ad_ped_matrix <- as(ad_ped_matrix, "dgCMatrix")
+    }
   }
   if (!is.null(cn_ped_matrix)) {
     if (!inherits(cn_ped_matrix, c("matrix", "dgCMatrix", "dsCMatrix"))) {
       stop("The 'cn_ped_matrix' must be a matrix or dgCMatrix.")
+    }
+    # convert to sparse
+    if (!inherits(cn_ped_matrix, "dgCMatrix")) {
+      cn_ped_matrix <- as(cn_ped_matrix, "dgCMatrix")
     }
   }
   if (!is.null(mit_ped_matrix)) {
@@ -50,7 +76,7 @@ com2links <- function(
       stop("The 'mit_ped_matrix' must be a matrix or dgCMatrix.")
     }
     if (!inherits(mit_ped_matrix, "dgCMatrix")) {
-      mit_ped_matrix <- as(mit_ped_matrix, "dgCMatrix")
+      mit_ped_matrix <- as(mit_ped_matrix, "symmetricMatrix")
     }
     # Ensure mitochondrial matrix values are binary (0/1)
     mit_ped_matrix@x[mit_ped_matrix@x > 0] <- 1
@@ -135,7 +161,7 @@ if(verbose){
     df_relpairs[[relNames[2]]] <- numeric(0)
     df_relpairs[[relNames[3]]] <- numeric(0)
     if (writetodisk == TRUE) {
-      write.table(
+      utils::write.table(
         df_relpairs,
         file = rel_pairs_file, sep = ",", append = FALSE, row.names = FALSE
       )
@@ -198,8 +224,8 @@ if(verbose){
         if (writetodisk == TRUE) {
           write_buffer[[length(write_buffer) + 1]] <- tds
 
-          if (length(write_buffer) >= 1000) { # Write in batches
-            write.table(do.call(rbind, write_buffer),
+          if (length(write_buffer) >= write_buffer_size) { # Write in batches
+            utils::write.table(do.call(rbind, write_buffer),
               file = rel_pairs_file,
               row.names = FALSE, col.names = FALSE, append = TRUE, sep = ","
             )
@@ -261,7 +287,7 @@ if(verbose){
     df_relpairs[[relNames[1]]] <- numeric(0)
     df_relpairs[[relNames[2]]] <- numeric(0)
     if (writetodisk == TRUE) {
-      write.table(
+      utils::write.table(
         df_relpairs,
         file = rel_pairs_file, sep = ",", append = FALSE, row.names = FALSE
       )
@@ -310,8 +336,8 @@ if(verbose){
         if (writetodisk == TRUE) {
           write_buffer[[length(write_buffer) + 1]] <- tds
 
-          if (length(write_buffer) >= 1000) { # Write in batches
-            write.table(do.call(rbind, write_buffer),
+          if (length(write_buffer) >= write_buffer_size) { # Write in batches
+            utils::write.table(do.call(rbind, write_buffer),
               file = rel_pairs_file,
               row.names = FALSE, col.names = FALSE, append = TRUE, sep = ","
             )
@@ -330,7 +356,7 @@ if(verbose){
   } else if (sum_nulls == 1) {
 
     if (verbose) {
-      print("Only one matrix is present")
+      message("Only one matrix is present")
     }
     if (!is.null(ad_ped_matrix)) {
       newColPos1 <- ad_ped_p
@@ -366,7 +392,7 @@ if(verbose){
     )
     df_relpairs[[relNames[1]]] <- numeric(0)
     if (writetodisk == TRUE) {
-      write.table(
+      utils::write.table(
         df_relpairs,
         file = rel_pairs_file, sep = ",", append = FALSE, row.names = FALSE
       )
@@ -402,8 +428,8 @@ if(verbose){
 
           write_buffer[[length(write_buffer) + 1]] <- tds
 
-          if (length(write_buffer) >= 1000) { # Write in batches
-            write.table(do.call(rbind, write_buffer),
+          if (length(write_buffer) >= write_buffer_size) { # Write in batches
+            utils::write.table(do.call(rbind, write_buffer),
               file = rel_pairs_file,
               row.names = FALSE, col.names = FALSE, append = TRUE, sep = ","
             )
@@ -424,11 +450,12 @@ if(verbose){
     return(df_relpairs)
   } else {
     if (length(write_buffer) > 0) {
-      write.table(do.call(rbind, write_buffer),
+      utils::write.table(do.call(rbind, write_buffer),
         file = rel_pairs_file,
         row.names = FALSE, col.names = FALSE, append = TRUE, sep = ","
       )
     }
+    return(NULL)
   }
   # Merge and write the parentage matrices
   #  df <- full_join(mat_ped_matrix %>% arrange(ID), pat_ped_matrix %>% arrange(ID))

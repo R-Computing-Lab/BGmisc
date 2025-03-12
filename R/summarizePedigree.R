@@ -75,7 +75,6 @@ summarizePedigrees <- function(ped, famID = "famID", personID = "ID",
     founder_sort_var <- byr
   }
 
-
   # Build the pedigree using the provided functions
   if ("families" %in% type && !famID %in% names(ped)) {
     if (verbose) message("Counting families...")
@@ -183,7 +182,7 @@ summarizePedigrees <- function(ped, famID = "famID", personID = "ID",
 
 
   ## oldest
-  if (!is.null(byr) & noldest > 0) {
+  if (!is.null(byr) && noldest > 0) {
     if (!is.null(n_families) && "families" %in% type) {
       if (verbose) message("Finding oldest families...")
       output$oldest_families <- try_na(family_summary_dt[order(get(byr))][1:min(c(noldest, n_families),
@@ -206,7 +205,7 @@ summarizePedigrees <- function(ped, famID = "famID", personID = "ID",
 
   # biggest lines
   if (!is.null(nbiggest) && nbiggest > 0) {
-    if (!is.null(n_families) & "families" %in% type) {
+    if (!is.null(n_families) && "families" %in% type) {
       output$biggest_families <- try_na(family_summary_dt[order(-get("count"))][1:min(c(nbiggest, n_families),
         na.rm = TRUE
       )])
@@ -248,6 +247,7 @@ calculateSummaryDT <- function(data, group_var, skip_var,
           #   count = .N,
           mean = as.double(base::mean(x, na.rm = TRUE)),
           median = as.double(stats::median(x, na.rm = TRUE)),
+        #  mode = as.double(stats::mode(x, na.rm = TRUE)),
           min = ifelse(all(is.na(x)), as.double(NA), as.double(base::min(x, na.rm = TRUE))),
           max = ifelse(all(is.na(x)), as.double(NA), as.double(base::max(x, na.rm = TRUE))),
           sd = as.double(stats::sd(x, na.rm = TRUE))

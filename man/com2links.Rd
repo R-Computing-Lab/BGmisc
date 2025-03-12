@@ -10,9 +10,7 @@ com2links(
   mit_ped_matrix = mt_ped_matrix,
   mt_ped_matrix = NULL,
   cn_ped_matrix = NULL,
-  pat_ped_matrix = NULL,
-  mat_ped_matrix = NULL,
-  mapa_id_file = "data_mapaID.csv",
+  write_buffer_size = 1000,
   gc = TRUE,
   writetodisk = TRUE,
   verbose = FALSE,
@@ -26,13 +24,11 @@ com2links(
 
 \item{mit_ped_matrix}{Matrix of mitochondrial relatedness coefficients}
 
+\item{mt_ped_matrix}{(alternative) Matrix of mitochondrial relatedness coefficients}
+
 \item{cn_ped_matrix}{Matrix of common nuclear relatedness coefficients}
 
-\item{pat_ped_matrix}{Matrix of paternal relatedness coefficients}
-
-\item{mat_ped_matrix}{Matrix of maternal relatedness coefficients}
-
-\item{mapa_id_file}{File to write the map of parental IDs to individual IDs}
+\item{write_buffer_size}{Number of related pairs to write to disk at a time}
 
 \item{gc}{logical. If TRUE, do frequent garbage collection via \code{\link{gc}} to save memory}
 
