@@ -33,7 +33,8 @@ Imports:
     kinship2,
     Matrix,
     stats,
-    stringr
+    stringr,
+    methods
 Suggests: 
     dplyr,
     EasyMx,

@@ -25,8 +25,6 @@ com2links <- function(
     writetodisk = TRUE,
     verbose = FALSE,
     ...) {
-  require(Matrix)
-  require(igraph)
 
   # match arguments
 #  a <- match.call()
@@ -59,7 +57,7 @@ com2links <- function(
     }
     # convert to sparse
     if (!inherits(ad_ped_matrix, "dgCMatrix")) {
-      ad_ped_matrix <- as(ad_ped_matrix, "dgCMatrix")
+      ad_ped_matrix <- methods::as(ad_ped_matrix, "dgCMatrix")
     }
   }
   if (!is.null(cn_ped_matrix)) {
@@ -68,7 +66,7 @@ com2links <- function(
     }
     # convert to sparse
     if (!inherits(cn_ped_matrix, "dgCMatrix")) {
-      cn_ped_matrix <- as(cn_ped_matrix, "dgCMatrix")
+      cn_ped_matrix <- methods::as(cn_ped_matrix, "dgCMatrix")
     }
   }
   if (!is.null(mit_ped_matrix)) {
@@ -76,7 +74,7 @@ com2links <- function(
       stop("The 'mit_ped_matrix' must be a matrix or dgCMatrix.")
     }
     if (!inherits(mit_ped_matrix, "dgCMatrix")) {
-      mit_ped_matrix <- as(mit_ped_matrix, "symmetricMatrix")
+      mit_ped_matrix <- methods::as(mit_ped_matrix, "symmetricMatrix")
     }
     # Ensure mitochondrial matrix values are binary (0/1)
     mit_ped_matrix@x[mit_ped_matrix@x > 0] <- 1
@@ -87,7 +85,7 @@ com2links <- function(
   ids <- NULL
   if (!is.null(cn_ped_matrix)) {
     # Convert CN matrix to symmetric if needed
-    cn_ped_matrix <- as(cn_ped_matrix, "symmetricMatrix")
+    cn_ped_matrix <- methods::as(cn_ped_matrix, "symmetricMatrix")
     ids <- as.numeric(dimnames(cn_ped_matrix)[[1]])
     nc <- ncol(cn_ped_matrix)
   } else if (!is.null(ad_ped_matrix)) {
