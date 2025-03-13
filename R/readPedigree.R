@@ -420,7 +420,7 @@ createFamilyToParentsMapping <- function(df_temp,datasource) {
 #'
 #' @param df_temp A data frame containing individual information.
 #' @param family_to_parents A list mapping family IDs to parent IDs.
-#' @param datasource A string indicating the data source. Options are "gedcom" and "wikitree".
+#' @param datasource A string indicating the data source. Options are "gedcom" and "wiki".
 #' @return A data frame with added momID and dad_ID columns.
 #' @keywords internal
 assignParentIDs <- function(df_temp, family_to_parents,datasource) {
@@ -443,8 +443,9 @@ if(datasource == "gedcom"){
     }
   }
   return(df_temp)
-} else if(datasource=="wikitree"){
-
+} else if(datasource=="wiki"){
+message("No parents information available for wiki data")
+return(df_temp)
   }
 }
 
@@ -459,27 +460,24 @@ processParents <- function(df_temp,datasource) {
   # Ensure required columns are present
   if(datasource=="gedcom"){
   required_cols <- c("FAMC", "sex", "FAMS")
+} else if(datasource=="wiki"){
+  required_cols <- c("id")
+} else {
+  stop("Invalid datasource")
+}
 
-  if (!all(required_cols %in% colnames(df_temp))) {
+if (!all(required_cols %in% colnames(df_temp))) {
     missing_cols <- setdiff(required_cols, colnames(df_temp))
     warning("Missing necessary columns: ", paste(missing_cols, collapse = ", "))
     return(df_temp)
   }
+
   family_to_parents <- createFamilyToParentsMapping(df_temp,datasource=datasource)
   if (is.null(family_to_parents) || length(family_to_parents) == 0) {
     return(df_temp)
   }
   df_temp <- assignParentIDs(df_temp, family_to_parents,datasource=datasource)
   return(df_temp)
-  } else if(datasource=="wikitree"){
-    df_temp$momID <- NA_character_
-    df_temp$dadID <- NA_character_
-    return(df_temp)
-  } else {
-
-    stop("Invalid datasource")
-    }
-
 }
 
 
@@ -605,7 +603,8 @@ readWikifamilytree <- function(text) {
 
   # parse relationships and infer them
 
-  relationships_df <- parseRelationships(tree_long)
+  relationships_df <- processParents(tree_long, datasource = "wiki")
+  (tree_long)
 
 
   # Return structured table of the family tree (symbols included)
