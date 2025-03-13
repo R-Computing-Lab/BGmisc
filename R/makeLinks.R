@@ -10,7 +10,7 @@
 #' @param verbose logical. If TRUE, print progress messages
 #' @param ... Additional arguments to be passed to \code{\link{com2links}}
 #' @return A data frame of related pairs
-
+#' @export
 com2links <- function(
     rel_pairs_file = "dataRelatedPairs.csv",
     ad_ped_matrix = NULL,
