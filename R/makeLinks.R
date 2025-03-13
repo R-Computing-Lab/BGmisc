@@ -21,6 +21,7 @@ com2links <- function(
   #  mat_ped_matrix = NULL,
   #  mapa_id_file = "data_mapaID.csv",
     write_buffer_size = 1000,
+    update_rate = 1000,
     gc = TRUE,
     writetodisk = TRUE,
     verbose = FALSE,
@@ -234,7 +235,7 @@ if(verbose){
         }
       }
       if(verbose){
-      if (!(j %% 500)) {
+      if (!(j %%  update_rate)) {
         cat(paste0("Done with ", j, " of ", nc, "\n"))
       }
       }
@@ -346,7 +347,7 @@ if(verbose){
         }
       }
       if(verbose){
-      if (!(j %% 500)) {
+      if (!(j %%  update_rate)) {
         cat(paste0("Done with ", j, " of ", nc, "\n"))
       }
       }
@@ -438,7 +439,7 @@ if(verbose){
         }
       }
       if(verbose){
-      if (!(j %% 500)) {
+      if (!(j %%  update_rate)) {
         cat(paste0("Done with ", j, " of ", nc, "\n"))
       }
       }
