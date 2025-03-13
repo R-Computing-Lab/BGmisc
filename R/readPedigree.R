@@ -610,7 +610,9 @@ readWikifamilytree <- function(text) {
 
   # parse relationships and infer them
 
-  relationships_df <- processParents(tree_long, datasource = "wiki")
+  relationships_df <- parseRelationships(tree_long)
+
+ # relationships_df <- processParents(tree_long, datasource = "wiki")
 
 
 
@@ -710,7 +712,7 @@ parseTree <- function(tree_lines) {
 #'
 parseRelationships <- function(tree_long) {
   relationships <- data.frame(
-    id = unique(tree_long$Value),
+    id = tree_long$id,
     momID = NA_character_,
     dadID = NA_character_,
     spouseID = NA_character_,
@@ -726,6 +728,8 @@ parseRelationships <- function(tree_long) {
       parent <- tree_long$Value[tree_long$Row == row$Row - 1 & tree_long$Column == row$Column]
       child <- tree_long$Value[tree_long$Row == row$Row + 1 & tree_long$Column == row$Column]
 
+      if(length(parent) == 0) parent <- NA
+      if(length(child) == 0) child <- NA
       # Assign mom/dad IDs based on tree structure
       if (!is.na(parent) && !is.na(child)) {
         relationships$momID[relationships$id == child] <- parent
