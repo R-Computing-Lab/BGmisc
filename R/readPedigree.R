@@ -326,7 +326,7 @@ readGedcom <- function(file_path,
     if (verbose) {
       print("Processing parents")
     }
-    df_temp <- processParents(df_temp)
+    df_temp <- processParents(df_temp, datasource="gedcom")
   }
 
 
@@ -383,7 +383,7 @@ readGedcom <- function(file_path,
 #' @param df_temp A data frame containing information about individuals.
 #' @return A list mapping family IDs to parent IDs.
 #' @keywords internal
-createFamilyToParentsMapping <- function(df_temp) {
+createFamilyToParentsMapping <- function(df_temp,datasource) {
   if (!all(c("FAMS", "sex") %in% colnames(df_temp))) {
     warning("The data frame does not contain the necessary columns (FAMS, sex)")
     return(NULL)
@@ -420,12 +420,13 @@ createFamilyToParentsMapping <- function(df_temp) {
 #'
 #' @param df_temp A data frame containing individual information.
 #' @param family_to_parents A list mapping family IDs to parent IDs.
+#' @param datasource A string indicating the data source. Options are "gedcom" and "wikitree".
 #' @return A data frame with added momID and dad_ID columns.
 #' @keywords internal
-assignParentIDs <- function(df_temp, family_to_parents) {
+assignParentIDs <- function(df_temp, family_to_parents,datasource) {
   df_temp$momID <- NA_character_
   df_temp$dadID <- NA_character_
-
+if(datasource == "gedcom"){
   for (i in 1:nrow(df_temp)) {
     if (!is.na(df_temp$FAMC[i])) {
       famc_ids <- unlist(strsplit(df_temp$FAMC[i], ", "))
@@ -442,6 +443,9 @@ assignParentIDs <- function(df_temp, family_to_parents) {
     }
   }
   return(df_temp)
+} else if(datasource=="wikitree"){
+
+  }
 }
 
 #' Process parents information
@@ -451,8 +455,9 @@ assignParentIDs <- function(df_temp, family_to_parents) {
 #' @param df_temp A data frame containing information about individuals.
 #' @return A data frame with added momID and dadID columns.
 #' @keywords internal
-processParents <- function(df_temp) {
+processParents <- function(df_temp,datasource) {
   # Ensure required columns are present
+  if(datasource=="gedcom"){
   required_cols <- c("FAMC", "sex", "FAMS")
 
   if (!all(required_cols %in% colnames(df_temp))) {
@@ -460,12 +465,21 @@ processParents <- function(df_temp) {
     warning("Missing necessary columns: ", paste(missing_cols, collapse = ", "))
     return(df_temp)
   }
-  family_to_parents <- createFamilyToParentsMapping(df_temp)
+  family_to_parents <- createFamilyToParentsMapping(df_temp,datasource=datasource)
   if (is.null(family_to_parents) || length(family_to_parents) == 0) {
     return(df_temp)
   }
-  df_temp <- assignParentIDs(df_temp, family_to_parents)
+  df_temp <- assignParentIDs(df_temp, family_to_parents,datasource=datasource)
   return(df_temp)
+  } else if(datasource=="wikitree"){
+    df_temp$momID <- NA_character_
+    df_temp$dadID <- NA_character_
+    return(df_temp)
+  } else {
+
+    stop("Invalid datasource")
+    }
+
 }
 
 
@@ -564,7 +578,6 @@ countPatternRows <- function(file) {
 #' @param text A character string containing the text of a family tree in wiki format.
 #' @export
 readWikifamilytree <- function(text) {
-
   # Extract summary text
 
   summary_text <- extractSummaryText(text)
@@ -574,7 +587,6 @@ readWikifamilytree <- function(text) {
   tree_lines <- gsub("\\{\\{familytree(.*?)\\}\\}", "\\1", tree_lines) # Remove wrapping markup
 
   # Convert tree structure into a coordinate grid (preserves symbols!)
-
   tree_df <- parseTree(tree_lines)
 
   # Identify columns that start with "Y"
@@ -589,36 +601,42 @@ readWikifamilytree <- function(text) {
   # Merge names into the tree structure (keeping all symbols!)
   tree_long <- merge(tree_long, members_df, by.x = "Value", by.y = "identifier", all.x = TRUE)
 
-  tree_long$DisplayName <- ifelse(!is.na(tree_long$name), tree_long$name, tree_long$Value)  # Use name if available
+  tree_long$DisplayName <- ifelse(!is.na(tree_long$name), tree_long$name, tree_long$Value) # Use name if available
+
+  # parse relationships and infer them
+
+  relationships_df <- parseRelationships(tree_long)
+
 
   # Return structured table of the family tree (symbols included)
   list(
     summary = summary_text,
     members = members_df,
-    structure = tree_long
+    structure = tree_long,
+    relationships = relationships_df
   )
 }
 
 #' Make Long Tree
-#' @inheritParams readWikifamilytree
 #' @param tree_df A data frame containing the tree structure.
 #' @param cols_to_pivot A character vector of column names to pivot.
 #' @return A long data frame containing the tree structure.
 #' @keywords internal
 makeLongTree <- function(tree_df, cols_to_pivot) {
-    tree_long <- stats::reshape(tree_df,
-                                varying = cols_to_pivot,
-                                v.names = "Value",
-                                timevar = "Column",
-                                times = cols_to_pivot,
-                                idvar = setdiff(names(tree_df), cols_to_pivot),
-                                direction = "long")
+  tree_long <- stats::reshape(tree_df,
+    varying = cols_to_pivot,
+    v.names = "Value",
+    timevar = "Column",
+    times = cols_to_pivot,
+    idvar = setdiff(names(tree_df), cols_to_pivot),
+    direction = "long"
+  )
 
-    tree_long <- tree_long[!is.na(tree_long$Value), ]
-    tree_long$Value <- stringr::str_trim(tree_long$Value)
-    tree_long$Column <- as.numeric(gsub("^Y", "", tree_long$Column))
-    return(tree_long)
-  }
+  tree_long <- tree_long[!is.na(tree_long$Value), ]
+  tree_long$Value <- stringr::str_trim(tree_long$Value)
+  tree_long$Column <- as.numeric(gsub("^Y", "", tree_long$Column))
+  return(tree_long)
+}
 
 #' Match Members
 #' @inheritParams readWikifamilytree
@@ -626,23 +644,23 @@ makeLongTree <- function(tree_df, cols_to_pivot) {
 #' @keywords internal
 
 matchMembers <- function(text) {
-    member_matches <- stringr::str_extract_all(text, "\\|\\s*([A-Za-z0-9]+)\\s*=\\s*([^|}]*)")[[1]]
-    member_matches <- gsub("\\[|\\]|'''", "", member_matches)  # Remove formatting
+  member_matches <- stringr::str_extract_all(text, "\\|\\s*([A-Za-z0-9]+)\\s*=\\s*([^|}]*)")[[1]]
+  member_matches <- gsub("\\[|\\]|'''", "", member_matches) # Remove formatting
 
-    members_df <- data.frame(
-      identifier = stringr::str_trim(stringr::str_extract(member_matches, "^[^=]+")),
-      name = stringr::str_trim(stringr::str_extract(member_matches, "(?<=\\=).*")),
-      stringsAsFactors = FALSE
-    )
+  members_df <- data.frame(
+    identifier = stringr::str_trim(stringr::str_extract(member_matches, "^[^=]+")),
+    name = stringr::str_trim(stringr::str_extract(member_matches, "(?<=\\=).*")),
+    stringsAsFactors = FALSE
+  )
 
-    # Remove leading pipes (`|`) from identifiers for consistency
-    members_df$identifier <- gsub("^\\|\\s*", "", members_df$identifier)
+  # Remove leading pipes (`|`) from identifiers for consistency
+  members_df$identifier <- gsub("^\\|\\s*", "", members_df$identifier)
 
-    # remove summary row
-    members_df <- members_df[members_df$identifier!="summary", ]
+  # remove summary row
+  members_df <- members_df[members_df$identifier != "summary", ]
 
-    return(members_df)
-  }
+  return(members_df)
+}
 
 #' Extract Summary Text
 #' @inheritParams readWikifamilytree
@@ -653,29 +671,73 @@ matchMembers <- function(text) {
 extractSummaryText <- function(text) {
   summary_match <- stringr::str_match(text, "\\{\\{familytree/start \\|summary=(.*?)\\}\\}")
   summary_text <- ifelse(!is.na(summary_match[, 2]), summary_match[, 2], NA)
-return(summary_text)
+  return(summary_text)
 }
 
 #' Parse Tree
-#' @inheritParams readWikifamilytree
 #' @param tree_lines A character vector containing the lines of the tree structure.
 #' @return A data frame containing the tree structure.
 #' @keywords internal
 #' @export
 
-  parseTree <- function(tree_lines) {
-    tree_matrix <- base::strsplit(tree_lines, "\\|")  # Split each row into columns
-    max_cols <- max(sapply(tree_matrix, length))  # Find the max column count
+parseTree <- function(tree_lines) {
+  tree_matrix <- base::strsplit(tree_lines, "\\|") # Split each row into columns
+  max_cols <- max(sapply(tree_matrix, length)) # Find the max column count
 
-    # Convert to a data frame (ensures correct structure)
-    tree_df <- do.call(rbind, lapply(tree_matrix, function(row) {
-      length(row) <- max_cols  # Ensure uniform column length
-      return(row)
-    }))
+  # Convert to a data frame (ensures correct structure)
+  tree_df <- do.call(rbind, lapply(tree_matrix, function(row) {
+    length(row) <- max_cols # Ensure uniform column length
+    return(row)
+  }))
 
-    tree_df <- as.data.frame(tree_df, stringsAsFactors = FALSE)
-    colnames(tree_df) <- paste0("Y", seq_len(ncol(tree_df)))  # Assign column names
-    tree_df$Row <- seq_len(nrow(tree_df))  # Assign row numbers
+  tree_df <- as.data.frame(tree_df, stringsAsFactors = FALSE)
+  colnames(tree_df) <- paste0("Y", seq_len(ncol(tree_df))) # Assign column names
+  tree_df$Row <- seq_len(nrow(tree_df)) # Assign row numbers
+  return(tree_df)
+}
 
-    return(tree_df)
+#' infer relationship from tree template
+#'
+#' @param tree_long A data frame containing the tree structure in long format.
+#' @return A data frame containing the relationships between family members.
+#' @keywords internal
+#'
+parseRelationships <- function(tree_long) {
+  relationships <- data.frame(
+    id = unique(tree_long$Value),
+    momID = NA_character_,
+    dadID = NA_character_,
+    spouseID = NA_character_,
+    stringsAsFactors = FALSE
+  )
+
+  # Loop through rows to find connections
+  for (i in seq_len(nrow(tree_long))) {
+    row <- tree_long[i, ]
+
+    # **Parent-Child Detection**
+    if (row$Value == "y") {
+      parent <- tree_long$Value[tree_long$Row == row$Row - 1 & tree_long$Column == row$Column]
+      child <- tree_long$Value[tree_long$Row == row$Row + 1 & tree_long$Column == row$Column]
+
+      # Assign mom/dad IDs based on tree structure
+      if (!is.na(parent) && !is.na(child)) {
+        relationships$momID[relationships$id == child] <- parent
+        relationships$dadID[relationships$id == child] <- parent  # Assuming one parent detected for now
+      }
+    }
+
+    # **Spouse Detection**
+    if (row$Value == "+") {
+      spouse1 <- tree_long$Value[tree_long$Row == row$Row & tree_long$Column == row$Column - 1]
+      spouse2 <- tree_long$Value[tree_long$Row == row$Row & tree_long$Column == row$Column + 1]
+
+      if (!is.na(spouse1) && !is.na(spouse2)) {
+        relationships$spouseID[relationships$id == spouse1] <- spouse2
+        relationships$spouseID[relationships$id == spouse2] <- spouse1
+      }
+    }
   }
+
+  return(relationships)
+}
