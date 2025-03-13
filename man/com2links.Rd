@@ -2,7 +2,7 @@
 % Please edit documentation in R/makeLinks.R
 \name{com2links}
 \alias{com2links}
-\title{Take a component and turn it into kinship links}
+\title{Take a sparse component and turn it into kinship links}
 \usage{
 com2links(
   rel_pairs_file = "dataRelatedPairs.csv",
@@ -11,6 +11,7 @@ com2links(
   mt_ped_matrix = NULL,
   cn_ped_matrix = NULL,
   write_buffer_size = 1000,
+  update_rate = 1000,
   gc = TRUE,
   writetodisk = TRUE,
   verbose = FALSE,
@@ -30,6 +31,8 @@ com2links(
 
 \item{write_buffer_size}{Number of related pairs to write to disk at a time}
 
+\item{update_rate}{numeric. How often to print progress messages}
+
 \item{gc}{logical. If TRUE, do frequent garbage collection via \code{\link{gc}} to save memory}
 
 \item{writetodisk}{logical. If TRUE, write the related pairs to disk}
@@ -42,5 +45,5 @@ com2links(
 A data frame of related pairs
 }
 \description{
-Take a component and turn it into kinship links
+Take a sparse component and turn it into kinship links
 }

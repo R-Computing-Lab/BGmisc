@@ -413,7 +413,7 @@ createFamilyToParentsMapping <- function(df_temp,datasource) {
   }
   } else if (datasource == "wiki") {
 
-      warning("The data source is not supported")
+    message("The data source is not supported")
       return(df_temp)
     }
   return(family_to_parents)
@@ -450,7 +450,7 @@ if(datasource == "gedcom"){
   }
   return(df_temp)
 } else if(datasource=="wiki"){
-message("No parents information available for wiki data")
+  message("No parents information available for wiki data")
 return(df_temp)
   }
 }
