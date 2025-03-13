@@ -566,59 +566,25 @@ countPatternRows <- function(file) {
 readWikifamilytree <- function(text) {
 
   # Extract summary text
-  summary_match <- stringr::str_match(text, "\\{\\{familytree/start \\|summary=(.*?)\\}\\}")
-  summary_text <- ifelse(!is.na(summary_match[,2]), summary_match[,2], NA)
 
+  summary_text <- extractSummaryText(text)
   # Extract all lines defining the family tree
   tree_lines <- unlist(stringr::str_extract_all(text, "\\{\\{familytree.*?\\}\\}"))
   tree_lines <- tree_lines[!stringr::str_detect(tree_lines, "start|end")] # Remove start/end markers
   tree_lines <- gsub("\\{\\{familytree(.*?)\\}\\}", "\\1", tree_lines) # Remove wrapping markup
 
   # Convert tree structure into a coordinate grid (preserves symbols!)
-  tree_matrix <- base::strsplit(tree_lines, "\\|")  # Split each row into columns
-  max_cols <- max(sapply(tree_matrix, length))  # Find the max column count
 
-  # Convert to a data frame (ensures correct structure)
-  tree_df <- do.call(rbind, lapply(tree_matrix, function(row) {
-    length(row) <- max_cols  # Ensure uniform column length
-    return(row)
-  }))
-
-  tree_df <- as.data.frame(tree_df, stringsAsFactors = FALSE)
-  colnames(tree_df) <- paste0("Y", seq_len(ncol(tree_df)))  # Assign column names
-  tree_df$Row <- seq_len(nrow(tree_df))  # Assign row numbers
+  tree_df <- parseTree(tree_lines)
 
   # Identify columns that start with "Y"
   cols_to_pivot <- grep("^Y", names(tree_df), value = TRUE)
 
   # Reshape from wide to long format
-  tree_long <- stats::reshape(tree_df,
-                       varying = cols_to_pivot,
-                       v.names = "Value",
-                       timevar = "Column",
-                       times = cols_to_pivot,
-                       idvar = setdiff(names(tree_df), cols_to_pivot),
-                       direction = "long")
-
-  tree_long <- tree_long[!is.na(tree_long$Value), ]
-  tree_long$Value <- stringr::str_trim(tree_long$Value)
-  tree_long$Column <- as.numeric(gsub("^Y", "", tree_long$Column))
+  tree_long <- makeLongTree(tree_df, cols_to_pivot)
 
   # Extract member definitions
-  member_matches <- stringr::str_extract_all(text, "\\|\\s*([A-Za-z0-9]+)\\s*=\\s*([^|}]*)")[[1]]
-  member_matches <- gsub("\\[|\\]|'''", "", member_matches)  # Remove formatting
-
-  members_df <- data.frame(
-    identifier = stringr::str_trim(stringr::str_extract(member_matches, "^[^=]+")),
-    name = stringr::str_trim(stringr::str_extract(member_matches, "(?<=\\=).*")),
-    stringsAsFactors = FALSE
-  )
-
-  # Remove leading pipes (`|`) from identifiers for consistency
-  members_df$identifier <- gsub("^\\|\\s*", "", members_df$identifier)
-
-  # remove summary row
-  members_df <- members_df[members_df$identifier!="summary", ]
+  members_df <- matchMembers(text)
 
   # Merge names into the tree structure (keeping all symbols!)
   tree_long <- merge(tree_long, members_df, by.x = "Value", by.y = "identifier", all.x = TRUE)
@@ -632,3 +598,84 @@ readWikifamilytree <- function(text) {
     structure = tree_long
   )
 }
+
+#' Make Long Tree
+#' @inheritParams readWikifamilytree
+#' @param tree_df A data frame containing the tree structure.
+#' @param cols_to_pivot A character vector of column names to pivot.
+#' @return A long data frame containing the tree structure.
+#' @keywords internal
+makeLongTree <- function(tree_df, cols_to_pivot) {
+    tree_long <- stats::reshape(tree_df,
+                                varying = cols_to_pivot,
+                                v.names = "Value",
+                                timevar = "Column",
+                                times = cols_to_pivot,
+                                idvar = setdiff(names(tree_df), cols_to_pivot),
+                                direction = "long")
+
+    tree_long <- tree_long[!is.na(tree_long$Value), ]
+    tree_long$Value <- stringr::str_trim(tree_long$Value)
+    tree_long$Column <- as.numeric(gsub("^Y", "", tree_long$Column))
+    return(tree_long)
+  }
+
+#' Match Members
+#' @inheritParams readWikifamilytree
+#' @return A data frame containing information about the members of the family tree.
+#' @keywords internal
+
+matchMembers <- function(text) {
+    member_matches <- stringr::str_extract_all(text, "\\|\\s*([A-Za-z0-9]+)\\s*=\\s*([^|}]*)")[[1]]
+    member_matches <- gsub("\\[|\\]|'''", "", member_matches)  # Remove formatting
+
+    members_df <- data.frame(
+      identifier = stringr::str_trim(stringr::str_extract(member_matches, "^[^=]+")),
+      name = stringr::str_trim(stringr::str_extract(member_matches, "(?<=\\=).*")),
+      stringsAsFactors = FALSE
+    )
+
+    # Remove leading pipes (`|`) from identifiers for consistency
+    members_df$identifier <- gsub("^\\|\\s*", "", members_df$identifier)
+
+    # remove summary row
+    members_df <- members_df[members_df$identifier!="summary", ]
+
+    return(members_df)
+  }
+
+#' Extract Summary Text
+#' @inheritParams readWikifamilytree
+#' @return A character string containing the summary text.
+#' @keywords internal
+#' @export
+
+extractSummaryText <- function(text) {
+  summary_match <- stringr::str_match(text, "\\{\\{familytree/start \\|summary=(.*?)\\}\\}")
+  summary_text <- ifelse(!is.na(summary_match[, 2]), summary_match[, 2], NA)
+return(summary_text)
+}
+
+#' Parse Tree
+#' @inheritParams readWikifamilytree
+#' @param tree_lines A character vector containing the lines of the tree structure.
+#' @return A data frame containing the tree structure.
+#' @keywords internal
+#' @export
+
+  parseTree <- function(tree_lines) {
+    tree_matrix <- base::strsplit(tree_lines, "\\|")  # Split each row into columns
+    max_cols <- max(sapply(tree_matrix, length))  # Find the max column count
+
+    # Convert to a data frame (ensures correct structure)
+    tree_df <- do.call(rbind, lapply(tree_matrix, function(row) {
+      length(row) <- max_cols  # Ensure uniform column length
+      return(row)
+    }))
+
+    tree_df <- as.data.frame(tree_df, stringsAsFactors = FALSE)
+    colnames(tree_df) <- paste0("Y", seq_len(ncol(tree_df)))  # Assign column names
+    tree_df$Row <- seq_len(nrow(tree_df))  # Assign row numbers
+
+    return(tree_df)
+  }
