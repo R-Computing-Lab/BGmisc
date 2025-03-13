@@ -1,4 +1,4 @@
-#' Take a component and turn it into kinship links
+#' Take a sparse component and turn it into kinship links
 #' @param rel_pairs_file File to write related pairs to
 #' @param ad_ped_matrix Matrix of additive genetic relatedness coefficients
 #' @param mit_ped_matrix Matrix of mitochondrial relatedness coefficients
@@ -8,6 +8,7 @@
 #' @param gc logical. If TRUE, do frequent garbage collection via \code{\link{gc}} to save memory
 #' @param writetodisk logical. If TRUE, write the related pairs to disk
 #' @param verbose logical. If TRUE, print progress messages
+#' @param update_rate numeric. How often to print progress messages
 #' @param ... Additional arguments to be passed to \code{\link{com2links}}
 #' @return A data frame of related pairs
 #' @export
@@ -454,7 +455,7 @@ if(verbose){
         row.names = FALSE, col.names = FALSE, append = TRUE, sep = ","
       )
     }
-    return(NULL)
+  #  return(NULL)
   }
   # Merge and write the parentage matrices
   #  df <- full_join(mat_ped_matrix %>% arrange(ID), pat_ped_matrix %>% arrange(ID))

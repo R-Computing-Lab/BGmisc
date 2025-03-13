@@ -384,6 +384,7 @@ readGedcom <- function(file_path,
 #' @return A list mapping family IDs to parent IDs.
 #' @keywords internal
 createFamilyToParentsMapping <- function(df_temp,datasource) {
+  if (datasource == "gedcom") {
   if (!all(c("FAMS", "sex") %in% colnames(df_temp))) {
     warning("The data frame does not contain the necessary columns (FAMS, sex)")
     return(NULL)
@@ -410,6 +411,11 @@ createFamilyToParentsMapping <- function(df_temp,datasource) {
       }
     }
   }
+  } else if (datasource == "wiki") {
+
+      warning("The data source is not supported")
+      return(df_temp)
+    }
   return(family_to_parents)
 }
 
@@ -458,7 +464,7 @@ return(df_temp)
 #' @keywords internal
 processParents <- function(df_temp,datasource) {
   # Ensure required columns are present
-  if(datasource=="gedcom"){
+if(datasource=="gedcom"){
   required_cols <- c("FAMC", "sex", "FAMS")
 } else if(datasource=="wiki"){
   required_cols <- c("id")
@@ -595,6 +601,7 @@ readWikifamilytree <- function(text) {
 
   # Extract member definitions
   members_df <- matchMembers(text)
+  members_df$id <- paste0("P", seq_len(nrow(members_df)))  # Assign unique person IDs
 
   # Merge names into the tree structure (keeping all symbols!)
   tree_long <- merge(tree_long, members_df, by.x = "Value", by.y = "identifier", all.x = TRUE)
@@ -604,7 +611,7 @@ readWikifamilytree <- function(text) {
   # parse relationships and infer them
 
   relationships_df <- processParents(tree_long, datasource = "wiki")
-  (tree_long)
+
 
 
   # Return structured table of the family tree (symbols included)

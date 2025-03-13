@@ -137,7 +137,7 @@ test_that("processParents adds momID and dadID correctly", {
   )
 
   # Call processParents
-  df_temp <- processParents(df_temp)
+  df_temp <- processParents(df_temp,datasource="gedcom")
 
   # Check the structure of the data frame
   expect_true("momID" %in% colnames(df_temp))
@@ -161,7 +161,7 @@ test_that("processParents adds momID and dadID correctly", {
   )
 
   # Call processParents
-  df_temp <- processParents(df_temp)
+  df_temp <- processParents(df_temp,datasource="gedcom")
 
   # Check the contents of the data frame
   expect_equal(df_temp$momID[3], "I2")
@@ -175,4 +175,31 @@ test_that("processParents adds momID and dadID correctly", {
 test_that("if file does not exist, readGedcom throws an error", {
   # Call readGedcom with a non-existent file
   expect_error(readGedcom("nonexistent.ged"))
+})
+
+
+
+# readWikifamilytree
+
+test_that("readWikifamilytree reads a simple file correctly", {
+  # Create a temporary WikiFamilyTree file for testing
+  # Example usage
+  family_tree_text <- "{{familytree/start |summary=I have a brother Joe and a little sister: my mom married my dad, and my dad's parents were Grandma and Grandpa; they had another child, Aunt Daisy.}}
+{{familytree | | | | GMa |~|y|~| GPa | | GMa=Gladys|GPa=Sydney}}
+{{familytree | | | | | | | |)|-|-|-|.| }}
+{{familytree | | | MOM |y| DAD | |DAISY| MOM=Mom|DAD=Dad|DAISY=[[Daisy Duke]]}}
+{{familytree | |,|-|-|-|+|-|-|-|.| | | }}
+{{familytree | JOE | | ME  | | SIS | | | JOE=My brother Joe|ME='''Me!'''|SIS=My little sister}}
+{{familytree/end}}"
+
+result <-  readWikifamilytree(family_tree_text)
+
+#list(
+#  summary = summary_text,
+#  members = members_df,
+#  structure = tree_long,
+#  relationships = relationships_df
+#)
+expect_equal(result$summary,
+             "I have a brother Joe and a little sister: my mom married my dad, and my dad's parents were Grandma and Grandpa; they had another child, Aunt Daisy.")
 })
