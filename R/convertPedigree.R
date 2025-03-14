@@ -31,6 +31,7 @@ ped2com <- function(ped, component,
                     standardize.colnames = TRUE,
                     transpose_method = "tcrossprod",
                     adjacency_method = "indexed",
+                    isChild_method = "classic",
                     saveable = FALSE,
                     resume = FALSE,
                     save_rate = 5,
@@ -222,14 +223,22 @@ ped2com <- function(ped, component,
     isChild <- readRDS(checkpoint_files$isChild)
   } else {
     # isChild is the 'S' matrix from RAM
+
+    if(isChild_method == "partialparent"){
     isChild <- apply(ped[, c("momID", "dadID")], 1, function(x) {
       .5 + .25*sum(is.na(x)) # 2 parents -> .5, 1 parent -> .75, 0 parents -> 1
     })
+    }else{
+      isChild <- apply(ped[, c("momID", "dadID")], 1, function(x) {
+        2^(-!all(is.na(x)))
+      })
+
+    }
     if (saveable) {
       saveRDS(isChild, file = checkpoint_files$isChild)
     }
-  }
 
+}
   # --- Step 2: Compute Relatedness Matrix ---
   if (resume && file.exists(checkpoint_files$r_checkpoint) && file.exists(checkpoint_files$gen_checkpoint) && file.exists(checkpoint_files$mtSum_checkpoint) && file.exists(checkpoint_files$newIsPar_checkpoint) &&
     file.exists(checkpoint_files$count_checkpoint)
@@ -659,9 +668,10 @@ compute_parent_adjacency <- function(ped, component,
                                           update_rate = update_rate,
                                           parList = parList,
                                           lens=lens,
-                                          save_rate_parlist=save_rate_parlist,
+                                          save_rate_parlist =save_rate_parlist,
                                           ...)
         }
+
     } else if (adjacency_method == "indexed") { # Garrison version
         if (lastComputed < nr) {
             list_of_adjacency <- .adjIndexed(ped=ped,
@@ -702,7 +712,7 @@ compute_parent_adjacency <- function(ped, component,
     if (saveable) {
         saveRDS(parList, file = checkpoint_files$parList)
         saveRDS(lens, file = checkpoint_files$lens)
-        if (verbose) cat("Final checkpoint saved for adjacency matrix.\n")
+        if (verbose) {cat("Final checkpoint saved for adjacency matrix.\n")}
     }
     return(list_of_adjacency)
 }
