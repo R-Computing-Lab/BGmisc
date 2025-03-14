@@ -26,8 +26,9 @@ com2links <- function(
     gc = TRUE,
     writetodisk = TRUE,
     verbose = FALSE,
+  legacy = FALSE,
     ...) {
-
+if(!legacy){
   # match arguments
 #  a <- match.call()
 # alternative names
@@ -457,8 +458,11 @@ if(verbose){
     }
   #  return(NULL)
   }
+} else if (legacy) {
+
   # Merge and write the parentage matrices
   #  df <- full_join(mat_ped_matrix %>% arrange(ID), pat_ped_matrix %>% arrange(ID))
 
   #  write.table(df, file = mapa_id_file, sep = ",", append = FALSE, row.names = FALSE)
+}
 }
