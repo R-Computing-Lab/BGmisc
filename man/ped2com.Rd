@@ -15,6 +15,7 @@ ped2com(
   standardize.colnames = TRUE,
   transpose_method = "tcrossprod",
   adjacency_method = "indexed",
+  isChild_method = "classic",
   saveable = FALSE,
   resume = FALSE,
   save_rate = 5,

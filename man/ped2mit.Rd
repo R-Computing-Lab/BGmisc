@@ -18,7 +18,7 @@ ped2mit(
   saveable = FALSE,
   resume = FALSE,
   save_rate = 5,
-  save_rate_gen = save_rate_gen,
+  save_rate_gen = save_rate,
   save_rate_parlist = 1000 * save_rate,
   save_path = "checkpoint/",
   ...
