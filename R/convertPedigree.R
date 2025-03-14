@@ -387,7 +387,7 @@ ped2mit <- ped2mt <- function(ped, max.gen = 25,
                               saveable = FALSE,
                               resume = FALSE,
                               save_rate = 5,
-                              save_rate_gen = save_rate_gen,
+                              save_rate_gen = save_rate,
                               save_rate_parlist = 1000 * save_rate,
                               save_path = "checkpoint/",
                               ...) {
@@ -624,7 +624,8 @@ ped2ce <- function(ped,
     } else {
         stop("Unknown relatedness component requested")
     }
-    list_of_adjacency <- list(iss=iss, jss=jss)
+    list_of_adjacency <- list(iss=iss,
+                              jss=jss)
     return(list_of_adjacency)
 }
 
@@ -646,26 +647,53 @@ compute_parent_adjacency <- function(ped, component,
                                      ...) {
     if (adjacency_method == "loop") {
         if (lastComputed < nr) { # Original version
-            list_of_adjacency <- .adjLoop(ped, component, saveable, resume,
-                                          save_path, verbose, lastComputed,
-                                          nr, checkpoint_files, update_rate,
-                                          parList, lens, save_rate_parlist,
+            list_of_adjacency <- .adjLoop(ped=ped,
+                                          component=component,
+                                          saveable=saveable,
+                                          resume = resume,
+                                          save_path = save_path,
+                                          verbose = verbose,
+                                          lastComputed = lastComputed,
+                                          nr = nr,
+                                          checkpoint_files = checkpoint_files,
+                                          update_rate = update_rate,
+                                          parList = parList,
+                                          lens=lens,
+                                          save_rate_parlist=save_rate_parlist,
                                           ...)
         }
     } else if (adjacency_method == "indexed") { # Garrison version
         if (lastComputed < nr) {
-            list_of_adjacency <- .adjIndexed(ped, component, saveable, resume,
-                                          save_path, verbose, lastComputed,
-                                          nr, checkpoint_files, update_rate,
-                                          parList, lens, save_rate_parlist,
+            list_of_adjacency <- .adjIndexed(ped=ped,
+                                             component=component,
+                                             saveable=saveable,
+                                             resume = resume,
+                                          save_path = save_path,
+                                          verbose = verbose,
+                                          lastComputed = lastComputed,
+                                          nr = nr,
+                                          checkpoint_files = checkpoint_files,
+                                          update_rate = update_rate,
+                                          parList = parList,
+                                          lens=lens,
+                                          save_rate_parlist=save_rate_parlist,
                                           ...)
         }
     } else if (adjacency_method == "direct"){ # Hunter version
         if (lastComputed < nr){
-            list_of_adjacency <- .adjDirect(ped, component, saveable, resume,
-                                          save_path, verbose, lastComputed,
-                                          nr, checkpoint_files, update_rate,
-                                          parList, lens, save_rate_parlist,
+            list_of_adjacency <- .adjDirect(ped=ped,
+                                            component=component,
+                                            saveable=saveable,
+                                            resume = resume,
+                                            save_path = save_path,
+                                            verbose = verbose,
+                                            lastComputed = lastComputed,
+                                            nr = nr,
+                                            checkpoint_files = checkpoint_files,
+                                            update_rate = update_rate,
+                                            parList = parList,
+                                            lens=lens,
+                                            save_rate_parlist=save_rate_parlist,
                                           ...)
         }
     } else {
