@@ -31,6 +31,7 @@ ped2com <- function(ped, component,
                     standardize.colnames = TRUE,
                     transpose_method = "tcrossprod",
                     adjacency_method = "indexed",
+                    isChild_method = "classic",
                     saveable = FALSE,
                     resume = FALSE,
                     save_rate = 5,
@@ -222,14 +223,22 @@ ped2com <- function(ped, component,
     isChild <- readRDS(checkpoint_files$isChild)
   } else {
     # isChild is the 'S' matrix from RAM
+
+    if(isChild_method == "partialparent"){
     isChild <- apply(ped[, c("momID", "dadID")], 1, function(x) {
       .5 + .25*sum(is.na(x)) # 2 parents -> .5, 1 parent -> .75, 0 parents -> 1
     })
+    }else{
+      isChild <- apply(ped[, c("momID", "dadID")], 1, function(x) {
+        2^(-!all(is.na(x)))
+      })
+
+    }
     if (saveable) {
       saveRDS(isChild, file = checkpoint_files$isChild)
     }
-  }
 
+}
   # --- Step 2: Compute Relatedness Matrix ---
   if (resume && file.exists(checkpoint_files$r_checkpoint) && file.exists(checkpoint_files$gen_checkpoint) && file.exists(checkpoint_files$mtSum_checkpoint) && file.exists(checkpoint_files$newIsPar_checkpoint) &&
     file.exists(checkpoint_files$count_checkpoint)
@@ -387,7 +396,7 @@ ped2mit <- ped2mt <- function(ped, max.gen = 25,
                               saveable = FALSE,
                               resume = FALSE,
                               save_rate = 5,
-                              save_rate_gen = save_rate_gen,
+                              save_rate_gen = save_rate,
                               save_rate_parlist = 1000 * save_rate,
                               save_path = "checkpoint/",
                               ...) {
@@ -624,7 +633,8 @@ ped2ce <- function(ped,
     } else {
         stop("Unknown relatedness component requested")
     }
-    list_of_adjacency <- list(iss=iss, jss=jss)
+    list_of_adjacency <- list(iss=iss,
+                              jss=jss)
     return(list_of_adjacency)
 }
 
@@ -646,26 +656,54 @@ compute_parent_adjacency <- function(ped, component,
                                      ...) {
     if (adjacency_method == "loop") {
         if (lastComputed < nr) { # Original version
-            list_of_adjacency <- .adjLoop(ped, component, saveable, resume,
-                                          save_path, verbose, lastComputed,
-                                          nr, checkpoint_files, update_rate,
-                                          parList, lens, save_rate_parlist,
+            list_of_adjacency <- .adjLoop(ped=ped,
+                                          component=component,
+                                          saveable=saveable,
+                                          resume = resume,
+                                          save_path = save_path,
+                                          verbose = verbose,
+                                          lastComputed = lastComputed,
+                                          nr = nr,
+                                          checkpoint_files = checkpoint_files,
+                                          update_rate = update_rate,
+                                          parList = parList,
+                                          lens=lens,
+                                          save_rate_parlist =save_rate_parlist,
                                           ...)
         }
+
     } else if (adjacency_method == "indexed") { # Garrison version
         if (lastComputed < nr) {
-            list_of_adjacency <- .adjIndexed(ped, component, saveable, resume,
-                                          save_path, verbose, lastComputed,
-                                          nr, checkpoint_files, update_rate,
-                                          parList, lens, save_rate_parlist,
+            list_of_adjacency <- .adjIndexed(ped=ped,
+                                             component=component,
+                                             saveable=saveable,
+                                             resume = resume,
+                                          save_path = save_path,
+                                          verbose = verbose,
+                                          lastComputed = lastComputed,
+                                          nr = nr,
+                                          checkpoint_files = checkpoint_files,
+                                          update_rate = update_rate,
+                                          parList = parList,
+                                          lens=lens,
+                                          save_rate_parlist=save_rate_parlist,
                                           ...)
         }
     } else if (adjacency_method == "direct"){ # Hunter version
         if (lastComputed < nr){
-            list_of_adjacency <- .adjDirect(ped, component, saveable, resume,
-                                          save_path, verbose, lastComputed,
-                                          nr, checkpoint_files, update_rate,
-                                          parList, lens, save_rate_parlist,
+            list_of_adjacency <- .adjDirect(ped=ped,
+                                            component=component,
+                                            saveable=saveable,
+                                            resume = resume,
+                                            save_path = save_path,
+                                            verbose = verbose,
+                                            lastComputed = lastComputed,
+                                            nr = nr,
+                                            checkpoint_files = checkpoint_files,
+                                            update_rate = update_rate,
+                                            parList = parList,
+                                            lens=lens,
+                                            save_rate_parlist=save_rate_parlist,
                                           ...)
         }
     } else {
@@ -674,7 +712,7 @@ compute_parent_adjacency <- function(ped, component,
     if (saveable) {
         saveRDS(parList, file = checkpoint_files$parList)
         saveRDS(lens, file = checkpoint_files$lens)
-        if (verbose) cat("Final checkpoint saved for adjacency matrix.\n")
+        if (verbose) {cat("Final checkpoint saved for adjacency matrix.\n")}
     }
     return(list_of_adjacency)
 }
