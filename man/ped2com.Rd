@@ -49,6 +49,8 @@ ped2com(
 
 \item{adjacency_method}{character. The method to use for computing the adjacency matrix.  Options are "loop" or "indexed"}
 
+\item{isChild_method}{character. The method to use for computing the isChild matrix.  Options are "classic" or "partialparent"}
+
 \item{saveable}{logical. If TRUE, save the intermediate results to disk}
 
 \item{resume}{logical. If TRUE, resume from a checkpoint}

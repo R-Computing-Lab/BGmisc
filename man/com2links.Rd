@@ -15,6 +15,7 @@ com2links(
   gc = TRUE,
   writetodisk = TRUE,
   verbose = FALSE,
+  legacy = FALSE,
   ...
 )
 }

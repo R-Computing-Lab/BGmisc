@@ -459,10 +459,82 @@ if(verbose){
   #  return(NULL)
   }
 } else if (legacy) {
+  if (verbose) {
+    message("Using legacy mode")
+  }
+
+
+#  load(paste0(outcome_name,'_dataBiggestCnPedigree.Rdata'))
+#  biggestCnPed <- as(biggestCnPed, "symmetricMatrix")
+  #load(paste0(outcome_name,'_dataBiggestPedigree.Rdata'))
+#  load(paste0(outcome_name,'_dataBiggestMtPedigree.Rdata'))
+
+ # rel_pairs_file <- paste0(outcome_name,'_datacnmitBiggestRelatedPairsTake3.csv')
+
+  biggestMtPed  <-  mit_ped_matrix
+  remove(mit_ped_matrix)
+  biggestCnPed  <- as(cn_ped_matrix , "symmetricMatrix")
+  remove(cn_ped_matrix)
+  biggestPed <- ad_ped_matrix
+  remove(ad_ped_matrix)
+  biggestMtPed@x[biggestMtPed@x > 0] <- 1
+
+if(exists("rel_pairs_file")){
+  fname <- rel_pairs_file}else{
+  fname <- paste0(outcome_name,'_dataBiggestRelatedPairsTake2.csv')
+  }
+  ds <- data.frame(ID1=numeric(0), ID2=numeric(0), addRel=numeric(0), mitRel=numeric(0), cnuRel=numeric(0))
+  write.table(ds, file=fname, sep=',', append=FALSE, row.names=FALSE)
+  ids <- as.numeric(dimnames(biggestCnPed)[[1]])
+  newColPos1 <- biggestPed@p + 1L
+  iss1 <- biggestPed@i + 1L
+  newColPos2 <- biggestMtPed@p + 1L
+  iss2 <- biggestMtPed@i + 1L
+  newColPos3 <- biggestCnPed@p + 1L
+  iss3 <- biggestCnPed@i + 1L
+  nc <- ncol(biggestPed)
+  for(j in 1L:nc){
+    ID2 <- ids[j]
+    ncp1 <- newColPos1[j]
+    ncp1p <- newColPos1[j+1L]
+    cond1 <- ncp1 < ncp1p
+    if(cond1){
+      vv1 <- ncp1:(ncp1p-1L)
+      iss1vv <- iss1[vv1]
+    }
+    ncp2 <- newColPos2[j]
+    ncp2p <- newColPos2[j+1L]
+    cond2 <- ncp2 < ncp2p
+    if(cond2){
+      vv2 <- ncp2:(ncp2p-1L)
+      iss2vv <- iss2[vv2]
+    }
+    ncp3 <- newColPos3[j]
+    ncp3p <- newColPos3[j+1L]
+    cond3 <- ncp3 < ncp3p
+    if(cond3){
+      vv3 <- ncp3:(ncp3p-1L)
+      iss3vv <- iss3[vv3]
+    }
+    u <- sort(igraph::union(igraph::union(if(cond1){iss1vv}, if(cond2){iss2vv}), if(cond3){iss3vv}))
+    #browser()
+    if(cond1 || cond2 || cond3){
+      ID1 <- ids[u]
+      tds <- data.frame(ID1=ID1, ID2=ID2, addRel=0, mitRel=0, cnuRel=0)
+      if(cond1){ tds$addRel[u %in% iss1vv] <- biggestPed@x[vv1] }
+      if(cond2){ tds$mitRel[u %in% iss2vv] <- biggestMtPed@x[vv2] }
+      if(cond3){ tds$cnuRel[u %in% iss3vv] <- biggestCnPed@x[vv3] }
+      write.table(tds, file=fname, row.names=FALSE, col.names=FALSE, append=TRUE, sep=',')
+    }
+    if( !(j %% 500) ) { cat(paste0('Done with ', j, ' of ', nc, '\n')) }
+  }
+}
+
+
 
   # Merge and write the parentage matrices
   #  df <- full_join(mat_ped_matrix %>% arrange(ID), pat_ped_matrix %>% arrange(ID))
 
   #  write.table(df, file = mapa_id_file, sep = ",", append = FALSE, row.names = FALSE)
 }
-}
+
