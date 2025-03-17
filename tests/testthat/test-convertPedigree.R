@@ -419,7 +419,7 @@ test_that("isChild_method product the same results for add matrix with inbreedin
   ped_add_partial_nona <- ped2com(df, isChild_method= "partialparent",
                              component = "additive",
                              adjacency_method = "direct")
-#  df$momID[df$ID == 6] <- NA
+  df$momID[df$ID == 6] <- NA
   tolerance <- 1e-10
   # add
   ped_add_partial <- ped2com(df, isChild_method= "partialparent",

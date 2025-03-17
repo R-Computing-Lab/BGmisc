@@ -1,0 +1,77 @@
+---
+title: "Partial"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Validation}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+options(rmarkdown.html_vignette.check_title = FALSE)
+library(tidyverse)
+```
+
+# Introduction
+
+
+```{r}
+library(BGmisc)
+
+data(hazard)
+
+df <- hazard
+
+
+ped_add_partial_nona <- ped2com(df, isChild_method= "partialparent",
+                                  component = "additive",
+                                  adjacency_method = "direct")
+ped_add_classic_nona <- ped2com(df, isChild_method= "classic",
+                                  component = "additive", adjacency_method = "direct")
+```
+
+
+First, we will compare the results of the two methods for the additive component. We will use the direct adjacency method. The first method is the classic method, which is the default method in the function. The second method is the partial parent method. These should behave the same when there are no missing values. However, when there are missing values, the partial parent method should be more accurate. For this example, we will remove the mother of individual 4.
+
+```{r}
+
+  df$momID[df$ID == 4] <- NA
+  tolerance <- 1e-10
+  # add
+  ped_add_partial <- ped2com(df, isChild_method= "partialparent",
+                             component = "additive",
+                             adjacency_method = "direct")
+  ped_add_classic <- ped2com(df, isChild_method= "classic",
+                             component = "additive", adjacency_method = "direct")
+
+
+  difference <- ped_add_partial - ped_add_classic
+  difference_nona <- ped_add_partial_nona - ped_add_classic_nona
+
+```
+
+
+As we can see, the difference between the two methods is very small, when we remove the mother of individual 4. This is because the mother of individual 4 is not used in the calculation of the additive component. The difference between the two methods is `r mean(difference)` and `r mean(difference_nona)` when we remove the mother of individual 4.
+
+
+```{r}
+image(ped_add_partial)
+
+```
+
+```{r}
+image(ped_add_partial_nona)
+```
+
+```{r}
+ image(ped_add_classic)
+```
+
+```{r}
+image(ped_add_classic_nona)
+
+```
