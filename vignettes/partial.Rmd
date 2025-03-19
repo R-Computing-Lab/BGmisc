@@ -18,6 +18,7 @@ library(tidyverse)
 
 # Introduction
 
+The `ped2com` function can be used to calculate the components of the genetic relationship matrix. The function has two methods to handle the parent adjacency matrix. The first method is the classic method, which is the default method in the function. The second method is the partial parent method. The partial parent method is more accurate when there are missing values in the parent adjacency matrix. This vignette will show the difference between the two methods when there are missing values in the parent adjacency matrix.
 
 ```{r}
 library(BGmisc)
@@ -32,37 +33,79 @@ ped_add_partial_nona <- ped2com(df, isChild_method= "partialparent",
                                   adjacency_method = "direct")
 ped_add_classic_nona <- ped2com(df, isChild_method= "classic",
                                   component = "additive", adjacency_method = "direct")
+
+write.csv(ped_add_partial_nona, "ped_add_partial_nona.csv")
+write.csv(ped_add_classic_nona, "ped_add_classic_nona.csv")
 ```
 
 
-First, we will compare the results of the two methods for the additive component. We will use the direct adjacency method. The first method is the classic method, which is the default method in the function. The second method is the partial parent method. These should behave the same when there are no missing values. However, when there are missing values, the partial parent method should be more accurate. For this example, we will remove the mother of individual 4.
+```{r}
+
+library(ggcorrplot)
+library(corrplot)
+
+if(FALSE){
+ggcorrplot(ped_add_partial_nona, hc.order = TRUE, 
+           lab = TRUE, lab_size = 3, method = "square", outline.col = "white", digits = 3,
+           title = "Additive component - Partial parent method")
+  
+}
+
+corrplot(as.matrix(ped_add_classic_nona),
+         method = 'color', type = 'lower', col.lim = c(0,1),
+         is.corr = FALSE)
+
+corrplot(as.matrix(ped_add_partial_nona),
+         method = 'color', type = 'lower', col.lim = c(0,1),
+         is.corr = FALSE)
+
+```
+First, we will compare the results of the two methods for the additive component. We will use the direct adjacency method. The first method is the classic method, which is the default method in the function. The second method is the partial parent method. These should behave the same when there are no missing values. However, when there are missing values, the partial parent method should be more accurate. For this example, we will remove the mother of individual 4. We will then compare the results of the two methods.
 
 ```{r}
 
   df$momID[df$ID == 4] <- NA
-  tolerance <- 1e-10
   # add
   ped_add_partial <- ped2com(df, isChild_method= "partialparent",
                              component = "additive",
                              adjacency_method = "direct")
+  
   ped_add_classic <- ped2com(df, isChild_method= "classic",
                              component = "additive", adjacency_method = "direct")
 
-
   difference <- ped_add_partial - ped_add_classic
   difference_nona <- ped_add_partial_nona - ped_add_classic_nona
-
+  
+  difference_best <- ped_add_partial- ped_add_classic_nona
+  write.csv(ped_add_partial, "ped_add_partial.csv")
+  write.csv(ped_add_classic, "ped_add_classic.csv")
 ```
 
 
-As we can see, the difference between the two methods is very small, when we remove the mother of individual 4. This is because the mother of individual 4 is not used in the calculation of the additive component. The difference between the two methods is `r mean(difference)` and `r mean(difference_nona)` when we remove the mother of individual 4.
+As we can see, the difference between the two methods is very small, when we remove the mother of individual 4. This is because the mother of individual 4 is not used in the calculation of the additive component. 
+
+
+The difference between the two methods is `r mean(difference)` and `r mean(difference_nona)` when we remove the mother of individual 4. If the correction is applied to the additive component, the difference between the matrix using the partial parent correction compared to the method without any missing data  is `r mean(difference_best)`.
 
 
 ```{r}
-image(ped_add_partial)
+corrplot(as.matrix(ped_add_classic),
+         method = 'color', type = 'lower', col.lim = c(0,1),
+         is.corr = FALSE)
+```
+When we plot the difference between the two methods, we can see that there are differences between the matrices. 
 
+```{r}
+corrplot(as.matrix(ped_add_partial),
+         method = 'color', type = 'lower', col.lim = c(0,1),
+         is.corr = FALSE)
 ```
 
+```{r}
+corrplot(as.matrix(ped_add_classic_nona-ped_add_partial),
+         method = 'color', type = 'lower', 
+         is.corr = FALSE)
+```
 ```{r}
 image(ped_add_partial_nona)
 ```
