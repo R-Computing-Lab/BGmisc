@@ -124,14 +124,20 @@ true_diff_thin <- as.data.frame(ped_add_classic_nona-ped_add_partial) %>% mutate
 corrplot(as.matrix(ped_add_classic_nona-ped_add_classic),
          method = 'color', type = 'lower', col.lim = c(0,1),
          is.corr = FALSE)
+
+sqrt(mean((ped_add_classic_nona-ped_add_classic)^2))
    
 corrplot(as.matrix(ped_add_partial-ped_add_classic),
          method = 'color', type = 'lower', col.lim = c(0,1),
-         is.corr = FALSE)                                                                              
+         is.corr = FALSE)                                                                      sqrt(mean((ped_add_partial-ped_add_classic)^2))
+       
 
 corrplot(as.matrix(ped_add_classic_nona-ped_add_partial),
          method = 'color', type = 'lower', col.lim = c(0,1),
          is.corr = FALSE)
+
+sqrt(mean((ped_add_classic_nona-ped_add_partial)^2))
+
 ```
 ```{r}
 image(ped_add_partial_nona)
