@@ -102,8 +102,35 @@ corrplot(as.matrix(ped_add_partial),
 ```
 
 ```{r}
+
+true_diff <- as.matrix(ped_add_classic_nona-ped_add_partial)
+
+# filter rows that aren't impacted a.k.a. rows that are all 0 or columns that are all 0
+
+true_diff_thin <- as.data.frame(ped_add_classic_nona-ped_add_partial) %>% mutate(row = row_number()) %>% 
+  filter(row %in% which(rowSums(ped_add_classic_nona-ped_add_partial)!=0))
+
+#true_diff_thin %>% as.data.frame()%>%
+  # columns that sum to 0 so that we can remove them 
+#  mutate(col = colSums(true_diff_thin)==1)
+#
+#%>%
+#  filter(col != 0) %>% select(-col, -row) %>% as.matrix()
+
+# key comparison isn't versus truth. it's versus the alterative solution
+
+# think about this more mason. these comparisons are important
+
+corrplot(as.matrix(ped_add_classic_nona-ped_add_classic),
+         method = 'color', type = 'lower', col.lim = c(0,1),
+         is.corr = FALSE)
+   
+corrplot(as.matrix(ped_add_partial-ped_add_classic),
+         method = 'color', type = 'lower', col.lim = c(0,1),
+         is.corr = FALSE)                                                                              
+
 corrplot(as.matrix(ped_add_classic_nona-ped_add_partial),
-         method = 'color', type = 'lower', 
+         method = 'color', type = 'lower', col.lim = c(0,1),
          is.corr = FALSE)
 ```
 ```{r}
