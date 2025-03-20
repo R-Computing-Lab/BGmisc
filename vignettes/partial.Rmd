@@ -25,7 +25,11 @@ library(BGmisc)
 
 data(hazard)
 
-df <- hazard
+df <- hazard # this is the data that we will use for the example
+
+# LOOK AT THAT UNUNUAL DYADS
+
+## SISTER WIVES 
 
 
 ped_add_partial_nona <- ped2com(df, isChild_method= "partialparent",
@@ -38,6 +42,8 @@ write.csv(ped_add_partial_nona, "ped_add_partial_nona.csv")
 write.csv(ped_add_classic_nona, "ped_add_classic_nona.csv")
 ```
 
+
+These first two additive matrices show what happens in both methods when you have intact family trees. The two matrices should be the same.
 
 ```{r}
 
@@ -53,14 +59,31 @@ ggcorrplot(ped_add_partial_nona, hc.order = TRUE,
 
 corrplot(as.matrix(ped_add_classic_nona),
          method = 'color', type = 'lower', col.lim = c(0,1),
-         is.corr = FALSE)
+         is.corr = FALSE, title = "Additive component - Classic method")
 
 corrplot(as.matrix(ped_add_partial_nona),
          method = 'color', type = 'lower', col.lim = c(0,1),
-         is.corr = FALSE)
+         is.corr = FALSE, title = "Additive component - Partial parent method")
 
 ```
-First, we will compare the results of the two methods for the additive component. We will use the direct adjacency method. The first method is the classic method, which is the default method in the function. The second method is the partial parent method. These should behave the same when there are no missing values. However, when there are missing values, the partial parent method should be more accurate. For this example, we will remove the mother of individual 4. We will then compare the results of the two methods.
+First, we will compare the results of the two methods for the additive component. We will use the direct adjacency method. The first method is the classic method, which is the default method in the function. The second method is the partial parent method. These should behave the same when there are no missing values. 
+
+
+Indeed when we subtract one matrix from the other , we can see that they are the same. And we note that the RMSE is `r sqrt(mean((ped_add_classic_nona-ped_add_partial_nona)^2))`.
+
+```{r}
+
+corrplot(as.matrix(ped_add_classic_nona-ped_add_partial_nona),
+         method = 'color', type = 'lower', col.lim = c(0,1),
+         is.corr = FALSE)
+
+
+```
+
+
+However, when there are missing values, the partial parent method should be more accurate. For this example, we will remove the mother of individual 4. We will then compare the results of the two methods. The key comparisons are how each method performs relative to the "true" additive component. The true additive component is the additive component calculated without any missing data. And how they compare to each other.
+
+
 
 ```{r}
 
@@ -73,33 +96,33 @@ First, we will compare the results of the two methods for the additive component
   ped_add_classic <- ped2com(df, isChild_method= "classic",
                              component = "additive", adjacency_method = "direct")
 
-  difference <- ped_add_partial - ped_add_classic
-  difference_nona <- ped_add_partial_nona - ped_add_classic_nona
-  
-  difference_best <- ped_add_partial- ped_add_classic_nona
-  write.csv(ped_add_partial, "ped_add_partial.csv")
-  write.csv(ped_add_classic, "ped_add_classic.csv")
 ```
 
 
-As we can see, the difference between the two methods is very small, when we remove the mother of individual 4. This is because the mother of individual 4 is not used in the calculation of the additive component. 
+As we can see, the two matrices are different. The RMSE between the two matrices is `r sqrt(mean((ped_add_classic-ped_add_partial)^2))`.
 
-
-The difference between the two methods is `r mean(difference)` and `r mean(difference_nona)` when we remove the mother of individual 4. If the correction is applied to the additive component, the difference between the matrix using the partial parent correction compared to the method without any missing data  is `r mean(difference_best)`.
-
+This plot shows the relatedness matrix when we use the classic method.
 
 ```{r}
 corrplot(as.matrix(ped_add_classic),
          method = 'color', type = 'lower', col.lim = c(0,1),
          is.corr = FALSE)
 ```
-When we plot the difference between the two methods, we can see that there are differences between the matrices. 
+
+
+This plot shows the relatedness matrix when we use the partial parent method.
+
 
 ```{r}
 corrplot(as.matrix(ped_add_partial),
          method = 'color', type = 'lower', col.lim = c(0,1),
          is.corr = FALSE)
 ```
+
+
+
+
+When we compare these methods to the true additive component, we can see that the partial parent method is more accurate. The RMSE between the true additive component and the classic method is `r sqrt(mean((ped_add_classic_nona-ped_add_classic)^2))`. The RMSE between the true additive component and the partial parent method is `r sqrt(mean((ped_add_classic_nona-ped_add_partial)^2))`. And the RMSE between the classic method and the partial parent method is `r sqrt(mean((ped_add_classic-ped_add_partial)^2))`.
 
 ```{r}
 
@@ -120,18 +143,26 @@ true_diff_thin <- as.data.frame(ped_add_classic_nona-ped_add_partial) %>% mutate
 # key comparison isn't versus truth. it's versus the alterative solution
 
 # think about this more mason. these comparisons are important
+```
 
+
+
+The classic adjustment compared to the true additive component is shown below. 
+
+```{r}
 corrplot(as.matrix(ped_add_classic_nona-ped_add_classic),
          method = 'color', type = 'lower', col.lim = c(0,1),
          is.corr = FALSE)
 
 sqrt(mean((ped_add_classic_nona-ped_add_classic)^2))
-   
-corrplot(as.matrix(ped_add_partial-ped_add_classic),
-         method = 'color', type = 'lower', col.lim = c(0,1),
-         is.corr = FALSE)                                                                      sqrt(mean((ped_add_partial-ped_add_classic)^2))
-       
 
+```
+
+
+The partial parent adjustment compared to the true additive component is shown below.
+
+
+```{r}
 corrplot(as.matrix(ped_add_classic_nona-ped_add_partial),
          method = 'color', type = 'lower', col.lim = c(0,1),
          is.corr = FALSE)
@@ -139,15 +170,18 @@ corrplot(as.matrix(ped_add_classic_nona-ped_add_partial),
 sqrt(mean((ped_add_classic_nona-ped_add_partial)^2))
 
 ```
-```{r}
-image(ped_add_partial_nona)
-```
+
+
+
+The classic adjustment compared to the partial parent adjustment is shown below.
 
 ```{r}
- image(ped_add_classic)
+corrplot(as.matrix(ped_add_partial-ped_add_classic),
+         method = 'color', type = 'lower', col.lim = c(0,1),
+         is.corr = FALSE)                                                                      sqrt(mean((ped_add_partial-ped_add_classic)^2))
+       
 ```
 
-```{r}
-image(ped_add_classic_nona)
 
-```
+
+
