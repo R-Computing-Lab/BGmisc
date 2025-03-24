@@ -16,14 +16,15 @@
 #' df <- loadDelimitedData(path = 'data.txt', var_nrows = 100, delim = '|', as.is = TRUE)
 #'
 #' @export
+
 readDelimitedData <- function(path='Z:/Data/2024/Smith_Burt_143000_Demographic_Export.txt',
                        var_nrows,
                        delim='|',
                        as.is=TRUE){
 
-  require(data.table) # for transpose() list function
-  require(stringi) # for stri_split_fixed() function
-  
+#  require(data.table) # for transpose() list function
+#require(stringi) # for stri_split_fixed() function
+
   temp_x <- readLines(
     path,
     n=var_nrows)
@@ -58,7 +59,3 @@ readDelimitedData <- function(path='Z:/Data/2024/Smith_Burt_143000_Demographic_E
   return(df)
 }
 
-#' @rdname loadDelimitedData
-#' @aliases read_MTDNA
-#' @export
-read_MTDNA<- readDelimitedData

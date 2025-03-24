@@ -1,3 +1,6 @@
+# BG 1.3.5
+* Add calculateCIs and readDelimitedData functions
+
 # BGmisc 1.3.3
 * Added ability to save and reload pedigree objects that are used by ped2Com
 * Optimized generation calculation
