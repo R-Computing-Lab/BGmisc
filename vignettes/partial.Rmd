@@ -292,11 +292,25 @@ df <- inbreeding
 
 FamIDs <- unique(df$FamID)
 
+inbreeding_list <- list()
+results <- data.frame(FamIDs = FamIDs,
+                      RMSE_partial_dad = rep(NA, length(FamIDs)),
+                      RMSE_partial_mom = rep(NA, length(FamIDs)),
+                      RMSE_classic_dad = rep(NA, length(FamIDs)),
+                      RMSE_classic_mom = rep(NA, length(FamIDs)),
+                      max_R_classic_dad = rep(NA, length(FamIDs)),
+                      max_R_partial_dad = rep(NA, length(FamIDs)),
+                      max_R_classic_mom = rep(NA, length(FamIDs)),
+                      max_R_partial_mom = rep(NA, length(FamIDs)),
+                      max_R_classic = rep(NA, length(FamIDs)))
 for (i in 1:length(FamIDs)) {
   
-df_fam <- df[df$FamID == FamIDs[i],]
+# make three versions to filter down
+df_fam_dad<-df_fam_mom <- df_fam <- df[df$FamID == FamIDs[i],]
   
+results$RMSE_partial_mom[i] <- sqrt(mean((ped_add_classic_complete-ped_add_partial_mom)^2))
 
+  
 ped_add_partial_complete <- ped2com(df_fam, isChild_method= "partialparent",
                                   component = "additive",
                                   adjacency_method = "direct")
@@ -304,6 +318,65 @@ ped_add_partial_complete <- ped2com(df_fam, isChild_method= "partialparent",
 ped_add_classic_complete <- ped2com(df_fam, isChild_method= "classic",
                                   component = "additive",
                                   adjacency_method = "direct")
+
+
+# select first ID with a mom and dad
+momid_to_cut <- df_fam$ID[!is.na(df_fam$momID)] %>% head(1)
+dadid_to_cut <- df_fam$ID[!is.na(df_fam$dadID)] %>% head(1)
+
+df_fam_dad$dadID[df_fam$ID == dadid_to_cut] <- NA
+
+df_fam_mom$momID[df_fam$ID == momid_to_cut] <- NA
+
+ped_add_partial_dad <- ped2com(df_fam_dad, isChild_method= "partialparent",
+                             component = "additive",
+                             adjacency_method = "direct")
+ped_add_classic_dad <- ped2com(df_fam_dad, isChild_method= "classic",
+                             component = "additive", adjacency_method = "direct")
+
+results$RMSE_partial_dad[i] <- sqrt(mean((ped_add_classic_complete-ped_add_partial_dad)^2))
+results$RMSE_classic_dad[i] <- sqrt(mean((ped_add_classic_complete-ped_add_classic_dad)^2))
+results$max_R_classic_dad[i] <-  max(as.matrix(ped_add_classic_dad))
+results$max_R_partial_dad[i] <-  max(as.matrix(ped_add_partial_dad))
+
+
+ped_add_partial_mom <- ped2com(df_fam_mom, isChild_method= "partialparent",
+                             component = "additive",
+                             adjacency_method = "direct")
+
+ped_add_classic_mom <-  ped2com(df_fam_mom, isChild_method= "classic",
+                             component = "additive", adjacency_method = "direct")
+
+results$RMSE_partial_mom[i] <- sqrt(mean((ped_add_classic_complete-ped_add_partial_mom)^2))
+results$RMSE_classic_mom[i] <- sqrt(mean((ped_add_classic_complete-ped_add_classic_mom)^2))
+results$max_R_classic_mom[i] <-  max(as.matrix(ped_add_classic_mom))
+results$max_R_partial_mom[i] <-  max(as.matrix(ped_add_partial_mom))
+results$max_R_classic[i] <-  max(as.matrix(ped_add_classic_complete))
+
+inbreeding_list[[i]] <- list(df_fam=df_fam,
+                            ped_add_partial_complete = ped_add_partial_complete,
+                             ped_add_classic_complete = ped_add_classic_complete,
+                             ped_add_partial_dad = ped_add_partial_dad,
+                             ped_add_classic_dad = ped_add_classic_dad,
+                             ped_add_partial_mom = ped_add_partial_mom,
+                             ped_add_classic_mom = ped_add_classic_mom)
+
 }
 
+write.csv(results, "results.csv")
 ```
+
+## Summary
+
+```{r}
+
+results <- results %>% as.data.frame() %>% mutate(RMSE_diff_dad = RMSE_classic_dad - RMSE_partial_dad,
+                                                   RMSE_diff_mom = RMSE_classic_mom - RMSE_partial_mom)
+
+results 
+
+results %>% as.data.frame() %>% select(-FamIDs) %>% summary()
+```
+
+
+The partial parent method is more accurate when there are missing values in the parent adjacency matrix. 
