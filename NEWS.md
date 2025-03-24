@@ -3,6 +3,7 @@
 * Add tests for com2links
 * Add function to extract family tree from wiki family tree template
 * Add tests for readWikifamilytree
+* Create vignette for adjacency matrix methods
 
 # BGmisc 1.3.4.1
 * Hot fix to resolve issue with list of adjacency matrix not loading saved version
@@ -10,7 +11,7 @@
 
 # BGmisc 1.3.4
 * Added alternative (and faster) methods to create the adjacency matrix
-* Add tests for comparison of adjacency matrix methods
+* Add tests for comparison of adjacency matrix build methods
 * Added Royal Family pedigree
 
 # BGmisc 1.3.3
