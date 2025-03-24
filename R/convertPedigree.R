@@ -144,7 +144,7 @@ ped2com <- function(ped, component,
     if (verbose) cat("Resuming: Constructed matrix...\n")
     jss <- readRDS(checkpoint_files$jss)
     iss <- readRDS(checkpoint_files$iss)
-    list_of_adjacencies <- list(iss=iss, jss=jss)
+    list_of_adjacencies <- list(iss = iss, jss = jss)
   } else {
 
   list_of_adjacencies <- compute_parent_adjacency(
@@ -177,7 +177,7 @@ ped2com <- function(ped, component,
     }
     # Garbage collection if gc is TRUE
     if (gc) {
-      rm(parList, lens,list_of_adjacencies)
+      rm(parList, lens, list_of_adjacencies)
       gc()
     }
   }
@@ -264,7 +264,7 @@ ped2com <- function(ped, component,
 
   # r is I + A + A^2 + ... = (I-A)^-1 from RAM
   # could trim, here
-  while (mtSum != 0 & count < maxCount) {
+  while (mtSum != 0 && count < maxCount) {
     r <- r + newIsPar
     gen <- gen + (Matrix::rowSums(newIsPar) > 0)
     newIsPar <- newIsPar %*% isPar

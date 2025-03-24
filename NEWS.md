@@ -1,10 +1,18 @@
+# BGmisc 1.3.5
+* Add com2links function that converts components to kinship links
+* Add tests for com2links
+* Add function to extract family tree from wiki family tree template
+* Add tests for readWikifamilytree
+* Create vignette for adjacency matrix methods
+* Silences invisible list for plot
+
 # BGmisc 1.3.4.1
 * Hot fix to resolve issue with list of adjacency matrix not loading saved version
 * Reoptimized generation calculation
 
 # BGmisc 1.3.4
 * Added alternative (and faster) methods to create the adjacency matrix
-* Add tests for comparison of adjacency matrix methods
+* Add tests for comparison of adjacency matrix build methods
 * Added Royal Family pedigree
 
 # BGmisc 1.3.3

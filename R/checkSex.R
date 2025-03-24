@@ -166,7 +166,7 @@ recodeSex <- function(
   }
 
   # Recode as "F" or "M" based on code_male, preserving NAs
-  if (!is.null(code_male) & !is.null(code_female)) {
+  if (!is.null(code_male) && !is.null(code_female)) {
     # Initialize sex_recode as NA, preserving the length of the 'sex' column
     ped$sex_recode <- recode_na
     ped$sex_recode[ped$sex == code_female] <- recode_female
@@ -174,7 +174,7 @@ recodeSex <- function(
     # Overwriting temp recode variable
     ped$sex <- ped$sex_recode
     ped$sex_recode <- NULL
-  } else if (!is.null(code_male) & is.null(code_female)) {
+  } else if (!is.null(code_male) && is.null(code_female)) {
     # Initialize sex_recode as NA, preserving the length of the 'sex' column
     ped$sex_recode <- recode_na
     ped$sex_recode[ped$sex != code_male & !is.na(ped$sex)] <- recode_female
@@ -182,7 +182,7 @@ recodeSex <- function(
     # Overwriting temp recode variable
     ped$sex <- ped$sex_recode
     ped$sex_recode <- NULL
-  } else if (is.null(code_male) & !is.null(code_female)) {
+  } else if (is.null(code_male) && !is.null(code_female)) {
     # Initialize sex_recode as NA, preserving the length of the 'sex' column
     ped$sex_recode <- recode_na
     ped$sex_recode[ped$sex != code_female & !is.na(ped$sex)] <- recode_male
