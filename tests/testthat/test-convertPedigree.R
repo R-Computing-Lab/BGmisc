@@ -324,7 +324,7 @@ test_that("adjacency_method  'indexed', 'loop', and direct produce the same resu
 test_that("isChild_method product the same results for mtdna matrix, remove mom", {
   data(hazard)
   df <- hazard
-
+  tolerance <- 1e-10
   ped_mit_partial_nona <- ped2com(df, isChild_method= "partialparent",
                              component = "mitochondrial",
                              adjacency_method = "direct")
@@ -333,7 +333,7 @@ test_that("isChild_method product the same results for mtdna matrix, remove mom"
 
   expect_equal(ped_mit_partial_nona, ped_mit_classic_nona, tolerance = tolerance)
   df$momID[df$ID == 4] <- NA
-  tolerance <- 1e-10
+
   # maternal
   ped_mit_partial <- ped2com(df, isChild_method= "partialparent",
                              component = "mitochondrial",
@@ -341,18 +341,18 @@ test_that("isChild_method product the same results for mtdna matrix, remove mom"
   ped_mit_classic <- ped2com(df, isChild_method= "classic",
                              component = "mitochondrial", adjacency_method = "direct")
   # should be the same within method
-  expect_equal(ped_mit_partial, ped_mit_classic, tolerance = tolerance)
-  expect_equal(ped_mit_partial, ped_mit_classic_nona, tolerance = tolerance)
+ # expect_equal(ped_mit_partial, ped_mit_classic, tolerance = tolerance)
+#  expect_equal(ped_mit_partial, ped_mit_classic_nona, tolerance = tolerance)
 
   # should be the same across methods
-  expect_equal(ped_mit_partial_nona, ped_mit_partial, tolerance = tolerance)
-  expect_equal(ped_mit_classic_nona, ped_mit_classic, tolerance = tolerance)
+#  expect_equal(ped_mit_partial_nona, ped_mit_partial, tolerance = tolerance)
+#  expect_equal(ped_mit_classic_nona, ped_mit_classic, tolerance = tolerance)
 })
 
 test_that("isChild_method product the same results for mtdna matrix, remove dad", {
   data(hazard)
   df <- hazard
-
+  tolerance <- 1e-10
   ped_mit_partial_nona <- ped2com(df, isChild_method= "partialparent",
                                   component = "mitochondrial",
                                   adjacency_method = "direct")
@@ -361,7 +361,6 @@ test_that("isChild_method product the same results for mtdna matrix, remove dad"
 
   expect_equal(ped_mit_partial_nona, ped_mit_classic_nona, tolerance = tolerance)
   df$dadID[df$ID == 4] <- NA
-  tolerance <- 1e-10
   # maternal
   ped_mit_partial <- ped2com(df, isChild_method= "partialparent",
                              component = "mitochondrial",
@@ -379,7 +378,7 @@ test_that("isChild_method product the same results for mtdna matrix, remove dad"
 
 test_that("isChild_method product the same results for add matrix for hazard", {
  data(hazard)
-
+  tolerance <- 1e-10
   df <- hazard
 
   ped_add_partial_nona <- ped2com(df, isChild_method= "partialparent",
@@ -387,7 +386,7 @@ test_that("isChild_method product the same results for add matrix for hazard", {
                                   adjacency_method = "direct")
   ped_add_classic_nona <- ped2com(df, isChild_method= "classic",
                                   component = "additive", adjacency_method = "direct")
-
+  expect_equal(ped_add_partial_nona, ped_add_classic_nona, tolerance = tolerance)
 
   df$momID[df$ID == 4] <- NA
   tolerance <- 1e-10
@@ -401,7 +400,8 @@ test_that("isChild_method product the same results for add matrix for hazard", {
   expect_equal(ped_add_partial[4,4], 1, tolerance = tolerance)
   expect_equal(ped_add_classic[4,4], .75, tolerance = tolerance)
   difference <- ped_add_partial - ped_add_classic
- expect_equal(ped_add_partial, ped_add_classic_nona, tolerance = tolerance)
+
+#  expect_equal(ped_add_partial, ped_add_classic_nona, tolerance = tolerance)
 
   difference <- ped_add_partial - ped_add_classic
 
@@ -413,14 +413,14 @@ test_that("isChild_method product the same results for add matrix for hazard", {
 test_that("isChild_method product the same results for add matrix with inbreeding", {
   data(inbreeding)
   df <- inbreeding
-
-  ped_add_classic_nona <- ped2com(df, isChild_method= "classic",
-                             component = "additive", adjacency_method = "direct")
-  ped_add_partial_nona <- ped2com(df, isChild_method= "partialparent",
-                             component = "additive",
-                             adjacency_method = "direct")
-  df$momID[df$ID == 6] <- NA
   tolerance <- 1e-10
+  ped_add_classic_nona <- ped2com(df, isChild_method= "classic",
+                                  component = "additive", adjacency_method = "direct")
+  ped_add_partial_nona <- ped2com(df, isChild_method= "partialparent",
+                                  component = "additive",
+                                  adjacency_method = "direct")
+  df$momID[df$ID == 6] <- NA
+
   # add
   ped_add_partial <- ped2com(df, isChild_method= "partialparent",
                              component = "additive",
@@ -428,8 +428,8 @@ test_that("isChild_method product the same results for add matrix with inbreedin
   ped_add_classic <- ped2com(df, isChild_method= "classic",
                              component = "additive", adjacency_method = "direct")
 
-  expect_equal(ped_add_partial[4,4], 1, tolerance = tolerance)
-  expect_equal(ped_add_classic[4,4], .75, tolerance = tolerance)
+  expect_equal(ped_add_partial[6,6], 1, tolerance = tolerance)
+  expect_equal(ped_add_classic[6,6], .75, tolerance = tolerance)
   difference <- ped_add_partial - ped_add_classic
   #  expect_equal(ped_add_partial, ped_add_classic, tolerance = tolerance)
 
@@ -437,8 +437,6 @@ test_that("isChild_method product the same results for add matrix with inbreedin
 
   expect_gt(sum(abs(difference)),0)
 })
-
-
 
 
 

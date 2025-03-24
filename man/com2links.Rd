@@ -16,6 +16,7 @@ com2links(
   writetodisk = TRUE,
   verbose = FALSE,
   legacy = FALSE,
+  outcome_name = "data",
   ...
 )
 }
@@ -39,6 +40,10 @@ com2links(
 \item{writetodisk}{logical. If TRUE, write the related pairs to disk}
 
 \item{verbose}{logical. If TRUE, print progress messages}
+
+\item{legacy}{logical. If TRUE, use the legacy version of the function}
+
+\item{outcome_name}{Character string. The name of the outcome}
 
 \item{...}{Additional arguments to be passed to \code{\link{com2links}}}
 }

@@ -9,6 +9,8 @@
 #' @param writetodisk logical. If TRUE, write the related pairs to disk
 #' @param verbose logical. If TRUE, print progress messages
 #' @param update_rate numeric. How often to print progress messages
+#' @param legacy logical. If TRUE, use the legacy version of the function
+#' @param outcome_name Character string. The name of the outcome
 #' @param ... Additional arguments to be passed to \code{\link{com2links}}
 #' @return A data frame of related pairs
 #' @export
@@ -26,7 +28,8 @@ com2links <- function(
     gc = TRUE,
     writetodisk = TRUE,
     verbose = FALSE,
-  legacy = FALSE,
+    legacy = FALSE,
+     outcome_name = "data",
     ...) {
 if(!legacy){
   # match arguments
