@@ -1,4 +1,5 @@
 # BGmisc 1.3.5
+* Added ASOIAF pedigree
 * Add com2links function that converts components to kinship links
 * Add tests for com2links
 * Add function to extract family tree from wiki family tree template

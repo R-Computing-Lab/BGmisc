@@ -121,3 +121,23 @@ NULL
 ##' @usage data(royal92)
 ##' @format A data frame with 3110 observations
 NULL
+
+##' A song of ice and fire pedigree data
+##'
+##' A dataset created from the Song of Ice and Fire series by George R. R. Martin.
+##'
+##' The variables are as follows:
+##' \itemize{
+##'   \item \code{id}:  Person identification variable
+##'   \item \code{momID}:  ID of the mother
+##'   \item \code{dadID}:  ID of the father
+##'   \item \code{name}:  Name of the person
+##'   \item \code{sex}: Biological sex
+##'   }
+##'
+##' @docType data
+##' @keywords datasets
+##' @name ASOIAF
+##' @usage data(ASOIAF)
+##' @format A data frame with 501 observations
+NULL
