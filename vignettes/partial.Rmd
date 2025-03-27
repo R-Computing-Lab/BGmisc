@@ -2,7 +2,7 @@
 title: "Adjacency matrix methods"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{adjacency}
+  %\VignetteIndexEntry{Adjacency}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -40,8 +40,7 @@ data(hazard)
 df <- hazard # this is the data that we will use for the example
 ```
 ```{r, echo=FALSE}
-
-temp<-plotPedigree(df, title = "Complete Pedigree")
+plotPedigree(df)
 ```
 
 We compute the additive genetic relationship matrix using both the classic and partial parent methods. Because the pedigree is complete, we expect no differences in the resulting matrices.
@@ -337,7 +336,8 @@ inbreeding_list[[i]] <- list(df_fam=df_fam,
 To understand what these matrices look like, we visualize them for one representative family. For this example, we select the first family in the dataset.
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
-temp<- plotPedigree(inbreeding_list[[1]]$df_fam, title = "Family 1",verbose = FALSE)
+plotPedigree(inbreeding_list[[1]]$df_fam,
+             verbose = FALSE)
 ```
 
 ```{r}
@@ -401,8 +401,10 @@ To make this explicit, we calculate the RMSE difference between methods. A posit
 
 ```{r}
 
-results <- results %>% as.data.frame() %>% mutate(RMSE_diff_dad = RMSE_classic_dad - RMSE_partial_dad,
-                                                   RMSE_diff_mom = RMSE_classic_mom - RMSE_partial_mom)
+results <- results %>% 
+  as.data.frame() %>% 
+  mutate(RMSE_diff_dad = RMSE_classic_dad - RMSE_partial_dad,
+         RMSE_diff_mom = RMSE_classic_mom - RMSE_partial_mom)
 ```
 
 We can then summarize the pattern across families:
