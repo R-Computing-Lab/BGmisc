@@ -44,6 +44,21 @@ checkPedigreeNetwork <- function(ped, personID = "ID", momID = "momID", dadID = 
     }
   }
 
+  ## Check for duplicate edges
+
+  duplicate_edges_idx <- igraph::which_multiple(ped_graph)
+  duplicate_edges <- igraph::as_edgelist(ped_graph)[duplicate_edges_idx, , drop=FALSE]
+
+  results$duplicate_edges <- duplicate_edges
+
+  if (verbose) {
+    if(nrow(duplicate_edges) > 0){
+      message("Duplicate edges detected:")
+      print(duplicate_edges)
+    } else {
+      message("No duplicate edges detected.")
+    }
+  }
   ## Check for cyclic relationships
   is_acyclic <- igraph::is_dag(ped_graph)
   results$is_acyclic <- is_acyclic

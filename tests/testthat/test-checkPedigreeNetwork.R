@@ -46,3 +46,17 @@ test_that("checkPedigreeNetwork detects individuals with excess parents in potte
 
   expect_true("Harry Potter" %in% excess_parents_potter$name[excess_parents_potter$personID %in% results$individuals_with_excess_parents])
 })
+
+# Test Case 4: Validate detection of duplicate edges in 'potter' dataset
+test_that("checkPedigreeNetwork detects duplicate edges in potter dataset", {
+  dup_potter <- potter
+  dup_row <- potter[1, ]
+  dup_potter <- rbind(dup_potter, dup_row)
+
+  results <- checkPedigreeNetwork(dup_potter,
+                                  personID = "personID",
+                                  momID = "momID",
+                                  dadID = "dadID", verbose = FALSE)
+
+  expect_true(nrow(results$duplicate_edges) > 0)
+})
