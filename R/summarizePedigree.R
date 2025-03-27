@@ -29,6 +29,7 @@
 #' @param include_founder Logical. If `TRUE`, includes the founder (originating member) of each lineage in the output.
 #' @param founder_sort_var Character. Column used to determine the founder of each lineage.
 #'   Defaults to `byr` (if available) or `personID` otherwise.
+#' @param network_checks Logical. If `TRUE`, performs network checks on the pedigree data.
 #' @param verbose Logical, if TRUE, print progress messages.
 #' @returns A data.frame (or list) containing summary statistics for family, maternal, and paternal lines, as well as the 5 oldest and biggest lines.
 #' @import data.table
@@ -39,7 +40,8 @@ summarizePedigrees <- function(ped, famID = "famID", personID = "ID",
                                type = c("fathers", "mothers", "families"),
                                byr = NULL, include_founder = FALSE, founder_sort_var = NULL,
                                nbiggest = 5, noldest = 5, skip_var = NULL,
-                               five_num_summary = FALSE, verbose = FALSE) {
+                               five_num_summary = FALSE, network_checks = FALSE,
+                               verbose = FALSE) {
   # Fast Fails
 
   ## Check that the ID variables are not the same
@@ -89,6 +91,7 @@ summarizePedigrees <- function(ped, famID = "famID", personID = "ID",
     ped <- ped2paternal(ped, personID = personID, momID = momID, dadID = dadID, patID = patID)
   }
 
+
   # Convert to data.table
   ped_dt <- data.table::as.data.table(ped)
 
@@ -97,6 +100,19 @@ summarizePedigrees <- function(ped, famID = "famID", personID = "ID",
   output <- list()
   ## Size of families
   n_fathers <- n_mothers <- n_families <- NULL
+
+
+  if (network_checks) {
+    if (verbose) message("Performing network validation checks...")
+    network_validation_results <- checkPedigreeNetwork(
+      ped,
+      personID = personID,
+      momID = momID,
+      dadID = dadID,
+      verbose = verbose
+    )
+    output$network_validation <- network_validation_results
+  }
 
   # Calculate summary statistics for families, maternal lines, and paternal lines
 

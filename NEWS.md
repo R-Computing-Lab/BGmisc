@@ -1,11 +1,10 @@
 # BGmisc 1.3.5
 * Added ASOIAF pedigree
-* Add com2links function that converts components to kinship links
-* Add tests for com2links
-* Add function to extract family tree from wiki family tree template
-* Add tests for readWikifamilytree
-* Create vignette for adjacency matrix methods
-* Silences invisible list for plot
+* Added com2links() function to convert components to kinship links, with accompanying tests
+* Added extractWikiFamilyTree() function to parse family trees from wiki templates, with accompanying tests
+* Created vignette demonstrating adjacency matrix methods and applications
+* Improved plotPedigree() function by silencing unnecessary invisible list outputs
+* Added checkPedigreeNetwork() function for validating pedigree network structure, with accompanying tests
 
 # BGmisc 1.3.4.1
 * Hot fix to resolve issue with list of adjacency matrix not loading saved version

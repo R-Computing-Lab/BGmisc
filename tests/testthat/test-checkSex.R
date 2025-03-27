@@ -10,7 +10,7 @@ test_that("checkSex identifies sex coding correctly in potter dataset", {
 })
 
 # Test Case 2: Validate sex coding without repair
-test_that("checkSex identifies potentially problematic sex coding  in potter dataset", {
+test_that("checkSex identifies potentially problematic sex coding of non-male dad in potter dataset", {
   df_potter <- potter
   df_potter$sex[df_potter$name == "Vernon Dursley"] <- 5
 
@@ -27,12 +27,31 @@ test_that("checkSex identifies potentially problematic sex coding  in potter dat
   expect_equal(results[["ID_female_dads"]], df_potter$personID[df_potter$name == "Vernon Dursley"])
 
 
-  df_fix <- checkSex(df_potter,
+df_fix <- checkSex(df_potter,
     code_male = 1,
     code_female = 0, verbose = TRUE, repair = TRUE
   )
   expect_true(dim(df_fix)[1] == dim(df_potter)[1])
   expect_true(dim(df_fix)[2] == dim(df_potter)[2])
+})
+
+# Test Case 2: Validate sex coding without repair
+test_that("checkSex identifies potentially problematic sex coding of non-female mom in potter dataset", {
+  df_potter <- potter
+  df_potter$sex[df_potter$name == "Petunia Evans"] <- 5
+
+  results <- checkSex(df_potter,
+                      code_male = 1,
+                      code_female = 0, verbose = TRUE, repair = FALSE
+  )
+  expect_true("sex_unique" %in% names(results))
+
+  expect_equal(sort(results$sex_unique), sort(c(5, 1, 0)))
+
+  expect_equal(results$sex_length, 3)
+
+  expect_equal(results[["ID_male_moms"]], df_potter$personID[df_potter$name == "Petunia Evans"])
+
 })
 
 

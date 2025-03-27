@@ -1,8 +1,8 @@
 ---
-title: "Partial"
+title: "Adjacency matrix methods"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Validation}
+  %\VignetteIndexEntry{adjacency}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

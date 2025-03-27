@@ -468,7 +468,7 @@ if(verbose){
 
 
 #  load(paste0(outcome_name,'_dataBiggestCnPedigree.Rdata'))
-#  biggestCnPed <- as(biggestCnPed, "symmetricMatrix")
+#  biggestCnPed <-  methods::as(biggestCnPed, "symmetricMatrix")
   #load(paste0(outcome_name,'_dataBiggestPedigree.Rdata'))
 #  load(paste0(outcome_name,'_dataBiggestMtPedigree.Rdata'))
 
@@ -476,7 +476,7 @@ if(verbose){
 
   biggestMtPed  <-  mit_ped_matrix
   remove(mit_ped_matrix)
-  biggestCnPed  <- as(cn_ped_matrix , "symmetricMatrix")
+  biggestCnPed  <-  methods::as(cn_ped_matrix , "symmetricMatrix")
   remove(cn_ped_matrix)
   biggestPed <- ad_ped_matrix
   remove(ad_ped_matrix)
@@ -487,7 +487,7 @@ if(exists("rel_pairs_file")){
   fname <- paste0(outcome_name,'_dataBiggestRelatedPairsTake2.csv')
   }
   ds <- data.frame(ID1=numeric(0), ID2=numeric(0), addRel=numeric(0), mitRel=numeric(0), cnuRel=numeric(0))
-  write.table(ds, file=fname, sep=',', append=FALSE, row.names=FALSE)
+  utils::write.table(ds, file=fname, sep=',', append=FALSE, row.names=FALSE)
   ids <- as.numeric(dimnames(biggestCnPed)[[1]])
   newColPos1 <- biggestPed@p + 1L
   iss1 <- biggestPed@i + 1L

@@ -53,10 +53,8 @@ checkSex <- function(ped, code_male = NULL, code_female = NULL, verbose = FALSE,
   validation_results$sex_unique <- unique(ped$sex)
   validation_results$sex_length <- length(unique(ped$sex))
   if (verbose) {
-    cat(paste0(
-      validation_results$sex_length, " unique values found.\n ",
-      paste0(validation_results$sex_unique)
-    ))
+    cat(paste0(validation_results$sex_length, " unique values found.\n"))
+    cat(paste0("Unique values: ", paste0(validation_results$sex_unique, collapse = ", "), "\n"))
   }
   # Are there multiple sexes/genders in the list of dads and moms?
 
@@ -83,7 +81,6 @@ checkSex <- function(ped, code_male = NULL, code_female = NULL, verbose = FALSE,
     remove(df_moms)
   }
 
-
   if (repair) {
     if (verbose) {
       cat("Step 2: Attempting to repair sex coding...\n")
@@ -99,7 +96,7 @@ checkSex <- function(ped, code_male = NULL, code_female = NULL, verbose = FALSE,
       num_changes <- sum(original_ped$sex != ped$sex)
       # Record the change and the count
       changes[[length(changes) + 1]] <- sprintf(
-        "Recode sex based on most frequent sex in dads: %s. Total gender changes made: %d",
+        "Recode sex based on most frequent sex in dads: %s. Total sex changes made:  %d",
         validation_results$most_frequent_sex_dad, num_changes
       )
     }
@@ -138,8 +135,8 @@ checkSex <- function(ped, code_male = NULL, code_female = NULL, verbose = FALSE,
 #' @export
 #'
 #' @seealso \code{\link{checkSex}}
-repairSex <- function(ped, verbose = FALSE, code_male = NULL) {
-  checkSex(ped = ped, verbose = verbose, repair = TRUE, code_male = code_male)
+repairSex <- function(ped, verbose = FALSE, code_male = NULL, code_female = NULL) {
+  checkSex(ped = ped, verbose = verbose, repair = TRUE, code_male = code_male, code_female = code_female)
 }
 
 #' Recodes Sex Variable in a Pedigree Dataframe
