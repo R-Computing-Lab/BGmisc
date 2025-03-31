@@ -161,7 +161,6 @@ recodeSex <- function(
   if (!is.null(code_na)) {
     ped$sex[ped$sex == code_na] <- NA
   }
-
   # Recode as "F" or "M" based on code_male, preserving NAs
   if (!is.null(code_male) && !is.null(code_female)) {
     # Initialize sex_recode as NA, preserving the length of the 'sex' column

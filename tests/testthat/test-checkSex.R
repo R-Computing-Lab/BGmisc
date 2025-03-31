@@ -61,6 +61,14 @@ test_that("recodeSex correctly recodes sex in potter dataset", {
   recoded_potter <- recodeSex(potter, code_male = 1, code_female = 0, recode_male = "M", recode_female = "F")
   expect_true(all(recoded_potter$sex %in% c("M", "F")))
   expect_false(any(is.na(recoded_potter$sex)))
+
+  recoded_potter <- recodeSex(potter, code_female = 0, recode_male = "M", recode_female = "F")
+  expect_true(all(recoded_potter$sex %in% c("M", "F")))
+  expect_false(any(is.na(recoded_potter$sex)))
+
+  recoded_potter <- recodeSex(potter, recode_male = "M", recode_female = "F")
+  expect_false(all(recoded_potter$sex %in% c("M", "F")))
+
 })
 
 

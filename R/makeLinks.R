@@ -527,7 +527,7 @@ if(exists("rel_pairs_file")){
       if(cond1){ tds$addRel[u %in% iss1vv] <- biggestPed@x[vv1] }
       if(cond2){ tds$mitRel[u %in% iss2vv] <- biggestMtPed@x[vv2] }
       if(cond3){ tds$cnuRel[u %in% iss3vv] <- biggestCnPed@x[vv3] }
-      write.table(tds, file=fname, row.names=FALSE, col.names=FALSE, append=TRUE, sep=',')
+      utils::write.table(tds, file=fname, row.names=FALSE, col.names=FALSE, append=TRUE, sep=',')
     }
     if( !(j %% 500) ) { cat(paste0('Done with ', j, ' of ', nc, '\n')) }
   }
