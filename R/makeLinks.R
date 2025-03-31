@@ -150,7 +150,7 @@ if(verbose){
       remove(ad_ped_p, ad_ped_i, ad_ped_x, mt_p, mt_i, mt_x, cn_p, cn_i, cn_x)
     }
     if(verbose){
-      print("All 3 matrix is present")
+      message("All 3 matrix is present")
     }
 
     # File names
