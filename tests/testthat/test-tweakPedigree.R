@@ -29,7 +29,6 @@ test_that("makeTwins - Twins specified by IDs", {
 
   result <- makeTwins(ped, ID_twin1 = 1, ID_twin2 = 2, verbose = TRUE)
   expect_equal(result, expected_result)
-
 })
 
 test_that("makeTwins - Twins specified by generation", {

@@ -13,7 +13,8 @@
 #' @return List containing detailed validation results.
 #' @examples
 #' \dontrun{
-#' results <- checkPedigreeNetwork(ped, personID = "ID", momID = "momID", dadID = "dadID", verbose = TRUE)
+#' results <- checkPedigreeNetwork(ped, personID = "ID",
+#' momID = "momID", dadID = "dadID", verbose = TRUE)
 #' }
 #' @export
 checkPedigreeNetwork <- function(ped, personID = "ID", momID = "momID", dadID = "dadID", verbose = FALSE) {

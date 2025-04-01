@@ -2,7 +2,7 @@
 % Please edit documentation in R/makeLinks.R
 \name{com2links}
 \alias{com2links}
-\title{Take a sparse component and turn it into kinship links}
+\title{Convert Sparse Relationship Matrices to Kinship Links}
 \usage{
 com2links(
   rel_pairs_file = "dataRelatedPairs.csv",
@@ -17,39 +17,44 @@ com2links(
   verbose = FALSE,
   legacy = FALSE,
   outcome_name = "data",
+  drop_upper_triangular = TRUE,
   ...
 )
 }
 \arguments{
-\item{rel_pairs_file}{File to write related pairs to}
+\item{rel_pairs_file}{File path to write related pairs to (CSV format).}
 
-\item{ad_ped_matrix}{Matrix of additive genetic relatedness coefficients}
+\item{ad_ped_matrix}{Matrix of additive genetic relatedness coefficients.}
 
-\item{mit_ped_matrix}{Matrix of mitochondrial relatedness coefficients}
+\item{mit_ped_matrix}{Matrix of mitochondrial relatedness coefficients. Alias: \code{mt_ped_matrix}.}
 
-\item{mt_ped_matrix}{(alternative) Matrix of mitochondrial relatedness coefficients}
+\item{mt_ped_matrix}{Matrix of mitochondrial relatedness coefficients.}
 
-\item{cn_ped_matrix}{Matrix of common nuclear relatedness coefficients}
+\item{cn_ped_matrix}{Matrix of common nuclear relatedness coefficients.}
 
-\item{write_buffer_size}{Number of related pairs to write to disk at a time}
+\item{write_buffer_size}{Number of related pairs to write to disk at a time.}
 
-\item{update_rate}{numeric. How often to print progress messages}
+\item{update_rate}{Numeric. Frequency (in iterations) at which progress messages are printed.}
 
-\item{gc}{logical. If TRUE, do frequent garbage collection via \code{\link{gc}} to save memory}
+\item{gc}{Logical. If TRUE, performs garbage collection via \code{\link{gc}} to free memory.}
 
-\item{writetodisk}{logical. If TRUE, write the related pairs to disk}
+\item{writetodisk}{Logical. If TRUE, writes the related pairs to disk; if FALSE, returns a data frame.}
 
-\item{verbose}{logical. If TRUE, print progress messages}
+\item{verbose}{Logical. If TRUE, prints progress messages.}
 
-\item{legacy}{logical. If TRUE, use the legacy version of the function}
+\item{legacy}{Logical. If TRUE, uses the legacy branch of the function.}
 
-\item{outcome_name}{Character string. The name of the outcome}
+\item{outcome_name}{Character string representing the outcome name (used in file naming).}
+
+\item{drop_upper_triangular}{Logical. If TRUE, drops the upper triangular portion of the matrix.}
 
 \item{...}{Additional arguments to be passed to \code{\link{com2links}}}
 }
 \value{
-A data frame of related pairs
+A data frame of related pairs if \code{writetodisk} is FALSE; otherwise, writes the results to disk.
 }
 \description{
-Take a sparse component and turn it into kinship links
+This function processes one or more sparse relationship components (additive, mitochondrial,
+and common nuclear) and converts them into kinship link pairs. The resulting related pairs are
+either returned as a data frame or written to disk in CSV format.
 }

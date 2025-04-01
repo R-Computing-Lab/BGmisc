@@ -33,6 +33,7 @@ Checks for structural issues in pedigree networks, including:
 }
 \examples{
 \dontrun{
-results <- checkPedigreeNetwork(ped, personID="ID", momID="momID", dadID="dadID", verbose=TRUE)
+results <- checkPedigreeNetwork(ped, personID = "ID",
+momID = "momID", dadID = "dadID", verbose = TRUE)
 }
 }

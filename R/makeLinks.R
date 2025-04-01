@@ -39,11 +39,9 @@ com2links <- function(
     outcome_name = "data",
     drop_upper_triangular = TRUE,
     ...) {
-
   # Non-legacy mode processing
 
   if (!legacy) {
-
     # --- Input Validations and Preprocessing ---
 
     # Ensure that at least one relationship matrix is provided.
@@ -135,7 +133,6 @@ com2links <- function(
     # --- Process Based on the Number of Provided Matrices ---
     # --- Case: All Three Matrices Provided ---
     if (sum_nulls == 3) {
-
       # Set pointers for all three matrices.
       newColPos1 <- ad_ped_p
       iss1 <- ad_ped_i
@@ -243,25 +240,25 @@ com2links <- function(
           }
 
           # Optionally drop upper-triangular entries.
-          if(drop_upper_triangular == TRUE) {
-            tds <- tds[tds$ID1 <= tds$ID2, ]  # or < if you want strictly lower triangle
+          if (drop_upper_triangular == TRUE) {
+            tds <- tds[tds$ID1 <= tds$ID2, ] # or < if you want strictly lower triangle
           }
 
           # Write the batch to disk or accumulate in the data frame.
           if (nrow(tds) > 0) {
-          if (writetodisk == TRUE) {
-            write_buffer[[length(write_buffer) + 1]] <- tds
+            if (writetodisk == TRUE) {
+              write_buffer[[length(write_buffer) + 1]] <- tds
 
-            if (length(write_buffer) >= write_buffer_size) { # Write in batches
-              utils::write.table(do.call(rbind, write_buffer),
-                file = rel_pairs_file,
-                row.names = FALSE, col.names = FALSE, append = TRUE, sep = ","
-              )
-              write_buffer <- list()
+              if (length(write_buffer) >= write_buffer_size) { # Write in batches
+                utils::write.table(do.call(rbind, write_buffer),
+                  file = rel_pairs_file,
+                  row.names = FALSE, col.names = FALSE, append = TRUE, sep = ","
+                )
+                write_buffer <- list()
+              }
+            } else {
+              df_relpairs <- rbind(df_relpairs, tds)
             }
-          } else {
-            df_relpairs <- rbind(df_relpairs, tds)
-          }
           }
         }
         if (verbose) {
@@ -368,26 +365,26 @@ com2links <- function(
           if (cond2) {
             tds[u %in% iss2vv, relNames[2]] <- x2[vv2]
           }
-          if(drop_upper_triangular == TRUE) {
-            tds <- tds[tds$ID1 <= tds$ID2, ]  # or < if you want strictly lower triangle
+          if (drop_upper_triangular == TRUE) {
+            tds <- tds[tds$ID1 <= tds$ID2, ] # or < if you want strictly lower triangle
           }
 
           # Write the batch to disk or accumulate in the data frame.
-if (nrow(tds) > 0) {
-          if (writetodisk == TRUE) {
-            write_buffer[[length(write_buffer) + 1]] <- tds
+          if (nrow(tds) > 0) {
+            if (writetodisk == TRUE) {
+              write_buffer[[length(write_buffer) + 1]] <- tds
 
-            if (length(write_buffer) >= write_buffer_size) { # Write in batches
-              utils::write.table(do.call(rbind, write_buffer),
-                file = rel_pairs_file,
-                row.names = FALSE, col.names = FALSE, append = TRUE, sep = ","
-              )
-              write_buffer <- list()
+              if (length(write_buffer) >= write_buffer_size) { # Write in batches
+                utils::write.table(do.call(rbind, write_buffer),
+                  file = rel_pairs_file,
+                  row.names = FALSE, col.names = FALSE, append = TRUE, sep = ","
+                )
+                write_buffer <- list()
+              }
+            } else {
+              df_relpairs <- rbind(df_relpairs, tds)
             }
-          } else {
-            df_relpairs <- rbind(df_relpairs, tds)
           }
-}
         }
         if (verbose) {
           if (!(j %% update_rate)) {
@@ -468,26 +465,26 @@ if (nrow(tds) > 0) {
           if (cond1) {
             tds[u %in% iss1vv, relNames[1]] <- x1[vv1]
           }
-          if(drop_upper_triangular == TRUE) {
-            tds <- tds[tds$ID1 <= tds$ID2, ]  # or < if you want strictly lower triangle
+          if (drop_upper_triangular == TRUE) {
+            tds <- tds[tds$ID1 <= tds$ID2, ] # or < if you want strictly lower triangle
           }
 
           # Write the batch to disk or accumulate in the data frame.
           if (nrow(tds) > 0) {
-          if (writetodisk == TRUE) {
-            write_buffer[[length(write_buffer) + 1]] <- tds
+            if (writetodisk == TRUE) {
+              write_buffer[[length(write_buffer) + 1]] <- tds
 
-            if (length(write_buffer) >= write_buffer_size) { # Write in batches
-              utils::write.table(do.call(rbind, write_buffer),
-                file = rel_pairs_file,
-                row.names = FALSE, col.names = FALSE, append = TRUE, sep = ","
-              )
-              write_buffer <- list()
+              if (length(write_buffer) >= write_buffer_size) { # Write in batches
+                utils::write.table(do.call(rbind, write_buffer),
+                  file = rel_pairs_file,
+                  row.names = FALSE, col.names = FALSE, append = TRUE, sep = ","
+                )
+                write_buffer <- list()
+              }
+            } else {
+              df_relpairs <- rbind(df_relpairs, tds)
             }
-          } else {
-            df_relpairs <- rbind(df_relpairs, tds)
           }
-        }
         }
         if (verbose && !(j %% update_rate)) {
           cat(paste0("Done with ", j, " of ", nc, "\n"))
@@ -497,7 +494,7 @@ if (nrow(tds) > 0) {
       stop("No matrices provided")
     }
 
-  # If not writing to disk, return the accumulated data frame.
+    # If not writing to disk, return the accumulated data frame.
     if (writetodisk == FALSE) {
       return(df_relpairs)
     } else {

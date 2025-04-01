@@ -29,6 +29,6 @@ test_that("pedigree plots correctly with affected variables", {
   expect_output(plotPedigree(results, verbose = TRUE, affected = "affected"))
   expect_output(plotPedigree(results, verbose = TRUE, affected = results$affected))
 
-# file.remove("Rplots.pdf")
+  # file.remove("Rplots.pdf")
 })
-#file.remove("Rplots.pdf")
+# file.remove("Rplots.pdf")

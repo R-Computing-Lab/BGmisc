@@ -426,42 +426,44 @@ dataset with two common real-world problems. First, we’ll accidentally
 give Vernon Dursley the same ID as his sister Marjorie (a common issue
 when merging family records). Then, we’ll add a complete duplicate of
 Dudley Dursley (as might happen during data entry).</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a></span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co"># Create our problematic dataset</span></span>
-<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>df_duplicates <span class="ot">&lt;-</span> df</span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co"># Sibling ID conflict</span></span>
-<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>df_duplicates<span class="sc">$</span>personID[df_duplicates<span class="sc">$</span>name <span class="sc">==</span> <span class="st">&quot;Vernon Dursley&quot;</span>] <span class="ot">&lt;-</span> </span>
-<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>  df_duplicates<span class="sc">$</span>personID[df_duplicates<span class="sc">$</span>name <span class="sc">==</span> <span class="st">&quot;Marjorie Dursley&quot;</span>]</span>
-<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="co"># Duplicate entry</span></span>
-<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>df_duplicates <span class="ot">&lt;-</span> <span class="fu">rbind</span>(df_duplicates, </span>
-<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>                       df_duplicates[df_duplicates<span class="sc">$</span>name <span class="sc">==</span> <span class="st">&quot;Dudley Dursley&quot;</span>, ])</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># Create our problematic dataset</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>df_duplicates <span class="ot">&lt;-</span> df</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co"># Sibling ID conflict</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>df_duplicates<span class="sc">$</span>personID[df_duplicates<span class="sc">$</span>name <span class="sc">==</span> <span class="st">&quot;Vernon Dursley&quot;</span>] <span class="ot">&lt;-</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>  df_duplicates<span class="sc">$</span>personID[df_duplicates<span class="sc">$</span>name <span class="sc">==</span> <span class="st">&quot;Marjorie Dursley&quot;</span>]</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="co"># Duplicate entry</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>df_duplicates <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>  df_duplicates,</span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>  df_duplicates[df_duplicates<span class="sc">$</span>name <span class="sc">==</span> <span class="st">&quot;Dudley Dursley&quot;</span>, ]</span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>)</span></code></pre></div>
 <p>If we look at the data using standard tools, the problems aren’t
 immediately obvious:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="fu">summarizeFamilies</span>(df_duplicates, </span>
-<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>                  <span class="at">famID =</span> <span class="st">&quot;newFamID&quot;</span>, </span>
-<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>                  <span class="at">personID =</span> <span class="st">&quot;personID&quot;</span>)<span class="sc">$</span>family_summary <span class="sc">%&gt;%</span> </span>
-<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>  <span class="fu">glimpse</span>()</span>
-<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co">#&gt; Rows: 1</span></span>
-<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="co">#&gt; Columns: 17</span></span>
-<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co">#&gt; $ newFamID        &lt;dbl&gt; 1</span></span>
-<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="co">#&gt; $ count           &lt;int&gt; 37</span></span>
-<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="co">#&gt; $ gen_mean        &lt;dbl&gt; 1.756757</span></span>
-<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a><span class="co">#&gt; $ gen_median      &lt;dbl&gt; 2</span></span>
-<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a><span class="co">#&gt; $ gen_min         &lt;dbl&gt; 0</span></span>
-<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a><span class="co">#&gt; $ gen_max         &lt;dbl&gt; 3</span></span>
-<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a><span class="co">#&gt; $ gen_sd          &lt;dbl&gt; 1.038305</span></span>
-<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a><span class="co">#&gt; $ spouseID_mean   &lt;dbl&gt; 38.2</span></span>
-<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a><span class="co">#&gt; $ spouseID_median &lt;dbl&gt; 15</span></span>
-<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a><span class="co">#&gt; $ spouseID_min    &lt;dbl&gt; 1</span></span>
-<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a><span class="co">#&gt; $ spouseID_max    &lt;dbl&gt; 106</span></span>
-<span id="cb3-20"><a href="#cb3-20" tabindex="-1"></a><span class="co">#&gt; $ spouseID_sd     &lt;dbl&gt; 44.15118</span></span>
-<span id="cb3-21"><a href="#cb3-21" tabindex="-1"></a><span class="co">#&gt; $ sex_mean        &lt;dbl&gt; 0.5135135</span></span>
-<span id="cb3-22"><a href="#cb3-22" tabindex="-1"></a><span class="co">#&gt; $ sex_median      &lt;dbl&gt; 1</span></span>
-<span id="cb3-23"><a href="#cb3-23" tabindex="-1"></a><span class="co">#&gt; $ sex_min         &lt;dbl&gt; 0</span></span>
-<span id="cb3-24"><a href="#cb3-24" tabindex="-1"></a><span class="co">#&gt; $ sex_max         &lt;dbl&gt; 1</span></span>
-<span id="cb3-25"><a href="#cb3-25" tabindex="-1"></a><span class="co">#&gt; $ sex_sd          &lt;dbl&gt; 0.5067117</span></span></code></pre></div>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="fu">summarizeFamilies</span>(df_duplicates,</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>  <span class="at">famID =</span> <span class="st">&quot;newFamID&quot;</span>,</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>  <span class="at">personID =</span> <span class="st">&quot;personID&quot;</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>)<span class="sc">$</span>family_summary <span class="sc">%&gt;%</span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>  <span class="fu">glimpse</span>()</span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="co">#&gt; Rows: 1</span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co">#&gt; Columns: 17</span></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="co">#&gt; $ newFamID        &lt;dbl&gt; 1</span></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="co">#&gt; $ count           &lt;int&gt; 37</span></span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a><span class="co">#&gt; $ gen_mean        &lt;dbl&gt; 1.756757</span></span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a><span class="co">#&gt; $ gen_median      &lt;dbl&gt; 2</span></span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a><span class="co">#&gt; $ gen_min         &lt;dbl&gt; 0</span></span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a><span class="co">#&gt; $ gen_max         &lt;dbl&gt; 3</span></span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a><span class="co">#&gt; $ gen_sd          &lt;dbl&gt; 1.038305</span></span>
+<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a><span class="co">#&gt; $ spouseID_mean   &lt;dbl&gt; 38.2</span></span>
+<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a><span class="co">#&gt; $ spouseID_median &lt;dbl&gt; 15</span></span>
+<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a><span class="co">#&gt; $ spouseID_min    &lt;dbl&gt; 1</span></span>
+<span id="cb3-20"><a href="#cb3-20" tabindex="-1"></a><span class="co">#&gt; $ spouseID_max    &lt;dbl&gt; 106</span></span>
+<span id="cb3-21"><a href="#cb3-21" tabindex="-1"></a><span class="co">#&gt; $ spouseID_sd     &lt;dbl&gt; 44.15118</span></span>
+<span id="cb3-22"><a href="#cb3-22" tabindex="-1"></a><span class="co">#&gt; $ sex_mean        &lt;dbl&gt; 0.5135135</span></span>
+<span id="cb3-23"><a href="#cb3-23" tabindex="-1"></a><span class="co">#&gt; $ sex_median      &lt;dbl&gt; 1</span></span>
+<span id="cb3-24"><a href="#cb3-24" tabindex="-1"></a><span class="co">#&gt; $ sex_min         &lt;dbl&gt; 0</span></span>
+<span id="cb3-25"><a href="#cb3-25" tabindex="-1"></a><span class="co">#&gt; $ sex_max         &lt;dbl&gt; 1</span></span>
+<span id="cb3-26"><a href="#cb3-26" tabindex="-1"></a><span class="co">#&gt; $ sex_sd          &lt;dbl&gt; 0.5067117</span></span></code></pre></div>
 <p>But <code>checkIDs()</code> detects the problems clearly:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co"># Identify duplicates</span></span>
 <span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">checkIDs</span>(df_duplicates)</span>
