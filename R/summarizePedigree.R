@@ -316,7 +316,8 @@ summarizeMatrilines <- function(ped, famID = "famID", personID = "ID",
                                 byr = NULL, include_founder = FALSE,
                                 founder_sort_var = NULL,
                                 nbiggest = 5, noldest = 5, skip_var = NULL,
-                                five_num_summary = FALSE, verbose = FALSE) {
+                                five_num_summary = FALSE, verbose = FALSE,
+                                network_checks = FALSE) {
   # Call to wrapper function
   summarizePedigrees(
     ped = ped,
@@ -328,7 +329,7 @@ summarizeMatrilines <- function(ped, famID = "famID", personID = "ID",
     momID = momID, dadID = dadID,
     famID = famID, matID = matID, patID = patID, skip_var = skip_var,
     type = "mothers", verbose = verbose, five_num_summary = five_num_summary,
-    founder_sort_var = founder_sort_var
+    founder_sort_var = founder_sort_var, network_checks = network_checks
   )
 }
 
@@ -343,7 +344,8 @@ summarizePatrilines <- function(ped, famID = "famID", personID = "ID",
                                 byr = NULL, founder_sort_var = NULL,
                                 include_founder = FALSE,
                                 nbiggest = 5, noldest = 5, skip_var = NULL,
-                                five_num_summary = FALSE, verbose = FALSE) {
+                                five_num_summary = FALSE, verbose = FALSE,
+                                network_checks = FALSE) {
   # Call to wrapper function
   summarizePedigrees(
     ped = ped,
@@ -355,7 +357,7 @@ summarizePatrilines <- function(ped, famID = "famID", personID = "ID",
     momID = momID, dadID = dadID,
     famID = famID, matID = matID, patID = patID, skip_var = skip_var,
     type = "fathers", verbose = verbose, five_num_summary = five_num_summary,
-    founder_sort_var = founder_sort_var
+    founder_sort_var = founder_sort_var, network_checks = network_checks
   )
 }
 
@@ -370,7 +372,8 @@ summarizeFamilies <- function(ped, famID = "famID", personID = "ID",
                               byr = NULL, founder_sort_var = NULL,
                               include_founder = FALSE,
                               nbiggest = 5, noldest = 5, skip_var = NULL,
-                              five_num_summary = FALSE, verbose = FALSE) {
+                              five_num_summary = FALSE, verbose = FALSE,
+                              network_checks = FALSE) {
   # Call to wrapper function
   summarizePedigrees(
     ped = ped,
@@ -382,6 +385,6 @@ summarizeFamilies <- function(ped, famID = "famID", personID = "ID",
     momID = momID, dadID = dadID,
     famID = famID, matID = matID, patID = patID, skip_var = skip_var,
     type = "families", verbose = verbose, five_num_summary = five_num_summary,
-    founder_sort_var = founder_sort_var
+    founder_sort_var = founder_sort_var, network_checks = network_checks
   )
 }

@@ -1,7 +1,7 @@
 # Test Case 1: Validate correct network structure in the original 'potter' dataset
 test_that("checkPedigreeNetwork identifies valid pedigree network correctly in potter dataset", {
   ped <- potter
-  results <- checkPedigreeNetwork(ped, personID = "personID", momID = "momID", dadID = "dadID", verbose = FALSE)
+  results <- checkPedigreeNetwork(ped, personID = "personID", momID = "momID", dadID = "dadID", verbose = TRUE)
   expect_true(results$is_acyclic)
   expect_equal(length(results$individuals_with_excess_parents), 0)
   expect_null(results$cyclic_relationships)
@@ -42,7 +42,7 @@ test_that("checkPedigreeNetwork detects individuals with excess parents in potte
   extra_row$dadID <- "999" # new parent
   excess_parents_potter <- rbind(excess_parents_potter, extra_row)
 
-  results <- checkPedigreeNetwork(excess_parents_potter, personID = "personID", momID = "momID", dadID = "dadID", verbose = FALSE)
+  results <- checkPedigreeNetwork(excess_parents_potter, personID = "personID", momID = "momID", dadID = "dadID", verbose = TRUE)
 
   expect_true("Harry Potter" %in% excess_parents_potter$name[excess_parents_potter$personID %in% results$individuals_with_excess_parents])
 })
@@ -56,7 +56,7 @@ test_that("checkPedigreeNetwork detects duplicate edges in potter dataset", {
   results <- checkPedigreeNetwork(dup_potter,
     personID = "personID",
     momID = "momID",
-    dadID = "dadID", verbose = FALSE
+    dadID = "dadID", verbose = TRUE
   )
 
   expect_true(nrow(results$duplicate_edges) > 0)
