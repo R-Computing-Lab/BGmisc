@@ -54,6 +54,39 @@ test_that("com2links processes multiple matrices correctly (hazard dataset)", {
 })
 
 
+test_that("com2links written version matchs", {
+
+  data(hazard)
+  ad_ped_matrix <-  ped2com(hazard, component = "additive", adjacency_method = "direct", sparse = TRUE)
+  mit_ped_matrix <- ped2com(hazard, component = "mitochondrial", adjacency_method = "direct", sparse = TRUE)
+  cn_ped_matrix <- ped2com(hazard, component = "common nuclear", adjacency_method = "indexed", sparse = TRUE)
+
+  result <- com2links(ad_ped_matrix = ad_ped_matrix,
+                      mit_ped_matrix = mit_ped_matrix, cn_ped_matrix = cn_ped_matrix,
+                      writetodisk =TRUE, rel_pairs_file = "dataRelatedPairs_new.csv")
+  expect_true(is.null(result))
+
+  written_data<- read.csv("dataRelatedPairs_new.csv")
+  # remove the file
+  expect_true(file.remove("dataRelatedPairs_new.csv"))
+  expect_true(all(c("ID1", "ID2", "addRel", "mitRel", "cnuRel") %in% colnames(written_data)))
+
+  result <- com2links(ad_ped_matrix = ad_ped_matrix,
+                      mit_ped_matrix = mit_ped_matrix, cn_ped_matrix = cn_ped_matrix,
+                      writetodisk =FALSE)
+
+  expect_true(is.data.frame(result))
+  expect_true(all(c("ID1", "ID2", "addRel", "mitRel", "cnuRel") %in% colnames(result)))
+
+  # Drop row names to avoid mismatches in expect_equal
+  rownames(result) <- NULL
+  rownames(written_data_new) <- NULL
+
+
+  # Final comparison between written versions
+  expect_equal(written_data, result)
+}
+)
 test_that("com2links legacy works", {
 
   data(hazard)
@@ -73,17 +106,6 @@ test_that("com2links legacy works", {
   expect_true(all(c("ID1", "ID2", "addRel", "mitRel", "cnuRel") %in% colnames(written_data)))
 
   result <- com2links(ad_ped_matrix = ad_ped_matrix,
-                            mit_ped_matrix = mit_ped_matrix, cn_ped_matrix = cn_ped_matrix,
-                            writetodisk =TRUE, rel_pairs_file = "dataRelatedPairs_new.csv")
-  expect_true(is.null(result))
-
-  written_data_new <- read.csv("dataRelatedPairs_new.csv")
-  # remove the file
-  expect_true(file.remove("dataRelatedPairs_new.csv"))
-  expect_true(all(c("ID1", "ID2", "addRel", "mitRel", "cnuRel") %in% colnames(written_data_new)))
-
-
-  result <- com2links(ad_ped_matrix = ad_ped_matrix,
                       mit_ped_matrix = mit_ped_matrix, cn_ped_matrix = cn_ped_matrix,
                       writetodisk =FALSE)
 
@@ -91,13 +113,10 @@ test_that("com2links legacy works", {
 
   # Drop row names to avoid mismatches in expect_equal
   rownames(result) <- NULL
-  rownames(written_data_new) <- NULL
   rownames(written_data) <- NULL
 
   # Final comparison between written versions
-  expect_equal(written_data_new, written_data)
   expect_equal(written_data, result)
-  expect_equal(written_data_new, result)
 })
 
 
