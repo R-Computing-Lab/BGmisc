@@ -13,19 +13,23 @@ ASOIAF <- readGedcom("data-raw/ASOIAF.ged")
 
 
 df <- ped2fam(ASOIAF, personID = "id") %>%
-  select(-name_npfx,
-         -name_nsfx,
-         -name_given,
-         -name_surn,
-         -name_marriedsurn,
-         -death_caus,
-         -FAMC,
-         -FAMS) %>%
-  mutate(momID = as.numeric(momID),
-         dadID = as.numeric(dadID),
-         name = str_remove(name, "/"))
+  select(
+    -name_npfx,
+    -name_nsfx,
+    -name_given,
+    -name_surn,
+    -name_marriedsurn,
+    -death_caus,
+    -FAMC,
+    -FAMS
+  ) %>%
+  mutate(
+    momID = as.numeric(momID),
+    dadID = as.numeric(dadID),
+    name = str_remove(name, "/")
+  )
 
-#pedADD <- ped2com(df , personID = "id", momID = "momID", dadID = "dadID", component = "additive", isChild_method = "partial_parent")
+# pedADD <- ped2com(df , personID = "id", momID = "momID", dadID = "dadID", component = "additive", isChild_method = "partial_parent")
 # com2links(ad_ped_matrix=pedADD)
 # if missing momID or dadID, assign the next available ID
 

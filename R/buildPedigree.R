@@ -51,7 +51,6 @@ ped2fam <- function(ped, personID = "ID",
   ped2 <- merge(fam, ped,
     by = personID, all.x = FALSE, all.y = TRUE
   )
-
   return(ped2)
 }
 

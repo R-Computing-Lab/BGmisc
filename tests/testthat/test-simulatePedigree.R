@@ -27,4 +27,3 @@ test_that("simulatePedigree verbose prints updates", {
 
   expect_output(simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR, verbose = TRUE), regexp = "Let's build the connection within each generation first")
 })
-

@@ -28,4 +28,7 @@ test_that("pedigree plots correctly with affected variables", {
   results$affected <- rbinom(n = nrow(results), size = 1, prob = .1)
   expect_output(plotPedigree(results, verbose = TRUE, affected = "affected"))
   expect_output(plotPedigree(results, verbose = TRUE, affected = results$affected))
+
+# file.remove("Rplots.pdf")
 })
+#file.remove("Rplots.pdf")

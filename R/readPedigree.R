@@ -326,7 +326,7 @@ readGedcom <- function(file_path,
     if (verbose) {
       print("Processing parents")
     }
-    df_temp <- processParents(df_temp, datasource="gedcom")
+    df_temp <- processParents(df_temp, datasource = "gedcom")
   }
 
 
@@ -383,39 +383,38 @@ readGedcom <- function(file_path,
 #' @param df_temp A data frame containing information about individuals.
 #' @return A list mapping family IDs to parent IDs.
 #' @keywords internal
-createFamilyToParentsMapping <- function(df_temp,datasource) {
+createFamilyToParentsMapping <- function(df_temp, datasource) {
   if (datasource == "gedcom") {
-  if (!all(c("FAMS", "sex") %in% colnames(df_temp))) {
-    warning("The data frame does not contain the necessary columns (FAMS, sex)")
-    return(NULL)
-  }
-  family_to_parents <- list()
-  for (i in 1:nrow(df_temp)) {
-    if (!is.na(df_temp$FAMS[i])) {
-      fams_ids <- unlist(strsplit(df_temp$FAMS[i], ", "))
-      for (fams_id in fams_ids) {
-        if (!is.null(family_to_parents[[fams_id]])) {
-          if (df_temp$sex[i] == "M") {
-            family_to_parents[[fams_id]]$father <- df_temp$id[i]
-          } else if (df_temp$sex[i] == "F") {
-            family_to_parents[[fams_id]]$mother <- df_temp$id[i]
-          }
-        } else {
-          family_to_parents[[fams_id]] <- list()
-          if (df_temp$sex[i] == "M") {
-            family_to_parents[[fams_id]]$father <- df_temp$id[i]
-          } else if (df_temp$sex[i] == "F") {
-            family_to_parents[[fams_id]]$mother <- df_temp$id[i]
+    if (!all(c("FAMS", "sex") %in% colnames(df_temp))) {
+      warning("The data frame does not contain the necessary columns (FAMS, sex)")
+      return(NULL)
+    }
+    family_to_parents <- list()
+    for (i in 1:nrow(df_temp)) {
+      if (!is.na(df_temp$FAMS[i])) {
+        fams_ids <- unlist(strsplit(df_temp$FAMS[i], ", "))
+        for (fams_id in fams_ids) {
+          if (!is.null(family_to_parents[[fams_id]])) {
+            if (df_temp$sex[i] == "M") {
+              family_to_parents[[fams_id]]$father <- df_temp$id[i]
+            } else if (df_temp$sex[i] == "F") {
+              family_to_parents[[fams_id]]$mother <- df_temp$id[i]
+            }
+          } else {
+            family_to_parents[[fams_id]] <- list()
+            if (df_temp$sex[i] == "M") {
+              family_to_parents[[fams_id]]$father <- df_temp$id[i]
+            } else if (df_temp$sex[i] == "F") {
+              family_to_parents[[fams_id]]$mother <- df_temp$id[i]
+            }
           }
         }
       }
     }
-  }
   } else if (datasource == "wiki") {
-
     message("The data source is not supported")
-      return(df_temp)
-    }
+    return(df_temp)
+  }
   return(family_to_parents)
 }
 
@@ -429,29 +428,29 @@ createFamilyToParentsMapping <- function(df_temp,datasource) {
 #' @param datasource A string indicating the data source. Options are "gedcom" and "wiki".
 #' @return A data frame with added momID and dad_ID columns.
 #' @keywords internal
-assignParentIDs <- function(df_temp, family_to_parents,datasource) {
+assignParentIDs <- function(df_temp, family_to_parents, datasource) {
   df_temp$momID <- NA_character_
   df_temp$dadID <- NA_character_
-if(datasource == "gedcom"){
-  for (i in 1:nrow(df_temp)) {
-    if (!is.na(df_temp$FAMC[i])) {
-      famc_ids <- unlist(strsplit(df_temp$FAMC[i], ", "))
-      for (famc_id in famc_ids) {
-        if (!is.null(family_to_parents[[famc_id]])) {
-          if (!is.null(family_to_parents[[famc_id]]$father)) {
-            df_temp$dadID[i] <- family_to_parents[[famc_id]]$father
-          }
-          if (!is.null(family_to_parents[[famc_id]]$mother)) {
-            df_temp$momID[i] <- family_to_parents[[famc_id]]$mother
+  if (datasource == "gedcom") {
+    for (i in 1:nrow(df_temp)) {
+      if (!is.na(df_temp$FAMC[i])) {
+        famc_ids <- unlist(strsplit(df_temp$FAMC[i], ", "))
+        for (famc_id in famc_ids) {
+          if (!is.null(family_to_parents[[famc_id]])) {
+            if (!is.null(family_to_parents[[famc_id]]$father)) {
+              df_temp$dadID[i] <- family_to_parents[[famc_id]]$father
+            }
+            if (!is.null(family_to_parents[[famc_id]]$mother)) {
+              df_temp$momID[i] <- family_to_parents[[famc_id]]$mother
+            }
           }
         }
       }
     }
-  }
-  return(df_temp)
-} else if(datasource=="wiki"){
-  message("No parents information available for wiki data")
-return(df_temp)
+    return(df_temp)
+  } else if (datasource == "wiki") {
+    message("No parents information available for wiki data")
+    return(df_temp)
   }
 }
 
@@ -462,27 +461,27 @@ return(df_temp)
 #' @param df_temp A data frame containing information about individuals.
 #' @return A data frame with added momID and dadID columns.
 #' @keywords internal
-processParents <- function(df_temp,datasource) {
+processParents <- function(df_temp, datasource) {
   # Ensure required columns are present
-if(datasource=="gedcom"){
-  required_cols <- c("FAMC", "sex", "FAMS")
-} else if(datasource=="wiki"){
-  required_cols <- c("id")
-} else {
-  stop("Invalid datasource")
-}
+  if (datasource == "gedcom") {
+    required_cols <- c("FAMC", "sex", "FAMS")
+  } else if (datasource == "wiki") {
+    required_cols <- c("id")
+  } else {
+    stop("Invalid datasource")
+  }
 
-if (!all(required_cols %in% colnames(df_temp))) {
+  if (!all(required_cols %in% colnames(df_temp))) {
     missing_cols <- setdiff(required_cols, colnames(df_temp))
     warning("Missing necessary columns: ", paste(missing_cols, collapse = ", "))
     return(df_temp)
   }
 
-  family_to_parents <- createFamilyToParentsMapping(df_temp,datasource=datasource)
+  family_to_parents <- createFamilyToParentsMapping(df_temp, datasource = datasource)
   if (is.null(family_to_parents) || length(family_to_parents) == 0) {
     return(df_temp)
   }
-  df_temp <- assignParentIDs(df_temp, family_to_parents,datasource=datasource)
+  df_temp <- assignParentIDs(df_temp, family_to_parents, datasource = datasource)
   return(df_temp)
 }
 
@@ -601,7 +600,7 @@ readWikifamilytree <- function(text) {
 
   # Extract member definitions
   members_df <- matchMembers(text)
-  members_df$id <- paste0("P", seq_len(nrow(members_df)))  # Assign unique person IDs
+  members_df$id <- paste0("P", seq_len(nrow(members_df))) # Assign unique person IDs
 
   # Merge names into the tree structure (keeping all symbols!)
   tree_long <- merge(tree_long, members_df, by.x = "Value", by.y = "identifier", all.x = TRUE)
@@ -612,7 +611,7 @@ readWikifamilytree <- function(text) {
 
   relationships_df <- parseRelationships(tree_long)
 
- # relationships_df <- processParents(tree_long, datasource = "wiki")
+  # relationships_df <- processParents(tree_long, datasource = "wiki")
 
 
 
@@ -728,12 +727,12 @@ parseRelationships <- function(tree_long) {
       parent <- tree_long$Value[tree_long$Row == row$Row - 1 & tree_long$Column == row$Column]
       child <- tree_long$Value[tree_long$Row == row$Row + 1 & tree_long$Column == row$Column]
 
-      if(length(parent) == 0) parent <- NA
-      if(length(child) == 0) child <- NA
+      if (length(parent) == 0) parent <- NA
+      if (length(child) == 0) child <- NA
       # Assign mom/dad IDs based on tree structure
       if (!is.na(parent) && !is.na(child)) {
         relationships$momID[relationships$id == child] <- parent
-        relationships$dadID[relationships$id == child] <- parent  # Assuming one parent detected for now
+        relationships$dadID[relationships$id == child] <- parent # Assuming one parent detected for now
       }
     }
 

@@ -1,7 +1,7 @@
 library(microbenchmark)
 library(Matrix)
-#library(BGmisc)
-#data("hazard")
+# library(BGmisc)
+# data("hazard")
 
 
 # make big data
@@ -10,14 +10,14 @@ Ngen <- 5
 kpc <- 5
 sexR <- .50
 marR <- .7
-ped  <- simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR)
+ped <- simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR)
 
 # Define parameters
-component <- "additive"  # Change this to test different components
-saveable <- FALSE  # Disable saving to avoid disk I/O slowing down benchmarking
-resume <- FALSE  # Disable resume to ensure full fresh runs
+component <- "additive" # Change this to test different components
+saveable <- FALSE # Disable saving to avoid disk I/O slowing down benchmarking
+resume <- FALSE # Disable resume to ensure full fresh runs
 save_path <- "checkpoint/"
-verbose <- FALSE  # Turn off verbose for cleaner output
+verbose <- FALSE # Turn off verbose for cleaner output
 update_rate <- 100
 save_rate_parlist <- 1000
 
@@ -27,7 +27,7 @@ benchmark_results <- microbenchmark(
     ped2com(
       ped = ped,
       component = component,
-      adjacency_method = "loop",  # Test "loop" method
+      adjacency_method = "loop", # Test "loop" method
       saveable = saveable,
       resume = resume,
       save_path = save_path,
@@ -40,7 +40,7 @@ benchmark_results <- microbenchmark(
     ped2com(
       ped = ped,
       component = component,
-      adjacency_method = "indexed",  # Test "indexed" method
+      adjacency_method = "indexed", # Test "indexed" method
       saveable = saveable,
       resume = resume,
       save_path = save_path,
@@ -49,7 +49,7 @@ benchmark_results <- microbenchmark(
       save_rate_parlist = save_rate_parlist
     )
   },
-  times = 100  # Run each method 100 times
+  times = 100 # Run each method 100 times
 )
 
 # Print benchmark

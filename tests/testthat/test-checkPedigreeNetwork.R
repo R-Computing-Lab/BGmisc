@@ -21,8 +21,8 @@ test_that("checkPedigreeNetwork detects cyclic relationships correctly in potter
 
 # Test Case 3: Validate detection of individuals with more than two parents in 'potter' dataset
 test_that("checkPedigreeNetwork detects individuals with excess parents in potter dataset", {
-   data("potter")
-   excess_parents_potter <- potter
+  data("potter")
+  excess_parents_potter <- potter
   # Artificially create an excess parent situation for Harry Potter
   new_parent <- data.frame(
     personID = "999",
@@ -33,7 +33,7 @@ test_that("checkPedigreeNetwork detects individuals with excess parents in potte
     dadID = NA,
     spouseID = NA,
     sex = "M"
- )
+  )
 
   excess_parents_potter <- rbind(excess_parents_potter, new_parent)
 
@@ -54,9 +54,10 @@ test_that("checkPedigreeNetwork detects duplicate edges in potter dataset", {
   dup_potter <- rbind(dup_potter, dup_row)
 
   results <- checkPedigreeNetwork(dup_potter,
-                                  personID = "personID",
-                                  momID = "momID",
-                                  dadID = "dadID", verbose = FALSE)
+    personID = "personID",
+    momID = "momID",
+    dadID = "dadID", verbose = FALSE
+  )
 
   expect_true(nrow(results$duplicate_edges) > 0)
 })

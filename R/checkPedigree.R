@@ -13,12 +13,10 @@
 #' @return List containing detailed validation results.
 #' @examples
 #' \dontrun{
-#' results <- checkPedigreeNetwork(ped, personID="ID", momID="momID", dadID="dadID", verbose=TRUE)
+#' results <- checkPedigreeNetwork(ped, personID = "ID", momID = "momID", dadID = "dadID", verbose = TRUE)
 #' }
 #' @export
 checkPedigreeNetwork <- function(ped, personID = "ID", momID = "momID", dadID = "dadID", verbose = FALSE) {
-
-
   # Create directed edges from parent to child relationships
   ped_edges <- rbind(
     data.frame(from = ped[[momID]], to = ped[[personID]]),
@@ -37,7 +35,7 @@ checkPedigreeNetwork <- function(ped, personID = "ID", momID = "momID", dadID = 
   results$individuals_with_excess_parents <- ids_excess_parents
 
   if (verbose) {
-    if(length(ids_excess_parents) > 0){
+    if (length(ids_excess_parents) > 0) {
       message("Individuals with more than two parents detected: ", paste(ids_excess_parents, collapse = ", "))
     } else {
       message("No individuals with more than two parents detected.")
@@ -47,12 +45,12 @@ checkPedigreeNetwork <- function(ped, personID = "ID", momID = "momID", dadID = 
   ## Check for duplicate edges
 
   duplicate_edges_idx <- igraph::which_multiple(ped_graph)
-  duplicate_edges <- igraph::as_edgelist(ped_graph)[duplicate_edges_idx, , drop=FALSE]
+  duplicate_edges <- igraph::as_edgelist(ped_graph)[duplicate_edges_idx, , drop = FALSE]
 
   results$duplicate_edges <- duplicate_edges
 
   if (verbose) {
-    if(nrow(duplicate_edges) > 0){
+    if (nrow(duplicate_edges) > 0) {
       message("Duplicate edges detected:")
       print(duplicate_edges)
     } else {

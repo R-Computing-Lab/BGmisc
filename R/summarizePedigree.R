@@ -263,7 +263,7 @@ calculateSummaryDT <- function(data, group_var, skip_var,
           #   count = .N,
           mean = as.double(base::mean(x, na.rm = TRUE)),
           median = as.double(stats::median(x, na.rm = TRUE)),
-        #  mode = as.double(stats::mode(x, na.rm = TRUE)),
+          #  mode = as.double(stats::mode(x, na.rm = TRUE)),
           min = ifelse(all(is.na(x)), as.double(NA), as.double(base::min(x, na.rm = TRUE))),
           max = ifelse(all(is.na(x)), as.double(NA), as.double(base::max(x, na.rm = TRUE))),
           sd = as.double(stats::sd(x, na.rm = TRUE))

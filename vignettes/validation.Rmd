@@ -46,7 +46,6 @@ df <- ped2fam(potter, famID = "newFamID", personID = "personID")
 
 # Check for ID issues
 checkIDs(df, repair = FALSE)
-
 ```
 There are no duplicated or self-referential IDs here. But things rarely stay that simple.
 
@@ -68,16 +67,16 @@ To understand how these tools work in practice, let's create a dataset with two 
 
 
 ```{r datamade}
-
 # Create our problematic dataset
 df_duplicates <- df
 # Sibling ID conflict
-df_duplicates$personID[df_duplicates$name == "Vernon Dursley"] <- 
+df_duplicates$personID[df_duplicates$name == "Vernon Dursley"] <-
   df_duplicates$personID[df_duplicates$name == "Marjorie Dursley"]
 # Duplicate entry
-df_duplicates <- rbind(df_duplicates, 
-                       df_duplicates[df_duplicates$name == "Dudley Dursley", ])
-
+df_duplicates <- rbind(
+  df_duplicates,
+  df_duplicates[df_duplicates$name == "Dudley Dursley", ]
+)
 ```
 
 
@@ -86,11 +85,11 @@ If we look at the data using standard tools, the problems aren't immediately obv
 ```{r}
 library(tidyverse)
 
-summarizeFamilies(df_duplicates, 
-                  famID = "newFamID", 
-                  personID = "personID")$family_summary %>% 
+summarizeFamilies(df_duplicates,
+  famID = "newFamID",
+  personID = "personID"
+)$family_summary %>%
   glimpse()
-
 ```
 
 But `checkIDs()` detects the problems clearly:

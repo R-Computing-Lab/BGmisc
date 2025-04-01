@@ -27,7 +27,7 @@ test_that("checkSex identifies potentially problematic sex coding of non-male da
   expect_equal(results[["ID_female_dads"]], df_potter$personID[df_potter$name == "Vernon Dursley"])
 
 
-df_fix <- checkSex(df_potter,
+  df_fix <- checkSex(df_potter,
     code_male = 1,
     code_female = 0, verbose = TRUE, repair = TRUE
   )
@@ -41,8 +41,8 @@ test_that("checkSex identifies potentially problematic sex coding of non-female 
   df_potter$sex[df_potter$name == "Petunia Evans"] <- 5
 
   results <- checkSex(df_potter,
-                      code_male = 1,
-                      code_female = 0, verbose = TRUE, repair = FALSE
+    code_male = 1,
+    code_female = 0, verbose = TRUE, repair = FALSE
   )
   expect_true("sex_unique" %in% names(results))
 
@@ -51,7 +51,6 @@ test_that("checkSex identifies potentially problematic sex coding of non-female 
   expect_equal(results$sex_length, 3)
 
   expect_equal(results[["ID_male_moms"]], df_potter$personID[df_potter$name == "Petunia Evans"])
-
 })
 
 
@@ -68,7 +67,6 @@ test_that("recodeSex correctly recodes sex in potter dataset", {
 
   recoded_potter <- recodeSex(potter, recode_male = "M", recode_female = "F")
   expect_false(all(recoded_potter$sex %in% c("M", "F")))
-
 })
 
 

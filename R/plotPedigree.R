@@ -110,45 +110,44 @@ plotPedigree <- function(ped,
       # Ensure the output is reverted back to console when function exits
       #     on.exit(if (sink.number() > 0) sink(), add = TRUE)
       if (verbose) {
-      plot_picture <- kinship2::plot.pedigree(p3,
-        cex = cex,
-        col = col,
-        symbolsize = symbolsize,
-        branch = branch,
-        packed = packed, align = align,
-        width = width,
-        density = density,
-        angle = angle, keep.par = keep.par,
-        pconnect = pconnect,
-        mar = mar,
-        ...
-      )
+        plot_picture <- kinship2::plot.pedigree(p3,
+          cex = cex,
+          col = col,
+          symbolsize = symbolsize,
+          branch = branch,
+          packed = packed, align = align,
+          width = width,
+          density = density,
+          angle = angle, keep.par = keep.par,
+          pconnect = pconnect,
+          mar = mar,
+          ...
+        )
 
-      # Explicitly revert the standard output back to the console
-      #      if (sink.number() > 0) {
-      #        sink()
-      #      }
-      return(plot_picture)
-        }else{
-          plot_picture <- suppressMessages(kinship2::plot.pedigree(p3,
-                                                  cex = cex,
-                                                  col = col,
-                                                  symbolsize = symbolsize,
-                                                  branch = branch,
-                                                  packed = packed, align = align,
-                                                  width = width,
-                                                  density = density,
-                                                  angle = angle, keep.par = keep.par,
-                                                  pconnect = pconnect,
-                                                  mar = mar,
-                                                  ...
-          ))
+        # Explicitly revert the standard output back to the console
+        #      if (sink.number() > 0) {
+        #        sink()
+        #      }
+        return(plot_picture)
+      } else {
+        plot_picture <- suppressMessages(kinship2::plot.pedigree(p3,
+          cex = cex,
+          col = col,
+          symbolsize = symbolsize,
+          branch = branch,
+          packed = packed, align = align,
+          width = width,
+          density = density,
+          angle = angle, keep.par = keep.par,
+          pconnect = pconnect,
+          mar = mar,
+          ...
+        ))
 
-      plot_picture[c("plist", "x", "y", "boxw", "boxh","call")] <- NULL
-      class(plot_picture) <- NULL
-      return(plot_picture)
+        plot_picture[c("plist", "x", "y", "boxw", "boxh", "call")] <- NULL
+        class(plot_picture) <- NULL
+        return(plot_picture)
       }
-
     }
   } else {
     stop("The structure of the provided pedigree data does not match the expected structure.")
