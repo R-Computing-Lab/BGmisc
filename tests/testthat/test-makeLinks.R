@@ -67,59 +67,37 @@ test_that("com2links legacy works", {
   expect_true(is.null(resultlegacy))
   expect_true(file.exists("dataRelatedPairs.csv"))
   written_data <- read.csv("dataRelatedPairs.csv")
-  file.remove("dataRelatedPairs.csv")
+  # remove the file
+  expect_true(file.remove("dataRelatedPairs.csv"))
+
   expect_true(all(c("ID1", "ID2", "addRel", "mitRel", "cnuRel") %in% colnames(written_data)))
 
-#  result <- com2links(ad_ped_matrix = ad_ped_matrix,  writetodisk = FALSE)
-#  result <- com2links(mit_ped_matrix = mit_ped_matrix,  writetodisk = FALSE)
+  result <- com2links(ad_ped_matrix = ad_ped_matrix,
+                            mit_ped_matrix = mit_ped_matrix, cn_ped_matrix = cn_ped_matrix,
+                            writetodisk =TRUE, rel_pairs_file = "dataRelatedPairs_new.csv")
+  expect_true(is.null(result))
 
-# note that this isn't behaving as expected
-# sort by ID1, ID2
-#  result <- result[order(result$ID1, result$ID2),]
-#  written_data <- written_data[order(written_data$ID1, written_data$ID2),]
-#  # convert all integer columns to numeric
-#  written_data <- as.data.frame(lapply(written_data, as.numeric))
+  written_data_new <- read.csv("dataRelatedPairs_new.csv")
+  # remove the file
+  expect_true(file.remove("dataRelatedPairs_new.csv"))
+  expect_true(all(c("ID1", "ID2", "addRel", "mitRel", "cnuRel") %in% colnames(written_data_new)))
 
-  # is result just the written data twice, but id1 and id2 are switched for the 2nd
-  # but the 2nd diagonal is not included in the written data
-  # so there's only one row with id1 == id 2
-  # so we need to remove the 2nd diagonal to the written data
-#  written_data2 <- written_data[written_data$ID1 != written_data$ID2,]
-#  written_data3 <-  rbind(written_data, written_data2[ , c(2, 1, 3, 4, 5)])
-#  written_data3 <- written_data3[order(written_data3$ID1, written_data3$ID2),]
 
-#  expect_equal(result, written_data3)
+  result <- com2links(ad_ped_matrix = ad_ped_matrix,
+                      mit_ped_matrix = mit_ped_matrix, cn_ped_matrix = cn_ped_matrix,
+                      writetodisk =FALSE)
 
-  # Sort both input frames by ID1 and ID2
-  result <- result[order(as.numeric(result$ID1), as.numeric(result$ID2)), ]
-  written_data <- written_data[order(as.numeric(written_data$ID1), as.numeric(written_data$ID2)), ]
-
-  # Convert all integer columns to numeric to ensure type consistency
-  written_data <- as.data.frame(lapply(written_data, as.numeric))
-  result <- as.data.frame(lapply(result, as.numeric))
-
-  # Remove second diagonal (ID1 != ID2) to create symmetric pairs
-  written_data2 <- written_data[written_data$ID1 != written_data$ID2, ]
-
-  # Flip ID1 and ID2 for symmetric entries
-  written_data2_flipped <- written_data2
-  written_data2_flipped$ID1 <- written_data2$ID2
-  written_data2_flipped$ID2 <- written_data2$ID1
-
-  # Combine original and flipped entries
-  written_data3 <- rbind(written_data, written_data2_flipped)
-
-  # Final sort
-  written_data3 <- written_data3[order(written_data3$ID1, written_data3$ID2), ]
+  expect_true(is.data.frame(result))
 
   # Drop row names to avoid mismatches in expect_equal
   rownames(result) <- NULL
-  rownames(written_data3) <- NULL
+  rownames(written_data_new) <- NULL
+  rownames(written_data) <- NULL
 
-  # Final comparison
-  expect_equal(result, written_data3)
-
-  #file.remove("dataRelatedPairs.csv")
+  # Final comparison between written versions
+  expect_equal(written_data_new, written_data)
+  expect_equal(written_data, result)
+  expect_equal(written_data_new, result)
 })
 
 

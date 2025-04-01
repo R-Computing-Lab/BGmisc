@@ -1,18 +1,25 @@
-#' Take a sparse component and turn it into kinship links
-#' @param rel_pairs_file File to write related pairs to
-#' @param ad_ped_matrix Matrix of additive genetic relatedness coefficients
-#' @param mit_ped_matrix Matrix of mitochondrial relatedness coefficients
-#' @param mt_ped_matrix (alternative) Matrix of mitochondrial relatedness coefficients
-#' @param cn_ped_matrix Matrix of common nuclear relatedness coefficients
-#' @param write_buffer_size Number of related pairs to write to disk at a time
-#' @param gc logical. If TRUE, do frequent garbage collection via \code{\link{gc}} to save memory
-#' @param writetodisk logical. If TRUE, write the related pairs to disk
-#' @param verbose logical. If TRUE, print progress messages
-#' @param update_rate numeric. How often to print progress messages
-#' @param legacy logical. If TRUE, use the legacy version of the function
-#' @param outcome_name Character string. The name of the outcome
+#' Convert Sparse Relationship Matrices to Kinship Links
+#'
+#' This function processes one or more sparse relationship components (additive, mitochondrial,
+#' and common nuclear) and converts them into kinship link pairs. The resulting related pairs are
+#' either returned as a data frame or written to disk in CSV format.
+#'
+#' @param rel_pairs_file File path to write related pairs to (CSV format).
+#' @param ad_ped_matrix Matrix of additive genetic relatedness coefficients.
+#' @param mit_ped_matrix Matrix of mitochondrial relatedness coefficients. Alias: \code{mt_ped_matrix}.
+#' @param mt_ped_matrix Matrix of mitochondrial relatedness coefficients.
+#' @param cn_ped_matrix Matrix of common nuclear relatedness coefficients.
+#' @param write_buffer_size Number of related pairs to write to disk at a time.
+#' @param gc Logical. If TRUE, performs garbage collection via \code{\link{gc}} to free memory.
+#' @param writetodisk Logical. If TRUE, writes the related pairs to disk; if FALSE, returns a data frame.
+#' @param verbose Logical. If TRUE, prints progress messages.
+#' @param update_rate Numeric. Frequency (in iterations) at which progress messages are printed.
+#' @param legacy Logical. If TRUE, uses the legacy branch of the function.
+#' @param outcome_name Character string representing the outcome name (used in file naming).
+#' @param drop_upper_triangular Logical. If TRUE, drops the upper triangular portion of the matrix.
 #' @param ... Additional arguments to be passed to \code{\link{com2links}}
-#' @return A data frame of related pairs
+#'
+#' @return A data frame of related pairs if \code{writetodisk} is FALSE; otherwise, writes the results to disk.
 #' @export
 com2links <- function(
     rel_pairs_file = "dataRelatedPairs.csv",
@@ -30,33 +37,20 @@ com2links <- function(
     verbose = FALSE,
     legacy = FALSE,
     outcome_name = "data",
+    drop_upper_triangular = TRUE,
     ...) {
+
+  # Non-legacy mode processing
+
   if (!legacy) {
-    # match arguments
-    #  a <- match.call()
-    # alternative names
-    #  mit_ped_names <- c("mit_ped_matrix","mt_ped_matrix","mtdna_ped_matrix")
-    # cn_ped_names <- c("cn_ped_matrix","comn_ped_matrix","nuc_ped_matrix")
-    #  ad_ped_names <- c("ad_ped_matrix","add_ped_matrix","additive_ped_matrix")
 
-    #  if (sum(names(a) %in% mit_ped_names)>0) {
-    #  mit_ped_matrix <- unlist(as.list(match.call())[mit_ped_names])[1]
-    # print(inherits(mit_ped_matrix))
-    # }
-    #  if (sum(names(a) %in% cn_ped_names) > 0) {
-    #  cn_ped_matrix <- unlist(as.list(match.call())[cn_ped_names])[1]
-    #  }
-    #
-    #  if (sum(names(a) %in% ad_ped_names) > 0) {
-    #  ad_ped_matrix <- unlist(as.list(match.call())[ad_ped_names])[1]
-    # }
-    # Fast fails
+    # --- Input Validations and Preprocessing ---
 
-    # Ensure at least one relationship matrix is provided
+    # Ensure that at least one relationship matrix is provided.
     if (is.null(ad_ped_matrix) && is.null(mit_ped_matrix) && is.null(cn_ped_matrix)) {
       stop("At least one of 'ped_matrix', 'mit_ped_matrix', or 'cn_ped_matrix' must be provided.")
     }
-    # Check for matrix type
+    # Validate and convert ad_ped_matrix to a sparse dgCMatrix if provided.
     if (!is.null(ad_ped_matrix)) {
       if (!inherits(ad_ped_matrix, c("matrix", "dgCMatrix", "dsCMatrix"))) {
         stop("The 'ad_ped_matrix' must be a matrix or dgCMatrix.")
@@ -66,6 +60,8 @@ com2links <- function(
         ad_ped_matrix <- methods::as(ad_ped_matrix, "dgCMatrix")
       }
     }
+
+    # Validate and convert cn_ped_matrix to a sparse dgCMatrix if provided.
     if (!is.null(cn_ped_matrix)) {
       if (!inherits(cn_ped_matrix, c("matrix", "dgCMatrix", "dsCMatrix"))) {
         stop("The 'cn_ped_matrix' must be a matrix or dgCMatrix.")
@@ -74,7 +70,11 @@ com2links <- function(
       if (!inherits(cn_ped_matrix, "dgCMatrix")) {
         cn_ped_matrix <- methods::as(cn_ped_matrix, "dgCMatrix")
       }
+      # Ensure CN matrix is symmetric.
+      cn_ped_matrix <- methods::as(cn_ped_matrix, "symmetricMatrix")
     }
+
+    # Validate and process mit_ped_matrix: convert and ensure binary values.
     if (!is.null(mit_ped_matrix)) {
       if (!inherits(mit_ped_matrix, c("matrix", "dgCMatrix", "dsCMatrix"))) {
         stop("The 'mit_ped_matrix' must be a matrix or dgCMatrix.")
@@ -86,12 +86,11 @@ com2links <- function(
       mit_ped_matrix@x[mit_ped_matrix@x > 0] <- 1
     }
 
-    # build IDs
-    # Extract IDs from the first available matrix
+    # --- Build IDs and Prepare Matrix Pointers ---
+
+    # Extract individual IDs from the first available matrix.
     ids <- NULL
     if (!is.null(cn_ped_matrix)) {
-      # Convert CN matrix to symmetric if needed
-      cn_ped_matrix <- methods::as(cn_ped_matrix, "symmetricMatrix")
       ids <- as.numeric(dimnames(cn_ped_matrix)[[1]])
       nc <- ncol(cn_ped_matrix)
     } else if (!is.null(ad_ped_matrix)) {
@@ -106,7 +105,7 @@ com2links <- function(
       stop("Could not extract IDs from the provided matrices.")
     }
 
-    # check which matrices are provided
+    # Count how many matrices are provided.
     sum_nulls <- sum(!is.null(ad_ped_matrix),
       !is.null(mit_ped_matrix),
       !is.null(cn_ped_matrix),
@@ -115,7 +114,8 @@ com2links <- function(
     if (verbose) {
       print(sum_nulls)
     }
-    # Extract matrix pointers (directly)
+
+    # Extract the internal pointers (p, i, and x slots) for each provided matrix.
     if (!is.null(ad_ped_matrix)) {
       ad_ped_p <- ad_ped_matrix@p + 1L
       ad_ped_i <- ad_ped_matrix@i + 1L
@@ -132,20 +132,27 @@ com2links <- function(
       cn_x <- cn_ped_matrix@x
     }
 
-    # if all matrices are provided
+    # --- Process Based on the Number of Provided Matrices ---
+    # --- Case: All Three Matrices Provided ---
     if (sum_nulls == 3) {
-      # Matrix index adjustments
+
+      # Set pointers for all three matrices.
       newColPos1 <- ad_ped_p
       iss1 <- ad_ped_i
       x1 <- ad_ped_x
+
       newColPos2 <- mt_p
       iss2 <- mt_i
       x2 <- mt_x
+
       newColPos3 <- cn_p
       iss3 <- cn_i
       x3 <- cn_x
-      # cleanup
+
+      # Define relationship column names.
       relNames <- c("addRel", "mitRel", "cnuRel")
+
+      # Optionally remove the original pointers to free memory.
       if (gc == TRUE) {
         remove(ad_ped_p, ad_ped_i, ad_ped_x, mt_p, mt_i, mt_x, cn_p, cn_i, cn_x)
       }
@@ -157,26 +164,31 @@ com2links <- function(
       #  rel_pairs_file <- paste0(outcome_name, "_dataRelatedPairs.csv")
       # mapa_id_file <- paste0(outcome_name, "_data_mapaID.csv")
 
-      # Initialize related pairs file
+      # Initialize the related pairs file with headers.
       df_relpairs <- data.frame(
         ID1 = numeric(0), ID2 = numeric(0)
       )
       df_relpairs[[relNames[1]]] <- numeric(0)
       df_relpairs[[relNames[2]]] <- numeric(0)
       df_relpairs[[relNames[3]]] <- numeric(0)
+
+      # Write the headers to the related pairs file.
       if (writetodisk == TRUE) {
         utils::write.table(
           df_relpairs,
           file = rel_pairs_file, sep = ",", append = FALSE, row.names = FALSE
         )
-        # initial buffer
+
+        # Prepare an empty buffer for batching writes.
         write_buffer <- list()
         remove(df_relpairs)
       }
+
+      # Loop over each column (individual) in the matrix.
       for (j in 1L:nc) {
         ID2 <- ids[j]
 
-        # Extract column indices
+        # Extract column indices for the 1st component
         ncp1 <- newColPos1[j]
         ncp1p <- newColPos1[j + 1L]
         cond1 <- ncp1 < ncp1p
@@ -184,7 +196,7 @@ com2links <- function(
           vv1 <- ncp1:(ncp1p - 1L)
           iss1vv <- iss1[vv1]
         }
-
+        # Extract indices for the 2nd component
         ncp2 <- newColPos2[j]
         ncp2p <- newColPos2[j + 1L]
         cond2 <- ncp2 < ncp2p
@@ -193,6 +205,7 @@ com2links <- function(
           iss2vv <- iss2[vv2]
         }
 
+        # Extract indices for the 3rd component
         ncp3 <- newColPos3[j]
         ncp3p <- newColPos3[j + 1L]
         cond3 <- ncp3 < ncp3p
@@ -201,6 +214,7 @@ com2links <- function(
           iss3vv <- iss3[vv3]
         }
 
+        # Create a unique, sorted set of row indices from all provided matrices.
         u <- sort(igraph::union(igraph::union(if (cond1) {
           iss1vv
         }, if (cond2) {
@@ -209,6 +223,7 @@ com2links <- function(
           iss3vv
         }))
 
+        # If any relationships exist for this individual, build the related pairs.
         if (cond1 || cond2 || cond3) {
           ID1 <- ids[u]
           tds <- data.frame(ID1 = ID1, ID2 = ID2)
@@ -216,6 +231,7 @@ com2links <- function(
           tds[[relNames[2]]] <- 0
           tds[[relNames[3]]] <- 0
 
+          # Assign the relationship coefficients from each matrix.
           if (cond1) {
             tds[u %in% iss1vv, relNames[1]] <- x1[vv1]
           }
@@ -225,6 +241,14 @@ com2links <- function(
           if (cond3) {
             tds[u %in% iss3vv, relNames[3]] <- x3[vv3]
           }
+
+          # Optionally drop upper-triangular entries.
+          if(drop_upper_triangular == TRUE) {
+            tds <- tds[tds$ID1 <= tds$ID2, ]  # or < if you want strictly lower triangle
+          }
+
+          # Write the batch to disk or accumulate in the data frame.
+          if (nrow(tds) > 0) {
           if (writetodisk == TRUE) {
             write_buffer[[length(write_buffer) + 1]] <- tds
 
@@ -238,6 +262,7 @@ com2links <- function(
           } else {
             df_relpairs <- rbind(df_relpairs, tds)
           }
+          }
         }
         if (verbose) {
           if (!(j %% update_rate)) {
@@ -246,7 +271,9 @@ com2links <- function(
         }
       }
     } else if (sum_nulls == 2) {
-      # one matrix is missing
+      # --- Case: Two Matrices Provided ---
+      # Set pointers and relationship names based on which matrix is missing.
+
       if (is.null(ad_ped_matrix)) {
         newColPos1 <- mt_p
         iss1 <- mt_i
@@ -283,8 +310,8 @@ com2links <- function(
           remove(ad_ped_p, ad_ped_i, ad_ped_x, mt_p, mt_i, mt_x)
         }
       }
-      # Matrix index adjustments
-      # Initialize related pairs file
+
+      # Initialize the related pairs file with the appropriate headers.
       df_relpairs <- data.frame(
         ID1 = numeric(0), ID2 = numeric(0)
       )
@@ -299,10 +326,12 @@ com2links <- function(
         write_buffer <- list()
         remove(df_relpairs)
       }
+
+      # Process each column to extract relationships.
       for (j in 1L:nc) {
         ID2 <- ids[j]
 
-        # Extract column indices
+        # Extract indices from the first matrix.
         ncp1 <- newColPos1[j]
         ncp1p <- newColPos1[j + 1L]
         cond1 <- ncp1 < ncp1p
@@ -310,7 +339,7 @@ com2links <- function(
           vv1 <- ncp1:(ncp1p - 1L)
           iss1vv <- iss1[vv1]
         }
-
+        # Extract indices from the second matrix.
         ncp2 <- newColPos2[j]
         ncp2p <- newColPos2[j + 1L]
         cond2 <- ncp2 < ncp2p
@@ -319,12 +348,14 @@ com2links <- function(
           iss2vv <- iss2[vv2]
         }
 
+        # Merge the indices from both matrices.
         u <- sort(igraph::union(if (cond1) {
           iss1vv
         }, if (cond2) {
           iss2vv
         }))
 
+        # Create related pairs if relationships are found.
         if (cond1 || cond2) {
           ID1 <- ids[u]
           tds <- data.frame(ID1 = ID1, ID2 = ID2)
@@ -337,6 +368,12 @@ com2links <- function(
           if (cond2) {
             tds[u %in% iss2vv, relNames[2]] <- x2[vv2]
           }
+          if(drop_upper_triangular == TRUE) {
+            tds <- tds[tds$ID1 <= tds$ID2, ]  # or < if you want strictly lower triangle
+          }
+
+          # Write the batch to disk or accumulate in the data frame.
+if (nrow(tds) > 0) {
           if (writetodisk == TRUE) {
             write_buffer[[length(write_buffer) + 1]] <- tds
 
@@ -350,6 +387,7 @@ com2links <- function(
           } else {
             df_relpairs <- rbind(df_relpairs, tds)
           }
+}
         }
         if (verbose) {
           if (!(j %% update_rate)) {
@@ -358,6 +396,7 @@ com2links <- function(
         }
       }
     } else if (sum_nulls == 1) {
+      # --- Case: Only One Matrix Provided ---
       if (verbose) {
         message("Only one matrix is present")
       }
@@ -389,7 +428,7 @@ com2links <- function(
         }
       }
 
-      # Initialize related pairs file
+      # Initialize the related pairs file.
       df_relpairs <- data.frame(
         ID1 = numeric(0), ID2 = numeric(0)
       )
@@ -406,6 +445,7 @@ com2links <- function(
         remove(df_relpairs)
       }
 
+      # Process each column.
       for (j in 1L:nc) {
         ID2 <- ids[j]
         # Extract column indices
@@ -417,6 +457,7 @@ com2links <- function(
           iss1vv <- iss1[vv1]
         }
 
+        # Use the indices from the single matrix.
         u <- sort(iss1vv)
 
         if (cond1) {
@@ -427,6 +468,12 @@ com2links <- function(
           if (cond1) {
             tds[u %in% iss1vv, relNames[1]] <- x1[vv1]
           }
+          if(drop_upper_triangular == TRUE) {
+            tds <- tds[tds$ID1 <= tds$ID2, ]  # or < if you want strictly lower triangle
+          }
+
+          # Write the batch to disk or accumulate in the data frame.
+          if (nrow(tds) > 0) {
           if (writetodisk == TRUE) {
             write_buffer[[length(write_buffer) + 1]] <- tds
 
@@ -441,16 +488,20 @@ com2links <- function(
             df_relpairs <- rbind(df_relpairs, tds)
           }
         }
-        if (verbose) {
-          if (!(j %% update_rate)) {
-            cat(paste0("Done with ", j, " of ", nc, "\n"))
-          }
+        }
+        if (verbose && !(j %% update_rate)) {
+          cat(paste0("Done with ", j, " of ", nc, "\n"))
         }
       }
+    } else {
+      stop("No matrices provided")
     }
+
+  # If not writing to disk, return the accumulated data frame.
     if (writetodisk == FALSE) {
       return(df_relpairs)
     } else {
+      # Write any remaining buffered rows.
       if (length(write_buffer) > 0) {
         utils::write.table(do.call(rbind, write_buffer),
           file = rel_pairs_file,
@@ -460,10 +511,11 @@ com2links <- function(
       #  return(NULL)
     }
   } else if (legacy) {
+    # --- Legacy Mode ---
     if (verbose) {
       message("Using legacy mode")
     }
-
+    # In legacy mode, convert matrices to the expected symmetric formats.
 
     #  load(paste0(outcome_name,'_dataBiggestCnPedigree.Rdata'))
     #  biggestCnPed <-  methods::as(biggestCnPed, "symmetricMatrix")
@@ -480,14 +532,20 @@ com2links <- function(
     remove(ad_ped_matrix)
     biggestMtPed@x[biggestMtPed@x > 0] <- 1
 
+    # Set the output file name.
     if (exists("rel_pairs_file")) {
       fname <- rel_pairs_file
     } else {
       fname <- paste0(outcome_name, "_dataBiggestRelatedPairsTake2.csv")
     }
+    # Initialize the output file with headers.
     ds <- data.frame(ID1 = numeric(0), ID2 = numeric(0), addRel = numeric(0), mitRel = numeric(0), cnuRel = numeric(0))
     utils::write.table(ds, file = fname, sep = ",", append = FALSE, row.names = FALSE)
+
+    # Extract IDs from the common nuclear matrix.
     ids <- as.numeric(dimnames(biggestCnPed)[[1]])
+
+    # Extract pointers from the legacy matrices.
     newColPos1 <- biggestPed@p + 1L
     iss1 <- biggestPed@i + 1L
     newColPos2 <- biggestMtPed@p + 1L
@@ -495,6 +553,8 @@ com2links <- function(
     newColPos3 <- biggestCnPed@p + 1L
     iss3 <- biggestCnPed@i + 1L
     nc <- ncol(biggestPed)
+
+    # Process each individual.
     for (j in 1L:nc) {
       ID2 <- ids[j]
       ncp1 <- newColPos1[j]
@@ -518,6 +578,8 @@ com2links <- function(
         vv3 <- ncp3:(ncp3p - 1L)
         iss3vv <- iss3[vv3]
       }
+
+      # Merge indices from all three matrices.
       u <- sort(igraph::union(igraph::union(if (cond1) {
         iss1vv
       }, if (cond2) {
