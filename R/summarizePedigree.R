@@ -29,6 +29,7 @@
 #' @param include_founder Logical. If `TRUE`, includes the founder (originating member) of each lineage in the output.
 #' @param founder_sort_var Character. Column used to determine the founder of each lineage.
 #'   Defaults to `byr` (if available) or `personID` otherwise.
+#' @param network_checks Logical. If `TRUE`, performs network checks on the pedigree data.
 #' @param verbose Logical, if TRUE, print progress messages.
 #' @returns A data.frame (or list) containing summary statistics for family, maternal, and paternal lines, as well as the 5 oldest and biggest lines.
 #' @import data.table
@@ -39,7 +40,8 @@ summarizePedigrees <- function(ped, famID = "famID", personID = "ID",
                                type = c("fathers", "mothers", "families"),
                                byr = NULL, include_founder = FALSE, founder_sort_var = NULL,
                                nbiggest = 5, noldest = 5, skip_var = NULL,
-                               five_num_summary = FALSE, verbose = FALSE) {
+                               five_num_summary = FALSE, network_checks = FALSE,
+                               verbose = FALSE) {
   # Fast Fails
 
   ## Check that the ID variables are not the same
@@ -75,7 +77,6 @@ summarizePedigrees <- function(ped, famID = "famID", personID = "ID",
     founder_sort_var <- byr
   }
 
-
   # Build the pedigree using the provided functions
   if ("families" %in% type && !famID %in% names(ped)) {
     if (verbose) message("Counting families...")
@@ -90,6 +91,7 @@ summarizePedigrees <- function(ped, famID = "famID", personID = "ID",
     ped <- ped2paternal(ped, personID = personID, momID = momID, dadID = dadID, patID = patID)
   }
 
+
   # Convert to data.table
   ped_dt <- data.table::as.data.table(ped)
 
@@ -98,6 +100,19 @@ summarizePedigrees <- function(ped, famID = "famID", personID = "ID",
   output <- list()
   ## Size of families
   n_fathers <- n_mothers <- n_families <- NULL
+
+
+  if (network_checks) {
+    if (verbose) message("Performing network validation checks...")
+    network_validation_results <- checkPedigreeNetwork(
+      ped,
+      personID = personID,
+      momID = momID,
+      dadID = dadID,
+      verbose = verbose
+    )
+    output$network_validation <- network_validation_results
+  }
 
   # Calculate summary statistics for families, maternal lines, and paternal lines
 
@@ -183,7 +198,7 @@ summarizePedigrees <- function(ped, famID = "famID", personID = "ID",
 
 
   ## oldest
-  if (!is.null(byr) & noldest > 0) {
+  if (!is.null(byr) && noldest > 0) {
     if (!is.null(n_families) && "families" %in% type) {
       if (verbose) message("Finding oldest families...")
       output$oldest_families <- try_na(family_summary_dt[order(get(byr))][1:min(c(noldest, n_families),
@@ -206,7 +221,7 @@ summarizePedigrees <- function(ped, famID = "famID", personID = "ID",
 
   # biggest lines
   if (!is.null(nbiggest) && nbiggest > 0) {
-    if (!is.null(n_families) & "families" %in% type) {
+    if (!is.null(n_families) && "families" %in% type) {
       output$biggest_families <- try_na(family_summary_dt[order(-get("count"))][1:min(c(nbiggest, n_families),
         na.rm = TRUE
       )])
@@ -248,6 +263,7 @@ calculateSummaryDT <- function(data, group_var, skip_var,
           #   count = .N,
           mean = as.double(base::mean(x, na.rm = TRUE)),
           median = as.double(stats::median(x, na.rm = TRUE)),
+          #  mode = as.double(stats::mode(x, na.rm = TRUE)),
           min = ifelse(all(is.na(x)), as.double(NA), as.double(base::min(x, na.rm = TRUE))),
           max = ifelse(all(is.na(x)), as.double(NA), as.double(base::max(x, na.rm = TRUE))),
           sd = as.double(stats::sd(x, na.rm = TRUE))

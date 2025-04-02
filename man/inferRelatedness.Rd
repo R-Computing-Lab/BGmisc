@@ -13,7 +13,7 @@ inferRelatedness(obsR, aceA = 0.9, aceC = 0, sharedC = 0)
 
 \item{aceC}{Numeric. Proportion of variance attributable to shared environmental variance. Must be between 0 and 1. Default is 0.}
 
-\item{sharedC}{Numeric. Proportion of shared environment shared between the two individuals. Must be between 0 and 1. Default is 0.}
+\item{sharedC}{Numeric. Proportion of shared environment shared between the two individuals. Must be between 0 (no shared environment) and 1 (completely shared environment). Default is 0.}
 }
 \value{
 Numeric. The calculated relatedness coefficient (`est_r`).

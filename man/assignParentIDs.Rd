@@ -4,12 +4,14 @@
 \alias{assignParentIDs}
 \title{Assign momID and dadID based on family mapping}
 \usage{
-assignParentIDs(df_temp, family_to_parents)
+assignParentIDs(df_temp, family_to_parents, datasource)
 }
 \arguments{
 \item{df_temp}{A data frame containing individual information.}
 
 \item{family_to_parents}{A list mapping family IDs to parent IDs.}
+
+\item{datasource}{A string indicating the data source. Options are "gedcom" and "wiki".}
 }
 \value{
 A data frame with added momID and dad_ID columns.
