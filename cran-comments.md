@@ -5,13 +5,15 @@ This update introduces several enhancements to functionality, performance, and d
 
 ## Pretest Notes
 
-None
+As recommended by Uwe Ligges, I've now rebuilt the package using R Under development (unstable) (2025-02-17 r87739 ucrt). This should fix 
+"Author field differs from that derived from Authors@R", which is due to use of an ORCID identifier. 
 
 # Test Environments
 
 1. Local OS: Windows 11 x64 (build 22635), R 4.4.2 (2024-10-31 ucrt)
 2. Local OS: Windows 11 x64 (build 22635), R 4.4.3 (2025-02-28 ucrt)
-3. **GitHub Actions**:  
+3. Local OS: Windows 11 x64 (build 22635), R Under development (unstable) (2025-02-17 r87739 ucrt)
+4. **GitHub Actions**:  
     - [Link](https://github.com/R-Computing-Lab/BGmisc/actions/runs/14227584727)
     - macOS (latest version) with the latest R release.
     - Windows (latest version) with the latest R release.
