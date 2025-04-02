@@ -5,12 +5,12 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Modeling and Relatedness • BGmisc</title>
+<title>Modeling variance components • BGmisc</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Modeling and Relatedness">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Modeling variance components">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -34,7 +34,7 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="../articles/analyticrelatedness.html">Calculating and Inferring Relatedness Coefficients with BGmisc</a></li>
-    <li><a class="dropdown-item" href="../articles/modelingrelatedness.html">Modeling and Relatedness</a></li>
+    <li><a class="dropdown-item" href="../articles/modelingrelatedness.html">Modeling variance components</a></li>
     <li><a class="dropdown-item" href="../articles/network.html">Network tools for finding extended pedigrees and path tracing</a></li>
     <li><a class="dropdown-item" href="../articles/partial.html">Adjacency matrix methods</a></li>
     <li><a class="dropdown-item" href="../articles/pedigree.html">Pedigree Simulation and Visualization with BGmisc</a></li>
@@ -61,7 +61,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>Modeling and Relatedness</h1>
+      <h1>Modeling variance components</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/R-Computing-Lab/BGmisc/blob/main/vignettes/modelingrelatedness.Rmd" class="external-link"><code>vignettes/modelingrelatedness.Rmd</code></a></small>
@@ -226,8 +226,8 @@ group. Let us confirm by fitting a model. First we prepare the data.</p>
 <span><span class="co">#&gt; AIC:      -5917.148              -3685.148                -3685.078</span></span>
 <span><span class="co">#&gt; BIC:     -10747.543              -3667.773                -3680.471</span></span>
 <span><span class="co">#&gt; To get additional fit indices, see help(mxRefModels)</span></span>
-<span><span class="co">#&gt; timestamp: 2025-04-02 14:53:24 </span></span>
-<span><span class="co">#&gt; Wall clock time: 0.05636406 secs </span></span>
+<span><span class="co">#&gt; timestamp: 2025-04-02 19:11:16 </span></span>
+<span><span class="co">#&gt; Wall clock time: 0.05811524 secs </span></span>
 <span><span class="co">#&gt; optimizer:  SLSQP </span></span>
 <span><span class="co">#&gt; OpenMx version number: 2.21.13 </span></span>
 <span><span class="co">#&gt; Need help?  See help(mxSummary)</span></span></code></pre></div>
@@ -266,8 +266,8 @@ identified, the model now fits.</p>
 <span><span class="co">#&gt; AIC:      -9113.092              -5499.092                -5499.048</span></span>
 <span><span class="co">#&gt; BIC:     -17811.437              -5479.794                -5492.498</span></span>
 <span><span class="co">#&gt; To get additional fit indices, see help(mxRefModels)</span></span>
-<span><span class="co">#&gt; timestamp: 2025-04-02 14:53:24 </span></span>
-<span><span class="co">#&gt; Wall clock time: 0.05621409 secs </span></span>
+<span><span class="co">#&gt; timestamp: 2025-04-02 19:11:17 </span></span>
+<span><span class="co">#&gt; Wall clock time: 0.05827308 secs </span></span>
 <span><span class="co">#&gt; optimizer:  SLSQP </span></span>
 <span><span class="co">#&gt; OpenMx version number: 2.21.13 </span></span>
 <span><span class="co">#&gt; Need help?  See help(mxSummary)</span></span></code></pre></div>
