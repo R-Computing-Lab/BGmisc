@@ -14,11 +14,13 @@ ped2com(
   flatten.diag = FALSE,
   standardize.colnames = TRUE,
   transpose_method = "tcrossprod",
+  adjacency_method = "indexed",
+  isChild_method = "classic",
   saveable = FALSE,
   resume = FALSE,
   save_rate = 5,
   save_rate_gen = save_rate,
-  save_rate_parlist = 1000 * save_rate,
+  save_rate_parlist = 1e+05 * save_rate,
   update_rate = 100,
   save_path = "checkpoint/",
   ...
@@ -44,6 +46,10 @@ ped2com(
 \item{standardize.colnames}{logical. If TRUE, standardize the column names of the pedigree dataset}
 
 \item{transpose_method}{character. The method to use for computing the transpose.  Options are "tcrossprod", "crossprod", or "star"}
+
+\item{adjacency_method}{character. The method to use for computing the adjacency matrix.  Options are "loop" or "indexed"}
+
+\item{isChild_method}{character. The method to use for computing the isChild matrix.  Options are "classic" or "partialparent"}
 
 \item{saveable}{logical. If TRUE, save the intermediate results to disk}
 

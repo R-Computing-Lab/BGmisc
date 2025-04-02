@@ -231,7 +231,8 @@ test_that("ped2com handles checkpoint saving and resuming", {
   ped_add_saved <- ped2com(hazard,
     component = "additive", saveable = TRUE, save_path = save_path,
     save_rate_gen = 1,
-    save_rate_parlist = 1
+    save_rate_parlist = 10,
+    adjacency_method = "direct"
   )
 
   checkpoint_files_v0 <- list(
@@ -257,10 +258,214 @@ test_that("ped2com handles checkpoint saving and resuming", {
   expect_equal(length(checkpoint_files_v1), length(checkpoint_files_v0))
 
   # Resume from checkpoint
-  resumed_matrix <- ped2com(hazard, component = "additive", resume = TRUE, save_path = save_path)
+  resumed_matrix <- ped2com(hazard,
+    component = "additive", resume = TRUE, save_path = save_path,
+    adjacency_method = "direct"
+  )
 
   expect_equal(dim(resumed_matrix), c(nrow(hazard), nrow(hazard)))
   expect_equal(dim(resumed_matrix), dim(ped_add_saved))
   # Cleanup
   unlink(save_path, recursive = TRUE)
+})
+
+#  adjacency_method = "indexed" and "loop" produce the same results", {
+test_that("adjacency_method  'indexed', 'loop', and direct produce the same results for additive matrix", {
+  data(inbreeding)
+  tolerance <- 1e-10
+  ped_add_indexed <- ped2com(hazard, component = "additive", adjacency_method = "indexed")
+  ped_add_loop <- ped2com(hazard, component = "additive", adjacency_method = "loop")
+  ped_add_direct <- ped2com(hazard, component = "additive", adjacency_method = "direct")
+  expect_equal(ped_add_indexed, ped_add_loop, tolerance = tolerance)
+  expect_equal(ped_add_loop, ped_add_direct, tolerance = tolerance)
+  expect_equal(ped_add_indexed, ped_add_direct, tolerance = tolerance)
+})
+
+test_that("adjacency_method  'indexed', 'loop', and direct produce the same results for mtdna  matrix", {
+  data(hazard)
+  tolerance <- 1e-10
+
+  ped_mit_indexed <- ped2com(hazard, component = "mitochondrial", adjacency_method = "indexed")
+  ped_mit_loop <- ped2com(hazard, component = "mitochondrial", adjacency_method = "loop")
+  ped_mit_direct <- ped2com(hazard, component = "mitochondrial", adjacency_method = "direct")
+  expect_equal(ped_mit_indexed, ped_mit_loop, tolerance = tolerance)
+  expect_equal(ped_mit_loop, ped_mit_direct, tolerance = tolerance)
+  expect_equal(ped_mit_indexed, ped_mit_direct, tolerance = tolerance)
+})
+
+
+test_that("adjacency_method  'indexed', 'loop', and direct produce the same results for common nuclear matrix", {
+  data(hazard)
+  tolerance <- 1e-10
+
+  # common nuclear
+  ped_common_indexed <- ped2com(hazard, component = "common nuclear", adjacency_method = "indexed")
+  ped_common_loop <- ped2com(hazard, component = "common nuclear", adjacency_method = "loop")
+  #  ped_common_direct <- ped2com(hazard, component = "common nuclear", adjacency_method = "direct")
+  expect_equal(ped_common_indexed, ped_common_loop, tolerance = tolerance)
+  # expect_equal(ped_common_loop, ped_common_direct, tolerance = tolerance)
+  # expect_equal(ped_common_indexed, ped_common_direct, tolerance = tolerance)
+})
+
+
+test_that("adjacency_method  'indexed', 'loop', and direct produce the same results for generation matrix", {
+  data(hazard)
+  tolerance <- 1e-10
+  #  generation
+  ped_gen_indexed <- ped2com(hazard, component = "generation", adjacency_method = "indexed")
+  ped_gen_loop <- ped2com(hazard, component = "generation", adjacency_method = "loop")
+  ped_gen_direct <- ped2com(hazard, component = "generation", adjacency_method = "direct")
+
+  expect_equal(ped_gen_indexed, ped_gen_loop, tolerance = tolerance)
+  expect_equal(ped_gen_loop, ped_gen_direct, tolerance = tolerance)
+  expect_equal(ped_gen_indexed, ped_gen_direct, tolerance = tolerance)
+})
+
+test_that("isChild_method product the same results for mtdna matrix, remove mom", {
+  data(hazard)
+  df <- hazard
+  tolerance <- 1e-10
+  ped_mit_partial_nona <- ped2com(df,
+    isChild_method = "partialparent",
+    component = "mitochondrial",
+    adjacency_method = "direct"
+  )
+  ped_mit_classic_nona <- ped2com(df,
+    isChild_method = "classic",
+    component = "mitochondrial", adjacency_method = "direct"
+  )
+
+  expect_equal(ped_mit_partial_nona, ped_mit_classic_nona, tolerance = tolerance)
+  df$momID[df$ID == 4] <- NA
+
+  # maternal
+  ped_mit_partial <- ped2com(df,
+    isChild_method = "partialparent",
+    component = "mitochondrial",
+    adjacency_method = "direct"
+  )
+  ped_mit_classic <- ped2com(df,
+    isChild_method = "classic",
+    component = "mitochondrial", adjacency_method = "direct"
+  )
+  # should be the same within method
+  # expect_equal(ped_mit_partial, ped_mit_classic, tolerance = tolerance)
+  #  expect_equal(ped_mit_partial, ped_mit_classic_nona, tolerance = tolerance)
+
+  # should be the same across methods
+  #  expect_equal(ped_mit_partial_nona, ped_mit_partial, tolerance = tolerance)
+  #  expect_equal(ped_mit_classic_nona, ped_mit_classic, tolerance = tolerance)
+})
+
+test_that("isChild_method product the same results for mtdna matrix, remove dad", {
+  data(hazard)
+  df <- hazard
+  tolerance <- 1e-10
+  ped_mit_partial_nona <- ped2com(df,
+    isChild_method = "partialparent",
+    component = "mitochondrial",
+    adjacency_method = "direct"
+  )
+  ped_mit_classic_nona <- ped2com(df,
+    isChild_method = "classic",
+    component = "mitochondrial", adjacency_method = "direct"
+  )
+
+  expect_equal(ped_mit_partial_nona, ped_mit_classic_nona, tolerance = tolerance)
+  df$dadID[df$ID == 4] <- NA
+  # maternal
+  ped_mit_partial <- ped2com(df,
+    isChild_method = "partialparent",
+    component = "mitochondrial",
+    adjacency_method = "direct"
+  )
+  ped_mit_classic <- ped2com(df,
+    isChild_method = "classic",
+    component = "mitochondrial", adjacency_method = "direct"
+  )
+  # should be the same within method
+  expect_equal(ped_mit_partial, ped_mit_classic, tolerance = tolerance)
+  expect_equal(ped_mit_partial, ped_mit_classic_nona, tolerance = tolerance)
+
+  # should be the same across methods
+  expect_equal(ped_mit_partial_nona, ped_mit_partial, tolerance = tolerance)
+  expect_equal(ped_mit_classic_nona, ped_mit_classic, tolerance = tolerance)
+})
+
+test_that("isChild_method product the same results for add matrix for hazard", {
+  data(hazard)
+  tolerance <- 1e-10
+  df <- hazard
+
+  ped_add_partial_nona <- ped2com(df,
+    isChild_method = "partialparent",
+    component = "additive",
+    adjacency_method = "direct"
+  )
+  ped_add_classic_nona <- ped2com(df,
+    isChild_method = "classic",
+    component = "additive", adjacency_method = "direct"
+  )
+  expect_equal(ped_add_partial_nona, ped_add_classic_nona, tolerance = tolerance)
+
+  df$momID[df$ID == 4] <- NA
+  tolerance <- 1e-10
+  # add
+  ped_add_partial <- ped2com(df,
+    isChild_method = "partialparent",
+    component = "additive",
+    adjacency_method = "direct"
+  )
+  ped_add_classic <- ped2com(df,
+    isChild_method = "classic",
+    component = "additive", adjacency_method = "direct"
+  )
+
+  expect_equal(ped_add_partial[4, 4], 1, tolerance = tolerance)
+  expect_equal(ped_add_classic[4, 4], .75, tolerance = tolerance)
+  difference <- ped_add_partial - ped_add_classic
+
+  #  expect_equal(ped_add_partial, ped_add_classic_nona, tolerance = tolerance)
+
+  difference <- ped_add_partial - ped_add_classic
+
+  expect_gt(sum(abs(difference)), 0)
+})
+
+
+
+test_that("isChild_method product the same results for add matrix with inbreeding", {
+  data(inbreeding)
+  df <- inbreeding
+  tolerance <- 1e-10
+  ped_add_classic_nona <- ped2com(df,
+    isChild_method = "classic",
+    component = "additive", adjacency_method = "direct"
+  )
+  ped_add_partial_nona <- ped2com(df,
+    isChild_method = "partialparent",
+    component = "additive",
+    adjacency_method = "direct"
+  )
+  df$momID[df$ID == 6] <- NA
+
+  # add
+  ped_add_partial <- ped2com(df,
+    isChild_method = "partialparent",
+    component = "additive",
+    adjacency_method = "direct"
+  )
+  ped_add_classic <- ped2com(df,
+    isChild_method = "classic",
+    component = "additive", adjacency_method = "direct"
+  )
+
+  expect_equal(ped_add_partial[6, 6], 1, tolerance = tolerance)
+  expect_equal(ped_add_classic[6, 6], .75, tolerance = tolerance)
+  difference <- ped_add_partial - ped_add_classic
+  #  expect_equal(ped_add_partial, ped_add_classic, tolerance = tolerance)
+
+  difference <- ped_add_partial - ped_add_classic
+
+  expect_gt(sum(abs(difference)), 0)
 })

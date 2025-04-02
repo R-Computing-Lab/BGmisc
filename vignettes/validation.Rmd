@@ -24,13 +24,18 @@ Working with pedigree data often involves dealing with inconsistencies, missing 
 
 # Identifying and Repairing ID Issues
 
-The `checkIDs()` function detects two types of ID duplication:
+The `checkIDs()` function detects two types of common ID errors in pedigree data:
 
 - Between-row duplication: When two or more individuals share the same ID
 - Within-row duplication: When an individual's parents' IDs are incorrectly listed as their own ID
 
 
-To illustrate `checkIDs()` in action, we will examine a clean example using the Potter family dataset.
+These problems are especially common when merging family records or processing historical data. Let’s explore how they show up — and what they imply for downstream structure.
+
+
+## A Clean Dataset
+
+We'll begin with the Potter family dataset, cleaned and reformatted with `ped2fam()`:
 
 
 ```{r,checkIDs}
@@ -40,19 +45,21 @@ library(BGmisc)
 df <- ped2fam(potter, famID = "newFamID", personID = "personID")
 
 # Check for ID issues
-result <- checkIDs(df, repair = FALSE)
-print(result)
+checkIDs(df, repair = FALSE)
 ```
+There are no duplicated or self-referential IDs here. But things rarely stay that simple.
 
-The checkIDs() function checks for:
+
+### What `checkIDs()` Reports
+
+The `checkIDs()` function checks for:
 
 - Whether all IDs are unique (reported by `all_unique_ids`, which tells you if all IDs in the dataset are unique, and `total_non_unique_ids`, which gives you the count of non-unique IDs found)
 - Cases where someone's ID matches their parent's ID (shown in `total_own_father` and `total_own_mother`, which count individuals whose father's or mother's ID matches their own ID)
 - Total duplicated parent IDs (tracked by `total_duplicated_parents`, which counts individuals with duplicated parent IDs)
 - Within-row duplicates (measured by `total_within_row_duplicates` showing the count and `within_row_duplicates` indicating their presence)
 
-As the output shows, there are no duplicates in our sample dataset.
-
+If you set `repair = TRUE`, the function will attempt to fix the issues it finds. We'll explore this later.
 
 ## A Tale of Two Duplicates
 
@@ -60,16 +67,16 @@ To understand how these tools work in practice, let's create a dataset with two 
 
 
 ```{r datamade}
-
 # Create our problematic dataset
 df_duplicates <- df
 # Sibling ID conflict
-df_duplicates$personID[df_duplicates$name == "Vernon Dursley"] <- 
+df_duplicates$personID[df_duplicates$name == "Vernon Dursley"] <-
   df_duplicates$personID[df_duplicates$name == "Marjorie Dursley"]
 # Duplicate entry
-df_duplicates <- rbind(df_duplicates, 
-                       df_duplicates[df_duplicates$name == "Dudley Dursley", ])
-
+df_duplicates <- rbind(
+  df_duplicates,
+  df_duplicates[df_duplicates$name == "Dudley Dursley", ]
+)
 ```
 
 
@@ -78,14 +85,15 @@ If we look at the data using standard tools, the problems aren't immediately obv
 ```{r}
 library(tidyverse)
 
-summarizeFamilies(df_duplicates, 
-                  famID = "newFamID", 
-                  personID = "personID")$family_summary %>% 
+summarizeFamilies(df_duplicates,
+  famID = "newFamID",
+  personID = "personID"
+)$family_summary %>%
   glimpse()
-
 ```
 
-This is where `checkIDs` becomes invaluable:
+But `checkIDs()` detects the problems clearly:
+
 
 ```{r}
 # Identify duplicates
@@ -102,8 +110,8 @@ df_duplicates %>%
   arrange(personID)
 ```
 
-
 Yep, these are definitely the duplicates.
+
 
 ### Repairing Between-Row Duplicates
 
@@ -124,6 +132,7 @@ print(result)
 
 Great! Notice what happened here: the function was able to repair the full duplicate, without any manual intervention. That still leaves us with the sibling ID conflict, but that's a more complex issue that would require manual intervention. We'll leave that for now.
 
+So far we’ve only checked for violations of uniqueness. But do these errors also affect the graph structure? Let's find out.
 
 ## Oedipus ID
 

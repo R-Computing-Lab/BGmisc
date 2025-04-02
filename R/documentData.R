@@ -94,3 +94,50 @@ NULL
 ##' @usage data(potter)
 ##' @format A data frame (and ped object) with 36 rows and 8 variables
 NULL
+
+
+##' Royal pedigree data from 1992
+##'
+##' A dataset created by Denis Reid from the Royal Families of Europe.
+##'
+##' The variables are as follows:
+##' id,momID,dadID,name,sex,birth_date,death_date,attribute_title
+##' \itemize{
+##'   \item \code{id}:  Person identification variable
+##'   \item \code{momID}:  ID of the mother
+##'   \item \code{dadID}:  ID of the father
+##'   \item \code{name}:  Name of the person
+##'   \item \code{sex}: Biological sex
+##'   \item \code{birth_date}:  Date of birth
+##'   \item \code{death_date}:  Date of death
+##'   \item \code{attribute_title}:  Title of the person
+##'
+##' }
+##'
+##'
+##' @docType data
+##' @keywords datasets
+##' @name royal92
+##' @usage data(royal92)
+##' @format A data frame with 3110 observations
+NULL
+
+##' A song of ice and fire pedigree data
+##'
+##' A dataset created from the Song of Ice and Fire series by George R. R. Martin.
+##'
+##' The variables are as follows:
+##' \itemize{
+##'   \item \code{id}:  Person identification variable
+##'   \item \code{momID}:  ID of the mother
+##'   \item \code{dadID}:  ID of the father
+##'   \item \code{name}:  Name of the person
+##'   \item \code{sex}: Biological sex
+##'   }
+##'
+##' @docType data
+##' @keywords datasets
+##' @name ASOIAF
+##' @usage data(ASOIAF)
+##' @format A data frame with 501 observations
+NULL

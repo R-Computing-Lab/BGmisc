@@ -4,7 +4,7 @@
 \alias{processParents}
 \title{Process parents information}
 \usage{
-processParents(df_temp)
+processParents(df_temp, datasource)
 }
 \arguments{
 \item{df_temp}{A data frame containing information about individuals.}
