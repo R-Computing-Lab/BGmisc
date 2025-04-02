@@ -4,7 +4,7 @@
 \alias{createFamilyToParentsMapping}
 \title{Create a mapping of family IDs to parent IDs}
 \usage{
-createFamilyToParentsMapping(df_temp)
+createFamilyToParentsMapping(df_temp, datasource)
 }
 \arguments{
 \item{df_temp}{A data frame containing information about individuals.}

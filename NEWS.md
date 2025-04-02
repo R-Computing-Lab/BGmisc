@@ -1,3 +1,20 @@
+# BGmisc 1.3.5
+* Added ASOIAF pedigree
+* Added com2links() function to convert components to kinship links, with accompanying tests
+* Added extractWikiFamilyTree() function to parse family trees from wiki templates, with accompanying tests
+* Created vignette demonstrating adjacency matrix methods and applications
+* Improved plotPedigree() function by silencing unnecessary invisible list outputs
+* Added checkPedigreeNetwork() function for validating pedigree network structure, with accompanying tests
+
+# BGmisc 1.3.4.1
+* Hot fix to resolve issue with list of adjacency matrix not loading saved version
+* Reoptimized generation calculation
+
+# BGmisc 1.3.4
+* Added alternative (and faster) methods to create the adjacency matrix
+* Add tests for comparison of adjacency matrix build methods
+* Added Royal Family pedigree
+
 # BGmisc 1.3.3
 * Added ability to save and reload pedigree objects that are used by ped2Com
 * Optimized generation calculation

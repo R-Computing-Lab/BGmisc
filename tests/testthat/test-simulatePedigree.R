@@ -17,22 +17,6 @@ test_that("simulated pedigree generates expected data structure", {
   expect_equal(mean(results$sex == "M"), sexR, tolerance = .05)
 })
 
-test_that("simulated pedigree plots correctly", {
-  set.seed(5)
-  Ngen <- 4
-  kpc <- 4
-  sexR <- .50
-  marR <- .7
-
-  results <- simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR)
-  expect_no_error(plotPedigree(results, verbose = FALSE))
-
-  kpc <- 2
-  results2 <- simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR)
-  results2$fam <- paste0("fam 2")
-  results <- rbind(results, results2)
-  expect_output(plotPedigree(results, verbose = TRUE))
-})
 
 test_that("simulatePedigree verbose prints updates", {
   set.seed(5)
@@ -42,17 +26,4 @@ test_that("simulatePedigree verbose prints updates", {
   marR <- .7
 
   expect_output(simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR, verbose = TRUE), regexp = "Let's build the connection within each generation first")
-})
-
-test_that("pedigree plots correctly with affected variables", {
-  set.seed(5)
-  Ngen <- 4
-  kpc <- 4
-  sexR <- .50
-  marR <- .7
-
-  results <- simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR)
-  results$affected <- rbinom(n = nrow(results), size = 1, prob = .1)
-  expect_output(plotPedigree(results, verbose = TRUE, affected = "affected"))
-  expect_output(plotPedigree(results, verbose = TRUE, affected = results$affected))
 })

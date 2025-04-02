@@ -20,6 +20,7 @@ summarizePedigrees(
   noldest = 5,
   skip_var = NULL,
   five_num_summary = FALSE,
+  network_checks = FALSE,
   verbose = FALSE
 )
 }
@@ -56,6 +57,8 @@ Defaults to `byr` (if available) or `personID` otherwise.}
 
 \item{five_num_summary}{Logical. If `TRUE`, includes the first quartile (Q1) and third quartile (Q3) in addition to
 the minimum, median, and maximum values.}
+
+\item{network_checks}{Logical. If `TRUE`, performs network checks on the pedigree data.}
 
 \item{verbose}{Logical, if TRUE, print progress messages.}
 }
