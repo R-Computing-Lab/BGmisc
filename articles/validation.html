@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">BGmisc</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,6 +36,7 @@
 <li><a class="dropdown-item" href="../articles/analyticrelatedness.html">Calculating and Inferring Relatedness Coefficients with BGmisc</a></li>
     <li><a class="dropdown-item" href="../articles/modelingrelatedness.html">Modeling and Relatedness</a></li>
     <li><a class="dropdown-item" href="../articles/network.html">Network tools for finding extended pedigrees and path tracing</a></li>
+    <li><a class="dropdown-item" href="../articles/partial.html">Adjacency matrix methods</a></li>
     <li><a class="dropdown-item" href="../articles/pedigree.html">Pedigree Simulation and Visualization with BGmisc</a></li>
     <li><a class="dropdown-item" href="../articles/validation.html">Validating and Repairing Pedigree Data with BGmisc</a></li>
   </ul>
@@ -82,16 +83,22 @@ validation functions.</p>
 <div class="section level2">
 <h2 id="identifying-and-repairing-id-issues">Identifying and Repairing ID Issues<a class="anchor" aria-label="anchor" href="#identifying-and-repairing-id-issues"></a>
 </h2>
-<p>The <code><a href="../reference/checkIDs.html">checkIDs()</a></code> function detects two types of ID
-duplication:</p>
+<p>The <code><a href="../reference/checkIDs.html">checkIDs()</a></code> function detects two types of common ID
+errors in pedigree data:</p>
 <ul>
 <li>Between-row duplication: When two or more individuals share the same
 ID</li>
 <li>Within-row duplication: When an individual’s parents’ IDs are
 incorrectly listed as their own ID</li>
 </ul>
-<p>To illustrate <code><a href="../reference/checkIDs.html">checkIDs()</a></code> in action, we will examine a
-clean example using the Potter family dataset.</p>
+<p>These problems are especially common when merging family records or
+processing historical data. Let’s explore how they show up — and what
+they imply for downstream structure.</p>
+<div class="section level3">
+<h3 id="a-clean-dataset">A Clean Dataset<a class="anchor" aria-label="anchor" href="#a-clean-dataset"></a>
+</h3>
+<p>We’ll begin with the Potter family dataset, cleaned and reformatted
+with <code><a href="../reference/ped2fam.html">ped2fam()</a></code>:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/R-Computing-Lab/BGmisc/" class="external-link">BGmisc</a></span><span class="op">)</span></span>
 <span></span>
@@ -99,8 +106,7 @@ clean example using the Potter family dataset.</p>
 <span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ped2fam.html">ped2fam</a></span><span class="op">(</span><span class="va">potter</span>, famID <span class="op">=</span> <span class="st">"newFamID"</span>, personID <span class="op">=</span> <span class="st">"personID"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Check for ID issues</span></span>
-<span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/checkIDs.html">checkIDs</a></span><span class="op">(</span><span class="va">df</span>, repair <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">result</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/checkIDs.html">checkIDs</a></span><span class="op">(</span><span class="va">df</span>, repair <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; $all_unique_ids</span></span>
 <span><span class="co">#&gt; [1] TRUE</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -121,7 +127,12 @@ clean example using the Potter family dataset.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $within_row_duplicates</span></span>
 <span><span class="co">#&gt; [1] FALSE</span></span></code></pre></div>
-<p>The checkIDs() function checks for:</p>
+<p>There are no duplicated or self-referential IDs here. But things
+rarely stay that simple.</p>
+<div class="section level4">
+<h4 id="what-checkids-reports">What <code>checkIDs()</code> Reports<a class="anchor" aria-label="anchor" href="#what-checkids-reports"></a>
+</h4>
+<p>The <code><a href="../reference/checkIDs.html">checkIDs()</a></code> function checks for:</p>
 <ul>
 <li>Whether all IDs are unique (reported by <code>all_unique_ids</code>,
 which tells you if all IDs in the dataset are unique, and
@@ -138,8 +149,10 @@ duplicated parent IDs)</li>
 <code>total_within_row_duplicates</code> showing the count and
 <code>within_row_duplicates</code> indicating their presence)</li>
 </ul>
-<p>As the output shows, there are no duplicates in our sample
-dataset.</p>
+<p>If you set <code>repair = TRUE</code>, the function will attempt to
+fix the issues it finds. We’ll explore this later.</p>
+</div>
+</div>
 <div class="section level3">
 <h3 id="a-tale-of-two-duplicates">A Tale of Two Duplicates<a class="anchor" aria-label="anchor" href="#a-tale-of-two-duplicates"></a>
 </h3>
@@ -149,23 +162,25 @@ give Vernon Dursley the same ID as his sister Marjorie (a common issue
 when merging family records). Then, we’ll add a complete duplicate of
 Dudley Dursley (as might happen during data entry).</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="co"># Create our problematic dataset</span></span>
+<code class="sourceCode R"><span><span class="co"># Create our problematic dataset</span></span>
 <span><span class="va">df_duplicates</span> <span class="op">&lt;-</span> <span class="va">df</span></span>
 <span><span class="co"># Sibling ID conflict</span></span>
-<span><span class="va">df_duplicates</span><span class="op">$</span><span class="va">personID</span><span class="op">[</span><span class="va">df_duplicates</span><span class="op">$</span><span class="va">name</span> <span class="op">==</span> <span class="st">"Vernon Dursley"</span><span class="op">]</span> <span class="op">&lt;-</span> </span>
+<span><span class="va">df_duplicates</span><span class="op">$</span><span class="va">personID</span><span class="op">[</span><span class="va">df_duplicates</span><span class="op">$</span><span class="va">name</span> <span class="op">==</span> <span class="st">"Vernon Dursley"</span><span class="op">]</span> <span class="op">&lt;-</span></span>
 <span>  <span class="va">df_duplicates</span><span class="op">$</span><span class="va">personID</span><span class="op">[</span><span class="va">df_duplicates</span><span class="op">$</span><span class="va">name</span> <span class="op">==</span> <span class="st">"Marjorie Dursley"</span><span class="op">]</span></span>
 <span><span class="co"># Duplicate entry</span></span>
-<span><span class="va">df_duplicates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">df_duplicates</span>, </span>
-<span>                       <span class="va">df_duplicates</span><span class="op">[</span><span class="va">df_duplicates</span><span class="op">$</span><span class="va">name</span> <span class="op">==</span> <span class="st">"Dudley Dursley"</span>, <span class="op">]</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">df_duplicates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span></span>
+<span>  <span class="va">df_duplicates</span>,</span>
+<span>  <span class="va">df_duplicates</span><span class="op">[</span><span class="va">df_duplicates</span><span class="op">$</span><span class="va">name</span> <span class="op">==</span> <span class="st">"Dudley Dursley"</span>, <span class="op">]</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <p>If we look at the data using standard tools, the problems aren’t
 immediately obvious:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="../reference/summarizeFamilies.html">summarizeFamilies</a></span><span class="op">(</span><span class="va">df_duplicates</span>, </span>
-<span>                  famID <span class="op">=</span> <span class="st">"newFamID"</span>, </span>
-<span>                  personID <span class="op">=</span> <span class="st">"personID"</span><span class="op">)</span><span class="op">$</span><span class="va">family_summary</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span><span class="fu"><a href="../reference/summarizeFamilies.html">summarizeFamilies</a></span><span class="op">(</span><span class="va">df_duplicates</span>,</span>
+<span>  famID <span class="op">=</span> <span class="st">"newFamID"</span>,</span>
+<span>  personID <span class="op">=</span> <span class="st">"personID"</span></span>
+<span><span class="op">)</span><span class="op">$</span><span class="va">family_summary</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: 1</span></span>
 <span><span class="co">#&gt; Columns: 17</span></span>
@@ -186,7 +201,7 @@ immediately obvious:</p>
 <span><span class="co">#&gt; $ sex_min         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 0</span></span>
 <span><span class="co">#&gt; $ sex_max         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 1</span></span>
 <span><span class="co">#&gt; $ sex_sd          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 0.5067117</span></span></code></pre></div>
-<p>This is where <code>checkIDs</code> becomes invaluable:</p>
+<p>But <code><a href="../reference/checkIDs.html">checkIDs()</a></code> detects the problems clearly:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Identify duplicates</span></span>
 <span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/checkIDs.html">checkIDs</a></span><span class="op">(</span><span class="va">df_duplicates</span><span class="op">)</span></span>
@@ -269,6 +284,8 @@ option:</p>
 full duplicate, without any manual intervention. That still leaves us
 with the sibling ID conflict, but that’s a more complex issue that would
 require manual intervention. We’ll leave that for now.</p>
+<p>So far we’ve only checked for violations of uniqueness. But do these
+errors also affect the graph structure? Let’s find out.</p>
 </div>
 </div>
 <div class="section level3">
@@ -363,8 +380,8 @@ Inconsistent sex coding across the dataset</p>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; Step 1: Checking how many sexes/genders...</span></span>
 <span><span class="co">#&gt; 2 unique values found.</span></span>
-<span><span class="co">#&gt;  1 2 unique values found.</span></span>
-<span><span class="co">#&gt;  0Checks Made:</span></span>
+<span><span class="co">#&gt; Unique values: 1, 0</span></span>
+<span><span class="co">#&gt; Checks Made:</span></span>
 <span><span class="co">#&gt; $sex_unique</span></span>
 <span><span class="co">#&gt; [1] 1 0</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -410,11 +427,11 @@ Inconsistent sex coding across the dataset</p>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; Step 1: Checking how many sexes/genders...</span></span>
 <span><span class="co">#&gt; 2 unique values found.</span></span>
-<span><span class="co">#&gt;  1 2 unique values found.</span></span>
-<span><span class="co">#&gt;  0Step 2: Attempting to repair sex coding...</span></span>
+<span><span class="co">#&gt; Unique values: 1, 0</span></span>
+<span><span class="co">#&gt; Step 2: Attempting to repair sex coding...</span></span>
 <span><span class="co">#&gt; Changes Made:</span></span>
 <span><span class="co">#&gt; [[1]]</span></span>
-<span><span class="co">#&gt; [1] "Recode sex based on most frequent sex in dads: 1. Total gender changes made: 36"</span></span>
+<span><span class="co">#&gt; [1] "Recode sex based on most frequent sex in dads: 1. Total sex changes made:  36"</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">df_fix</span><span class="op">)</span></span>
 <span><span class="co">#&gt;     ID fam               name gen momID dadID spID sex</span></span>
 <span><span class="co">#&gt; 1    1   1     Vernon Dursley   1   101   102    3   M</span></span>

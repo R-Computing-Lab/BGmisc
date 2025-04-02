@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">BGmisc</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -21,6 +21,7 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/analyticrelatedness.html">Calculating and Inferring Relatedness Coefficients with BGmisc</a></li>
     <li><a class="dropdown-item" href="../articles/modelingrelatedness.html">Modeling and Relatedness</a></li>
     <li><a class="dropdown-item" href="../articles/network.html">Network tools for finding extended pedigrees and path tracing</a></li>
+    <li><a class="dropdown-item" href="../articles/partial.html">Adjacency matrix methods</a></li>
     <li><a class="dropdown-item" href="../articles/pedigree.html">Pedigree Simulation and Visualization with BGmisc</a></li>
     <li><a class="dropdown-item" href="../articles/validation.html">Validating and Repairing Pedigree Data with BGmisc</a></li>
   </ul></li>
@@ -57,11 +58,13 @@
 <span>  flatten.diag <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  standardize.colnames <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  transpose_method <span class="op">=</span> <span class="st">"tcrossprod"</span>,</span>
+<span>  adjacency_method <span class="op">=</span> <span class="st">"indexed"</span>,</span>
+<span>  isChild_method <span class="op">=</span> <span class="st">"classic"</span>,</span>
 <span>  saveable <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  resume <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  save_rate <span class="op">=</span> <span class="fl">5</span>,</span>
 <span>  save_rate_gen <span class="op">=</span> <span class="va">save_rate</span>,</span>
-<span>  save_rate_parlist <span class="op">=</span> <span class="fl">1000</span> <span class="op">*</span> <span class="va">save_rate</span>,</span>
+<span>  save_rate_parlist <span class="op">=</span> <span class="fl">1e+05</span> <span class="op">*</span> <span class="va">save_rate</span>,</span>
 <span>  update_rate <span class="op">=</span> <span class="fl">100</span>,</span>
 <span>  save_path <span class="op">=</span> <span class="st">"checkpoint/"</span>,</span>
 <span>  <span class="va">...</span></span>
@@ -108,6 +111,14 @@
 
 <dt id="arg-transpose-method">transpose_method<a class="anchor" aria-label="anchor" href="#arg-transpose-method"></a></dt>
 <dd><p>character. The method to use for computing the transpose.  Options are "tcrossprod", "crossprod", or "star"</p></dd>
+
+
+<dt id="arg-adjacency-method">adjacency_method<a class="anchor" aria-label="anchor" href="#arg-adjacency-method"></a></dt>
+<dd><p>character. The method to use for computing the adjacency matrix.  Options are "loop" or "indexed"</p></dd>
+
+
+<dt id="arg-ischild-method">isChild_method<a class="anchor" aria-label="anchor" href="#arg-ischild-method"></a></dt>
+<dd><p>character. The method to use for computing the isChild matrix.  Options are "classic" or "partialparent"</p></dd>
 
 
 <dt id="arg-saveable">saveable<a class="anchor" aria-label="anchor" href="#arg-saveable"></a></dt>
