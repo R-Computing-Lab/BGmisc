@@ -124,7 +124,9 @@ NULL
 
 ##' A song of ice and fire pedigree data
 ##'
-##' A dataset created from the Song of Ice and Fire series by George R. R. Martin.
+##' A dataset created from the Song of Ice and Fire series by George R. R. Martin. Core data is from the [Westeros.org forum](https://asoiaf.westeros.org/index.php?/topic/88863-all-the-family-trees/).
+##'
+##'
 ##'
 ##' The variables are as follows:
 ##' \itemize{

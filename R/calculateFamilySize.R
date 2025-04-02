@@ -12,8 +12,7 @@ allGens <- function(kpc, Ngen, marR) {
   }
   if (Ngen == 1) {
     allGens <- 2
-  }
-  if (Ngen >= 2) {
+  } else if (Ngen >= 2) {
     allGens <- sizeAllGens(
       kpc = kpc,
       Ngen = Ngen,

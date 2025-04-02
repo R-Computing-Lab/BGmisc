@@ -115,7 +115,7 @@ test_that("makeInbreeding - Inbred mates specified by generation and cousin", {
 
   expect_error(makeInbreeding(ped,
     gen_inbred = gen_inbred,
-    type_inbred = type_inbred
+    type_inbred = type_inbred,verbose = TRUE
   ), regexp = "Cousin inbreedin")
 })
 
