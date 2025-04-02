@@ -1,5 +1,5 @@
 ---
-title: "Modeling and Relatedness"
+title: "Modeling variance components"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{modelingandrelatedness}
@@ -75,6 +75,7 @@ identifyComponentModel(
   E = diag(1, 2)
 )
 ```
+
 As you can see, the model is not identified. We need to add an additional group so that we have sufficient information. Let us add the rest of the classical twin model, in this case DZ twins.
 
 ```{r}
