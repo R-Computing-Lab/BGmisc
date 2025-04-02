@@ -17,26 +17,26 @@ options(rmarkdown.html_vignette.check_title = FALSE)
 
 # Introduction
 
-This vignette demonstrates analytic methods for determining relatedness in a pedigree. The relatedness coefficient is a measure of the genetic overlap between two individuals. In the simplest terms, it quantifies the genetic overlap between two individuals. The relatedness coefficient ranges from 0 to 1, with 1 indicating a perfect genetic match (which occurs when comparing an individual to themselves, their identical twin, or their clone), whereas 0 indicates no genetic overlap. We introduce two functions: `calculateRelatedness` and `inferRelatedness`, which allow users to compute and infer the relatedness coefficient, respectively.
+This vignette demonstrates how to quantify relatedness using two functions from the `BGmisc` package: 
+- `calculateRelatedness` computes the relatedness coefficient based on known genealogical structure, and 
+- `inferRelatedness` infers the relatedness coefficient from observed phenotypic correlations under a fixed ACE model.
 
-## Loading Required Libraries
 
-```{r setup}
-library(BGmisc)
-```
+The relatedness coefficient \( r \) indexes the proportion of alleles shared identically by descent (IBD) between two individuals. This value ranges from 0 (no shared alleles by descent) to 1 (a perfect genetic match, which occurs when comparing an individual to themselves, their identical twin, or their clone). Values can be interpreted in the context of standard relationships: e.g., full siblings are expected to have \( r = 0.5 \), half siblings \( r = 0.25 \), and first cousins \( r = 0.125 \).
 
-## Calculating Relatedness Coefficient
+# Calculating Relatedness Coefficient
 
-The `calculateRelatedness` function offers a method to compute the relatedness coefficient based on shared ancestry, as described by Wright (1922). This function utilizes the formula:
+The `calculateRelatedness` function offers a method to compute the relatedness coefficient based on shared ancestry. The function computes \( r \) based on generational distance to one or more shared ancestors, according to Wright's (1922) formulation:
 
 \[
 r_{bc} = \sum \left(\frac{1}{2}\right)^{n+n'+1} (1+f_a)
 \]
 
-Where \( n \) and \( n' \) represent the number of generations back of common ancestors the pair share.
+Here, \( n \) and \( n' \) are the number of generations from each descendant to a common ancestor \( a \), and \( f_a \) is the inbreeding coefficient of \( a \), assumed to be zero unless specified otherwise.
 
 
 ```{r}
+library(BGmisc)
 # Example usage:
 # For full siblings, the relatedness coefficient is expected to be 0.5:
 calculateRelatedness(generations = 1, full = TRUE)
@@ -44,9 +44,27 @@ calculateRelatedness(generations = 1, full = TRUE)
 calculateRelatedness(generations = 1, full = FALSE)
 ```
 
+
+These examples illustrate how relatedness changes based on whether the siblings share both parents (full) or only one (half). When `full = TRUE`, each sibling is one generation from the shared pair of parents, yielding `r=0.5`. When `full = FALSE`, they share only one parent, yielding `r=0.25`.
+
 # Inferring Relatedness Coefficient
 
-The `inferRelatedness` function is designed to infer the relatedness coefficient between two groups based on the observed correlation between their additive genetic variance and shared environmental variance. This function leverages the `ACE` framework.
+ The `inferRelatedness` function solves for the relatedness coefficient \( r \) implied by an observed phenotypic correlation under a fixed ACE variance decomposition. Specifically, it inverts the equation:
+
+ \[
+\text{obsR} = r \cdot a^2 + \text{sharedC} \cdot c^2
+ \]
+
+to obtain:
+
+ \[
+ r = \frac{\text{obsR} - \text{sharedC} \cdot c^2}{a^2}
+ \]
+ 
+where:
+- `obsR` is the observed phenotypic correlation between two individuals or groups.
+- `aceA` and `aceC` represent the proportions of variance due to additive genetic and shared environmental influences, respectively.
+- `sharedC` is the shared-environment analog to the relatedness coefficient: it indicates what proportion of the shared environmental variance applies to this pair (e.g., 1 for siblings raised together, 0 for siblings raised apart).
 
 ```{r}
 # Example usage:
@@ -54,3 +72,13 @@ The `inferRelatedness` function is designed to infer the relatedness coefficient
 inferRelatedness(obsR = 0.5, aceA = 0.9, aceC = 0, sharedC = 0)
 ```
 
+
+In this example, the observed correlation is 0.5, and no shared environmental variance is assumed. Given that additive genetic variance accounts for 90% of trait variance, the inferred relatedness coefficient is approximately 0.556. This reflects the proportion of genetic overlap that would be required to produce the observed similarity under these assumptions.
+
+
+```{r}
+# Now assume shared environment is fully shared:
+inferRelatedness(obsR = 0.5, aceA = 0.45, aceC = 0.45, sharedC = 1)
+```
+
+In this case, the observed phenotypic correlation is still 0.5, and both additive genetic and shared environmental components are assumed to explain 45% of the variance. Because the shared environment is fully shared between individuals (sharedC = 1), much of the observed similarity is attributed to C, leaving only a small portion attributable to genetic relatedness. The function returns an inferred relatedness coefficient of approximately 0.11 — that is, the amount of additive genetic overlap required (under this model) to produce the remaining unexplained correlation after accounting for shared environmental similarity.

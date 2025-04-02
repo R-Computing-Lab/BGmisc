@@ -60,7 +60,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
 { counter-reset: source-line 0; }
@@ -343,50 +343,96 @@ Coefficients with BGmisc</h1>
 
 <div id="introduction" class="section level1">
 <h1>Introduction</h1>
-<p>This vignette demonstrates analytic methods for determining
-relatedness in a pedigree. The relatedness coefficient is a measure of
-the genetic overlap between two individuals. In the simplest terms, it
-quantifies the genetic overlap between two individuals. The relatedness
-coefficient ranges from 0 to 1, with 1 indicating a perfect genetic
-match (which occurs when comparing an individual to themselves, their
-identical twin, or their clone), whereas 0 indicates no genetic overlap.
-We introduce two functions: <code>calculateRelatedness</code> and
-<code>inferRelatedness</code>, which allow users to compute and infer
-the relatedness coefficient, respectively.</p>
-<div id="loading-required-libraries" class="section level2">
-<h2>Loading Required Libraries</h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(BGmisc)</span></code></pre></div>
+<p>This vignette demonstrates how to quantify relatedness using two
+functions from the <code>BGmisc</code> package: -
+<code>calculateRelatedness</code> computes the relatedness coefficient
+based on known genealogical structure, and -
+<code>inferRelatedness</code> infers the relatedness coefficient from
+observed phenotypic correlations under a fixed ACE model.</p>
+<p>The relatedness coefficient <span class="math inline">\(r\)</span>
+indexes the proportion of alleles shared identically by descent (IBD)
+between two individuals. This value ranges from 0 (no shared alleles by
+descent) to 1 (a perfect genetic match, which occurs when comparing an
+individual to themselves, their identical twin, or their clone). Values
+can be interpreted in the context of standard relationships: e.g., full
+siblings are expected to have <span class="math inline">\(r =
+0.5\)</span>, half siblings <span class="math inline">\(r =
+0.25\)</span>, and first cousins <span class="math inline">\(r =
+0.125\)</span>.</p>
 </div>
-<div id="calculating-relatedness-coefficient" class="section level2">
-<h2>Calculating Relatedness Coefficient</h2>
+<div id="calculating-relatedness-coefficient" class="section level1">
+<h1>Calculating Relatedness Coefficient</h1>
 <p>The <code>calculateRelatedness</code> function offers a method to
-compute the relatedness coefficient based on shared ancestry, as
-described by Wright (1922). This function utilizes the formula:</p>
+compute the relatedness coefficient based on shared ancestry. The
+function computes <span class="math inline">\(r\)</span> based on
+generational distance to one or more shared ancestors, according to
+Wright’s (1922) formulation:</p>
 <p><span class="math display">\[
 r_{bc} = \sum \left(\frac{1}{2}\right)^{n+n&#39;+1} (1+f_a)
 \]</span></p>
-<p>Where <span class="math inline">\(n\)</span> and <span class="math inline">\(n&#39;\)</span> represent the number of
-generations back of common ancestors the pair share.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># Example usage:</span></span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co"># For full siblings, the relatedness coefficient is expected to be 0.5:</span></span>
-<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="fu">calculateRelatedness</span>(<span class="at">generations =</span> <span class="dv">1</span>, <span class="at">full =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co">#&gt; [1] 0.5</span></span></code></pre></div>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co"># For half siblings, the relatedness coefficient is expected to be 0.25:</span></span>
-<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="fu">calculateRelatedness</span>(<span class="at">generations =</span> <span class="dv">1</span>, <span class="at">full =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#&gt; [1] 0.25</span></span></code></pre></div>
-</div>
+<p>Here, <span class="math inline">\(n\)</span> and <span class="math inline">\(n&#39;\)</span> are the number of generations from
+each descendant to a common ancestor <span class="math inline">\(a\)</span>, and <span class="math inline">\(f_a\)</span> is the inbreeding coefficient of
+<span class="math inline">\(a\)</span>, assumed to be zero unless
+specified otherwise.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(BGmisc)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="co"># Example usage:</span></span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="co"># For full siblings, the relatedness coefficient is expected to be 0.5:</span></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="fu">calculateRelatedness</span>(<span class="at">generations =</span> <span class="dv">1</span>, <span class="at">full =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="co">#&gt; [1] 0.5</span></span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="co"># For half siblings, the relatedness coefficient is expected to be 0.25:</span></span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="fu">calculateRelatedness</span>(<span class="at">generations =</span> <span class="dv">1</span>, <span class="at">full =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a><span class="co">#&gt; [1] 0.25</span></span></code></pre></div>
+<p>These examples illustrate how relatedness changes based on whether
+the siblings share both parents (full) or only one (half). When
+<code>full = TRUE</code>, each sibling is one generation from the shared
+pair of parents, yielding <code>r=0.5</code>. When
+<code>full = FALSE</code>, they share only one parent, yielding
+<code>r=0.25</code>.</p>
 </div>
 <div id="inferring-relatedness-coefficient" class="section level1">
 <h1>Inferring Relatedness Coefficient</h1>
-<p>The <code>inferRelatedness</code> function is designed to infer the
-relatedness coefficient between two groups based on the observed
-correlation between their additive genetic variance and shared
-environmental variance. This function leverages the <code>ACE</code>
-framework.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co"># Example usage:</span></span>
-<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co"># Infer the relatedness coefficient:</span></span>
-<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="fu">inferRelatedness</span>(<span class="at">obsR =</span> <span class="fl">0.5</span>, <span class="at">aceA =</span> <span class="fl">0.9</span>, <span class="at">aceC =</span> <span class="dv">0</span>, <span class="at">sharedC =</span> <span class="dv">0</span>)</span>
-<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&gt; [1] 0.5555556</span></span></code></pre></div>
+<p>The <code>inferRelatedness</code> function solves for the relatedness
+coefficient <span class="math inline">\(r\)</span> implied by an
+observed phenotypic correlation under a fixed ACE variance
+decomposition. Specifically, it inverts the equation:</p>
+<p><span class="math display">\[
+\text{obsR} = r \cdot a^2 + \text{sharedC} \cdot c^2
+\]</span></p>
+<p>to obtain:</p>
+<p><span class="math display">\[
+r = \frac{\text{obsR} - \text{sharedC} \cdot c^2}{a^2}
+\]</span></p>
+<p>where: - <code>obsR</code> is the observed phenotypic correlation
+between two individuals or groups. - <code>aceA</code> and
+<code>aceC</code> represent the proportions of variance due to additive
+genetic and shared environmental influences, respectively. -
+<code>sharedC</code> is the shared-environment analog to the relatedness
+coefficient: it indicates what proportion of the shared environmental
+variance applies to this pair (e.g., 1 for siblings raised together, 0
+for siblings raised apart).</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># Example usage:</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co"># Infer the relatedness coefficient:</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="fu">inferRelatedness</span>(<span class="at">obsR =</span> <span class="fl">0.5</span>, <span class="at">aceA =</span> <span class="fl">0.9</span>, <span class="at">aceC =</span> <span class="dv">0</span>, <span class="at">sharedC =</span> <span class="dv">0</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co">#&gt; [1] 0.5555556</span></span></code></pre></div>
+<p>In this example, the observed correlation is 0.5, and no shared
+environmental variance is assumed. Given that additive genetic variance
+accounts for 90% of trait variance, the inferred relatedness coefficient
+is approximately 0.556. This reflects the proportion of genetic overlap
+that would be required to produce the observed similarity under these
+assumptions.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co"># Now assume shared environment is fully shared:</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="fu">inferRelatedness</span>(<span class="at">obsR =</span> <span class="fl">0.5</span>, <span class="at">aceA =</span> <span class="fl">0.45</span>, <span class="at">aceC =</span> <span class="fl">0.45</span>, <span class="at">sharedC =</span> <span class="dv">1</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#&gt; [1] 0.1111111</span></span></code></pre></div>
+<p>In this case, the observed phenotypic correlation is still 0.5, and
+both additive genetic and shared environmental components are assumed to
+explain 45% of the variance. Because the shared environment is fully
+shared between individuals (sharedC = 1), much of the observed
+similarity is attributed to C, leaving only a small portion attributable
+to genetic relatedness. The function returns an inferred relatedness
+coefficient of approximately 0.11 — that is, the amount of additive
+genetic overlap required (under this model) to produce the remaining
+unexplained correlation after accounting for shared environmental
+similarity.</p>
 </div>
 
 
