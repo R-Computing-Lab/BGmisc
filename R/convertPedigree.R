@@ -25,7 +25,7 @@
 #'
 ped2com <- function(ped, component,
                     max.gen = 25,
-                    sparse = FALSE,
+                    sparse = TRUE,
                     verbose = FALSE,
                     gc = FALSE,
                     flatten.diag = FALSE,
@@ -347,7 +347,7 @@ ped2com <- function(ped, component,
 #' @inherit ped2com details
 #' @export
 #'
-ped2add <- function(ped, max.gen = 25, sparse = FALSE, verbose = FALSE,
+ped2add <- function(ped, max.gen = 25, sparse = TRUE, verbose = FALSE,
                     gc = FALSE,
                     flatten.diag = FALSE, standardize.colnames = TRUE,
                     transpose_method = "tcrossprod",
@@ -385,7 +385,7 @@ ped2add <- function(ped, max.gen = 25, sparse = FALSE, verbose = FALSE,
 #' @aliases ped2mt
 #'
 ped2mit <- ped2mt <- function(ped, max.gen = 25,
-                              sparse = FALSE,
+                              sparse = TRUE,
                               verbose = FALSE, gc = FALSE,
                               flatten.diag = FALSE,
                               standardize.colnames = TRUE,
@@ -422,7 +422,7 @@ ped2mit <- ped2mt <- function(ped, max.gen = 25,
 #' @inherit ped2com details
 #' @export
 #'
-ped2cn <- function(ped, max.gen = 25, sparse = FALSE, verbose = FALSE,
+ped2cn <- function(ped, max.gen = 25, sparse = TRUE, verbose = FALSE,
                    gc = FALSE, flatten.diag = FALSE,
                    standardize.colnames = TRUE,
                    transpose_method = "tcrossprod",

@@ -1,3 +1,6 @@
+# BGmisc 1.3.5.1
+* Setting the default for the `sparse` argument in `ped2Com()` to TRUE
+
 # BGmisc 1.3.5
 * Added ASOIAF pedigree
 * Added com2links() function to convert components to kinship links, with accompanying tests
