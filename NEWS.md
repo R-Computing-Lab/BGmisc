@@ -1,5 +1,5 @@
 # BGmisc 1.3.5.1
-* Setting the default for the `sparse` argument in `ped2Com()` to TRUE
+* Setting the default for the `sparse` argument in `ped2com()` to TRUE
 
 # BGmisc 1.3.5
 * Added ASOIAF pedigree
