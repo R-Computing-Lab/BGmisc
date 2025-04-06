@@ -175,9 +175,9 @@ checkSex(temptemp ,
 
 ```{r}
 
-fixParents(id=df_got$ID, dadid=df_got$dadID, momid=df_got$momID, sex=df_got$sex, missid = NA)
+#fixParents(id=df_got$ID, dadid=df_got$dadID, momid=df_got$momID, sex=df_got$sex, missid = NA)
 
-plotPedigree()
+#plotPedigree()
 
 
 ```

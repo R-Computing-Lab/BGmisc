@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>ASOIAF: How related are Jon and Danny?</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">ASOIAF: How related are Jon and Danny?</h1>
+
+
+
+<p>Just how related are Jon Snow and Daenerys Targaryen? This vignette
+walks through how to quantify their genetic relatedness using functions
+from the BGmisc package. While the Game of Thrones canon gives us some
+clues, we can use a formal pedigree-based approach to quantify their
+genetic relatedness. This vignette demonstrates how to compute
+coefficients of relatedness using the <code>BGmisc</code> package, along
+with basic data manipulation from tidyverse. We will also handle
+incomplete parental information programmatically and generate a plot of
+the reconstructed pedigree.</p>
+<div id="load-packages-and-data" class="section level2">
+<h2>Load Packages and Data</h2>
+<p>We begin by loading the necessary packages and accessing the built-in
+<code>ASOIAF</code> pedigree dataset included with
+<code>BGmisc</code>.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(BGmisc)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
+<pre><code>## ── Attaching core tidyverse packages ───────────────────
+## ✔ dplyr     1.1.4     ✔ readr     2.1.5
+## ✔ forcats   1.0.0     ✔ stringr   1.5.1
+## ✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+## ✔ lubridate 1.9.4     ✔ tidyr     1.3.1
+## ✔ purrr     1.0.4     
+## ── Conflicts ────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::between()     masks BGmisc::between()
+## ✖ dplyr::filter()      masks stats::filter()
+## ✖ dplyr::first()       masks BGmisc::first()
+## ✖ lubridate::hour()    masks BGmisc::hour()
+## ✖ lubridate::isoweek() masks BGmisc::isoweek()
+## ✖ dplyr::lag()         masks stats::lag()
+## ✖ dplyr::last()        masks BGmisc::last()
+## ✖ lubridate::mday()    masks BGmisc::mday()
+## ✖ lubridate::minute()  masks BGmisc::minute()
+## ✖ lubridate::month()   masks BGmisc::month()
+## ✖ lubridate::quarter() masks BGmisc::quarter()
+## ✖ lubridate::second()  masks BGmisc::second()
+## ✖ purrr::transpose()   masks BGmisc::transpose()
+## ✖ lubridate::wday()    masks BGmisc::wday()
+## ✖ lubridate::week()    masks BGmisc::week()
+## ✖ lubridate::yday()    masks BGmisc::yday()
+## ✖ lubridate::year()    masks BGmisc::year()
+## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">data</span>(ASOIAF)</span></code></pre></div>
+<p>The ASOIAF data contains character IDs, family identifiers, and
+parent-child links extracted from A Song of Ice and Fire lore.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">head</span>(ASOIAF)</span></code></pre></div>
+<pre><code>##   id famID momID dadID          name sex
+## 1  1     1    NA    NA   Walder Frey   M
+## 2  2     1    NA    NA   Perra Royce   F
+## 3  3     1     2     1  Stevron Frey   M
+## 4  4     1     2     1    Emmon Frey   M
+## 5  5     1     2     1    Aenys Frey   M
+## 6  6     1    NA    NA Corenna Swann   F</code></pre>
+</div>
+<div id="prepare-and-validate-sex-codes" class="section level2">
+<h2>Prepare and Validate Sex Codes</h2>
+<p>We use <code>checkSex()</code> to ensure that all individuals have
+valid sex codes, repairing as needed. This is important for correct
+pedigree plotting and downstream calculations.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>df_got <span class="ot">&lt;-</span> <span class="fu">checkSex</span>(ASOIAF,</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>  <span class="at">code_male =</span> <span class="dv">1</span>,</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>  <span class="at">code_female =</span> <span class="dv">0</span>,</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>  <span class="at">verbose =</span> <span class="cn">FALSE</span>, <span class="at">repair =</span> <span class="cn">TRUE</span></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>)</span></code></pre></div>
+</div>
+<div id="compute-relatedness-matrices" class="section level2">
+<h2>Compute Relatedness Matrices</h2>
+<p>We now compute the additive genetic relatedness matrix (add) and the
+common nuclear relatedness matrix (cn) from the pedigree using ped2com()
+and ped2cn(), respectively. The <code>isChild_method</code> argument
+specifies how to identify child-parent relationships. We use
+“partialparent” to account for missing parent information. The
+<code>adjacency_method</code> argument specifies how to construct the
+adjacency matrix. We use “direct” for the additive matrix and “indexed”
+for the common nuclear matrix. The direct method is much faster. The
+<code>sparse</code> argument is set to FALSE to return dense
+matrices.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>add <span class="ot">&lt;-</span> <span class="fu">ped2com</span>(df_got,</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>  <span class="at">isChild_method =</span> <span class="st">&quot;partialparent&quot;</span>,</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>  <span class="at">component =</span> <span class="st">&quot;additive&quot;</span>,</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>  <span class="at">adjacency_method =</span> <span class="st">&quot;direct&quot;</span>,</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>  <span class="at">sparse =</span> <span class="cn">FALSE</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>)</span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>cn <span class="ot">&lt;-</span> <span class="fu">ped2cn</span>(df_got,</span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>  <span class="at">isChild_method =</span> <span class="st">&quot;partialparent&quot;</span>,</span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a>  <span class="at">adjacency_method =</span> <span class="st">&quot;indexed&quot;</span>,</span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a>  <span class="at">sparse =</span> <span class="cn">FALSE</span></span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a>)</span></code></pre></div>
+</div>
+<div id="convert-to-pairwise-format" class="section level2">
+<h2>Convert to Pairwise Format</h2>
+<p>We convert the component matrices into a long-format table of
+pairwise relationships using <code>com2links()</code>. This gives us a
+long dataframe where each row represents a pair of individuals and their
+relatedness. The function can return the entire matrix or just the lower
+triangular part, which is often sufficient for our purposes. We set
+<code>writetodisk = FALSE</code> to keep the data in memory.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>df_links <span class="ot">&lt;-</span> <span class="fu">com2links</span>(</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>  <span class="at">writetodisk =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>  <span class="at">ad_ped_matrix =</span> add, <span class="at">cn_ped_matrix =</span> cn,</span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>  <span class="at">drop_upper_triangular =</span> <span class="cn">TRUE</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>)<span class="co"># %&gt;%</span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="co">#  filter(ID1 != ID2)</span></span></code></pre></div>
+</div>
+<div id="locate-jon-and-daenerys" class="section level2">
+<h2>Locate Jon and Daenerys</h2>
+<p>Next, we extract the IDs corresponding to Jon Snow and Daenerys
+Targaryen. We use the <code>filter()</code> function to find the rows in
+the <code>df_links</code> dataframe where either ID1 or ID2 corresponds
+to Jon Snow, and then filter again to find the row where the other ID
+corresponds to Daenerys Targaryen.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="co"># Find the IDs of Jon Snow and Daenerys Targaryen</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>jon_id <span class="ot">&lt;-</span> df_got <span class="sc">%&gt;%</span></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>  <span class="fu">filter</span>(name <span class="sc">==</span> <span class="st">&quot;Jon Snow&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>  <span class="fu">pull</span>(ID)</span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>dany_id <span class="ot">&lt;-</span> df_got <span class="sc">%&gt;%</span></span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>  <span class="fu">filter</span>(name <span class="sc">==</span> <span class="st">&quot;Daenerys Targaryen&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a>  <span class="fu">pull</span>(ID)</span></code></pre></div>
+<p>We then filter the pairwise table to retrieve the row containing
+their relationship.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>jon_dany_row <span class="ot">&lt;-</span> df_links <span class="sc">%&gt;%</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>  <span class="fu">filter</span>(ID1 <span class="sc">==</span> jon_id <span class="sc">|</span> ID2 <span class="sc">==</span> jon_id) <span class="sc">%&gt;%</span></span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>  <span class="fu">filter</span>(ID1 <span class="sc">%in%</span> dany_id<span class="sc">|</span> ID2 <span class="sc">%in%</span> dany_id)</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>jon_dany_row </span></code></pre></div>
+<pre><code>##   ID1 ID2     addRel cnuRel
+## 1 206 211 0.31274414      0
+## 2 211 304 0.01953125      0</code></pre>
+<p>This row contains the additive relatedness coefficient between Jon
+and Daenerys, which allows us to assess how closely related they are
+genetically.</p>
+</div>
+<div id="plotting-the-pedigree-with-incomplete-parental-information" class="section level2">
+<h2>Plotting the Pedigree with incomplete parental information</h2>
+<p>To facilitate plotting, we check for individuals with one known
+parent but a missing other. For those cases, we assign a placeholder ID
+to the missing parent.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>fix_df<span class="ot">=</span><span class="fu">fixParents</span>(<span class="at">id=</span>df_got<span class="sc">$</span>ID, <span class="at">dadid=</span>df_got<span class="sc">$</span>dadID, <span class="at">momid=</span>df_got<span class="sc">$</span>momID, <span class="at">sex=</span>df_got<span class="sc">$</span>sex, <span class="at">missid =</span> <span class="cn">NA</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>missingparents <span class="ot">&lt;-</span>   df_got <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(</span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a>    <span class="at">momID =</span> <span class="fu">case_when</span>(</span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a>      <span class="sc">!</span><span class="fu">is.na</span>(dadID) <span class="sc">&amp;</span> <span class="fu">is.na</span>(momID) <span class="sc">~</span>  <span class="dv">10000</span> <span class="sc">+</span> <span class="fu">row_number</span>(), <span class="co"># random id</span></span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a>      <span class="cn">TRUE</span> <span class="sc">~</span> momID</span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a>    ),</span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a>    <span class="at">dadID =</span> <span class="fu">case_when</span>(</span>
+<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a>      <span class="sc">!</span><span class="fu">is.na</span>(momID) <span class="sc">&amp;</span> <span class="fu">is.na</span>(dadID) <span class="sc">~</span>  <span class="dv">20000</span> <span class="sc">+</span> <span class="fu">row_number</span>(), <span class="co"># random id</span></span>
+<span id="cb12-11"><a href="#cb12-11" tabindex="-1"></a>      <span class="cn">TRUE</span> <span class="sc">~</span> dadID</span>
+<span id="cb12-12"><a href="#cb12-12" tabindex="-1"></a>    )</span>
+<span id="cb12-13"><a href="#cb12-13" tabindex="-1"></a>  )</span></code></pre></div>
+<p>This code creates new IDs for individuals with one known parent and a
+missing other. The <code>case_when()</code> function is used to check if
+either <code>momID</code> or <code>dadID</code> is missing, and if so,
+it assigns a new ID based on the row number. This allows us to visualize
+the pedigree even when some parental information is incomplete.</p>
+<p>We then identify the newly created momID and dadID values that are
+not yet represented as actual individuals in the data.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>newmoms <span class="ot">&lt;-</span> missingparents<span class="sc">$</span>momID[<span class="sc">!</span>missingparents<span class="sc">$</span>momID <span class="sc">%in%</span> missingparents<span class="sc">$</span>ID ] <span class="sc">%&gt;%</span> <span class="fu">unique</span>()</span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>newdads <span class="ot">&lt;-</span> missingparents<span class="sc">$</span>dadID[<span class="sc">!</span>missingparents<span class="sc">$</span>dadID <span class="sc">%in%</span> missingparents<span class="sc">$</span>ID ] <span class="sc">%&gt;%</span> <span class="fu">unique</span>()</span></code></pre></div>
+<p>For each of these placeholder parents, we add a row with NA parents
+and appropriate sex codes:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>newtemp <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">ID =</span> <span class="fu">c</span>(newmoms,newdads))</span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>newtemp<span class="sc">$</span>momID <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="cn">NA</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>newtemp<span class="sc">$</span>dadID <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="cn">NA</span>)</span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a>newtemp<span class="sc">$</span>name <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">&quot;mom&quot;</span>,<span class="fu">length</span>(newmoms)),<span class="fu">rep</span>(<span class="st">&quot;dad&quot;</span>,<span class="fu">length</span>(newdads)))</span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a>newtemp<span class="sc">$</span>fam <span class="ot">&lt;-</span> <span class="dv">502</span><span class="sc">:</span>(<span class="dv">501</span><span class="sc">+</span><span class="fu">length</span>(newmoms)<span class="sc">+</span><span class="fu">length</span>(newdads))</span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a>newtemp<span class="sc">$</span>sex <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">&quot;F&quot;</span>,<span class="fu">length</span>(newmoms)),<span class="fu">rep</span>(<span class="st">&quot;M&quot;</span>,<span class="fu">length</span>(newdads)))</span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a><span class="co"># drop the rows with NA IDs</span></span>
+<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a>newtemp <span class="ot">&lt;-</span> newtemp <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(ID)) </span></code></pre></div>
+<p>Now we bind these placeholder rows back into the main dataframe:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a>temptemp <span class="ot">&lt;-</span> missingparents <span class="sc">%&gt;%</span> <span class="fu">bind_rows</span>(newtemp)</span></code></pre></div>
+<div id="recheck-and-repair-sex-codes" class="section level4">
+<h4>Recheck and Repair Sex Codes</h4>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a>temptemp  <span class="ot">&lt;-</span> <span class="fu">checkSex</span>(temptemp ,</span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>  <span class="at">code_male =</span> <span class="dv">1</span>,</span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a>  <span class="at">code_female =</span> <span class="dv">0</span>,</span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a>  <span class="at">verbose =</span> <span class="cn">TRUE</span>, <span class="at">repair =</span> <span class="cn">TRUE</span></span>
+<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a>)</span></code></pre></div>
+<pre><code>## Step 1: Checking how many sexes/genders...
+## 3 unique values found.
+## Unique values: M, F, U
+## Step 2: Attempting to repair sex coding...
+## Changes Made:
+## list()</code></pre>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="fu">checkSex</span>(temptemp ,</span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a>  <span class="at">code_male =</span> <span class="dv">1</span>,</span>
+<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a>  <span class="at">code_female =</span> <span class="dv">0</span>,</span>
+<span id="cb18-4"><a href="#cb18-4" tabindex="-1"></a>  <span class="at">verbose =</span> <span class="cn">TRUE</span></span>
+<span id="cb18-5"><a href="#cb18-5" tabindex="-1"></a>)</span></code></pre></div>
+<pre><code>## Step 1: Checking how many sexes/genders...
+## 3 unique values found.
+## Unique values: M, F, U
+## Checks Made:
+## $sex_unique
+## [1] &quot;M&quot; &quot;F&quot; &quot;U&quot;
+## 
+## $sex_length
+## [1] 3
+## 
+## $all_sex_dad
+## [1] &quot;M&quot;
+## 
+## $all_sex_mom
+## [1] &quot;F&quot;
+## 
+## $most_frequent_sex_dad
+## [1] &quot;M&quot;
+## 
+## $most_frequent_sex_mom
+## [1] &quot;F&quot;</code></pre>
+<pre><code>## $sex_unique
+## [1] &quot;M&quot; &quot;F&quot; &quot;U&quot;
+## 
+## $sex_length
+## [1] 3
+## 
+## $all_sex_dad
+## [1] &quot;M&quot;
+## 
+## $all_sex_mom
+## [1] &quot;F&quot;
+## 
+## $most_frequent_sex_dad
+## [1] &quot;M&quot;
+## 
+## $most_frequent_sex_mom
+## [1] &quot;F&quot;</code></pre>
+</div>
+</div>
+<div id="visualize-the-pedigree" class="section level2">
+<h2>Visualize the Pedigree</h2>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="co">#fixParents(id=df_got$ID, dadid=df_got$dadID, momid=df_got$momID, sex=df_got$sex, missid = NA)</span></span>
+<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a><span class="co">#plotPedigree()</span></span></code></pre></div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

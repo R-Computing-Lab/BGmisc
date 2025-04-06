@@ -293,8 +293,8 @@ if (addphantoms){
 #' Repair Parent IDs
 #'
 #' This function repairs parent IDs in a pedigree.
-#' @param ped A pedigree object
-#' @param verbose A logical indicating whether to print progress messages
+#' @inheritParams checkParentIDs
+#' @inherit checkParentIDs details
 #' @return A corrected pedigree
 repairParentIDs <- function(ped, verbose = FALSE) {
   checkParentIDs(ped = ped, verbose = verbose, repair = TRUE)
