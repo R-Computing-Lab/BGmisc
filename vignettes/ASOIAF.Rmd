@@ -1,0 +1,183 @@
+---
+title: "ASOIAF: How related are Jon and Danny?"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{ASOIAF: How related are Jon and Danny?}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+Just how related are Jon Snow and Daenerys Targaryen? This vignette walks through how to quantify their genetic relatedness using functions from the BGmisc package. While the Game of Thrones canon gives us some clues, we can use a formal pedigree-based approach to quantify their genetic relatedness. This vignette demonstrates how to compute coefficients of relatedness using the `BGmisc` package, along with basic data manipulation from tidyverse. We will also handle incomplete parental information programmatically and generate a plot of the reconstructed pedigree.
+
+## Load Packages and Data
+
+We begin by loading the necessary packages and accessing the built-in `ASOIAF` pedigree dataset included with `BGmisc`.
+
+
+```{r}
+library(BGmisc)
+library(tidyverse)
+data(ASOIAF)
+```
+The ASOIAF data contains character IDs, family identifiers, and parent-child links extracted from A Song of Ice and Fire lore.
+
+```{r}
+head(ASOIAF)
+```
+
+## Prepare and Validate Sex Codes
+
+We use `checkSex()` to ensure that all individuals have valid sex codes, repairing as needed. This is important for correct pedigree plotting and downstream calculations.
+
+```{r}
+df_got <- checkSex(ASOIAF,
+  code_male = 1,
+  code_female = 0,
+  verbose = FALSE, repair = TRUE
+)
+```
+
+## Compute Relatedness Matrices
+
+We now compute the additive genetic relatedness matrix (add) and the common nuclear relatedness matrix (cn) from the pedigree using ped2com() and ped2cn(), respectively.
+The `isChild_method` argument specifies how to identify child-parent relationships. We use "partialparent" to account for missing parent information.
+The `adjacency_method` argument specifies how to construct the adjacency matrix. We use "direct" for the additive matrix and "indexed" for the common nuclear matrix. The direct method is much faster. The `sparse` argument is set to FALSE to return dense matrices.
+
+```{r}
+add <- ped2com(df_got,
+  isChild_method = "partialparent",
+  component = "additive",
+  adjacency_method = "direct",
+  sparse = FALSE
+)
+
+cn <- ped2cn(df_got,
+  isChild_method = "partialparent",
+  adjacency_method = "indexed",
+  sparse = FALSE
+)
+```
+
+## Convert to Pairwise Format
+
+We convert the component matrices into a long-format table of pairwise relationships using `com2links()`. This gives us a long dataframe where each row represents a pair of individuals and their relatedness. The function can return the entire matrix or just the lower triangular part, which is often sufficient for our purposes. We set `writetodisk = FALSE` to keep the data in memory.
+
+```{r}
+df_links <- com2links(
+  writetodisk = FALSE,
+  ad_ped_matrix = add, cn_ped_matrix = cn,
+  drop_upper_triangular = TRUE
+)# %>%
+#  filter(ID1 != ID2)
+```
+
+## Locate Jon and Daenerys
+
+Next, we extract the IDs corresponding to Jon Snow and Daenerys Targaryen.
+We use the `filter()` function to find the rows in the `df_links` dataframe where either ID1 or ID2 corresponds to Jon Snow, and then filter again to find the row where the other ID corresponds to Daenerys Targaryen.
+```{r}
+
+# Find the IDs of Jon Snow and Daenerys Targaryen
+
+jon_id <- df_got %>%
+  filter(name == "Jon Snow") %>%
+  pull(ID)
+
+dany_id <- df_got %>%
+  filter(name == "Daenerys Targaryen") %>%
+  pull(ID)
+```
+
+We then filter the pairwise table to retrieve the row containing their relationship.
+
+```{r}
+
+jon_dany_row <- df_links %>%
+  filter(ID1 == jon_id | ID2 == jon_id) %>%
+  filter(ID1 %in% dany_id| ID2 %in% dany_id)
+
+jon_dany_row 
+```
+This row contains the additive relatedness coefficient between Jon and Daenerys, which allows us to assess how closely related they are genetically.
+
+## Plotting the Pedigree with incomplete parental information
+
+To facilitate plotting, we check for individuals with one known parent but a missing other. For those cases, we assign a placeholder ID to the missing parent.
+
+```{r}
+
+fix_df=fixParents(id=df_got$ID, dadid=df_got$dadID, momid=df_got$momID, sex=df_got$sex, missid = NA)
+
+
+missingparents <-   df_got %>% mutate(
+    momID = case_when(
+      !is.na(dadID) & is.na(momID) ~  10000 + row_number(), # random id
+      TRUE ~ momID
+    ),
+    dadID = case_when(
+      !is.na(momID) & is.na(dadID) ~  20000 + row_number(), # random id
+      TRUE ~ dadID
+    )
+  )
+```
+
+This code creates new IDs for individuals with one known parent and a missing other. The `case_when()` function is used to check if either `momID` or `dadID` is missing, and if so, it assigns a new ID based on the row number. This allows us to visualize the pedigree even when some parental information is incomplete.
+
+We then identify the newly created momID and dadID values that are not yet represented as actual individuals in the data.
+```{r}
+
+newmoms <- missingparents$momID[!missingparents$momID %in% missingparents$ID ] %>% unique()
+newdads <- missingparents$dadID[!missingparents$dadID %in% missingparents$ID ] %>% unique()
+
+```
+For each of these placeholder parents, we add a row with NA parents and appropriate sex codes:
+
+```{r}
+
+newtemp <- data.frame(ID = c(newmoms,newdads))
+newtemp$momID <- as.numeric(NA)
+newtemp$dadID <- as.numeric(NA)
+newtemp$name <- c(rep("mom",length(newmoms)),rep("dad",length(newdads)))
+newtemp$fam <- 502:(501+length(newmoms)+length(newdads))
+newtemp$sex <- c(rep("F",length(newmoms)),rep("M",length(newdads)))
+# drop the rows with NA IDs
+newtemp <- newtemp %>% filter(!is.na(ID)) 
+```
+
+Now we bind these placeholder rows back into the main dataframe:
+
+```{r}
+
+temptemp <- missingparents %>% bind_rows(newtemp)
+
+```
+
+
+#### Recheck and Repair Sex Codes
+
+```{r}
+
+temptemp  <- checkSex(temptemp ,
+  code_male = 1,
+  code_female = 0,
+  verbose = TRUE, repair = TRUE
+)
+
+checkSex(temptemp ,
+  code_male = 1,
+  code_female = 0,
+  verbose = TRUE
+)
+```
+
+## Visualize the Pedigree
+
+```{r}
+
+fixParents(id=df_got$ID, dadid=df_got$dadID, momid=df_got$momID, sex=df_got$sex, missid = NA)
+
+plotPedigree()
+
+
+```
