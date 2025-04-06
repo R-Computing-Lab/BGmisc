@@ -83,7 +83,8 @@ plotPedigree <- function(ped,
       dadid = p$father,
       momid = p$mother,
       sex = p$sex,
-      famid = p$ped
+      famid = p$ped,
+      affected = p$affected
     )
     p3 <- p2["1"]
     if (verbose) {
