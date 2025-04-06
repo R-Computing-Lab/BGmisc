@@ -356,13 +356,13 @@ the reconstructed pedigree.</p>
 <code>BGmisc</code>.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(BGmisc)</span>
 <span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
-<pre><code>## ── Attaching core tidyverse packages ───────────────────
+<pre><code>## ── Attaching core tidyverse packages ──────────────────── tidyverse 2.0.0 ──
 ## ✔ dplyr     1.1.4     ✔ readr     2.1.5
 ## ✔ forcats   1.0.0     ✔ stringr   1.5.1
 ## ✔ ggplot2   3.5.1     ✔ tibble    3.2.1
 ## ✔ lubridate 1.9.4     ✔ tidyr     1.3.1
 ## ✔ purrr     1.0.4     
-## ── Conflicts ────────────────── tidyverse_conflicts() ──
+## ── Conflicts ────────────────────────────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::between()     masks BGmisc::between()
 ## ✖ dplyr::filter()      masks stats::filter()
 ## ✖ dplyr::first()       masks BGmisc::first()
@@ -479,7 +479,7 @@ genetically.</p>
 <p>To facilitate plotting, we check for individuals with one known
 parent but a missing other. For those cases, we assign a placeholder ID
 to the missing parent.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>fix_df<span class="ot">=</span><span class="fu">fixParents</span>(<span class="at">id=</span>df_got<span class="sc">$</span>ID, <span class="at">dadid=</span>df_got<span class="sc">$</span>dadID, <span class="at">momid=</span>df_got<span class="sc">$</span>momID, <span class="at">sex=</span>df_got<span class="sc">$</span>sex, <span class="at">missid =</span> <span class="cn">NA</span>)</span>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="co">#fix_df=fixParents(id=df_got$ID, dadid=df_got$dadID, momid=df_got$momID, sex=df_got$sex, missid = NA)</span></span>
 <span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a></span>
 <span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a></span>
 <span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>missingparents <span class="ot">&lt;-</span>   df_got <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(</span>

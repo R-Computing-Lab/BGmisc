@@ -107,7 +107,7 @@ To facilitate plotting, we check for individuals with one known parent but a mis
 
 ```{r}
 
-fix_df=fixParents(id=df_got$ID, dadid=df_got$dadID, momid=df_got$momID, sex=df_got$sex, missid = NA)
+#fix_df=fixParents(id=df_got$ID, dadid=df_got$dadID, momid=df_got$momID, sex=df_got$sex, missid = NA)
 
 
 missingparents <-   df_got %>% mutate(
