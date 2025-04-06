@@ -3,6 +3,7 @@
 <url><loc>https://r-computing-lab.github.io/BGmisc/CODE_OF_CONDUCT.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/CONTRIBUTING.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/LICENSE.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/articles/ASOIAF.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/articles/analyticrelatedness.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/articles/index.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/articles/modelingrelatedness.html</loc></url>
@@ -27,6 +28,7 @@
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/calculateRelatedness.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/calculateSummaryDT.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/checkIDs.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/checkParentIDs.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/checkPedigreeNetwork.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/checkSex.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/com2links.html</loc></url>
@@ -77,6 +79,7 @@
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/related_coef.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/relatedness.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/repairIDs.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/repairParentIDs.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/repairSex.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/resample.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/rmvn.html</loc></url>

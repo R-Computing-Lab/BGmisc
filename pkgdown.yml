@@ -3,12 +3,13 @@ pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
   analyticrelatedness: analyticrelatedness.html
+  ASOIAF: ASOIAF.html
   modelingrelatedness: modelingrelatedness.html
   network: network.html
   partial: partial.html
   pedigree: pedigree.html
   validation: validation.html
-last_built: 2025-04-02T23:59Z
+last_built: 2025-04-06T23:18Z
 urls:
   reference: https://r-computing-lab.github.io/BGmisc/reference
   article: https://r-computing-lab.github.io/BGmisc/articles

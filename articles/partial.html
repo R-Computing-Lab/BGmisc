@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">BGmisc</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.5.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,6 +34,7 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="../articles/analyticrelatedness.html">Calculating and Inferring Relatedness Coefficients with BGmisc</a></li>
+    <li><a class="dropdown-item" href="../articles/ASOIAF.html">ASOIAF: How related are Jon and Danny?</a></li>
     <li><a class="dropdown-item" href="../articles/modelingrelatedness.html">Modeling variance components</a></li>
     <li><a class="dropdown-item" href="../articles/network.html">Network tools for finding extended pedigrees and path tracing</a></li>
     <li><a class="dropdown-item" href="../articles/partial.html">Adjacency matrix methods</a></li>
@@ -138,7 +139,7 @@ matrices should be identical.</p>
 <span><span class="op">)</span></span></code></pre></div>
 <p><img src="partial_files/figure-html/unnamed-chunk-5-2.png" width="700"></p>
 <p>To verify this, we subtract one matrix from the other and calculate
-RMSE. The difference should be numerically zero. Indeed, it is 0.</p>
+RMSE. The difference should be numerically zero. Indeed, it is NA.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/corrplot/man/corrplot.html" class="external-link">corrplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">ped_add_classic_complete</span> <span class="op">-</span> <span class="va">ped_add_partial_complete</span><span class="op">)</span>,</span>
 <span>  method <span class="op">=</span> <span class="st">"color"</span>, type <span class="op">=</span> <span class="st">"lower"</span>, col.lim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,</span>
@@ -173,7 +174,7 @@ because one parent remains. The partial parent method inflates the
 individual’s diagonal contribution to account for the missing
 parent.</p>
 <p>The resulting additive matrices reflect this difference. The RMSE
-between the two matrices is 0.009811.</p>
+between the two matrices is NA.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/corrplot/man/corrplot.html" class="external-link">corrplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">ped_add_classic</span><span class="op">)</span>,</span>
 <span>  method <span class="op">=</span> <span class="st">"color"</span>, type <span class="op">=</span> <span class="st">"lower"</span>, col.lim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,</span>
@@ -190,7 +191,9 @@ between the two matrices is 0.009811.</p>
 <p>We quantify the overall matrix difference:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="op">(</span><span class="va">ped_add_classic</span> <span class="op">-</span> <span class="va">ped_add_partial</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 0.009811047</span></span></code></pre></div>
+<span><span class="co">#&gt; Warning in mean.default((ped_add_classic - ped_add_partial)^2): argument is not</span></span>
+<span><span class="co">#&gt; numeric or logical: returning NA</span></span>
+<span><span class="co">#&gt; [1] NA</span></span></code></pre></div>
 <p>Next, we compare each method to the matrix from the complete
 pedigree. This evaluates how much each method deviates from the correct
 additive structure.</p>
@@ -203,9 +206,11 @@ additive structure.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="op">(</span><span class="va">ped_add_classic_complete</span> <span class="op">-</span> <span class="va">ped_add_classic</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 0.02991371</span></span></code></pre></div>
+<span><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_classic)^2):</span></span>
+<span><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
+<span><span class="co">#&gt; [1] NA</span></span></code></pre></div>
 <p>The RMSE between the true additive component and the classic method
-is 0.0299137.</p>
+is NA.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/corrplot/man/corrplot.html" class="external-link">corrplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">ped_add_classic_complete</span> <span class="op">-</span> <span class="va">ped_add_partial</span><span class="op">)</span>,</span>
 <span>  method <span class="op">=</span> <span class="st">"color"</span>, type <span class="op">=</span> <span class="st">"lower"</span>, col.lim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,</span>
@@ -215,9 +220,11 @@ is 0.0299137.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="op">(</span><span class="va">ped_add_classic_complete</span> <span class="op">-</span> <span class="va">ped_add_partial</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 0.02825904</span></span></code></pre></div>
+<span><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_partial)^2):</span></span>
+<span><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
+<span><span class="co">#&gt; [1] NA</span></span></code></pre></div>
 <p>The RMSE between the true additive component and the partial parent
-method is 0.028259.</p>
+method is NA.</p>
 <p>The partial method shows smaller deviations from the complete matrix,
 confirming that it better preserves relatedness structure when one
 parent is missing.</p>
@@ -245,7 +252,7 @@ individual 4.</p>
 <span>  component <span class="op">=</span> <span class="st">"additive"</span>, adjacency_method <span class="op">=</span> <span class="st">"direct"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p>As we can see, the two matrices are different. The RMSE between the
-two matrices is 0.009811.</p>
+two matrices is NA.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/corrplot/man/corrplot.html" class="external-link">corrplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">ped_add_classic_dad</span><span class="op">)</span>,</span>
 <span>  method <span class="op">=</span> <span class="st">"color"</span>, type <span class="op">=</span> <span class="st">"lower"</span>, col.lim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,</span>
@@ -269,7 +276,9 @@ two matrices is 0.009811.</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="op">(</span><span class="va">ped_add_classic_complete</span> <span class="op">-</span> <span class="va">ped_add_classic</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 0.02991371</span></span></code></pre></div>
+<span><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_classic)^2):</span></span>
+<span><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
+<span><span class="co">#&gt; [1] NA</span></span></code></pre></div>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/corrplot/man/corrplot.html" class="external-link">corrplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">ped_add_classic_complete</span> <span class="op">-</span> <span class="va">ped_add_partial</span><span class="op">)</span>,</span>
 <span>  method <span class="op">=</span> <span class="st">"color"</span>, type <span class="op">=</span> <span class="st">"lower"</span>, col.lim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,</span>
@@ -279,7 +288,9 @@ two matrices is 0.009811.</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="op">(</span><span class="va">ped_add_classic_complete</span> <span class="op">-</span> <span class="va">ped_add_partial</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 0.02825904</span></span></code></pre></div>
+<span><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_partial)^2):</span></span>
+<span><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
+<span><span class="co">#&gt; [1] NA</span></span></code></pre></div>
 <p>The partial parent method again yields a matrix closer to the
 full-data version.</p>
 </div>
@@ -397,7 +408,87 @@ values.</p>
 <span>    ped_add_partial_mom <span class="op">=</span> <span class="va">ped_add_partial_mom</span>,</span>
 <span>    ped_add_classic_mom <span class="op">=</span> <span class="va">ped_add_classic_mom</span></span>
 <span>  <span class="op">)</span></span>
-<span><span class="op">}</span></span></code></pre></div>
+<span><span class="op">}</span></span>
+<span><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_partial_mom)^2):</span></span>
+<span><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
+<span><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_partial_dad)^2):</span></span>
+<span><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
+<span><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_classic_dad)^2):</span></span>
+<span><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
+<span><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_partial_mom)^2):</span></span>
+<span><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
+<span><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_classic_mom)^2):</span></span>
+<span><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
+<span><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_partial_mom)^2):</span></span>
+<span><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
+<span><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_partial_dad)^2):</span></span>
+<span><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
+<span><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_classic_dad)^2):</span></span>
+<span><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
+<span><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_partial_mom)^2):</span></span>
+<span><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
+<span><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_classic_mom)^2):</span></span>
+<span><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
+<span><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_partial_mom)^2):</span></span>
+<span><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
+<span><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_partial_dad)^2):</span></span>
+<span><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
+<span><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_classic_dad)^2):</span></span>
+<span><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
+<span><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_partial_mom)^2):</span></span>
+<span><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
+<span><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_classic_mom)^2):</span></span>
+<span><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
+<span><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_partial_mom)^2):</span></span>
+<span><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
+<span><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_partial_dad)^2):</span></span>
+<span><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
+<span><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_classic_dad)^2):</span></span>
+<span><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
+<span><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_partial_mom)^2):</span></span>
+<span><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
+<span><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_classic_mom)^2):</span></span>
+<span><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
+<span><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_partial_mom)^2):</span></span>
+<span><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
+<span><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_partial_dad)^2):</span></span>
+<span><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
+<span><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_classic_dad)^2):</span></span>
+<span><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
+<span><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_partial_mom)^2):</span></span>
+<span><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
+<span><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_classic_mom)^2):</span></span>
+<span><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
+<span><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_partial_mom)^2):</span></span>
+<span><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
+<span><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_partial_dad)^2):</span></span>
+<span><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
+<span><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_classic_dad)^2):</span></span>
+<span><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
+<span><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_partial_mom)^2):</span></span>
+<span><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
+<span><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_classic_mom)^2):</span></span>
+<span><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
+<span><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_partial_mom)^2):</span></span>
+<span><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
+<span><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_partial_dad)^2):</span></span>
+<span><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
+<span><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_classic_dad)^2):</span></span>
+<span><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
+<span><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_partial_mom)^2):</span></span>
+<span><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
+<span><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_classic_mom)^2):</span></span>
+<span><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
+<span><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_partial_mom)^2):</span></span>
+<span><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
+<span><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_partial_dad)^2):</span></span>
+<span><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
+<span><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_classic_dad)^2):</span></span>
+<span><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
+<span><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_partial_mom)^2):</span></span>
+<span><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
+<span><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_classic_mom)^2):</span></span>
+<span><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span></code></pre></div>
 <div class="section level4">
 <h4 id="example-family-1">Example: Family <code>1</code><a class="anchor" aria-label="anchor" href="#example-family-1"></a>
 </h4>
@@ -500,13 +591,14 @@ methods. A positive value means that the partial method had lower RMSE
 <code class="sourceCode R"><span><span class="va">results</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">RMSE_diff_mom</span>, <span class="va">RMSE_diff_dad</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  RMSE_diff_mom      RMSE_diff_dad     </span></span>
-<span><span class="co">#&gt;  Min.   :0.001222   Min.   :0.001222  </span></span>
-<span><span class="co">#&gt;  1st Qu.:0.001869   1st Qu.:0.002036  </span></span>
-<span><span class="co">#&gt;  Median :0.002538   Median :0.002520  </span></span>
-<span><span class="co">#&gt;  Mean   :0.005763   Mean   :0.005786  </span></span>
-<span><span class="co">#&gt;  3rd Qu.:0.005625   3rd Qu.:0.005625  </span></span>
-<span><span class="co">#&gt;  Max.   :0.024221   Max.   :0.024221</span></span></code></pre></div>
+<span><span class="co">#&gt;  RMSE_diff_mom RMSE_diff_dad</span></span>
+<span><span class="co">#&gt;  Min.   : NA   Min.   : NA  </span></span>
+<span><span class="co">#&gt;  1st Qu.: NA   1st Qu.: NA  </span></span>
+<span><span class="co">#&gt;  Median : NA   Median : NA  </span></span>
+<span><span class="co">#&gt;  Mean   :NaN   Mean   :NaN  </span></span>
+<span><span class="co">#&gt;  3rd Qu.: NA   3rd Qu.: NA  </span></span>
+<span><span class="co">#&gt;  Max.   : NA   Max.   : NA  </span></span>
+<span><span class="co">#&gt;  NA's   :8     NA's   :8</span></span></code></pre></div>
 <p>In all families, both <code>RMSE_diff_mom</code> and
 <code>RMSE_diff_dad</code> are positive—indicating that the classic
 method produces larger the errors relative to the partial method. This
@@ -515,9 +607,9 @@ father.</p>
 <p>To verify this directly:</p>
 <div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">results</span><span class="op">$</span><span class="va">RMSE_diff_mom</span> <span class="op">&gt;</span> <span class="fl">0</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 1</span></span>
+<span><span class="co">#&gt; [1] NaN</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">results</span><span class="op">$</span><span class="va">RMSE_diff_dad</span> <span class="op">&gt;</span> <span class="fl">0</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 1</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] NaN</span></span></code></pre></div>
 <p>These proportions show how often the partial method produces a lower
 RMSE across the dataset. This confirms the earlier findings: when
 pedigree data are incomplete, the partial parent method more faithfully
@@ -530,13 +622,14 @@ reconstructs the full-data relatedness matrix.</p>
 <span>    <span class="op">-</span><span class="va">max_R_partial_dad</span>, <span class="op">-</span><span class="va">max_R_classic_mom</span>, <span class="op">-</span><span class="va">max_R_partial_mom</span>, <span class="op">-</span><span class="va">max_R_classic</span></span>
 <span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  RMSE_partial_dad  RMSE_partial_mom  RMSE_classic_dad  RMSE_classic_mom </span></span>
-<span><span class="co">#&gt;  Min.   :0.04773   Min.   :0.04773   Min.   :0.04895   Min.   :0.04895  </span></span>
-<span><span class="co">#&gt;  1st Qu.:0.05570   1st Qu.:0.05349   1st Qu.:0.05774   1st Qu.:0.05555  </span></span>
-<span><span class="co">#&gt;  Median :0.06206   Median :0.06899   Median :0.06457   Median :0.07158  </span></span>
-<span><span class="co">#&gt;  Mean   :0.07545   Mean   :0.07686   Mean   :0.08124   Mean   :0.08262  </span></span>
-<span><span class="co">#&gt;  3rd Qu.:0.08237   3rd Qu.:0.08323   3rd Qu.:0.08866   3rd Qu.:0.08866  </span></span>
-<span><span class="co">#&gt;  Max.   :0.15547   Max.   :0.15547   Max.   :0.17969   Max.   :0.17969</span></span></code></pre></div>
+<span><span class="co">#&gt;  RMSE_partial_dad RMSE_partial_mom RMSE_classic_dad RMSE_classic_mom</span></span>
+<span><span class="co">#&gt;  Min.   : NA      Min.   : NA      Min.   : NA      Min.   : NA     </span></span>
+<span><span class="co">#&gt;  1st Qu.: NA      1st Qu.: NA      1st Qu.: NA      1st Qu.: NA     </span></span>
+<span><span class="co">#&gt;  Median : NA      Median : NA      Median : NA      Median : NA     </span></span>
+<span><span class="co">#&gt;  Mean   :NaN      Mean   :NaN      Mean   :NaN      Mean   :NaN     </span></span>
+<span><span class="co">#&gt;  3rd Qu.: NA      3rd Qu.: NA      3rd Qu.: NA      3rd Qu.: NA     </span></span>
+<span><span class="co">#&gt;  Max.   : NA      Max.   : NA      Max.   : NA      Max.   : NA     </span></span>
+<span><span class="co">#&gt;  NA's   :8        NA's   :8        NA's   :8        NA's   :8</span></span></code></pre></div>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
