@@ -99,7 +99,8 @@ jon_dany_row <- df_links %>%
 
 jon_dany_row 
 ```
-This row contains the additive relatedness coefficient between Jon and Daenerys, which allows us to assess how closely related they are genetically.
+
+This row contains the additive relatedness coefficient between Jon and Daenerys, which allows us to assess how closely related they are genetically. We'd expect to see a value of 0.25 for an Aunt-Nephew relationship, which is what Jon and Daenerys are in the show. However, the value is `r jon_dany_row$addRel[1]`, indicating a more complex relationship.
 
 ## Plotting the Pedigree with incomplete parental information
 
@@ -107,69 +108,22 @@ To facilitate plotting, we check for individuals with one known parent but a mis
 
 ```{r}
 
-#fix_df=fixParents(id=df_got$ID, dadid=df_got$dadID, momid=df_got$momID, sex=df_got$sex, missid = NA)
+df_repaired <- checkParentIDs(df_got,addphantoms=TRUE,
+                              repair=TRUE,
+                              parentswithoutrow=FALSE,
+                              repairsex=FALSE
+                              ) %>% mutate(fam=1,
+                                           affected = case_when(ID %in% c(jon_id,dany_id) ~ 1,
+                                                               TRUE ~ 0)
+                              )
+                                                               
 
-
-missingparents <-   df_got %>% mutate(
-    momID = case_when(
-      !is.na(dadID) & is.na(momID) ~  10000 + row_number(), # random id
-      TRUE ~ momID
-    ),
-    dadID = case_when(
-      !is.na(momID) & is.na(dadID) ~  20000 + row_number(), # random id
-      TRUE ~ dadID
-    )
-  )
-```
-
-This code creates new IDs for individuals with one known parent and a missing other. The `case_when()` function is used to check if either `momID` or `dadID` is missing, and if so, it assigns a new ID based on the row number. This allows us to visualize the pedigree even when some parental information is incomplete.
-
-We then identify the newly created momID and dadID values that are not yet represented as actual individuals in the data.
-```{r}
-
-newmoms <- missingparents$momID[!missingparents$momID %in% missingparents$ID ] %>% unique()
-newdads <- missingparents$dadID[!missingparents$dadID %in% missingparents$ID ] %>% unique()
-
-```
-For each of these placeholder parents, we add a row with NA parents and appropriate sex codes:
-
-```{r}
-
-newtemp <- data.frame(ID = c(newmoms,newdads))
-newtemp$momID <- as.numeric(NA)
-newtemp$dadID <- as.numeric(NA)
-newtemp$name <- c(rep("mom",length(newmoms)),rep("dad",length(newdads)))
-newtemp$fam <- 502:(501+length(newmoms)+length(newdads))
-newtemp$sex <- c(rep("F",length(newmoms)),rep("M",length(newdads)))
-# drop the rows with NA IDs
-newtemp <- newtemp %>% filter(!is.na(ID)) 
-```
-
-Now we bind these placeholder rows back into the main dataframe:
-
-```{r}
-
-temptemp <- missingparents %>% bind_rows(newtemp)
 
 ```
 
+This code creates new IDs for individuals with one known parent and a missing other. It checks if either `momID` or `dadID` is missing, and if so, it assigns a new ID based on the row number. This allows us to visualize the pedigree even when some parental information is incomplete.
 
-#### Recheck and Repair Sex Codes
 
-```{r}
-
-temptemp  <- checkSex(temptemp ,
-  code_male = 1,
-  code_female = 0,
-  verbose = TRUE, repair = TRUE
-)
-
-checkSex(temptemp ,
-  code_male = 1,
-  code_female = 0,
-  verbose = TRUE
-)
-```
 
 ## Visualize the Pedigree
 
@@ -177,7 +131,6 @@ checkSex(temptemp ,
 
 #fixParents(id=df_got$ID, dadid=df_got$dadID, momid=df_got$momID, sex=df_got$sex, missid = NA)
 
-#plotPedigree()
-
+plotPedigree(df_repaired,affected=df_repaired$affected,verbose=FALSE)
 
 ```
