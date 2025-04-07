@@ -1,4 +1,4 @@
-﻿0 HEAD
+0 HEAD
 1 SOUR PAF
 2 NAME Personal Ancestral File
 2 VERS 5.2.18.0
@@ -260,7 +260,7 @@
 0 @I17@ INDI
 1 NAME /Frederick I/
 2 SURN Frederick I
-2 _AKA Frederick the Handsome or the Fair 
+2 _AKA Frederick the Handsome or the Fair
 1 SEX M
 1 BIRT
 2 DATE 1289

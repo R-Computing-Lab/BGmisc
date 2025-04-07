@@ -340,29 +340,33 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 
-<p>Just how related are Jon Snow and Daenerys Targaryen? This vignette
-walks through how to quantify their genetic relatedness using functions
-from the BGmisc package. While the Game of Thrones canon gives us some
-clues, we can use a formal pedigree-based approach to quantify their
-genetic relatedness. This vignette demonstrates how to compute
-coefficients of relatedness using the <code>BGmisc</code> package, along
-with basic data manipulation from tidyverse. We will also handle
-incomplete parental information programmatically and generate a plot of
-the reconstructed pedigree.</p>
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>Just how closely related are Jon Snow and Daenerys Targaryen?
+According to the lore of <em>A Song of Ice and Fire</em>, Daenerys is
+Jon’s paternal aunt. This would suggest a theoretical genetic
+relatedness of 0.25, assuming a simple pedigree and no inbreeding. But
+with tangled ancestries and potentially missing information, how
+confident can we be in that estimate?</p>
+<p>In this vignette, we use the <code>BGmisc</code> package to
+reconstruct the <em>ASOIAF</em> pedigree, handle incomplete parentage
+data, and compute additive genetic and common nuclear relatedness. We’ll
+focus on Jon and Daenerys as a case study, but the methods generalize to
+any characters in the provided dataset.</p>
+</div>
 <div id="load-packages-and-data" class="section level2">
 <h2>Load Packages and Data</h2>
-<p>We begin by loading the necessary packages and accessing the built-in
-<code>ASOIAF</code> pedigree dataset included with
-<code>BGmisc</code>.</p>
+<p>We begin by loading the required libraries and examining the
+structure of the built-in <code>ASOIAF</code> pedigree.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(BGmisc)</span>
 <span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
-<pre><code>## ── Attaching core tidyverse packages ────── tidyverse 2.0.0 ──
+<pre><code>## ── Attaching core tidyverse packages ───── tidyverse 2.0.0 ──
 ## ✔ dplyr     1.1.4     ✔ readr     2.1.5
 ## ✔ forcats   1.0.0     ✔ stringr   1.5.1
 ## ✔ ggplot2   3.5.1     ✔ tibble    3.2.1
 ## ✔ lubridate 1.9.4     ✔ tidyr     1.3.1
 ## ✔ purrr     1.0.4     
-## ── Conflicts ──────────────────────── tidyverse_conflicts() ──
+## ── Conflicts ─────────────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::between()     masks BGmisc::between()
 ## ✖ dplyr::filter()      masks stats::filter()
 ## ✖ dplyr::first()       masks BGmisc::first()
@@ -382,8 +386,9 @@ the reconstructed pedigree.</p>
 ## ✖ lubridate::year()    masks BGmisc::year()
 ## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">data</span>(ASOIAF)</span></code></pre></div>
-<p>The ASOIAF data contains character IDs, family identifiers, and
-parent-child links extracted from A Song of Ice and Fire lore.</p>
+<p>The ASOIAF dataset includes character IDs, names, sex codes, and
+parent identifiers for a subset of characters drawn from the <em>A Song
+of Ice and Fire</em> canon.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">head</span>(ASOIAF)</span></code></pre></div>
 <pre><code>##   id famID momID dadID          name sex
 ## 1  1     1    NA    NA   Walder Frey   M
@@ -395,14 +400,15 @@ parent-child links extracted from A Song of Ice and Fire lore.</p>
 </div>
 <div id="prepare-and-validate-sex-codes" class="section level2">
 <h2>Prepare and Validate Sex Codes</h2>
-<p>We use <code>checkSex()</code> to ensure that all individuals have
-valid sex codes, repairing as needed. This is important for correct
-pedigree plotting and downstream calculations.</p>
+<p>Many pedigree-based algorithms rely on valid sex codes for downstream
+calculationss and visualization. We use <code>checkSex()</code> to
+inspect the sex variable, repairing inconsistencies
+programmatically.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>df_got <span class="ot">&lt;-</span> <span class="fu">checkSex</span>(ASOIAF,</span>
 <span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>  <span class="at">code_male =</span> <span class="dv">1</span>,</span>
 <span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>  <span class="at">code_female =</span> <span class="dv">0</span>,</span>
 <span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>  <span class="at">verbose =</span> <span class="cn">FALSE</span>, <span class="at">repair =</span> <span class="cn">TRUE</span></span>
-<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>)</span></code></pre></div>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>) </span></code></pre></div>
 </div>
 <div id="compute-relatedness-matrices" class="section level2">
 <h2>Compute Relatedness Matrices</h2>
