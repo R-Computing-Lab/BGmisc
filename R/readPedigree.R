@@ -579,8 +579,32 @@ countPatternRows <- function(file) {
 #' Read Wiki Family Tree
 #'
 #' @param text A character string containing the text of a family tree in wiki format.
+#' @param verbose A logical value indicating whether to print messages.
+#' @param file_path The path to the file containing the family tree.
+#' @param ... Additional arguments (not used).
+#'
+#' @return A list containing the summary, members, structure, and relationships of the family tree.
 #' @export
-readWikifamilytree <- function(text) {
+readWikifamilytree <- function(text=NULL, verbose = FALSE, file_path = NULL, ...) {
+  # Checks
+  if (is.null(text) && is.null(file_path)) {
+    stop("Either 'text' or 'file_path' must be provided.")
+  }
+   # read from file if provided
+if (!is.null(file_path)){
+
+  if (!file.exists(file_path)) stop("File does not exist: ", file_path)
+
+  if (verbose) {
+    print(paste("Reading file:", file_path))
+  }
+  file <- data.frame(X1 = readLines(file_path))
+  file_length <- nrow(file)
+  if (verbose) {
+    print(paste0("File is ", file_length, " lines long"))
+  }
+  text <- file$X1
+}
   # Extract summary text
 
   summary_text <- extractSummaryText(text)
