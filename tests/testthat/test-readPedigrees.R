@@ -193,12 +193,12 @@ test_that("readWikifamilytree reads a string correctly", {
 {{familytree | JOE | | ME  | | SIS | | | JOE=My brother Joe|ME='''Me!'''|SIS=My little sister}}
 {{familytree/end}}"
 
-  temp_file <- tempfile(fileext  = ".txt")
+  temp_file <- tempfile(fileext = ".txt")
   writeLines(family_tree_text, temp_file)
 
 
-  result <- readWikifamilytree(text=family_tree_text)
-  result2 <- readWikifamilytree(file_path=temp_file)
+  result <- readWikifamilytree(text = family_tree_text)
+  result2 <- readWikifamilytree(file_path = temp_file)
 
   expect_equal(
     result$summary,
@@ -217,8 +217,7 @@ test_that("readWikifamilytree reads a string correctly", {
 test_that("readWikifamilytree reads a file correctly", {
   # Create a temporary WikiFamilyTree file for testing
   # Example usage
-  family_tree_file_path <- "data-raw/Targaryen tree Dance.txt" #system.file("extdata", "Targaryen tree Dance.txt", package = "BGmisc")
+  family_tree_file_path <- "data-raw/Targaryen tree Dance.txt" # system.file("extdata", "Targaryen tree Dance.txt", package = "BGmisc")
 
-#  result <- readWikifamilytree(file_path=family_tree_file_path)
-
+  #  result <- readWikifamilytree(file_path=family_tree_file_path)
 })

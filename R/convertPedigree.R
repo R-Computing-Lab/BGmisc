@@ -212,7 +212,7 @@ ped2com <- function(ped, component,
   # isPar is the adjacency matrix.  'A' matrix from RAM
   if (component %in% c("common nuclear")) {
     Matrix::diag(isPar) <- 1
-    if (sparse==FALSE) {
+    if (sparse == FALSE) {
       isPar <- as.matrix(isPar)
     }
     return(isPar)
@@ -330,7 +330,7 @@ ped2com <- function(ped, component,
     # Assign 1 to all nonzero elements for mitochondrial component
   }
 
-  if (sparse==FALSE) {
+  if (sparse == FALSE) {
     r <- as.matrix(r)
   }
   if (flatten.diag) { # flattens diagonal if you don't want to deal with inbreeding

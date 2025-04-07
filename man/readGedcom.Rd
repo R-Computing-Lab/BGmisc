@@ -10,7 +10,8 @@ readGedcom(
   add_parents = TRUE,
   remove_empty_cols = TRUE,
   combine_cols = TRUE,
-  skinny = FALSE
+  skinny = FALSE,
+  ...
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ readGedcom(
 \item{combine_cols}{A logical value indicating whether to combine columns with duplicate values.}
 
 \item{skinny}{A logical value indicating whether to return a skinny data frame.}
+
+\item{...}{Additional arguments to be passed to the function.}
 }
 \value{
 A data frame containing information about individuals, with the following potential columns:

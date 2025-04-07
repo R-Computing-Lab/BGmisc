@@ -42,7 +42,6 @@ df_got <- checkSex(ASOIAF,
   code_female = 0,
   verbose = FALSE, repair = TRUE
 )
-
 ```
 
 
@@ -94,9 +93,9 @@ For interpretability, we convert these square matrices into long-format tables u
 ```{r}
 df_links <- com2links(
   writetodisk = FALSE,
-  ad_ped_matrix = add, cn_ped_matrix = cn, mit_ped_matrix= mt,
+  ad_ped_matrix = add, cn_ped_matrix = cn, mit_ped_matrix = mt,
   drop_upper_triangular = TRUE
-)# %>%
+) # %>%
 #  filter(ID1 != ID2)
 ```
 
@@ -108,7 +107,6 @@ We next identify the rows in the pairwise relatedness table that correspond to J
 
 
 ```{r}
-
 # Find the IDs of Jon Snow and Daenerys Targaryen
 
 jon_id <- df_got %>%
@@ -123,12 +121,11 @@ dany_id <- df_got %>%
 Then we isolate their dyad:
 
 ```{r}
-
 jon_dany_row <- df_links %>%
   filter(ID1 == jon_id | ID2 == jon_id) %>%
-  filter(ID1 %in% dany_id| ID2 %in% dany_id)
+  filter(ID1 %in% dany_id | ID2 %in% dany_id)
 
-jon_dany_row 
+jon_dany_row
 ```
 
 This table contains the additive and nuclear relatedness estimates for Jon and Daenerys. If the pedigree reflects their canonical aunt-nephew relationship and is free from inbreeding, we’d expect to see an additive coefficient close to 0.25. However, the value is `r jon_dany_row$addRel[1]`, indicating a more complex relationship.
@@ -146,18 +143,18 @@ Many real-world and fictional pedigrees contain individuals with unknown or part
 To facilitate plotting, we check for individuals with one known parent but a missing other. For those cases, we assign a placeholder ID to the missing parent.
 
 ```{r}
-
-df_repaired <- checkParentIDs(df_got,addphantoms=TRUE,
-                              repair=TRUE,
-                              parentswithoutrow=FALSE,
-                              repairsex=FALSE
-                              ) %>% mutate(fam=1,
-                                           affected = case_when(ID %in% c(jon_id,dany_id, "365") ~ 1,
-                                                               TRUE ~ 0)
-                              )
-                                                               
-
-
+df_repaired <- checkParentIDs(df_got,
+  addphantoms = TRUE,
+  repair = TRUE,
+  parentswithoutrow = FALSE,
+  repairsex = FALSE
+) %>% mutate(
+  fam = 1,
+  affected = case_when(
+    ID %in% c(jon_id, dany_id, "365") ~ 1,
+    TRUE ~ 0
+  )
+)
 ```
 
 This code creates new IDs for individuals with one known parent and a missing other. It checks if either `momID` or `dadID` is missing, and if so, it assigns a new ID based on the row number. This allows us to visualize the pedigree even when some parental information is incomplete.
@@ -167,9 +164,7 @@ This code creates new IDs for individuals with one known parent and a missing ot
 ## Visualize the Pedigree
 
 ```{r}
+# fixParents(id=df_got$ID, dadid=df_got$dadID, momid=df_got$momID, sex=df_got$sex, missid = NA)
 
-#fixParents(id=df_got$ID, dadid=df_got$dadID, momid=df_got$momID, sex=df_got$sex, missid = NA)
-
-plotPedigree(df_repaired,affected=df_repaired$affected,verbose=FALSE)
-
+plotPedigree(df_repaired, affected = df_repaired$affected, verbose = FALSE)
 ```

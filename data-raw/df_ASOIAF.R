@@ -10,7 +10,7 @@ library(BGmisc)
 ## Create dataframe
 ASOIAF <- readGedcom("data-raw/ASOIAF.ged")
 
-#ASOIAF <- readGedcom("data-raw/ASOIAF_040725.ged")
+# ASOIAF <- readGedcom("data-raw/ASOIAF_040725.ged")
 
 df <- ped2fam(ASOIAF, personID = "id") %>%
   select(

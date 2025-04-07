@@ -7,26 +7,25 @@
 #'
 #' @return A list containing the summary, members, structure, and relationships of the family tree.
 #' @export
-readWikifamilytree <- function(text=NULL, verbose = FALSE, file_path = NULL, ...) {
+readWikifamilytree <- function(text = NULL, verbose = FALSE, file_path = NULL, ...) {
   # Checks
   if (is.null(text) && is.null(file_path)) {
     stop("Either 'text' or 'file_path' must be provided.")
   }
-   # read from file if provided
-if (!is.null(file_path)){
+  # read from file if provided
+  if (!is.null(file_path)) {
+    if (!file.exists(file_path)) stop("File does not exist: ", file_path)
 
-  if (!file.exists(file_path)) stop("File does not exist: ", file_path)
-
-  if (verbose) {
-    print(paste("Reading file:", file_path))
+    if (verbose) {
+      print(paste("Reading file:", file_path))
+    }
+    file <- data.frame(X1 = readLines(file_path))
+    file_length <- nrow(file)
+    if (verbose) {
+      print(paste0("File is ", file_length, " lines long"))
+    }
+    text <- paste0(file$X1, collapse = "\n")
   }
-  file <- data.frame(X1 = readLines(file_path))
-  file_length <- nrow(file)
-  if (verbose) {
-    print(paste0("File is ", file_length, " lines long"))
-  }
-  text <- paste0(file$X1, collapse = "\n")
-}
   # Extract summary text
 
   summary_text <- extractSummaryText(text)

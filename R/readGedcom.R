@@ -9,6 +9,7 @@
 #' @param combine_cols A logical value indicating whether to combine columns with duplicate values.
 #' @param verbose A logical value indicating whether to print messages.
 #' @param skinny A logical value indicating whether to return a skinny data frame.
+#' @param ... Additional arguments to be passed to the function.
 #' @return A data frame containing information about individuals, with the following potential columns:
 #' - `id`: ID of the individual
 #' - `momID`: ID of the individual's mother
@@ -51,7 +52,8 @@ readGedcom <- function(file_path,
                        add_parents = TRUE,
                        remove_empty_cols = TRUE,
                        combine_cols = TRUE,
-                       skinny = FALSE) {
+                       skinny = FALSE,
+                       ...) {
   # Checks
   if (!file.exists(file_path)) stop("File does not exist: ", file_path)
   if (verbose) {
@@ -189,7 +191,7 @@ readGedcom <- function(file_path,
 
     # Attribute tags using process_tag()
     for (tag_field in list(
-      c("SEX",  "sex"),
+      c("SEX", "sex"),
 
       # CAST	caste
       #  g7:CAST	The name of an individual’s rank or status in society which is sometimes based on racial or religious differences, or differences in wealth, inherited rank, profession, or occupation.
@@ -217,7 +219,7 @@ readGedcom <- function(file_path,
 
       # NMR	number of marriages
       # g7:NMR	The number of times this person has participated in a family as a spouse or parent.
-      c("NMR",  "attribute_marriages"),
+      c("NMR", "attribute_marriages"),
 
       # OCCU	occupation
       # g7:OCCU	The type of work or profession of an individual.
@@ -237,7 +239,7 @@ readGedcom <- function(file_path,
 
       # SSN	social security number
       # g7:SSN	A number assigned by the United States Social Security Administration, used for tax identification purposes. It is a type of IDNO.
-      c("SSN",  "attribute_ssn"),
+      c("SSN", "attribute_ssn"),
 
       # TITL	title
       # g7:INDI-TITL	A formal designation used by an individual in connection with positions of royalty or other social status, such as Grand Duke.
@@ -251,17 +253,19 @@ readGedcom <- function(file_path,
     # relationship data
     # g7:INDI-FAMC
     ## The family in which an individual appears as a child. It is also used with a g7:FAMC-STAT substructure to show individuals who are not children of the family. See FAMILY_RECORD for more details.
-result <- process_tag("FAMC", "FAMC", num_rows, tmpv, vars,
-                      extractor = function(x) stringr::str_extract(x, "(?<=@.)\\d*(?=@)"),
-                      mode = "append")
+    result <- process_tag("FAMC", "FAMC", num_rows, tmpv, vars,
+      extractor = function(x) stringr::str_extract(x, "(?<=@.)\\d*(?=@)"),
+      mode = "append"
+    )
     vars <- result$vars
     if (result$matched) next
 
     # FAMS (Family spouse) g7:FAMS
     #  The family in which an individual appears as a partner. See FAMILY_RECORD for more details.
     result <- process_tag("FAMS", "FAMS", num_rows, tmpv, vars,
-                          extractor = function(x) stringr::str_extract(x, "(?<=@.)\\d*(?=@)"),
-                          mode = "append")
+      extractor = function(x) stringr::str_extract(x, "(?<=@.)\\d*(?=@)"),
+      mode = "append"
+    )
     vars <- result$vars
     if (result$matched) next
 
@@ -347,32 +351,32 @@ result <- process_tag("FAMC", "FAMC", num_rows, tmpv, vars,
 #' @return A list mapping family IDs to parent IDs.
 #' @keywords internal
 mapFAMS2parents <- function(df_temp) {
-    if (!all(c("FAMS", "sex") %in% colnames(df_temp))) {
-      warning("The data frame does not contain the necessary columns (FAMS, sex)")
-      return(NULL)
-    }
-    family_to_parents <- list()
-    for (i in 1:nrow(df_temp)) {
-      if (!is.na(df_temp$FAMS[i])) {
-        fams_ids <- unlist(strsplit(df_temp$FAMS[i], ", "))
-        for (fams_id in fams_ids) {
-          if (!is.null(family_to_parents[[fams_id]])) {
-            if (df_temp$sex[i] == "M") {
-              family_to_parents[[fams_id]]$father <- df_temp$id[i]
-            } else if (df_temp$sex[i] == "F") {
-              family_to_parents[[fams_id]]$mother <- df_temp$id[i]
-            }
-          } else {
-            family_to_parents[[fams_id]] <- list()
-            if (df_temp$sex[i] == "M") {
-              family_to_parents[[fams_id]]$father <- df_temp$id[i]
-            } else if (df_temp$sex[i] == "F") {
-              family_to_parents[[fams_id]]$mother <- df_temp$id[i]
-            }
+  if (!all(c("FAMS", "sex") %in% colnames(df_temp))) {
+    warning("The data frame does not contain the necessary columns (FAMS, sex)")
+    return(NULL)
+  }
+  family_to_parents <- list()
+  for (i in 1:nrow(df_temp)) {
+    if (!is.na(df_temp$FAMS[i])) {
+      fams_ids <- unlist(strsplit(df_temp$FAMS[i], ", "))
+      for (fams_id in fams_ids) {
+        if (!is.null(family_to_parents[[fams_id]])) {
+          if (df_temp$sex[i] == "M") {
+            family_to_parents[[fams_id]]$father <- df_temp$id[i]
+          } else if (df_temp$sex[i] == "F") {
+            family_to_parents[[fams_id]]$mother <- df_temp$id[i]
+          }
+        } else {
+          family_to_parents[[fams_id]] <- list()
+          if (df_temp$sex[i] == "M") {
+            family_to_parents[[fams_id]]$father <- df_temp$id[i]
+          } else if (df_temp$sex[i] == "F") {
+            family_to_parents[[fams_id]]$mother <- df_temp$id[i]
           }
         }
       }
     }
+  }
   return(family_to_parents)
 }
 
@@ -388,22 +392,22 @@ mapFAMS2parents <- function(df_temp) {
 mapFAMC2parents <- function(df_temp, family_to_parents) {
   df_temp$momID <- NA_character_
   df_temp$dadID <- NA_character_
-    for (i in 1:nrow(df_temp)) {
-      if (!is.na(df_temp$FAMC[i])) {
-        famc_ids <- unlist(strsplit(df_temp$FAMC[i], ", "))
-        for (famc_id in famc_ids) {
-          if (!is.null(family_to_parents[[famc_id]])) {
-            if (!is.null(family_to_parents[[famc_id]]$father)) {
-              df_temp$dadID[i] <- family_to_parents[[famc_id]]$father
-            }
-            if (!is.null(family_to_parents[[famc_id]]$mother)) {
-              df_temp$momID[i] <- family_to_parents[[famc_id]]$mother
-            }
+  for (i in 1:nrow(df_temp)) {
+    if (!is.na(df_temp$FAMC[i])) {
+      famc_ids <- unlist(strsplit(df_temp$FAMC[i], ", "))
+      for (famc_id in famc_ids) {
+        if (!is.null(family_to_parents[[famc_id]])) {
+          if (!is.null(family_to_parents[[famc_id]]$father)) {
+            df_temp$dadID[i] <- family_to_parents[[famc_id]]$father
+          }
+          if (!is.null(family_to_parents[[famc_id]]$mother)) {
+            df_temp$momID[i] <- family_to_parents[[famc_id]]$mother
           }
         }
       }
     }
-    return(df_temp)
+  }
+  return(df_temp)
 }
 
 #' Process parents information
@@ -545,9 +549,8 @@ process_tag <- function(tag, field_name, pattern_rows, line, vars,
   count_name <- paste0("num_", tolower(tag), "_rows")
   matched <- FALSE
   if (!is.null(pattern_rows[[count_name]]) &&
-      pattern_rows[[count_name]] > 0 &&
-      grepl(paste0(" ", tag), line)) {
-
+    pattern_rows[[count_name]] > 0 &&
+    grepl(paste0(" ", tag), line)) {
     value <- if (is.null(extractor)) extract_info(line, tag) else extractor(line)
 
     if (mode == "append" && !is.na(vars[[field_name]])) {
@@ -560,4 +563,3 @@ process_tag <- function(tag, field_name, pattern_rows, line, vars,
   }
   return(list(vars = vars, matched = matched))
 }
-
