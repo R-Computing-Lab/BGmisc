@@ -603,7 +603,7 @@ if (!is.null(file_path)){
   if (verbose) {
     print(paste0("File is ", file_length, " lines long"))
   }
-  text <- file$X1
+  text <- paste0(file$X1, collapse = "\n")
 }
   # Extract summary text
 
