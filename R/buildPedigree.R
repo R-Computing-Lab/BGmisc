@@ -88,7 +88,8 @@ ped2graph <- function(ped,
                       ...) {
   # Check ped/data.fram
   if (!inherits(ped, "data.frame")) {
-    stop("ped should be a data.frame or inherit to a data.frame")}
+    stop("ped should be a data.frame or inherit to a data.frame")
+  }
   # Handle adjacent argument
   adjacent <- match.arg(tolower(adjacent)[1],
     choices = c(
@@ -182,8 +183,10 @@ ped2maternal <- function(ped, personID = "ID",
                          momID = "momID", dadID = "dadID",
                          matID = "matID", ...) {
   # Call to wrapper function
-  .ped2id(ped = ped, personID = personID, momID = momID,
-          dadID = dadID, famID = matID, type = "mothers")
+  .ped2id(
+    ped = ped, personID = personID, momID = momID,
+    dadID = dadID, famID = matID, type = "mothers"
+  )
 }
 
 #' Add a paternal line ID variable to a pedigree
@@ -203,6 +206,8 @@ ped2paternal <- function(ped, personID = "ID",
                          momID = "momID", dadID = "dadID",
                          patID = "patID", ...) {
   # Call to wrapper function
-  .ped2id(ped = ped, personID = personID, momID = momID,
-          dadID = dadID, famID = patID, type = "fathers")
+  .ped2id(
+    ped = ped, personID = personID, momID = momID,
+    dadID = dadID, famID = patID, type = "fathers"
+  )
 }

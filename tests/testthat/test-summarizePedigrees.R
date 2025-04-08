@@ -53,9 +53,11 @@ test_that("summarizeMatrilines() works", {
   nbiggest <- 2
   df <- ped2fam(potter, famID = "newFamID", personID = "personID") %>%
     ped2maternal(personID = "personID")
-  df_summarized <- summarizeMatrilines(df, famID = "newFamID",
-                                       personID = "personID",
-                                       nbiggest = nbiggest)
+  df_summarized <- summarizeMatrilines(df,
+    famID = "newFamID",
+    personID = "personID",
+    nbiggest = nbiggest
+  )
   # is the total count from the family summary the same as the raw data?
   result_observed <- sum(df_summarized$maternal_summary$count)
   result_expected <- nrow(potter)
@@ -76,9 +78,11 @@ test_that("summarizePatrilines() works", {
   nbiggest <- 4
   df <- ped2fam(potter, famID = "newFamID", personID = "personID") %>%
     ped2paternal(personID = "personID")
-  df_summarized <- summarizePatrilines(df, famID = "newFamID",
-                                       personID = "personID",
-                                       nbiggest = nbiggest)
+  df_summarized <- summarizePatrilines(df,
+    famID = "newFamID",
+    personID = "personID",
+    nbiggest = nbiggest
+  )
   # is the total count from the family summary the same as the raw data?
   result_observed <- sum(df_summarized$paternal_summary$count)
   result_expected <- nrow(potter)
@@ -111,7 +115,7 @@ test_that("summarizePedigrees() handles missing values correctly", {
 })
 
 # Test Case 7: When all variables are skipped
-test_that("summarizePedigrees works when all numeric variables are skipped",{
+test_that("summarizePedigrees works when all numeric variables are skipped", {
   df <- data.frame(
     ID = 1:5,
     momID = c(NA, 1, 1, NA, 4),
@@ -126,8 +130,10 @@ test_that("summarizePedigrees works when all numeric variables are skipped",{
 
 # Test Case 8: Handling invalid column names
 test_that("summarizePedigrees() throws error on invalid column names", {
-  df <- data.frame(ID = 1:5, momID = c(NA, 1, 1, NA, 4),
-                   dadID = c(NA, 2, 2, NA, 5), famID = c(1, 1, 1, 2, 2))
+  df <- data.frame(
+    ID = 1:5, momID = c(NA, 1, 1, NA, 4),
+    dadID = c(NA, 2, 2, NA, 5), famID = c(1, 1, 1, 2, 2)
+  )
   expect_error(summarizePedigrees(df, byr = "unknown_column"))
 })
 

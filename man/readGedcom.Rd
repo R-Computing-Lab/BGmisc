@@ -11,6 +11,7 @@ readGedcom(
   remove_empty_cols = TRUE,
   combine_cols = TRUE,
   skinny = FALSE,
+  update_rate = 1000,
   ...
 )
 }
@@ -26,6 +27,8 @@ readGedcom(
 \item{combine_cols}{A logical value indicating whether to combine columns with duplicate values.}
 
 \item{skinny}{A logical value indicating whether to return a skinny data frame.}
+
+\item{update_rate}{numeric. The rate at which to print progress}
 
 \item{...}{Additional arguments to be passed to the function.}
 }

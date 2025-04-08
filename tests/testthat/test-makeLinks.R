@@ -131,7 +131,8 @@ test_that("com2links correctly handles missing matrices", {
 
   expect_error(
     com2links(ad_ped_matrix = NULL, mit_ped_matrix = NULL, cn_ped_matrix = NULL),
-    "At least one of 'ad_ped_matrix', 'mit_ped_matrix', or 'cn_ped_matrix' must be provided."  )
+    "At least one of 'ad_ped_matrix', 'mit_ped_matrix', or 'cn_ped_matrix' must be provided."
+  )
 
   expect_error(com2links(ad_ped_matrix = hazard), "The 'ad_ped_matrix' must be a matrix or dgCMatrix.")
 })

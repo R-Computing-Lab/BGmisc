@@ -28,11 +28,13 @@ test_that("calculateRelatedness function with empirical", {
 # Test 7: empirical divide by zero
 
 test_that("calculateH handles divide by zero for empirical", {
-expect_error(
-  calculateRelatedness(generations = 2,
-                                   empirical = TRUE, total_a = 0,
-                                   total_m = 0))
-
+  expect_error(
+    calculateRelatedness(
+      generations = 2,
+      empirical = TRUE, total_a = 0,
+      total_m = 0
+    )
+  )
 })
 test_that("inferRelatedness performs as expected", {
   result <- inferRelatedness(0, aceA = .9, aceC = 0, sharedC = 0)
@@ -105,4 +107,3 @@ test_that("calculateH stops for illegal coefficients", {
     "The observed correlations should be between -1 and 1"
   )
 })
-

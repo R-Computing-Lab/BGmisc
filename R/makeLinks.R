@@ -50,23 +50,28 @@ com2links <- function(
     }
     # Validate and convert ad_ped_matrix to a sparse dgCMatrix if provided.
     if (!is.null(ad_ped_matrix)) {
-      ad_ped_matrix <-  validate_and_convert_matrix(mat=ad_ped_matrix,
-                                                    name = "ad_ped_matrix")
+      ad_ped_matrix <- validate_and_convert_matrix(
+        mat = ad_ped_matrix,
+        name = "ad_ped_matrix"
+      )
     }
 
     # Validate and convert cn_ped_matrix to a sparse dgCMatrix if provided.
     if (!is.null(cn_ped_matrix)) {
-      cn_ped_matrix <-  validate_and_convert_matrix(mat=cn_ped_matrix,
-                                                    name="cn_ped_matrix",
-                                                    ensure_symmetric = TRUE)
+      cn_ped_matrix <- validate_and_convert_matrix(
+        mat = cn_ped_matrix,
+        name = "cn_ped_matrix",
+        ensure_symmetric = TRUE
+      )
     }
 
     # Validate and process mit_ped_matrix: convert and ensure binary values.
     if (!is.null(mit_ped_matrix)) {
-
-      mit_ped_matrix <-  validate_and_convert_matrix(mat=mit_ped_matrix,
-                                                    name="mit_ped_matrix",force_binary = TRUE,
-                                                    ensure_symmetric = TRUE)
+      mit_ped_matrix <- validate_and_convert_matrix(
+        mat = mit_ped_matrix,
+        name = "mit_ped_matrix", force_binary = TRUE,
+        ensure_symmetric = TRUE
+      )
     }
 
     # --- Build IDs and Prepare Matrix Pointers ---
@@ -516,109 +521,117 @@ com2links.legacy <- function(
     verbose = FALSE,
     outcome_name = "data",
     ...) {
-    # --- Legacy Mode ---
-    if (verbose) {
-      message("Using legacy mode")
-    }
-    # In legacy mode, convert matrices to the expected symmetric formats.
-
-    #  load(paste0(outcome_name,'_dataBiggestCnPedigree.Rdata'))
-    #  biggestCnPed <-  methods::as(biggestCnPed, "symmetricMatrix")
-    # load(paste0(outcome_name,'_dataBiggestPedigree.Rdata'))
-    #  load(paste0(outcome_name,'_dataBiggestMtPedigree.Rdata'))
-
-    # rel_pairs_file <- paste0(outcome_name,'_datacnmitBiggestRelatedPairsTake3.csv')
-
-    biggestMtPed <- mit_ped_matrix
-    remove(mit_ped_matrix)
-    biggestCnPed <- methods::as(cn_ped_matrix, "symmetricMatrix")
-    remove(cn_ped_matrix)
-    biggestPed <- ad_ped_matrix
-    remove(ad_ped_matrix)
-    biggestMtPed@x[biggestMtPed@x > 0] <- 1
-
-    # Set the output file name.
-    if (exists("rel_pairs_file")) {
-      fname <- rel_pairs_file
-    } else {
-      fname <- paste0(outcome_name, "_dataBiggestRelatedPairsTake2.csv")
-    }
-    # Initialize the output file with headers.
-    ds <- data.frame(ID1 = numeric(0), ID2 = numeric(0),
-                     addRel = numeric(0),
-                     mitRel = numeric(0), cnuRel = numeric(0))
-
-    utils::write.table(ds, file = fname, sep = ",",
-                       append = FALSE, row.names = FALSE)
-
-    # Extract IDs from the common nuclear matrix.
-    ids <- as.numeric(dimnames(biggestCnPed)[[1]])
-
-    # Extract pointers from the legacy matrices.
-    newColPos1 <- biggestPed@p + 1L
-    iss1 <- biggestPed@i + 1L
-    newColPos2 <- biggestMtPed@p + 1L
-    iss2 <- biggestMtPed@i + 1L
-    newColPos3 <- biggestCnPed@p + 1L
-    iss3 <- biggestCnPed@i + 1L
-    nc <- ncol(biggestPed)
-
-    # Process each individual.
-    for (j in 1L:nc) {
-      ID2 <- ids[j]
-      ncp1 <- newColPos1[j]
-      ncp1p <- newColPos1[j + 1L]
-      cond1 <- ncp1 < ncp1p
-      if (cond1) {
-        vv1 <- ncp1:(ncp1p - 1L)
-        iss1vv <- iss1[vv1]
-      }
-      ncp2 <- newColPos2[j]
-      ncp2p <- newColPos2[j + 1L]
-      cond2 <- ncp2 < ncp2p
-      if (cond2) {
-        vv2 <- ncp2:(ncp2p - 1L)
-        iss2vv <- iss2[vv2]
-      }
-      ncp3 <- newColPos3[j]
-      ncp3p <- newColPos3[j + 1L]
-      cond3 <- ncp3 < ncp3p
-      if (cond3) {
-        vv3 <- ncp3:(ncp3p - 1L)
-        iss3vv <- iss3[vv3]
-      }
-
-      # Merge indices from all three matrices.
-      u <- sort(igraph::union(igraph::union(if (cond1) {
-        iss1vv
-      }, if (cond2) {
-        iss2vv
-      }), if (cond3) {
-        iss3vv
-      }))
-      # browser()
-      if (cond1 || cond2 || cond3) {
-        ID1 <- ids[u]
-        tds <- data.frame(ID1 = ID1, ID2 = ID2,
-                          addRel = 0, mitRel = 0, cnuRel = 0)
-        if (cond1) {
-          tds$addRel[u %in% iss1vv] <- biggestPed@x[vv1]
-        }
-        if (cond2) {
-          tds$mitRel[u %in% iss2vv] <- biggestMtPed@x[vv2]
-        }
-        if (cond3) {
-          tds$cnuRel[u %in% iss3vv] <- biggestCnPed@x[vv3]
-        }
-        utils::write.table(tds, file = fname, row.names = FALSE,
-                           col.names = FALSE, append = TRUE, sep = ",")
-      }
-      if (!(j %% update_rate)) {
-        cat(paste0("Done with ", j, " of ", nc, "\n"))
-      }
-    }
-    return(NULL)
+  # --- Legacy Mode ---
+  if (verbose) {
+    message("Using legacy mode")
   }
+  # In legacy mode, convert matrices to the expected symmetric formats.
+
+  #  load(paste0(outcome_name,'_dataBiggestCnPedigree.Rdata'))
+  #  biggestCnPed <-  methods::as(biggestCnPed, "symmetricMatrix")
+  # load(paste0(outcome_name,'_dataBiggestPedigree.Rdata'))
+  #  load(paste0(outcome_name,'_dataBiggestMtPedigree.Rdata'))
+
+  # rel_pairs_file <- paste0(outcome_name,'_datacnmitBiggestRelatedPairsTake3.csv')
+
+  biggestMtPed <- mit_ped_matrix
+  remove(mit_ped_matrix)
+  biggestCnPed <- methods::as(cn_ped_matrix, "symmetricMatrix")
+  remove(cn_ped_matrix)
+  biggestPed <- ad_ped_matrix
+  remove(ad_ped_matrix)
+  biggestMtPed@x[biggestMtPed@x > 0] <- 1
+
+  # Set the output file name.
+  if (exists("rel_pairs_file")) {
+    fname <- rel_pairs_file
+  } else {
+    fname <- paste0(outcome_name, "_dataBiggestRelatedPairsTake2.csv")
+  }
+  # Initialize the output file with headers.
+  ds <- data.frame(
+    ID1 = numeric(0), ID2 = numeric(0),
+    addRel = numeric(0),
+    mitRel = numeric(0), cnuRel = numeric(0)
+  )
+
+  utils::write.table(ds,
+    file = fname, sep = ",",
+    append = FALSE, row.names = FALSE
+  )
+
+  # Extract IDs from the common nuclear matrix.
+  ids <- as.numeric(dimnames(biggestCnPed)[[1]])
+
+  # Extract pointers from the legacy matrices.
+  newColPos1 <- biggestPed@p + 1L
+  iss1 <- biggestPed@i + 1L
+  newColPos2 <- biggestMtPed@p + 1L
+  iss2 <- biggestMtPed@i + 1L
+  newColPos3 <- biggestCnPed@p + 1L
+  iss3 <- biggestCnPed@i + 1L
+  nc <- ncol(biggestPed)
+
+  # Process each individual.
+  for (j in 1L:nc) {
+    ID2 <- ids[j]
+    ncp1 <- newColPos1[j]
+    ncp1p <- newColPos1[j + 1L]
+    cond1 <- ncp1 < ncp1p
+    if (cond1) {
+      vv1 <- ncp1:(ncp1p - 1L)
+      iss1vv <- iss1[vv1]
+    }
+    ncp2 <- newColPos2[j]
+    ncp2p <- newColPos2[j + 1L]
+    cond2 <- ncp2 < ncp2p
+    if (cond2) {
+      vv2 <- ncp2:(ncp2p - 1L)
+      iss2vv <- iss2[vv2]
+    }
+    ncp3 <- newColPos3[j]
+    ncp3p <- newColPos3[j + 1L]
+    cond3 <- ncp3 < ncp3p
+    if (cond3) {
+      vv3 <- ncp3:(ncp3p - 1L)
+      iss3vv <- iss3[vv3]
+    }
+
+    # Merge indices from all three matrices.
+    u <- sort(igraph::union(igraph::union(if (cond1) {
+      iss1vv
+    }, if (cond2) {
+      iss2vv
+    }), if (cond3) {
+      iss3vv
+    }))
+    # browser()
+    if (cond1 || cond2 || cond3) {
+      ID1 <- ids[u]
+      tds <- data.frame(
+        ID1 = ID1, ID2 = ID2,
+        addRel = 0, mitRel = 0, cnuRel = 0
+      )
+      if (cond1) {
+        tds$addRel[u %in% iss1vv] <- biggestPed@x[vv1]
+      }
+      if (cond2) {
+        tds$mitRel[u %in% iss2vv] <- biggestMtPed@x[vv2]
+      }
+      if (cond3) {
+        tds$cnuRel[u %in% iss3vv] <- biggestCnPed@x[vv3]
+      }
+      utils::write.table(tds,
+        file = fname, row.names = FALSE,
+        col.names = FALSE, append = TRUE, sep = ","
+      )
+    }
+    if (!(j %% update_rate)) {
+      cat(paste0("Done with ", j, " of ", nc, "\n"))
+    }
+  }
+  return(NULL)
+}
 
 #' @title validate_and_convert_matrix
 #' @description
