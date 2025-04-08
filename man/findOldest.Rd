@@ -15,6 +15,9 @@ findOldest(foo_summary_dt, byr, noldest, n_foo)
 
 \item{n_foo}{An integer specifying the number of individuals in the summary.}
 }
+\value{
+a data.table containing the oldest families in the pedigree.
+}
 \description{
 This function finds the oldest families in a pedigree. It is supposed to be used internally by the \code{summarize_pedigree} function.
 }

@@ -9,9 +9,10 @@ findBiggest(foo_summary_dt, nbiggest, n_foo)
 \arguments{
 \item{foo_summary_dt}{A data.table containing the summary statistics.}
 
-\item{nbiggest}{An integer specifying the number of biggest families to find.}
-
 \item{n_foo}{An integer specifying the number of individuals in the summary.}
+}
+\value{
+a data.table containing the biggest families in the pedigree.
 }
 \description{
 This function finds the biggest families in a pedigree. It is supposed to be used internally by the \code{summarize_pedigree} function.

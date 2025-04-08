@@ -46,42 +46,27 @@ com2links <- function(
 
     # Ensure that at least one relationship matrix is provided.
     if (is.null(ad_ped_matrix) && is.null(mit_ped_matrix) && is.null(cn_ped_matrix)) {
-      stop("At least one of 'ped_matrix', 'mit_ped_matrix', or 'cn_ped_matrix' must be provided.")
+      stop("At least one of 'ad_ped_matrix', 'mit_ped_matrix', or 'cn_ped_matrix' must be provided.")
     }
     # Validate and convert ad_ped_matrix to a sparse dgCMatrix if provided.
     if (!is.null(ad_ped_matrix)) {
-      if (!inherits(ad_ped_matrix, c("matrix", "dgCMatrix", "dsCMatrix"))) {
-        stop("The 'ad_ped_matrix' must be a matrix or dgCMatrix.")
-      }
-      # convert to sparse
-      if (!inherits(ad_ped_matrix, "dgCMatrix")) {
-        ad_ped_matrix <- methods::as(ad_ped_matrix, "dgCMatrix")
-      }
+      ad_ped_matrix <-  validate_and_convert_matrix(mat=ad_ped_matrix,
+                                                    name = "ad_ped_matrix")
     }
 
     # Validate and convert cn_ped_matrix to a sparse dgCMatrix if provided.
     if (!is.null(cn_ped_matrix)) {
-      if (!inherits(cn_ped_matrix, c("matrix", "dgCMatrix", "dsCMatrix"))) {
-        stop("The 'cn_ped_matrix' must be a matrix or dgCMatrix.")
-      }
-      # convert to sparse
-      if (!inherits(cn_ped_matrix, "dgCMatrix")) {
-        cn_ped_matrix <- methods::as(cn_ped_matrix, "dgCMatrix")
-      }
-      # Ensure CN matrix is symmetric.
-      cn_ped_matrix <- methods::as(cn_ped_matrix, "symmetricMatrix")
+      cn_ped_matrix <-  validate_and_convert_matrix(mat=cn_ped_matrix,
+                                                    name="cn_ped_matrix",
+                                                    ensure_symmetric = TRUE)
     }
 
     # Validate and process mit_ped_matrix: convert and ensure binary values.
     if (!is.null(mit_ped_matrix)) {
-      if (!inherits(mit_ped_matrix, c("matrix", "dgCMatrix", "dsCMatrix"))) {
-        stop("The 'mit_ped_matrix' must be a matrix or dgCMatrix.")
-      }
-      if (!inherits(mit_ped_matrix, "dgCMatrix")) {
-        mit_ped_matrix <- methods::as(mit_ped_matrix, "symmetricMatrix")
-      }
-      # Ensure mitochondrial matrix values are binary (0/1)
-      mit_ped_matrix@x[mit_ped_matrix@x > 0] <- 1
+
+      mit_ped_matrix <-  validate_and_convert_matrix(mat=mit_ped_matrix,
+                                                    name="mit_ped_matrix",force_binary = TRUE,
+                                                    ensure_symmetric = TRUE)
     }
 
     # --- Build IDs and Prepare Matrix Pointers ---
@@ -162,12 +147,7 @@ com2links <- function(
       # mapa_id_file <- paste0(outcome_name, "_data_mapaID.csv")
 
       # Initialize the related pairs file with headers.
-      df_relpairs <- data.frame(
-        ID1 = numeric(0), ID2 = numeric(0)
-      )
-      df_relpairs[[relNames[1]]] <- numeric(0)
-      df_relpairs[[relNames[2]]] <- numeric(0)
-      df_relpairs[[relNames[3]]] <- numeric(0)
+      df_relpairs <- initialize_empty_df(relNames = relNames)
 
       # Write the headers to the related pairs file.
       if (writetodisk == TRUE) {
@@ -261,10 +241,8 @@ com2links <- function(
             }
           }
         }
-        if (verbose) {
-          if (!(j %% update_rate)) {
-            cat(paste0("Done with ", j, " of ", nc, "\n"))
-          }
+        if (verbose && (j %% update_rate == 0L)) {
+          cat("Done with", j, "of", nc, "\n")
         }
       }
     } else if (sum_nulls == 2) {
@@ -309,11 +287,8 @@ com2links <- function(
       }
 
       # Initialize the related pairs file with the appropriate headers.
-      df_relpairs <- data.frame(
-        ID1 = numeric(0), ID2 = numeric(0)
-      )
-      df_relpairs[[relNames[1]]] <- numeric(0)
-      df_relpairs[[relNames[2]]] <- numeric(0)
+      df_relpairs <- initialize_empty_df(relNames = relNames)
+
       if (writetodisk == TRUE) {
         utils::write.table(
           df_relpairs,
@@ -386,10 +361,8 @@ com2links <- function(
             }
           }
         }
-        if (verbose) {
-          if (!(j %% update_rate)) {
-            cat(paste0("Done with ", j, " of ", nc, "\n"))
-          }
+        if (verbose && (j %% update_rate == 0L)) {
+          cat("Done with", j, "of", nc, "\n")
         }
       }
     } else if (sum_nulls == 1) {
@@ -426,10 +399,8 @@ com2links <- function(
       }
 
       # Initialize the related pairs file.
-      df_relpairs <- data.frame(
-        ID1 = numeric(0), ID2 = numeric(0)
-      )
-      df_relpairs[[relNames[1]]] <- numeric(0)
+      df_relpairs <- initialize_empty_df(relNames = relNames)
+
       if (writetodisk == TRUE) {
         utils::write.table(
           df_relpairs,
@@ -486,8 +457,8 @@ com2links <- function(
             }
           }
         }
-        if (verbose && !(j %% update_rate)) {
-          cat(paste0("Done with ", j, " of ", nc, "\n"))
+        if (verbose && (j %% update_rate == 0L)) {
+          cat("Done with", j, "of", nc, "\n")
         }
       }
     } else {
@@ -510,7 +481,6 @@ com2links <- function(
   } else if (legacy) {
     # --- Legacy Mode ---
     # In legacy mode, convert matrices to the expected symmetric formats.
-
     com2links.legacy(
       rel_pairs_file = rel_pairs_file,
       ad_ped_matrix = ad_ped_matrix,
@@ -649,3 +619,34 @@ com2links.legacy <- function(
     }
     return(NULL)
   }
+
+#' @title validate_and_convert_matrix
+#' @description
+#' This function validates and converts a matrix to a specific format.
+#'
+#' @param mat The matrix to be validated and converted.
+#' @param name The name of the matrix for error messages.
+#' @param ensure_symmetric Logical indicating whether to ensure the matrix is symmetric.
+#' @param force_binary Logical indicating whether to force the matrix to be binary.
+#'
+#' @return The validated and converted matrix.
+validate_and_convert_matrix <- function(mat, name, ensure_symmetric = FALSE, force_binary = FALSE) {
+  if (!inherits(mat, c("matrix", "dgCMatrix", "dsCMatrix"))) {
+    stop(paste0("The '", name, "' must be a matrix or dgCMatrix."))
+  }
+  if (!inherits(mat, "dgCMatrix")) {
+    mat <- methods::as(mat, if (ensure_symmetric) "symmetricMatrix" else "dgCMatrix")
+  }
+  if (force_binary) {
+    mat@x[mat@x > 0] <- 1
+  }
+  return(mat)
+}
+
+initialize_empty_df <- function(relNames) {
+  df <- data.frame(ID1 = numeric(0), ID2 = numeric(0))
+  for (r in relNames) {
+    df[[r]] <- numeric(0)
+  }
+  return(df)
+}
