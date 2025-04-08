@@ -2,7 +2,7 @@
 % Please edit documentation in R/summarizePedigree.R
 \name{findFounder}
 \alias{findFounder}
-\title{This function finds the originating member for each line in a pedigree. It is supposed to be used internally by the \code{summarize_pedigree} function.}
+\title{Function to find the originating member for each line}
 \usage{
 findFounder(data, group_var, sort_var)
 }
