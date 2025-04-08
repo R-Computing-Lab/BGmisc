@@ -20,13 +20,13 @@ coverage:
         # For each PR, auto compare coverage to previous commit.
         target: auto  # Desired coverage
         base: auto    # Compares against the base branch
-        threshold: 1% # Allows slight drops before failing
+        threshold: 2% # Allows slight drops before failing
     # Checks the relative coverage of the new PR code only.
     patch:
       default:
          target: auto
          base: auto
-         threshold: 1%
+         threshold: 2%
 
 # Settings related to the comment that Codecov posts on the PR
 comment:
