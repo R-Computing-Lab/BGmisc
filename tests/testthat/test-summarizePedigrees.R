@@ -51,17 +51,22 @@ test_that("summarizeFamilies() works with additional summary stats", {
 # Test Case 4: Does this function work for summarizeMatrilines
 test_that("summarizeMatrilines() works", {
   nbiggest <- 2
-  df <- ped2fam(potter, famID = "newFamID", personID = "personID") %>% ped2maternal(personID = "personID")
-  df_summarized <- summarizeMatrilines(df, famID = "newFamID", personID = "personID", nbiggest = nbiggest)
+  df <- ped2fam(potter, famID = "newFamID", personID = "personID") %>%
+    ped2maternal(personID = "personID")
+  df_summarized <- summarizeMatrilines(df, famID = "newFamID",
+                                       personID = "personID",
+                                       nbiggest = nbiggest)
   # is the total count from the family summary the same as the raw data?
   result_observed <- sum(df_summarized$maternal_summary$count)
   result_expected <- nrow(potter)
   expect_equal(result_observed, result_expected)
-  # is the count of the summarized data frame equal to the number of unique families in the input data frame?
+  # is the count of the summarized data frame equal to the number of
+  # unique families in the input data frame?
   result_observed <- length(df_summarized$maternal_summary$count)
   result_expected <- length(unique(df$matID))
   expect_equal(result_observed, result_expected)
-  # is the count of the biggest families equal to the number of unique families in the input data frame?
+  # is the count of the biggest families equal to the number of
+  # unique families in the input data frame?
   result_observed <- nrow(df_summarized$biggest_maternal)
   expect_equal(result_observed, nbiggest)
 })
@@ -69,17 +74,22 @@ test_that("summarizeMatrilines() works", {
 # Test Case 5: Does this function work for summarizePatrilines
 test_that("summarizePatrilines() works", {
   nbiggest <- 4
-  df <- ped2fam(potter, famID = "newFamID", personID = "personID") %>% ped2paternal(personID = "personID")
-  df_summarized <- summarizePatrilines(df, famID = "newFamID", personID = "personID", nbiggest = nbiggest)
+  df <- ped2fam(potter, famID = "newFamID", personID = "personID") %>%
+    ped2paternal(personID = "personID")
+  df_summarized <- summarizePatrilines(df, famID = "newFamID",
+                                       personID = "personID",
+                                       nbiggest = nbiggest)
   # is the total count from the family summary the same as the raw data?
   result_observed <- sum(df_summarized$paternal_summary$count)
   result_expected <- nrow(potter)
   expect_equal(result_observed, result_expected)
-  # is the count of the summarized data frame equal to the number of unique families in the input data frame?
+  # is the count of the summarized data frame equal to the number of
+  # unique families in the input data frame?
   result_observed <- length(df_summarized$paternal_summary$count)
   result_expected <- length(unique(df$patID))
   expect_equal(result_observed, result_expected)
-  # is the count of the biggest families equal to the number of unique families in the input data frame?
+  # is the count of the biggest families equal to the number of
+  # unique families in the input data frame?
   result_observed <- nrow(df_summarized$biggest_paternal)
   expect_equal(result_observed, nbiggest)
 })
@@ -101,7 +111,7 @@ test_that("summarizePedigrees() handles missing values correctly", {
 })
 
 # Test Case 7: When all variables are skipped
-test_that("summarizePedigrees() works when all numeric variables are skipped", {
+test_that("summarizePedigrees works when all numeric variables are skipped",{
   df <- data.frame(
     ID = 1:5,
     momID = c(NA, 1, 1, NA, 4),
@@ -116,7 +126,8 @@ test_that("summarizePedigrees() works when all numeric variables are skipped", {
 
 # Test Case 8: Handling invalid column names
 test_that("summarizePedigrees() throws error on invalid column names", {
-  df <- data.frame(ID = 1:5, momID = c(NA, 1, 1, NA, 4), dadID = c(NA, 2, 2, NA, 5), famID = c(1, 1, 1, 2, 2))
+  df <- data.frame(ID = 1:5, momID = c(NA, 1, 1, NA, 4),
+                   dadID = c(NA, 2, 2, NA, 5), famID = c(1, 1, 1, 2, 2))
   expect_error(summarizePedigrees(df, byr = "unknown_column"))
 })
 

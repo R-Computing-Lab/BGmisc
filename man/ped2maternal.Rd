@@ -22,7 +22,7 @@ ped2maternal(
 
 \item{dadID}{character.  Name of the column in ped for the father ID variable}
 
-\item{matID}{Character.  Maternal line ID variable to be created and added to the pedigree}
+\item{matID}{Character. Maternal line ID variable to be created and added to the pedigree}
 
 \item{...}{additional arguments to be passed to \code{\link{ped2com}}}
 }

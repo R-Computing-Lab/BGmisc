@@ -23,8 +23,7 @@
 checkParentIDs <- function(ped, verbose = FALSE, repair = FALSE,
                            repairsex = repair,
                            addphantoms = repair,
-                           parentswithoutrow = repair
-                           ) {
+                           parentswithoutrow = repair) {
   # Standardize column names in the input dataframe
   ped_og <- ped
   ped <- standardizeColnames(ped)
@@ -74,7 +73,7 @@ checkParentIDs <- function(ped, verbose = FALSE, repair = FALSE,
       cat("All parents are listed in the pedigree.\n")
     }
   }
-  validation_results$missing_parents <- validation_results$single_parents&length(rowless_parents) > 0
+  validation_results$missing_parents <- validation_results$single_parents & length(rowless_parents) > 0
 
   if (verbose) {
     cat("Step 2: Determining the if moms are the same sex and dads are same sex\n")
@@ -146,11 +145,13 @@ checkParentIDs <- function(ped, verbose = FALSE, repair = FALSE,
 
   # Are any parents in both momID and dadID?
   momdad <- intersect(ped$dadID, ped$momID)
-  if (!is.na(momdad)&&length(momdad) > 0) {
+  if (!is.na(momdad) && length(momdad) > 0) {
     validation_results$parents_in_both <- momdad
     if (verbose) {
-      cat(paste("Some individuals appear in both momID and dadID roles.\n",
-                "These individuals are:\n"))
+      cat(paste(
+        "Some individuals appear in both momID and dadID roles.\n",
+        "These individuals are:\n"
+      ))
       print(momdad)
     }
   }
@@ -162,12 +163,12 @@ checkParentIDs <- function(ped, verbose = FALSE, repair = FALSE,
       print(validation_results)
     }
     return(validation_results)
-  } else{
-  if (verbose) {
-    cat("Validation Results:\n")
-    print(validation_results)
-    cat("Step 3: Attempting to repair missing parents...\n")
-  }
+  } else {
+    if (verbose) {
+      cat("Validation Results:\n")
+      print(validation_results)
+      cat("Step 3: Attempting to repair missing parents...\n")
+    }
 
     cat("REPAIR IN EARLY ALPHA\n")
     # Initialize a list to track changes made during repair
@@ -177,32 +178,32 @@ checkParentIDs <- function(ped, verbose = FALSE, repair = FALSE,
       phantom_dads_added = c(),
       phantom_moms_added = c()
     )
-    if(repairsex){
-    # Fix sex of existing parents if wrong
-    mom_indices <- match(ped$momID, ped$ID)
-    dad_indices <- match(ped$dadID, ped$ID)
+    if (repairsex) {
+      # Fix sex of existing parents if wrong
+      mom_indices <- match(ped$momID, ped$ID)
+      dad_indices <- match(ped$dadID, ped$ID)
 
 
 
-    if (!is.na(validation_results$female_var)) {
-      corrected_moms <- ped$ID[mom_indices[!is.na(mom_indices)]]
-      ped$sex[mom_indices[!is.na(mom_indices)]] <- validation_results$female_var
-      changes$corrected_mom_sex <- corrected_moms
-      if (verbose && length(corrected_moms) > 0) {
-        cat("Corrected sex of moms for:", paste(corrected_moms, collapse = ", "), "\n")
+      if (!is.na(validation_results$female_var)) {
+        corrected_moms <- ped$ID[mom_indices[!is.na(mom_indices)]]
+        ped$sex[mom_indices[!is.na(mom_indices)]] <- validation_results$female_var
+        changes$corrected_mom_sex <- corrected_moms
+        if (verbose && length(corrected_moms) > 0) {
+          cat("Corrected sex of moms for:", paste(corrected_moms, collapse = ", "), "\n")
+        }
+      }
+      if (!is.na(validation_results$male_var)) {
+        corrected_dads <- ped$ID[dad_indices[!is.na(dad_indices)]]
+        ped$sex[dad_indices[!is.na(dad_indices)]] <- validation_results$male_var
+        changes$corrected_dad_sex <- corrected_dads
+        if (verbose && length(corrected_dads) > 0) {
+          cat("Corrected sex of dads for:", paste(corrected_dads, collapse = ", "), "\n")
+        }
       }
     }
-    if (!is.na(validation_results$male_var)) {
-      corrected_dads <- ped$ID[dad_indices[!is.na(dad_indices)]]
-      ped$sex[dad_indices[!is.na(dad_indices)]] <- validation_results$male_var
-      changes$corrected_dad_sex <- corrected_dads
-      if (verbose && length(corrected_dads) > 0) {
-        cat("Corrected sex of dads for:", paste(corrected_dads, collapse = ", "), "\n")
-      }
-    }
-    }
-}
-if (addphantoms){
+  }
+  if (addphantoms) {
     # Generate new IDs
     newIDbase <- if (is.numeric(ped$ID)) max(ped$ID, na.rm = TRUE) + 1 else paste0("phantom-", seq_len(nrow(ped)))
     new_entries <- data.frame()
@@ -248,47 +249,47 @@ if (addphantoms){
     if (verbose && length(changes$phantom_moms_added) > 0) {
       cat("Added phantom moms for:", paste(changes$phantom_moms_added, collapse = ", "), "\n")
     }
-}
+  }
   # add phantom parents
-  if(parentswithoutrow){
-  # Add parents who appear in momID or dadID but are missing from ID
-  listed_parents <- unique(c(ped$momID, ped$dadID))
-  listed_parents <- listed_parents[!is.na(listed_parents)]
+  if (parentswithoutrow) {
+    # Add parents who appear in momID or dadID but are missing from ID
+    listed_parents <- unique(c(ped$momID, ped$dadID))
+    listed_parents <- listed_parents[!is.na(listed_parents)]
 
-  existing_ids <- ped$ID
-  missing_parents <- setdiff(listed_parents, existing_ids)
+    existing_ids <- ped$ID
+    missing_parents <- setdiff(listed_parents, existing_ids)
 
-  if (length(missing_parents) > 0) {
-    if (verbose) {
-      cat("Adding parents who were listed in momID/dadID but missing from ID:\n")
-      print(missing_parents)
-    }
+    if (length(missing_parents) > 0) {
+      if (verbose) {
+        cat("Adding parents who were listed in momID/dadID but missing from ID:\n")
+        print(missing_parents)
+      }
 
-    for (pid in missing_parents) {
-      role <- unique(
-        c(
-          if (pid %in% ped$momID) "mom" else NULL,
-          if (pid %in% ped$dadID) "dad" else NULL
+      for (pid in missing_parents) {
+        role <- unique(
+          c(
+            if (pid %in% ped$momID) "mom" else NULL,
+            if (pid %in% ped$dadID) "dad" else NULL
+          )
         )
-      )
-      inferred_sex <- if ("mom" %in% role) validation_results$female_var else validation_results$male_var
+        inferred_sex <- if ("mom" %in% role) validation_results$female_var else validation_results$male_var
 
-      new_row <- ped[1, ]
-      new_row$ID <- pid
-      new_row$dadID <- NA
-      new_row$momID <- NA
-      new_row$sex <- inferred_sex
-      new_entries <- rbind(new_entries, new_row)
+        new_row <- ped[1, ]
+        new_row$ID <- pid
+        new_row$dadID <- NA
+        new_row$momID <- NA
+        new_row$sex <- inferred_sex
+        new_entries <- rbind(new_entries, new_row)
+      }
     }
-  }
-  ped <- merge(ped, new_entries, all = TRUE)
+    ped <- merge(ped, new_entries, all = TRUE)
   }
 
-    if (verbose) {
-      cat("Changes Made:\n")
-      print(changes)
-    }
-    return(ped)
+  if (verbose) {
+    cat("Changes Made:\n")
+    print(changes)
+  }
+  return(ped)
 }
 #' Repair Parent IDs
 #'

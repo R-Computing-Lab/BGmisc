@@ -59,4 +59,5 @@ benchmark_results <- microbenchmark(
 print(benchmark_results)
 
 # Optional: Save results to CSV for later analysis
-write.csv(summary(benchmark_results), "benchmark_results.csv", row.names = FALSE)
+write.csv(summary(benchmark_results),
+          "benchmark_results.csv", row.names = FALSE)

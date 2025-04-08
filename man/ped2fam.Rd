@@ -30,7 +30,8 @@ ped2fam(
 A pedigree dataset with one additional column for the newly created extended family ID
 }
 \description{
-This function adds an extended family ID variable to a pedigree by segmenting that dataset into independent extended families
+This function adds an extended family ID variable to a pedigree by segmenting
+that dataset into independent extended families
 using the weakly connected components algorithm.
 }
 \details{

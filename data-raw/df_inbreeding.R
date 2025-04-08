@@ -8,5 +8,5 @@ inbreeding <- raw
 ##
 # data processing
 
-write.csv(inbreeding, "data-raw/inbreeding.csv", row.names = FALSE)
+#write.csv(inbreeding, "data-raw/inbreeding.csv", row.names = FALSE)
 usethis::use_data(inbreeding, overwrite = TRUE, compress = "xz")

@@ -95,7 +95,7 @@ ped2com <- function(ped, component,
 
   # standardize colnames
   if (standardize.colnames) {
-    ped <- standardizeColnames(ped)
+    ped <- standardizeColnames(ped, verbose = verbose)
   }
 
   # Load final result if computation was completed
@@ -212,7 +212,7 @@ ped2com <- function(ped, component,
   # isPar is the adjacency matrix.  'A' matrix from RAM
   if (component %in% c("common nuclear")) {
     Matrix::diag(isPar) <- 1
-    if (sparse==FALSE) {
+    if (sparse == FALSE) {
       isPar <- as.matrix(isPar)
     }
     return(isPar)
@@ -224,15 +224,8 @@ ped2com <- function(ped, component,
   } else {
     # isChild is the 'S' matrix from RAM
 
-    if (isChild_method == "partialparent") {
-      isChild <- apply(ped[, c("momID", "dadID")], 1, function(x) {
-        .5 + .25 * sum(is.na(x)) # 2 parents -> .5, 1 parent -> .75, 0 parents -> 1
-      })
-    } else {
-      isChild <- apply(ped[, c("momID", "dadID")], 1, function(x) {
-        2^(-!all(is.na(x)))
-      })
-    }
+    isChild <- isChild(isChild_method=isChild_method, ped=ped)
+
     if (saveable) {
       saveRDS(isChild, file = checkpoint_files$isChild)
     }
@@ -330,7 +323,7 @@ ped2com <- function(ped, component,
     # Assign 1 to all nonzero elements for mitochondrial component
   }
 
-  if (sparse==FALSE) {
+  if (sparse == FALSE) {
     r <- as.matrix(r)
   }
   if (flatten.diag) { # flattens diagonal if you don't want to deal with inbreeding
@@ -722,4 +715,23 @@ compute_parent_adjacency <- function(ped, component,
     }
   }
   return(list_of_adjacency)
+}
+
+
+#' Determine isChild Status, isChild is the 'S' matrix from RAM
+#' @param isChild_method method to determine isChild status
+#' @param ped pedigree data frame
+#' @return isChild 'S' matrix
+#'
+
+isChild <- function(isChild_method, ped) {
+  if (isChild_method == "partialparent") {
+    isChild <- apply(ped[, c("momID", "dadID")], 1, function(x) {
+      .5 + .25 * sum(is.na(x)) # 2 parents -> .5, 1 parent -> .75, 0 parents -> 1
+    })
+  } else {
+    isChild <- apply(ped[, c("momID", "dadID")], 1, function(x) {
+      2^(-!all(is.na(x)))
+    })
+  }
 }
