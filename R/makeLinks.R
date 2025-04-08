@@ -509,6 +509,44 @@ com2links <- function(
     }
   } else if (legacy) {
     # --- Legacy Mode ---
+    # In legacy mode, convert matrices to the expected symmetric formats.
+
+    com2links.legacy(
+      rel_pairs_file = rel_pairs_file,
+      ad_ped_matrix = ad_ped_matrix,
+      mit_ped_matrix = mit_ped_matrix,
+      cn_ped_matrix = cn_ped_matrix,
+      update_rate = update_rate,
+      verbose = verbose,
+      outcome_name = outcome_name
+    )
+    return(NULL)
+  }
+
+  # --- End of Legacy Mode ---
+
+  # Merge and write the parentage matrices
+  #  df <- full_join(mat_ped_matrix %>% arrange(ID), pat_ped_matrix %>% arrange(ID))
+
+  #  write.table(df, file = mapa_id_file, sep = ",", append = FALSE, row.names = FALSE)
+}
+
+#' @title com2links
+#' @description
+#' This legacy function converts pedigree matrices into a related pairs file.
+
+
+com2links.legacy <- function(
+    rel_pairs_file = "dataRelatedPairs.csv",
+    ad_ped_matrix = NULL,
+    mit_ped_matrix = mt_ped_matrix,
+    mt_ped_matrix = NULL,
+    cn_ped_matrix = NULL,
+    update_rate = 500,
+    verbose = FALSE,
+    outcome_name = "data",
+    ...) {
+    # --- Legacy Mode ---
     if (verbose) {
       message("Using legacy mode")
     }
@@ -536,8 +574,12 @@ com2links <- function(
       fname <- paste0(outcome_name, "_dataBiggestRelatedPairsTake2.csv")
     }
     # Initialize the output file with headers.
-    ds <- data.frame(ID1 = numeric(0), ID2 = numeric(0), addRel = numeric(0), mitRel = numeric(0), cnuRel = numeric(0))
-    utils::write.table(ds, file = fname, sep = ",", append = FALSE, row.names = FALSE)
+    ds <- data.frame(ID1 = numeric(0), ID2 = numeric(0),
+                     addRel = numeric(0),
+                     mitRel = numeric(0), cnuRel = numeric(0))
+
+    utils::write.table(ds, file = fname, sep = ",",
+                       append = FALSE, row.names = FALSE)
 
     # Extract IDs from the common nuclear matrix.
     ids <- as.numeric(dimnames(biggestCnPed)[[1]])
@@ -587,7 +629,8 @@ com2links <- function(
       # browser()
       if (cond1 || cond2 || cond3) {
         ID1 <- ids[u]
-        tds <- data.frame(ID1 = ID1, ID2 = ID2, addRel = 0, mitRel = 0, cnuRel = 0)
+        tds <- data.frame(ID1 = ID1, ID2 = ID2,
+                          addRel = 0, mitRel = 0, cnuRel = 0)
         if (cond1) {
           tds$addRel[u %in% iss1vv] <- biggestPed@x[vv1]
         }
@@ -597,18 +640,12 @@ com2links <- function(
         if (cond3) {
           tds$cnuRel[u %in% iss3vv] <- biggestCnPed@x[vv3]
         }
-        utils::write.table(tds, file = fname, row.names = FALSE, col.names = FALSE, append = TRUE, sep = ",")
+        utils::write.table(tds, file = fname, row.names = FALSE,
+                           col.names = FALSE, append = TRUE, sep = ",")
       }
-      if (!(j %% 500)) {
+      if (!(j %% update_rate)) {
         cat(paste0("Done with ", j, " of ", nc, "\n"))
       }
     }
+    return(NULL)
   }
-
-
-
-  # Merge and write the parentage matrices
-  #  df <- full_join(mat_ped_matrix %>% arrange(ID), pat_ped_matrix %>% arrange(ID))
-
-  #  write.table(df, file = mapa_id_file, sep = ",", append = FALSE, row.names = FALSE)
-}

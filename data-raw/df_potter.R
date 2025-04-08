@@ -45,7 +45,9 @@ potter <- data.frame(
     "Molly Weasley",
     "Lucy Weasley"
   ),
-  gen = c(1, 1, 1, 1, 1, 2, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3),
+  gen = c(1, 1, 1, 1, 1, 2, 2, 2, 1, 1, 2, 2,
+          2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3,
+          3, 3, 3, 3, 3, 3),
   momID = c(
     101, 101, 103, 103, NA, 3, 4, 10, NA, NA,
     10, 10, 10, 10, 10, 10, NA, 105, 105, NA,
@@ -137,7 +139,8 @@ potter[nrow(potter) + 1, ] <- list(
   0
 )
 
-# potter[nrow(potter) + 1,] <- list(personID,fam,name,gen,momID,dadID,spouseID,sex)
+# potter[nrow(potter) + 1,] <- list(personID,fam,name,gen,
+#                                momID,dadID,spouseID,sex)
 
 write_csv(potter, here("data-raw", "potter.csv"))
 usethis::use_data(potter, overwrite = TRUE, compress = "xz")

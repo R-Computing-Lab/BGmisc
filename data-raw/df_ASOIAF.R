@@ -29,7 +29,8 @@ df <- ped2fam(ASOIAF, personID = "id") %>%
     name = str_remove(name, "/")
   )
 
-# pedADD <- ped2com(df , personID = "id", momID = "momID", dadID = "dadID", component = "additive", isChild_method = "partial_parent")
+# pedADD <- ped2com(df , personID = "id", momID = "momID",
+# dadID = "dadID", component = "additive", isChild_method = "partial_parent")
 # com2links(ad_ped_matrix=pedADD)
 # if missing momID or dadID, assign the next available ID
 

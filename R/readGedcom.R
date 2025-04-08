@@ -350,6 +350,7 @@ readGedcom <- function(file_path,
 #' @param df_temp A data frame containing information about individuals.
 #' @return A list mapping family IDs to parent IDs.
 #' @keywords internal
+#'
 mapFAMS2parents <- function(df_temp) {
   if (!all(c("FAMS", "sex") %in% colnames(df_temp))) {
     warning("The data frame does not contain the necessary columns (FAMS, sex)")
@@ -544,6 +545,7 @@ countPatternRows <- function(file) {
 #' @param vars The current list of variables to update.
 #' @return A list with updated `vars` and a `matched` flag.
 #' @keywords internal
+#'
 process_tag <- function(tag, field_name, pattern_rows, line, vars,
                         extractor = NULL, mode = "replace") {
   count_name <- paste0("num_", tolower(tag), "_rows")

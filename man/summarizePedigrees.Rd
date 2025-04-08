@@ -35,7 +35,7 @@ summarizePedigrees(
 
 \item{dadID}{character.  Name of the column in ped for the father ID variable}
 
-\item{matID}{Character.  Maternal line ID variable to be created and added to the pedigree}
+\item{matID}{Character. Maternal line ID variable to be created and added to the pedigree}
 
 \item{patID}{Character.  Paternal line ID variable to be created and added to the pedigree}
 

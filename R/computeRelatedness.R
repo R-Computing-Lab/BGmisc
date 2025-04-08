@@ -133,7 +133,6 @@ calculateH <- function(r1, r2, obsR1, obsR2) {
     message("Your scale might be reverse coded because you have negative correlations. Please check your data. ")
   }
 
-
   # Calculate heritability estimates (H^2) for all pairs
   heritability_estimates <- (obsR1 - obsR2) / (r1 - r2)
 
@@ -145,7 +144,5 @@ calculateH <- function(r1, r2, obsR1, obsR2) {
   if (any(heritability_estimates > 1)) {
     warning("Some calculated heritability values are greater than 1, which may suggest overestimation or errors in the observed correlations or relatedness coefficients.")
   }
-
-
   return(heritability_estimates)
 }
