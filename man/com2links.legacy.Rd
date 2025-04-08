@@ -2,7 +2,7 @@
 % Please edit documentation in R/makeLinks.R
 \name{com2links.legacy}
 \alias{com2links.legacy}
-\title{com2links}
+\title{Convert Pedigree Matrices to Related Pairs File (Legacy)}
 \usage{
 com2links.legacy(
   rel_pairs_file = "dataRelatedPairs.csv",
@@ -15,6 +15,25 @@ com2links.legacy(
   outcome_name = "data",
   ...
 )
+}
+\arguments{
+\item{rel_pairs_file}{File path to write related pairs to (CSV format).}
+
+\item{ad_ped_matrix}{Matrix of additive genetic relatedness coefficients.}
+
+\item{mit_ped_matrix}{Matrix of mitochondrial relatedness coefficients. Alias: \code{mt_ped_matrix}.}
+
+\item{mt_ped_matrix}{Matrix of mitochondrial relatedness coefficients.}
+
+\item{cn_ped_matrix}{Matrix of common nuclear relatedness coefficients.}
+
+\item{update_rate}{Numeric. Frequency (in iterations) at which progress messages are printed.}
+
+\item{verbose}{Logical. If TRUE, prints progress messages.}
+
+\item{outcome_name}{Character string representing the outcome name (used in file naming).}
+
+\item{...}{Additional arguments to be passed to \code{\link{com2links}}}
 }
 \description{
 This legacy function converts pedigree matrices into a related pairs file.

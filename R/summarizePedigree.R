@@ -410,6 +410,7 @@ findOldest <- function(foo_summary_dt, byr, noldest, n_foo) {
 # Function to find the biggest families in a pedigree
 #' This function finds the biggest families in a pedigree. It is supposed to be used internally by the \code{summarize_pedigree} function.
 #' @inheritParams findOldest
+#' @inheritParams summarizePedigrees
 #' @returns a data.table containing the biggest families in the pedigree.
 
 

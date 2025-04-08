@@ -9,6 +9,8 @@ findBiggest(foo_summary_dt, nbiggest, n_foo)
 \arguments{
 \item{foo_summary_dt}{A data.table containing the summary statistics.}
 
+\item{nbiggest}{Integer. Number of largest lineages to return (sorted by count).}
+
 \item{n_foo}{An integer specifying the number of individuals in the summary.}
 }
 \value{

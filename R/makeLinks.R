@@ -501,10 +501,10 @@ com2links <- function(
   #  write.table(df, file = mapa_id_file, sep = ",", append = FALSE, row.names = FALSE)
 }
 
-#' @title com2links
+#' Convert Pedigree Matrices to Related Pairs File (Legacy)
 #' @description
 #' This legacy function converts pedigree matrices into a related pairs file.
-
+#' @inheritParams com2links
 
 com2links.legacy <- function(
     rel_pairs_file = "dataRelatedPairs.csv",
@@ -642,6 +642,15 @@ validate_and_convert_matrix <- function(mat, name, ensure_symmetric = FALSE, for
   }
   return(mat)
 }
+
+#' @title initialize_empty_df
+#' @description
+#' This function initializes an empty data frame with specified column names.
+#'
+#' @param relNames A vector of column names to be included in the data frame.
+#'
+#' @return An empty data frame with specified column names.
+#' @keywords internal
 
 initialize_empty_df <- function(relNames) {
   df <- data.frame(ID1 = numeric(0), ID2 = numeric(0))
