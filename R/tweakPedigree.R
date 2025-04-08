@@ -18,7 +18,7 @@ makeTwins <- function(ped, ID_twin1 = NA_integer_, ID_twin2 = NA_integer_, gen_t
     "fam", "ID", "gen",
     "dadID", "momID", "spID", "sex"
   ), collapse = "")) {
-    ped <- standardizeColnames(ped)
+    ped <- standardizeColnames(ped, verbose = verbose)
     if (verbose) {
       cat("The input pedigree is not in the same format as the output of simulatePedigree\n")
     }
@@ -131,7 +131,7 @@ makeInbreeding <- function(ped,
     c("fam", "ID", "gen", "dadID", "momID", "spID", "sex"),
     collapse = ""
   )) {
-    ped <- standardizeColnames(ped)
+    ped <- standardizeColnames(ped, verbose = verbose)
     if (verbose) {
       cat("The input pedigree is not in the same format as the output of simulatePedigree\n")
     }

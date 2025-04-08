@@ -17,7 +17,7 @@
 #' @export
 checkIDs <- function(ped, verbose = FALSE, repair = FALSE) {
   # Standardize column names in the input dataframe
-  ped <- standardizeColnames(ped)
+  ped <- standardizeColnames(ped, verbose = verbose)
 
   # Initialize a list to store validation results
   validation_results <- list()

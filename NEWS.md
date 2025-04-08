@@ -3,6 +3,7 @@
 * added tests for checkParents function
 * added GoT analysis
 * reduced complexity of com2links and summarizePedigree with the use of subfunctions
+* allow verbose argument to be passed to standardizeColnames
 
 # BGmisc 1.3.5.1
 * Setting the default for the `sparse` argument in `ped2com()` to TRUE

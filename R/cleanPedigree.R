@@ -60,7 +60,7 @@ standardizeColnames <- function(df, verbose = FALSE) {
 # check_sex = TRUE,
 # check_parents = TRUE,
 # verbose = FALSE) {
-# corrected_ped <- ped <- standardizeColnames(ped)
+# corrected_ped <- ped <- standardizeColnames(ped, verbose = verbose)
 # if (verbose) {
 # print("Repairing pedigree...")
 # }
