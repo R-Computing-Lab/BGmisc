@@ -343,6 +343,7 @@ buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose, marR, sexR,
 #' @param balancedSex Not fully developed yet. Always \code{TRUE} in the current version.
 #' @param balancedMar Not fully developed yet. Always \code{TRUE} in the current version.
 #' @param verbose logical  If TRUE, print progress through stages of algorithm
+#' @param ... Additional arguments to be passed to other functions.
 
 #' @return A \code{data.frame} with each row representing a simulated individual. The columns are as follows:
 #' \itemize{
@@ -407,4 +408,11 @@ simulatePedigree <- function(kpc = 3,
   #  }
   # print(df_Fam)
   return(df_Fam)
+}
+
+#' @rdname simulatePedigree
+#' @export
+SimPed <- function(...) { # nolint: object_name_linter.
+  warning("The 'SimPed' function is deprecated. Please use 'simulatePedigree' instead.")
+  simulatePedigree(...)
 }

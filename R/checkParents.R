@@ -305,8 +305,9 @@ repairParentIDs <- function(ped, verbose = FALSE) {
 #'
 #' This function adds phantom parents to a pedigree.
 #' @inheritParams checkParentIDs
+#' @param validation_results validation results
 
-addPhantoms <- function(ped, verbose, pid, validation_results) {
+addPhantoms <- function(ped, verbose, validation_results) {
   # Add parents who appear in momID or dadID but are missing from ID
   new_entries <- data.frame()
 

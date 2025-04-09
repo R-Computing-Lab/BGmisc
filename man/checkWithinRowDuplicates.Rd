@@ -6,6 +6,14 @@
 \usage{
 checkWithinRowDuplicates(ped, verbose = FALSE)
 }
+\arguments{
+\item{ped}{A dataframe representing the pedigree data with columns `ID`, `dadID`, and `momID`.}
+
+\item{verbose}{A logical flag indicating whether to print progress and validation messages to the console.}
+}
+\value{
+A list containing the results of the check
+}
 \description{
-Check for within-row duplicates (self-parents, same mom/dad)
+This function checks for within-row duplicates in a pedigree.
 }

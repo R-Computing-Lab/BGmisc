@@ -4,7 +4,7 @@
 * added GoT analysis
 * reduced complexity of com2links, summarizePedigree, and checkIDs with the use of subfunctions
 * allow verbose argument to be passed to standardizeColnames
-
+* list SimPed and related_coef as aliases for functions
 
 # BGmisc 1.3.5.1
 * Setting the default for the `sparse` argument in `ped2com()` to TRUE

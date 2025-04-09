@@ -87,8 +87,7 @@ checkIDs <- function(ped, verbose = FALSE, repair = FALSE) {
 #' Repair Missing IDs
 #'
 #' This function repairs missing IDs in a pedigree.
-#' @param ped A pedigree object
-#' @param verbose A logical indicating whether to print progress messages
+#' @inheritParams checkIDs
 #' @return A corrected pedigree
 repairIDs <- function(ped, verbose = FALSE) {
   checkIDs(ped = ped, verbose = verbose, repair = TRUE)
@@ -98,8 +97,7 @@ repairIDs <- function(ped, verbose = FALSE) {
 #'
 #' This function checks for duplicated individual IDs in a pedigree.
 #'
-#' @param ped A pedigree object
-#' @param verbose A logical indicating whether to print progress messages
+#' @inheritParams checkIDs
 #' @return A list containing the results of the check
 #'
 checkIDuniqueness <- function(ped, verbose = FALSE) {
@@ -124,7 +122,14 @@ checkIDuniqueness <- function(ped, verbose = FALSE) {
 }
 
 
+
 #' Check for within-row duplicates (self-parents, same mom/dad)
+#'
+#' This function checks for within-row duplicates in a pedigree.
+#'
+#' @inheritParams checkIDs
+#' @return A list containing the results of the check
+#'
 checkWithinRowDuplicates <- function(ped, verbose = FALSE) {
   # is the individual their own father or mother?
   is_own_father <- ped$ID[ped$ID == ped$dadID & !is.na(ped$dadID)]

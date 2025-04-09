@@ -4,12 +4,14 @@
 \alias{addPhantoms}
 \title{Add Phantom Parents}
 \usage{
-addPhantoms(ped, verbose, pid, validation_results)
+addPhantoms(ped, verbose, validation_results)
 }
 \arguments{
 \item{ped}{A dataframe representing the pedigree data with columns 'ID', 'dadID', and 'momID'.}
 
 \item{verbose}{A logical flag indicating whether to print progress and validation messages to the console.}
+
+\item{validation_results}{validation results}
 }
 \description{
 This function adds phantom parents to a pedigree.
