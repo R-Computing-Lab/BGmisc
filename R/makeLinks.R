@@ -17,6 +17,7 @@
 #' @param legacy Logical. If TRUE, uses the legacy branch of the function.
 #' @param outcome_name Character string representing the outcome name (used in file naming).
 #' @param drop_upper_triangular Logical. If TRUE, drops the upper triangular portion of the matrix.
+#' @param include_all_links_1ped Logical. If TRUE, includes all links in the output. (Default is true when only one ped is provided)
 #' @param ... Additional arguments to be passed to \code{\link{com2links}}
 #'
 #' @return A data frame of related pairs if \code{writetodisk} is FALSE; otherwise, writes the results to disk.
@@ -39,6 +40,7 @@ com2links <- function(
     legacy = FALSE,
     outcome_name = "data",
     drop_upper_triangular = TRUE,
+    include_all_links_1ped=FALSE,
     ...) {
   # --- Input Validations and Preprocessing ---
 
@@ -118,6 +120,7 @@ com2links <- function(
            update_rate = update_rate,
            verbose = verbose,
            gc = gc,
+           include_all_links = include_all_links_1ped,
            ...
          ),
          "mt" = process_one(
@@ -132,6 +135,7 @@ com2links <- function(
            update_rate = update_rate,
            verbose = verbose,
            gc = gc,
+           include_all_links = include_all_links_1ped,
            ...
          ),
          "cn" = process_one(
@@ -146,6 +150,7 @@ com2links <- function(
            update_rate = update_rate,
            verbose = verbose,
            gc = gc,
+           include_all_links = include_all_links_1ped,
            ...
          ),
          "ad-mt" = process_two(
@@ -217,13 +222,17 @@ com2links <- function(
          stop("Unsupported matrix combination")
   )
 }
-#' Convert Sparse Relationship Matrices to Kinship Links
+#' Convert Sparse Relationship Matrices to Kinship Links for one Matrix
 #' @inheritParams com2links
+#' @param include_all_links Logical. If TRUE, all links are included in the output.
 #' @keywords internal
 
 
 
-process_one <- function(matrix, rel_name, ids, nc, rel_pairs_file, writetodisk, write_buffer_size, drop_upper_triangular, update_rate, verbose, gc, ...) {
+process_one <- function(matrix, rel_name, ids, nc, rel_pairs_file, writetodisk,
+                        write_buffer_size, drop_upper_triangular, update_rate, verbose, gc,
+                       include_all_links=TRUE, ...) {
+  if (include_all_links == FALSE) {
   # Extract pointers and indices from the matrix.
   newColPos <- matrix@p + 1L
   iss <- matrix@i + 1L
@@ -245,7 +254,8 @@ process_one <- function(matrix, rel_name, ids, nc, rel_pairs_file, writetodisk, 
 
   # Process each column in the matrix.
   for (j in 1L:nc) {
-    ID2 <- ids[j]
+
+      ID2 <- ids[j]
 
     # Extract column indices
     ncp <- newColPos[j]
@@ -261,10 +271,10 @@ process_one <- function(matrix, rel_name, ids, nc, rel_pairs_file, writetodisk, 
 
     # If any relationships exist for this individual, build the related pairs.
     if (cond) {
-      ID1 <- ids[u]
-      tds <- data.frame(ID1 = ID1, ID2 = ID2)
-      tds[[rel_name]] <- 0
-
+        # Create a data frame with unique pairs.
+        ID1 <- ids[u]
+        tds <- data.frame(ID1 = ID1, ID2 = ID2)
+        tds[[rel_name]] <- 0
       if (cond) {
         tds[u %in% issvv, rel_name] <- x[vv]
       }
@@ -307,6 +317,26 @@ process_one <- function(matrix, rel_name, ids, nc, rel_pairs_file, writetodisk, 
   }
   if (gc == TRUE) {
     remove(newColPos, iss, x)
+  }
+  }else{
+    matrix2=  matrix(rep(1,length(ids)^2),
+              nrow = length(ids),
+              dimnames = list(ids, ids))
+    process_two(matrix2=matrix, name2=rel_name,
+                  matrix1=methods::as(matrix2,"CsparseMatrix"),
+                  name1="phantom",
+                    ids=ids,
+                  nc = nc,
+                    rel_pairs_file = rel_pairs_file,
+                    writetodisk = writetodisk,
+                    write_buffer_size = write_buffer_size,
+                    drop_upper_triangular = drop_upper_triangular,
+                    update_rate = update_rate,
+                    verbose = verbose,
+                    gc = gc)
+
+
+
   }
 }
 
@@ -524,7 +554,7 @@ process_two <- function(
 #' @return The validated and converted matrix.
 validate_and_convert_matrix <- function(mat, name, ensure_symmetric = FALSE, force_binary = FALSE) {
   if (!inherits(mat, c("matrix", "dgCMatrix", "dsCMatrix","generalMatrix",
-                       "symmetricMatrix", "triangularMatrix", "dsyMatrix", "dspMatrix", "dsyMatrix"))) {
+                       "symmetricMatrix", "triangularMatrix", "dsyMatrix", "dspMatrix", "dsyMatrix",'CsparseMatrix'))) {
     stop(paste0("The '", name, "' must be a matrix or generalMatrix"))
   }
   if (!inherits(mat, "generalMatrix")) {
