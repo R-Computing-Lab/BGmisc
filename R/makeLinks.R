@@ -20,7 +20,208 @@
 #' @param ... Additional arguments to be passed to \code{\link{com2links}}
 #'
 #' @return A data frame of related pairs if \code{writetodisk} is FALSE; otherwise, writes the results to disk.
-#' @keywords internal
+#' @export com2links
+
+com2links <- function(
+    rel_pairs_file = "dataRelatedPairs.csv",
+    ad_ped_matrix = NULL,
+    mit_ped_matrix = mt_ped_matrix,
+    mt_ped_matrix = NULL,
+    cn_ped_matrix = NULL,
+    #  pat_ped_matrix = NULL,
+    #  mat_ped_matrix = NULL,
+    #  mapa_id_file = "data_mapaID.csv",
+    write_buffer_size = 1000,
+    update_rate = 1000,
+    gc = TRUE,
+    writetodisk = TRUE,
+    verbose = FALSE,
+    legacy = FALSE,
+    outcome_name = "data",
+    drop_upper_triangular = TRUE,
+    ...) {
+  # --- Input Validations and Preprocessing ---
+
+  # Ensure that at least one relationship matrix is provided.
+  if (is.null(ad_ped_matrix) && is.null(mit_ped_matrix) && is.null(cn_ped_matrix)) {
+    stop("At least one of 'ad_ped_matrix', 'mit_ped_matrix', or 'cn_ped_matrix' must be provided.")
+  }
+  # Validate and convert ad_ped_matrix to a sparse dgCMatrix if provided.
+  if (!is.null(ad_ped_matrix)) {
+    ad_ped_matrix <- validate_and_convert_matrix(
+      mat = ad_ped_matrix,
+      name = "ad_ped_matrix"
+    )
+  }
+
+  # Validate and convert cn_ped_matrix to a sparse dgCMatrix if provided.
+  if (!is.null(cn_ped_matrix)) {
+    cn_ped_matrix <- validate_and_convert_matrix(
+      mat = cn_ped_matrix,
+      name = "cn_ped_matrix",
+      ensure_symmetric = TRUE
+    )
+  }
+
+  # Validate and process mit_ped_matrix: convert and ensure binary values.
+  if (!is.null(mit_ped_matrix)) {
+    mit_ped_matrix <- validate_and_convert_matrix(
+      mat = mit_ped_matrix,
+      name = "mit_ped_matrix", force_binary = TRUE,
+      ensure_symmetric = TRUE
+    )
+  }
+
+  # --- Build IDs and Prepare Matrix Pointers ---
+
+  # Extract individual IDs from the first available matrix.
+  ids <- NULL
+
+
+
+  if (!is.null(cn_ped_matrix)) {
+    ids <- as.numeric(dimnames(cn_ped_matrix)[[1]])
+    nc <- ncol(cn_ped_matrix)
+  } else if (!is.null(ad_ped_matrix)) {
+    ids <- as.numeric(dimnames(ad_ped_matrix)[[1]])
+    nc <- ncol(ad_ped_matrix)
+  } else if (!is.null(mit_ped_matrix)) {
+    ids <- as.numeric(dimnames(mit_ped_matrix)[[1]])
+    nc <- ncol(mit_ped_matrix)
+  }
+
+  if (is.null(ids)) {
+    stop("Could not extract IDs from the provided matrices.")
+  }
+
+  # --- matrix_case construction and switch dispatch ---
+  matrix_case <- paste(sort(c(
+    if (!is.null(ad_ped_matrix)) "ad" else NULL,
+    if (!is.null(mit_ped_matrix)) "mt" else NULL,
+    if (!is.null(cn_ped_matrix)) "cn" else NULL
+  )), collapse = "-")
+
+  if (verbose) {
+    print(matrix_case)
+  }
+
+  switch(matrix_case,
+         "ad" = process_one(
+           matrix = ad_ped_matrix,
+           rel_name = "addRel",
+           ids = ids,
+           nc = nc,
+           rel_pairs_file = rel_pairs_file,
+           writetodisk = writetodisk,
+           write_buffer_size = write_buffer_size,
+           drop_upper_triangular = drop_upper_triangular,
+           update_rate = update_rate,
+           verbose = verbose,
+           gc = gc,
+           ...
+         ),
+         "mt" = process_one(
+           matrix = mit_ped_matrix,
+           rel_name = "mitRel",
+           ids = ids,
+           nc = nc,
+           rel_pairs_file = rel_pairs_file,
+           writetodisk = writetodisk,
+           write_buffer_size = write_buffer_size,
+           drop_upper_triangular = drop_upper_triangular,
+           update_rate = update_rate,
+           verbose = verbose,
+           gc = gc,
+           ...
+         ),
+         "cn" = process_one(
+           matrix = cn_ped_matrix,
+           rel_name = "cnuRel",
+           ids = ids,
+           nc = nc,
+           rel_pairs_file = rel_pairs_file,
+           writetodisk = writetodisk,
+           write_buffer_size = write_buffer_size,
+           drop_upper_triangular = drop_upper_triangular,
+           update_rate = update_rate,
+           verbose = verbose,
+           gc = gc,
+           ...
+         ),
+         "ad-mt" = process_two(
+           matrix1 = ad_ped_matrix,
+           name1 = "addRel",
+           matrix2 = mit_ped_matrix,
+           name2 = "mitRel",
+           ids = ids,
+           nc = nc,
+           rel_pairs_file = rel_pairs_file,
+           writetodisk = writetodisk,
+           write_buffer_size = write_buffer_size,
+           drop_upper_triangular = drop_upper_triangular,
+           update_rate = update_rate,
+           verbose = verbose,
+           gc = gc,
+           ...
+         ),
+         "ad-cn" = process_two(
+           matrix1 = ad_ped_matrix,
+           name1 = "addRel",
+           matrix2 = cn_ped_matrix,
+           name2 = "cnuRel",
+           ids = ids,
+           nc = nc,
+           rel_pairs_file = rel_pairs_file,
+           writetodisk = writetodisk,
+           write_buffer_size = write_buffer_size,
+           drop_upper_triangular = drop_upper_triangular,
+           update_rate = update_rate,
+           verbose = verbose,
+           gc = gc,
+           ...
+         ),
+         "cn-mt" = process_two(
+           matrix1 = cn_ped_matrix,
+           name1 = "cnuRel",
+           matrix2 = mit_ped_matrix,
+           name2 = "mitRel",
+           ids = ids,
+           nc = nc,
+           rel_pairs_file = rel_pairs_file,
+           writetodisk = writetodisk,
+           write_buffer_size = write_buffer_size,
+           drop_upper_triangular = drop_upper_triangular,
+           update_rate = update_rate,
+           verbose = verbose,
+           gc = gc,
+           ...
+         ),
+         "ad-cn-mt" = process_all_three(
+           mat1 = ad_ped_matrix,
+           name1 = "addRel",
+           mat2 = mit_ped_matrix,
+           name2 = "mitRel",
+           mat3 = cn_ped_matrix,
+           name3 = "cnuRel",
+           ids = ids,
+           nc = nc,
+           rel_pairs_file = rel_pairs_file,
+           writetodisk = writetodisk,
+           write_buffer_size = write_buffer_size,
+           drop_upper_triangular = drop_upper_triangular,
+           update_rate = update_rate,
+           verbose = verbose,
+           gc = gc,
+           ...
+         ),
+         stop("Unsupported matrix combination")
+  )
+}
+#' Convert Sparse Relationship Matrices to Kinship Links
+#' @inheritParams com2links
+#' @inherit com2links description
+#' @inherit com2links details
+#' @keyword internal
 
 com2links.legacy <- function(
     rel_pairs_file = "dataRelatedPairs.csv",
@@ -522,7 +723,7 @@ com2links.legacy <- function(
 #' Convert Pedigree Matrices to Related Pairs File (Legacy)
 #' @description
 #' This legacy function converts pedigree matrices into a related pairs file.
-#' @inheritParams com2links.legacy
+#' @inheritParams com2links
 #' @keywords internal
 
 
@@ -648,207 +849,6 @@ com2links.og <- function(
   return(NULL)
 }
 
-#' Convert Sparse Relationship Matrices to Kinship Links
-#' @inheritParams com2links.legacy
-#' @inherit com2links.legacy description
-#' @inherit com2links.legacy details
-#' @export
-
-com2links <- function(
-    rel_pairs_file = "dataRelatedPairs.csv",
-    ad_ped_matrix = NULL,
-    mit_ped_matrix = mt_ped_matrix,
-    mt_ped_matrix = NULL,
-    cn_ped_matrix = NULL,
-    #  pat_ped_matrix = NULL,
-    #  mat_ped_matrix = NULL,
-    #  mapa_id_file = "data_mapaID.csv",
-    write_buffer_size = 1000,
-    update_rate = 1000,
-    gc = TRUE,
-    writetodisk = TRUE,
-    verbose = FALSE,
-    legacy = FALSE,
-    outcome_name = "data",
-    drop_upper_triangular = TRUE,
-    ...) {
-  # --- Input Validations and Preprocessing ---
-
-  # Ensure that at least one relationship matrix is provided.
-  if (is.null(ad_ped_matrix) && is.null(mit_ped_matrix) && is.null(cn_ped_matrix)) {
-    stop("At least one of 'ad_ped_matrix', 'mit_ped_matrix', or 'cn_ped_matrix' must be provided.")
-  }
-  # Validate and convert ad_ped_matrix to a sparse dgCMatrix if provided.
-  if (!is.null(ad_ped_matrix)) {
-    ad_ped_matrix <- validate_and_convert_matrix(
-      mat = ad_ped_matrix,
-      name = "ad_ped_matrix"
-    )
-  }
-
-  # Validate and convert cn_ped_matrix to a sparse dgCMatrix if provided.
-  if (!is.null(cn_ped_matrix)) {
-    cn_ped_matrix <- validate_and_convert_matrix(
-      mat = cn_ped_matrix,
-      name = "cn_ped_matrix",
-      ensure_symmetric = TRUE
-    )
-  }
-
-  # Validate and process mit_ped_matrix: convert and ensure binary values.
-  if (!is.null(mit_ped_matrix)) {
-    mit_ped_matrix <- validate_and_convert_matrix(
-      mat = mit_ped_matrix,
-      name = "mit_ped_matrix", force_binary = TRUE,
-      ensure_symmetric = TRUE
-    )
-  }
-
-  # --- Build IDs and Prepare Matrix Pointers ---
-
-  # Extract individual IDs from the first available matrix.
-  ids <- NULL
-
-
-
-  if (!is.null(cn_ped_matrix)) {
-    ids <- as.numeric(dimnames(cn_ped_matrix)[[1]])
-    nc <- ncol(cn_ped_matrix)
-  } else if (!is.null(ad_ped_matrix)) {
-    ids <- as.numeric(dimnames(ad_ped_matrix)[[1]])
-    nc <- ncol(ad_ped_matrix)
-  } else if (!is.null(mit_ped_matrix)) {
-    ids <- as.numeric(dimnames(mit_ped_matrix)[[1]])
-    nc <- ncol(mit_ped_matrix)
-  }
-
-  if (is.null(ids)) {
-    stop("Could not extract IDs from the provided matrices.")
-  }
-
-  # --- matrix_case construction and switch dispatch ---
-  matrix_case <- paste(sort(c(
-    if (!is.null(ad_ped_matrix)) "ad" else NULL,
-    if (!is.null(mit_ped_matrix)) "mt" else NULL,
-    if (!is.null(cn_ped_matrix)) "cn" else NULL
-  )), collapse = "-")
-
-  if (verbose) {
-    print(matrix_case)
-  }
-
-  switch(matrix_case,
-    "ad" = process_one(
-      matrix = ad_ped_matrix,
-      rel_name = "addRel",
-      ids = ids,
-      nc = nc,
-      rel_pairs_file = rel_pairs_file,
-      writetodisk = writetodisk,
-      write_buffer_size = write_buffer_size,
-      drop_upper_triangular = drop_upper_triangular,
-      update_rate = update_rate,
-      verbose = verbose,
-      gc = gc,
-      ...
-    ),
-    "mt" = process_one(
-      matrix = mit_ped_matrix,
-      rel_name = "mitRel",
-      ids = ids,
-      nc = nc,
-      rel_pairs_file = rel_pairs_file,
-      writetodisk = writetodisk,
-      write_buffer_size = write_buffer_size,
-      drop_upper_triangular = drop_upper_triangular,
-      update_rate = update_rate,
-      verbose = verbose,
-      gc = gc,
-      ...
-    ),
-    "cn" = process_one(
-      matrix = cn_ped_matrix,
-      rel_name = "cnuRel",
-      ids = ids,
-      nc = nc,
-      rel_pairs_file = rel_pairs_file,
-      writetodisk = writetodisk,
-      write_buffer_size = write_buffer_size,
-      drop_upper_triangular = drop_upper_triangular,
-      update_rate = update_rate,
-      verbose = verbose,
-      gc = gc,
-      ...
-    ),
-    "ad-mt" = process_two(
-      matrix1 = ad_ped_matrix,
-      name1 = "addRel",
-      matrix2 = mit_ped_matrix,
-      name2 = "mitRel",
-      ids = ids,
-      nc = nc,
-      rel_pairs_file = rel_pairs_file,
-      writetodisk = writetodisk,
-      write_buffer_size = write_buffer_size,
-      drop_upper_triangular = drop_upper_triangular,
-      update_rate = update_rate,
-      verbose = verbose,
-      gc = gc,
-      ...
-    ),
-    "ad-cn" = process_two(
-      matrix1 = ad_ped_matrix,
-      name1 = "addRel",
-      matrix2 = cn_ped_matrix,
-      name2 = "cnuRel",
-      ids = ids,
-      nc = nc,
-      rel_pairs_file = rel_pairs_file,
-      writetodisk = writetodisk,
-      write_buffer_size = write_buffer_size,
-      drop_upper_triangular = drop_upper_triangular,
-      update_rate = update_rate,
-      verbose = verbose,
-      gc = gc,
-      ...
-    ),
-    "cn-mt" = process_two(
-      matrix1 = cn_ped_matrix,
-      name1 = "cnuRel",
-      matrix2 = mit_ped_matrix,
-      name2 = "mitRel",
-      ids = ids,
-      nc = nc,
-      rel_pairs_file = rel_pairs_file,
-      writetodisk = writetodisk,
-      write_buffer_size = write_buffer_size,
-      drop_upper_triangular = drop_upper_triangular,
-      update_rate = update_rate,
-      verbose = verbose,
-      gc = gc,
-      ...
-    ),
-    "ad-cn-mt" = process_all_three(
-      mat1 = ad_ped_matrix,
-      name1 = "addRel",
-      mat2 = mit_ped_matrix,
-      name2 = "mitRel",
-      mat3 = cn_ped_matrix,
-      name3 = "cnuRel",
-      ids = ids,
-      nc = nc,
-      rel_pairs_file = rel_pairs_file,
-      writetodisk = writetodisk,
-      write_buffer_size = write_buffer_size,
-      drop_upper_triangular = drop_upper_triangular,
-      update_rate = update_rate,
-      verbose = verbose,
-      gc = gc,
-      ...
-    ),
-    stop("Unsupported matrix combination")
-  )
-}
 
 process_one <- function(matrix, rel_name, ids, nc, rel_pairs_file, writetodisk, write_buffer_size, drop_upper_triangular, update_rate, verbose, gc, ...) {
   # Extract pointers and indices from the matrix.
