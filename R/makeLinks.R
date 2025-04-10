@@ -20,8 +20,9 @@
 #' @param ... Additional arguments to be passed to \code{\link{com2links}}
 #'
 #' @return A data frame of related pairs if \code{writetodisk} is FALSE; otherwise, writes the results to disk.
-#' @export
-com2links <- function(
+#' @keywords internal
+
+com2links.legacy <- function(
     rel_pairs_file = "dataRelatedPairs.csv",
     ad_ped_matrix = NULL,
     mit_ped_matrix = mt_ped_matrix,
@@ -498,7 +499,7 @@ com2links <- function(
   } else if (legacy) {
     # --- Legacy Mode ---
     # In legacy mode, convert matrices to the expected symmetric formats.
-    com2links.legacy(
+    com2links.og(
       rel_pairs_file = rel_pairs_file,
       ad_ped_matrix = ad_ped_matrix,
       mit_ped_matrix = mit_ped_matrix,
@@ -521,9 +522,11 @@ com2links <- function(
 #' Convert Pedigree Matrices to Related Pairs File (Legacy)
 #' @description
 #' This legacy function converts pedigree matrices into a related pairs file.
-#' @inheritParams com2links
+#' @inheritParams com2links.legacy
+#' @keywords internal
 
-com2links.legacy <- function(
+
+com2links.og <- function(
     rel_pairs_file = "dataRelatedPairs.csv",
     ad_ped_matrix = NULL,
     mit_ped_matrix = mt_ped_matrix,
@@ -645,7 +648,13 @@ com2links.legacy <- function(
   return(NULL)
 }
 
-com2links.beta <- function(
+#' Convert Sparse Relationship Matrices to Kinship Links
+#' @inheritParams com2links.legacy
+#' @inherit com2links.legacy description
+#' @inherit com2links.legacy details
+#' @export
+
+com2links <- function(
     rel_pairs_file = "dataRelatedPairs.csv",
     ad_ped_matrix = NULL,
     mit_ped_matrix = mt_ped_matrix,

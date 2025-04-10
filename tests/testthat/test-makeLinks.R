@@ -95,7 +95,7 @@ test_that("com2links legacy works", {
   mit_ped_matrix <- ped2com(hazard, component = "mitochondrial", adjacency_method = "direct", sparse = TRUE)
   cn_ped_matrix <- ped2com(hazard, component = "common nuclear", adjacency_method = "indexed", sparse = TRUE)
 
-  resultlegacy <- com2links(
+  resultlegacy <- com2links.legacy(
     ad_ped_matrix = ad_ped_matrix,
     mit_ped_matrix = mit_ped_matrix, cn_ped_matrix = cn_ped_matrix,
     legacy = TRUE
@@ -109,7 +109,7 @@ test_that("com2links legacy works", {
   expect_true(all(c("ID1", "ID2", "addRel", "mitRel", "cnuRel") %in% colnames(written_data)))
 
 
-  result_beta <- com2links.beta(
+  result_beta <- com2links(
     ad_ped_matrix = ad_ped_matrix,
     mit_ped_matrix = mit_ped_matrix, cn_ped_matrix = cn_ped_matrix,
     writetodisk = FALSE
@@ -119,7 +119,7 @@ test_that("com2links legacy works", {
   expect_true(all(c("ID1", "ID2", "addRel", "mitRel", "cnuRel") %in% colnames(result_beta)))
 
 
-  result <- com2links(
+  result <- com2links.legacy(
     ad_ped_matrix = ad_ped_matrix,
     mit_ped_matrix = mit_ped_matrix, cn_ped_matrix = cn_ped_matrix,
     writetodisk = FALSE
@@ -145,7 +145,7 @@ test_that("com2links beta works", {
   cn_ped_matrix <- ped2com(hazard, component = "common nuclear", adjacency_method = "indexed", sparse = TRUE)
 
   # compare 2
-  result_beta <- com2links.beta(
+  result_beta <- com2links(
     ad_ped_matrix = ad_ped_matrix,
     mit_ped_matrix = mit_ped_matrix,
     writetodisk = FALSE
@@ -155,7 +155,7 @@ test_that("com2links beta works", {
   expect_true(all(c("ID1", "ID2", "addRel", "mitRel") %in% colnames(result_beta)))
 
 
-  result <- com2links(
+  result <- com2links.legacy(
     ad_ped_matrix = ad_ped_matrix,
     mit_ped_matrix = mit_ped_matrix,
     writetodisk = FALSE
@@ -172,7 +172,7 @@ test_that("com2links beta works", {
 
 
   # write to disk
-  result_disk <- com2links.beta(
+  result_disk <- com2links(
     ad_ped_matrix = ad_ped_matrix,
     mit_ped_matrix = mit_ped_matrix,
     writetodisk = TRUE
@@ -188,7 +188,7 @@ test_that("com2links beta works", {
   expect_equal(result, written_data)
   # compare 1
 
-  result_beta <- com2links.beta(
+  result_beta <- com2links(
     mit_ped_matrix = mit_ped_matrix,
     writetodisk = FALSE
   )

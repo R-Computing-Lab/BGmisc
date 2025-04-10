@@ -2,7 +2,7 @@
 % Please edit documentation in R/checkParents.R
 \name{addRowlessParents}
 \alias{addRowlessParents}
-\title{Add Phantom Parents}
+\title{Add addRowlessParents}
 \usage{
 addRowlessParents(ped, verbose, validation_results)
 }
@@ -14,5 +14,5 @@ addRowlessParents(ped, verbose, validation_results)
 \item{validation_results}{validation results}
 }
 \description{
-This function adds parents w
+This function adds parents who appear in momID or dadID but are missing from ID
 }
