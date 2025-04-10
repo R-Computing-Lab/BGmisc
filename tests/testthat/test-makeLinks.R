@@ -108,6 +108,17 @@ test_that("com2links legacy works", {
 
   expect_true(all(c("ID1", "ID2", "addRel", "mitRel", "cnuRel") %in% colnames(written_data)))
 
+
+  result_beta <- com2links.beta(
+    ad_ped_matrix = ad_ped_matrix,
+    mit_ped_matrix = mit_ped_matrix, cn_ped_matrix = cn_ped_matrix,
+    writetodisk = FALSE
+  )
+
+  expect_true(is.data.frame(result_beta))
+  expect_true(all(c("ID1", "ID2", "addRel", "mitRel", "cnuRel") %in% colnames(result_beta)))
+
+
   result <- com2links(
     ad_ped_matrix = ad_ped_matrix,
     mit_ped_matrix = mit_ped_matrix, cn_ped_matrix = cn_ped_matrix,
@@ -115,14 +126,93 @@ test_that("com2links legacy works", {
   )
 
   expect_true(is.data.frame(result))
+  expect_true(all(c("ID1", "ID2", "addRel", "mitRel", "cnuRel") %in% colnames(result)))
 
   # Drop row names to avoid mismatches in expect_equal
   rownames(result) <- NULL
   rownames(written_data) <- NULL
+  rownames(result_beta) <- NULL
 
   # Final comparison between written versions
   expect_equal(written_data, result)
+  expect_equal(result_beta, result)
 })
+
+test_that("com2links beta works", {
+  data(hazard)
+  ad_ped_matrix <- ped2com(hazard, component = "additive", adjacency_method = "direct", sparse = TRUE)
+  mit_ped_matrix <- ped2com(hazard, component = "mitochondrial", adjacency_method = "direct", sparse = TRUE)
+  cn_ped_matrix <- ped2com(hazard, component = "common nuclear", adjacency_method = "indexed", sparse = TRUE)
+
+  # compare 2
+  result_beta <- com2links.beta(
+    ad_ped_matrix = ad_ped_matrix,
+    mit_ped_matrix = mit_ped_matrix,
+    writetodisk = FALSE
+  )
+
+  expect_true(is.data.frame(result_beta))
+  expect_true(all(c("ID1", "ID2", "addRel", "mitRel") %in% colnames(result_beta)))
+
+
+  result <- com2links(
+    ad_ped_matrix = ad_ped_matrix,
+    mit_ped_matrix = mit_ped_matrix,
+    writetodisk = FALSE
+  )
+
+  expect_true(is.data.frame(result))
+  expect_true(all(c("ID1", "ID2", "addRel", "mitRel") %in% colnames(result)))
+  # Drop row names to avoid mismatches in expect_equal
+  rownames(result) <- NULL
+  rownames(result_beta) <- NULL
+
+  # Final comparison between  versions
+  expect_equal(result_beta, result)
+
+
+  # write to disk
+  result_disk <- com2links.beta(
+    ad_ped_matrix = ad_ped_matrix,
+    mit_ped_matrix = mit_ped_matrix,
+    writetodisk = TRUE
+  )
+  expect_true(file.exists("dataRelatedPairs.csv"))
+  written_data <- read.csv("dataRelatedPairs.csv")
+  # remove the file
+  expect_true(file.remove("dataRelatedPairs.csv"))
+
+  expect_true(all(c("ID1", "ID2", "addRel", "mitRel") %in% colnames(written_data)))
+  rownames(written_data) <- NULL
+  expect_equal(result_beta, written_data)
+  expect_equal(result, written_data)
+  # compare 1
+
+  result_beta <- com2links.beta(
+    mit_ped_matrix = mit_ped_matrix,
+    writetodisk = FALSE
+  )
+
+  expect_true(is.data.frame(result_beta))
+  expect_true(all(c("ID1", "ID2", "mitRel") %in% colnames(result_beta)))
+
+
+  result <- com2links(
+    mit_ped_matrix = mit_ped_matrix,
+    writetodisk = FALSE
+  )
+
+  expect_true(is.data.frame(result))
+  expect_true(all(c("ID1", "ID2", "mitRel") %in% colnames(result)))
+  # Drop row names to avoid mismatches in expect_equal
+  rownames(result) <- NULL
+  rownames(result_beta) <- NULL
+
+  # Final comparison between  versions
+  expect_equal(result_beta, result)
+})
+
+
 
 
 test_that("com2links correctly handles missing matrices", {

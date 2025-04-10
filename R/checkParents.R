@@ -250,39 +250,10 @@ checkParentIDs <- function(ped, verbose = FALSE, repair = FALSE,
       cat("Added phantom moms for:", paste(changes$phantom_moms_added, collapse = ", "), "\n")
     }
   }
-  # add phantom parents
+  # add parents who appear in momID or dadID but are missing from ID
   if (parentswithoutrow) {
     # Add parents who appear in momID or dadID but are missing from ID
-    listed_parents <- unique(c(ped$momID, ped$dadID))
-    listed_parents <- listed_parents[!is.na(listed_parents)]
-
-    existing_ids <- ped$ID
-    missing_parents <- setdiff(listed_parents, existing_ids)
-
-    if (length(missing_parents) > 0) {
-      if (verbose) {
-        cat("Adding parents who were listed in momID/dadID but missing from ID:\n")
-        print(missing_parents)
-      }
-
-      for (pid in missing_parents) {
-        role <- unique(
-          c(
-            if (pid %in% ped$momID) "mom" else NULL,
-            if (pid %in% ped$dadID) "dad" else NULL
-          )
-        )
-        inferred_sex <- if ("mom" %in% role) validation_results$female_var else validation_results$male_var
-
-        new_row <- ped[1, ]
-        new_row$ID <- pid
-        new_row$dadID <- NA
-        new_row$momID <- NA
-        new_row$sex <- inferred_sex
-        new_entries <- rbind(new_entries, new_row)
-      }
-    }
-    ped <- merge(ped, new_entries, all = TRUE)
+    ped <- addRowlessParents(ped = ped, verbose = verbose, validation_results = validation_results)
   }
 
   if (verbose) {
@@ -301,13 +272,13 @@ repairParentIDs <- function(ped, verbose = FALSE) {
   checkParentIDs(ped = ped, verbose = verbose, repair = TRUE)
 }
 
-#' Add Phantom Parents
+#' Add addRowlessParents
 #'
-#' This function adds phantom parents to a pedigree.
+#' This function adds parents who appear in momID or dadID but are missing from ID
 #' @inheritParams checkParentIDs
 #' @param validation_results validation results
 
-addPhantoms <- function(ped, verbose, validation_results) {
+addRowlessParents <- function(ped, verbose, validation_results) {
   # Add parents who appear in momID or dadID but are missing from ID
   new_entries <- data.frame()
 
@@ -339,10 +310,11 @@ addPhantoms <- function(ped, verbose, validation_results) {
       new_row$sex <- inferred_sex
       new_entries <- rbind(new_entries, new_row)
     }
-  }
-  ped <- merge(ped, new_entries, all = TRUE)
-  if (verbose) {
-    cat("Added phantom parents for:", paste(new_entries$ID, collapse = ", "), "\n")
+
+    ped <- merge(ped, new_entries, all = TRUE)
+    if (verbose) {
+      cat("Added phantom parents for:", paste(new_entries$ID, collapse = ", "), "\n")
+    }
   }
   return(ped)
 }

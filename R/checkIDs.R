@@ -28,12 +28,12 @@ checkIDs <- function(ped, verbose = FALSE, repair = FALSE) {
   }
 
   # Identify non-unique IDs
-  id_check <- checkIDuniqueness(ped=ped, verbose=verbose)
+  id_check <- checkIDuniqueness(ped = ped, verbose = verbose)
 
   if (verbose) {
     cat("Step 2: Checking for within row duplicats...\n")
   }
-  row_check <- checkWithinRowDuplicates(ped=ped, verbose = verbose)
+  row_check <- checkWithinRowDuplicates(ped = ped, verbose = verbose)
 
   validation_results <- c(id_check, row_check)
 
@@ -166,4 +166,3 @@ checkWithinRowDuplicates <- function(ped, verbose = FALSE) {
     duplicated_parents_ids = if (length(duplicated_parents) > 0) unique(duplicated_parents) else NULL
   )
 }
-
