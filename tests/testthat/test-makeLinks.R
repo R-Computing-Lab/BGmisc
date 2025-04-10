@@ -25,6 +25,18 @@ test_that("com2links produces correct output with a single relationship matrix (
   expect_true(all(result$addRel >= 0)) # Relatedness values should be non-negative
 })
 
+test_that("com2links produces correct output with cn_ped_matrix", {
+  data(ASOIAF)
+  cn_ped_matrix <- ped2mit(ASOIAF, sparse = TRUE)
+
+  result <- com2links(cn_ped_matrix = cn_ped_matrix, writetodisk = FALSE)
+
+  expect_true(is.data.frame(result))
+  expect_true(all(c("ID1", "ID2", "cnRel") %in% colnames(result)))
+  expect_equal(ncol(result), 3) # Expect ID1, ID2, and addRel
+  expect_true(all(result$cnRel >= 0)) # Relatedness values should be non-negative
+})
+
 test_that("com2links produces correct output with mt_ped_matrix", {
   data(hazard)
   mit_ped_matrix <- ped2mit(hazard, sparse = TRUE)
@@ -34,7 +46,7 @@ test_that("com2links produces correct output with mt_ped_matrix", {
   expect_true(is.data.frame(result))
   expect_true(all(c("ID1", "ID2", "mitRel") %in% colnames(result)))
   expect_equal(ncol(result), 3) # Expect ID1, ID2, and addRel
-  expect_true(all(result$addRel >= 0)) # Relatedness values should be non-negative
+  expect_true(all(result$mitRel %in% c(0, 1))) # Mitochondrial should be binary
 })
 
 test_that("com2links processes multiple matrices correctly (hazard dataset)", {
