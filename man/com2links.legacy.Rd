@@ -50,9 +50,6 @@ com2links.legacy(
 
 \item{...}{Additional arguments to be passed to \code{\link{com2links}}}
 }
-\value{
-A data frame of related pairs if \code{writetodisk} is FALSE; otherwise, writes the results to disk.
-}
 \description{
 This function processes one or more sparse relationship components (additive, mitochondrial,
 and common nuclear) and converts them into kinship link pairs. The resulting related pairs are
