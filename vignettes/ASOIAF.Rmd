@@ -15,11 +15,12 @@ Just how related are Jon Snow and Daenerys Targaryen? This vignette walks throug
 We begin by loading the necessary packages and accessing the built-in `ASOIAF` pedigree dataset included with `BGmisc`.
 
 
-```{r}
+```{r echo=TRUE, message=FALSE, warning=FALSE}
 library(BGmisc)
 library(tidyverse)
 data(ASOIAF)
 ```
+
 The ASOIAF data contains character IDs, family identifiers, and parent-child links extracted from A Song of Ice and Fire lore.
 
 ```{r}
@@ -127,7 +128,7 @@ This code creates new IDs for individuals with one known parent and a missing ot
 
 ## Visualize the Pedigree
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 
 #fixParents(id=df_got$ID, dadid=df_got$dadID, momid=df_got$momID, sex=df_got$sex, missid = NA)
 
