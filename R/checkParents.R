@@ -145,7 +145,7 @@ checkParentIDs <- function(ped, verbose = FALSE, repair = FALSE,
 
   # Are any parents in both momID and dadID?
   momdad <- intersect(ped$dadID, ped$momID)
-  if (!is.na(momdad) && length(momdad) > 0) {
+  if (length(momdad) > 0&& !is.na(momdad)) {
     validation_results$parents_in_both <- momdad
     if (verbose) {
       cat(paste(
@@ -185,21 +185,38 @@ checkParentIDs <- function(ped, verbose = FALSE, repair = FALSE,
 
 
 
-      if (!is.na(validation_results$female_var)) {
+      if (length(validation_results$female_var) > 0 && !is.na(validation_results$female_var)){
         corrected_moms <- ped$ID[mom_indices[!is.na(mom_indices)]]
         ped$sex[mom_indices[!is.na(mom_indices)]] <- validation_results$female_var
         changes$corrected_mom_sex <- corrected_moms
         if (verbose && length(corrected_moms) > 0) {
           cat("Corrected sex of moms for:", paste(corrected_moms, collapse = ", "), "\n")
         }
+      } else {
+        corrected_moms <- ped$ID[mom_indices[!is.na(mom_indices)]]
+        ped$sex[mom_indices[!is.na(mom_indices)]] <- 0
+
+        changes$corrected_mom_sex <- corrected_moms
+        if (verbose && length(corrected_moms) > 0) {
+          cat("Corrected sex of moms for:", paste(corrected_moms, collapse = ", "), "\n")
+        }
+
       }
-      if (!is.na(validation_results$male_var)) {
+      if (length(validation_results$male_var) > 0 && !is.na(validation_results$male_var)){
         corrected_dads <- ped$ID[dad_indices[!is.na(dad_indices)]]
         ped$sex[dad_indices[!is.na(dad_indices)]] <- validation_results$male_var
         changes$corrected_dad_sex <- corrected_dads
         if (verbose && length(corrected_dads) > 0) {
           cat("Corrected sex of dads for:", paste(corrected_dads, collapse = ", "), "\n")
         }
+      } else {
+        corrected_dads <- ped$ID[dad_indices[!is.na(dad_indices)]]
+        ped$sex[dad_indices[!is.na(dad_indices)]] <- 1
+        changes$corrected_dad_sex <- corrected_dads
+        if (verbose && length(corrected_dads) > 0) {
+          cat("Corrected sex of dads for:", paste(corrected_dads, collapse = ", "), "\n")
+        }
+
       }
     }
   }
@@ -218,7 +235,7 @@ checkParentIDs <- function(ped, verbose = FALSE, repair = FALSE,
       new_entry$ID <- new_id
       new_entry$dadID <- NA
       new_entry$momID <- NA
-      new_entry$sex <- validation_results$male_var
+      new_entry$sex <- if(length(validation_results$male_var) > 0 && !is.na(validation_results$male_var)) validation_results$male_var else 1
       new_entries <- rbind(new_entries, new_entry)
     }
 
@@ -231,7 +248,7 @@ checkParentIDs <- function(ped, verbose = FALSE, repair = FALSE,
       new_entry$ID <- new_id
       new_entry$dadID <- NA
       new_entry$momID <- NA
-      new_entry$sex <- validation_results$female_var
+      new_entry$sex <- if(length(validation_results$female_var) > 0 && !is.na(validation_results$female_var)) validation_results$female_var else 0
       new_entries <- rbind(new_entries, new_entry)
     }
 
