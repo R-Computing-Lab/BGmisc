@@ -9,6 +9,7 @@
 #' @param combine_cols A logical value indicating whether to combine columns with duplicate values.
 #' @param verbose A logical value indicating whether to print messages.
 #' @param skinny A logical value indicating whether to return a skinny data frame.
+#' @param update_rate numeric. The rate at which to print progress
 #' @param ... Additional arguments to be passed to the function.
 #' @return A data frame containing information about individuals, with the following potential columns:
 #' - `id`: ID of the individual
@@ -53,6 +54,7 @@ readGedcom <- function(file_path,
                        remove_empty_cols = TRUE,
                        combine_cols = TRUE,
                        skinny = FALSE,
+                       update_rate = 1000,
                        ...) {
   # Checks
   if (!file.exists(file_path)) stop("File does not exist: ", file_path)
@@ -73,11 +75,15 @@ readGedcom <- function(file_path,
     identifiers = c("id", "momID", "dadID"),
     names = c(
       "name", "name_given", "name_given_pieces",
-      "name_surn", "name_surn_pieces", "name_marriedsurn", "name_nick", "name_npfx", "name_nsfx"
+      "name_surn", "name_surn_pieces", "name_marriedsurn",
+      "name_nick", "name_npfx", "name_nsfx"
     ),
     sex = c("sex"),
     birth = c("birth_date", "birth_lat", "birth_long", "birth_place"),
-    death = c("death_caus", "death_date", "death_lat", "death_long", "death_place"),
+    death = c(
+      "death_caus", "death_date",
+      "death_lat", "death_long", "death_place"
+    ),
     attributes = c(
       "attribute_caste", "attribute_children", "attribute_description",
       "attribute_education", "attribute_idnumber", "attribute_marriages",
@@ -91,7 +97,10 @@ readGedcom <- function(file_path,
   all_var_names <- unlist(var_names, use.names = FALSE)
 
   # Initialize all variables to NA
-  vars <- stats::setNames(as.list(rep(NA_character_, length(all_var_names))), all_var_names)
+  vars <- stats::setNames(
+    as.list(rep(NA_character_, length(all_var_names))),
+    all_var_names
+  )
 
   df_temp <- as.data.frame(matrix(nrow = 1, ncol = length(all_var_names)))
   names(df_temp) <- all_var_names
@@ -107,7 +116,10 @@ readGedcom <- function(file_path,
       df_temp <- rbind(df_temp, line_to_write)
 
       # Reset all variables to NA
-      vars <- stats::setNames(as.list(rep(NA_character_, length(all_var_names))), all_var_names)
+      vars <- stats::setNames(as.list(rep(
+        NA_character_,
+        length(all_var_names)
+      )), all_var_names)
 
       vars$id <- stringr::str_extract(tmpv, "(?<=@.)\\d*(?=@)")
       next
@@ -269,7 +281,7 @@ readGedcom <- function(file_path,
     vars <- result$vars
     if (result$matched) next
 
-    if (verbose && i %% 1000 == 0) {
+    if (verbose && i %% update_rate == 0) {
       cat("Processed", i, "lines\n")
     }
   }
@@ -296,32 +308,8 @@ readGedcom <- function(file_path,
     df_temp <- processParents(df_temp, datasource = "gedcom")
   }
 
-
-
   if (combine_cols) {
-    if (verbose) {
-      print("Combining Duplicate Columns")
-    }
-    # need to check if any values aren't NA in name_given_pieces and name_surn_pieces
-    # Combine `name_given` and `name_given_pieces`
-
-    # Combine `name_given` and `name_given_pieces`
-    if (!all(is.na(df_temp$name_given_pieces)) | !all(is.na(df_temp$name_given))) {
-      result <- combine_columns(df_temp$name_given, df_temp$name_given_pieces)
-      df_temp$name_given <- result$combined
-      if (!result$retain_col2) {
-        df_temp$name_given_pieces <- NULL
-      }
-    }
-
-    # Combine `name_surn` and `name_surn_pieces`
-    if (!all(is.na(df_temp$name_surn_pieces)) | !all(is.na(df_temp$name_surn))) {
-      result <- combine_columns(df_temp$name_surn, df_temp$name_surn_pieces)
-      df_temp$name_surn <- result$combined
-      if (!result$retain_col2) {
-        df_temp$name_surn_pieces <- NULL
-      }
-    }
+    df_temp <- collapseNames(verbose = verbose, df_temp = df_temp)
   }
 
   if (remove_empty_cols) {
@@ -564,4 +552,38 @@ process_tag <- function(tag, field_name, pattern_rows, line, vars,
     matched <- TRUE
   }
   return(list(vars = vars, matched = matched))
+}
+
+#' collapse Names
+#'
+#' This function combines the `name_given` and `name_given_pieces` columns in a data frame.
+#'
+#' @inheritParams readGedcom
+#' @param df_temp A data frame containing the columns to be combined.
+
+collapseNames <- function(verbose, df_temp) {
+  if (verbose) {
+    print("Combining Duplicate Columns")
+  }
+  # need to check if any values aren't NA in name_given_pieces and name_surn_pieces
+  # Combine `name_given` and `name_given_pieces`
+
+  # Combine `name_given` and `name_given_pieces`
+  if (!all(is.na(df_temp$name_given_pieces)) | !all(is.na(df_temp$name_given))) {
+    result <- combine_columns(df_temp$name_given, df_temp$name_given_pieces)
+    df_temp$name_given <- result$combined
+    if (!result$retain_col2) {
+      df_temp$name_given_pieces <- NULL
+    }
+  }
+
+  # Combine `name_surn` and `name_surn_pieces`
+  if (!all(is.na(df_temp$name_surn_pieces)) | !all(is.na(df_temp$name_surn))) {
+    result <- combine_columns(df_temp$name_surn, df_temp$name_surn_pieces)
+    df_temp$name_surn <- result$combined
+    if (!result$retain_col2) {
+      df_temp$name_surn_pieces <- NULL
+    }
+  }
+  return(df_temp)
 }

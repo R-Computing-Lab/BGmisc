@@ -12,7 +12,7 @@
 #' @export
 #' @seealso \code{\link{SimPed}} for the main function that uses this supporting function.
 
-evenInsert <- function(m, n, verbose = FALSE) {
+insertEven <- function(m, n, verbose = FALSE) {
   if (length(m) > length(n)) {
     temp <- m
     m <- n
@@ -36,3 +36,7 @@ evenInsert <- function(m, n, verbose = FALSE) {
 
   return(vec)
 }
+
+#' @rdname insertEven
+#' @export
+evenInsert <- insertEven

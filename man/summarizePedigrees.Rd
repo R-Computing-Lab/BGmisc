@@ -17,7 +17,7 @@ summarizePedigrees(
   include_founder = FALSE,
   founder_sort_var = NULL,
   nbiggest = 5,
-  noldest = 5,
+  noldest = nbiggest,
   skip_var = NULL,
   five_num_summary = FALSE,
   network_checks = FALSE,

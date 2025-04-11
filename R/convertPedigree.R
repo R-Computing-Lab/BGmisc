@@ -224,7 +224,7 @@ ped2com <- function(ped, component,
   } else {
     # isChild is the 'S' matrix from RAM
 
-    isChild <- isChild(isChild_method=isChild_method, ped=ped)
+    isChild <- isChild(isChild_method = isChild_method, ped = ped)
 
     if (saveable) {
       saveRDS(isChild, file = checkpoint_files$isChild)

@@ -22,6 +22,6 @@ test_that("checksif single parents found correctly in ASOIAF dataset", {
   single_moms <- length(df_asoiaf$id[is.na(df_asoiaf$dadID) & !is.na(df_asoiaf$momID)])
   expect_equal(single_moms, length(results$missing_fathers))
   expect_equal(single_dads, length(results$missing_mothers))
-  repaired_df <- checkParentIDs(df_asoiaf, verbose = FALSE, repair = TRUE)
+  repaired_df <- checkParentIDs(df_asoiaf, verbose = FALSE, repair = TRUE, parentswithoutrow = TRUE)
   expect_equal(nrow(repaired_df), nrow(df_asoiaf) + single_moms + single_dads)
 })

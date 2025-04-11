@@ -64,6 +64,14 @@ calculateRelatedness <- function(
   return(coef)
 }
 
+
+#' @rdname calculateRelatedness
+#' @export
+related_coef <- function(...) {
+  warning("The 'related_coef' function is deprecated. Please use 'calculateRelatedness' instead.")
+  calculateRelatedness(...)
+}
+
 #' Infer Relatedness Coefficient
 #'
 #' @description
@@ -79,6 +87,7 @@ calculateRelatedness <- function(
 #' @param aceA Numeric. Proportion of variance attributable to additive genetic variance. Must be between 0 and 1. Default is 0.9.
 #' @param aceC Numeric. Proportion of variance attributable to shared environmental variance. Must be between 0 and 1. Default is 0.
 #' @param sharedC Numeric. Proportion of shared environment shared between the two individuals. Must be between 0 (no shared environment) and 1 (completely shared environment). Default is 0.
+#' @param ... Further named arguments that may be passed to another function.
 #'
 #' @return
 #' Numeric. The calculated relatedness coefficient (`est_r`).
@@ -95,6 +104,13 @@ inferRelatedness <- function(obsR, aceA = .9, aceC = 0, sharedC = 0) {
   }
   calc_r <- (obsR - sharedC * aceC) / aceA
   return(calc_r)
+}
+
+#' @rdname inferRelatedness
+#' @export
+relatedness <- function(...) {
+  warning("The 'relatedness' function is deprecated. Please use 'inferRelatedness' instead.")
+  inferRelatedness(...)
 }
 
 #' Falconer's Formula

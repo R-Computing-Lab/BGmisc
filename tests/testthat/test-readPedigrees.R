@@ -214,10 +214,10 @@ test_that("readWikifamilytree reads a string correctly", {
 
 # read E:/Dropbox/Lab/Research/Projects/2024/BGMiscJoss/BGmisc_main/data-raw/Targaryen tree Dance.txt
 
-#test_that("readWikifamilytree reads a file correctly", {
-  # Create a temporary WikiFamilyTree file for testing
-  # Example usage
+# test_that("readWikifamilytree reads a file correctly", {
+# Create a temporary WikiFamilyTree file for testing
+# Example usage
 #  family_tree_file_path <- "data-raw/Targaryen tree Dance.txt" # system.file("extdata", "Targaryen tree Dance.txt", package = "BGmisc")
 
-  #  result <- readWikifamilytree(file_path=family_tree_file_path)
-#})
+#  result <- readWikifamilytree(file_path=family_tree_file_path)
+# })

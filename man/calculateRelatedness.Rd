@@ -2,6 +2,7 @@
 % Please edit documentation in R/computeRelatedness.R
 \name{calculateRelatedness}
 \alias{calculateRelatedness}
+\alias{related_coef}
 \title{Calculate Relatedness Coefficient}
 \usage{
 calculateRelatedness(
@@ -18,6 +19,8 @@ calculateRelatedness(
   denom_m = FALSE,
   ...
 )
+
+related_coef(...)
 }
 \arguments{
 \item{generations}{Number of generations back of common ancestors the pair share.}

@@ -2,9 +2,12 @@
 % Please edit documentation in R/computeRelatedness.R
 \name{inferRelatedness}
 \alias{inferRelatedness}
+\alias{relatedness}
 \title{Infer Relatedness Coefficient}
 \usage{
 inferRelatedness(obsR, aceA = 0.9, aceC = 0, sharedC = 0)
+
+relatedness(...)
 }
 \arguments{
 \item{obsR}{Numeric. Observed correlation between the two groups. Must be between -1 and 1.}
@@ -14,6 +17,8 @@ inferRelatedness(obsR, aceA = 0.9, aceC = 0, sharedC = 0)
 \item{aceC}{Numeric. Proportion of variance attributable to shared environmental variance. Must be between 0 and 1. Default is 0.}
 
 \item{sharedC}{Numeric. Proportion of shared environment shared between the two individuals. Must be between 0 (no shared environment) and 1 (completely shared environment). Default is 0.}
+
+\item{...}{Further named arguments that may be passed to another function.}
 }
 \value{
 Numeric. The calculated relatedness coefficient (`est_r`).
