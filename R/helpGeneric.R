@@ -24,10 +24,9 @@ rmvn <- function(n, sigma) {
 #' @param x vector of any length
 #' @return replaces null values in a vector to NA
 #'
-nullToNA <- function(x) {
+null2NA <- function(x) {
   if (length(x) == 0) {
     x <- NA
-
     # Handle case when x is a list
   } else if (is.list(x)) {
     for (i in seq_along(x)) {
@@ -39,6 +38,9 @@ nullToNA <- function(x) {
   return(x)
 }
 
+#' @rdname null2NA
+#'
+nullToNA <- null2NA
 
 #' modified tryCatch function
 #'
@@ -46,10 +48,14 @@ nullToNA <- function(x) {
 #' @keywords internal
 #' @return Fuses the nullToNA function with efunc
 #'
-try_na <- function(x) {
-  nullToNA(tryCatch(x, error = efunc))
+tryNA <- function(x) {
+  null2NA(tryCatch(x, error = efunc))
 }
+#' @rdname tryNA
+#' @keywords internal
 
+#'
+try_na <- tryNA
 #' Compute the null space of a matrix
 #'
 #' @param M a matrix of which the null space is desired

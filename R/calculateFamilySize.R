@@ -5,7 +5,7 @@
 #' @param marR Mating rate (numeric value ranging from 0 to 1).
 #' @return Returns a vector containing the number of individuals in every generation.
 #' @export
-allGens <- function(kpc, Ngen, marR) {
+calcAllGens <- function(kpc, Ngen, marR) {
   # Check if the number of generations is valid
   if (Ngen < 1) {
     stop("The number of generations should be an integer greater or equal than 1")
@@ -23,14 +23,16 @@ allGens <- function(kpc, Ngen, marR) {
   }
   return(allGens)
 }
-
+#' @rdname calcAllGens
+#' @export
+allGens <- calcAllGens
 
 #' sizeAllGens
 #' An internal supporting function for \code{simulatePedigree}.
-#' @inheritParams allGens
+#' @inheritParams calcAllGens
 #' @return Returns a vector including the number of individuals in every generation.
 
-sizeAllGens <- function(kpc, Ngen, marR) {
+calcFamilySizeByGen <- function(kpc, Ngen, marR) {
   Nmid <- Ngen - 2
   midGens <- numeric(length = Nmid)
 
@@ -46,14 +48,16 @@ sizeAllGens <- function(kpc, Ngen, marR) {
   # print(allGens)
   return(allGens)
 }
-
+#' @rdname calcFamilySizeByGen
+#' @export
+sizeAllGens <- calcFamilySizeByGen
 
 #' famSizeCal
 #' A function to calculate the total number of individuals in a pedigree given parameters. This is a supporting function for function \code{simulatePedigree}
-#' @inheritParams allGens
+#' @inheritParams calcAllGens
 #' @return Returns a numeric value indicating the total pedigree size.
 #' @export
-famSizeCal <- function(kpc, Ngen, marR) {
+calcFamilySize <- function(kpc, Ngen, marR) {
   if (Ngen < 1) {
     stop("The number of generations should be an integer greater than or equal to 1")
   } else if (Ngen == 1) {
@@ -71,3 +75,8 @@ famSizeCal <- function(kpc, Ngen, marR) {
   }
   return(size)
 }
+
+#' @rdname calcFamilySize
+#' @export
+#'
+famSizeCal <- calcFamilySize

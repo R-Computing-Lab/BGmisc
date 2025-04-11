@@ -24,7 +24,6 @@ buildWithinGenerations <- function(sizeGens, marR, sexR, Ngen) {
 
     df_Ngen$sex <- determineSex(idGen = idGen, sexR = sexR)
 
-
     # print(paste("tiger",i))
     # The first generation
     if (i == 1) {
@@ -181,10 +180,8 @@ buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose, marR, sexR,
       # count the number of couples in the i th gen
       countCouple <- (nrow(df_Ngen) - sum(is.na(df_Ngen$spID))) * .5
 
-
       # Now, assign couple IDs for the current generation
       df_Ngen <- assignCoupleIds(df_Ngen)
-
 
       # get the number of linked female and male children after excluding the single children
       # get a vector of single person id in the ith generation
@@ -194,9 +191,11 @@ buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose, marR, sexR,
       SingleM <- sum(df_Ngen$sex == "M" & is.na(df_Ngen$spID))
       CoupleM <- N_LinkedMale - SingleM
 
-      df_Fam[df_Fam$gen == i, ] <- markPotentialChildren(df_Ngen = df_Ngen, i = i, Ngen = Ngen, sizeGens = sizeGens, CoupleF = CoupleF)
-
-
+      df_Fam[df_Fam$gen == i, ] <- markPotentialChildren(df_Ngen = df_Ngen,
+                                                         i = i,
+                                                         Ngen = Ngen,
+                                                         sizeGens = sizeGens,
+                                                         CoupleF = CoupleF)
       if (verbose) {
         print(
           "Step 2.2: mark a group of potential parents in the i-1 th generation"
@@ -250,7 +249,6 @@ buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose, marR, sexR,
 
         # generate link kids to the couples
         random_numbers <- adjustKidsPerCouple(nMates = sum(df_Ngen$ifparent) / 2, kpc = kpc, rd_kpc = rd_kpc)
-
 
         # cat("final random numbers",random_numbers, "\n")
         # cat("mean",sum(random_numbers)/length(random_numbers), "\n")
@@ -390,8 +388,6 @@ simulatePedigree <- function(kpc = 3,
     df_Fam = df_Fam, Ngen = Ngen,
     sizeGens = sizeGens, verbose = verbose, marR = marR, sexR = sexR, kpc = kpc, rd_kpc = rd_kpc
   )
-
-
 
   df_Fam <- df_Fam[, 1:7]
   df_Fam <- df_Fam[!(is.na(df_Fam$pat) & is.na(df_Fam$mat) & is.na(df_Fam$spID)), ]

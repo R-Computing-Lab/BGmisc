@@ -255,7 +255,7 @@ dropLink <- function(ped,
     if (!is.na(ID_drop)) {
       ped[ped$ID %in% ID_drop, c("dadID", "momID")] <- NA_integer_
     } else {
-      warning("No individual is dropped from his/her parents.")
+      warning("No individual is dropped from their parents.")
     }
   } else {
     ped[ped$ID == ID_drop, c("dadID", "momID")] <- NA_integer_
