@@ -2,9 +2,33 @@
 % Please edit documentation in R/readGedcom.R
 \name{readGedcom}
 \alias{readGedcom}
+\alias{readGed}
+\alias{readgedcom}
 \title{Read a GEDCOM File}
 \usage{
 readGedcom(
+  file_path,
+  verbose = FALSE,
+  add_parents = TRUE,
+  remove_empty_cols = TRUE,
+  combine_cols = TRUE,
+  skinny = FALSE,
+  update_rate = 1000,
+  ...
+)
+
+readGed(
+  file_path,
+  verbose = FALSE,
+  add_parents = TRUE,
+  remove_empty_cols = TRUE,
+  combine_cols = TRUE,
+  skinny = FALSE,
+  update_rate = 1000,
+  ...
+)
+
+readgedcom(
   file_path,
   verbose = FALSE,
   add_parents = TRUE,
