@@ -235,12 +235,11 @@ summarizePedigrees <- function(ped, famID = "famID", personID = "ID",
       )
     }
   }
-
   return(output)
 }
 
-# Function to calculate summary statistics for all numeric variables
 
+#' Function to calculate summary statistics for all numeric variables
 #' This function calculates summary statistics for all numeric variables in a data.table. It is supposed to be used internally by the \code{summarize_pedigree} function.
 #' @inheritParams summarizePedigrees
 #' @param data A data.table containing the pedigree data.
@@ -352,6 +351,9 @@ summarizeMatrilines <- function(ped, famID = "famID", personID = "ID",
   )
 }
 
+
+
+
 #' Summarize the paternal lines in a pedigree
 #' @inheritParams summarizePedigrees
 #' @seealso [summarizePedigrees ()]
@@ -432,3 +434,19 @@ findBiggest <- function(foo_summary_dt, nbiggest, n_foo) {
   )])
   return(biggest_foo)
 }
+
+#' @rdname summarizePedigrees
+#' @export
+summarisePedigrees <- summarizePedigrees
+
+#' @rdname summarizeFamilies
+#' @export
+summariseFamilies <- summarizeFamilies
+
+#' @rdname summarizeMatrilines
+#' @export
+summariseMatrilines <- summarizeMatrilines
+
+#' @rdname summarizePatrilines
+#' @export
+summarisePatrilines <- summarizePatrilines

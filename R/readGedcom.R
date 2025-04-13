@@ -587,3 +587,10 @@ collapseNames <- function(verbose, df_temp) {
   }
   return(df_temp)
 }
+#' @rdname readGedcom
+#' @export
+readGed <- readGedcom
+
+#' @rdname readGedcom
+#' @export
+readgedcom <- readGedcom
