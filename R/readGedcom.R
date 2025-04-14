@@ -48,7 +48,7 @@
 #' - `FAMC`: ID(s) of the family where the individual is a child
 #' - `FAMS`: ID(s) of the family where the individual is a spouse
 #' @export
-readGedcom <- function(file_path,
+readGedcom.legacy <- function(file_path,
                        verbose = FALSE,
                        add_parents = TRUE,
                        remove_empty_cols = TRUE,
