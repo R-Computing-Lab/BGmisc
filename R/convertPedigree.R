@@ -31,7 +31,7 @@ ped2com <- function(ped, component,
                     flatten.diag = FALSE,
                     standardize.colnames = TRUE,
                     transpose_method = "tcrossprod",
-                    adjacency_method = "indexed",
+                    adjacency_method = "direct",
                     isChild_method = "classic",
                     saveable = FALSE,
                     resume = FALSE,
@@ -615,8 +615,18 @@ ped2ce <- function(ped,
     iss <- c(mIDs$rID, dIDs$rID)
     jss <- c(mIDs$cID, dIDs$cID)
   } else if (component %in% c("common nuclear")) {
-    stop("Common Nuclear component is not yet implemented for direct method.  Use index method.\n")
+    message("Common Nuclear component is not yet implemented for direct method.  Using index method.\n")
     # change to warning and call indexed version
+    list_of_adjacency <- .adjIndexed(ped = ped, component = component,
+      saveable = saveable, resume = resume,
+      save_path = save_path, verbose = verbose,
+      lastComputed = lastComputed, nr = nr,
+      checkpoint_files = checkpoint_files,
+      update_rate = update_rate, parList = parList,
+      lens = lens, save_rate_parlist = save_rate_parlist,
+      ...
+    )
+    return(list_of_adjacency)
   } else if (component %in% c("mitochondrial")) {
     mIDs <- stats::na.omit(data.frame(rID = ped$ID, cID = ped$momID))
     iss <- c(mIDs$rID)
@@ -641,7 +651,7 @@ ped2ce <- function(ped,
 #' @param checkpoint_files a list of checkpoint files
 
 compute_parent_adjacency <- function(ped, component,
-                                     adjacency_method = "indexed",
+                                     adjacency_method = "direct",
                                      saveable, resume,
                                      save_path, verbose,
                                      lastComputed, nr, checkpoint_files, update_rate,
