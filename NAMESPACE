@@ -2,6 +2,7 @@
 
 export(SimPed)
 export(allGens)
+export(assignCoupleIDs)
 export(calcAllGens)
 export(calcFamilySize)
 export(calculateRelatedness)

@@ -14,6 +14,7 @@ readGedcom(
   combine_cols = TRUE,
   skinny = FALSE,
   update_rate = 1000,
+  post_process = TRUE,
   ...
 )
 
@@ -25,6 +26,7 @@ readGed(
   combine_cols = TRUE,
   skinny = FALSE,
   update_rate = 1000,
+  post_process = TRUE,
   ...
 )
 
@@ -36,6 +38,7 @@ readgedcom(
   combine_cols = TRUE,
   skinny = FALSE,
   update_rate = 1000,
+  post_process = TRUE,
   ...
 )
 }

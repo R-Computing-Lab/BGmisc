@@ -55,6 +55,7 @@ readGedcom <- function(file_path,
                        combine_cols = TRUE,
                        skinny = FALSE,
                        update_rate = 1000,
+                       post_process = TRUE,
                        ...) {
   # Checks
   if (!file.exists(file_path)) stop("File does not exist: ", file_path)
@@ -300,6 +301,39 @@ readGedcom <- function(file_path,
   if (nrow(df_temp) != num_rows$num_indi_rows) {
     warning("The number of people found in the processed file does not match the number of individuals raw data")
   }
+
+  if(post_process){
+    if (verbose) {
+      print("Post-processing data frame")
+    }
+    # Remove the first row (empty)
+df_temp <- postProcessGedcom(
+      df_temp = df_temp,
+      remove_empty_cols = remove_empty_cols,
+      combine_cols = combine_cols,
+      add_parents = add_parents,
+      skinny = skinny,
+      verbose = verbose
+    )
+
+  }
+
+  return(df_temp)
+}
+
+#' Post-process GEDCOM Data Frame
+#'
+#' @inheritParams readGedcom
+#' @inheritParams mapFAMS2parents
+#' @return A data frame with processed information.
+
+postProcessGedcom <- function(df_temp,
+                              remove_empty_cols = TRUE,
+                                    combine_cols = TRUE,
+                                    add_parents = TRUE,
+                                    skinny = TRUE,
+                                    verbose = FALSE
+){
   # Add mom and dad ids
   if (add_parents) {
     if (verbose) {
@@ -308,28 +342,29 @@ readGedcom <- function(file_path,
     df_temp <- processParents(df_temp, datasource = "gedcom")
   }
 
-  if (combine_cols) {
-    df_temp <- collapseNames(verbose = verbose, df_temp = df_temp)
-  }
-
-  if (remove_empty_cols) {
-    # Remove empty columns
-    if (verbose) {
-      print("Removing empty columns")
-    }
-    df_temp <- df_temp[, colSums(is.na(df_temp)) < nrow(df_temp)]
-  }
-  if (skinny) {
-    if (verbose) {
-      print("Slimming down the data frame")
-    }
-    df_temp <- df_temp[, colSums(is.na(df_temp)) < nrow(df_temp)]
-    df_temp$FAMC <- NULL
-    df_temp$FAMS <- NULL
-  }
-  return(df_temp)
+if (combine_cols) {
+  df_temp <- collapseNames(verbose = verbose, df_temp = df_temp)
 }
 
+if (remove_empty_cols) {
+  # Remove empty columns
+  if (verbose) {
+    print("Removing empty columns")
+  }
+  df_temp <- df_temp[, colSums(is.na(df_temp)) < nrow(df_temp)]
+}
+if (skinny) {
+  if (verbose) {
+    print("Slimming down the data frame")
+  }
+  df_temp <- df_temp[, colSums(is.na(df_temp)) < nrow(df_temp)]
+  df_temp$FAMC <- NULL
+  df_temp$FAMS <- NULL
+}
+
+return(df_temp)
+
+}
 
 #' Create a mapping of family IDs to parent IDs
 #'

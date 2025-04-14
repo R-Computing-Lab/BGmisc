@@ -4,7 +4,7 @@
 \alias{determineSex}
 \title{Determine Sex of Offspring}
 \usage{
-determineSex(idGen, sexR)
+determineSex(idGen, sexR, code_male = "M", code_female = "F")
 }
 \arguments{
 \item{idGen}{Vector of IDs for the generation.}
