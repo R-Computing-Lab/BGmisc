@@ -47,7 +47,7 @@
 #' - `attribute_title`: Title of the individual
 #' - `FAMC`: ID(s) of the family where the individual is a child
 #' - `FAMS`: ID(s) of the family where the individual is a spouse
-#' @internal
+#' @keywords internal
 readGedcom.legacy <- function(file_path,
                        verbose = FALSE,
                        add_parents = TRUE,

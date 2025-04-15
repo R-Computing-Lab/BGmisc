@@ -14,21 +14,22 @@ postProcessGedcom(
 )
 }
 \arguments{
-\item{df_temp}{A data frame containing information about individuals.}
+\item{df_temp}{A data frame produced by \code{readGedcom()}.}
 
-\item{remove_empty_cols}{A logical value indicating whether to remove columns with all missing values.}
+\item{remove_empty_cols}{Logical indicating whether to remove columns that are entirely missing.}
 
-\item{combine_cols}{A logical value indicating whether to combine columns with duplicate values.}
+\item{combine_cols}{Logical indicating whether to combine columns with duplicate values.}
 
-\item{add_parents}{A logical value indicating whether to add parents to the data frame.}
+\item{add_parents}{Logical indicating whether to add parent information.}
 
-\item{skinny}{A logical value indicating whether to return a skinny data frame.}
+\item{skinny}{Logical indicating whether to slim down the data frame.}
 
-\item{verbose}{A logical value indicating whether to print messages.}
+\item{verbose}{Logical indicating whether to print progress messages.}
 }
 \value{
-A data frame with processed information.
+The post-processed data frame.
 }
 \description{
-Post-process GEDCOM Data Frame
+This function optionally adds parent information, combines duplicate columns,
+and removes empty columns from the GEDCOM data frame.
 }

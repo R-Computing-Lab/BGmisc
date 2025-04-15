@@ -47,7 +47,7 @@
 #' - `FAMC`: ID(s) of the family where the individual is a child
 #' - `FAMS`: ID(s) of the family where the individual is a spouse
 #' @export
-readGedcom.alpha <- function(file_path,
+readGedcom <- function(file_path,
                        verbose = FALSE,
                        add_parents = TRUE,
                        remove_empty_cols = TRUE,
@@ -67,7 +67,7 @@ readGedcom.alpha <- function(file_path,
   if (verbose) message("File is ", total_lines, " lines long")
 
   # Count pattern occurrences (pattern_rows remains used in subfunctions)
-  pattern_rows <- countPatternRows.alpha(data.frame(X1 = lines))
+  pattern_rows <- countPatternRows(data.frame(X1 = lines))
 
   # List of variables to initialize
   all_var_names <- unlist(list(
@@ -85,10 +85,10 @@ readGedcom.alpha <- function(file_path,
   ), use.names = FALSE)
 
   # Split the file into blocks; each block corresponds to one individual.
-  blocks <- splitIndividuals.alpha(lines, verbose)
+  blocks <- splitIndividuals(lines, verbose)
 
   # Parse each individual block into a record (a named list)
-  records <- lapply(blocks, parseIndividualBlock.alpha,
+  records <- lapply(blocks, parseIndividualBlock,
                     pattern_rows = pattern_rows,
                     all_var_names = all_var_names, verbose = verbose)
 
@@ -110,7 +110,7 @@ readGedcom.alpha <- function(file_path,
   # Run post-processing if requested.
   if (post_process) {
     if (verbose) message("Post-processing data frame")
-    df_temp <- postProcessGedcom.alpha(
+    df_temp <- postProcessGedcom(
       df_temp = df_temp,
       remove_empty_cols = remove_empty_cols,
       combine_cols = combine_cols,
@@ -132,7 +132,7 @@ readGedcom.alpha <- function(file_path,
 #' @param lines A character vector of lines from the GEDCOM file.
 #' @param verbose Logical indicating whether to output progress messages.
 #' @return A list of character vectors, each representing one individual.
-splitIndividuals.alpha <- function(lines, verbose = FALSE) {
+splitIndividuals <- function(lines, verbose = FALSE) {
   indi_idx <- grep("@ INDI", lines)
   if (length(indi_idx) == 0) return(list())
 
@@ -153,7 +153,7 @@ splitIndividuals.alpha <- function(lines, verbose = FALSE) {
 #'
 #' @param all_var_names A character vector of variable names.
 #' @return A named list representing an empty individual record.
-initializeRecord.alpha <- function(all_var_names) {
+initializeRecord <- function(all_var_names) {
   setNames(as.list(rep(NA_character_, length(all_var_names))), all_var_names)
 }
 
@@ -167,8 +167,8 @@ initializeRecord.alpha <- function(all_var_names) {
 #' @param verbose Logical indicating whether to print progress messages.
 #' @return A named list representing the parsed record for the individual, or NULL if no ID is found.
 #' @keywords internal
-parseIndividualBlock.alpha <- function(block, pattern_rows, all_var_names, verbose = FALSE) {
-  record <- initializeRecord.alpha(all_var_names)
+parseIndividualBlock <- function(block, pattern_rows, all_var_names, verbose = FALSE) {
+  record <- initializeRecord(all_var_names)
   n_lines <- length(block)
 
   # Loop through the block by index so that we can look ahead for event details.
@@ -185,19 +185,19 @@ parseIndividualBlock.alpha <- function(block, pattern_rows, all_var_names, verbo
 
     # Special processing for full name using " NAME" tag.
     if (grepl(" NAME", line) && pattern_rows$num_name_rows > 0) {
-      record <- parseNameLine.alpha(line, record)
+      record <- parseNameLine(line, record)
       i <- i + 1
       next
     }
 
     # Process birth and death events by consuming multiple lines.
     if (grepl(" BIRT", line) && pattern_rows$num_birt_rows > 0) {
-      record <- processEventLine.alpha("birth", block, i, record, pattern_rows)
+      record <- processEventLine("birth", block, i, record, pattern_rows)
       i <- i + 1  # Skip further processing of this line.
       next
     }
     if (grepl(" DEAT", line) && pattern_rows$num_deat_rows > 0) {
-      record <- processEventLine.alpha("death", block, i, record, pattern_rows)
+      record <- processEventLine("death", block, i, record, pattern_rows)
       i <- i + 1
       next
     }
@@ -212,7 +212,7 @@ parseIndividualBlock.alpha <- function(block, pattern_rows, all_var_names, verbo
       list(tag = "NSFX", field = "name_nsfx", mode = "replace"),
       list(tag = "_MARNM", field = "name_marriedsurn", mode = "replace")
     )
-    out <- applyTagMappings.alpha(line, record, pattern_rows, name_piece_mappings)
+    out <- applyTagMappings(line, record, pattern_rows, name_piece_mappings)
     if (out$matched) { record <- out$record
     i <- i + 1
     next }
@@ -234,7 +234,7 @@ parseIndividualBlock.alpha <- function(block, pattern_rows, all_var_names, verbo
       list(tag = "SSN",  field = "attribute_ssn", mode = "replace"),
       list(tag = "TITL", field = "attribute_title", mode = "replace")
     )
-    out <- applyTagMappings.alpha(line, record, pattern_rows, attribute_mappings)
+    out <- applyTagMappings(line, record, pattern_rows, attribute_mappings)
     if (out$matched) { record <- out$record
     i <- i + 1
     next }
@@ -246,7 +246,7 @@ parseIndividualBlock.alpha <- function(block, pattern_rows, all_var_names, verbo
       list(tag = "FAMS", field = "FAMS", mode = "append",
            extractor = function(x) stringr::str_extract(x, "(?<=@.)\\d*(?=@)"))
     )
-    out <- applyTagMappings.alpha(line, record, pattern_rows, relationship_mappings)
+    out <- applyTagMappings(line, record, pattern_rows, relationship_mappings)
     if (out$matched) { record <- out$record
     i <- i + 1
     next }
@@ -267,8 +267,8 @@ parseIndividualBlock.alpha <- function(block, pattern_rows, all_var_names, verbo
 #' @param line A character string containing the name line.
 #' @param record A named list representing the individual's record.
 #' @return The updated record with parsed name information.
-parseNameLine.alpha <- function(line, record) {
-  record$name <- extract_info.alpha(line, "NAME")
+parseNameLine <- function(line, record) {
+  record$name <- extract_info(line, "NAME")
   record$name_given <- stringr::str_extract(record$name, ".*(?= /)")
   record$name_surn <- stringr::str_extract(record$name, "(?<=/).*(?=/)")
   record$name <- stringr::str_squish(stringr::str_replace(record$name, "/", " "))
@@ -287,19 +287,19 @@ parseNameLine.alpha <- function(line, record) {
 #' @param pattern_rows A list with counts of GEDCOM tag occurrences.
 #' @return The updated record with parsed event information.#
 # For "death": expect DATE on line i+1, PLAC on i+2, CAUS on i+3, LATI on i+4, LONG on i+5.
-processEventLine.alpha <- function(event, block, i, record, pattern_rows) {
+processEventLine <- function(event, block, i, record, pattern_rows) {
   n_lines <- length(block)
   if (event == "birth") {
-    if (i + 1 <= n_lines) record$birth_date <- extract_info.alpha(block[i+1], "DATE")
-    if (i + 2 <= n_lines) record$birth_place <- extract_info.alpha(block[i+2], "PLAC")
-    if (i + 4 <= n_lines) record$birth_lat <- extract_info.alpha(block[i+4], "LATI")
-    if (i + 5 <= n_lines) record$birth_long <- extract_info.alpha(block[i+5], "LONG")
+    if (i + 1 <= n_lines) record$birth_date <- extract_info(block[i+1], "DATE")
+    if (i + 2 <= n_lines) record$birth_place <- extract_info(block[i+2], "PLAC")
+    if (i + 4 <= n_lines) record$birth_lat <- extract_info(block[i+4], "LATI")
+    if (i + 5 <= n_lines) record$birth_long <- extract_info(block[i+5], "LONG")
   } else if (event == "death") {
-    if (i + 1 <= n_lines) record$death_date <- extract_info.alpha(block[i+1], "DATE")
-    if (i + 2 <= n_lines) record$death_place <- extract_info.alpha(block[i+2], "PLAC")
-    if (i + 3 <= n_lines) record$death_caus <- extract_info.alpha(block[i+3], "CAUS")
-    if (i + 4 <= n_lines) record$death_lat <- extract_info.alpha(block[i+4], "LATI")
-    if (i + 5 <= n_lines) record$death_long <- extract_info.alpha(block[i+5], "LONG")
+    if (i + 1 <= n_lines) record$death_date <- extract_info(block[i+1], "DATE")
+    if (i + 2 <= n_lines) record$death_place <- extract_info(block[i+2], "PLAC")
+    if (i + 3 <= n_lines) record$death_caus <- extract_info(block[i+3], "CAUS")
+    if (i + 4 <= n_lines) record$death_lat <- extract_info(block[i+4], "LATI")
+    if (i + 5 <= n_lines) record$death_long <- extract_info(block[i+5], "LONG")
   }
   return(record)
 }
@@ -317,10 +317,10 @@ processEventLine.alpha <- function(event, block, i, record, pattern_rows) {
 #'   - \code{mode}: either "replace" or "append",
 #'   - \code{extractor}: (optional) a custom extraction function.
 #' @return A list with the updated record (\code{record}) and a logical flag (\code{matched}).
-applyTagMappings.alpha <- function(line, record, pattern_rows, tag_mappings) {
+applyTagMappings <- function(line, record, pattern_rows, tag_mappings) {
   for (mapping in tag_mappings) {
     extractor <- if (is.null(mapping$extractor)) NULL else mapping$extractor
-    result <- process_tag.alpha(mapping$tag, mapping$field, pattern_rows, line, record,
+    result <- process_tag(mapping$tag, mapping$field, pattern_rows, line, record,
                           extractor = extractor, mode = mapping$mode)
     record <- result$vars
     if (result$matched) {
@@ -338,7 +338,7 @@ applyTagMappings.alpha <- function(line, record, pattern_rows, tag_mappings) {
 #' @param type A character string representing the type of information to extract.
 #' @return A character string with the extracted information.
 #' @keywords internal
-extract_info.alpha <- function(line, type) {
+extract_info <- function(line, type) {
   stringr::str_squish(stringr::str_extract(line, paste0("(?<=", type, " ).+")))
 }
 
@@ -349,7 +349,7 @@ extract_info.alpha <- function(line, type) {
 #'
 #' @param file A data frame with a column \code{X1} containing GEDCOM lines.
 #' @return A list with counts of specific GEDCOM tag occurrences.
-countPatternRows.alpha <- function(file) {
+countPatternRows <- function(file) {
   pattern_counts <- sapply(
     c(
       "@ INDI", " NAME", " GIVN", " NPFX", " NICK", " SURN", " NSFX", " _MARNM",
@@ -407,7 +407,7 @@ countPatternRows.alpha <- function(file) {
 #' @param vars The current list of variables to update.
 #' @return A list with updated `vars` and a `matched` flag.
 #' @keywords internal
-process_tag.alpha <- function(tag, field_name, pattern_rows, line, vars,
+process_tag <- function(tag, field_name, pattern_rows, line, vars,
                         extractor = NULL, mode = "replace") {
   count_name <- paste0("num_", tolower(tag), "_rows")
   matched <- FALSE
@@ -415,7 +415,7 @@ process_tag.alpha <- function(tag, field_name, pattern_rows, line, vars,
       pattern_rows[[count_name]] > 0 &&
       grepl(paste0(" ", tag), line)) {
     value <- if (is.null(extractor)) {
-      extract_info.alpha(line, tag)
+      extract_info(line, tag)
     } else {
       extractor(line)
     }
@@ -441,7 +441,7 @@ process_tag.alpha <- function(tag, field_name, pattern_rows, line, vars,
 #' @param skinny Logical indicating whether to slim down the data frame.
 #' @param verbose Logical indicating whether to print progress messages.
 #' @return The post-processed data frame.
-postProcessGedcom.alpha <- function(df_temp,
+postProcessGedcom <- function(df_temp,
                               remove_empty_cols = TRUE,
                               combine_cols = TRUE,
                               add_parents = TRUE,
@@ -449,10 +449,10 @@ postProcessGedcom.alpha <- function(df_temp,
                               verbose = FALSE) {
   if (add_parents) {
     if (verbose) message("Processing parents")
-    df_temp <- processParents.alpha(df_temp, datasource = "gedcom")
+    df_temp <- processParents(df_temp, datasource = "gedcom")
   }
   if (combine_cols) {
-    df_temp <- collapseNames.alpha(verbose = verbose, df_temp = df_temp)
+    df_temp <- collapseNames(verbose = verbose, df_temp = df_temp)
   }
   if (remove_empty_cols) {
     if (verbose) message("Removing empty columns")
@@ -474,7 +474,7 @@ postProcessGedcom.alpha <- function(df_temp,
 #' @param df_temp A data frame produced by \code{readGedcom()}.
 #' @param datasource Character string indicating the data source ("gedcom" or "wiki").
 #' @return The updated data frame with parent IDs added.
-processParents.alpha <- function(df_temp, datasource) {
+processParents <- function(df_temp, datasource) {
   if (datasource == "gedcom") {
     required_cols <- c("FAMC", "sex", "FAMS")
   } else if (datasource == "wiki") {
@@ -487,11 +487,11 @@ processParents.alpha <- function(df_temp, datasource) {
     warning("Missing necessary columns: ", paste(missing_cols, collapse = ", "))
     return(df_temp)
   }
-  family_to_parents <- mapFAMS2parents.alpha(df_temp)
+  family_to_parents <- mapFAMS2parents(df_temp)
   if (is.null(family_to_parents) || length(family_to_parents) == 0) {
     return(df_temp)
   }
-  df_temp <- mapFAMC2parents.alpha(df_temp, family_to_parents)
+  df_temp <- mapFAMC2parents(df_temp, family_to_parents)
   return(df_temp)
 }
 
@@ -502,7 +502,7 @@ processParents.alpha <- function(df_temp, datasource) {
 #'
 #' @param df_temp A data frame produced by \code{readGedcom()}.
 #' @return A list mapping family IDs to parent information.
-mapFAMS2parents.alpha <- function(df_temp) {
+mapFAMS2parents <- function(df_temp) {
   if (!all(c("FAMS", "sex") %in% colnames(df_temp))) {
     warning("The data frame does not contain the necessary columns (FAMS, sex)")
     return(NULL)
@@ -541,7 +541,7 @@ mapFAMS2parents.alpha <- function(df_temp) {
 #' @param family_to_parents A list mapping family IDs to parent IDs.
 #' @return A data frame with added momID and dad_ID columns.
 #' @keywords internal
-mapFAMC2parents.alpha <- function(df_temp, family_to_parents) {
+mapFAMC2parents <- function(df_temp, family_to_parents) {
   df_temp$momID <- NA_character_
   df_temp$dadID <- NA_character_
   for (i in 1:nrow(df_temp)) {
@@ -569,17 +569,17 @@ mapFAMC2parents.alpha <- function(df_temp, family_to_parents) {
 #' @inheritParams readGedcom
 #' @param df_temp A data frame containing the columns to be combined.
 #' @return A data frame with the combined columns.
-collapseNames.alpha <- function(verbose, df_temp) {
+collapseNames <- function(verbose, df_temp) {
   if (verbose) message("Combining Duplicate Columns")
 
   if (!all(is.na(df_temp$name_given_pieces)) | !all(is.na(df_temp$name_given))) {
-    result <- combine_columns.alpha(df_temp$name_given, df_temp$name_given_pieces)
+    result <- combine_columns(df_temp$name_given, df_temp$name_given_pieces)
     df_temp$name_given <- result$combined
     if (!result$retain_col2) df_temp$name_given_pieces <- NULL
   }
 
   if (!all(is.na(df_temp$name_surn_pieces)) | !all(is.na(df_temp$name_surn))) {
-    result <- combine_columns.alpha(df_temp$name_surn, df_temp$name_surn_pieces)
+    result <- combine_columns(df_temp$name_surn, df_temp$name_surn_pieces)
     df_temp$name_surn <- result$combined
     if (!result$retain_col2) df_temp$name_surn_pieces <- NULL
   }
@@ -594,7 +594,7 @@ collapseNames.alpha <- function(verbose, df_temp) {
 #' @return A list with the combined column and a flag indicating if the second column should be retained.
 #' @keywords internal
 # Helper function to check for conflicts and merge columns
-combine_columns.alpha <- function(col1, col2) {
+combine_columns <- function(col1, col2) {
   col1_lower <- stringr::str_to_lower(col1)
   col2_lower <- stringr::str_to_lower(col2)
   conflicts <- !is.na(col1_lower) & !is.na(col2_lower) & col1_lower != col2_lower
@@ -608,9 +608,9 @@ combine_columns.alpha <- function(col1, col2) {
 }
 
 # --- Exported Aliases ---
-#' @rdname readGedcom.alpha
+#' @rdname readGedcom
 #' @export
-readGed.alpha <- readGedcom.alpha
-#' @rdname readGedcom.alpha
+readGed <- readGedcom
+#' @rdname readGedcom
 #' @export
-readgedcom.alpha <- readGedcom.alpha
+readgedcom <- readGedcom

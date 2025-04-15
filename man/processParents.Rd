@@ -2,17 +2,18 @@
 % Please edit documentation in R/readGedcom.R
 \name{processParents}
 \alias{processParents}
-\title{Process parents information}
+\title{Process Parents Information from GEDCOM Data}
 \usage{
 processParents(df_temp, datasource)
 }
 \arguments{
-\item{df_temp}{A data frame containing information about individuals.}
+\item{df_temp}{A data frame produced by \code{readGedcom()}.}
+
+\item{datasource}{Character string indicating the data source ("gedcom" or "wiki").}
 }
 \value{
-A data frame with added momID and dadID columns.
+The updated data frame with parent IDs added.
 }
 \description{
-This function processes the dataframe to add momID and dadID columns.
+Adds parent IDs to the individuals based on family relationship data.
 }
-\keyword{internal}
