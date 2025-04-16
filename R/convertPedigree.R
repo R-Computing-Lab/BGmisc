@@ -902,15 +902,12 @@ cnmethods <- function(ped,component = "common nuclear",
     # 1) Create a logical mask for known parents
     mask <- !is.na(ped$momID) & !is.na(ped$dadID)
 
-  # 2) Create a single string label for each known (momID, dadID) pair
+  # 2) Create a single hash label for each known (momID, dadID) pair
   #pairLabel <- paste0(ped$momID[mask], "_", ped$dadID[mask])
   base <- max(ped$ID, na.rm = TRUE) + 1L
   pairCode <- ped$momID[mask] + base * ped$dadID[mask]
 
   # 3) Factor that label => each row with the same (mom,dad) gets the same integer code
-  # pairCode <- match(pairLabel, unique(pairLabel))
-
-  # childVec are the row indices in 'ped' that have known parents
   childVec <- which(mask)
 
   # 4) Group children by pairCode, so each group is "all children with that (mom,dad)"

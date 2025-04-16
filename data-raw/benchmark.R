@@ -20,29 +20,29 @@ marR <- .8
 ped2 <- simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR) %>%
   mutate(
     fam = "fam 2",
-    ID = ID + 10000,
-    momID = momID + 10000,
-    dadID = dadID + 10000,
-    spID = spID + 10000
+    ID = ID + max(ped2$ID, na.rm = TRUE),
+    momID = momID + max(ped$ID, na.rm = TRUE),
+    dadID = dadID + max(ped$ID, na.rm = TRUE),
+    spID = spID + max(ped$ID, na.rm = TRUE)
   )
 set.seed(1151)
 kpc <- 8
-Ngen <- 10
+Ngen <- 6
 ped3 <- simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR) %>%
   mutate(
     fam = "fam 3",
-    ID = ID + 20000,
-    momID = momID + 20000,
-    dadID = dadID + 20000,
-    spID = spID + 20000
+    ID = ID + max(ped2$ID, na.rm = TRUE),
+    momID = momID + max(ped2$ID, na.rm = TRUE),
+    dadID = dadID + max(ped2$ID, na.rm = TRUE),
+    spID = spID + max(ped2$ID, na.rm = TRUE)
   )
 ped3 <- ped3 %>%
   mutate(
     fam = "fam 4",
-    ID = ID + 10000,
-    momID = momID + 10000,
-    dadID = dadID + 10000,
-    spID = spID + 10000
+    ID = ID + max(ped3$ID, na.rm = TRUE),
+    momID = momID + max(ped3$ID, na.rm = TRUE),
+    dadID = dadID + max(ped3$ID, na.rm = TRUE),
+    spID = spID + max(ped3$ID, na.rm = TRUE)
   ) %>% rbind(ped3)
 
 set.seed(1151)
@@ -51,10 +51,10 @@ Ngen <- 10
 ped4 <- simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR) %>%
   mutate(
     fam = "fam 5",
-    ID = ID + 40000,
-    momID = momID + 40000,
-    dadID = dadID + 40000,
-    spID = spID + 40000
+    ID = ID + max(ped3$ID, na.rm = TRUE),
+    momID = momID + max(ped3$ID, na.rm = TRUE),
+    dadID = dadID + max(ped3$ID, na.rm = TRUE),
+    spID = spID + max(ped3$ID, na.rm = TRUE)
   )
 
 
@@ -211,7 +211,7 @@ benchmark_results <- microbenchmark(
       save_rate_parlist = save_rate_parlist
    )
   },
-  times = 100 # Run each method 100 times
+  times = 10 # Run each method 100 times
 )
 
 
