@@ -231,4 +231,3 @@ test_that("readGedcom handles incomplete individual records gracefully", {
 
   unlink(temp_file)
 })
-

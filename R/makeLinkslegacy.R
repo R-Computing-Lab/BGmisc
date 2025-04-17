@@ -628,4 +628,3 @@ com2links.og <- function(
   }
   return(NULL)
 }
-

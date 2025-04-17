@@ -86,7 +86,7 @@ test_that("com2links processes creates same length for cn with 3, 2, and 1 matri
   expect_true(all(result2$addRel >= 0))
   expect_true(all(result2$cnuRel >= 0))
 
-  expect_equal(result3$cnuRel,result2$cnuRel)
+  expect_equal(result3$cnuRel, result2$cnuRel)
 
   result1 <- com2links(cn_ped_matrix = cn_ped_matrix, writetodisk = FALSE)
   result1_legacy <- com2links.legacy(cn_ped_matrix = cn_ped_matrix, writetodisk = FALSE)
@@ -98,12 +98,11 @@ test_that("com2links processes creates same length for cn with 3, 2, and 1 matri
   expect_equal(ncol(result1_legacy), 3) # Expect ID1, ID2, and cnuRel
   expect_true(all(result1$cnuRel >= 0))
   expect_true(all(result1_legacy$cnuRel >= 0))
-  expect_equal(result3$cnuRel[result3$cnuRel==1],result1$cnuRel[result1$cnuRel==1])
-  expect_equal(result3$cnuRel[result3$cnuRel==1],result1_legacy$cnuRel[result1_legacy$cnuRel==1])
-  expect_equal(result2$cnuRel[result2$cnuRel==1],result1$cnuRel[result1$cnuRel==1])
-  expect_equal(result2$cnuRel[result2$cnuRel==1],result1_legacy$cnuRel[result1_legacy$cnuRel==1])
-  expect_equal(result1$cnuRel[result1$cnuRel==1],result1_legacy$cnuRel[result1_legacy$cnuRel==1])
-
+  expect_equal(result3$cnuRel[result3$cnuRel == 1], result1$cnuRel[result1$cnuRel == 1])
+  expect_equal(result3$cnuRel[result3$cnuRel == 1], result1_legacy$cnuRel[result1_legacy$cnuRel == 1])
+  expect_equal(result2$cnuRel[result2$cnuRel == 1], result1$cnuRel[result1$cnuRel == 1])
+  expect_equal(result2$cnuRel[result2$cnuRel == 1], result1_legacy$cnuRel[result1_legacy$cnuRel == 1])
+  expect_equal(result1$cnuRel[result1$cnuRel == 1], result1_legacy$cnuRel[result1_legacy$cnuRel == 1])
 })
 test_that("com2links written version matchs", {
   data(hazard)
@@ -327,9 +326,8 @@ test_that("com2links handles large batch writing correctly", {
 
   expect_true(file.exists(temp_file))
   written_data <- read.csv(temp_file)
-  expect_true(nrow(written_data)  == 155) # Ensuring batch writing logic works
+  expect_true(nrow(written_data) == 155) # Ensuring batch writing logic works
   expect_true(file.remove(temp_file))
-
 })
 
 test_that("com2links garbage collection does not affect output, using two components", {

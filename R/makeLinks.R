@@ -40,7 +40,7 @@ com2links <- function(
     legacy = FALSE,
     outcome_name = "data",
     drop_upper_triangular = TRUE,
-    include_all_links_1ped=FALSE,
+    include_all_links_1ped = FALSE,
     ...) {
   # --- Input Validations and Preprocessing ---
 
@@ -108,118 +108,118 @@ com2links <- function(
   }
 
   switch(matrix_case,
-         "ad" = process_one(
-           matrix = ad_ped_matrix,
-           rel_name = "addRel",
-           ids = ids,
-           nc = nc,
-           rel_pairs_file = rel_pairs_file,
-           writetodisk = writetodisk,
-           write_buffer_size = write_buffer_size,
-           drop_upper_triangular = drop_upper_triangular,
-           update_rate = update_rate,
-           verbose = verbose,
-           gc = gc,
-           include_all_links = include_all_links_1ped,
-           ...
-         ),
-         "mt" = process_one(
-           matrix = mit_ped_matrix,
-           rel_name = "mitRel",
-           ids = ids,
-           nc = nc,
-           rel_pairs_file = rel_pairs_file,
-           writetodisk = writetodisk,
-           write_buffer_size = write_buffer_size,
-           drop_upper_triangular = drop_upper_triangular,
-           update_rate = update_rate,
-           verbose = verbose,
-           gc = gc,
-           include_all_links = include_all_links_1ped,
-           ...
-         ),
-         "cn" = process_one(
-           matrix = cn_ped_matrix,
-           rel_name = "cnuRel",
-           ids = ids,
-           nc = nc,
-           rel_pairs_file = rel_pairs_file,
-           writetodisk = writetodisk,
-           write_buffer_size = write_buffer_size,
-           drop_upper_triangular = drop_upper_triangular,
-           update_rate = update_rate,
-           verbose = verbose,
-           gc = gc,
-           include_all_links = include_all_links_1ped,
-           ...
-         ),
-         "ad-mt" = process_two(
-           matrix1 = ad_ped_matrix,
-           name1 = "addRel",
-           matrix2 = mit_ped_matrix,
-           name2 = "mitRel",
-           ids = ids,
-           nc = nc,
-           rel_pairs_file = rel_pairs_file,
-           writetodisk = writetodisk,
-           write_buffer_size = write_buffer_size,
-           drop_upper_triangular = drop_upper_triangular,
-           update_rate = update_rate,
-           verbose = verbose,
-           gc = gc,
-           ...
-         ),
-         "ad-cn" = process_two(
-           matrix1 = ad_ped_matrix,
-           name1 = "addRel",
-           matrix2 = cn_ped_matrix,
-           name2 = "cnuRel",
-           ids = ids,
-           nc = nc,
-           rel_pairs_file = rel_pairs_file,
-           writetodisk = writetodisk,
-           write_buffer_size = write_buffer_size,
-           drop_upper_triangular = drop_upper_triangular,
-           update_rate = update_rate,
-           verbose = verbose,
-           gc = gc,
-           ...
-         ),
-         "cn-mt" = process_two(
-           matrix1 = cn_ped_matrix,
-           name1 = "cnuRel",
-           matrix2 = mit_ped_matrix,
-           name2 = "mitRel",
-           ids = ids,
-           nc = nc,
-           rel_pairs_file = rel_pairs_file,
-           writetodisk = writetodisk,
-           write_buffer_size = write_buffer_size,
-           drop_upper_triangular = drop_upper_triangular,
-           update_rate = update_rate,
-           verbose = verbose,
-           gc = gc,
-           ...
-         ),
-         "ad-cn-mt" = process_all_three(
-           mat1 = ad_ped_matrix,
-           name1 = "addRel",
-           mat2 = mit_ped_matrix,
-           name2 = "mitRel",
-           mat3 = cn_ped_matrix,
-           name3 = "cnuRel",
-           ids = ids,
-           nc = nc,
-           rel_pairs_file = rel_pairs_file,
-           writetodisk = writetodisk,
-           write_buffer_size = write_buffer_size,
-           drop_upper_triangular = drop_upper_triangular,
-           update_rate = update_rate,
-           verbose = verbose,
-           gc = gc,
-           ...
-         ),
-         stop("Unsupported matrix combination")
+    "ad" = process_one(
+      matrix = ad_ped_matrix,
+      rel_name = "addRel",
+      ids = ids,
+      nc = nc,
+      rel_pairs_file = rel_pairs_file,
+      writetodisk = writetodisk,
+      write_buffer_size = write_buffer_size,
+      drop_upper_triangular = drop_upper_triangular,
+      update_rate = update_rate,
+      verbose = verbose,
+      gc = gc,
+      include_all_links = include_all_links_1ped,
+      ...
+    ),
+    "mt" = process_one(
+      matrix = mit_ped_matrix,
+      rel_name = "mitRel",
+      ids = ids,
+      nc = nc,
+      rel_pairs_file = rel_pairs_file,
+      writetodisk = writetodisk,
+      write_buffer_size = write_buffer_size,
+      drop_upper_triangular = drop_upper_triangular,
+      update_rate = update_rate,
+      verbose = verbose,
+      gc = gc,
+      include_all_links = include_all_links_1ped,
+      ...
+    ),
+    "cn" = process_one(
+      matrix = cn_ped_matrix,
+      rel_name = "cnuRel",
+      ids = ids,
+      nc = nc,
+      rel_pairs_file = rel_pairs_file,
+      writetodisk = writetodisk,
+      write_buffer_size = write_buffer_size,
+      drop_upper_triangular = drop_upper_triangular,
+      update_rate = update_rate,
+      verbose = verbose,
+      gc = gc,
+      include_all_links = include_all_links_1ped,
+      ...
+    ),
+    "ad-mt" = process_two(
+      matrix1 = ad_ped_matrix,
+      name1 = "addRel",
+      matrix2 = mit_ped_matrix,
+      name2 = "mitRel",
+      ids = ids,
+      nc = nc,
+      rel_pairs_file = rel_pairs_file,
+      writetodisk = writetodisk,
+      write_buffer_size = write_buffer_size,
+      drop_upper_triangular = drop_upper_triangular,
+      update_rate = update_rate,
+      verbose = verbose,
+      gc = gc,
+      ...
+    ),
+    "ad-cn" = process_two(
+      matrix1 = ad_ped_matrix,
+      name1 = "addRel",
+      matrix2 = cn_ped_matrix,
+      name2 = "cnuRel",
+      ids = ids,
+      nc = nc,
+      rel_pairs_file = rel_pairs_file,
+      writetodisk = writetodisk,
+      write_buffer_size = write_buffer_size,
+      drop_upper_triangular = drop_upper_triangular,
+      update_rate = update_rate,
+      verbose = verbose,
+      gc = gc,
+      ...
+    ),
+    "cn-mt" = process_two(
+      matrix1 = cn_ped_matrix,
+      name1 = "cnuRel",
+      matrix2 = mit_ped_matrix,
+      name2 = "mitRel",
+      ids = ids,
+      nc = nc,
+      rel_pairs_file = rel_pairs_file,
+      writetodisk = writetodisk,
+      write_buffer_size = write_buffer_size,
+      drop_upper_triangular = drop_upper_triangular,
+      update_rate = update_rate,
+      verbose = verbose,
+      gc = gc,
+      ...
+    ),
+    "ad-cn-mt" = process_all_three(
+      mat1 = ad_ped_matrix,
+      name1 = "addRel",
+      mat2 = mit_ped_matrix,
+      name2 = "mitRel",
+      mat3 = cn_ped_matrix,
+      name3 = "cnuRel",
+      ids = ids,
+      nc = nc,
+      rel_pairs_file = rel_pairs_file,
+      writetodisk = writetodisk,
+      write_buffer_size = write_buffer_size,
+      drop_upper_triangular = drop_upper_triangular,
+      update_rate = update_rate,
+      verbose = verbose,
+      gc = gc,
+      ...
+    ),
+    stop("Unsupported matrix combination")
   )
 }
 #' Convert Sparse Relationship Matrices to Kinship Links for one Matrix
@@ -231,112 +231,111 @@ com2links <- function(
 
 process_one <- function(matrix, rel_name, ids, nc, rel_pairs_file, writetodisk,
                         write_buffer_size, drop_upper_triangular, update_rate, verbose, gc,
-                       include_all_links=TRUE, ...) {
+                        include_all_links = TRUE, ...) {
   if (include_all_links == FALSE) {
-  # Extract pointers and indices from the matrix.
-  newColPos <- matrix@p + 1L
-  iss <- matrix@i + 1L
-  x <- matrix@x
+    # Extract pointers and indices from the matrix.
+    newColPos <- matrix@p + 1L
+    iss <- matrix@i + 1L
+    x <- matrix@x
 
-  # Initialize the related pairs file with headers.
-  df_relpairs <- initialize_empty_df(relNames = rel_name)
+    # Initialize the related pairs file with headers.
+    df_relpairs <- initialize_empty_df(relNames = rel_name)
 
-  if (writetodisk == TRUE) {
-    utils::write.table(
-      df_relpairs,
-      file = rel_pairs_file, sep = ",", append = FALSE, row.names = FALSE
-    )
+    if (writetodisk == TRUE) {
+      utils::write.table(
+        df_relpairs,
+        file = rel_pairs_file, sep = ",", append = FALSE, row.names = FALSE
+      )
 
-    # Prepare an empty buffer for batching writes.
-    write_buffer <- list()
-    remove(df_relpairs)
-  }
-
-  # Process each column in the matrix.
-  for (j in 1L:nc) {
-
-      ID2 <- ids[j]
-
-    # Extract column indices
-    ncp <- newColPos[j]
-    ncpp <- newColPos[j + 1L]
-    cond <- ncp < ncpp
-    if (cond) {
-      vv <- ncp:(ncpp - 1L)
-      issvv <- iss[vv]
+      # Prepare an empty buffer for batching writes.
+      write_buffer <- list()
+      remove(df_relpairs)
     }
 
-    # Create a unique set of row indices.
-    u <- sort(issvv)
+    # Process each column in the matrix.
+    for (j in 1L:nc) {
+      ID2 <- ids[j]
 
-    # If any relationships exist for this individual, build the related pairs.
-    if (cond) {
+      # Extract column indices
+      ncp <- newColPos[j]
+      ncpp <- newColPos[j + 1L]
+      cond <- ncp < ncpp
+      if (cond) {
+        vv <- ncp:(ncpp - 1L)
+        issvv <- iss[vv]
+      }
+
+      # Create a unique set of row indices.
+      u <- sort(issvv)
+
+      # If any relationships exist for this individual, build the related pairs.
+      if (cond) {
         # Create a data frame with unique pairs.
         ID1 <- ids[u]
         tds <- data.frame(ID1 = ID1, ID2 = ID2)
         tds[[rel_name]] <- 0
-      if (cond) {
-        tds[u %in% issvv, rel_name] <- x[vv]
-      }
-      if (drop_upper_triangular == TRUE) {
-        tds <- tds[tds$ID1 <= tds$ID2, ] # or < if you want strictly lower triangle
-      }
+        if (cond) {
+          tds[u %in% issvv, rel_name] <- x[vv]
+        }
+        if (drop_upper_triangular == TRUE) {
+          tds <- tds[tds$ID1 <= tds$ID2, ] # or < if you want strictly lower triangle
+        }
 
-      # Write the batch to disk or accumulate in the data frame.
-      if (nrow(tds) > 0) {
-        if (writetodisk == TRUE) {
-          write_buffer[[length(write_buffer) + 1]] <- tds
+        # Write the batch to disk or accumulate in the data frame.
+        if (nrow(tds) > 0) {
+          if (writetodisk == TRUE) {
+            write_buffer[[length(write_buffer) + 1]] <- tds
 
-          if (length(write_buffer) >= write_buffer_size) { # Write in batches
-            utils::write.table(do.call(rbind, write_buffer),
-              file = rel_pairs_file,
-              row.names = FALSE, col.names = FALSE, append = TRUE, sep = ","
-            )
-            write_buffer <- list()
+            if (length(write_buffer) >= write_buffer_size) { # Write in batches
+              utils::write.table(do.call(rbind, write_buffer),
+                file = rel_pairs_file,
+                row.names = FALSE, col.names = FALSE, append = TRUE, sep = ","
+              )
+              write_buffer <- list()
+            }
+          } else {
+            df_relpairs <- rbind(df_relpairs, tds)
           }
-        } else {
-          df_relpairs <- rbind(df_relpairs, tds)
         }
       }
+      if (verbose && (j %% update_rate == 0L)) {
+        cat("Done with", j, "of", nc, "\n")
+      }
     }
-    if (verbose && (j %% update_rate == 0L)) {
-      cat("Done with", j, "of", nc, "\n")
+    # If not writing to disk, return the accumulated data frame.
+    if (writetodisk == FALSE) {
+      return(df_relpairs)
+    } else {
+      # Write any remaining buffered rows.
+      if (length(write_buffer) > 0) {
+        utils::write.table(do.call(rbind, write_buffer),
+          file = rel_pairs_file,
+          row.names = FALSE, col.names = FALSE, append = TRUE, sep = ","
+        )
+      }
     }
-  }
-  # If not writing to disk, return the accumulated data frame.
-  if (writetodisk == FALSE) {
-    return(df_relpairs)
+    if (gc == TRUE) {
+      remove(newColPos, iss, x)
+    }
   } else {
-    # Write any remaining buffered rows.
-    if (length(write_buffer) > 0) {
-      utils::write.table(do.call(rbind, write_buffer),
-        file = rel_pairs_file,
-        row.names = FALSE, col.names = FALSE, append = TRUE, sep = ","
-      )
-    }
-  }
-  if (gc == TRUE) {
-    remove(newColPos, iss, x)
-  }
-  }else{
-    matrix2=  matrix(rep(1,length(ids)^2),
-              nrow = length(ids),
-              dimnames = list(ids, ids))
-    process_two(matrix2=matrix, name2=rel_name,
-                  matrix1=methods::as(matrix2,"CsparseMatrix"),
-                  name1="phantom",
-                    ids=ids,
-                  nc = nc,
-                    rel_pairs_file = rel_pairs_file,
-                    writetodisk = writetodisk,
-                    write_buffer_size = write_buffer_size,
-                    drop_upper_triangular = drop_upper_triangular,
-                    update_rate = update_rate,
-                    verbose = verbose,
-                    gc = gc)
-
-
-
+    matrix2 <- matrix(rep(1, length(ids)^2),
+      nrow = length(ids),
+      dimnames = list(ids, ids)
+    )
+    process_two(
+      matrix2 = matrix, name2 = rel_name,
+      matrix1 = methods::as(matrix2, "CsparseMatrix"),
+      name1 = "phantom",
+      ids = ids,
+      nc = nc,
+      rel_pairs_file = rel_pairs_file,
+      writetodisk = writetodisk,
+      write_buffer_size = write_buffer_size,
+      drop_upper_triangular = drop_upper_triangular,
+      update_rate = update_rate,
+      verbose = verbose,
+      gc = gc
+    )
   }
 }
 
@@ -553,8 +552,10 @@ process_two <- function(
 #'
 #' @return The validated and converted matrix.
 validate_and_convert_matrix <- function(mat, name, ensure_symmetric = FALSE, force_binary = FALSE) {
-  if (!inherits(mat, c("matrix", "dgCMatrix", "dsCMatrix","generalMatrix",
-                       "symmetricMatrix", "triangularMatrix", "dsyMatrix", "dspMatrix", "dsyMatrix",'CsparseMatrix'))) {
+  if (!inherits(mat, c(
+    "matrix", "dgCMatrix", "dsCMatrix", "generalMatrix",
+    "symmetricMatrix", "triangularMatrix", "dsyMatrix", "dspMatrix", "dsyMatrix", "CsparseMatrix"
+  ))) {
     stop(paste0("The '", name, "' must be a matrix or generalMatrix"))
   }
   if (!inherits(mat, "generalMatrix")) {

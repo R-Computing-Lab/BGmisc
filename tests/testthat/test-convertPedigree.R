@@ -304,8 +304,8 @@ test_that("adjacency_method  'indexed', 'loop', and direct produce the same resu
   ped_common_indexed <- ped2com(hazard, component = "common nuclear", adjacency_method = "indexed")
   ped_common_loop <- ped2com(hazard, component = "common nuclear", adjacency_method = "loop")
   ped_common_direct <- ped2com(hazard, component = "common nuclear", adjacency_method = "direct")
-  ped_common_adjBeta_1 <- ped2com(hazard, component = "common nuclear", adjacency_method = "beta",adjBeta_method = adjBeta_method_2)
-  ped_common_adjBeta_2 <- ped2com(hazard, component = "common nuclear", adjacency_method = "beta",adjBeta_method = adjBeta_method_3)
+  ped_common_adjBeta_1 <- ped2com(hazard, component = "common nuclear", adjacency_method = "beta", adjBeta_method = adjBeta_method_2)
+  ped_common_adjBeta_2 <- ped2com(hazard, component = "common nuclear", adjacency_method = "beta", adjBeta_method = adjBeta_method_3)
 
   expect_equal(ped_common_indexed, ped_common_loop, tolerance = tolerance)
   expect_equal(ped_common_loop, ped_common_direct, tolerance = tolerance)

@@ -57,7 +57,6 @@ readGedcom <- function(file_path,
                        update_rate = 1000,
                        post_process = TRUE,
                        ...) {
-
   # Ensure the file exists and read all lines.
   if (!file.exists(file_path)) {
     stop("File does not exist: ", file_path)
@@ -73,15 +72,19 @@ readGedcom <- function(file_path,
   # List of variables to initialize
   all_var_names <- unlist(list(
     identifiers = c("id", "momID", "dadID"),
-    names       = c("name", "name_given", "name_given_pieces", "name_surn", "name_surn_pieces", "name_marriedsurn",
-                    "name_nick", "name_npfx", "name_nsfx"),
-    sex         = c("sex"),
-    birth       = c("birth_date", "birth_lat", "birth_long", "birth_place"),
-    death       = c("death_caus", "death_date", "death_lat", "death_long", "death_place"),
-    attributes  = c("attribute_caste", "attribute_children", "attribute_description", "attribute_education",
-                    "attribute_idnumber", "attribute_marriages", "attribute_nationality", "attribute_occupation",
-                    "attribute_property", "attribute_religion", "attribute_residence", "attribute_ssn",
-                    "attribute_title"),
+    names = c(
+      "name", "name_given", "name_given_pieces", "name_surn", "name_surn_pieces", "name_marriedsurn",
+      "name_nick", "name_npfx", "name_nsfx"
+    ),
+    sex = c("sex"),
+    birth = c("birth_date", "birth_lat", "birth_long", "birth_place"),
+    death = c("death_caus", "death_date", "death_lat", "death_long", "death_place"),
+    attributes = c(
+      "attribute_caste", "attribute_children", "attribute_description", "attribute_education",
+      "attribute_idnumber", "attribute_marriages", "attribute_nationality", "attribute_occupation",
+      "attribute_property", "attribute_religion", "attribute_residence", "attribute_ssn",
+      "attribute_title"
+    ),
     relationships = c("FAMC", "FAMS")
   ), use.names = FALSE)
 
@@ -90,8 +93,9 @@ readGedcom <- function(file_path,
 
   # Parse each individual block into a record (a named list)
   records <- lapply(blocks, parseIndividualBlock,
-                    pattern_rows = pattern_rows,
-                    all_var_names = all_var_names, verbose = verbose)
+    pattern_rows = pattern_rows,
+    all_var_names = all_var_names, verbose = verbose
+  )
 
   # Remove any NULLs (if a block did not contain an individual id)
   records <- Filter(Negate(is.null), records)
@@ -135,7 +139,9 @@ readGedcom <- function(file_path,
 #' @return A list of character vectors, each representing one individual.
 splitIndividuals <- function(lines, verbose = FALSE) {
   indi_idx <- grep("@ INDI", lines)
-  if (length(indi_idx) == 0) return(list())
+  if (length(indi_idx) == 0) {
+    return(list())
+  }
 
   blocks <- list()
   for (i in seq_along(indi_idx)) {
@@ -194,7 +200,7 @@ parseIndividualBlock <- function(block, pattern_rows, all_var_names, verbose = F
     # Process birth and death events by consuming multiple lines.
     if (grepl(" BIRT", line) && pattern_rows$num_birt_rows > 0) {
       record <- processEventLine("birth", block, i, record, pattern_rows)
-      i <- i + 1  # Skip further processing of this line.
+      i <- i + 1 # Skip further processing of this line.
       next
     }
     if (grepl(" DEAT", line) && pattern_rows$num_deat_rows > 0) {
@@ -214,50 +220,62 @@ parseIndividualBlock <- function(block, pattern_rows, all_var_names, verbose = F
       list(tag = "_MARNM", field = "name_marriedsurn", mode = "replace")
     )
     out <- applyTagMappings(line, record, pattern_rows, name_piece_mappings)
-    if (out$matched) { record <- out$record
-    i <- i + 1
-    next }
+    if (out$matched) {
+      record <- out$record
+      i <- i + 1
+      next
+    }
 
     # Process attribute tags.
     attribute_mappings <- list(
-      list(tag = "SEX",  field = "sex", mode = "replace"),
+      list(tag = "SEX", field = "sex", mode = "replace"),
       list(tag = "CAST", field = "attribute_caste", mode = "replace"),
       list(tag = "DSCR", field = "attribute_description", mode = "replace"),
       list(tag = "EDUC", field = "attribute_education", mode = "replace"),
       list(tag = "IDNO", field = "attribute_idnumber", mode = "replace"),
       list(tag = "NATI", field = "attribute_nationality", mode = "replace"),
       list(tag = "NCHI", field = "attribute_children", mode = "replace"),
-      list(tag = "NMR",  field = "attribute_marriages", mode = "replace"),
+      list(tag = "NMR", field = "attribute_marriages", mode = "replace"),
       list(tag = "OCCU", field = "attribute_occupation", mode = "replace"),
       list(tag = "PROP", field = "attribute_property", mode = "replace"),
       list(tag = "RELI", field = "attribute_religion", mode = "replace"),
       list(tag = "RESI", field = "attribute_residence", mode = "replace"),
-      list(tag = "SSN",  field = "attribute_ssn", mode = "replace"),
+      list(tag = "SSN", field = "attribute_ssn", mode = "replace"),
       list(tag = "TITL", field = "attribute_title", mode = "replace")
     )
     out <- applyTagMappings(line, record, pattern_rows, attribute_mappings)
-    if (out$matched) { record <- out$record
-    i <- i + 1
-    next }
+    if (out$matched) {
+      record <- out$record
+      i <- i + 1
+      next
+    }
 
     # Process relationship tags, using a custom extractor.
     relationship_mappings <- list(
-      list(tag = "FAMC", field = "FAMC", mode = "append",
-           extractor = function(x) stringr::str_extract(x, "(?<=@.)\\d*(?=@)")),
-      list(tag = "FAMS", field = "FAMS", mode = "append",
-           extractor = function(x) stringr::str_extract(x, "(?<=@.)\\d*(?=@)"))
+      list(
+        tag = "FAMC", field = "FAMC", mode = "append",
+        extractor = function(x) stringr::str_extract(x, "(?<=@.)\\d*(?=@)")
+      ),
+      list(
+        tag = "FAMS", field = "FAMS", mode = "append",
+        extractor = function(x) stringr::str_extract(x, "(?<=@.)\\d*(?=@)")
+      )
     )
     out <- applyTagMappings(line, record, pattern_rows, relationship_mappings)
-    if (out$matched) { record <- out$record
-    i <- i + 1
-    next }
+    if (out$matched) {
+      record <- out$record
+      i <- i + 1
+      next
+    }
 
     # Optionally print progress for long records.
     i <- i + 1
   }
 
   # If the record has no ID, return NULL.
-  if (is.na(record$id)) return(NULL)
+  if (is.na(record$id)) {
+    return(NULL)
+  }
   return(record)
 }
 
@@ -291,16 +309,16 @@ parseNameLine <- function(line, record) {
 processEventLine <- function(event, block, i, record, pattern_rows) {
   n_lines <- length(block)
   if (event == "birth") {
-    if (i + 1 <= n_lines) record$birth_date <- extract_info(block[i+1], "DATE")
-    if (i + 2 <= n_lines) record$birth_place <- extract_info(block[i+2], "PLAC")
-    if (i + 4 <= n_lines) record$birth_lat <- extract_info(block[i+4], "LATI")
-    if (i + 5 <= n_lines) record$birth_long <- extract_info(block[i+5], "LONG")
+    if (i + 1 <= n_lines) record$birth_date <- extract_info(block[i + 1], "DATE")
+    if (i + 2 <= n_lines) record$birth_place <- extract_info(block[i + 2], "PLAC")
+    if (i + 4 <= n_lines) record$birth_lat <- extract_info(block[i + 4], "LATI")
+    if (i + 5 <= n_lines) record$birth_long <- extract_info(block[i + 5], "LONG")
   } else if (event == "death") {
-    if (i + 1 <= n_lines) record$death_date <- extract_info(block[i+1], "DATE")
-    if (i + 2 <= n_lines) record$death_place <- extract_info(block[i+2], "PLAC")
-    if (i + 3 <= n_lines) record$death_caus <- extract_info(block[i+3], "CAUS")
-    if (i + 4 <= n_lines) record$death_lat <- extract_info(block[i+4], "LATI")
-    if (i + 5 <= n_lines) record$death_long <- extract_info(block[i+5], "LONG")
+    if (i + 1 <= n_lines) record$death_date <- extract_info(block[i + 1], "DATE")
+    if (i + 2 <= n_lines) record$death_place <- extract_info(block[i + 2], "PLAC")
+    if (i + 3 <= n_lines) record$death_caus <- extract_info(block[i + 3], "CAUS")
+    if (i + 4 <= n_lines) record$death_lat <- extract_info(block[i + 4], "LATI")
+    if (i + 5 <= n_lines) record$death_long <- extract_info(block[i + 5], "LONG")
   }
   return(record)
 }
@@ -322,7 +340,8 @@ applyTagMappings <- function(line, record, pattern_rows, tag_mappings) {
   for (mapping in tag_mappings) {
     extractor <- if (is.null(mapping$extractor)) NULL else mapping$extractor
     result <- process_tag(mapping$tag, mapping$field, pattern_rows, line, record,
-                          extractor = extractor, mode = mapping$mode)
+      extractor = extractor, mode = mapping$mode
+    )
     record <- result$vars
     if (result$matched) {
       return(list(record = record, matched = TRUE))
@@ -413,8 +432,8 @@ process_tag <- function(tag, field_name, pattern_rows, line, vars,
   count_name <- paste0("num_", tolower(tag), "_rows")
   matched <- FALSE
   if (!is.null(pattern_rows[[count_name]]) &&
-      pattern_rows[[count_name]] > 0 &&
-      grepl(paste0(" ", tag), line)) {
+    pattern_rows[[count_name]] > 0 &&
+    grepl(paste0(" ", tag), line)) {
     value <- if (is.null(extractor)) {
       extract_info(line, tag)
     } else {

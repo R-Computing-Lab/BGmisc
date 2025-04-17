@@ -1,4 +1,3 @@
-
 # readWikifamilytree
 
 test_that("readWikifamilytree reads a string correctly", {

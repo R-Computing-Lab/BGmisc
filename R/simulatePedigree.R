@@ -191,11 +191,13 @@ buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose, marR, sexR,
       SingleM <- sum(df_Ngen$sex == "M" & is.na(df_Ngen$spID))
       CoupleM <- N_LinkedMale - SingleM
 
-      df_Fam[df_Fam$gen == i, ] <- markPotentialChildren(df_Ngen = df_Ngen,
-                                                         i = i,
-                                                         Ngen = Ngen,
-                                                         sizeGens = sizeGens,
-                                                         CoupleF = CoupleF)
+      df_Fam[df_Fam$gen == i, ] <- markPotentialChildren(
+        df_Ngen = df_Ngen,
+        i = i,
+        Ngen = Ngen,
+        sizeGens = sizeGens,
+        CoupleF = CoupleF
+      )
       if (verbose) {
         print(
           "Step 2.2: mark a group of potential parents in the i-1 th generation"

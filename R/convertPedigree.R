@@ -41,7 +41,7 @@ ped2com <- function(ped, component,
                     save_rate_parlist = 100000 * save_rate,
                     update_rate = 100,
                     save_path = "checkpoint/",
-                    adjBeta_method=NULL,
+                    adjBeta_method = NULL,
                     ...) {
   #------
   # Checkpointing
@@ -447,7 +447,7 @@ ped2cn <- function(ped, max.gen = 25, sparse = TRUE, verbose = FALSE,
     save_rate_gen = save_rate_gen,
     save_rate_parlist = save_rate_parlist,
     save_path = save_path,
-        ...
+    ...
   )
 }
 #' Take a pedigree and turn it into an extended environmental relatedness matrix
@@ -603,7 +603,7 @@ ped2ce <- function(ped,
 .adjDirect <- function(ped, component, saveable, resume,
                        save_path, verbose, lastComputed,
                        nr, checkpoint_files, update_rate,
-                       parList, lens, save_rate_parlist,adjBeta_method,
+                       parList, lens, save_rate_parlist, adjBeta_method,
                        ...) {
   # Loop through each individual in the pedigree
   # Build the adjacency matrix for parent-child relationships
@@ -619,7 +619,7 @@ ped2ce <- function(ped,
     iss <- c(mIDs$rID, dIDs$rID)
     jss <- c(mIDs$cID, dIDs$cID)
   } else if (component %in% c("common nuclear")) {
-  #  message("Common Nuclear component is not yet implemented for direct method.  Using index method.\n")
+    #  message("Common Nuclear component is not yet implemented for direct method.  Using index method.\n")
 
     # 1) Create a logical mask for only known parents
     mask <- !is.na(ped$momID) & !is.na(ped$dadID)
@@ -637,7 +637,7 @@ ped2ce <- function(ped,
     # 5) For each group with >1 children, form pairwise adjacency (i->j) for i != j
     iss_list <- vector("list", length(groupList))
     jss_list <- vector("list", length(groupList))
-    counter  <- 1
+    counter <- 1
 
     for (g in groupList) {
       k <- length(g)
@@ -647,10 +647,10 @@ ped2ce <- function(ped,
 
         # v = each child repeated k times
         # w = entire group repeated once for each child
-        v <- rep(g, each  = k)  # row index
-        w <- rep(g, times = k)  # col index
+        v <- rep(g, each = k) # row index
+        w <- rep(g, times = k) # col index
 
-        keep <- (v != w)        # remove diagonal where v == w
+        keep <- (v != w) # remove diagonal where v == w
         iss_list[[counter]] <- v[keep]
         jss_list[[counter]] <- w[keep]
         counter <- counter + 1
@@ -658,21 +658,21 @@ ped2ce <- function(ped,
     }
 
 
-      iss <- unlist(iss_list, use.names = FALSE)
-      jss <- unlist(jss_list, use.names = FALSE)
+    iss <- unlist(iss_list, use.names = FALSE)
+    jss <- unlist(jss_list, use.names = FALSE)
 
- #   list_of_adjacency <-    .adjBeta(ped=ped,adjBeta_method=adjBeta_method,
-#                                      component = component,
- #                                     saveable = saveable, resume = resume,
- #                                     save_path = save_path, verbose = verbose,
- #                                     lastComputed = lastComputed, nr = nr,
- #                                     checkpoint_files = checkpoint_files,
- #                                     update_rate = update_rate,
- #                                     parList = parList,
- #                                     lens = lens, save_rate_parlist = save_rate_parlist,
- #                                     ...)
+    #   list_of_adjacency <-    .adjBeta(ped=ped,adjBeta_method=adjBeta_method,
+    #                                      component = component,
+    #                                     saveable = saveable, resume = resume,
+    #                                     save_path = save_path, verbose = verbose,
+    #                                     lastComputed = lastComputed, nr = nr,
+    #                                     checkpoint_files = checkpoint_files,
+    #                                     update_rate = update_rate,
+    #                                     parList = parList,
+    #                                     lens = lens, save_rate_parlist = save_rate_parlist,
+    #                                     ...)
 
- #   return(list_of_adjacency)
+    #   return(list_of_adjacency)
   } else if (component %in% c("mitochondrial")) {
     mIDs <- stats::na.omit(data.frame(rID = ped$ID, cID = ped$momID))
     iss <- c(mIDs$rID)
@@ -699,9 +699,9 @@ ped2ce <- function(ped,
 compute_parent_adjacency <- function(ped, component,
                                      adjacency_method = "direct",
                                      saveable, resume,
-                                     save_path, verbose=FALSE,
-                                     lastComputed=0, nr, checkpoint_files, update_rate,
-                                     parList, lens, save_rate_parlist,adjBeta_method=NULL,
+                                     save_path, verbose = FALSE,
+                                     lastComputed = 0, nr, checkpoint_files, update_rate,
+                                     parList, lens, save_rate_parlist, adjBeta_method = NULL,
                                      ...) {
   if (adjacency_method == "loop") {
     if (lastComputed < nr) { # Original version
@@ -761,21 +761,23 @@ compute_parent_adjacency <- function(ped, component,
       )
     }
   } else if (adjacency_method == "beta") {
-    list_of_adjacency <- .adjBeta(ped = ped,
-                                   adjBeta_method = adjBeta_method,
-                                   component = component,
-                                   saveable = saveable,
-                                   resume = resume,
-                                   save_path = save_path,
-                                   verbose = verbose,
-                                   lastComputed = lastComputed,
-                                   nr = nr,
-                                   checkpoint_files = checkpoint_files,
-                                   update_rate = update_rate,
-                                   parList = parList,
-                                   lens = lens,
-                                   save_rate_parlist = save_rate_parlist,
-                                   ...)
+    list_of_adjacency <- .adjBeta(
+      ped = ped,
+      adjBeta_method = adjBeta_method,
+      component = component,
+      saveable = saveable,
+      resume = resume,
+      save_path = save_path,
+      verbose = verbose,
+      lastComputed = lastComputed,
+      nr = nr,
+      checkpoint_files = checkpoint_files,
+      update_rate = update_rate,
+      parList = parList,
+      lens = lens,
+      save_rate_parlist = save_rate_parlist,
+      ...
+    )
   } else {
     stop("Invalid method specified. Choose from 'loop', 'direct', 'indexed', or beta")
   }
@@ -809,22 +811,21 @@ isChild <- function(isChild_method, ped) {
 }
 
 
-.adjBeta <- function(ped,component,
-                      adjBeta_method=5,
-                      parList=NULL,
-                      lastComputed=0,
-                      nr=NULL,
-                      lens=NULL,
-                      saveable=FALSE,
-                      resume=FALSE,
-                      save_path=NULL,
-                      verbose=FALSE,
-                     save_rate_parlist=NULL,
-                      update_rate=NULL,
-                      checkpoint_files=NULL,
-                      ...){# 1) Pairwise compare mother IDs
-  if(adjBeta_method == 1){
-
+.adjBeta <- function(ped, component,
+                     adjBeta_method = 5,
+                     parList = NULL,
+                     lastComputed = 0,
+                     nr = NULL,
+                     lens = NULL,
+                     saveable = FALSE,
+                     resume = FALSE,
+                     save_path = NULL,
+                     verbose = FALSE,
+                     save_rate_parlist = NULL,
+                     update_rate = NULL,
+                     checkpoint_files = NULL,
+                     ...) { # 1) Pairwise compare mother IDs
+  if (adjBeta_method == 1) {
     # gets slow when data are bigger. much slower than indexed
     momMatch <- outer(ped$momID, ped$momID, FUN = "==")
     momMatch[is.na(momMatch)] <- FALSE
@@ -837,15 +838,15 @@ isChild <- function(isChild_method, ped) {
     adj <- momMatch & dadMatch
 
     # 4) Extract indices where adj[i,j] is TRUE
-    w   <- which(adj, arr.ind = TRUE)
-   # iss <- w[, 1]
-  #  jss <- w[, 2]
-#
+    w <- which(adj, arr.ind = TRUE)
+    # iss <- w[, 1]
+    #  jss <- w[, 2]
+    #
     list_of_adjacency <- list(
       iss = w[, 1],
       jss = w[, 2]
     )
-  } else if(adjBeta_method == 2){
+  } else if (adjBeta_method == 2) {
     # 1) Create a logical mask for known parents
     mask <- !is.na(ped$momID) & !is.na(ped$dadID)
 
@@ -857,7 +858,7 @@ isChild <- function(isChild_method, ped) {
     pairCode <- match(pairLabel, unique(pairLabel))
 
     # childVec are the row indices in 'ped' that have known parents
-    childVec <- which(mask)  # length(childVec) = sum(mask)
+    childVec <- which(mask) # length(childVec) = sum(mask)
 
     # 4) Group children by pairCode, so each group is "all children with that (mom,dad)"
     groupList <- split(childVec, pairCode)
@@ -865,27 +866,27 @@ isChild <- function(isChild_method, ped) {
     # 5) For each group with >1 children, form pairwise adjacency i->j
     iss_list <- list()
     jss_list <- list()
-    counter  <- 1
+    counter <- 1
 
     for (g in groupList) {
       if (length(g) > 1) {
         combos <- expand.grid(g, g, KEEP.OUT.ATTRS = FALSE)
-        combos <- combos[combos[,1] != combos[,2], , drop = FALSE]
-        iss_list[[counter]] <- combos[,1]
-        jss_list[[counter]] <- combos[,2]
+        combos <- combos[combos[, 1] != combos[, 2], , drop = FALSE]
+        iss_list[[counter]] <- combos[, 1]
+        jss_list[[counter]] <- combos[, 2]
         counter <- counter + 1
       }
     }
-   # iss <- unlist(iss_list, use.names = FALSE)
-  #  jss <- unlist(jss_list, use.names = FALSE)
+    # iss <- unlist(iss_list, use.names = FALSE)
+    #  jss <- unlist(jss_list, use.names = FALSE)
 
     list_of_adjacency <- list(
       iss = unlist(iss_list, use.names = FALSE),
       jss = unlist(jss_list, use.names = FALSE)
     )
-  } else if(adjBeta_method == 3){
+  } else if (adjBeta_method == 3) {
     nr <- nrow(ped)
-# terrible
+    # terrible
     # Define a scalar-checking function:
     f_check <- function(i, j) {
       # i, j are each single integers
@@ -903,105 +904,102 @@ isChild <- function(isChild_method, ped) {
     adj <- outer(seq_len(nr), seq_len(nr), FUN = vf_check)
 
     # Extract which cells of adj are TRUE
-    w   <- which(adj, arr.ind = TRUE)
-  #  iss <- w[, 1]
- #   jss <- w[, 2]
+    w <- which(adj, arr.ind = TRUE)
+    #  iss <- w[, 1]
+    #   jss <- w[, 2]
 
     list_of_adjacency <- list(
       iss = iss <- w[, 1],
       jss = jss <- w[, 2]
     )
-}else if(adjBeta_method == 4){
-
-  # 1) Create a logical mask for known parents
-  mask <- !is.na(ped$momID) & !is.na(ped$dadID)
-
-  # 2) Create a single string label for each known (momID, dadID) pair
-  pairLabel <- paste0(ped$momID[mask], "_", ped$dadID[mask])
-
-  # 3) Factor that label => each row with the same (mom,dad) gets the same integer code
-  pairCode <- match(pairLabel, unique(pairLabel))
-
-  # childVec are the row indices in 'ped' that have known parents
-  childVec <- which(mask)
-
-  # 4) Group children by pairCode, so each group is "all children with that (mom,dad)"
-  groupList <- split(childVec, pairCode)
-
-  # 5) For each group with >1 children, form pairwise adjacency (i->j) for i != j
-  iss_list <- vector("list", length(groupList))
-  jss_list <- vector("list", length(groupList))
-  counter  <- 1
-
-  for (g in groupList) {
-    k <- length(g)
-    if (k > 1) {
-      # We'll form all k^2 combos, then remove the diagonal i=j
-      # Instead of expand.grid, do rep() calls:
-
-      # v = each child repeated k times
-      # w = entire group repeated once for each child
-      v <- rep(g, each  = k)  # row index
-      w <- rep(g, times = k)  # col index
-
-      keep <- (v != w)        # remove diagonal where v == w
-      iss_list[[counter]] <- v[keep]
-      jss_list[[counter]] <- w[keep]
-      counter <- counter + 1
-    }
-  }
-
-  list_of_adjacency <- list(
-    iss = unlist(iss_list, use.names = FALSE),
-    jss = unlist(jss_list, use.names = FALSE)
-  )
-
-  } else if(adjBeta_method == 5){
+  } else if (adjBeta_method == 4) {
     # 1) Create a logical mask for known parents
     mask <- !is.na(ped$momID) & !is.na(ped$dadID)
 
-  # 2) Create a single hash label for each known (momID, dadID) pair
-  #pairLabel <- paste0(ped$momID[mask], "_", ped$dadID[mask])
-  base <- max(ped$ID, na.rm = TRUE) + 1L
-  pairCode <- ped$momID[mask] + base * ped$dadID[mask]
+    # 2) Create a single string label for each known (momID, dadID) pair
+    pairLabel <- paste0(ped$momID[mask], "_", ped$dadID[mask])
 
-  # 3) Factor that label => each row with the same (mom,dad) gets the same integer code
-  childVec <- which(mask)
+    # 3) Factor that label => each row with the same (mom,dad) gets the same integer code
+    pairCode <- match(pairLabel, unique(pairLabel))
 
-  # 4) Group children by pairCode, so each group is "all children with that (mom,dad)"
-  groupList <- split(childVec, pairCode)
+    # childVec are the row indices in 'ped' that have known parents
+    childVec <- which(mask)
 
-  # 5) For each group with >1 children, form pairwise adjacency (i->j) for i != j
-  iss_list <- vector("list", length(groupList))
-  jss_list <- vector("list", length(groupList))
-  counter  <- 1
+    # 4) Group children by pairCode, so each group is "all children with that (mom,dad)"
+    groupList <- split(childVec, pairCode)
 
-  for (g in groupList) {
-    k <- length(g)
-    if (k > 1) {
-      # We'll form all k^2 combos, then remove the diagonal i=j
-      # Instead of expand.grid, do rep() calls:
+    # 5) For each group with >1 children, form pairwise adjacency (i->j) for i != j
+    iss_list <- vector("list", length(groupList))
+    jss_list <- vector("list", length(groupList))
+    counter <- 1
 
-      # v = each child repeated k times
-      # w = entire group repeated once for each child
-      v <- rep(g, each  = k)  # row index
-      w <- rep(g, times = k)  # col index
+    for (g in groupList) {
+      k <- length(g)
+      if (k > 1) {
+        # We'll form all k^2 combos, then remove the diagonal i=j
+        # Instead of expand.grid, do rep() calls:
 
-      keep <- (v != w)        # remove diagonal where v == w
-      iss_list[[counter]] <- v[keep]
-      jss_list[[counter]] <- w[keep]
-      counter <- counter + 1
+        # v = each child repeated k times
+        # w = entire group repeated once for each child
+        v <- rep(g, each = k) # row index
+        w <- rep(g, times = k) # col index
+
+        keep <- (v != w) # remove diagonal where v == w
+        iss_list[[counter]] <- v[keep]
+        jss_list[[counter]] <- w[keep]
+        counter <- counter + 1
+      }
     }
-  }
 
-  list_of_adjacency <- list(
-    iss = unlist(iss_list, use.names = FALSE),
-    jss = unlist(jss_list, use.names = FALSE)
-  )
+    list_of_adjacency <- list(
+      iss = unlist(iss_list, use.names = FALSE),
+      jss = unlist(jss_list, use.names = FALSE)
+    )
+  } else if (adjBeta_method == 5) {
+    # 1) Create a logical mask for known parents
+    mask <- !is.na(ped$momID) & !is.na(ped$dadID)
 
-    }else{
+    # 2) Create a single hash label for each known (momID, dadID) pair
+    # pairLabel <- paste0(ped$momID[mask], "_", ped$dadID[mask])
+    base <- max(ped$ID, na.rm = TRUE) + 1L
+    pairCode <- ped$momID[mask] + base * ped$dadID[mask]
 
-    list_of_adjacency <- .adjIndexed(ped = ped, component = component,
+    # 3) Factor that label => each row with the same (mom,dad) gets the same integer code
+    childVec <- which(mask)
+
+    # 4) Group children by pairCode, so each group is "all children with that (mom,dad)"
+    groupList <- split(childVec, pairCode)
+
+    # 5) For each group with >1 children, form pairwise adjacency (i->j) for i != j
+    iss_list <- vector("list", length(groupList))
+    jss_list <- vector("list", length(groupList))
+    counter <- 1
+
+    for (g in groupList) {
+      k <- length(g)
+      if (k > 1) {
+        # We'll form all k^2 combos, then remove the diagonal i=j
+        # Instead of expand.grid, do rep() calls:
+
+        # v = each child repeated k times
+        # w = entire group repeated once for each child
+        v <- rep(g, each = k) # row index
+        w <- rep(g, times = k) # col index
+
+        keep <- (v != w) # remove diagonal where v == w
+        iss_list[[counter]] <- v[keep]
+        jss_list[[counter]] <- w[keep]
+        counter <- counter + 1
+      }
+    }
+
+    list_of_adjacency <- list(
+      iss = unlist(iss_list, use.names = FALSE),
+      jss = unlist(jss_list, use.names = FALSE)
+    )
+  } else {
+    list_of_adjacency <- .adjIndexed(
+      ped = ped, component = component,
       saveable = saveable, resume = resume,
       save_path = save_path, verbose = verbose,
       lastComputed = lastComputed, nr = nr,
@@ -1009,7 +1007,6 @@ isChild <- function(isChild_method, ped) {
       update_rate = update_rate, parList = parList,
       lens = lens, save_rate_parlist = save_rate_parlist
     )
-
   }
   return(list_of_adjacency)
 }

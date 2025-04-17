@@ -71,16 +71,18 @@ corrplot(as.matrix(ped_add_classic_complete),
   method = "color", type = "lower", col.lim = c(0, 1),
   is.corr = FALSE, title = "Additive component - Classic method",
   order = "hclust",
-  tl.pos	="l", tl.col = "black", tl.srt = 5, tl.cex = 0.2,
-  col = COL1('Reds', 100), mar=c(0,0,2,0))
+  tl.pos = "l", tl.col = "black", tl.srt = 5, tl.cex = 0.2,
+  col = COL1("Reds", 100), mar = c(0, 0, 2, 0)
+)
 
 
 corrplot(as.matrix(ped_add_partial_complete),
   method = "color", type = "lower", col.lim = c(0, 1),
-  is.corr = FALSE, title = "Additive component - Partial parent method", 
+  is.corr = FALSE, title = "Additive component - Partial parent method",
   order = "hclust",
-  tl.pos	="l", tl.col = "black", tl.srt = 5, tl.cex = 0.2,
-  col = COL1('Reds', 100), mar=c(0,0,2,0))
+  tl.pos = "l", tl.col = "black", tl.srt = 5, tl.cex = 0.2,
+  col = COL1("Reds", 100), mar = c(0, 0, 2, 0)
+)
 ```
 
 
@@ -89,9 +91,10 @@ To verify this, we subtract one matrix from the other and calculate RMSE. The di
 ```{r,warning=FALSE}
 corrplot((as.matrix(ped_add_classic_complete) - as.matrix(ped_add_partial_complete)),
   method = "color", type = "lower", col.lim = c(0, 1),
-  is.corr = FALSE,  order = "hclust",
-  tl.pos	="l", tl.col = "black", tl.srt = 5, tl.cex = 0.2,
-  col = COL1('Reds', 100), mar=c(0,0,2,0))
+  is.corr = FALSE, order = "hclust",
+  tl.pos = "l", tl.col = "black", tl.srt = 5, tl.cex = 0.2,
+  col = COL1("Reds", 100), mar = c(0, 0, 2, 0)
+)
 ```
 
 
@@ -131,14 +134,16 @@ corrplot(as.matrix(ped_add_classic),
   method = "color", type = "lower", col.lim = c(0, 1),
   is.corr = FALSE, title = "Classic (mother removed)",
   order = "hclust",
-  tl.pos	="l", tl.col = "black", tl.srt = 5, tl.cex = 0.2,
-  col = COL1('Reds', 100), mar=c(0,0,2,0))
+  tl.pos = "l", tl.col = "black", tl.srt = 5, tl.cex = 0.2,
+  col = COL1("Reds", 100), mar = c(0, 0, 2, 0)
+)
 corrplot(as.matrix(ped_add_partial),
   method = "color", type = "lower", col.lim = c(0, 1),
   is.corr = FALSE, title = "Partial (mother removed)",
   order = "hclust",
-  tl.pos	="l", tl.col = "black", tl.srt = 5, tl.cex = 0.2,
-  col = COL1('Reds', 100), mar=c(0,0,2,0))
+  tl.pos = "l", tl.col = "black", tl.srt = 5, tl.cex = 0.2,
+  col = COL1("Reds", 100), mar = c(0, 0, 2, 0)
+)
 ```
 
 
@@ -156,8 +161,9 @@ corrplot(as.matrix(ped_add_classic_complete) - as.matrix(ped_add_classic),
   method = "color", type = "lower", col.lim = c(0, 1),
   is.corr = FALSE,
   order = "hclust",
-  tl.pos	="l", tl.col = "black", tl.srt = 5, tl.cex = 0.2,
-  col = COL1('Reds', 100), mar=c(0,0,2,0))
+  tl.pos = "l", tl.col = "black", tl.srt = 5, tl.cex = 0.2,
+  col = COL1("Reds", 100), mar = c(0, 0, 2, 0)
+)
 
 sqrt(mean((ped_add_classic_complete - ped_add_classic)^2))
 ```
@@ -169,8 +175,9 @@ corrplot(as.matrix(ped_add_classic_complete - ped_add_partial),
   method = "color", type = "lower", col.lim = c(0, 1),
   is.corr = FALSE,
   order = "hclust",
-  tl.pos	="l", tl.col = "black", tl.srt = 5, tl.cex = 0.2,
-  col = COL1('Reds', 100), mar=c(0,0,2,0))
+  tl.pos = "l", tl.col = "black", tl.srt = 5, tl.cex = 0.2,
+  col = COL1("Reds", 100), mar = c(0, 0, 2, 0)
+)
 
 sqrt(mean((ped_add_classic_complete - ped_add_partial)^2))
 ```
@@ -214,15 +221,17 @@ corrplot(as.matrix(ped_add_classic_dad),
   method = "color", type = "lower", col.lim = c(0, 1),
   is.corr = FALSE, title = "Classic (father removed)",
   order = "hclust",
-  tl.pos	="l", tl.col = "black", tl.srt = 5, tl.cex = 0.2,
-  col = COL1('Reds', 100), mar=c(0,0,2,0))
+  tl.pos = "l", tl.col = "black", tl.srt = 5, tl.cex = 0.2,
+  col = COL1("Reds", 100), mar = c(0, 0, 2, 0)
+)
 
 corrplot(as.matrix(ped_add_partial_dad),
   method = "color", type = "lower", col.lim = c(0, 1),
   is.corr = FALSE, title = "Partial (father removed)",
   order = "hclust",
-  tl.pos	="l", tl.col = "black", tl.srt = 5, tl.cex = 0.2,
-  col = COL1('Reds', 100), mar=c(0,0,2,0))
+  tl.pos = "l", tl.col = "black", tl.srt = 5, tl.cex = 0.2,
+  col = COL1("Reds", 100), mar = c(0, 0, 2, 0)
+)
 ```
 
 Again, we compare to the true matrix from the complete pedigree:
@@ -233,8 +242,9 @@ corrplot(as.matrix(ped_add_classic_complete - ped_add_classic),
   method = "color", type = "lower", col.lim = c(0, 1),
   is.corr = FALSE,
   order = "hclust",
-  tl.pos	="l", tl.col = "black", tl.srt = 5, tl.cex = 0.2,
-  col = COL1('Reds', 100), mar=c(0,0,2,0))
+  tl.pos = "l", tl.col = "black", tl.srt = 5, tl.cex = 0.2,
+  col = COL1("Reds", 100), mar = c(0, 0, 2, 0)
+)
 
 sqrt(mean((ped_add_classic_complete - ped_add_classic)^2))
 ```
@@ -245,8 +255,9 @@ corrplot(as.matrix(ped_add_classic_complete - ped_add_partial),
   method = "color", type = "lower", col.lim = c(0, 1),
   is.corr = FALSE,
   order = "hclust",
-  tl.pos	="l", tl.col = "black", tl.srt = 5, tl.cex = 0.2,
-  col = COL1('Reds', 100), mar=c(0,0,2,0))
+  tl.pos = "l", tl.col = "black", tl.srt = 5, tl.cex = 0.2,
+  col = COL1("Reds", 100), mar = c(0, 0, 2, 0)
+)
 
 sqrt(mean((ped_add_classic_complete - ped_add_partial)^2))
 ```
@@ -389,36 +400,41 @@ corrplot(as.matrix(fam1$ped_add_classic_complete),
   method = "color", type = "lower", col.lim = c(0, 1),
   is.corr = FALSE, title = "Classic - Complete",
   order = "hclust",
-  tl.pos	="l", tl.col = "black", tl.srt = 5, tl.cex = 0.2,
-  col = COL1('Reds', 100), mar=c(0,0,2,0))
+  tl.pos = "l", tl.col = "black", tl.srt = 5, tl.cex = 0.2,
+  col = COL1("Reds", 100), mar = c(0, 0, 2, 0)
+)
 
 corrplot(as.matrix(fam1$ped_add_classic_mom),
   method = "color", type = "lower", col.lim = c(0, 1),
   is.corr = FALSE, title = "Classic - Mom Missing",
   order = "hclust",
-  tl.pos	="l", tl.col = "black", tl.srt = 5, tl.cex = 0.2,
-  col = COL1('Reds', 100), mar=c(0,0,2,0))
+  tl.pos = "l", tl.col = "black", tl.srt = 5, tl.cex = 0.2,
+  col = COL1("Reds", 100), mar = c(0, 0, 2, 0)
+)
 
 corrplot(as.matrix(fam1$ped_add_partial_mom),
   method = "color", type = "lower", col.lim = c(0, 1),
   is.corr = FALSE, title = "Partial - Mom Missing",
   order = "hclust",
-  tl.pos	="l", tl.col = "black", tl.srt = 5, tl.cex = 0.2,
-  col = COL1('Reds', 100), mar=c(0,0,2,0))
+  tl.pos = "l", tl.col = "black", tl.srt = 5, tl.cex = 0.2,
+  col = COL1("Reds", 100), mar = c(0, 0, 2, 0)
+)
 
 corrplot(as.matrix(fam1$ped_add_classic_dad),
   method = "color", type = "lower", col.lim = c(0, 1),
   is.corr = FALSE, title = "Classic - Dad Missing",
   order = "hclust",
-  tl.pos	="l", tl.col = "black", tl.srt = 5, tl.cex = 0.2,
-  col = COL1('Reds', 100), mar=c(0,0,2,0))
+  tl.pos = "l", tl.col = "black", tl.srt = 5, tl.cex = 0.2,
+  col = COL1("Reds", 100), mar = c(0, 0, 2, 0)
+)
 
 corrplot(as.matrix(fam1$ped_add_partial_dad),
   method = "color", type = "lower", col.lim = c(0, 1),
   is.corr = FALSE, title = "Partial - Dad Missing",
   order = "hclust",
-  tl.pos	="l", tl.col = "black", tl.srt = 5, tl.cex = 0.2,
-  col = COL1('Reds', 100), mar=c(0,0,2,0))
+  tl.pos = "l", tl.col = "black", tl.srt = 5, tl.cex = 0.2,
+  col = COL1("Reds", 100), mar = c(0, 0, 2, 0)
+)
 ```
 
 
@@ -429,29 +445,33 @@ corrplot(as.matrix(fam1$ped_add_classic_complete - fam1$ped_add_classic_mom),
   method = "color", type = "lower", col.lim = c(0, 1),
   is.corr = FALSE, title = "Classic Mom Diff from Complete",
   order = "hclust",
-  tl.pos	="l", tl.col = "black", tl.srt = 5, tl.cex = 0.2,
-  col = COL1('Reds', 100), mar=c(0,0,2,0))
+  tl.pos = "l", tl.col = "black", tl.srt = 5, tl.cex = 0.2,
+  col = COL1("Reds", 100), mar = c(0, 0, 2, 0)
+)
 
 corrplot(as.matrix(fam1$ped_add_classic_complete - fam1$ped_add_partial_mom),
   method = "color", type = "lower", col.lim = c(0, 1),
   is.corr = FALSE, title = "Partial Mom Diff from Complete",
   order = "hclust",
-  tl.pos	="l", tl.col = "black", tl.srt = 5, tl.cex = 0.2,
-  col = COL1('Reds', 100), mar=c(0,0,2,0))
+  tl.pos = "l", tl.col = "black", tl.srt = 5, tl.cex = 0.2,
+  col = COL1("Reds", 100), mar = c(0, 0, 2, 0)
+)
 
 corrplot(as.matrix(fam1$ped_add_classic_complete - fam1$ped_add_classic_dad),
   method = "color", type = "lower", col.lim = c(0, 1),
   is.corr = FALSE, title = "Classic Dad Diff from Complete",
   order = "hclust",
-  tl.pos	="l", tl.col = "black", tl.srt = 5, tl.cex = 0.2,
-  col = COL1('Reds', 100), mar=c(0,0,2,0))
+  tl.pos = "l", tl.col = "black", tl.srt = 5, tl.cex = 0.2,
+  col = COL1("Reds", 100), mar = c(0, 0, 2, 0)
+)
 
 corrplot(as.matrix(fam1$ped_add_classic_complete - fam1$ped_add_partial_dad),
   method = "color", type = "lower", col.lim = c(0, 1),
   is.corr = FALSE, title = "Partial Dad Diff from Complete",
   order = "hclust",
-  tl.pos	="l", tl.col = "black", tl.srt = 5, tl.cex = 0.2,
-  col = COL1('Reds', 100), mar=c(0,0,2,0))
+  tl.pos = "l", tl.col = "black", tl.srt = 5, tl.cex = 0.2,
+  col = COL1("Reds", 100), mar = c(0, 0, 2, 0)
+)
 ```
 
 These plots show how each method responds to missing data, and whether it maintains consistency with the complete pedigree. We observe that the partial parent method typically introduces smaller deviations. If desired, this same diagnostic can be repeated for additional families, such as inbreeding_list[[2]].

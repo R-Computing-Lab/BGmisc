@@ -49,14 +49,14 @@
 #' - `FAMS`: ID(s) of the family where the individual is a spouse
 #' @keywords internal
 readGedcom.legacy <- function(file_path,
-                       verbose = FALSE,
-                       add_parents = TRUE,
-                       remove_empty_cols = TRUE,
-                       combine_cols = TRUE,
-                       skinny = FALSE,
-                       update_rate = 1000,
-                       post_process = TRUE,
-                       ...) {
+                              verbose = FALSE,
+                              add_parents = TRUE,
+                              remove_empty_cols = TRUE,
+                              combine_cols = TRUE,
+                              skinny = FALSE,
+                              update_rate = 1000,
+                              post_process = TRUE,
+                              ...) {
   # Checks
   if (!file.exists(file_path)) stop("File does not exist: ", file_path)
   if (verbose) {
@@ -302,12 +302,12 @@ readGedcom.legacy <- function(file_path,
     warning("The number of people found in the processed file does not match the number of individuals raw data")
   }
 
-  if(post_process){
+  if (post_process) {
     if (verbose) {
       print("Post-processing data frame")
     }
     # Remove the first row (empty)
-df_temp <- postProcessGedcom.legacy(
+    df_temp <- postProcessGedcom.legacy(
       df_temp = df_temp,
       remove_empty_cols = remove_empty_cols,
       combine_cols = combine_cols,
@@ -315,7 +315,6 @@ df_temp <- postProcessGedcom.legacy(
       skinny = skinny,
       verbose = verbose
     )
-
   }
 
   return(df_temp)
@@ -328,12 +327,11 @@ df_temp <- postProcessGedcom.legacy(
 #' @return A data frame with processed information.
 
 postProcessGedcom.legacy <- function(df_temp,
-                              remove_empty_cols = TRUE,
-                                    combine_cols = TRUE,
-                                    add_parents = TRUE,
-                                    skinny = TRUE,
-                                    verbose = FALSE
-){
+                                     remove_empty_cols = TRUE,
+                                     combine_cols = TRUE,
+                                     add_parents = TRUE,
+                                     skinny = TRUE,
+                                     verbose = FALSE) {
   # Add mom and dad ids
   if (add_parents) {
     if (verbose) {
@@ -342,28 +340,27 @@ postProcessGedcom.legacy <- function(df_temp,
     df_temp <- processParents.legacy(df_temp, datasource = "gedcom")
   }
 
-if (combine_cols) {
-  df_temp <- collapseNames.legacy(verbose = verbose, df_temp = df_temp)
-}
-
-if (remove_empty_cols) {
-  # Remove empty columns
-  if (verbose) {
-    print("Removing empty columns")
+  if (combine_cols) {
+    df_temp <- collapseNames.legacy(verbose = verbose, df_temp = df_temp)
   }
-  df_temp <- df_temp[, colSums(is.na(df_temp)) < nrow(df_temp)]
-}
-if (skinny) {
-  if (verbose) {
-    print("Slimming down the data frame")
+
+  if (remove_empty_cols) {
+    # Remove empty columns
+    if (verbose) {
+      print("Removing empty columns")
+    }
+    df_temp <- df_temp[, colSums(is.na(df_temp)) < nrow(df_temp)]
   }
-  df_temp <- df_temp[, colSums(is.na(df_temp)) < nrow(df_temp)]
-  df_temp$FAMC <- NULL
-  df_temp$FAMS <- NULL
-}
+  if (skinny) {
+    if (verbose) {
+      print("Slimming down the data frame")
+    }
+    df_temp <- df_temp[, colSums(is.na(df_temp)) < nrow(df_temp)]
+    df_temp$FAMC <- NULL
+    df_temp$FAMS <- NULL
+  }
 
-return(df_temp)
-
+  return(df_temp)
 }
 
 #' Create a mapping of family IDs to parent IDs
@@ -570,7 +567,7 @@ countPatternRows.legacy <- function(file) {
 #' @keywords internal
 #'
 process_tag.legacy <- function(tag, field_name, pattern_rows, line, vars,
-                        extractor = NULL, mode = "replace") {
+                               extractor = NULL, mode = "replace") {
   count_name <- paste0("num_", tolower(tag), "_rows")
   matched <- FALSE
   if (!is.null(pattern_rows[[count_name]]) &&
@@ -622,4 +619,3 @@ collapseNames.legacy <- function(verbose, df_temp) {
   }
   return(df_temp)
 }
-
