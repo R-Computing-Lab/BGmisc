@@ -53,3 +53,24 @@ test_that("famSizeCal returns increasingly large  numbers for increased kpc", {
 
   expect_gt(result_B, result_A)
 })
+
+# other allGens values
+
+test_that("allGens behaves with Ngens", {
+  # Test case 1: Ngen = 1
+  set.seed(123)
+  kpc <- 1
+  Ngen <- 1
+  marR <- 0.8
+
+  result <- allGens(kpc = kpc, Ngen = Ngen, marR = marR)
+
+  expect_equal(result, 2)
+
+  Ngen <- 0
+
+  expect_error(allGens(kpc = kpc, Ngen = Ngen, marR = marR))
+
+  expect_error(allGens(kpc = kpc, Ngen = NULL, marR = marR))
+  expect_error(allGens(kpc = kpc, Ngen = -1, marR = marR))
+})

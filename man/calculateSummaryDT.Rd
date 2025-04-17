@@ -2,7 +2,8 @@
 % Please edit documentation in R/summarizePedigree.R
 \name{calculateSummaryDT}
 \alias{calculateSummaryDT}
-\title{This function calculates summary statistics for all numeric variables in a data.table. It is supposed to be used internally by the \code{summarize_pedigree} function.}
+\title{Function to calculate summary statistics for all numeric variables
+This function calculates summary statistics for all numeric variables in a data.table. It is supposed to be used internally by the \code{summarize_pedigree} function.}
 \usage{
 calculateSummaryDT(data, group_var, skip_var, five_num_summary = FALSE)
 }
@@ -20,6 +21,7 @@ the minimum, median, and maximum values.}
 A data.table containing the summary statistics for all numeric variables.
 }
 \description{
+Function to calculate summary statistics for all numeric variables
 This function calculates summary statistics for all numeric variables in a data.table. It is supposed to be used internally by the \code{summarize_pedigree} function.
 }
 \keyword{internal}

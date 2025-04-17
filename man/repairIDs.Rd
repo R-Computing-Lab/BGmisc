@@ -7,9 +7,9 @@
 repairIDs(ped, verbose = FALSE)
 }
 \arguments{
-\item{ped}{A pedigree object}
+\item{ped}{A dataframe representing the pedigree data with columns `ID`, `dadID`, and `momID`.}
 
-\item{verbose}{A logical indicating whether to print progress messages}
+\item{verbose}{A logical flag indicating whether to print progress and validation messages to the console.}
 }
 \value{
 A corrected pedigree

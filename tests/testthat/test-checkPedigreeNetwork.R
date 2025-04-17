@@ -13,7 +13,7 @@ test_that("checkPedigreeNetwork detects cyclic relationships correctly in potter
   # Introduce a cycle: making Harry Potter his own ancestor
   cyclic_potter$dadID[cyclic_potter$personID == cyclic_potter$dadID[cyclic_potter$name == "Harry Potter"]] <- cyclic_potter$personID[cyclic_potter$name == "Harry Potter"]
 
-  results <- checkPedigreeNetwork(cyclic_potter, personID = "personID", momID = "momID", dadID = "dadID", verbose = FALSE)
+  results <- checkPedigreeNetwork(cyclic_potter, personID = "personID", momID = "momID", dadID = "dadID", verbose = TRUE)
   expect_false(results$is_acyclic)
   expect_true(!is.null(results$cyclic_relationships))
   expect_true(any(cyclic_potter$personID[cyclic_potter$name == "Harry Potter"] %in% results$cyclic_relationships))

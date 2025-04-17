@@ -18,6 +18,7 @@ com2links(
   legacy = FALSE,
   outcome_name = "data",
   drop_upper_triangular = TRUE,
+  include_all_links_1ped = FALSE,
   ...
 )
 }
@@ -47,6 +48,8 @@ com2links(
 \item{outcome_name}{Character string representing the outcome name (used in file naming).}
 
 \item{drop_upper_triangular}{Logical. If TRUE, drops the upper triangular portion of the matrix.}
+
+\item{include_all_links_1ped}{Logical. If TRUE, includes all links in the output. (Default is true when only one ped is provided)}
 
 \item{...}{Additional arguments to be passed to \code{\link{com2links}}}
 }

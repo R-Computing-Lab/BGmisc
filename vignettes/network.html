@@ -399,7 +399,7 @@ They match!</p>
 <p>Once you know which sets of people are related at all to one another,
 you’ll likely want to know how much. For additive genetic relatedness,
 you can use the <code>ped2add()</code> function.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>add <span class="ot">&lt;-</span> <span class="fu">ped2add</span>(potter)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>add <span class="ot">&lt;-</span> <span class="fu">ped2add</span>(potter, <span class="at">sparse =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
 <p>This computes the additive genetic relatedness for everyone in the
 data. It returns a square, symmetric matrix that has as many rows and
 columns as there are IDs.</p>
@@ -428,7 +428,7 @@ extended family.</p>
 <span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>  <span class="fu">unique</span>(potter<span class="sc">$</span>famID),</span>
 <span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>  <span class="cf">function</span>(d) {</span>
 <span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>    tmp <span class="ot">&lt;-</span> potter[potter<span class="sc">$</span>famID <span class="sc">%in%</span> d, ]</span>
-<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>    <span class="fu">ped2add</span>(tmp)</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>    <span class="fu">ped2add</span>(tmp, <span class="at">sparse =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>  }</span>
 <span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>)</span></code></pre></div>
 <div id="other-relatedness-measures" class="section level2">
@@ -441,7 +441,7 @@ parents (<code>ped2cn</code>), and common extended family environment
 <h3>Computing mitochondrial relatedness</h3>
 <p>Here we calculate the mitochondrial relatedness between all pairs of
 individuals in the <code>potter</code> dataset.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>mit <span class="ot">&lt;-</span> <span class="fu">ped2mit</span>(potter)</span>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>mit <span class="ot">&lt;-</span> <span class="fu">ped2mit</span>(potter, <span class="at">sparse =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>mit[<span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>]</span>
 <span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="co">#&gt;   1 2 3 4 5 6 7</span></span>
 <span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co">#&gt; 1 1 1 0 0 0 0 0</span></span>
@@ -463,7 +463,7 @@ not.</p>
 <h3>Computing relatedness through common nuclear environment</h3>
 <p>Here we calculate the relatedness between all pairs of individuals in
 the <code>potter</code> dataset through sharing both parents.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>commonNuclear <span class="ot">&lt;-</span> <span class="fu">ped2cn</span>(potter)</span>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>commonNuclear <span class="ot">&lt;-</span> <span class="fu">ped2cn</span>(potter, <span class="at">sparse =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>commonNuclear[<span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>]</span>
 <span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="co">#&gt;   1 2 3 4 5 6 7</span></span>
 <span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="co">#&gt; 1 1 1 0 0 0 0 0</span></span>
@@ -484,7 +484,7 @@ the <code>potter</code> dataset through sharing both parents.</p>
 environment</h3>
 <p>Here we calculate the relatedness between all pairs of individuals in
 the <code>potter</code> dataset through sharing an extended family.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>extendedFamilyEnvironment <span class="ot">&lt;-</span> <span class="fu">ped2ce</span>(potter)</span>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>extendedFamilyEnvironment <span class="ot">&lt;-</span> <span class="fu">ped2ce</span>(potter, <span class="at">sparse =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>extendedFamilyEnvironment[<span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>]</span>
 <span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="co">#&gt;      [,1] [,2] [,3] [,4] [,5] [,6] [,7]</span></span>
 <span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="co">#&gt; [1,]    1    1    1    1    1    1    1</span></span>

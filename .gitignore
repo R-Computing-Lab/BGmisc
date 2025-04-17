@@ -12,7 +12,9 @@ tests/testthat/Rplots.pdf
 *.ASOIAF.ged
 ASOIAF.ged
 *.Rproj
-
+benchmark_results.csv
 .vscode/launch.json
 dataRelatedPairs_new2.csv
 tests/testthat/dataRelatedPairs_new.csv
+data-raw/ASOIAF_040725.ged
+dataRelatedPairs.csv

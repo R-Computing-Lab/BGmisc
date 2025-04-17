@@ -1,6 +1,7 @@
 #' Segment Pedigree into Extended Families
 #'
-#' This function adds an extended family ID variable to a pedigree by segmenting that dataset into independent extended families
+#' This function adds an extended family ID variable to a pedigree by segmenting
+#' that dataset into independent extended families
 #' using the weakly connected components algorithm.
 #'
 #'
@@ -51,6 +52,7 @@ ped2fam <- function(ped, personID = "ID",
   ped2 <- merge(fam, ped,
     by = personID, all.x = FALSE, all.y = TRUE
   )
+
   return(ped2)
 }
 
@@ -85,7 +87,9 @@ ped2graph <- function(ped,
                       adjacent = c("parents", "mothers", "fathers"),
                       ...) {
   # Check ped/data.fram
-  if (!inherits(ped, "data.frame")) stop("ped should be a data.frame or inherit to a data.frame")
+  if (!inherits(ped, "data.frame")) {
+    stop("ped should be a data.frame or inherit to a data.frame")
+  }
   # Handle adjacent argument
   adjacent <- match.arg(tolower(adjacent)[1],
     choices = c(
@@ -164,7 +168,7 @@ ped2graph <- function(ped,
 
 #' Add a maternal line ID variable to a pedigree
 #' @inheritParams ped2fam
-#' @param matID Character.  Maternal line ID variable to be created and added to the pedigree
+#' @param matID Character. Maternal line ID variable to be created and added to the pedigree
 #' @details
 #' Under various scenarios it is useful to know which people in a pedigree
 #' belong to the same maternal lines.  This function first turns a pedigree
@@ -176,9 +180,13 @@ ped2graph <- function(ped,
 #' @export
 #'
 ped2maternal <- function(ped, personID = "ID",
-                         momID = "momID", dadID = "dadID", matID = "matID", ...) {
+                         momID = "momID", dadID = "dadID",
+                         matID = "matID", ...) {
   # Call to wrapper function
-  .ped2id(ped = ped, personID = personID, momID = momID, dadID = dadID, famID = matID, type = "mothers")
+  .ped2id(
+    ped = ped, personID = personID, momID = momID,
+    dadID = dadID, famID = matID, type = "mothers"
+  )
 }
 
 #' Add a paternal line ID variable to a pedigree
@@ -198,5 +206,8 @@ ped2paternal <- function(ped, personID = "ID",
                          momID = "momID", dadID = "dadID",
                          patID = "patID", ...) {
   # Call to wrapper function
-  .ped2id(ped = ped, personID = personID, momID = momID, dadID = dadID, famID = patID, type = "fathers")
+  .ped2id(
+    ped = ped, personID = personID, momID = momID,
+    dadID = dadID, famID = patID, type = "fathers"
+  )
 }

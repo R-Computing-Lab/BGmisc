@@ -25,7 +25,7 @@ plotPedigree <- function(ped,
                          pconnect = .5,
                          ...) {
   # Standardize column names in the input dataframe
-  ped <- standardizeColnames(ped)
+  ped <- standardizeColnames(ped, verbose = verbose)
 
   # Define required columns
   simulated_vars <- c("fam", "ID", "dadID", "momID", "sex")
@@ -83,7 +83,8 @@ plotPedigree <- function(ped,
       dadid = p$father,
       momid = p$mother,
       sex = p$sex,
-      famid = p$ped
+      famid = p$ped,
+      affected = p$affected
     )
     p3 <- p2["1"]
     if (verbose) {
