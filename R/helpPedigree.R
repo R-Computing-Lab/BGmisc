@@ -39,8 +39,8 @@ createGenDataFrame <- function(sizeGens, genIndex, idGen) {
 #'
 #' @param idGen Vector of IDs for the generation.
 #' @param sexR Numeric value indicating the sex ratio (proportion of males).
-#' @param recode_male The value to use for males. Default is "M"
-#' @param recode_female The value to use for females. Default is "F"
+#' @param code_male The value to use for males. Default is "M"
+#' @param code_female The value to use for females. Default is "F"
 #' @return Vector of sexes ("M" for male, "F" for female) for the offspring.
 #' @importFrom stats runif
 determineSex <- function(idGen, sexR, code_male = "M", code_female = "F") {
