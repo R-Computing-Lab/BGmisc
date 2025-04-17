@@ -42,7 +42,7 @@ ped2add(
 
 \item{transpose_method}{character. The method to use for computing the transpose.  Options are "tcrossprod", "crossprod", or "star"}
 
-\item{adjacency_method}{character. The method to use for computing the adjacency matrix.  Options are "loop" or "indexed"}
+\item{adjacency_method}{character. The method to use for computing the adjacency matrix.  Options are "loop", "indexed", direct or beta}
 
 \item{saveable}{logical. If TRUE, save the intermediate results to disk}
 

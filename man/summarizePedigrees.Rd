@@ -2,6 +2,7 @@
 % Please edit documentation in R/summarizePedigree.R
 \name{summarizePedigrees}
 \alias{summarizePedigrees}
+\alias{summarisePedigrees}
 \title{Summarize Pedigree Data}
 \usage{
 summarizePedigrees(
@@ -17,7 +18,27 @@ summarizePedigrees(
   include_founder = FALSE,
   founder_sort_var = NULL,
   nbiggest = 5,
-  noldest = 5,
+  noldest = nbiggest,
+  skip_var = NULL,
+  five_num_summary = FALSE,
+  network_checks = FALSE,
+  verbose = FALSE
+)
+
+summarisePedigrees(
+  ped,
+  famID = "famID",
+  personID = "ID",
+  momID = "momID",
+  dadID = "dadID",
+  matID = "matID",
+  patID = "patID",
+  type = c("fathers", "mothers", "families"),
+  byr = NULL,
+  include_founder = FALSE,
+  founder_sort_var = NULL,
+  nbiggest = 5,
+  noldest = nbiggest,
   skip_var = NULL,
   five_num_summary = FALSE,
   network_checks = FALSE,

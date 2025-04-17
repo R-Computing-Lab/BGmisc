@@ -297,14 +297,26 @@ test_that("adjacency_method  'indexed', 'loop', and direct produce the same resu
 test_that("adjacency_method  'indexed', 'loop', and direct produce the same results for common nuclear matrix", {
   data(hazard)
   tolerance <- 1e-10
-
+  adjBeta_method_1 <- 1
+  adjBeta_method_2 <- 4
+  adjBeta_method_3 <- 5
   # common nuclear
   ped_common_indexed <- ped2com(hazard, component = "common nuclear", adjacency_method = "indexed")
   ped_common_loop <- ped2com(hazard, component = "common nuclear", adjacency_method = "loop")
-  #  ped_common_direct <- ped2com(hazard, component = "common nuclear", adjacency_method = "direct")
+  ped_common_direct <- ped2com(hazard, component = "common nuclear", adjacency_method = "direct")
+  ped_common_adjBeta_1 <- ped2com(hazard, component = "common nuclear", adjacency_method = "beta", adjBeta_method = adjBeta_method_2)
+  ped_common_adjBeta_2 <- ped2com(hazard, component = "common nuclear", adjacency_method = "beta", adjBeta_method = adjBeta_method_3)
+
   expect_equal(ped_common_indexed, ped_common_loop, tolerance = tolerance)
-  # expect_equal(ped_common_loop, ped_common_direct, tolerance = tolerance)
-  # expect_equal(ped_common_indexed, ped_common_direct, tolerance = tolerance)
+  expect_equal(ped_common_loop, ped_common_direct, tolerance = tolerance)
+  expect_equal(ped_common_indexed, ped_common_direct, tolerance = tolerance)
+  expect_equal(ped_common_loop, ped_common_adjBeta_1, tolerance = tolerance)
+  expect_equal(ped_common_indexed, ped_common_adjBeta_1, tolerance = tolerance)
+  expect_equal(ped_common_loop, ped_common_adjBeta_2, tolerance = tolerance)
+  expect_equal(ped_common_indexed, ped_common_adjBeta_2, tolerance = tolerance)
+  expect_equal(ped_common_direct, ped_common_adjBeta_1, tolerance = tolerance)
+  expect_equal(ped_common_direct, ped_common_adjBeta_2, tolerance = tolerance)
+  expect_equal(ped_common_adjBeta_1, ped_common_adjBeta_2, tolerance = tolerance)
 })
 
 

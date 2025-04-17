@@ -7,18 +7,19 @@
 compute_parent_adjacency(
   ped,
   component,
-  adjacency_method = "indexed",
+  adjacency_method = "direct",
   saveable,
   resume,
   save_path,
-  verbose,
-  lastComputed,
+  verbose = FALSE,
+  lastComputed = 0,
   nr,
   checkpoint_files,
   update_rate,
   parList,
   lens,
   save_rate_parlist,
+  adjBeta_method = NULL,
   ...
 )
 }
@@ -27,7 +28,7 @@ compute_parent_adjacency(
 
 \item{component}{character.  Which component of the pedigree to return.  See Details.}
 
-\item{adjacency_method}{character. The method to use for computing the adjacency matrix.  Options are "loop" or "indexed"}
+\item{adjacency_method}{character. The method to use for computing the adjacency matrix.  Options are "loop", "indexed", direct or beta}
 
 \item{saveable}{logical. If TRUE, save the intermediate results to disk}
 
@@ -50,6 +51,8 @@ compute_parent_adjacency(
 \item{lens}{a vector of the lengths of the parent-child relationships}
 
 \item{save_rate_parlist}{numeric. The rate at which to save the intermediate results by parent list. If NULL, defaults to save_rate*1000}
+
+\item{adjBeta_method}{numeric The method to use for computing the building the adjacency_method matrix when using the "beta" build}
 
 \item{...}{additional arguments to be passed to \code{\link{ped2com}}}
 }

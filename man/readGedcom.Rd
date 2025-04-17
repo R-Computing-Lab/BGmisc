@@ -2,6 +2,8 @@
 % Please edit documentation in R/readGedcom.R
 \name{readGedcom}
 \alias{readGedcom}
+\alias{readGed}
+\alias{readgedcom}
 \title{Read a GEDCOM File}
 \usage{
 readGedcom(
@@ -11,6 +13,32 @@ readGedcom(
   remove_empty_cols = TRUE,
   combine_cols = TRUE,
   skinny = FALSE,
+  update_rate = 1000,
+  post_process = TRUE,
+  ...
+)
+
+readGed(
+  file_path,
+  verbose = FALSE,
+  add_parents = TRUE,
+  remove_empty_cols = TRUE,
+  combine_cols = TRUE,
+  skinny = FALSE,
+  update_rate = 1000,
+  post_process = TRUE,
+  ...
+)
+
+readgedcom(
+  file_path,
+  verbose = FALSE,
+  add_parents = TRUE,
+  remove_empty_cols = TRUE,
+  combine_cols = TRUE,
+  skinny = FALSE,
+  update_rate = 1000,
+  post_process = TRUE,
   ...
 )
 }
@@ -26,6 +54,10 @@ readGedcom(
 \item{combine_cols}{A logical value indicating whether to combine columns with duplicate values.}
 
 \item{skinny}{A logical value indicating whether to return a skinny data frame.}
+
+\item{update_rate}{numeric. The rate at which to print progress}
+
+\item{post_process}{A logical value indicating whether to post-process the data frame.}
 
 \item{...}{Additional arguments to be passed to the function.}
 }
@@ -69,5 +101,4 @@ A data frame containing information about individuals, with the following potent
 }
 \description{
 This function reads a GEDCOM file and parses it into a structured data frame of individuals.
-Inspired by https://raw.githubusercontent.com/jjfitz/readgedcom/master/R/read_gedcom.R
 }

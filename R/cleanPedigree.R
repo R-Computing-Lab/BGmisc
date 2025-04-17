@@ -16,9 +16,9 @@ standardizeColnames <- function(df, verbose = FALSE) {
     "fam" = "^(?:fam(?:ily)?[\\.\\-_]?(?:id)?)",
     "ID" = "^(?:i(?:d$|ndiv(?:idual)?)|p(?:erson)?[\\.\\-_]?id)",
     "gen" = "^(?:gen(?:s|eration)?)",
-    "dadID" = "^(?:d(?:ad)?id|paid|fatherid|pid[\\.\\-_]?fath[er]*)",
+    "dadID" = "^(?:d(?:ad)?id|paid|fatherid|pid[\\.\\-_]?fath[er]*|sire)",
     "patID" = "^(?:dat[\\.\\-_]?id|pat[\\.\\-_]?id|paternal[\\.\\-_]?(?:id)?)",
-    "momID" = "^(?:m(?:om|a|other)?[\\.\\-_]?id|pid[\\.\\-_]?moth[er]*)",
+    "momID" = "^(?:m(?:om|a|other)?[\\.\\-_]?id|pid[\\.\\-_]?moth[er]*|dame)",
     "matID" = "^(?:mat[\\.\\-_]?id|maternal[\\.\\-_]?(?:id)?)",
     "spID" = "^(?:s(?:pt)?id|spouse[\\.\\-_]?(?:id)?|partner[\\.\\-_]?(?:id)?|husb(?:and)?[\\.\\-_]?id|wife[\\.\\-_]?(?:id)?|pid[\\.\\-_]?spouse1?)",
     "twinID" = "^(?:twin[\\.\\-_]?(?:id)?)",
@@ -60,7 +60,7 @@ standardizeColnames <- function(df, verbose = FALSE) {
 # check_sex = TRUE,
 # check_parents = TRUE,
 # verbose = FALSE) {
-# corrected_ped <- ped <- standardizeColnames(ped)
+# corrected_ped <- ped <- standardizeColnames(ped, verbose = verbose)
 # if (verbose) {
 # print("Repairing pedigree...")
 # }

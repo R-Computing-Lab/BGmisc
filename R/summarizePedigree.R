@@ -39,7 +39,7 @@ summarizePedigrees <- function(ped, famID = "famID", personID = "ID",
                                matID = "matID", patID = "patID",
                                type = c("fathers", "mothers", "families"),
                                byr = NULL, include_founder = FALSE, founder_sort_var = NULL,
-                               nbiggest = 5, noldest = 5, skip_var = NULL,
+                               nbiggest = 5, noldest = nbiggest, skip_var = NULL,
                                five_num_summary = FALSE, network_checks = FALSE,
                                verbose = FALSE) {
   # Fast Fails
@@ -123,15 +123,11 @@ summarizePedigrees <- function(ped, famID = "famID", personID = "ID",
     )
     # Find the originating member for each line
     if (include_founder) {
-      if (verbose) message("Finding originating members for families...")
-      originating_member_family <- findFounder(ped_dt,
+      family_summary_dt <- summarizeFounder(
+        verbose = verbose, ped_dt = ped_dt,
         group_var = famID,
-        sort_var = founder_sort_var
-      )
-      # Merge summary statistics with originating members for additional information
-      family_summary_dt <- merge(family_summary_dt,
-        originating_member_family,
-        by = famID, suffixes = c("", "_founder")
+        sort_var = founder_sort_var,
+        foo_summary_dt = family_summary_dt
       )
     }
     output$family_summary <- family_summary_dt
@@ -146,14 +142,11 @@ summarizePedigrees <- function(ped, famID = "famID", personID = "ID",
       five_num_summary = five_num_summary
     )
     if (include_founder) {
-      if (verbose) message("Finding originating members for matrilineal lines...")
-      originating_member_maternal <- findFounder(ped_dt,
+      maternal_summary_dt <- summarizeFounder(
+        verbose = verbose, ped_dt = ped_dt,
         group_var = matID,
-        sort_var = founder_sort_var
-      )
-      maternal_summary_dt <- merge(maternal_summary_dt,
-        originating_member_maternal,
-        by = matID, suffixes = c("", "_founder")
+        sort_var = founder_sort_var,
+        foo_summary_dt = maternal_summary_dt
       )
     }
     output$maternal_summary <- maternal_summary_dt
@@ -167,14 +160,11 @@ summarizePedigrees <- function(ped, famID = "famID", personID = "ID",
       five_num_summary = five_num_summary
     )
     if (include_founder) {
-      if (verbose) message("Finding originating members for patrilineal lines...")
-      originating_member_paternal <- findFounder(ped_dt,
+      paternal_summary_dt <- summarizeFounder(
+        verbose = verbose, ped_dt = ped_dt,
         group_var = patID,
-        sort_var = founder_sort_var
-      )
-      paternal_summary_dt <- merge(paternal_summary_dt,
-        originating_member_paternal,
-        by = patID, suffixes = c("", "_founder")
+        sort_var = founder_sort_var,
+        foo_summary_dt = paternal_summary_dt
       )
     }
 
@@ -245,12 +235,11 @@ summarizePedigrees <- function(ped, famID = "famID", personID = "ID",
       )
     }
   }
-
   return(output)
 }
 
-# Function to calculate summary statistics for all numeric variables
 
+#' Function to calculate summary statistics for all numeric variables
 #' This function calculates summary statistics for all numeric variables in a data.table. It is supposed to be used internally by the \code{summarize_pedigree} function.
 #' @inheritParams summarizePedigrees
 #' @param data A data.table containing the pedigree data.
@@ -298,8 +287,8 @@ calculateSummaryDT <- function(data, group_var, skip_var,
   return(summary_stats)
 }
 
-# Function to find the originating member for each line
-
+#' Function to find the originating member for each line
+#'
 #' This function finds the originating member for each line in a pedigree. It is supposed to be used internally by the \code{summarize_pedigree} function.
 #' @inheritParams summarizePedigrees
 #' @param sort_var A character string specifying the column name to sort by.
@@ -312,7 +301,29 @@ findFounder <- function(data, group_var, sort_var) {
   data[order(get(sort_var)), .SD[1], by = group_var]
 }
 
+#' Function to summarize the originating members for each line
+#'
+#' This function summarizes the originating members for each line in a pedigree. It is supposed to be used internally by the \code{summarize_pedigree} function.
+#'
+#' @inheritParams summarizePedigrees
+#' @inheritParams findFounder
+#'
+#' @keywords internal
 
+summarizeFounder <- function(ped_dt, group_var, sort_var, foo_summary_dt, verbose) {
+  if (verbose) message(paste0("Finding originating members for ", "group_var"))
+  originating_member_foo <- findFounder(
+    data = ped_dt,
+    group_var = group_var,
+    sort_var = sort_var
+  )
+  # Merge summary statistics with originating members for additional information
+  foo_summary_dt <- merge(foo_summary_dt,
+    originating_member_foo,
+    by = group_var, suffixes = c("", "_founder")
+  )
+  return(foo_summary_dt)
+}
 #' Summarize the maternal lines in a pedigree
 #' @inheritParams summarizePedigrees
 #' @seealso [summarizePedigrees ()]
@@ -339,6 +350,9 @@ summarizeMatrilines <- function(ped, famID = "famID", personID = "ID",
     founder_sort_var = founder_sort_var
   )
 }
+
+
+
 
 #' Summarize the paternal lines in a pedigree
 #' @inheritParams summarizePedigrees
@@ -420,3 +434,19 @@ findBiggest <- function(foo_summary_dt, nbiggest, n_foo) {
   )])
   return(biggest_foo)
 }
+
+#' @rdname summarizePedigrees
+#' @export
+summarisePedigrees <- summarizePedigrees
+
+#' @rdname summarizeFamilies
+#' @export
+summariseFamilies <- summarizeFamilies
+
+#' @rdname summarizeMatrilines
+#' @export
+summariseMatrilines <- summarizeMatrilines
+
+#' @rdname summarizePatrilines
+#' @export
+summarisePatrilines <- summarizePatrilines

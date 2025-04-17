@@ -2,17 +2,17 @@
 % Please edit documentation in R/readGedcom.R
 \name{mapFAMS2parents}
 \alias{mapFAMS2parents}
-\title{Create a mapping of family IDs to parent IDs}
+\title{Create a Mapping from Family IDs to Parent IDs}
 \usage{
 mapFAMS2parents(df_temp)
 }
 \arguments{
-\item{df_temp}{A data frame containing information about individuals.}
+\item{df_temp}{A data frame produced by \code{readGedcom()}.}
 }
 \value{
-A list mapping family IDs to parent IDs.
+A list mapping family IDs to parent information.
 }
 \description{
-This function creates a mapping from family IDs to the IDs of the parents.
+This function scans the data frame and creates a mapping of family IDs
+to the corresponding parent IDs.
 }
-\keyword{internal}

@@ -4,12 +4,16 @@
 \alias{determineSex}
 \title{Determine Sex of Offspring}
 \usage{
-determineSex(idGen, sexR)
+determineSex(idGen, sexR, code_male = "M", code_female = "F")
 }
 \arguments{
 \item{idGen}{Vector of IDs for the generation.}
 
 \item{sexR}{Numeric value indicating the sex ratio (proportion of males).}
+
+\item{code_male}{The value to use for males. Default is "M"}
+
+\item{code_female}{The value to use for females. Default is "F"}
 }
 \value{
 Vector of sexes ("M" for male, "F" for female) for the offspring.
