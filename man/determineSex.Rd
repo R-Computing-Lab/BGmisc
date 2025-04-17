@@ -10,6 +10,10 @@ determineSex(idGen, sexR, code_male = "M", code_female = "F")
 \item{idGen}{Vector of IDs for the generation.}
 
 \item{sexR}{Numeric value indicating the sex ratio (proportion of males).}
+
+\item{recode_male}{The value to use for males. Default is "M"}
+
+\item{recode_female}{The value to use for females. Default is "F"}
 }
 \value{
 Vector of sexes ("M" for male, "F" for female) for the offspring.

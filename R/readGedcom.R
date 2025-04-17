@@ -9,6 +9,7 @@
 #' @param verbose A logical value indicating whether to print messages.
 #' @param skinny A logical value indicating whether to return a skinny data frame.
 #' @param update_rate numeric. The rate at which to print progress
+#' @param post_process A logical value indicating whether to post-process the data frame.
 #' @param ... Additional arguments to be passed to the function.
 #' @return A data frame containing information about individuals, with the following potential columns:
 #' - `id`: ID of the individual
@@ -154,7 +155,7 @@ splitIndividuals <- function(lines, verbose = FALSE) {
 #' @param all_var_names A character vector of variable names.
 #' @return A named list representing an empty individual record.
 initializeRecord <- function(all_var_names) {
-  setNames(as.list(rep(NA_character_, length(all_var_names))), all_var_names)
+  stats::setNames(as.list(rep(NA_character_, length(all_var_names))), all_var_names)
 }
 
 #' Parse a GEDCOM Individual Block

@@ -17,8 +17,9 @@
 #' @param flatten.diag logical. If TRUE, overwrite the diagonal of the final relatedness matrix with ones
 #' @param standardize.colnames logical. If TRUE, standardize the column names of the pedigree dataset
 #' @param transpose_method character. The method to use for computing the transpose.  Options are "tcrossprod", "crossprod", or "star"
-#' @param adjacency_method character. The method to use for computing the adjacency matrix.  Options are "loop" or "indexed"
+#' @param adjacency_method character. The method to use for computing the adjacency matrix.  Options are "loop", "indexed", direct or beta
 #' @param isChild_method character. The method to use for computing the isChild matrix.  Options are "classic" or "partialparent"
+#' @param adjBeta_method numeric The method to use for computing the building the adjacency_method matrix when using the "beta" build
 #' @param ... additional arguments to be passed to \code{\link{ped2com}}
 #' @details The algorithms and methodologies used in this function are further discussed and exemplified in the vignette titled "examplePedigreeFunctions". For more advanced scenarios and detailed explanations, consult this vignette.
 #' @export
@@ -40,7 +41,7 @@ ped2com <- function(ped, component,
                     save_rate_parlist = 100000 * save_rate,
                     update_rate = 100,
                     save_path = "checkpoint/",
-                    method_approach=NULL,
+                    adjBeta_method=NULL,
                     ...) {
   #------
   # Checkpointing
@@ -90,8 +91,8 @@ ped2com <- function(ped, component,
   if (!transpose_method %in% c("tcrossprod", "crossprod", "star", "tcross.alt.crossprod", "tcross.alt.star")) {
     stop("Invalid method specified. Choose from 'tcrossprod', 'crossprod', or 'star' or 'tcross.alt.crossprod' or 'tcross.alt.star'.")
   }
-  if (!adjacency_method %in% c("indexed", "loop", "direct")) {
-    stop("Invalid method specified. Choose from 'indexed', 'loop', or 'direct'.")
+  if (!adjacency_method %in% c("indexed", "loop", "direct", "beta")) {
+    stop("Invalid method specified. Choose from 'indexed', 'loop', 'direct', or 'beta'.")
   }
 
   # standardize colnames
@@ -162,7 +163,7 @@ ped2com <- function(ped, component,
       nr = nr,
       parList = parList,
       lens = lens,
-      method_approach = method_approach
+      adjBeta_method = adjBeta_method
     )
 
     # Construct sparse matrix
@@ -425,7 +426,7 @@ ped2cn <- function(ped, max.gen = 25, sparse = TRUE, verbose = FALSE,
                    saveable = FALSE,
                    resume = FALSE,
                    save_rate = 5,
-                   adjacency_method = "indexed",
+                   adjacency_method = "direct",
                    save_rate_gen = save_rate,
                    save_rate_parlist = 1000 * save_rate,
                    save_path = "checkpoint/",
@@ -602,7 +603,7 @@ ped2ce <- function(ped,
 .adjDirect <- function(ped, component, saveable, resume,
                        save_path, verbose, lastComputed,
                        nr, checkpoint_files, update_rate,
-                       parList, lens, save_rate_parlist,method_approach,
+                       parList, lens, save_rate_parlist,adjBeta_method,
                        ...) {
   # Loop through each individual in the pedigree
   # Build the adjacency matrix for parent-child relationships
@@ -620,18 +621,58 @@ ped2ce <- function(ped,
   } else if (component %in% c("common nuclear")) {
   #  message("Common Nuclear component is not yet implemented for direct method.  Using index method.\n")
 
-    list_of_adjacency <-    cnmethods(ped=ped,method_approach=method_approach,
-                                      component = component,
-                                      saveable = saveable, resume = resume,
-                                      save_path = save_path, verbose = verbose,
-                                      lastComputed = lastComputed, nr = nr,
-                                      checkpoint_files = checkpoint_files,
-                                      update_rate = update_rate,
-                                      parList = parList,
-                                      lens = lens, save_rate_parlist = save_rate_parlist,
-                                      ...)
+    # 1) Create a logical mask for only known parents
+    mask <- !is.na(ped$momID) & !is.na(ped$dadID)
 
-    return(list_of_adjacency)
+    # 2) Create a single hash label for each known (momID, dadID) pair
+    base <- max(ped$ID, na.rm = TRUE) + 1L
+    pairCode <- ped$momID[mask] + base * ped$dadID[mask]
+
+    # 3) Factor that label => each row with the same (mom,dad) gets the same integer code
+    childVec <- which(mask)
+
+    # 4) Group children by pairCode, so each group is "all children with that (mom,dad)"
+    groupList <- split(childVec, pairCode)
+
+    # 5) For each group with >1 children, form pairwise adjacency (i->j) for i != j
+    iss_list <- vector("list", length(groupList))
+    jss_list <- vector("list", length(groupList))
+    counter  <- 1
+
+    for (g in groupList) {
+      k <- length(g)
+      if (k > 1) {
+        # We'll form all k^2 combos, then remove the diagonal i=j
+        # rep() calls faster than expand.grid
+
+        # v = each child repeated k times
+        # w = entire group repeated once for each child
+        v <- rep(g, each  = k)  # row index
+        w <- rep(g, times = k)  # col index
+
+        keep <- (v != w)        # remove diagonal where v == w
+        iss_list[[counter]] <- v[keep]
+        jss_list[[counter]] <- w[keep]
+        counter <- counter + 1
+      }
+    }
+
+
+      iss <- unlist(iss_list, use.names = FALSE)
+      jss <- unlist(jss_list, use.names = FALSE)
+
+ #   list_of_adjacency <-    .adjBeta(ped=ped,adjBeta_method=adjBeta_method,
+#                                      component = component,
+ #                                     saveable = saveable, resume = resume,
+ #                                     save_path = save_path, verbose = verbose,
+ #                                     lastComputed = lastComputed, nr = nr,
+ #                                     checkpoint_files = checkpoint_files,
+ #                                     update_rate = update_rate,
+ #                                     parList = parList,
+ #                                     lens = lens, save_rate_parlist = save_rate_parlist,
+ #                                     ...)
+
+ #   return(list_of_adjacency)
   } else if (component %in% c("mitochondrial")) {
     mIDs <- stats::na.omit(data.frame(rID = ped$ID, cID = ped$momID))
     iss <- c(mIDs$rID)
@@ -660,7 +701,7 @@ compute_parent_adjacency <- function(ped, component,
                                      saveable, resume,
                                      save_path, verbose=FALSE,
                                      lastComputed=0, nr, checkpoint_files, update_rate,
-                                     parList, lens, save_rate_parlist,method_approach=NULL,
+                                     parList, lens, save_rate_parlist,adjBeta_method=NULL,
                                      ...) {
   if (adjacency_method == "loop") {
     if (lastComputed < nr) { # Original version
@@ -716,12 +757,27 @@ compute_parent_adjacency <- function(ped, component,
         parList = parList,
         lens = lens,
         save_rate_parlist = save_rate_parlist,
-        method_approach = method_approach,
         ...
       )
     }
+  } else if (adjacency_method == "beta") {
+    list_of_adjacency <- .adjBeta(ped = ped,
+                                   adjBeta_method = adjBeta_method,
+                                   component = component,
+                                   saveable = saveable,
+                                   resume = resume,
+                                   save_path = save_path,
+                                   verbose = verbose,
+                                   lastComputed = lastComputed,
+                                   nr = nr,
+                                   checkpoint_files = checkpoint_files,
+                                   update_rate = update_rate,
+                                   parList = parList,
+                                   lens = lens,
+                                   save_rate_parlist = save_rate_parlist,
+                                   ...)
   } else {
-    stop("Invalid method specified. Choose from 'loop', 'direct',  or 'indexed'.")
+    stop("Invalid method specified. Choose from 'loop', 'direct', 'indexed', or beta")
   }
   if (saveable) {
     saveRDS(parList, file = checkpoint_files$parList)
@@ -753,8 +809,8 @@ isChild <- function(isChild_method, ped) {
 }
 
 
-cnmethods <- function(ped,component = "common nuclear",
-                      method_approach=NULL,
+.adjBeta <- function(ped,component,
+                      adjBeta_method=5,
                       parList=NULL,
                       lastComputed=0,
                       nr=NULL,
@@ -763,9 +819,11 @@ cnmethods <- function(ped,component = "common nuclear",
                       resume=FALSE,
                       save_path=NULL,
                       verbose=FALSE,
+                     save_rate_parlist=NULL,
+                      update_rate=NULL,
                       checkpoint_files=NULL,
                       ...){# 1) Pairwise compare mother IDs
-  if(method_approach == 1){
+  if(adjBeta_method == 1){
 
     # gets slow when data are bigger. much slower than indexed
     momMatch <- outer(ped$momID, ped$momID, FUN = "==")
@@ -787,7 +845,7 @@ cnmethods <- function(ped,component = "common nuclear",
       iss = w[, 1],
       jss = w[, 2]
     )
-  } else if(method_approach == 2){
+  } else if(adjBeta_method == 2){
     # 1) Create a logical mask for known parents
     mask <- !is.na(ped$momID) & !is.na(ped$dadID)
 
@@ -825,7 +883,7 @@ cnmethods <- function(ped,component = "common nuclear",
       iss = unlist(iss_list, use.names = FALSE),
       jss = unlist(jss_list, use.names = FALSE)
     )
-  } else if(method_approach == 3){
+  } else if(adjBeta_method == 3){
     nr <- nrow(ped)
 # terrible
     # Define a scalar-checking function:
@@ -853,7 +911,7 @@ cnmethods <- function(ped,component = "common nuclear",
       iss = iss <- w[, 1],
       jss = jss <- w[, 2]
     )
-}else if(method_approach == 4){
+}else if(adjBeta_method == 4){
 
   # 1) Create a logical mask for known parents
   mask <- !is.na(ped$momID) & !is.na(ped$dadID)
@@ -898,7 +956,7 @@ cnmethods <- function(ped,component = "common nuclear",
     jss = unlist(jss_list, use.names = FALSE)
   )
 
-  } else if(method_approach == 5){
+  } else if(adjBeta_method == 5){
     # 1) Create a logical mask for known parents
     mask <- !is.na(ped$momID) & !is.na(ped$dadID)
 
@@ -953,9 +1011,5 @@ cnmethods <- function(ped,component = "common nuclear",
     )
 
   }
-
-
-
   return(list_of_adjacency)
-
 }

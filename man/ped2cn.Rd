@@ -16,7 +16,7 @@ ped2cn(
   saveable = FALSE,
   resume = FALSE,
   save_rate = 5,
-  adjacency_method = "indexed",
+  adjacency_method = "direct",
   save_rate_gen = save_rate,
   save_rate_parlist = 1000 * save_rate,
   save_path = "checkpoint/",
@@ -48,7 +48,7 @@ ped2cn(
 
 \item{save_rate}{numeric. The rate at which to save the intermediate results}
 
-\item{adjacency_method}{character. The method to use for computing the adjacency matrix.  Options are "loop" or "indexed"}
+\item{adjacency_method}{character. The method to use for computing the adjacency matrix.  Options are "loop", "indexed", direct or beta}
 
 \item{save_rate_gen}{numeric. The rate at which to save the intermediate results by generation. If NULL, defaults to save_rate}
 

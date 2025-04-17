@@ -57,6 +57,8 @@ readgedcom(
 
 \item{update_rate}{numeric. The rate at which to print progress}
 
+\item{post_process}{A logical value indicating whether to post-process the data frame.}
+
 \item{...}{Additional arguments to be passed to the function.}
 }
 \value{

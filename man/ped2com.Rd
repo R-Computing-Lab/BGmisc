@@ -23,6 +23,7 @@ ped2com(
   save_rate_parlist = 1e+05 * save_rate,
   update_rate = 100,
   save_path = "checkpoint/",
+  adjBeta_method = NULL,
   ...
 )
 }
@@ -47,7 +48,7 @@ ped2com(
 
 \item{transpose_method}{character. The method to use for computing the transpose.  Options are "tcrossprod", "crossprod", or "star"}
 
-\item{adjacency_method}{character. The method to use for computing the adjacency matrix.  Options are "loop" or "indexed"}
+\item{adjacency_method}{character. The method to use for computing the adjacency matrix.  Options are "loop", "indexed", direct or beta}
 
 \item{isChild_method}{character. The method to use for computing the isChild matrix.  Options are "classic" or "partialparent"}
 
@@ -64,6 +65,8 @@ ped2com(
 \item{update_rate}{numeric. The rate at which to print progress}
 
 \item{save_path}{character. The path to save the checkpoint files}
+
+\item{adjBeta_method}{numeric The method to use for computing the building the adjacency_method matrix when using the "beta" build}
 
 \item{...}{additional arguments to be passed to \code{\link{ped2com}}}
 }
