@@ -209,6 +209,7 @@ test_that("readGedcom parses death event correctly", {
   expect_equal(df$death_caus[1], "Old age")
   expect_equal(df$death_lat[1], "12.3456")
   expect_equal(df$death_long[1], "-65.4321")
+  df <- readGedcom.legacy(temp_file, verbose = TRUE)
 
   unlink(temp_file)
 })
