@@ -148,6 +148,10 @@ parseTree <- function(tree_lines) {
   return(tree_df)
 }
 
+
+
+
+
 #' infer relationship from tree template
 #'
 #' @param tree_long A data frame containing the tree structure in long format.
@@ -155,43 +159,162 @@ parseTree <- function(tree_lines) {
 #' @keywords internal
 #'
 parseRelationships <- function(tree_long) {
+
+traced <-  traceTreePaths(tree_long, deduplicate = FALSE)
+
+  # Initialize relationships data frame
   relationships <- data.frame(
-    id = tree_long$id,
+    id = tree_long$id[!is.na(tree_long$id)],
     momID = NA_character_,
     dadID = NA_character_,
+    parent_1 = NA_character_,
+    parent_2 = NA_character_,
     spouseID = NA_character_,
     stringsAsFactors = FALSE
   )
 
-  # Loop through rows to find connections
-  for (i in seq_len(nrow(tree_long))) {
-    row <- tree_long[i, ]
+  traced <- traced[!is.na(traced$from_id) & !is.na(traced$to_id), ]
 
-    # **Parent-Child Detection**
-    if (row$Value == "y") {
-      parent <- tree_long$Value[tree_long$Row == row$Row - 1 & tree_long$Column == row$Column]
-      child <- tree_long$Value[tree_long$Row == row$Row + 1 & tree_long$Column == row$Column]
 
-      if (length(parent) == 0) parent <- NA
-      if (length(child) == 0) child <- NA
-      # Assign mom/dad IDs based on tree structure
-      if (!is.na(parent) && !is.na(child)) {
-        relationships$momID[relationships$id == child] <- parent
-        relationships$dadID[relationships$id == child] <- parent # Assuming one parent detected for now
-      }
-    }
+ # > traced
+#  from_id to_id path_length   intermediates intermediate_values
+#        A     B           2             1_2                   +
+#          A     C           5 1_2;2_2;3_2;4_2                +|y|
+#          B     C           5 1_2;2_2;3_2;4_2                +|y|
+  # Fill in relationships based on the tree structure
+  traced$relationship <- NA_character_
 
-    # **Spouse Detection**
-    if (row$Value == "+") {
-      spouse1 <- tree_long$Value[tree_long$Row == row$Row & tree_long$Column == row$Column - 1]
-      spouse2 <- tree_long$Value[tree_long$Row == row$Row & tree_long$Column == row$Column + 1]
 
-      if (!is.na(spouse1) && !is.na(spouse2)) {
-        relationships$spouseID[relationships$id == spouse1] <- spouse2
-        relationships$spouseID[relationships$id == spouse2] <- spouse1
-      }
-    }
-  }
+  # if intermediate values is "+", the relationship is spouse
+
+
+  traced$relationship[traced$intermediate_values=="+"] <- "spouse"
+
+  #if intermediate value contains "y", the relationship is parent-child
+
+  traced$relationship[traced$intermediate_values=="+|y|"] <- "parent-child"
+  traced$relationship[traced$intermediate_values=="|y|+"] <- "child-parent"
+
+
 
   return(relationships)
+}
+
+
+
+#' Trace paths between individuals in a family tree grid
+#'
+#' @param tree_long A data.frame with columns: Row, Column, Value, id
+#' @param deduplicate Logical, if TRUE, will remove duplicate paths
+#' @return A data.frame with columns: from_id, to_id, direction, path_length, intermediates
+#' @export
+traceTreePaths <- function(tree_long, deduplicate = TRUE) {
+  # Keep only relevant cells (people and path symbols)
+  path_symbols <- c("|", "-", "+", "v", "^", "y", ",", ".", "`", "!")
+  tree_long$Value <- gsub("\\s+", "", tree_long$Value) # Remove whitespace
+  active_cells <- tree_long[!is.na(tree_long$Value) &
+                              (tree_long$Value %in% path_symbols | !is.na(tree_long$id)), ]
+
+  active_cells$key <- paste(active_cells$Row, active_cells$Column, sep = "_")
+
+
+  edges <- do.call(rbind, lapply(seq_len(nrow(active_cells)), function(i) {
+    from_key <- active_cells$key[i]
+    to_keys <- findNeighbors(active_cells[i, ],
+                             active_keys=active_cells$key)
+    if (length(to_keys) > 0) {
+      data.frame(from = from_key, to = to_keys, stringsAsFactors = FALSE)
+    }
+  }))
+
+  # Create graph
+  g <- igraph::graph_from_data_frame(edges, directed = FALSE)
+
+  # Map keys to IDs
+  person_nodes <- active_cells[!is.na(active_cells$id), c("key", "id")]
+  id_map <- setNames(person_nodes$id, person_nodes$key)
+
+  # Find all pairs of people and trace paths
+  person_keys <- names(id_map)
+  result <- data.frame()
+
+  for (i in seq_along(person_keys)) {
+    for (j in seq_along(person_keys)) {
+      if (i == j) next
+      from_key <- person_keys[i]
+      to_key <- person_keys[j]
+
+      sp <- suppressWarnings(igraph::shortest_paths(g, from_key, to_key, output = "vpath")$vpath[[1]])
+      if (length(sp) > 1) {
+        intermediate <- setdiff(names(sp), c(from_key, to_key))
+        # Extract values at those intermediate keys
+        intermediate_values <- sapply(intermediate, function(k) {
+          cell <- active_cells[active_cells$key == k, ]
+          if (nrow(cell) > 0) cell$Value else NA
+        })
+        result <- rbind(result, data.frame(
+          from_id = id_map[[from_key]],
+          to_id = id_map[[to_key]],
+          path_length = length(sp) - 1,
+          intermediates = paste(intermediate, collapse = ";"),
+          intermediate_values = paste(intermediate_values, collapse = ""),
+          stringsAsFactors = FALSE
+        ))} else {
+          # If no path found, add a row with NA values
+          result <- rbind(result, data.frame(
+            from_id = id_map[[from_key]],
+            to_id = id_map[[to_key]],
+            path_length = NA,
+            intermediates = NA,
+            intermediate_values = NA,
+            stringsAsFactors = FALSE
+          ))
+        }
+      }
+    }
+
+  if(deduplicate==TRUE){
+    # Deduplicate pairs
+    result <- deduplicatePairs(result)
+  }
+
+  return(result)
+}
+
+#' Build adjacency list (4-way neighbors)
+#'
+#' @param cell A data frame with columns Row and Column
+#' @return A character vector of neighboring cell keys
+#' @keywords internal
+
+findNeighbors <- function(cell,active_keys) {
+  offsets <- list(c(1, 0), c(-1, 0), c(0, 1), c(0, -1))  # down, up, right, left
+  out <- character()
+  for (offset in offsets) {
+    r2 <- cell$Row + offset[1]
+    c2 <- cell$Column + offset[2]
+    key2 <- paste(r2, c2, sep = "_")
+    if (key2 %in% active_keys) {
+      out <- c(out, key2)
+    }
+  }
+  return(out)
+}
+
+#' Deduplicate pairs of IDs in a data frame
+#'
+#' @param df A data frame with columns from_id and to_id
+#' @return A data frame with unique pairs of IDs
+#' @export
+deduplicatePairs <- function(df) {
+  # Create a new column with sorted pairs
+  df$pair <- apply(df[, c("from_id", "to_id")], 1, function(x) paste(sort(x), collapse = "_"))
+
+  # Remove duplicates based on the pair column
+  df_dedup <- df[!duplicated(df$pair), ]
+
+  # Drop the pair column
+  df_dedup$pair <- NULL
+
+  return(df_dedup)
 }
