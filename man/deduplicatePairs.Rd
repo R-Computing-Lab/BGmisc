@@ -15,3 +15,4 @@ A data frame with unique pairs of IDs
 \description{
 Deduplicate pairs of IDs in a data frame
 }
+\keyword{internal}

@@ -4,10 +4,12 @@
 \alias{parseRelationships}
 \title{infer relationship from tree template}
 \usage{
-parseRelationships(tree_long)
+parseRelationships(tree_long, tree_paths = NULL)
 }
 \arguments{
 \item{tree_long}{A data frame containing the tree structure in long format.}
+
+\item{tree_paths}{Optional. traceTreePaths output. If NULL, it will be calculated.}
 }
 \value{
 A data frame containing the relationships between family members.
