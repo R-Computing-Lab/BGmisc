@@ -28,23 +28,23 @@ readWikifamilytree <- function(text = NULL, verbose = FALSE, file_path = NULL, .
   }
   # Extract summary text
 
-  summary_text <- extractSummaryText(text)
+  summary_text <- getWikiTreeSummary(text)
   # Extract all lines defining the family tree
   tree_lines <- unlist(stringr::str_extract_all(text, "\\{\\{familytree.*?\\}\\}"))
   tree_lines <- tree_lines[!stringr::str_detect(tree_lines, "start|end")] # Remove start/end markers
   tree_lines <- gsub("\\{\\{familytree(.*?)\\}\\}", "\\1", tree_lines) # Remove wrapping markup
 
   # Convert tree structure into a coordinate grid (preserves symbols!)
-  tree_df <- parseTree(tree_lines)
+  tree_df <- buildTreeGrid(tree_lines)
 
   # Identify columns that start with "Y"
   cols_to_pivot <- grep("^Y", names(tree_df), value = TRUE)
 
   # Reshape from wide to long format
-  tree_long <- makeLongTree(tree_df, cols_to_pivot)
+  tree_long <- convertGrid2LongTree(tree_df, cols_to_pivot)
 
   # Extract member definitions
-  members_df <- matchMembers(text)
+  members_df <- extractMemberTable(text)
   members_df$id <- paste0("P", seq_len(nrow(members_df))) # Assign unique person IDs
 
   # Merge names into the tree structure (keeping all symbols!)
@@ -55,19 +55,14 @@ readWikifamilytree <- function(text = NULL, verbose = FALSE, file_path = NULL, .
   # parse relationships and infer them
   tree_paths <- traceTreePaths(tree_long, deduplicate = FALSE)
 
-  paresedrelationships <- parseRelationships(tree_long, tree_paths)
-
-  # relationships_df <- processParents(tree_long, datasource = "wiki")
-
-
-
+  parsedRelationships <- parseTreeRelationships(tree_long, tree_paths)
   # Return structured table of the family tree (symbols included)
   list(
     summary = summary_text,
     members = members_df,
     structure = tree_long,
-    tree_paths = paresedrelationships$tree_paths,
-    relationships = paresedrelationships$relationships
+    tree_paths = parsedRelationships$tree_paths,
+    relationships = parsedRelationships$relationships
   )
 }
 
@@ -76,7 +71,7 @@ readWikifamilytree <- function(text = NULL, verbose = FALSE, file_path = NULL, .
 #' @param cols_to_pivot A character vector of column names to pivot.
 #' @return A long data frame containing the tree structure.
 #' @keywords internal
-makeLongTree <- function(tree_df, cols_to_pivot) {
+convertGrid2LongTree <- function(tree_df, cols_to_pivot) {
   tree_long <- stats::reshape(tree_df,
     varying = cols_to_pivot,
     v.names = "Value",
@@ -97,7 +92,7 @@ makeLongTree <- function(tree_df, cols_to_pivot) {
 #' @return A data frame containing information about the members of the family tree.
 #' @keywords internal
 
-matchMembers <- function(text) {
+extractMemberTable <- function(text) {
   member_matches <- stringr::str_extract_all(text, "\\|\\s*([A-Za-z0-9]+)\\s*=\\s*([^|}]*)")[[1]]
   member_matches <- gsub("\\[|\\]|'''", "", member_matches) # Remove formatting
 
@@ -122,7 +117,7 @@ matchMembers <- function(text) {
 #' @keywords internal
 #' @export
 
-extractSummaryText <- function(text) {
+getWikiTreeSummary <- function(text) {
   summary_match <- stringr::str_match(text, "\\{\\{familytree/start \\|summary=(.*?)\\}\\}")
   summary_text <- ifelse(!is.na(summary_match[, 2]), summary_match[, 2], NA)
   return(summary_text)
@@ -134,7 +129,7 @@ extractSummaryText <- function(text) {
 #' @keywords internal
 #' @export
 
-parseTree <- function(tree_lines) {
+buildTreeGrid <- function(tree_lines) {
   tree_matrix <- base::strsplit(tree_lines, "\\|") # Split each row into columns
   max_cols <- max(sapply(tree_matrix, length)) # Find the max column count
 
@@ -150,10 +145,6 @@ parseTree <- function(tree_lines) {
   return(tree_df)
 }
 
-
-
-
-
 #' infer relationship from tree template
 #'
 #' @param tree_long A data frame containing the tree structure in long format.
@@ -161,8 +152,7 @@ parseTree <- function(tree_lines) {
 #' @return A data frame containing the relationships between family members.
 #' @keywords internal
 #'
-parseRelationships <- function(tree_long, tree_paths=NULL) {
-
+parseTreeRelationships <- function(tree_long, tree_paths = NULL) {
   # Check if tree_paths is NULL and call traceTreePaths if necessary
   if (is.null(tree_paths)) {
     tree_paths <- traceTreePaths(tree_long, deduplicate = FALSE)
@@ -194,26 +184,22 @@ parseRelationships <- function(tree_long, tree_paths=NULL) {
   ] <- "spouse"
 
   # Parent-child: + and y both present
-    tree_paths$relationship[
+  tree_paths$relationship[
     grepl("\\+", tree_paths$intermediate_values) &
-    grepl("y", tree_paths$intermediate_values)
+      grepl("y", tree_paths$intermediate_values)
   ] <- "offspring"
 
-tree_paths$relationship[
-  is.na(tree_paths$relationship) & grepl("y", tree_paths$intermediate_values)
-] <- "offspring"
+  tree_paths$relationship[
+    is.na(tree_paths$relationship) & grepl("y", tree_paths$intermediate_values)
+  ] <- "offspring"
 
+  # determine direction
+  tree_paths$relationship[grepl("^\\+", tree_paths$intermediate_values) & tree_paths$relationship == "offspring"] <- "parent-child"
+  tree_paths$relationship[grepl("[y\\|]$", tree_paths$intermediate_values) & tree_paths$relationship == "offspring"] <- "parent-child"
+  tree_paths$relationship[grepl("\\+$", tree_paths$intermediate_values) & tree_paths$relationship == "offspring"] <- "child-parent"
+  tree_paths$relationship[grepl("^[y\\|]", tree_paths$intermediate_values) & tree_paths$relationship == "offspring"] <- "child-parent"
 
-
-    # determine direction
-  tree_paths$relationship[grepl("^\\+", tree_paths$intermediate_values) & tree_paths$relationship=="offspring"] <- "parent-child"
-  tree_paths$relationship[grepl("[y\\|]$", tree_paths$intermediate_values) & tree_paths$relationship=="offspring"] <- "parent-child"
-  tree_paths$relationship[grepl("\\+$", tree_paths$intermediate_values) & tree_paths$relationship=="offspring"] <- "child-parent"
-  tree_paths$relationship[grepl("^[y\\|]", tree_paths$intermediate_values) & tree_paths$relationship=="offspring"] <- "child-parent"
-
-
-
-# Fill spouse links
+  # Fill spouse links
   spouse_links <- tree_paths[tree_paths$relationship == "spouse", ]
 
   for (i in seq_len(nrow(spouse_links))) {
@@ -227,22 +213,27 @@ tree_paths$relationship[
 
   pc_links <- tree_paths[tree_paths$relationship == "parent-child", ]
   for (i in seq_len(nrow(pc_links))) {
-    relationships <- assignParent(df=relationships,
-                                  child=pc_links$to_id[i],
-                                  parent=pc_links$from_id[i])
+    relationships <- populateParents(
+      df = relationships,
+      child = pc_links$to_id[i],
+      parent = pc_links$from_id[i]
+    )
   }
 
   # --- Child-parent (to_id = parent) ---
   cp_links <- tree_paths[tree_paths$relationship == "child-parent", ]
   for (i in seq_len(nrow(cp_links))) {
-    parent <- cp_links$to_id[i]
-    child  <- cp_links$from_id[i]
-    relationships <- assignParent(relationships, child, parent)
+    relationships <- populateParents(
+      df = relationships,
+      child = cp_links$from_id[i],
+      parent = cp_links$to_id[i]
+    )
   }
 
-  out <-  list(tree_paths = tree_paths,
-       relationships = relationships)
-
+  out <- list(
+    tree_paths = tree_paths,
+    relationships = relationships
+  )
   return(out)
 }
 
@@ -252,17 +243,19 @@ tree_paths$relationship[
 #' @param parent The ID of the parent.
 #' @return A data frame with updated parent information.
 #' @keywords internal
-assignParent <- function(df, child, parent) {
-    idx <- which(df$id == child)
-    if (length(idx) != 1) return(df)
-
-    if (is.na(df$parent_1[idx])) {
-      df$parent_1[idx] <- parent
-    } else if (is.na(df$parent_2[idx]) && df$parent_1[idx] != parent) {
-      df$parent_2[idx] <- parent
-    }
+populateParents <- function(df, child, parent) {
+  idx <- which(df$id == child)
+  if (length(idx) != 1) {
     return(df)
   }
+
+  if (is.na(df$parent_1[idx])) {
+    df$parent_1[idx] <- parent
+  } else if (is.na(df$parent_2[idx]) && df$parent_1[idx] != parent) {
+    df$parent_2[idx] <- parent
+  }
+  return(df)
+}
 
 
 #' Trace paths between individuals in a family tree grid
@@ -271,20 +264,21 @@ assignParent <- function(df, child, parent) {
 #' @param deduplicate Logical, if TRUE, will remove duplicate paths
 #' @return A data.frame with columns: from_id, to_id, direction, path_length, intermediates
 #' @export
+#'
 traceTreePaths <- function(tree_long, deduplicate = TRUE) {
   # Keep only relevant cells (people and path symbols)
   path_symbols <- c("|", "-", "+", "v", "^", "y", ",", ".", "`", "!", "~", "x", ")", "(")
   tree_long$Value <- gsub("\\s+", "", tree_long$Value) # Remove whitespace
   active_cells <- tree_long[!is.na(tree_long$Value) &
-                              (tree_long$Value %in% path_symbols | !is.na(tree_long$id)), ]
+    (tree_long$Value %in% path_symbols | !is.na(tree_long$id)), ]
 
   active_cells$key <- paste(active_cells$Row, active_cells$Column, sep = "_")
 
-
   edges <- do.call(rbind, lapply(seq_len(nrow(active_cells)), function(i) {
     from_key <- active_cells$key[i]
-    to_keys <- findNeighbors(active_cells[i, ],
-                             active_keys=active_cells$key)
+    to_keys <- getGridNeighbors(active_cells[i, ],
+      active_keys = active_cells$key
+    )
     if (length(to_keys) > 0) {
       data.frame(from = from_key, to = to_keys, stringsAsFactors = FALSE)
     }
@@ -327,21 +321,22 @@ traceTreePaths <- function(tree_long, deduplicate = TRUE) {
           intermediates = paste(intermediate, collapse = ";"),
           intermediate_values = paste(intermediate_values, collapse = ""),
           stringsAsFactors = FALSE
-        ))} else {
-          # If no path found, add a row with NA values
-          result <- rbind(result, data.frame(
-            from_id = id_map[[from_key]],
-            to_id = id_map[[to_key]],
-            path_length = NA,
-            intermediates = NA,
-            intermediate_values = NA,
-            stringsAsFactors = FALSE
-          ))
-        }
+        ))
+      } else {
+        # If no path found, add a row with NA values
+        result <- rbind(result, data.frame(
+          from_id = id_map[[from_key]],
+          to_id = id_map[[to_key]],
+          path_length = NA,
+          intermediates = NA,
+          intermediate_values = NA,
+          stringsAsFactors = FALSE
+        ))
       }
     }
+  }
 
-  if(deduplicate==TRUE){
+  if (deduplicate == TRUE) {
     # Deduplicate pairs
     result <- deduplicatePairs(result)
   }
@@ -355,8 +350,8 @@ traceTreePaths <- function(tree_long, deduplicate = TRUE) {
 #' @return A character vector of neighboring cell keys
 #' @keywords internal
 
-findNeighbors <- function(cell,active_keys) {
-  offsets <- list(c(1, 0), c(-1, 0), c(0, 1), c(0, -1))  # down, up, right, left
+getGridNeighbors <- function(cell, active_keys) {
+  offsets <- list(c(1, 0), c(-1, 0), c(0, 1), c(0, -1)) # down, up, right, left
   out <- character()
   for (offset in offsets) {
     r2 <- cell$Row + offset[1]
