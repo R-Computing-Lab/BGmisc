@@ -148,7 +148,7 @@ ped2com <- function(ped, component,
     iss <- readRDS(checkpoint_files$iss)
     list_of_adjacencies <- list(iss = iss, jss = jss)
   } else {
-    list_of_adjacencies <- compute_parent_adjacency(
+    list_of_adjacencies <- computeParentAdjacency(
       ped = ped,
       save_rate_parlist = save_rate_parlist,
       checkpoint_files = checkpoint_files,

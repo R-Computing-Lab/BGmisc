@@ -7,6 +7,7 @@
 * list SimPed and related_coef as aliases for functions
 * harmonizing function names like calcFamilySize from famSizeCal
 * implemented adjBeta function to evaluation alternative build method
+* reorganize file names to be more consistent
 
 # BGmisc 1.3.5.1
 * Setting the default for the `sparse` argument in `ped2com()` to TRUE

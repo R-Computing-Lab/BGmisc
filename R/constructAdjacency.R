@@ -204,128 +204,6 @@
   return(list_of_adjacency)
 }
 
-#' Compute Parent Adjacency Matrix with Multiple Approaches
-#' @inheritParams ped2com
-#' @inherit ped2com details
-#' @param nr the number of rows in the pedigree dataset
-#' @param lastComputed the last computed index
-#' @param parList a list of parent-child relationships
-#' @param lens a vector of the lengths of the parent-child relationships
-#' @param checkpoint_files a list of checkpoint files
-
-compute_parent_adjacency <- function(ped, component,
-                                     adjacency_method = "direct",
-                                     saveable, resume,
-                                     save_path, verbose = FALSE,
-                                     lastComputed = 0, nr, checkpoint_files, update_rate,
-                                     parList, lens, save_rate_parlist, adjBeta_method = NULL,
-                                     ...) {
-  if (adjacency_method == "loop") {
-    if (lastComputed < nr) { # Original version
-      list_of_adjacency <- .adjLoop(
-        ped = ped,
-        component = component,
-        saveable = saveable,
-        resume = resume,
-        save_path = save_path,
-        verbose = verbose,
-        lastComputed = lastComputed,
-        nr = nr,
-        checkpoint_files = checkpoint_files,
-        update_rate = update_rate,
-        parList = parList,
-        lens = lens,
-        save_rate_parlist = save_rate_parlist,
-        ...
-      )
-    }
-  } else if (adjacency_method == "indexed") { # Garrison version
-    if (lastComputed < nr) {
-      list_of_adjacency <- .adjIndexed(
-        ped = ped,
-        component = component,
-        saveable = saveable,
-        resume = resume,
-        save_path = save_path,
-        verbose = verbose,
-        lastComputed = lastComputed,
-        nr = nr,
-        checkpoint_files = checkpoint_files,
-        update_rate = update_rate,
-        parList = parList,
-        lens = lens,
-        save_rate_parlist = save_rate_parlist,
-        ...
-      )
-    }
-  } else if (adjacency_method == "direct") { # Hunter version
-    if (lastComputed < nr) {
-      list_of_adjacency <- .adjDirect(
-        ped = ped,
-        component = component,
-        saveable = saveable,
-        resume = resume,
-        save_path = save_path,
-        verbose = verbose,
-        lastComputed = lastComputed,
-        nr = nr,
-        checkpoint_files = checkpoint_files,
-        update_rate = update_rate,
-        parList = parList,
-        lens = lens,
-        save_rate_parlist = save_rate_parlist,
-        ...
-      )
-    }
-  } else if (adjacency_method == "beta") {
-    list_of_adjacency <- .adjBeta(
-      ped = ped,
-      adjBeta_method = adjBeta_method,
-      component = component,
-      saveable = saveable,
-      resume = resume,
-      save_path = save_path,
-      verbose = verbose,
-      lastComputed = lastComputed,
-      nr = nr,
-      checkpoint_files = checkpoint_files,
-      update_rate = update_rate,
-      parList = parList,
-      lens = lens,
-      save_rate_parlist = save_rate_parlist,
-      ...
-    )
-  } else {
-    stop("Invalid method specified. Choose from 'loop', 'direct', 'indexed', or beta")
-  }
-  if (saveable) {
-    saveRDS(parList, file = checkpoint_files$parList)
-    saveRDS(lens, file = checkpoint_files$lens)
-    if (verbose) {
-      cat("Final checkpoint saved for adjacency matrix.\n")
-    }
-  }
-  return(list_of_adjacency)
-}
-
-
-#' Determine isChild Status, isChild is the 'S' matrix from RAM
-#' @param isChild_method method to determine isChild status
-#' @param ped pedigree data frame
-#' @return isChild 'S' matrix
-#'
-
-isChild <- function(isChild_method, ped) {
-  if (isChild_method == "partialparent") {
-    isChild <- apply(ped[, c("momID", "dadID")], 1, function(x) {
-      .5 + .25 * sum(is.na(x)) # 2 parents -> .5, 1 parent -> .75, 0 parents -> 1
-    })
-  } else {
-    isChild <- apply(ped[, c("momID", "dadID")], 1, function(x) {
-      2^(-!all(is.na(x)))
-    })
-  }
-}
 
 
 .adjBeta <- function(ped, component,
@@ -526,4 +404,137 @@ isChild <- function(isChild_method, ped) {
     )
   }
   return(list_of_adjacency)
+}
+
+
+
+
+
+#' Compute Parent Adjacency Matrix with Multiple Approaches
+#' @inheritParams ped2com
+#' @inherit ped2com details
+#' @param nr the number of rows in the pedigree dataset
+#' @param lastComputed the last computed index
+#' @param parList a list of parent-child relationships
+#' @param lens a vector of the lengths of the parent-child relationships
+#' @param checkpoint_files a list of checkpoint files
+#' @param update_rate the rate at which to update the progress
+#'
+#' @export
+computeParentAdjacency <- function(ped, component,
+                                     adjacency_method = "direct",
+                                     saveable, resume,
+                                     save_path,
+                                   verbose = FALSE,
+                                     lastComputed = 0, nr,
+                                   checkpoint_files,
+                                   update_rate,
+                                     parList, lens, save_rate_parlist,
+                                   adjBeta_method = NULL,
+                                     ...) {
+  if (adjacency_method == "loop") {
+    if (lastComputed < nr) { # Original version
+      list_of_adjacency <- .adjLoop(
+        ped = ped,
+        component = component,
+        saveable = saveable,
+        resume = resume,
+        save_path = save_path,
+        verbose = verbose,
+        lastComputed = lastComputed,
+        nr = nr,
+        checkpoint_files = checkpoint_files,
+        update_rate = update_rate,
+        parList = parList,
+        lens = lens,
+        save_rate_parlist = save_rate_parlist,
+        ...
+      )
+    }
+  } else if (adjacency_method == "indexed") { # Garrison version
+    if (lastComputed < nr) {
+      list_of_adjacency <- .adjIndexed(
+        ped = ped,
+        component = component,
+        saveable = saveable,
+        resume = resume,
+        save_path = save_path,
+        verbose = verbose,
+        lastComputed = lastComputed,
+        nr = nr,
+        checkpoint_files = checkpoint_files,
+        update_rate = update_rate,
+        parList = parList,
+        lens = lens,
+        save_rate_parlist = save_rate_parlist,
+        ...
+      )
+    }
+  } else if (adjacency_method == "direct") { # Hunter version
+    if (lastComputed < nr) {
+      list_of_adjacency <- .adjDirect(
+        ped = ped,
+        component = component,
+        saveable = saveable,
+        resume = resume,
+        save_path = save_path,
+        verbose = verbose,
+        lastComputed = lastComputed,
+        nr = nr,
+        checkpoint_files = checkpoint_files,
+        update_rate = update_rate,
+        parList = parList,
+        lens = lens,
+        save_rate_parlist = save_rate_parlist,
+        ...
+      )
+    }
+  } else if (adjacency_method == "beta") {
+    list_of_adjacency <- .adjBeta(
+      ped = ped,
+      adjBeta_method = adjBeta_method,
+      component = component,
+      saveable = saveable,
+      resume = resume,
+      save_path = save_path,
+      verbose = verbose,
+      lastComputed = lastComputed,
+      nr = nr,
+      checkpoint_files = checkpoint_files,
+      update_rate = update_rate,
+      parList = parList,
+      lens = lens,
+      save_rate_parlist = save_rate_parlist,
+      ...
+    )
+  } else {
+    stop("Invalid method specified. Choose from 'loop', 'direct', 'indexed', or beta")
+  }
+  if (saveable) {
+    saveRDS(parList, file = checkpoint_files$parList)
+    saveRDS(lens, file = checkpoint_files$lens)
+    if (verbose) {
+      cat("Final checkpoint saved for adjacency matrix.\n")
+    }
+  }
+  return(list_of_adjacency)
+}
+
+
+#' Determine isChild Status, isChild is the 'S' matrix from RAM
+#' @param isChild_method method to determine isChild status
+#' @param ped pedigree data frame
+#' @return isChild 'S' matrix
+#'
+
+isChild <- function(isChild_method, ped) {
+  if (isChild_method == "partialparent") {
+    isChild <- apply(ped[, c("momID", "dadID")], 1, function(x) {
+      .5 + .25 * sum(is.na(x)) # 2 parents -> .5, 1 parent -> .75, 0 parents -> 1
+    })
+  } else {
+    isChild <- apply(ped[, c("momID", "dadID")], 1, function(x) {
+      2^(-!all(is.na(x)))
+    })
+  }
 }

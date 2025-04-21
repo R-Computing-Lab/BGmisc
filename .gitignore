@@ -19,3 +19,4 @@ dataRelatedPairs_new2.csv
 paper/paper.html
 tests/testthat/Rplots.pdf
 vignettes/articles/paper.html
+.vscode/settings.json
