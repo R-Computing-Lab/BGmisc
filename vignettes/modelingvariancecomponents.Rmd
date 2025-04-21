@@ -2,7 +2,7 @@
 title: "Modeling variance components"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{modelingandrelatedness}
+  %\VignetteIndexEntry{modelingvariancecomponents}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
