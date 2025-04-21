@@ -467,18 +467,38 @@ ped2ce <- function(ped,
 #' @param r2 a relatedness matrix
 #'
 .computeTranspose <- function(r2, transpose_method = "tcrossprod", verbose = FALSE) {
-  if (!transpose_method %in% c("tcrossprod", "crossprod", "star", "tcross.alt.crossprod", "tcross.alt.star")) {
-    stop("Invalid method specified. Choose from 'tcrossprod', 'crossprod', or 'star'.")
+  valid_methods <- c("tcrossprod", "crossprod", "star",
+                     "tcross.alt.crossprod", "tcross.alt.star")
+  if (!transpose_method %in% valid_methods) {
+    stop("Invalid method specified. Choose from 'tcrossprod', 'crossprod', 'star', 'tcross.alt.crossprod', or 'tcross.alt.star'.")
   }
-  if (transpose_method %in% c("crossprod", "tcross.alt.crossprod")) {
-    if (verbose) cat("Doing alt tcrossprod crossprod t \n")
-    return(crossprod(t(as.matrix(r2))))
-  } else if (transpose_method %in% c("star", "tcross.alt.star")) {
-    if (verbose) cat("Doing alt tcrossprod %*% t \n")
-    return(r2 %*% t(as.matrix(r2)))
-  } else {
-    if (verbose) cat("Doing tcrossprod\n")
-    return(Matrix::tcrossprod(r2))
-  }
-}
 
+  # Map aliases to core methods
+  alias_map <- c(
+    "tcross.alt.crossprod" = "crossprod",
+    "tcross.alt.star" = "star"
+  )
+
+  if (transpose_method %in% names(alias_map)) {
+    method_normalized <- alias_map[[transpose_method]]
+  } else {
+    method_normalized <- transpose_method
+  }
+
+  result <- switch(method_normalized,
+                   "tcrossprod" = {
+                     if (verbose) cat("Doing tcrossprod\n")
+                     Matrix::tcrossprod(r2)
+                   },
+                   "crossprod" = {
+                     if (verbose) cat("Doing tcrossprod using crossprod(t(.))\n")
+                     crossprod(t(as.matrix(r2)))
+                   },
+                   "star" = {
+                     if (verbose) cat("Doing tcrossprod using %*% t(.)\n")
+                     r2 %*% t(as.matrix(r2))
+                   }
+  )
+
+  return(result)
+}

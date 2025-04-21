@@ -19,8 +19,8 @@ test_that("traceTreePaths works correctly for horizontal tree", {
   result <- traceTreePaths(tree_horizontal)
   # Check the result
   # Check the result
-  expect_equal(names(result), c("from_id", "to_id", "path_length", "intermediates","intermediate_values"))
-  expect_equal(c("A", "B") %in% c(result$from_id, result$to_id), rep(TRUE,2))
+  expect_equal(names(result), c("from_id", "to_id", "path_length", "intermediates", "intermediate_values"))
+  expect_equal(c("A", "B") %in% c(result$from_id, result$to_id), rep(TRUE, 2))
   expect_equal(result$path_length[result$from_id == "A" & result$to_id == "B"], 2)
   expect_equal(result$intermediate_values[result$from_id == "A" & result$to_id == "B"], "+")
 })
@@ -42,13 +42,12 @@ test_that("traceTreePaths works correctly for vertical tree", {
 
   result <- traceTreePaths(tree_spouse_child)
   # Check the result
-  expect_equal(names(result), c("from_id", "to_id", "path_length", "intermediates","intermediate_values"))
-  expect_equal(c("A", "B", "C") %in% c(result$from_id, result$to_id), rep(TRUE,3))
+  expect_equal(names(result), c("from_id", "to_id", "path_length", "intermediates", "intermediate_values"))
+  expect_equal(c("A", "B", "C") %in% c(result$from_id, result$to_id), rep(TRUE, 3))
   expect_equal(result$path_length[result$from_id == "A" & result$to_id == "B"], 2)
   expect_equal(result$path_length[result$from_id == "A" & result$to_id == "C"], 5)
   expect_equal(result$path_length[result$from_id == "B" & result$to_id == "C"], 5)
   expect_equal(result$intermediate_values[result$from_id == "A" & result$to_id == "B"], "+")
-
 })
 
 
@@ -83,7 +82,8 @@ test_that("readWikifamilytree reads a string correctly", {
 
   expect_equal(
     result2$summary,
-    result$summary)
+    result$summary
+  )
 })
 
 

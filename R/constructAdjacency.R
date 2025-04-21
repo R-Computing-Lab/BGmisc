@@ -1,4 +1,3 @@
-
 .adjLoop <- function(ped, component, saveable, resume,
                      save_path, verbose, lastComputed,
                      nr, checkpoint_files, update_rate,
@@ -407,9 +406,6 @@
 }
 
 
-
-
-
 #' Compute Parent Adjacency Matrix with Multiple Approaches
 #' @inheritParams ped2com
 #' @inherit ped2com details
@@ -422,93 +418,105 @@
 #'
 #' @export
 computeParentAdjacency <- function(ped, component,
-                                     adjacency_method = "direct",
-                                     saveable, resume,
-                                     save_path,
+                                   adjacency_method = "direct",
+                                   saveable, resume,
+                                   save_path,
                                    verbose = FALSE,
-                                     lastComputed = 0, nr,
+                                   lastComputed = 0, nr,
                                    checkpoint_files,
                                    update_rate,
-                                     parList, lens, save_rate_parlist,
+                                   parList, lens, save_rate_parlist,
                                    adjBeta_method = NULL,
-                                     ...) {
-  if (adjacency_method == "loop") {
-    if (lastComputed < nr) { # Original version
-      list_of_adjacency <- .adjLoop(
-        ped = ped,
-        component = component,
-        saveable = saveable,
-        resume = resume,
-        save_path = save_path,
-        verbose = verbose,
-        lastComputed = lastComputed,
-        nr = nr,
-        checkpoint_files = checkpoint_files,
-        update_rate = update_rate,
-        parList = parList,
-        lens = lens,
-        save_rate_parlist = save_rate_parlist,
-        ...
-      )
-    }
-  } else if (adjacency_method == "indexed") { # Garrison version
-    if (lastComputed < nr) {
-      list_of_adjacency <- .adjIndexed(
-        ped = ped,
-        component = component,
-        saveable = saveable,
-        resume = resume,
-        save_path = save_path,
-        verbose = verbose,
-        lastComputed = lastComputed,
-        nr = nr,
-        checkpoint_files = checkpoint_files,
-        update_rate = update_rate,
-        parList = parList,
-        lens = lens,
-        save_rate_parlist = save_rate_parlist,
-        ...
-      )
-    }
-  } else if (adjacency_method == "direct") { # Hunter version
-    if (lastComputed < nr) {
-      list_of_adjacency <- .adjDirect(
-        ped = ped,
-        component = component,
-        saveable = saveable,
-        resume = resume,
-        save_path = save_path,
-        verbose = verbose,
-        lastComputed = lastComputed,
-        nr = nr,
-        checkpoint_files = checkpoint_files,
-        update_rate = update_rate,
-        parList = parList,
-        lens = lens,
-        save_rate_parlist = save_rate_parlist,
-        ...
-      )
-    }
-  } else if (adjacency_method == "beta") {
-    list_of_adjacency <- .adjBeta(
-      ped = ped,
-      adjBeta_method = adjBeta_method,
-      component = component,
-      saveable = saveable,
-      resume = resume,
-      save_path = save_path,
-      verbose = verbose,
-      lastComputed = lastComputed,
-      nr = nr,
-      checkpoint_files = checkpoint_files,
-      update_rate = update_rate,
-      parList = parList,
-      lens = lens,
-      save_rate_parlist = save_rate_parlist,
-      ...
-    )
+                                   ...) {
+  if (!adjacency_method %in% c("loop", "indexed", "direct", "beta")) {
+    stop("Invalid method specified. Choose from 'loop', 'direct', 'indexed', or 'beta'.")
+  }
+  # For loop/indexed/direct: skip if already complete
+  if (adjacency_method != "beta" && lastComputed >= nr) {
+    list_of_adjacency <- NULL
   } else {
-    stop("Invalid method specified. Choose from 'loop', 'direct', 'indexed', or beta")
+    list_of_adjacency <- switch(adjacency_method,
+
+                                "loop" = {
+                                  # Original version
+                                  .adjLoop(
+                                    ped = ped,
+                                    component = component,
+                                    saveable = saveable,
+                                    resume = resume,
+                                    save_path = save_path,
+                                    verbose = verbose,
+                                    lastComputed = lastComputed,
+                                    nr = nr,
+                                    checkpoint_files = checkpoint_files,
+                                    update_rate = update_rate,
+                                    parList = parList,
+                                    lens = lens,
+                                    save_rate_parlist = save_rate_parlist,
+                                    ...
+                                  )
+                                },
+
+                                "indexed" = {
+                                  # Garrison version
+                                  .adjIndexed(
+                                    ped = ped,
+                                    component = component,
+                                    saveable = saveable,
+                                    resume = resume,
+                                    save_path = save_path,
+                                    verbose = verbose,
+                                    lastComputed = lastComputed,
+                                    nr = nr,
+                                    checkpoint_files = checkpoint_files,
+                                    update_rate = update_rate,
+                                    parList = parList,
+                                    lens = lens,
+                                    save_rate_parlist = save_rate_parlist,
+                                    ...
+                                  )
+                                },
+
+                                "direct" = {
+                                  # Hunter version
+                                  .adjDirect(
+                                    ped = ped,
+                                    component = component,
+                                    saveable = saveable,
+                                    resume = resume,
+                                    save_path = save_path,
+                                    verbose = verbose,
+                                    lastComputed = lastComputed,
+                                    nr = nr,
+                                    checkpoint_files = checkpoint_files,
+                                    update_rate = update_rate,
+                                    parList = parList,
+                                    lens = lens,
+                                    save_rate_parlist = save_rate_parlist,
+                                    ...
+                                  )
+                                },
+
+                                "beta" = {
+                                  .adjBeta(
+                                    ped = ped,
+                                    adjBeta_method = adjBeta_method,
+                                    component = component,
+                                    saveable = saveable,
+                                    resume = resume,
+                                    save_path = save_path,
+                                    verbose = verbose,
+                                    lastComputed = lastComputed,
+                                    nr = nr,
+                                    checkpoint_files = checkpoint_files,
+                                    update_rate = update_rate,
+                                    parList = parList,
+                                    lens = lens,
+                                    save_rate_parlist = save_rate_parlist,
+                                    ...
+                                  )
+                                }
+    )
   }
   if (saveable) {
     saveRDS(parList, file = checkpoint_files$parList)
