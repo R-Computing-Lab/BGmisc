@@ -6,6 +6,14 @@
 \usage{
 .getModalValue(x)
 }
-\description{
-Get the Modal Value of a Vector
+\arguments{
+\item{x}{A vector of values.}
 }
+\value{
+The modal value of the vector. If the vector is empty or contains only NA values, returns NA.
+}
+\description{
+This function calculates the modal value of a vector, which is the most frequently occurring value.
+If the vector is empty or contains only NA values, it returns NA.
+}
+\keyword{internal}

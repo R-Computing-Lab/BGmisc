@@ -289,7 +289,7 @@ traceTreePaths <- function(tree_long, deduplicate = TRUE) {
 
   # Map keys to IDs
   person_nodes <- active_cells[!is.na(active_cells$id), c("key", "id")]
-  id_map <- setNames(person_nodes$id, person_nodes$key)
+  id_map <- stats::setNames(person_nodes$id, person_nodes$key)
 
   # Find all pairs of people and trace paths
   person_keys <- names(id_map)
