@@ -3,7 +3,7 @@
 \name{calcFamilySizeByGen}
 \alias{calcFamilySizeByGen}
 \alias{sizeAllGens}
-\title{sizeAllGens
+\title{calcFamilySizeByGen
 An internal supporting function for \code{simulatePedigree}.}
 \usage{
 calcFamilySizeByGen(kpc, Ngen, marR)
@@ -21,6 +21,6 @@ sizeAllGens(kpc, Ngen, marR)
 Returns a vector including the number of individuals in every generation.
 }
 \description{
-sizeAllGens
+calcFamilySizeByGen
 An internal supporting function for \code{simulatePedigree}.
 }
