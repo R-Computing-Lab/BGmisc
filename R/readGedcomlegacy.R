@@ -48,7 +48,7 @@
 #' - `FAMC`: ID(s) of the family where the individual is a child
 #' - `FAMS`: ID(s) of the family where the individual is a spouse
 #' @keywords internal
-readGedcom.legacy <- function(file_path,
+.readGedcom.legacy <- function(file_path,
                               verbose = FALSE,
                               add_parents = TRUE,
                               remove_empty_cols = TRUE,
@@ -69,7 +69,7 @@ readGedcom.legacy <- function(file_path,
   }
 
   # Count the number of rows containing specific patterns
-  num_rows <- countPatternRows.legacy(file)
+  num_rows <- .countPatternRows.legacy(file)
 
   # List of variables to initialize
   var_names <- list(
@@ -128,51 +128,51 @@ readGedcom.legacy <- function(file_path,
 
     # names
     if (num_rows$num_name_rows > 0 && grepl(" NAME", tmpv)) {
-      vars$name <- extract_info.legacy(tmpv, "NAME")
+      vars$name <- .extract_info.legacy(tmpv, "NAME")
       vars$name_given <- stringr::str_extract(vars$name, ".*(?= /)")
       vars$name_surn <- stringr::str_extract(vars$name, "(?<=/).*(?=/)")
       vars$name <- stringr::str_squish(stringr::str_replace(vars$name, "/", " "))
       next
     }
     # PERSONAL_NAME_PIECES := NAME | NPFX | GIVN | NICK | SPFX | SURN | NSFX
-    result <- process_tag.legacy("GIVN", "name_given_pieces", num_rows, tmpv, vars)
+    result <- .process_tag.legacy("GIVN", "name_given_pieces", num_rows, tmpv, vars)
     vars <- result$vars
     if (result$matched) next
 
     # npfx := Name Prefix
-    result <- process_tag.legacy("NPFX", "name_npfx", num_rows, tmpv, vars)
+    result <- .process_tag.legacy("NPFX", "name_npfx", num_rows, tmpv, vars)
     vars <- result$vars
     if (result$matched) next
 
     # NICK := Nickname
-    result <- process_tag.legacy("NICK", "name_nick", num_rows, tmpv, vars)
+    result <- .process_tag.legacy("NICK", "name_nick", num_rows, tmpv, vars)
     vars <- result$vars
     if (result$matched) next
 
     # surn := Surname
-    result <- process_tag.legacy("SURN", "name_surn_pieces", num_rows, tmpv, vars)
+    result <- .process_tag.legacy("SURN", "name_surn_pieces", num_rows, tmpv, vars)
     vars <- result$vars
     if (result$matched) next
 
     # nsfx := Name suffix
-    result <- process_tag.legacy("NSFX", "name_nsfx", num_rows, tmpv, vars)
+    result <- .process_tag.legacy("NSFX", "name_nsfx", num_rows, tmpv, vars)
     vars <- result$vars
     if (result$matched) next
 
-    result <- process_tag.legacy("_MARNM", "name_marriedsurn", num_rows, tmpv, vars)
+    result <- .process_tag.legacy("_MARNM", "name_marriedsurn", num_rows, tmpv, vars)
     vars <- result$vars
     if (result$matched) next
 
     # Birth event related information
     if (num_rows$num_birt_rows > 0 && grepl(" BIRT", tmpv)) {
       if (num_rows$num_date_rows > 0 && i + 1 <= file_length) {
-        vars$birth_date <- extract_info.legacy(file[1][[1]][[i + 1]], "DATE")
+        vars$birth_date <- .extract_info.legacy(file[1][[1]][[i + 1]], "DATE")
         if (num_rows$num_plac_rows > 0 && i + 2 <= file_length) {
-          vars$birth_place <- extract_info.legacy(file[1][[1]][[i + 2]], "PLAC")
+          vars$birth_place <- .extract_info.legacy(file[1][[1]][[i + 2]], "PLAC")
           if (num_rows$num_lati_rows > 0 && i + 4 <= file_length) {
-            vars$birth_lat <- extract_info.legacy(file[1][[1]][[i + 4]], "LATI")
+            vars$birth_lat <- .extract_info.legacy(file[1][[1]][[i + 4]], "LATI")
             if (num_rows$num_long_rows > 0 && i + 5 <= file_length) {
-              vars$birth_long <- extract_info.legacy(file[1][[1]][[i + 5]], "LONG")
+              vars$birth_long <- .extract_info.legacy(file[1][[1]][[i + 5]], "LONG")
             }
           }
         }
@@ -184,15 +184,15 @@ readGedcom.legacy <- function(file_path,
     # the ifs are nested so that there is no need to check if you've already run out of
     if (num_rows$num_deat_rows > 0 && grepl(" DEAT", tmpv)) {
       if (num_rows$num_date_rows > 0 && i + 1 <= file_length) {
-        vars$death_date <- extract_info.legacy(file[1][[1]][[i + 1]], "DATE")
+        vars$death_date <- .extract_info.legacy(file[1][[1]][[i + 1]], "DATE")
         if (num_rows$num_plac_rows > 0 && i + 2 <= file_length) {
-          vars$death_place <- extract_info.legacy(file[1][[1]][[i + 2]], "PLAC")
+          vars$death_place <- .extract_info.legacy(file[1][[1]][[i + 2]], "PLAC")
           if (num_rows$num_caus_rows > 0 && i + 3 <= file_length) {
-            vars$death_caus <- extract_info.legacy(file[1][[1]][[i + 3]], "CAUS")
+            vars$death_caus <- .extract_info.legacy(file[1][[1]][[i + 3]], "CAUS")
             if (num_rows$num_lati_rows > 0 && i + 4 <= file_length) {
-              vars$death_lat <- extract_info.legacy(file[1][[1]][[i + 4]], "LATI")
+              vars$death_lat <- .extract_info.legacy(file[1][[1]][[i + 4]], "LATI")
               if (num_rows$num_long_rows > 0 && i + 5 <= file_length) {
-                vars$death_long <- extract_info.legacy(file[1][[1]][[i + 5]], "LONG")
+                vars$death_long <- .extract_info.legacy(file[1][[1]][[i + 5]], "LONG")
               }
             }
           }
@@ -258,7 +258,7 @@ readGedcom.legacy <- function(file_path,
       # g7:INDI-TITL	A formal designation used by an individual in connection with positions of royalty or other social status, such as Grand Duke.
       c("TITL", "attribute_title")
     )) {
-      result <- process_tag.legacy(tag_field[1], tag_field[2], num_rows, tmpv, vars)
+      result <- .process_tag.legacy(tag_field[1], tag_field[2], num_rows, tmpv, vars)
       vars <- result$vars
       if (result$matched) next
     }
@@ -266,7 +266,7 @@ readGedcom.legacy <- function(file_path,
     # relationship data
     # g7:INDI-FAMC
     ## The family in which an individual appears as a child. It is also used with a g7:FAMC-STAT substructure to show individuals who are not children of the family. See FAMILY_RECORD for more details.
-    result <- process_tag.legacy("FAMC", "FAMC", num_rows, tmpv, vars,
+    result <- .process_tag.legacy("FAMC", "FAMC", num_rows, tmpv, vars,
       extractor = function(x) stringr::str_extract(x, "(?<=@.)\\d*(?=@)"),
       mode = "append"
     )
@@ -275,7 +275,7 @@ readGedcom.legacy <- function(file_path,
 
     # FAMS (Family spouse) g7:FAMS
     #  The family in which an individual appears as a partner. See FAMILY_RECORD for more details.
-    result <- process_tag.legacy("FAMS", "FAMS", num_rows, tmpv, vars,
+    result <- .process_tag.legacy("FAMS", "FAMS", num_rows, tmpv, vars,
       extractor = function(x) stringr::str_extract(x, "(?<=@.)\\d*(?=@)"),
       mode = "append"
     )
@@ -307,7 +307,7 @@ readGedcom.legacy <- function(file_path,
       print("Post-processing data frame")
     }
     # Remove the first row (empty)
-    df_temp <- postProcessGedcom.legacy(
+    df_temp <- .postProcessGedcom.legacy(
       df_temp = df_temp,
       remove_empty_cols = remove_empty_cols,
       combine_cols = combine_cols,
@@ -322,11 +322,11 @@ readGedcom.legacy <- function(file_path,
 
 #' Post-process GEDCOM Data Frame
 #'
-#' @inheritParams readGedcom.legacy
-#' @inheritParams mapFAMS2parents.legacy
+#' @inheritParams .readGedcom.legacy
+#' @inheritParams .mapFAMS2parents.legacy
 #' @return A data frame with processed information.
 
-postProcessGedcom.legacy <- function(df_temp,
+.postProcessGedcom.legacy <- function(df_temp,
                                      remove_empty_cols = TRUE,
                                      combine_cols = TRUE,
                                      add_parents = TRUE,
@@ -337,11 +337,11 @@ postProcessGedcom.legacy <- function(df_temp,
     if (verbose) {
       print("Processing parents")
     }
-    df_temp <- processParents.legacy(df_temp, datasource = "gedcom")
+    df_temp <- .processParents.legacy(df_temp, datasource = "gedcom")
   }
 
   if (combine_cols) {
-    df_temp <- collapseNames.legacy(verbose = verbose, df_temp = df_temp)
+    df_temp <- .collapseNames.legacy(verbose = verbose, df_temp = df_temp)
   }
 
   if (remove_empty_cols) {
@@ -371,7 +371,7 @@ postProcessGedcom.legacy <- function(df_temp,
 #' @return A list mapping family IDs to parent IDs.
 #' @keywords internal
 #'
-mapFAMS2parents.legacy <- function(df_temp) {
+.mapFAMS2parents.legacy <- function(df_temp) {
   if (!all(c("FAMS", "sex") %in% colnames(df_temp))) {
     warning("The data frame does not contain the necessary columns (FAMS, sex)")
     return(NULL)
@@ -410,7 +410,7 @@ mapFAMS2parents.legacy <- function(df_temp) {
 #' @param family_to_parents A list mapping family IDs to parent IDs.
 #' @return A data frame with added momID and dad_ID columns.
 #' @keywords internal
-mapFAMC2parents.legacy <- function(df_temp, family_to_parents) {
+.mapFAMC2parents.legacy <- function(df_temp, family_to_parents) {
   df_temp$momID <- NA_character_
   df_temp$dadID <- NA_character_
   for (i in 1:nrow(df_temp)) {
@@ -438,7 +438,7 @@ mapFAMC2parents.legacy <- function(df_temp, family_to_parents) {
 #' @param df_temp A data frame containing information about individuals.
 #' @return A data frame with added momID and dadID columns.
 #' @keywords internal
-processParents.legacy <- function(df_temp, datasource) {
+.processParents.legacy <- function(df_temp, datasource) {
   # Ensure required columns are present
   if (datasource == "gedcom") {
     required_cols <- c("FAMC", "sex", "FAMS")
@@ -454,11 +454,11 @@ processParents.legacy <- function(df_temp, datasource) {
     return(df_temp)
   }
 
-  family_to_parents <- mapFAMS2parents.legacy(df_temp)
+  family_to_parents <- .mapFAMS2parents.legacy(df_temp)
   if (is.null(family_to_parents) || length(family_to_parents) == 0) {
     return(df_temp)
   }
-  df_temp <- mapFAMC2parents.legacy(df_temp, family_to_parents)
+  df_temp <- .mapFAMC2parents.legacy(df_temp, family_to_parents)
   return(df_temp)
 }
 
@@ -471,7 +471,7 @@ processParents.legacy <- function(df_temp, datasource) {
 #' @param type A character string representing the type of information to extract.
 #' @return A character string with the extracted information.
 #' @keywords internal
-extract_info.legacy <- function(line, type) {
+.extract_info.legacy <- function(line, type) {
   stringr::str_squish(stringr::str_extract(line, paste0("(?<=", type, " ).+")))
 }
 
@@ -483,7 +483,7 @@ extract_info.legacy <- function(line, type) {
 #' @return A list with the combined column and a flag indicating if the second column should be retained.
 #' @keywords internal
 # Helper function to check for conflicts and merge columns
-combine_columns <- function(col1, col2) {
+.combine_columns.legacy <- function(col1, col2) {
   col1_lower <- stringr::str_to_lower(col1)
   col2_lower <- stringr::str_to_lower(col2)
 
@@ -506,7 +506,7 @@ combine_columns <- function(col1, col2) {
 #' @return A list with the number of rows containing each pattern.
 #' @keywords internal
 #'
-countPatternRows.legacy <- function(file) {
+.countPatternRows.legacy <- function(file) {
   # Count the number of rows containing specific patterns
   pattern_counts <- sapply(
     c(
@@ -566,14 +566,14 @@ countPatternRows.legacy <- function(file) {
 #' @return A list with updated `vars` and a `matched` flag.
 #' @keywords internal
 #'
-process_tag.legacy <- function(tag, field_name, pattern_rows, line, vars,
+.process_tag.legacy <- function(tag, field_name, pattern_rows, line, vars,
                                extractor = NULL, mode = "replace") {
   count_name <- paste0("num_", tolower(tag), "_rows")
   matched <- FALSE
   if (!is.null(pattern_rows[[count_name]]) &&
     pattern_rows[[count_name]] > 0 &&
     grepl(paste0(" ", tag), line)) {
-    value <- if (is.null(extractor)) extract_info.legacy(line, tag) else extractor(line)
+    value <- if (is.null(extractor)) .extract_info.legacy(line, tag) else extractor(line)
 
     if (mode == "append" && !is.na(vars[[field_name]])) {
       vars[[field_name]] <- paste0(vars[[field_name]], ", ", value)
@@ -590,10 +590,10 @@ process_tag.legacy <- function(tag, field_name, pattern_rows, line, vars,
 #'
 #' This function combines the `name_given` and `name_given_pieces` columns in a data frame.
 #'
-#' @inheritParams readGedcom.legacy
+#' @inheritParams .readGedcom.legacy
 #' @param df_temp A data frame containing the columns to be combined.
 #' @keywords internal
-collapseNames.legacy <- function(verbose, df_temp) {
+.collapseNames.legacy <- function(verbose, df_temp) {
   if (verbose) {
     print("Combining Duplicate Columns")
   }
@@ -602,7 +602,7 @@ collapseNames.legacy <- function(verbose, df_temp) {
 
   # Combine `name_given` and `name_given_pieces`
   if (!all(is.na(df_temp$name_given_pieces)) | !all(is.na(df_temp$name_given))) {
-    result <- combine_columns(df_temp$name_given, df_temp$name_given_pieces)
+    result <- .combine_columns.legacy(df_temp$name_given, df_temp$name_given_pieces)
     df_temp$name_given <- result$combined
     if (!result$retain_col2) {
       df_temp$name_given_pieces <- NULL
@@ -611,7 +611,7 @@ collapseNames.legacy <- function(verbose, df_temp) {
 
   # Combine `name_surn` and `name_surn_pieces`
   if (!all(is.na(df_temp$name_surn_pieces)) | !all(is.na(df_temp$name_surn))) {
-    result <- combine_columns(df_temp$name_surn, df_temp$name_surn_pieces)
+    result <- .combine_columns.legacy(df_temp$name_surn, df_temp$name_surn_pieces)
     df_temp$name_surn <- result$combined
     if (!result$retain_col2) {
       df_temp$name_surn_pieces <- NULL
