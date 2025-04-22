@@ -9,7 +9,9 @@ checkSex(
   code_male = NULL,
   code_female = NULL,
   verbose = FALSE,
-  repair = FALSE
+  repair = FALSE,
+  momID = "momID",
+  dadID = "dadID"
 )
 }
 \arguments{
