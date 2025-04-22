@@ -64,7 +64,7 @@ ped2com <- function(ped, component,
                  save_rate_parlist = save_rate_parlist,
                  update_rate = update_rate,
                  gc = gc,
-                 component =component,
+                 component = component,
                  adjBeta_method = adjBeta_method
                  )
 
@@ -131,7 +131,7 @@ ped2com <- function(ped, component,
 
   ## A. Resume from Checkpoint if Needed
   ## Initialize variables
-  list_of_adjacencies <-   loadOrComputeParList(checkpoint_files = checkpoint_files,
+  list_of_adjacencies <-   .loadOrComputeParList(checkpoint_files = checkpoint_files,
                                                  ped = ped,
                                                  config = config,
                                                  nr=nr)
@@ -147,7 +147,7 @@ ped2com <- function(ped, component,
    }
 
   # Assign parent values based on the component type
-  parVal <- assignParentValue(component = config$component)
+  parVal <- .assignParentValue(component = config$component)
 
   # Construct sparse matrix
   # Initialize adjacency matrix for parent-child relationships
@@ -240,22 +240,12 @@ ped2com <- function(ped, component,
   }
 
   # --- Step 3: I-A inverse times diagonal multiplication ---
-  if (resume && file.exists(checkpoint_files$r2_checkpoint)) {
-    if (verbose) cat("Resuming: Loading I-A inverse...\n")
-    r2 <- readRDS(checkpoint_files$r2_checkpoint)
-  } else {
-    if (verbose) {
-      cat("Doing I-A inverse times diagonal multiplication\n")
-    }
-    r2 <- r %*% Matrix::Diagonal(x = sqrt(isChild), n = nr)
-    if (gc) {
-      rm(r, isChild)
-      gc()
-    }
-    if (saveable) {
-      saveRDS(r2, file = checkpoint_files$r2_checkpoint)
-    }
-  }
+  r2 <- .loadOrComputeInverseDiagonal(r=r,
+                                      nr=nr,
+                                      isChild=isChild,
+                                      checkpoint_files = checkpoint_files,
+                                      config = config
+                                      )
 
   # --- Step 4: T crossproduct  ---
 
@@ -487,8 +477,9 @@ initializeCheckpoint <- function(config= list(verbose = FALSE,
   return(checkpoint_files)
 }
 
-
-assignParentValue<- function(component){
+#' Assign parent values based on component type
+#' @inheritParams ped2com
+.assignParentValue <- function(component){
 
 # Set parent values depending on the component type
 if (component %in% c("generation", "additive")) {
@@ -553,7 +544,6 @@ loadOrComputeCheckpoint <- function(file, compute_fn, config, message_resume = N
 #' @inheritParams loadOrComputeCheckpoint
 #' @inheritParams ped2com
 #' @param checkpoint_files A list of checkpoint file paths.
-#' @param config A list containing configuration parameters such as `resume`, `verbose`, and `saveable`.
 #'
 #'  @keywords internal
 
@@ -569,6 +559,23 @@ loadOrComputeCheckpoint <- function(file, compute_fn, config, message_resume = N
   return(isChild)
 }
 
+.loadOrComputeInverseDiagonal <- function(r,nr, isChild, checkpoint_files, config) {
+  r2 <- loadOrComputeCheckpoint(
+    file = checkpoint_files$r2_checkpoint,
+    compute_fn = function() {r %*% Matrix::Diagonal(x = sqrt(isChild),  n = nr)
+      },
+    config = config,
+    message_resume = "Resuming: Loading I-A inverse...\n",
+    message_compute = "Doing I-A inverse times diagonal multiplication\n"
+  )
+  if (config$gc) {
+    rm(r, isChild)
+    gc()
+  }
+  return(r2)
+}
+
+
 
 #' parent-child adjacency data
 #' @inheritParams loadOrComputeCheckpoint
@@ -583,7 +590,7 @@ loadOrComputeCheckpoint <- function(file, compute_fn, config, message_resume = N
 #' @return A list containing the parent-child adjacency data either loaded from a checkpoint or initialized.
 #'
 
-loadOrComputeParList <- function(checkpoint_files, config, nr, ped = NULL, parList = NULL, lens = NULL) {
+.loadOrComputeParList <- function(checkpoint_files, config, nr, ped = NULL, parList = NULL, lens = NULL) {
   if (config$resume && file.exists(checkpoint_files$parList) && file.exists(checkpoint_files$lens)) {
     if (config$verbose) cat("Resuming: Loading parent-child adjacency data...\n")
     parList <- readRDS(checkpoint_files$parList)

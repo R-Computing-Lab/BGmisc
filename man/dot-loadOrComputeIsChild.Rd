@@ -9,11 +9,11 @@
 \arguments{
 \item{ped}{a pedigree dataset.  Needs ID, momID, and dadID columns}
 
-\item{checkpoint_files}{A list of checkpoint file paths.}
-
-\item{config}{A list containing configuration parameters such as `resume`, `verbose`, and `saveable`.
+\item{checkpoint_files}{A list of checkpoint file paths.
 
  @keywords internal}
+
+\item{config}{A list containing configuration parameters such as `resume`, `verbose`, and `saveable`.}
 }
 \description{
 Load or compute the isChild matrix

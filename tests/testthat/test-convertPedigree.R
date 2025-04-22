@@ -256,7 +256,6 @@ test_that("ped2com handles checkpoint saving and resuming", {
   checkpoint_files_v1 <- list.files(save_path, pattern = "\\.rds$", full.names = TRUE)
 
   expect_equal(length(checkpoint_files_v1), length(checkpoint_files_v0))
-
   # Resume from checkpoint
   resumed_matrix <- ped2com(hazard,
     component = "additive", resume = TRUE, save_path = save_path,
