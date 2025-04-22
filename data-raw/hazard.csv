@@ -1,4 +1,4 @@
-"FamID","ID","sex","dadID","momID","affected","DA1","DA2","birthYr","onsetYr","deathYr","available","Gen","proband"
+"famID","ID","sex","dadID","momID","affected","DA1","DA2","birthYr","onsetYr","deathYr","available","gen","proband"
 1,1,1,NA,NA,TRUE,0,1,1902,1940,1970,TRUE,1,FALSE
 1,2,0,NA,NA,FALSE,0,0,NA,NA,NA,FALSE,1,FALSE
 1,3,0,2,1,FALSE,0,1,1923,NA,1982,TRUE,2,FALSE
