@@ -35,7 +35,10 @@
 #' }
 #' @export
 #'
-checkSex <- function(ped, code_male = NULL, code_female = NULL, verbose = FALSE, repair = FALSE) {
+checkSex <- function(ped, code_male = NULL, code_female = NULL, verbose = FALSE, repair = FALSE,
+                     momID = "momID",
+                     dadID = "dadID"
+                     ) {
   # Standardize column names in the input dataframe
   ped <- standardizeColnames(ped, verbose = verbose)
 
@@ -53,36 +56,31 @@ checkSex <- function(ped, code_male = NULL, code_female = NULL, verbose = FALSE,
   validation_results$sex_unique <- unique(ped$sex)
   validation_results$sex_length <- length(unique(ped$sex))
   if (verbose) {
-    cat(paste0(validation_results$sex_length, " unique values found.\n"))
-    cat(paste0("Unique values: ", paste0(validation_results$sex_unique, collapse = ", "), "\n"))
+    cat(validation_results$sex_length, " unique sex codes found: ", paste(validation_results$sex_unique, collapse = ", "), "\n")
   }
+
+
+
   # Are there multiple sexes/genders in the list of dads and moms?
 
-  table_sex_dad <- sort(table(ped$sex[ped$ID %in% ped$dadID]), decreasing = TRUE)
-  table_sex_mom <- sort(table(ped$sex[ped$ID %in% ped$momID]), decreasing = TRUE)
+  dad_results <- checkParentSex(ped, parent_col = dadID, verbose = verbose)
+  mom_results <- checkParentSex(ped, parent_col = momID, verbose = verbose)
 
-  validation_results$all_sex_dad <- names(table_sex_dad)
-  validation_results$all_sex_mom <- names(table_sex_mom)
+  validation_results$all_sex_dad <- dad_results$unique_sexes
+  validation_results$all_sex_mom <- mom_results$unique_sexes
+  validation_results$most_frequent_sex_dad <- dad_results$modal_sex
+  validation_results$most_frequent_sex_mom <- mom_results$modal_sex
+  validation_results$ID_female_dads <- dad_results$inconsistent_parents
+  validation_results$ID_child_female_dads <- dad_results$inconsistent_children
+  validation_results$ID_male_moms <- mom_results$inconsistent_parents
+  validation_results$ID_child_male_moms <- mom_results$inconsistent_children
 
-  validation_results$most_frequent_sex_dad <- validation_results$all_sex_dad[1]
-  validation_results$most_frequent_sex_mom <- validation_results$all_sex_mom[1]
-
-  # List ids for dads that are female, moms that are male
-  if (length(validation_results$all_sex_dad) > 1) {
-    df_dads <- ped[ped$ID %in% ped$dadID, ]
-    validation_results$ID_female_dads <- df_dads$ID[df_dads$sex != validation_results$most_frequent_sex_dad]
-    validation_results$ID_child_female_dads <- ped$ID[ped$dadID %in% validation_results$ID_female_dads]
-    remove(df_dads)
-  }
-  if (length(validation_results$all_sex_mom) > 1) {
-    df_moms <- ped[ped$ID %in% ped$momID, ]
-    validation_results$ID_male_moms <- df_moms$ID[df_moms$sex != validation_results$most_frequent_sex_mom]
-    validation_results$ID_child_male_moms <- ped$ID[ped$momID %in% validation_results$ID_male_moms]
-    remove(df_moms)
-  }
-
-  if (repair) {
-    if (verbose) {
+  if (repair==FALSE) {
+    if (verbose) { cat("Checks Made:\n")
+      print(validation_results) }
+    return(validation_results)
+  } else {
+    if (verbose==TRUE) {
       cat("Step 2: Attempting to repair sex coding...\n")
     }
     # Initialize a list to track changes made during repair
@@ -107,13 +105,6 @@ checkSex <- function(ped, code_male = NULL, code_female = NULL, verbose = FALSE,
       print(changes)
     }
     return(ped)
-  } else {
-    if (verbose) {
-      cat("Checks Made:\n")
-      print(validation_results)
-    }
-
-    return(validation_results)
   }
 }
 
@@ -192,4 +183,86 @@ recodeSex <- function(
     }
   }
   return(ped)
+}
+
+
+
+#' Check Parental Role Sex Consistency
+#'
+#' Validates sex coding consistency for a given parental role (momID or dadID).
+#'
+#' @param ped Pedigree dataframe.
+#' @param parent_col The column name for parent IDs ("momID" or "dadID").
+#' @param sex_col The column name for sex coding. Default is "sex".
+#' @param verbose Logical, whether to print messages.
+#'
+#' @return A list containing role, unique sex codes, modal sex, inconsistent parents, and linked children.
+checkParentSex <- function(ped, parent_col, sex_col = "sex", verbose = FALSE) {
+
+
+  parent_ids <- ped[[parent_col]]
+  parent_rows <- ped[ped$ID %in% parent_ids, ]
+
+  if (nrow(parent_rows) == 0) {
+    if (verbose) cat(paste0("No individuals found in role: ", parent_col, "\n"))
+    return(list(
+      role = parent_col,
+      unique_sexes = NULL,
+      modal_sex = NA,
+      all_same_sex = NA,
+      inconsistent_parents = NULL,
+      inconsistent_children = NULL
+    ))
+  }
+
+
+  # Are there multiple sexes/genders in the list of dads and moms?
+  parent_sexes <- parent_rows[[sex_col]]
+  unique_sexes <- unique(parent_sexes)
+
+  # are all moms/dads the same sex?
+  all_same_sex <- length(unique_sexes) == 1
+
+  # Store the most frequent sex for moms and dads
+  modal_sex <- names(sort(table(parent_sexes), decreasing = TRUE))[1]
+
+  # Type coercion based on ped$sex type
+  if (is.numeric(ped[[sex_col]])) {
+  modal_sex <- as.numeric(modal_sex)
+  }
+
+  # List ids for dads that are female, moms that are male
+  inconsistent_parents <- parent_rows$ID[parent_rows[[sex_col]] != modal_sex]
+
+  child_col <- parent_col
+  inconsistent_children <- ped$ID[ped[[child_col]] %in% inconsistent_parents]
+
+
+  if (verbose) {
+    cat(paste0("Role: ", parent_col, "\n"))
+    cat(length(unique_sexes), " unique sex codes found: ", paste(unique_sexes, collapse = ", "), "\n")
+    cat("Modal sex code: ", modal_sex, "\n")
+
+    if (all_same_sex) {
+      cat("All parents consistently coded.\n")
+  }  else cat(length(inconsistent_parents), " parents have inconsistent sex coding.\n")
+  }
+
+  return(list(
+    role = parent_col,
+    unique_sexes = unique_sexes,
+    modal_sex = modal_sex,
+    all_same_sex = all_same_sex,
+    inconsistent_parents = inconsistent_parents,
+    inconsistent_children = inconsistent_children
+  ))
+}
+
+#' Get the Modal Value of a Vector
+
+.getModalValue <- function(x) {
+  if (length(na.omit(x)) == 0) return(NA)
+  freq_table <- sort(table(x), decreasing = TRUE)
+  modal <- names(freq_table)[1]
+  return(modal)
 }

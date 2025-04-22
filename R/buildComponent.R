@@ -120,6 +120,7 @@ ped2com <- function(ped, component,
   }
 
   # Step 1: Construct parent-child adjacency matrix
+
   ## A. Resume from Checkpoint if Needed
   if (resume && file.exists(checkpoint_files$parList) && file.exists(checkpoint_files$lens)) {
     if (verbose) cat("Resuming: Loading parent-child adjacency data...\n")
@@ -139,7 +140,6 @@ ped2com <- function(ped, component,
 
 
   ## B. Resume loop from the next uncomputed index
-
   if (verbose) cat("Computing parent-child adjacency matrix...\n")
   # Construct sparse matrix
   if (resume && file.exists(checkpoint_files$iss) && file.exists(checkpoint_files$jss)) { # fix to check actual
@@ -234,6 +234,8 @@ ped2com <- function(ped, component,
     }
   }
   # --- Step 2: Compute Relatedness Matrix ---
+
+
   if (resume && file.exists(checkpoint_files$r_checkpoint) && file.exists(checkpoint_files$gen_checkpoint) && file.exists(checkpoint_files$mtSum_checkpoint) && file.exists(checkpoint_files$newIsPar_checkpoint) &&
     file.exists(checkpoint_files$count_checkpoint)
   ) {
@@ -319,7 +321,6 @@ ped2com <- function(ped, component,
       saveRDS(r, file = checkpoint_files$tcrossprod_checkpoint)
     }
   }
-
 
   if (component == "mitochondrial") {
     r@x <- rep(1, length(r@x))

@@ -119,7 +119,7 @@
 .adjDirect <- function(ped, component, saveable, resume,
                        save_path, verbose, lastComputed,
                        nr, checkpoint_files, update_rate,
-                       parList, lens, save_rate_parlist, adjBeta_method,
+                       parList, lens, save_rate_parlist,
                        ...) {
   # Loop through each individual in the pedigree
   # Build the adjacency matrix for parent-child relationships
@@ -177,18 +177,6 @@
     iss <- unlist(iss_list, use.names = FALSE)
     jss <- unlist(jss_list, use.names = FALSE)
 
-    #   list_of_adjacency <-    .adjBeta(ped=ped,adjBeta_method=adjBeta_method,
-    #                                      component = component,
-    #                                     saveable = saveable, resume = resume,
-    #                                     save_path = save_path, verbose = verbose,
-    #                                     lastComputed = lastComputed, nr = nr,
-    #                                     checkpoint_files = checkpoint_files,
-    #                                     update_rate = update_rate,
-    #                                     parList = parList,
-    #                                     lens = lens, save_rate_parlist = save_rate_parlist,
-    #                                     ...)
-
-    #   return(list_of_adjacency)
   } else if (component %in% c("mitochondrial")) {
     mIDs <- stats::na.omit(data.frame(rID = ped$ID, cID = ped$momID))
     iss <- c(mIDs$rID)
@@ -459,8 +447,7 @@ computeParentAdjacency <- function(ped, component,
 
                                 "indexed" = {
                                   # Garrison version
-                                  .adjIndexed(
-                                    ped = ped,
+                                  .adjIndexed(ped = ped,
                                     component = component,
                                     saveable = saveable,
                                     resume = resume,
