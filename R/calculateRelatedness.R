@@ -107,6 +107,7 @@ inferRelatedness <- function(obsR, aceA = .9, aceC = 0, sharedC = 0) {
 }
 
 #' @rdname inferRelatedness
+#' @keywords internal
 relatedness <- function(...) {
   warning("The 'relatedness' function is deprecated. Please use 'inferRelatedness' instead.")
   inferRelatedness(...)

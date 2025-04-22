@@ -43,36 +43,38 @@ ped2com <- function(ped, component,
                     save_path = "checkpoint/",
                     adjBeta_method = NULL,
                     ...) {
+
+  #------
+  # Check inputs
+  #------
+
+  config <- list(verbose = verbose,
+                 saveable = saveable,
+                 resume = resume,
+                 save_path = save_path,
+                 max.gen = max.gen,
+                 sparse = sparse,
+                 flatten.diag = flatten.diag,
+                 standardize.colnames = standardize.colnames,
+                 transpose_method = transpose_method,
+                 adjacency_method = adjacency_method,
+                 isChild_method = isChild_method,
+                 save_rate = save_rate,
+                 save_rate_gen = save_rate_gen,
+                 save_rate_parlist = save_rate_parlist,
+                 update_rate = update_rate,
+                 gc = gc,
+                 component =component
+                 )
+
+
   #------
   # Checkpointing
   #------
-  if (saveable || resume) { # prepare checkpointing
-    if (verbose) cat("Preparing checkpointing...\n")
-    # Ensure save path exists
-    if (saveable && !dir.exists(save_path)) {
-      if (verbose) cat("Creating save path...\n")
-      dir.create(save_path, recursive = TRUE)
-    } else if (resume && !dir.exists(save_path)) {
-      stop("Cannot resume from checkpoint. Save path does not exist.")
-    }
+  if (config$saveable || config$resume) { # prepare checkpointing
+  if (config$verbose) cat("Preparing checkpointing...\n")
 
-    # Define checkpoint files
-    checkpoint_files <- list(
-      parList = file.path(save_path, "parList.rds"),
-      lens = file.path(save_path, "lens.rds"),
-      isPar = file.path(save_path, "isPar.rds"),
-      iss = file.path(save_path, "iss.rds"),
-      jss = file.path(save_path, "jss.rds"),
-      isChild = file.path(save_path, "isChild.rds"),
-      r_checkpoint = file.path(save_path, "r_checkpoint.rds"),
-      gen_checkpoint = file.path(save_path, "gen_checkpoint.rds"),
-      newIsPar_checkpoint = file.path(save_path, "newIsPar_checkpoint.rds"),
-      mtSum_checkpoint = file.path(save_path, "mtSum_checkpoint.rds"),
-      r2_checkpoint = file.path(save_path, "r2_checkpoint.rds"),
-      tcrossprod_checkpoint = file.path(save_path, "tcrossprod_checkpoint.rds"),
-      count_checkpoint = file.path(save_path, "count_checkpoint.rds"),
-      final_matrix = file.path(save_path, "final_matrix.rds")
-    )
+    checkpoint_files  <- initializeCheckpoint(config) # initialize checkpoint files
   }
   #------
   # Validation/Preparation
@@ -88,9 +90,14 @@ ped2com <- function(ped, component,
     )
   )
 
-  if (!transpose_method %in% c("tcrossprod", "crossprod", "star", "tcross.alt.crossprod", "tcross.alt.star")) {
-    stop("Invalid method specified. Choose from 'tcrossprod', 'crossprod', or 'star' or 'tcross.alt.crossprod' or 'tcross.alt.star'.")
+  transpose_method_options <- c("tcrossprod", "crossprod", "star",
+                                "tcross.alt.crossprod", "tcross.alt.star")
+  if (!transpose_method %in%  transpose_method_options) {
+    stop(paste0("Invalid method specified. Choose from ",
+                paste(transpose_method_options, collapse = ", "), "."))
   }
+
+
   if (!adjacency_method %in% c("indexed", "loop", "direct", "beta")) {
     stop("Invalid method specified. Choose from 'indexed', 'loop', 'direct', or 'beta'.")
   }
@@ -134,13 +141,13 @@ ped2com <- function(ped, component,
     parList <- vector("list", nr)
     lens <- integer(nr)
     lastComputed <- 0
-
     if (verbose) cat("Building parent adjacency matrix...\n")
   }
 
 
   ## B. Resume loop from the next uncomputed index
-  if (verbose) cat("Computing parent-child adjacency matrix...\n")
+
+
   # Construct sparse matrix
   if (resume && file.exists(checkpoint_files$iss) && file.exists(checkpoint_files$jss)) { # fix to check actual
     if (verbose) cat("Resuming: Constructed matrix...\n")
@@ -148,6 +155,7 @@ ped2com <- function(ped, component,
     iss <- readRDS(checkpoint_files$iss)
     list_of_adjacencies <- list(iss = iss, jss = jss)
   } else {
+    if (verbose) cat("Computing parent-child adjacency matrix...\n")
     list_of_adjacencies <- computeParentAdjacency(
       ped = ped,
       save_rate_parlist = save_rate_parlist,
@@ -183,36 +191,27 @@ ped2com <- function(ped, component,
       gc()
     }
   }
-  # Set parent values depending on the component type
-  if (component %in% c("generation", "additive")) {
-    parVal <- .5
-  } else if (component %in% c("common nuclear", "mitochondrial")) {
-    parVal <- 1
-  } else {
-    stop("Don't know how to set parental value")
-  }
+
+  # Assign parent values based on the component type
+  parVal <- assignParentValue(component = component, verbose = verbose,...)
+
   # Construct sparse matrix
-  if (resume && file.exists(checkpoint_files$isPar)) {
-    if (verbose) cat("Resuming: Loading adjacency matrix...\n")
-    isPar <- readRDS(checkpoint_files$isPar)
-  } else {
-    # Initialize adjacency matrix for parent-child relationships
-    isPar <- Matrix::sparseMatrix(
-      i = iss,
-      j = jss,
-      x = parVal,
-      dims = c(nr, nr),
-      dimnames = list(ped$ID, ped$ID)
-    )
-    if (verbose) {
-      cat("Completed first degree relatives (adjacency)\n")
-    }
-    if (saveable) {
-      saveRDS(isPar, file = checkpoint_files$isPar)
-    }
+  # Initialize adjacency matrix for parent-child relationships
+  isPar <-  loadOrComputeIsPar(
+    iss = iss,
+    jss = jss,
+    parVal = parVal,
+    nr = nr,
+    ped = ped,
+    checkpoint_files = checkpoint_files,
+    config = config
+  )
+  if (verbose) {
+    cat("Completed first degree relatives (adjacency)\n")
   }
 
-  # isPar is the adjacency matrix.  'A' matrix from RAM
+   # isPar is the adjacency matrix.  'A' matrix from RAM
+
   if (component %in% c("common nuclear")) {
     Matrix::diag(isPar) <- 1
     if (sparse == FALSE) {
@@ -353,7 +352,7 @@ ped2add <- function(ped, max.gen = 25, sparse = TRUE, verbose = FALSE,
                     resume = FALSE,
                     save_rate = 5,
                     save_rate_gen = save_rate,
-                    save_rate_parlist = 1000 * save_rate,
+                    save_rate_parlist = 100000 * save_rate,
                     save_path = "checkpoint/",
                     ...) {
   ped2com(
@@ -392,7 +391,7 @@ ped2mit <- ped2mt <- function(ped, max.gen = 25,
                               resume = FALSE,
                               save_rate = 5,
                               save_rate_gen = save_rate,
-                              save_rate_parlist = 1000 * save_rate,
+                              save_rate_parlist = 100000 * save_rate,
                               save_path = "checkpoint/",
                               ...) {
   ped2com(
@@ -456,8 +455,7 @@ ped2cn <- function(ped, max.gen = 25, sparse = TRUE, verbose = FALSE,
 #' @inherit ped2com details
 #' @export
 #'
-ped2ce <- function(ped,
-                   ...) {
+ped2ce <- function(ped,...) {
   matrix(1, nrow = nrow(ped), ncol = nrow(ped), dimnames = list(ped$ID, ped$ID))
 }
 
@@ -502,4 +500,97 @@ ped2ce <- function(ped,
   )
 
   return(result)
+}
+
+#' Initialize checkpoint files
+#' @inheritParams ped2com
+#' @keyword internal
+
+initializeCheckpoint <- function(config= list(verbose = FALSE,
+       saveable = FALSE,
+       resume = FALSE,
+       save_path = "checkpoint/")) {
+  # Define checkpoint files
+  # Ensure save path exists
+  if (config$saveable && !dir.exists(config$save_path)) {
+    if (config$verbose) cat("Creating save path...\n")
+    dir.create(config$save_path, recursive = TRUE)
+  } else if (config$resume && !dir.exists(config$save_path)) {
+    stop("Cannot resume from checkpoint. Save path does not exist.")
+  }
+
+  checkpoint_files <- list(
+    parList = file.path(config$save_path, "parList.rds"),
+    lens = file.path(config$save_path, "lens.rds"),
+    isPar = file.path(config$save_path, "isPar.rds"),
+    iss = file.path(config$save_path, "iss.rds"),
+    jss = file.path(config$save_path, "jss.rds"),
+    isChild = file.path(config$save_path, "isChild.rds"),
+    r_checkpoint = file.path(config$save_path, "r_checkpoint.rds"),
+    gen_checkpoint = file.path(config$save_path, "gen_checkpoint.rds"),
+    newIsPar_checkpoint = file.path(config$save_path, "newIsPar_checkpoint.rds"),
+    mtSum_checkpoint = file.path(config$save_path, "mtSum_checkpoint.rds"),
+    r2_checkpoint = file.path(config$save_path, "r2_checkpoint.rds"),
+    tcrossprod_checkpoint = file.path(config$save_path, "tcrossprod_checkpoint.rds"),
+    count_checkpoint = file.path(config$save_path, "count_checkpoint.rds"),
+    final_matrix = file.path(config$save_path, "final_matrix.rds")
+  )
+
+  return(checkpoint_files)
+}
+
+
+assignParentValue<- function(component = component, verbose = verbose){
+
+# Set parent values depending on the component type
+if (component %in% c("generation", "additive")) {
+  parVal <- .5
+} else if (component %in% c("common nuclear", "mitochondrial")) {
+  parVal <- 1
+} else {
+  stop("Don't know how to set parental value")
+}
+return(parVal)
+}
+
+#' Load or compute a checkpoint
+#' @param file The file path to load the checkpoint from.
+#' @param compute_fn The function to compute the checkpoint if it doesn't exist.
+#' @param config A list containing configuration parameters such as `resume`, `verbose`, and `saveable`.
+#' @param message_resume Optional message to display when resuming from a checkpoint.
+#' @param message_compute Optional message to display when computing the checkpoint.
+#' @return The loaded or computed checkpoint.
+#' @keyword internal
+loadOrComputeCheckpoint <- function(file, compute_fn, config, message_resume = NULL, message_compute = NULL) {
+  if (config$resume && file.exists(file)) {
+    if (config$verbose && !is.null(message_resume)) cat(message_resume)
+    return(readRDS(file))
+  } else {
+    if (config$verbose && !is.null(message_compute)) cat(message_compute)
+    result <- compute_fn()
+    if (config$saveable) saveRDS(result, file = file)
+    return(result)
+  }
+}
+
+#' Load or compute the isPar matrix
+#' @inheritParams loadOrComputeCheckpoint
+#' @inheritParams ped2com
+#'
+#' @keyword internal
+loadOrComputeIsPar <- function(iss, jss, parVal, nr, ped, checkpoint_files, config) {
+  isPar <- loadOrComputeCheckpoint(
+    file = checkpoint_files$isPar,
+    compute_fn = function() Matrix::sparseMatrix(
+      i = iss, j = jss, x = parVal,
+      dims = c(nr, nr),
+      dimnames = list(ped$ID, ped$ID)
+    ),
+    config = config,
+    message_resume = "Resuming: Loading adjacency matrix...\n",
+    message_compute = "Initializing adjacency matrix...\n"
+  )
+
+  return(isPar)
+
 }
