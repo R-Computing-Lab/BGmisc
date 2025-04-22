@@ -13,7 +13,7 @@
 standardizeColnames <- function(df, verbose = FALSE) {
   # Internal mapping of standardized names to possible variants
   mapping <- list(
-    "fam" = "^(?:fam(?:ily)?[\\.\\-_]?(?:id)?)",
+    "famID" = "^(?:fam(?:ily)?[\\.\\-_]?(?:id)?)",
     "ID" = "^(?:i(?:d$|ndiv(?:idual)?)|p(?:erson)?[\\.\\-_]?id)",
     "gen" = "^(?:gen(?:s|eration)?)",
     "dadID" = "^(?:d(?:ad)?id|paid|fatherid|pid[\\.\\-_]?fath[er]*|sire)",

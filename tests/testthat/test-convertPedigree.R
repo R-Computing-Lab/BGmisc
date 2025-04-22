@@ -37,7 +37,7 @@ test_that("ped2add produces correct matrix dims, values, and dimnames for altern
   expect_equal(dn[[1]], dn[[2]])
   expect_equal(dn[[1]], as.character(hazard$ID))
 })
-# to do, combine the sets that are equalivant. shouldn't need to run 1000 expect equals
+# to do, combine the sets that are equivalent. shouldn't need to run 1000 expect equals
 
 test_that("ped2add produces correct matrix dims, values, and dimnames for inbreeding data", {
   tolerance <- 1e-10
