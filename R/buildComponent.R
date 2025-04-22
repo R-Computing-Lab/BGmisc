@@ -129,20 +129,13 @@ ped2com <- function(ped, component,
   # Step 1: Construct parent-child adjacency matrix
 
   ## A. Resume from Checkpoint if Needed
-  if (resume && file.exists(checkpoint_files$parList) && file.exists(checkpoint_files$lens)) {
-    if (verbose) cat("Resuming: Loading parent-child adjacency data...\n")
-    parList <- readRDS(checkpoint_files$parList)
-    lens <- readRDS(checkpoint_files$lens)
-    computed_indices <- which(!sapply(parList, is.null))
-    lastComputed <- if (length(computed_indices) > 0) max(computed_indices) else 0
-    if (verbose) cat("Resuming from iteration", lastComputed + 1, "\n")
-  } else {
-    ## Initialize variables
-    parList <- vector("list", nr)
-    lens <- integer(nr)
-    lastComputed <- 0
-    if (verbose) cat("Building parent adjacency matrix...\n")
-  }
+  ## Initialize variables
+  ParList_prep <-  resumeParList(checkpoint_files = checkpoint_files, config = config,nr=nr)
+  parList <- ParList_prep$parList
+  lens <- ParList_prep$lens
+  lastComputed <- ParList_prep$lastComputed
+
+  remove(ParList_prep)
 
 
   ## B. Resume loop from the next uncomputed index
@@ -220,18 +213,12 @@ ped2com <- function(ped, component,
     return(isPar)
   }
 
-  if (resume && file.exists(checkpoint_files$isChild)) {
-    if (verbose) cat("Resuming: Loading isChild matrix...\n")
-    isChild <- readRDS(checkpoint_files$isChild)
-  } else {
     # isChild is the 'S' matrix from RAM
-
-    isChild <- isChild(isChild_method = isChild_method, ped = ped)
-
-    if (saveable) {
-      saveRDS(isChild, file = checkpoint_files$isChild)
-    }
-  }
+  isChild <- loadOrComputeIsChild(
+    ped = ped,
+    checkpoint_files = checkpoint_files,
+    config = config
+  )
   # --- Step 2: Compute Relatedness Matrix ---
 
 
@@ -594,3 +581,49 @@ loadOrComputeIsPar <- function(iss, jss, parVal, nr, ped, checkpoint_files, conf
   return(isPar)
 
 }
+
+#' Load or compute the isChild matrix
+#' @inheritParams loadOrComputeCheckpoint
+#' @inheritParams ped2com
+#'
+#'  @keyword internal
+
+loadOrComputeIsChild <- function(ped, checkpoint_files, config) {
+  isChild <- loadOrComputeCheckpoint(
+    file = checkpoint_files$isChild,
+    compute_fn = function() isChild(isChild_method = config$isChild_method, ped = ped),
+    config = config,
+    message_resume = "Resuming: Loading isChild matrix...\n",
+    message_compute = "Computing isChild matrix...\n"
+  )
+
+  return(isChild)
+}
+
+
+#' parent-child adjacency data
+#' @inheritParams loadOrComputeCheckpoint
+#' @inheritParams ped2com
+#' @keyword internal
+
+#' @return A list containing the parent-child adjacency data either loaded from a checkpoint or initialized.
+#'
+
+resumeParList <- function(checkpoint_files, config, lastComputed, nr) {
+  if (config$resume && file.exists(checkpoint_files$parList) && file.exists(checkpoint_files$lens)) {
+    if (config$verbose) cat("Resuming: Loading parent-child adjacency data...\n")
+    parList <- readRDS(checkpoint_files$parList)
+    lens <- readRDS(checkpoint_files$lens)
+    computed_indices <- which(!sapply(parList, is.null))
+    lastComputed <- if (length(computed_indices) > 0) max(computed_indices) else 0
+    if (config$verbose) cat("Resuming from iteration", lastComputed + 1, "\n")
+  } else {
+    ## Initialize variables
+    parList <- vector("list", nr)
+    lens <- integer(nr)
+    lastComputed <- 0
+    if (config$verbose) cat("Building parent adjacency matrix...\n")
+  }
+  return(list(parList = parList, lens = lens, lastComputed = lastComputed))
+}
+
