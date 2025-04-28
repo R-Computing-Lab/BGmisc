@@ -3,7 +3,7 @@
 #' @keywords internal
 
 
-com2links.legacy <- function(
+.com2links.legacy <- function(
     rel_pairs_file = "dataRelatedPairs.csv",
     ad_ped_matrix = NULL,
     mit_ped_matrix = mt_ped_matrix,
@@ -480,7 +480,7 @@ com2links.legacy <- function(
   } else if (legacy) {
     # --- Legacy Mode ---
     # In legacy mode, convert matrices to the expected symmetric formats.
-    com2links.og(
+    .com2links.og(
       rel_pairs_file = rel_pairs_file,
       ad_ped_matrix = ad_ped_matrix,
       mit_ped_matrix = mit_ped_matrix,
@@ -507,7 +507,7 @@ com2links.legacy <- function(
 #' @keywords internal
 
 
-com2links.og <- function(
+.com2links.og <- function(
     rel_pairs_file = "dataRelatedPairs.csv",
     ad_ped_matrix = NULL,
     mit_ped_matrix = mt_ped_matrix,
