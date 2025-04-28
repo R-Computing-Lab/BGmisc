@@ -396,7 +396,7 @@
 #' Compute Parent Adjacency Matrix with Multiple Approaches
 #' @inheritParams ped2com
 #' @inherit ped2com details
-#' @param nr the number of rows in the pedigree dataset
+#' @param config a configuration list that passes parameters to the function
 #' @param lastComputed the last computed index
 #' @param parList a list of parent-child relationships
 #' @param lens a vector of the lengths of the parent-child relationships

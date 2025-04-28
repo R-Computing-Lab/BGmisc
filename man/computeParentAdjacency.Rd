@@ -52,9 +52,9 @@ computeParentAdjacency(
 
 \item{adjBeta_method}{numeric The method to use for computing the building the adjacency_method matrix when using the "beta" build}
 
-\item{...}{additional arguments to be passed to \code{\link{ped2com}}}
+\item{config}{a configuration list that passes parameters to the function}
 
-\item{nr}{the number of rows in the pedigree dataset}
+\item{...}{additional arguments to be passed to \code{\link{ped2com}}}
 }
 \description{
 Compute Parent Adjacency Matrix with Multiple Approaches
