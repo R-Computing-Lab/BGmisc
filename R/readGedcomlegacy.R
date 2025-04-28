@@ -49,14 +49,14 @@
 #' - `FAMS`: ID(s) of the family where the individual is a spouse
 #' @keywords internal
 .readGedcom.legacy <- function(file_path,
-                              verbose = FALSE,
-                              add_parents = TRUE,
-                              remove_empty_cols = TRUE,
-                              combine_cols = TRUE,
-                              skinny = FALSE,
-                              update_rate = 1000,
-                              post_process = TRUE,
-                              ...) {
+                               verbose = FALSE,
+                               add_parents = TRUE,
+                               remove_empty_cols = TRUE,
+                               combine_cols = TRUE,
+                               skinny = FALSE,
+                               update_rate = 1000,
+                               post_process = TRUE,
+                               ...) {
   # Checks
   if (!file.exists(file_path)) stop("File does not exist: ", file_path)
   if (verbose) {
@@ -327,11 +327,11 @@
 #' @return A data frame with processed information.
 
 .postProcessGedcom.legacy <- function(df_temp,
-                                     remove_empty_cols = TRUE,
-                                     combine_cols = TRUE,
-                                     add_parents = TRUE,
-                                     skinny = TRUE,
-                                     verbose = FALSE) {
+                                      remove_empty_cols = TRUE,
+                                      combine_cols = TRUE,
+                                      add_parents = TRUE,
+                                      skinny = TRUE,
+                                      verbose = FALSE) {
   # Add mom and dad ids
   if (add_parents) {
     if (verbose) {
@@ -567,7 +567,7 @@
 #' @keywords internal
 #'
 .process_tag.legacy <- function(tag, field_name, pattern_rows, line, vars,
-                               extractor = NULL, mode = "replace") {
+                                extractor = NULL, mode = "replace") {
   count_name <- paste0("num_", tolower(tag), "_rows")
   matched <- FALSE
   if (!is.null(pattern_rows[[count_name]]) &&

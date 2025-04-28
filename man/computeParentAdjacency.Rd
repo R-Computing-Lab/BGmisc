@@ -13,13 +13,13 @@ computeParentAdjacency(
   save_path,
   verbose = FALSE,
   lastComputed = 0,
-  nr,
   checkpoint_files,
   update_rate,
   parList,
   lens,
   save_rate_parlist,
   adjBeta_method = NULL,
+  config,
   ...
 )
 }
@@ -40,8 +40,6 @@ computeParentAdjacency(
 
 \item{lastComputed}{the last computed index}
 
-\item{nr}{the number of rows in the pedigree dataset}
-
 \item{checkpoint_files}{a list of checkpoint files}
 
 \item{update_rate}{the rate at which to update the progress}
@@ -55,6 +53,8 @@ computeParentAdjacency(
 \item{adjBeta_method}{numeric The method to use for computing the building the adjacency_method matrix when using the "beta" build}
 
 \item{...}{additional arguments to be passed to \code{\link{ped2com}}}
+
+\item{nr}{the number of rows in the pedigree dataset}
 }
 \description{
 Compute Parent Adjacency Matrix with Multiple Approaches

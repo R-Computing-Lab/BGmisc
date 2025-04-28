@@ -225,7 +225,7 @@ test_that("readGedcom parses death event correctly", {
 
   row.names(df) <- NULL
   row.names(df_leg) <- NULL
-  expect_equal(df_leg,df)
+  expect_equal(df_leg, df)
 
   unlink(temp_file)
 })

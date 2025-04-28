@@ -7,7 +7,6 @@
 .loadOrComputeParList(
   checkpoint_files,
   config,
-  nr,
   ped = NULL,
   parList = NULL,
   lens = NULL
@@ -17,8 +16,6 @@
 \item{checkpoint_files}{A list of checkpoint file paths.}
 
 \item{config}{A list containing configuration parameters such as `resume`, `verbose`, and `saveable`.}
-
-\item{nr}{The number of rows in the sparse matrix.}
 
 \item{ped}{a pedigree dataset.  Needs ID, momID, and dadID columns}
 

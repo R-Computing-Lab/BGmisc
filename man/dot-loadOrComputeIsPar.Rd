@@ -4,7 +4,7 @@
 \alias{.loadOrComputeIsPar}
 \title{Load or compute the isPar matrix}
 \usage{
-.loadOrComputeIsPar(iss, jss, parVal, nr, ped, checkpoint_files, config)
+.loadOrComputeIsPar(iss, jss, parVal, ped, checkpoint_files, config)
 }
 \arguments{
 \item{iss}{The row indices of the sparse matrix.}
@@ -12,8 +12,6 @@
 \item{jss}{The column indices of the sparse matrix.}
 
 \item{parVal}{The value to assign to the non-zero elements of the sparse matrix.}
-
-\item{nr}{The number of rows in the sparse matrix.}
 
 \item{ped}{The pedigree dataset.}
 
