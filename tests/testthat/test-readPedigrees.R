@@ -18,7 +18,8 @@ test_that("readGedcom reads and parses a GEDCOM file correctly", {
     "1 SEX F",
     "1 BIRT",
     "2 DATE 2 FEB 1910",
-    "2 PLAC Anotherplace"
+    "2 PLAC Anotherplace",
+    "1 NCHI 2"
   )
   temp_file <- tempfile(fileext = ".ged")
   writeLines(gedcom_content, temp_file)
@@ -179,29 +180,71 @@ test_that("if file does not exist, readGedcom throws an error", {
 
 
 
-# readWikifamilytree
-
-test_that("readWikifamilytree reads a simple file correctly", {
-  # Create a temporary WikiFamilyTree file for testing
-  # Example usage
-  family_tree_text <- "{{familytree/start |summary=I have a brother Joe and a little sister: my mom married my dad, and my dad's parents were Grandma and Grandpa; they had another child, Aunt Daisy.}}
-{{familytree | | | | GMa |~|y|~| GPa | | GMa=Gladys|GPa=Sydney}}
-{{familytree | | | | | | | |)|-|-|-|.| }}
-{{familytree | | | MOM |y| DAD | |DAISY| MOM=Mom|DAD=Dad|DAISY=[[Daisy Duke]]}}
-{{familytree | |,|-|-|-|+|-|-|-|.| | | }}
-{{familytree | JOE | | ME  | | SIS | | | JOE=My brother Joe|ME='''Me!'''|SIS=My little sister}}
-{{familytree/end}}"
-
-  result <- readWikifamilytree(family_tree_text)
-
-  # list(
-  #  summary = summary_text,
-  #  members = members_df,
-  #  structure = tree_long,
-  #  relationships = relationships_df
-  # )
-  expect_equal(
-    result$summary,
-    "I have a brother Joe and a little sister: my mom married my dad, and my dad's parents were Grandma and Grandpa; they had another child, Aunt Daisy."
+test_that("readGedcom parses death event correctly", {
+  # Test that a GEDCOM file with a death event is parsed correctly.
+  gedcom_content <- c(
+    "0 @I1@ INDI",
+    "1 NAME John /Doe/",
+    "1 SEX M",
+    "1 DEAT",
+    "2 DATE 31 DEC 2000",
+    "2 PLAC Lastplace",
+    "2 CAUS Old age",
+    "2 LATI 12.3456",
+    "2 LONG -65.4321"
   )
+  temp_file <- tempfile(fileext = ".ged")
+  writeLines(gedcom_content, temp_file)
+
+  df <- readGedcom(temp_file, verbose = TRUE)
+
+  expect_true("death_date" %in% colnames(df))
+  expect_true("death_place" %in% colnames(df))
+  expect_true("death_caus" %in% colnames(df))
+  expect_true("death_lat" %in% colnames(df))
+  expect_true("death_long" %in% colnames(df))
+
+  expect_equal(df$death_date[1], "31 DEC 2000")
+  expect_equal(df$death_place[1], "Lastplace")
+  expect_equal(df$death_caus[1], "Old age")
+  expect_equal(df$death_lat[1], "12.3456")
+  expect_equal(df$death_long[1], "-65.4321")
+  df_leg <- .readGedcom.legacy(temp_file, verbose = TRUE)
+
+  expect_true("death_date" %in% colnames(df_leg))
+  expect_true("death_place" %in% colnames(df_leg))
+  expect_true("death_caus" %in% colnames(df_leg))
+  expect_true("death_lat" %in% colnames(df_leg))
+  expect_true("death_long" %in% colnames(df_leg))
+
+  expect_equal(df_leg$death_date[1], "31 DEC 2000")
+  expect_equal(df_leg$death_place[1], "Lastplace")
+  expect_equal(df_leg$death_caus[1], "Old age")
+  expect_equal(df_leg$death_lat[1], "12.3456")
+  expect_equal(df_leg$death_long[1], "-65.4321")
+
+  row.names(df) <- NULL
+  row.names(df_leg) <- NULL
+  expect_equal(df_leg, df)
+
+  unlink(temp_file)
+})
+
+test_that("readGedcom handles incomplete individual records gracefully", {
+  # Test that an individual record missing a NAME line is handled without error.
+  gedcom_content <- c(
+    "0 @I1@ INDI",
+    "1 SEX M"
+    # No NAME or BIRT information.
+  )
+  temp_file <- tempfile(fileext = ".ged")
+  writeLines(gedcom_content, temp_file)
+
+  df <- readGedcom(temp_file, verbose = TRUE)
+
+  # Expect one record with missing name fields.
+  expect_equal(nrow(df), 1)
+  expect_true(is.null(df$name[1]))
+
+  unlink(temp_file)
 })

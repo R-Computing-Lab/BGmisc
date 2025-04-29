@@ -2,7 +2,7 @@
 test_that("makeTwins - Twins specified by IDs", {
   set.seed(1234)
   ped <- data.frame(
-    fam = c(1, 1, 2, 2),
+    famID = c(1, 1, 2, 2),
     ID = c(1, 2, 3, 4),
     gen = c(1, 1, 2, 2),
     dadID = c(NA, NA, 1, 1),
@@ -11,7 +11,7 @@ test_that("makeTwins - Twins specified by IDs", {
     sex = c("M", "F", "M", "F")
   )
   expected_result <- data.frame(
-    fam = c(1, 1, 2, 2),
+    famID = c(1, 1, 2, 2),
     ID = c(1, 2, 3, 4),
     gen = c(1, 1, 2, 2),
     dadID = c(NA, NA, 1, 1),
@@ -25,7 +25,7 @@ test_that("makeTwins - Twins specified by IDs", {
   expect_equal(result, expected_result)
   # does it handle weird variable names? "fam" = "famID"
 
-  names(ped)[1] <- "famID"
+  names(ped)[1] <- "fam"
 
   result <- makeTwins(ped, ID_twin1 = 1, ID_twin2 = 2, verbose = TRUE)
   expect_equal(result, expected_result)
@@ -41,7 +41,7 @@ test_that("makeTwins - Twins specified by generation", {
   ped <- simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR)
   #
   result <- makeTwins(ped, gen_twin = gen_twin)
-  expect_equal(names(result), c("fam", "ID", "gen", "dadID", "momID", "spID", "sex", "MZtwin"))
+  expect_equal(names(result), c("famID", "ID", "gen", "dadID", "momID", "spID", "sex", "MZtwin"))
   # do we have the same people?
   expect_equal(result$ID, ped$ID)
   # did it make one pair of twins?
@@ -61,7 +61,7 @@ test_that("makeTwins - Twins specified by generation", {
 # Test for makeInbreeding function
 test_that("makeInbreeding - Inbred mates specified by IDs", {
   ped <- data.frame(
-    fam = c(1, 1, 2, 2),
+    famID = c(1, 1, 2, 2),
     ID = c(1, 2, 3, 4),
     gen = c(1, 1, 2, 2),
     dadID = c(NA, NA, 1, 1),
@@ -70,7 +70,7 @@ test_that("makeInbreeding - Inbred mates specified by IDs", {
     sex = c("M", "F", "M", "F")
   )
   expected_result <- data.frame(
-    fam = c(1, 1, 2, 2),
+    famID = c(1, 1, 2, 2),
     ID = c(1, 2, 3, 4),
     gen = c(1, 1, 2, 2),
     dadID = c(NA, NA, 1, 1),
@@ -94,7 +94,7 @@ test_that("makeInbreeding - Inbred mates specified by generation and sibling", {
   ped <- simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR)
   #
   result <- makeInbreeding(ped, gen_inbred = gen_inbred, type_inbred = type_inbred)
-  expect_equal(names(result), c("fam", "ID", "gen", "dadID", "momID", "spID", "sex"))
+  expect_equal(names(result), c("famID", "ID", "gen", "dadID", "momID", "spID", "sex"))
 
   # do we have the same people?
   expect_equal(result$ID, ped$ID)
@@ -115,7 +115,7 @@ test_that("makeInbreeding - Inbred mates specified by generation and cousin", {
 
   expect_error(makeInbreeding(ped,
     gen_inbred = gen_inbred,
-    type_inbred = type_inbred,verbose = TRUE
+    type_inbred = type_inbred, verbose = TRUE
   ), regexp = "Cousin inbreedin")
 })
 

@@ -2,9 +2,28 @@
 % Please edit documentation in R/summarizePedigree.R
 \name{summarizeMatrilines}
 \alias{summarizeMatrilines}
+\alias{summariseMatrilines}
 \title{Summarize the maternal lines in a pedigree}
 \usage{
 summarizeMatrilines(
+  ped,
+  famID = "famID",
+  personID = "ID",
+  momID = "momID",
+  dadID = "dadID",
+  matID = "matID",
+  patID = "patID",
+  byr = NULL,
+  include_founder = FALSE,
+  founder_sort_var = NULL,
+  nbiggest = 5,
+  noldest = 5,
+  skip_var = NULL,
+  five_num_summary = FALSE,
+  verbose = FALSE
+)
+
+summariseMatrilines(
   ped,
   famID = "famID",
   personID = "ID",
@@ -33,7 +52,7 @@ summarizeMatrilines(
 
 \item{dadID}{character.  Name of the column in ped for the father ID variable}
 
-\item{matID}{Character.  Maternal line ID variable to be created and added to the pedigree}
+\item{matID}{Character. Maternal line ID variable to be created and added to the pedigree}
 
 \item{patID}{Character.  Paternal line ID variable to be created and added to the pedigree}
 
