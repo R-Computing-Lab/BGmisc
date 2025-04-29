@@ -7,7 +7,7 @@
 ped2cn(
   ped,
   max.gen = 25,
-  sparse = FALSE,
+  sparse = TRUE,
   verbose = FALSE,
   gc = FALSE,
   flatten.diag = FALSE,

@@ -11,7 +11,7 @@ A data frame with 501 observations
 data(ASOIAF)
 }
 \description{
-A dataset created from the Song of Ice and Fire series by George R. R. Martin.
+A dataset created from the Song of Ice and Fire series by George R. R. Martin. Core data is from the [Westeros.org forum](https://asoiaf.westeros.org/index.php?/topic/88863-all-the-family-trees/).
 }
 \details{
 The variables are as follows:

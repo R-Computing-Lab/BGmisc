@@ -76,7 +76,7 @@ you'll likely want to know how much. For additive genetic relatedness,
 you can use the `ped2add()` function.
 
 ```{r}
-add <- ped2add(potter)
+add <- ped2add(potter, sparse = FALSE)
 ```
 
 This computes the additive genetic relatedness for everyone in the data.
@@ -104,7 +104,7 @@ add_list <- lapply(
   unique(potter$famID),
   function(d) {
     tmp <- potter[potter$famID %in% d, ]
-    ped2add(tmp)
+    ped2add(tmp, sparse = FALSE)
   }
 )
 ```
@@ -123,7 +123,7 @@ individuals in the `potter` dataset.
 
 
 ```{r}
-mit <- ped2mit(potter)
+mit <- ped2mit(potter, sparse = FALSE)
 mit[1:7, 1:7]
 table(mit)
 ```
@@ -138,7 +138,7 @@ Here we calculate the relatedness between all pairs of individuals in
 the `potter` dataset through sharing both parents.
 
 ```{r}
-commonNuclear <- ped2cn(potter)
+commonNuclear <- ped2cn(potter, sparse = FALSE)
 commonNuclear[1:7, 1:7]
 
 table(commonNuclear)
@@ -150,7 +150,7 @@ Here we calculate the relatedness between all pairs of individuals in
 the `potter` dataset through sharing an extended family.
 
 ```{r}
-extendedFamilyEnvironment <- ped2ce(potter)
+extendedFamilyEnvironment <- ped2ce(potter, sparse = FALSE)
 extendedFamilyEnvironment[1:7, 1:7]
 table(extendedFamilyEnvironment)
 ```

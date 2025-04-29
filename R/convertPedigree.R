@@ -25,7 +25,7 @@
 #'
 ped2com <- function(ped, component,
                     max.gen = 25,
-                    sparse = FALSE,
+                    sparse = TRUE,
                     verbose = FALSE,
                     gc = FALSE,
                     flatten.diag = FALSE,
@@ -212,7 +212,7 @@ ped2com <- function(ped, component,
   # isPar is the adjacency matrix.  'A' matrix from RAM
   if (component %in% c("common nuclear")) {
     Matrix::diag(isPar) <- 1
-    if (!sparse) {
+    if (sparse==FALSE) {
       isPar <- as.matrix(isPar)
     }
     return(isPar)
@@ -330,7 +330,7 @@ ped2com <- function(ped, component,
     # Assign 1 to all nonzero elements for mitochondrial component
   }
 
-  if (!sparse) {
+  if (sparse==FALSE) {
     r <- as.matrix(r)
   }
   if (flatten.diag) { # flattens diagonal if you don't want to deal with inbreeding
@@ -347,7 +347,7 @@ ped2com <- function(ped, component,
 #' @inherit ped2com details
 #' @export
 #'
-ped2add <- function(ped, max.gen = 25, sparse = FALSE, verbose = FALSE,
+ped2add <- function(ped, max.gen = 25, sparse = TRUE, verbose = FALSE,
                     gc = FALSE,
                     flatten.diag = FALSE, standardize.colnames = TRUE,
                     transpose_method = "tcrossprod",
@@ -385,7 +385,7 @@ ped2add <- function(ped, max.gen = 25, sparse = FALSE, verbose = FALSE,
 #' @aliases ped2mt
 #'
 ped2mit <- ped2mt <- function(ped, max.gen = 25,
-                              sparse = FALSE,
+                              sparse = TRUE,
                               verbose = FALSE, gc = FALSE,
                               flatten.diag = FALSE,
                               standardize.colnames = TRUE,
@@ -422,7 +422,7 @@ ped2mit <- ped2mt <- function(ped, max.gen = 25,
 #' @inherit ped2com details
 #' @export
 #'
-ped2cn <- function(ped, max.gen = 25, sparse = FALSE, verbose = FALSE,
+ped2cn <- function(ped, max.gen = 25, sparse = TRUE, verbose = FALSE,
                    gc = FALSE, flatten.diag = FALSE,
                    standardize.colnames = TRUE,
                    transpose_method = "tcrossprod",

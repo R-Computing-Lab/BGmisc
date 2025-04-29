@@ -1,3 +1,11 @@
+# BGmisc 1.3.6
+* revived checkParents function to check for handling phantom parents and missing parents
+* added tests for checkParents function
+* added GoT analysis
+
+# BGmisc 1.3.5.1
+* Setting the default for the `sparse` argument in `ped2com()` to TRUE
+
 # BGmisc 1.3.5
 * Add calculateCIs and readDelimitedData functions
 * Added ASOIAF pedigree
