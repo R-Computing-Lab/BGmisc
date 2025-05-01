@@ -24,6 +24,10 @@ checkSex(
 \item{verbose}{A logical flag indicating whether to print progress and validation messages to the console.}
 
 \item{repair}{A logical flag indicating whether to attempt repairs on the sex coding.}
+
+\item{momID}{The column name for maternal IDs. Default is "momID".}
+
+\item{dadID}{The column name for paternal IDs. Default is "dadID".}
 }
 \value{
 Depending on the value of `repair`, either a list containing validation results or a repaired dataframe is returned.

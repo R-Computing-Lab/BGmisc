@@ -575,7 +575,7 @@ this dataset is analyzed independently.</p>
 <span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a></span>
 <span id="cb23-3"><a href="#cb23-3" tabindex="-1"></a>df <span class="ot">&lt;-</span> inbreeding</span>
 <span id="cb23-4"><a href="#cb23-4" tabindex="-1"></a></span>
-<span id="cb23-5"><a href="#cb23-5" tabindex="-1"></a>FamIDs <span class="ot">&lt;-</span> <span class="fu">unique</span>(df<span class="sc">$</span>FamID)</span></code></pre></div>
+<span id="cb23-5"><a href="#cb23-5" tabindex="-1"></a>famIDs <span class="ot">&lt;-</span> <span class="fu">unique</span>(df<span class="sc">$</span>famID)</span></code></pre></div>
 <p>For each one, we construct the additive relationship matrix under
 complete information and then simulate two missingness scenarios:</p>
 <ul>
@@ -591,23 +591,23 @@ to quantify which method more accurately reconstructs the original
 relatedness structure when parental data are partially missing.</p>
 <div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a>inbreeding_list <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
 <span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb24-3"><a href="#cb24-3" tabindex="-1"></a>  <span class="at">FamIDs =</span> FamIDs,</span>
-<span id="cb24-4"><a href="#cb24-4" tabindex="-1"></a>  <span class="at">RMSE_partial_dad =</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="fu">length</span>(FamIDs)),</span>
-<span id="cb24-5"><a href="#cb24-5" tabindex="-1"></a>  <span class="at">RMSE_partial_mom =</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="fu">length</span>(FamIDs)),</span>
-<span id="cb24-6"><a href="#cb24-6" tabindex="-1"></a>  <span class="at">RMSE_classic_dad =</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="fu">length</span>(FamIDs)),</span>
-<span id="cb24-7"><a href="#cb24-7" tabindex="-1"></a>  <span class="at">RMSE_classic_mom =</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="fu">length</span>(FamIDs)),</span>
-<span id="cb24-8"><a href="#cb24-8" tabindex="-1"></a>  <span class="at">max_R_classic_dad =</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="fu">length</span>(FamIDs)),</span>
-<span id="cb24-9"><a href="#cb24-9" tabindex="-1"></a>  <span class="at">max_R_partial_dad =</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="fu">length</span>(FamIDs)),</span>
-<span id="cb24-10"><a href="#cb24-10" tabindex="-1"></a>  <span class="at">max_R_classic_mom =</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="fu">length</span>(FamIDs)),</span>
-<span id="cb24-11"><a href="#cb24-11" tabindex="-1"></a>  <span class="at">max_R_partial_mom =</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="fu">length</span>(FamIDs)),</span>
-<span id="cb24-12"><a href="#cb24-12" tabindex="-1"></a>  <span class="at">max_R_classic =</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="fu">length</span>(FamIDs))</span>
+<span id="cb24-3"><a href="#cb24-3" tabindex="-1"></a>  <span class="at">famIDs =</span> famIDs,</span>
+<span id="cb24-4"><a href="#cb24-4" tabindex="-1"></a>  <span class="at">RMSE_partial_dad =</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="fu">length</span>(famIDs)),</span>
+<span id="cb24-5"><a href="#cb24-5" tabindex="-1"></a>  <span class="at">RMSE_partial_mom =</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="fu">length</span>(famIDs)),</span>
+<span id="cb24-6"><a href="#cb24-6" tabindex="-1"></a>  <span class="at">RMSE_classic_dad =</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="fu">length</span>(famIDs)),</span>
+<span id="cb24-7"><a href="#cb24-7" tabindex="-1"></a>  <span class="at">RMSE_classic_mom =</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="fu">length</span>(famIDs)),</span>
+<span id="cb24-8"><a href="#cb24-8" tabindex="-1"></a>  <span class="at">max_R_classic_dad =</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="fu">length</span>(famIDs)),</span>
+<span id="cb24-9"><a href="#cb24-9" tabindex="-1"></a>  <span class="at">max_R_partial_dad =</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="fu">length</span>(famIDs)),</span>
+<span id="cb24-10"><a href="#cb24-10" tabindex="-1"></a>  <span class="at">max_R_classic_mom =</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="fu">length</span>(famIDs)),</span>
+<span id="cb24-11"><a href="#cb24-11" tabindex="-1"></a>  <span class="at">max_R_partial_mom =</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="fu">length</span>(famIDs)),</span>
+<span id="cb24-12"><a href="#cb24-12" tabindex="-1"></a>  <span class="at">max_R_classic =</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="fu">length</span>(famIDs))</span>
 <span id="cb24-13"><a href="#cb24-13" tabindex="-1"></a>)</span></code></pre></div>
 <p>The loop below performs this procedure for all families in the
 dataset and stores both the RMSEs and the maximum relatedness
 values.</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(FamIDs)) {</span>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(famIDs)) {</span>
 <span id="cb25-2"><a href="#cb25-2" tabindex="-1"></a>  <span class="co"># make three versions to filter down</span></span>
-<span id="cb25-3"><a href="#cb25-3" tabindex="-1"></a>  df_fam_dad <span class="ot">&lt;-</span> df_fam_mom <span class="ot">&lt;-</span> df_fam <span class="ot">&lt;-</span> df[df<span class="sc">$</span>FamID <span class="sc">==</span> FamIDs[i], ]</span>
+<span id="cb25-3"><a href="#cb25-3" tabindex="-1"></a>  df_fam_dad <span class="ot">&lt;-</span> df_fam_mom <span class="ot">&lt;-</span> df_fam <span class="ot">&lt;-</span> df[df<span class="sc">$</span>famID <span class="sc">==</span> famIDs[i], ]</span>
 <span id="cb25-4"><a href="#cb25-4" tabindex="-1"></a></span>
 <span id="cb25-5"><a href="#cb25-5" tabindex="-1"></a>  results<span class="sc">$</span>RMSE_partial_mom[i] <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((ped_add_classic_complete <span class="sc">-</span> ped_add_partial_mom)<span class="sc">^</span><span class="dv">2</span>))</span>
 <span id="cb25-6"><a href="#cb25-6" tabindex="-1"></a></span>
@@ -895,7 +895,7 @@ reconstructs the full-data relatedness matrix.</p>
 <div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" tabindex="-1"></a>results <span class="sc">%&gt;%</span></span>
 <span id="cb39-2"><a href="#cb39-2" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span></span>
 <span id="cb39-3"><a href="#cb39-3" tabindex="-1"></a>  <span class="fu">select</span>(</span>
-<span id="cb39-4"><a href="#cb39-4" tabindex="-1"></a>    <span class="sc">-</span>FamIDs, <span class="sc">-</span>RMSE_diff_mom, <span class="sc">-</span>RMSE_diff_dad, <span class="sc">-</span>max_R_classic_dad,</span>
+<span id="cb39-4"><a href="#cb39-4" tabindex="-1"></a>    <span class="sc">-</span>famIDs, <span class="sc">-</span>RMSE_diff_mom, <span class="sc">-</span>RMSE_diff_dad, <span class="sc">-</span>max_R_classic_dad,</span>
 <span id="cb39-5"><a href="#cb39-5" tabindex="-1"></a>    <span class="sc">-</span>max_R_partial_dad, <span class="sc">-</span>max_R_classic_mom, <span class="sc">-</span>max_R_partial_mom, <span class="sc">-</span>max_R_classic</span>
 <span id="cb39-6"><a href="#cb39-6" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
 <span id="cb39-7"><a href="#cb39-7" tabindex="-1"></a>  <span class="fu">summary</span>()</span>

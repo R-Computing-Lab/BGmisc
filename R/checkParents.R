@@ -89,7 +89,7 @@ checkParentIDs <- function(ped, verbose = FALSE, repair = FALSE,
   validation_results$wrong_sex_moms <- mom_results$inconsistent_parents
   validation_results$wrong_sex_dads <- dad_results$inconsistent_parents
   validation_results$female_moms <- mom_results$all_same_sex
-  validation_results$male_dads   <- dad_results$all_same_sex
+  validation_results$male_dads <- dad_results$all_same_sex
 
   # Are any parents in both momID and dadID?
   momdad <- intersect(ped$dadID, ped$momID)

@@ -37,3 +37,4 @@ By considering the observed correlation (`obsR`), the proportion of variance att
 inferRelatedness(obsR = 0.5, aceA = 0.9, aceC = 0, sharedC = 0)
 }
 }
+\keyword{internal}

@@ -275,7 +275,7 @@ data("inbreeding")
 
 df <- inbreeding
 
-FamIDs <- unique(df$FamID)
+famIDs <- unique(df$famID)
 ```
 
 For each one, we construct the additive relationship matrix under complete information and then simulate two missingness scenarios:
@@ -291,16 +291,16 @@ In each condition, we recompute the additive matrix using both the classic and p
 ```{r}
 inbreeding_list <- list()
 results <- data.frame(
-  FamIDs = FamIDs,
-  RMSE_partial_dad = rep(NA, length(FamIDs)),
-  RMSE_partial_mom = rep(NA, length(FamIDs)),
-  RMSE_classic_dad = rep(NA, length(FamIDs)),
-  RMSE_classic_mom = rep(NA, length(FamIDs)),
-  max_R_classic_dad = rep(NA, length(FamIDs)),
-  max_R_partial_dad = rep(NA, length(FamIDs)),
-  max_R_classic_mom = rep(NA, length(FamIDs)),
-  max_R_partial_mom = rep(NA, length(FamIDs)),
-  max_R_classic = rep(NA, length(FamIDs))
+  famIDs = famIDs,
+  RMSE_partial_dad = rep(NA, length(famIDs)),
+  RMSE_partial_mom = rep(NA, length(famIDs)),
+  RMSE_classic_dad = rep(NA, length(famIDs)),
+  RMSE_classic_mom = rep(NA, length(famIDs)),
+  max_R_classic_dad = rep(NA, length(famIDs)),
+  max_R_partial_dad = rep(NA, length(famIDs)),
+  max_R_classic_mom = rep(NA, length(famIDs)),
+  max_R_partial_mom = rep(NA, length(famIDs)),
+  max_R_classic = rep(NA, length(famIDs))
 )
 ```
 
@@ -308,9 +308,9 @@ The loop below performs this procedure for all families in the dataset and store
 
 
 ```{r}
-for (i in 1:length(FamIDs)) {
+for (i in 1:length(famIDs)) {
   # make three versions to filter down
-  df_fam_dad <- df_fam_mom <- df_fam <- df[df$FamID == FamIDs[i], ]
+  df_fam_dad <- df_fam_mom <- df_fam <- df[df$famID == famIDs[i], ]
 
   results$RMSE_partial_mom[i] <- sqrt(mean((ped_add_classic_complete - ped_add_partial_mom)^2))
 
@@ -381,7 +381,7 @@ for (i in 1:length(FamIDs)) {
 }
 ```
 
-### Example: Family ``r FamIDs[1]``
+### Example: Family ``r famIDs[1]``
 
 
 To understand what these matrices look like, we visualize them for one representative family. For this example, we select the first family in the dataset.
@@ -519,7 +519,7 @@ These proportions show how often the partial method produces a lower RMSE across
 results %>%
   as.data.frame() %>%
   select(
-    -FamIDs, -RMSE_diff_mom, -RMSE_diff_dad, -max_R_classic_dad,
+    -famIDs, -RMSE_diff_mom, -RMSE_diff_dad, -max_R_classic_dad,
     -max_R_partial_dad, -max_R_classic_mom, -max_R_partial_mom, -max_R_classic
   ) %>%
   summary()

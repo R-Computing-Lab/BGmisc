@@ -89,7 +89,7 @@ test_that("com2links processes creates same length for cn with 3, 2, and 1 matri
   expect_equal(result3$cnuRel, result2$cnuRel)
 
   result1 <- com2links(cn_ped_matrix = cn_ped_matrix, writetodisk = FALSE)
-  result1_legacy <- com2links.legacy(cn_ped_matrix = cn_ped_matrix, writetodisk = FALSE)
+  result1_legacy <- .com2links.legacy(cn_ped_matrix = cn_ped_matrix, writetodisk = FALSE)
   expect_true(is.data.frame(result1))
   expect_true(is.data.frame(result1_legacy))
   expect_true(all(c("ID1", "ID2", "cnuRel") %in% colnames(result1)))
@@ -145,7 +145,7 @@ test_that("com2links legacy works", {
   mit_ped_matrix <- ped2com(hazard, component = "mitochondrial", adjacency_method = "direct", sparse = TRUE)
   cn_ped_matrix <- ped2com(hazard, component = "common nuclear", adjacency_method = "indexed", sparse = TRUE)
 
-  resultlegacy <- com2links.legacy(
+  resultlegacy <- .com2links.legacy(
     ad_ped_matrix = ad_ped_matrix,
     mit_ped_matrix = mit_ped_matrix, cn_ped_matrix = cn_ped_matrix,
     legacy = TRUE
@@ -169,7 +169,7 @@ test_that("com2links legacy works", {
   expect_true(all(c("ID1", "ID2", "addRel", "mitRel", "cnuRel") %in% colnames(result_beta)))
 
 
-  result <- com2links.legacy(
+  result <- .com2links.legacy(
     ad_ped_matrix = ad_ped_matrix,
     mit_ped_matrix = mit_ped_matrix, cn_ped_matrix = cn_ped_matrix,
     writetodisk = FALSE
@@ -205,7 +205,7 @@ test_that("com2links beta works", {
   expect_true(all(c("ID1", "ID2", "addRel", "mitRel") %in% colnames(result_beta)))
 
 
-  result <- com2links.legacy(
+  result <- .com2links.legacy(
     ad_ped_matrix = ad_ped_matrix,
     mit_ped_matrix = mit_ped_matrix,
     writetodisk = FALSE

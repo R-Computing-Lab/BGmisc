@@ -26,6 +26,8 @@
 #' @param code_female The current code used to represent females in the 'sex' column. If both are NULL, no recoding is performed.
 #' @param verbose A logical flag indicating whether to print progress and validation messages to the console.
 #' @param repair A logical flag indicating whether to attempt repairs on the sex coding.
+#' @param momID The column name for maternal IDs. Default is "momID".
+#' @param dadID The column name for paternal IDs. Default is "dadID".
 #'
 #' @return Depending on the value of `repair`, either a list containing validation results or a repaired dataframe is returned.
 #' @examples
@@ -37,8 +39,7 @@
 #'
 checkSex <- function(ped, code_male = NULL, code_female = NULL, verbose = FALSE, repair = FALSE,
                      momID = "momID",
-                     dadID = "dadID"
-                     ) {
+                     dadID = "dadID") {
   # Standardize column names in the input dataframe
   ped <- standardizeColnames(ped, verbose = verbose)
 
@@ -75,12 +76,14 @@ checkSex <- function(ped, code_male = NULL, code_female = NULL, verbose = FALSE,
   validation_results$ID_male_moms <- mom_results$inconsistent_parents
   validation_results$ID_child_male_moms <- mom_results$inconsistent_children
 
-  if (repair==FALSE) {
-    if (verbose) { cat("Checks Made:\n")
-      print(validation_results) }
+  if (repair == FALSE) {
+    if (verbose) {
+      cat("Checks Made:\n")
+      print(validation_results)
+    }
     return(validation_results)
   } else {
-    if (verbose==TRUE) {
+    if (verbose == TRUE) {
       cat("Step 2: Attempting to repair sex coding...\n")
     }
     # Initialize a list to track changes made during repair
@@ -196,10 +199,9 @@ recodeSex <- function(
 #' @param sex_col The column name for sex coding. Default is "sex".
 #' @param verbose Logical, whether to print messages.
 #'
+#'
 #' @return A list containing role, unique sex codes, modal sex, inconsistent parents, and linked children.
 checkParentSex <- function(ped, parent_col, sex_col = "sex", verbose = FALSE) {
-
-
   parent_ids <- ped[[parent_col]]
   parent_rows <- ped[ped$ID %in% parent_ids, ]
 
@@ -228,7 +230,7 @@ checkParentSex <- function(ped, parent_col, sex_col = "sex", verbose = FALSE) {
 
   # Type coercion based on ped$sex type
   if (is.numeric(ped[[sex_col]])) {
-  modal_sex <- as.numeric(modal_sex)
+    modal_sex <- as.numeric(modal_sex)
   }
 
   # List ids for dads that are female, moms that are male
@@ -245,7 +247,9 @@ checkParentSex <- function(ped, parent_col, sex_col = "sex", verbose = FALSE) {
 
     if (all_same_sex) {
       cat("All parents consistently coded.\n")
-  }  else cat(length(inconsistent_parents), " parents have inconsistent sex coding.\n")
+    } else {
+      cat(length(inconsistent_parents), " parents have inconsistent sex coding.\n")
+    }
   }
 
   return(list(
@@ -259,9 +263,18 @@ checkParentSex <- function(ped, parent_col, sex_col = "sex", verbose = FALSE) {
 }
 
 #' Get the Modal Value of a Vector
-
+#'
+#' This function calculates the modal value of a vector, which is the most frequently occurring value.
+#' If the vector is empty or contains only NA values, it returns NA.
+#'
+#' @param x A vector of values.
+#'
+#' @return The modal value of the vector. If the vector is empty or contains only NA values, returns NA.
+#' @keywords internal
 .getModalValue <- function(x) {
-  if (length(na.omit(x)) == 0) return(NA)
+  if (length(stats::na.omit(x)) == 0) {
+    return(NA)
+  }
   freq_table <- sort(table(x), decreasing = TRUE)
   modal <- names(freq_table)[1]
   return(modal)
