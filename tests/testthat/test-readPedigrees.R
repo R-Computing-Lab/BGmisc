@@ -248,3 +248,16 @@ test_that("readGedcom handles incomplete individual records gracefully", {
 
   unlink(temp_file)
 })
+
+# temp test
+
+#test_that("readGedcom handles more complex ged", {
+  # Test that multiple families are handled correctly.
+
+
+ # df <- readGedcom("E:\\Dropbox\\Lab\\Research\\Projects\\2025\\astra\\gedcom_files\\genealogyoflife_tng\\3500WikipdeiaGodsUnconnected.ged", verbose = TRUE, post_process = FALSE)
+
+  # Check that the family IDs are parsed correctly.
+#  expect_true("id" %in% colnames(df))
+#})
+

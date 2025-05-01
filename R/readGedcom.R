@@ -47,6 +47,7 @@
 #' - `attribute_title`: Title of the individual
 #' - `FAMC`: ID(s) of the family where the individual is a child
 #' - `FAMS`: ID(s) of the family where the individual is a spouse
+#' - `NOTE`: Notes associated with the individual
 #' @export
 readGedcom <- function(file_path,
                        verbose = FALSE,
@@ -83,9 +84,10 @@ readGedcom <- function(file_path,
       "attribute_caste", "attribute_children", "attribute_description", "attribute_education",
       "attribute_idnumber", "attribute_marriages", "attribute_nationality", "attribute_occupation",
       "attribute_property", "attribute_religion", "attribute_residence", "attribute_ssn",
-      "attribute_title"
+      "attribute_title", "attribute_conc"
     ),
-    relationships = c("FAMC", "FAMS")
+    relationships = c("FAMC", "FAMS"),
+    notes = c("NOTE")
   ), use.names = FALSE)
 
   # Split the file into blocks; each block corresponds to one individual.
@@ -100,11 +102,25 @@ readGedcom <- function(file_path,
   # Remove any NULLs (if a block did not contain an individual id)
   records <- Filter(Negate(is.null), records)
 
+  # Add missing fields to each record
+  records <- lapply(records, function(rec) {
+    missing_fields <- setdiff(all_var_names, names(rec))
+    for (mf in missing_fields) rec[[mf]] <- NA_character_
+    rec <- rec[all_var_names]  # Ensure correct order
+    return(rec)
+  })
+  if(verbose==TRUE){
+  print(length(records))
+  print(unique(sapply(records, length)))
+  }
+
   if (length(records) == 0) {
     warning("No people found in file")
     return(NULL)
   }
-
+  if(verbose==TRUE){
+    print(names(pattern_rows))
+  }
   # Convert the list of records to a data frame.
   df_temp <- do.call(rbind, lapply(records, function(rec) {
     as.data.frame(rec, stringsAsFactors = FALSE)
@@ -113,7 +129,7 @@ readGedcom <- function(file_path,
   if (verbose) message("File has ", nrow(df_temp), " people")
 
   # Run post-processing if requested.
-  if (post_process) {
+  if (post_process==TRUE) {
     if (verbose) message("Post-processing data frame")
     df_temp <- postProcessGedcom(
       df_temp = df_temp,
@@ -241,7 +257,9 @@ parseIndividualBlock <- function(block, pattern_rows, all_var_names, verbose = F
       list(tag = "RELI", field = "attribute_religion", mode = "replace"),
       list(tag = "RESI", field = "attribute_residence", mode = "replace"),
       list(tag = "SSN", field = "attribute_ssn", mode = "replace"),
-      list(tag = "TITL", field = "attribute_title", mode = "replace")
+      list(tag = "TITL", field = "attribute_title", mode = "replace"),
+      list(tag = "CONC", field = "attribute_conc", mode = "replace"),
+      list(tag = "NOTE", field = "NOTE", mode = "append")
     )
     out <- applyTagMappings(line, record, pattern_rows, attribute_mappings)
     if (out$matched) {
@@ -369,51 +387,25 @@ extract_info <- function(line, type) {
 #'
 #' @param file A data frame with a column \code{X1} containing GEDCOM lines.
 #' @return A list with counts of specific GEDCOM tag occurrences.
+
 countPatternRows <- function(file) {
-  pattern_counts <- sapply(
-    c(
-      "@ INDI", " NAME", " GIVN", " NPFX", " NICK", " SURN", " NSFX", " _MARNM",
-      " BIRT", " DEAT", " SEX", " CAST", " DSCR", " EDUC", " IDNO", " NATI",
-      " NCHI", " NMR", " OCCU", " PROP", " RELI", " RESI", " SSN", " TITL",
-      " FAMC", " FAMS", " PLAC", " LATI", " LONG", " DATE", " CAUS"
-    ),
-    function(pat) sum(grepl(pat, file$X1))
+  tags <- c(
+    "@ INDI", " NAME", " GIVN", " NPFX", " NICK", " SURN", " NSFX", "_MARNM",
+    " BIRT", " DEAT", " SEX", " CAST", " DSCR", " EDUC", " IDNO", " NATI",
+    " NCHI", " NMR", " OCCU", " PROP", " RELI", " RESI", " SSN", " TITL",
+    " FAMC", " FAMS", " PLAC", " LATI", " LONG", " DATE", " CAUS", " NOTE", " CONC"
   )
-  num_rows <- list(
-    num_indi_rows = pattern_counts["@ INDI"],
-    num_name_rows = pattern_counts[" NAME"],
-    num_givn_rows = pattern_counts[" GIVN"],
-    num_npfx_rows = pattern_counts[" NPFX"],
-    num_nick_rows = pattern_counts[" NICK"],
-    num_surn_rows = pattern_counts[" SURN"],
-    num_nsfx_rows = pattern_counts[" NSFX"],
-    num_marnm_rows = pattern_counts[" _MARNM"],
-    num_birt_rows = pattern_counts[" BIRT"],
-    num_deat_rows = pattern_counts[" DEAT"],
-    num_sex_rows = pattern_counts[" SEX"],
-    num_cast_rows = pattern_counts[" CAST"],
-    num_dscr_rows = pattern_counts[" DSCR"],
-    num_educ_rows = pattern_counts[" EDUC"],
-    num_idno_rows = pattern_counts[" IDNO"],
-    num_nati_rows = pattern_counts[" NATI"],
-    num_nchi_rows = pattern_counts[" NCHI"],
-    num_nmr_rows = pattern_counts[" NMR"],
-    num_occu_rows = pattern_counts[" OCCU"],
-    num_prop_rows = pattern_counts[" PROP"],
-    num_reli_rows = pattern_counts[" RELI"],
-    num_resi_rows = pattern_counts[" RESI"],
-    num_ssn_rows = pattern_counts[" SSN"],
-    num_titl_rows = pattern_counts[" TITL"],
-    num_famc_rows = pattern_counts[" FAMC"],
-    num_fams_rows = pattern_counts[" FAMS"],
-    num_plac_rows = pattern_counts[" PLAC"],
-    num_lati_rows = pattern_counts[" LATI"],
-    num_long_rows = pattern_counts[" LONG"],
-    num_date_rows = pattern_counts[" DATE"],
-    num_caus_rows = pattern_counts[" CAUS"]
+
+  counts <- sapply(tags, function(tag) sum(grepl(tag, file$X1)))
+  # Auto-name counts: turn " NAME" -> "num_name_rows"
+  names(counts) <- paste0(
+    "num_",
+    tolower(gsub("[^A-Za-z0-9]", "", tags)),
+    "_rows"
   )
-  return(num_rows)
+  return(as.list(counts))
 }
+
 
 #' Process a GEDCOM Tag
 #'
@@ -429,7 +421,11 @@ countPatternRows <- function(file) {
 #' @keywords internal
 process_tag <- function(tag, field_name, pattern_rows, line, vars,
                         extractor = NULL, mode = "replace") {
-  count_name <- paste0("num_", tolower(tag), "_rows")
+  count_name <- paste0(
+    "num_",
+    tolower(gsub("[^A-Za-z0-9]", "", tag)),
+    "_rows"
+  )
   matched <- FALSE
   if (!is.null(pattern_rows[[count_name]]) &&
     pattern_rows[[count_name]] > 0 &&
