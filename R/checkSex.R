@@ -79,7 +79,7 @@ checkSex <- function(ped, code_male = NULL, code_female = NULL, verbose = FALSE,
   if (repair == FALSE) {
     if (verbose) {
       cat("Checks Made:\n")
-      print(validation_results)
+      message(validation_results)
     }
     return(validation_results)
   } else {
@@ -105,7 +105,7 @@ checkSex <- function(ped, code_male = NULL, code_female = NULL, verbose = FALSE,
 
     if (verbose) {
       cat("Changes Made:\n")
-      print(changes)
+      message(changes)
     }
     return(ped)
   }

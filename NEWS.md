@@ -1,3 +1,6 @@
+# BGmisc 1.4.1
+* replaced print with message in all functions
+
 # BGmisc 1.4.0
 * revived checkParents function to check for handling phantom parents and missing parents
 * added tests for checkParents function
