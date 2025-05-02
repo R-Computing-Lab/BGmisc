@@ -84,10 +84,10 @@ readGedcom <- function(file_path,
       "attribute_caste", "attribute_children", "attribute_description", "attribute_education",
       "attribute_idnumber", "attribute_marriages", "attribute_nationality", "attribute_occupation",
       "attribute_property", "attribute_religion", "attribute_residence", "attribute_ssn",
-      "attribute_title", "attribute_conc"
+      "attribute_title"
     ),
     relationships = c("FAMC", "FAMS"),
-    notes = c("NOTE")
+    notes = c("NOTE", "CONT", "CONC")
   ), use.names = FALSE)
 
   # Split the file into blocks; each block corresponds to one individual.
@@ -258,8 +258,9 @@ parseIndividualBlock <- function(block, pattern_rows, all_var_names, verbose = F
       list(tag = "RESI", field = "attribute_residence", mode = "replace"),
       list(tag = "SSN", field = "attribute_ssn", mode = "replace"),
       list(tag = "TITL", field = "attribute_title", mode = "replace"),
-      list(tag = "CONC", field = "attribute_conc", mode = "replace"),
-      list(tag = "NOTE", field = "NOTE", mode = "append")
+      list(tag = "NOTE", field = "NOTE", mode = "append"),
+      list(tag = "CONT", field = "NOTE", mode = "append"),
+      list(tag = "CONC", field = "NOTE", mode = "append")
     )
     out <- applyTagMappings(line, record, pattern_rows, attribute_mappings)
     if (out$matched) {
@@ -393,7 +394,8 @@ countPatternRows <- function(file) {
     "@ INDI", " NAME", " GIVN", " NPFX", " NICK", " SURN", " NSFX", "_MARNM",
     " BIRT", " DEAT", " SEX", " CAST", " DSCR", " EDUC", " IDNO", " NATI",
     " NCHI", " NMR", " OCCU", " PROP", " RELI", " RESI", " SSN", " TITL",
-    " FAMC", " FAMS", " PLAC", " LATI", " LONG", " DATE", " CAUS", " NOTE", " CONC"
+    " FAMC", " FAMS", " PLAC", " LATI", " LONG", " DATE", " CAUS",
+    " NOTE", " CONC"," CONT"
   )
 
   counts <- sapply(tags, function(tag) sum(grepl(tag, file$X1)))
