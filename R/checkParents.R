@@ -66,7 +66,7 @@ checkParentIDs <- function(ped, verbose = FALSE, repair = FALSE,
     validation_results$rowless_parents <- rowless_parents
     if (verbose) {
       cat("Some parents are not listed in the pedigree:\n")
-      print(rowless_parents)
+      message(rowless_parents)
     }
   } else {
     if (verbose) {
@@ -100,7 +100,7 @@ checkParentIDs <- function(ped, verbose = FALSE, repair = FALSE,
         "Some individuals appear in both momID and dadID roles.\n",
         "These individuals are:\n"
       ))
-      print(momdad)
+      message(momdad)
     }
   }
 
@@ -108,13 +108,13 @@ checkParentIDs <- function(ped, verbose = FALSE, repair = FALSE,
   if (!repair) {
     if (verbose) {
       cat("Validation Results:\n")
-      print(validation_results)
+      message(validation_results)
     }
     return(validation_results)
   } else {
     if (verbose) {
       cat("Validation Results:\n")
-      print(validation_results)
+      message(validation_results)
       cat("Step 3: Attempting to repair missing parents...\n")
     }
 
@@ -221,7 +221,7 @@ checkParentIDs <- function(ped, verbose = FALSE, repair = FALSE,
 
   if (verbose) {
     cat("Changes Made:\n")
-    print(changes)
+    message(changes)
   }
   return(ped)
 }
@@ -254,7 +254,7 @@ addRowlessParents <- function(ped, verbose, validation_results) {
   if (length(missing_parents) > 0) {
     if (verbose) {
       cat("Adding parents who were listed in momID/dadID but missing from ID:\n")
-      print(missing_parents)
+      message(missing_parents)
     }
 
     for (pid in missing_parents) {

@@ -39,7 +39,7 @@ checkIDs <- function(ped, verbose = FALSE, repair = FALSE) {
 
   if (verbose) {
     cat("Validation Results:\n")
-    print(validation_results)
+    message(validation_results)
   }
   if (repair) {
     if (verbose) {
@@ -76,7 +76,7 @@ checkIDs <- function(ped, verbose = FALSE, repair = FALSE) {
 
     if (verbose) {
       cat("Changes Made:\n")
-      print(changes)
+      message(changes)
     }
     return(repaired_ped)
   } else {
