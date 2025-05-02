@@ -97,7 +97,7 @@ Null <- function(M) {
 #'
 #' @export
 resample <- function(x, ...) {
-  # print(length(x))
+  # message(length(x))
   if (length(x) == 0) {
     return(NA_integer_)
   }

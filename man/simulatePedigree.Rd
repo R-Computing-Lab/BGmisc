@@ -38,7 +38,7 @@ SimPed(...)
 
 \item{balancedMar}{Not fully developed yet. Always \code{TRUE} in the current version.}
 
-\item{verbose}{logical  If TRUE, print progress through stages of algorithm}
+\item{verbose}{logical  If TRUE, message progress through stages of algorithm}
 
 \item{...}{Additional arguments to be passed to other functions.}
 }
