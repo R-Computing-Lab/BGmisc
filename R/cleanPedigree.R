@@ -7,23 +7,33 @@
 #'
 #' @param df A dataframe whose column names need to be standardized.
 #' @param verbose A logical indicating whether to print progress messages.
+#' @param mapping A list of mapping options for customizing the renaming process.
 #' @return A dataframe with standardized column names.
 #'
-#' @keywords internal
-standardizeColnames <- function(df, verbose = FALSE) {
+#' @export
+standardizeColnames <- function(df, verbose = FALSE, mapping = list()) {
   # Internal mapping of standardized names to possible variants
-  mapping <- list(
-    "famID" = "^(?:fam(?:ily)?[\\.\\-_]?(?:id)?)",
-    "ID" = "^(?:i(?:d$|ndiv(?:idual)?)|p(?:erson)?[\\.\\-_]?id)",
-    "gen" = "^(?:gen(?:s|eration)?)",
-    "dadID" = "^(?:d(?:ad)?id|paid|fatherid|pid[\\.\\-_]?fath[er]*|sire)",
-    "patID" = "^(?:dat[\\.\\-_]?id|pat[\\.\\-_]?id|paternal[\\.\\-_]?(?:id)?)",
-    "momID" = "^(?:m(?:om|a|other)?[\\.\\-_]?id|pid[\\.\\-_]?moth[er]*|dame)",
-    "matID" = "^(?:mat[\\.\\-_]?id|maternal[\\.\\-_]?(?:id)?)",
-    "spID" = "^(?:s(?:pt)?id|spouse[\\.\\-_]?(?:id)?|partner[\\.\\-_]?(?:id)?|husb(?:and)?[\\.\\-_]?id|wife[\\.\\-_]?(?:id)?|pid[\\.\\-_]?spouse1?)",
-    "twinID" = "^(?:twin[\\.\\-_]?(?:id)?)",
-    "sex" = "^(?:sex|gender|female|m(?:a(?:le|n)|en)|wom[ae]n)"
-  )
+
+    # default config
+    default_mapping <- list(
+      "famID" = "^(?:fam(?:ily)?[\\.\\-_]?(?:id)?)",
+      "ID" = "^(?:i(?:d$|ndiv(?:idual)?)|p(?:erson)?[\\.\\-_]?id)",
+      "gen" = "^(?:gen(?:s|eration)?)",
+      "dadID" = "^(?:d(?:ad)?id|paid|fatherid|pid[\\.\\-_]?fath[er]*|sire)",
+      "patID" = "^(?:dat[\\.\\-_]?id|pat[\\.\\-_]?id|paternal[\\.\\-_]?(?:id)?)",
+      "momID" = "^(?:m(?:om|a|other)?[\\.\\-_]?id|pid[\\.\\-_]?moth[er]*|dame)",
+      "matID" = "^(?:mat[\\.\\-_]?id|maternal[\\.\\-_]?(?:id)?)",
+      "spID" = "^(?:s(?:pt)?id|spouse[\\.\\-_]?(?:id)?|partner[\\.\\-_]?(?:id)?|husb(?:and)?[\\.\\-_]?id|wife[\\.\\-_]?(?:id)?|pid[\\.\\-_]?spouse1?)",
+      "twinID" = "^(?:twin[\\.\\-_]?(?:id)?)",
+      "sex" = "^(?:sex|gender|female|m(?:a(?:le|n)|en)|wom[ae]n)"
+    )
+
+    # Add fill in default_config values to config if config doesn't already have them
+
+  mapping <- utils::modifyList(default_mapping, mapping)
+
+
+
   if (verbose) {
     print("Standardizing column names...")
   }

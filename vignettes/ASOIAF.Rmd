@@ -21,6 +21,8 @@ We begin by loading the required libraries and examining the structure of the bu
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 library(BGmisc)
 library(tidyverse)
+library(ggpedigree)
+
 data(ASOIAF)
 ```
 
@@ -137,7 +139,7 @@ Many real-world and fictional pedigrees contain individuals with unknown or part
 
 - Create "phantom" placeholders for the missing parent
 
--Optionally repair and harmonize parent fields
+- Optionally repair and harmonize parent fields
 
 To facilitate plotting, we check for individuals with one known parent but a missing other. For those cases, we assign a placeholder ID to the missing parent.
 
@@ -166,4 +168,9 @@ We can now visualize the repaired pedigree using the `plotPedigree()` function. 
 
 ```{r, message=FALSE, warning=FALSE}
 plotPedigree(df_repaired, affected = df_repaired$affected, verbose = FALSE)
+
+ggPedigree(df_repaired,  status_col = "affected",  personID_col = "ID",  code_male = "M", 
+           config = list(unaffected =  0,affected = 1,
+                         ped_width=15))
+
 ```

@@ -4,12 +4,14 @@
 \alias{standardizeColnames}
 \title{Standardize Column Names in a Dataframe (Internal)}
 \usage{
-standardizeColnames(df, verbose = FALSE)
+standardizeColnames(df, verbose = FALSE, mapping = list())
 }
 \arguments{
 \item{df}{A dataframe whose column names need to be standardized.}
 
 \item{verbose}{A logical indicating whether to print progress messages.}
+
+\item{mapping}{A list of mapping options for customizing the renaming process.}
 }
 \value{
 A dataframe with standardized column names.
@@ -20,4 +22,3 @@ It utilizes regular expressions and the `tolower()` function to match column nam
 against a list of predefined standard names. The approach is case-insensitive and
 allows for flexible matching of column names.
 }
-\keyword{internal}
