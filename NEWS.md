@@ -1,5 +1,5 @@
 # BGmisc 1.4.1
-## In Progress
+## In
 * replaced print with message in all functions
 * Exposed several internal functions to the user
 
