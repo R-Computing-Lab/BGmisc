@@ -63,6 +63,7 @@ determineSex <- function(idGen, sexR, code_male = "M", code_female = "F") {
 #' @param df_Ngen The dataframe for the current generation, including columns for individual IDs and spouse IDs.
 #' @return The input dataframe augmented with a 'coupleId' column, where each mated pair has a unique identifier.
 #' @export
+#'
 assignCoupleIDs <- function(df_Ngen) {
   df_Ngen$coupleId <- NA_character_ # Initialize the coupleId column with NAs
   usedCoupleIds <- character() # Initialize an empty character vector to track used IDs

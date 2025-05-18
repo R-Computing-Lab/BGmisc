@@ -9,7 +9,6 @@
 #' @param verbose A logical indicating whether to print progress messages.
 #' @return A dataframe with standardized column names.
 #'
-#' @keywords internal
 standardizeColnames <- function(df, verbose = FALSE) {
   # Internal mapping of standardized names to possible variants
   mapping <- list(
@@ -25,7 +24,7 @@ standardizeColnames <- function(df, verbose = FALSE) {
     "sex" = "^(?:sex|gender|female|m(?:a(?:le|n)|en)|wom[ae]n)"
   )
   if (verbose) {
-    print("Standardizing column names...")
+    message("Standardizing column names...")
   }
   lowered_colnames <- tolower(colnames(df))
   for (standard_name in names(mapping)) {

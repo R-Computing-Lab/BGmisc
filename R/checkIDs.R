@@ -89,6 +89,7 @@ checkIDs <- function(ped, verbose = FALSE, repair = FALSE) {
 #' This function repairs missing IDs in a pedigree.
 #' @inheritParams checkIDs
 #' @return A corrected pedigree
+#' @export
 repairIDs <- function(ped, verbose = FALSE) {
   checkIDs(ped = ped, verbose = verbose, repair = TRUE)
 }
