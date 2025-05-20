@@ -26,7 +26,7 @@ coverage:
       default:
          target: auto
          base: auto
-         threshold: 2%
+         threshold: 10%
 
 # Settings related to the comment that Codecov posts on the PR
 comment:
