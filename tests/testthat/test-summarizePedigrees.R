@@ -185,3 +185,30 @@ test_that("SummarizePedigrees works like SummarisePedigrees", {
   df_summarised <- summarisePedigrees(df, famID = "newFamID", personID = "personID")
   expect_equal(df_summarised, df_summarized)
 })
+
+
+# these need to be tests: summarizePedigrees <- function(ped, famID = "famID", personID = "ID",
+
+
+  test_that("SummarizePedigrees data fast fails", {
+    df <- ped2fam(potter, famID = "newFamID", personID = "personID")
+    expect_error(summarizePedigrees(df, famID = "newFamID", personID = "perxsonID"))
+    expect_error(summarizePedigrees(df, famID = "newFamID", personID = "momID"))
+    expect_error(summarizePedigrees(df%>% select(-momID), famID = "newFamID", personID = "personID"))
+    expect_error(summarizePedigrees(df, famID = "newFamID", personID = "personID", verbose = TRUE, type = NULL))
+
+    expect_error(summarizePedigrees(df, famID = "newFamID", personID = "personID", founder_sort_var = "NOTHERE"))
+
+
+  })
+
+  test_that("SummarizePedigrees verboses", {
+    df <- ped2fam(potter, famID = "newFamID", personID = "personID")
+
+    expect_message(summarizeFamilies(df, famID = "newFamID", personID = "personID", verbose = TRUE))
+    expect_message(summarizeMatrilines(df, famID = "newFamID", personID = "personID", verbose = TRUE))
+    expect_message(summarizePatrilines(df, famID = "newFamID", personID = "personID", verbose = TRUE))
+    expect_message(summarizePedigrees(df, famID = "newFamID", personID = "personID", verbose = TRUE,
+                                      network_checks=TRUE))
+
+  })
