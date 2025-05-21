@@ -88,7 +88,7 @@ plotPedigree <- function(ped,
     )
     p3 <- p2["1"]
     if (verbose) {
-      print(p3)
+      message(p3)
       return(kinship2::plot.pedigree(p3,
         cex = cex,
         col = col,

@@ -509,13 +509,15 @@ individual 4.</p>
 <span id="cb16-8"><a href="#cb16-8" tabindex="-1"></a>ped_add_partial_dad <span class="ot">&lt;-</span> ped_add_partial <span class="ot">&lt;-</span> <span class="fu">ped2com</span>(df,</span>
 <span id="cb16-9"><a href="#cb16-9" tabindex="-1"></a>  <span class="at">isChild_method =</span> <span class="st">&quot;partialparent&quot;</span>,</span>
 <span id="cb16-10"><a href="#cb16-10" tabindex="-1"></a>  <span class="at">component =</span> <span class="st">&quot;additive&quot;</span>,</span>
-<span id="cb16-11"><a href="#cb16-11" tabindex="-1"></a>  <span class="at">adjacency_method =</span> <span class="st">&quot;direct&quot;</span></span>
-<span id="cb16-12"><a href="#cb16-12" tabindex="-1"></a>)</span>
-<span id="cb16-13"><a href="#cb16-13" tabindex="-1"></a></span>
-<span id="cb16-14"><a href="#cb16-14" tabindex="-1"></a>ped_add_classic_dad <span class="ot">&lt;-</span> ped_add_classic <span class="ot">&lt;-</span> <span class="fu">ped2com</span>(df,</span>
-<span id="cb16-15"><a href="#cb16-15" tabindex="-1"></a>  <span class="at">isChild_method =</span> <span class="st">&quot;classic&quot;</span>,</span>
-<span id="cb16-16"><a href="#cb16-16" tabindex="-1"></a>  <span class="at">component =</span> <span class="st">&quot;additive&quot;</span>, <span class="at">adjacency_method =</span> <span class="st">&quot;direct&quot;</span></span>
-<span id="cb16-17"><a href="#cb16-17" tabindex="-1"></a>)</span></code></pre></div>
+<span id="cb16-11"><a href="#cb16-11" tabindex="-1"></a>  <span class="at">adjacency_method =</span> <span class="st">&quot;direct&quot;</span>,</span>
+<span id="cb16-12"><a href="#cb16-12" tabindex="-1"></a>  <span class="at">sparse =</span> <span class="cn">FALSE</span></span>
+<span id="cb16-13"><a href="#cb16-13" tabindex="-1"></a>)</span>
+<span id="cb16-14"><a href="#cb16-14" tabindex="-1"></a></span>
+<span id="cb16-15"><a href="#cb16-15" tabindex="-1"></a>ped_add_classic_dad <span class="ot">&lt;-</span> ped_add_classic <span class="ot">&lt;-</span> <span class="fu">ped2com</span>(df,</span>
+<span id="cb16-16"><a href="#cb16-16" tabindex="-1"></a>  <span class="at">isChild_method =</span> <span class="st">&quot;classic&quot;</span>,</span>
+<span id="cb16-17"><a href="#cb16-17" tabindex="-1"></a>  <span class="at">component =</span> <span class="st">&quot;additive&quot;</span>, <span class="at">adjacency_method =</span> <span class="st">&quot;direct&quot;</span>,</span>
+<span id="cb16-18"><a href="#cb16-18" tabindex="-1"></a>  <span class="at">sparse =</span> <span class="cn">FALSE</span></span>
+<span id="cb16-19"><a href="#cb16-19" tabindex="-1"></a>)</span></code></pre></div>
 <p>As we can see, the two matrices are different. The RMSE between the
 two matrices is 0.009811.</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="fu">corrplot</span>(<span class="fu">as.matrix</span>(ped_add_classic_dad),</span>
@@ -546,9 +548,7 @@ two matrices is 0.009811.</p>
 <p><img role="img" src="data:image/png;base64,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" /><!-- --></p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a></span>
 <span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a><span class="fu">sqrt</span>(<span class="fu">mean</span>((ped_add_classic_complete <span class="sc">-</span> ped_add_classic)<span class="sc">^</span><span class="dv">2</span>))</span>
-<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_classic)^2):</span></span>
-<span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
-<span id="cb20-5"><a href="#cb20-5" tabindex="-1"></a><span class="co">#&gt; [1] NA</span></span></code></pre></div>
+<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a><span class="co">#&gt; [1] 0.02991371</span></span></code></pre></div>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="fu">corrplot</span>(<span class="fu">as.matrix</span>(ped_add_classic_complete <span class="sc">-</span> ped_add_partial),</span>
 <span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">&quot;color&quot;</span>, <span class="at">type =</span> <span class="st">&quot;lower&quot;</span>, <span class="at">col.lim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>),</span>
 <span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a>  <span class="at">is.corr =</span> <span class="cn">FALSE</span>,</span>
@@ -559,9 +559,7 @@ two matrices is 0.009811.</p>
 <p><img role="img" src="data:image/png;base64,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" /><!-- --></p>
 <div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a></span>
 <span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a><span class="fu">sqrt</span>(<span class="fu">mean</span>((ped_add_classic_complete <span class="sc">-</span> ped_add_partial)<span class="sc">^</span><span class="dv">2</span>))</span>
-<span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_partial)^2):</span></span>
-<span id="cb22-4"><a href="#cb22-4" tabindex="-1"></a><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
-<span id="cb22-5"><a href="#cb22-5" tabindex="-1"></a><span class="co">#&gt; [1] NA</span></span></code></pre></div>
+<span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a><span class="co">#&gt; [1] 0.02825904</span></span></code></pre></div>
 <p>The partial parent method again yields a matrix closer to the
 full-data version.</p>
 </div>
@@ -615,145 +613,73 @@ values.</p>
 <span id="cb25-8"><a href="#cb25-8" tabindex="-1"></a>  ped_add_partial_complete <span class="ot">&lt;-</span> <span class="fu">ped2com</span>(df_fam,</span>
 <span id="cb25-9"><a href="#cb25-9" tabindex="-1"></a>    <span class="at">isChild_method =</span> <span class="st">&quot;partialparent&quot;</span>,</span>
 <span id="cb25-10"><a href="#cb25-10" tabindex="-1"></a>    <span class="at">component =</span> <span class="st">&quot;additive&quot;</span>,</span>
-<span id="cb25-11"><a href="#cb25-11" tabindex="-1"></a>    <span class="at">adjacency_method =</span> <span class="st">&quot;direct&quot;</span></span>
-<span id="cb25-12"><a href="#cb25-12" tabindex="-1"></a>  )</span>
-<span id="cb25-13"><a href="#cb25-13" tabindex="-1"></a></span>
-<span id="cb25-14"><a href="#cb25-14" tabindex="-1"></a>  ped_add_classic_complete <span class="ot">&lt;-</span> <span class="fu">ped2com</span>(df_fam,</span>
-<span id="cb25-15"><a href="#cb25-15" tabindex="-1"></a>    <span class="at">isChild_method =</span> <span class="st">&quot;classic&quot;</span>,</span>
-<span id="cb25-16"><a href="#cb25-16" tabindex="-1"></a>    <span class="at">component =</span> <span class="st">&quot;additive&quot;</span>,</span>
-<span id="cb25-17"><a href="#cb25-17" tabindex="-1"></a>    <span class="at">adjacency_method =</span> <span class="st">&quot;direct&quot;</span></span>
-<span id="cb25-18"><a href="#cb25-18" tabindex="-1"></a>  )</span>
-<span id="cb25-19"><a href="#cb25-19" tabindex="-1"></a></span>
-<span id="cb25-20"><a href="#cb25-20" tabindex="-1"></a></span>
-<span id="cb25-21"><a href="#cb25-21" tabindex="-1"></a>  <span class="co"># select first ID with a mom and dad</span></span>
-<span id="cb25-22"><a href="#cb25-22" tabindex="-1"></a>  momid_to_cut <span class="ot">&lt;-</span> df_fam<span class="sc">$</span>ID[<span class="sc">!</span><span class="fu">is.na</span>(df_fam<span class="sc">$</span>momID)] <span class="sc">%&gt;%</span> <span class="fu">head</span>(<span class="dv">1</span>)</span>
-<span id="cb25-23"><a href="#cb25-23" tabindex="-1"></a>  dadid_to_cut <span class="ot">&lt;-</span> df_fam<span class="sc">$</span>ID[<span class="sc">!</span><span class="fu">is.na</span>(df_fam<span class="sc">$</span>dadID)] <span class="sc">%&gt;%</span> <span class="fu">head</span>(<span class="dv">1</span>)</span>
-<span id="cb25-24"><a href="#cb25-24" tabindex="-1"></a></span>
-<span id="cb25-25"><a href="#cb25-25" tabindex="-1"></a>  df_fam_dad<span class="sc">$</span>dadID[df_fam<span class="sc">$</span>ID <span class="sc">==</span> dadid_to_cut] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb25-11"><a href="#cb25-11" tabindex="-1"></a>    <span class="at">adjacency_method =</span> <span class="st">&quot;direct&quot;</span>,</span>
+<span id="cb25-12"><a href="#cb25-12" tabindex="-1"></a>    <span class="at">sparse =</span> <span class="cn">FALSE</span></span>
+<span id="cb25-13"><a href="#cb25-13" tabindex="-1"></a>  )</span>
+<span id="cb25-14"><a href="#cb25-14" tabindex="-1"></a></span>
+<span id="cb25-15"><a href="#cb25-15" tabindex="-1"></a>  ped_add_classic_complete <span class="ot">&lt;-</span> <span class="fu">ped2com</span>(df_fam,</span>
+<span id="cb25-16"><a href="#cb25-16" tabindex="-1"></a>    <span class="at">isChild_method =</span> <span class="st">&quot;classic&quot;</span>,</span>
+<span id="cb25-17"><a href="#cb25-17" tabindex="-1"></a>    <span class="at">component =</span> <span class="st">&quot;additive&quot;</span>,</span>
+<span id="cb25-18"><a href="#cb25-18" tabindex="-1"></a>    <span class="at">adjacency_method =</span> <span class="st">&quot;direct&quot;</span>,</span>
+<span id="cb25-19"><a href="#cb25-19" tabindex="-1"></a>    <span class="at">sparse =</span> <span class="cn">FALSE</span></span>
+<span id="cb25-20"><a href="#cb25-20" tabindex="-1"></a>  )</span>
+<span id="cb25-21"><a href="#cb25-21" tabindex="-1"></a></span>
+<span id="cb25-22"><a href="#cb25-22" tabindex="-1"></a></span>
+<span id="cb25-23"><a href="#cb25-23" tabindex="-1"></a>  <span class="co"># select first ID with a mom and dad</span></span>
+<span id="cb25-24"><a href="#cb25-24" tabindex="-1"></a>  momid_to_cut <span class="ot">&lt;-</span> df_fam<span class="sc">$</span>ID[<span class="sc">!</span><span class="fu">is.na</span>(df_fam<span class="sc">$</span>momID)] <span class="sc">%&gt;%</span> <span class="fu">head</span>(<span class="dv">1</span>)</span>
+<span id="cb25-25"><a href="#cb25-25" tabindex="-1"></a>  dadid_to_cut <span class="ot">&lt;-</span> df_fam<span class="sc">$</span>ID[<span class="sc">!</span><span class="fu">is.na</span>(df_fam<span class="sc">$</span>dadID)] <span class="sc">%&gt;%</span> <span class="fu">head</span>(<span class="dv">1</span>)</span>
 <span id="cb25-26"><a href="#cb25-26" tabindex="-1"></a></span>
-<span id="cb25-27"><a href="#cb25-27" tabindex="-1"></a>  df_fam_mom<span class="sc">$</span>momID[df_fam<span class="sc">$</span>ID <span class="sc">==</span> momid_to_cut] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb25-27"><a href="#cb25-27" tabindex="-1"></a>  df_fam_dad<span class="sc">$</span>dadID[df_fam<span class="sc">$</span>ID <span class="sc">==</span> dadid_to_cut] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
 <span id="cb25-28"><a href="#cb25-28" tabindex="-1"></a></span>
-<span id="cb25-29"><a href="#cb25-29" tabindex="-1"></a>  ped_add_partial_dad <span class="ot">&lt;-</span> <span class="fu">ped2com</span>(df_fam_dad,</span>
-<span id="cb25-30"><a href="#cb25-30" tabindex="-1"></a>    <span class="at">isChild_method =</span> <span class="st">&quot;partialparent&quot;</span>,</span>
-<span id="cb25-31"><a href="#cb25-31" tabindex="-1"></a>    <span class="at">component =</span> <span class="st">&quot;additive&quot;</span>,</span>
-<span id="cb25-32"><a href="#cb25-32" tabindex="-1"></a>    <span class="at">adjacency_method =</span> <span class="st">&quot;direct&quot;</span></span>
-<span id="cb25-33"><a href="#cb25-33" tabindex="-1"></a>  )</span>
-<span id="cb25-34"><a href="#cb25-34" tabindex="-1"></a>  ped_add_classic_dad <span class="ot">&lt;-</span> <span class="fu">ped2com</span>(df_fam_dad,</span>
-<span id="cb25-35"><a href="#cb25-35" tabindex="-1"></a>    <span class="at">isChild_method =</span> <span class="st">&quot;classic&quot;</span>,</span>
-<span id="cb25-36"><a href="#cb25-36" tabindex="-1"></a>    <span class="at">component =</span> <span class="st">&quot;additive&quot;</span>, <span class="at">adjacency_method =</span> <span class="st">&quot;direct&quot;</span></span>
-<span id="cb25-37"><a href="#cb25-37" tabindex="-1"></a>  )</span>
-<span id="cb25-38"><a href="#cb25-38" tabindex="-1"></a></span>
-<span id="cb25-39"><a href="#cb25-39" tabindex="-1"></a>  results<span class="sc">$</span>RMSE_partial_dad[i] <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((ped_add_classic_complete <span class="sc">-</span> ped_add_partial_dad)<span class="sc">^</span><span class="dv">2</span>))</span>
-<span id="cb25-40"><a href="#cb25-40" tabindex="-1"></a>  results<span class="sc">$</span>RMSE_classic_dad[i] <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((ped_add_classic_complete <span class="sc">-</span> ped_add_classic_dad)<span class="sc">^</span><span class="dv">2</span>))</span>
-<span id="cb25-41"><a href="#cb25-41" tabindex="-1"></a>  results<span class="sc">$</span>max_R_classic_dad[i] <span class="ot">&lt;-</span> <span class="fu">max</span>(<span class="fu">as.matrix</span>(ped_add_classic_dad))</span>
-<span id="cb25-42"><a href="#cb25-42" tabindex="-1"></a>  results<span class="sc">$</span>max_R_partial_dad[i] <span class="ot">&lt;-</span> <span class="fu">max</span>(<span class="fu">as.matrix</span>(ped_add_partial_dad))</span>
-<span id="cb25-43"><a href="#cb25-43" tabindex="-1"></a></span>
-<span id="cb25-44"><a href="#cb25-44" tabindex="-1"></a></span>
-<span id="cb25-45"><a href="#cb25-45" tabindex="-1"></a>  ped_add_partial_mom <span class="ot">&lt;-</span> <span class="fu">ped2com</span>(df_fam_mom,</span>
-<span id="cb25-46"><a href="#cb25-46" tabindex="-1"></a>    <span class="at">isChild_method =</span> <span class="st">&quot;partialparent&quot;</span>,</span>
-<span id="cb25-47"><a href="#cb25-47" tabindex="-1"></a>    <span class="at">component =</span> <span class="st">&quot;additive&quot;</span>,</span>
-<span id="cb25-48"><a href="#cb25-48" tabindex="-1"></a>    <span class="at">adjacency_method =</span> <span class="st">&quot;direct&quot;</span></span>
-<span id="cb25-49"><a href="#cb25-49" tabindex="-1"></a>  )</span>
-<span id="cb25-50"><a href="#cb25-50" tabindex="-1"></a></span>
-<span id="cb25-51"><a href="#cb25-51" tabindex="-1"></a>  ped_add_classic_mom <span class="ot">&lt;-</span> <span class="fu">ped2com</span>(df_fam_mom,</span>
-<span id="cb25-52"><a href="#cb25-52" tabindex="-1"></a>    <span class="at">isChild_method =</span> <span class="st">&quot;classic&quot;</span>,</span>
-<span id="cb25-53"><a href="#cb25-53" tabindex="-1"></a>    <span class="at">component =</span> <span class="st">&quot;additive&quot;</span>, <span class="at">adjacency_method =</span> <span class="st">&quot;direct&quot;</span></span>
+<span id="cb25-29"><a href="#cb25-29" tabindex="-1"></a>  df_fam_mom<span class="sc">$</span>momID[df_fam<span class="sc">$</span>ID <span class="sc">==</span> momid_to_cut] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb25-30"><a href="#cb25-30" tabindex="-1"></a></span>
+<span id="cb25-31"><a href="#cb25-31" tabindex="-1"></a>  ped_add_partial_dad <span class="ot">&lt;-</span> <span class="fu">ped2com</span>(df_fam_dad,</span>
+<span id="cb25-32"><a href="#cb25-32" tabindex="-1"></a>    <span class="at">isChild_method =</span> <span class="st">&quot;partialparent&quot;</span>,</span>
+<span id="cb25-33"><a href="#cb25-33" tabindex="-1"></a>    <span class="at">component =</span> <span class="st">&quot;additive&quot;</span>,</span>
+<span id="cb25-34"><a href="#cb25-34" tabindex="-1"></a>    <span class="at">adjacency_method =</span> <span class="st">&quot;direct&quot;</span>,</span>
+<span id="cb25-35"><a href="#cb25-35" tabindex="-1"></a>    <span class="at">sparse =</span> <span class="cn">FALSE</span></span>
+<span id="cb25-36"><a href="#cb25-36" tabindex="-1"></a>  )</span>
+<span id="cb25-37"><a href="#cb25-37" tabindex="-1"></a>  ped_add_classic_dad <span class="ot">&lt;-</span> <span class="fu">ped2com</span>(df_fam_dad,</span>
+<span id="cb25-38"><a href="#cb25-38" tabindex="-1"></a>    <span class="at">isChild_method =</span> <span class="st">&quot;classic&quot;</span>,</span>
+<span id="cb25-39"><a href="#cb25-39" tabindex="-1"></a>    <span class="at">component =</span> <span class="st">&quot;additive&quot;</span>, <span class="at">adjacency_method =</span> <span class="st">&quot;direct&quot;</span>,</span>
+<span id="cb25-40"><a href="#cb25-40" tabindex="-1"></a>    <span class="at">sparse =</span> <span class="cn">FALSE</span></span>
+<span id="cb25-41"><a href="#cb25-41" tabindex="-1"></a>  )</span>
+<span id="cb25-42"><a href="#cb25-42" tabindex="-1"></a></span>
+<span id="cb25-43"><a href="#cb25-43" tabindex="-1"></a>  results<span class="sc">$</span>RMSE_partial_dad[i] <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((ped_add_classic_complete <span class="sc">-</span> ped_add_partial_dad)<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb25-44"><a href="#cb25-44" tabindex="-1"></a>  results<span class="sc">$</span>RMSE_classic_dad[i] <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((ped_add_classic_complete <span class="sc">-</span> ped_add_classic_dad)<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb25-45"><a href="#cb25-45" tabindex="-1"></a>  results<span class="sc">$</span>max_R_classic_dad[i] <span class="ot">&lt;-</span> <span class="fu">max</span>(<span class="fu">as.matrix</span>(ped_add_classic_dad))</span>
+<span id="cb25-46"><a href="#cb25-46" tabindex="-1"></a>  results<span class="sc">$</span>max_R_partial_dad[i] <span class="ot">&lt;-</span> <span class="fu">max</span>(<span class="fu">as.matrix</span>(ped_add_partial_dad))</span>
+<span id="cb25-47"><a href="#cb25-47" tabindex="-1"></a></span>
+<span id="cb25-48"><a href="#cb25-48" tabindex="-1"></a></span>
+<span id="cb25-49"><a href="#cb25-49" tabindex="-1"></a>  ped_add_partial_mom <span class="ot">&lt;-</span> <span class="fu">ped2com</span>(df_fam_mom,</span>
+<span id="cb25-50"><a href="#cb25-50" tabindex="-1"></a>    <span class="at">isChild_method =</span> <span class="st">&quot;partialparent&quot;</span>,</span>
+<span id="cb25-51"><a href="#cb25-51" tabindex="-1"></a>    <span class="at">component =</span> <span class="st">&quot;additive&quot;</span>,</span>
+<span id="cb25-52"><a href="#cb25-52" tabindex="-1"></a>    <span class="at">adjacency_method =</span> <span class="st">&quot;direct&quot;</span>,</span>
+<span id="cb25-53"><a href="#cb25-53" tabindex="-1"></a>    <span class="at">sparse =</span> <span class="cn">FALSE</span></span>
 <span id="cb25-54"><a href="#cb25-54" tabindex="-1"></a>  )</span>
 <span id="cb25-55"><a href="#cb25-55" tabindex="-1"></a></span>
-<span id="cb25-56"><a href="#cb25-56" tabindex="-1"></a>  results<span class="sc">$</span>RMSE_partial_mom[i] <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((ped_add_classic_complete <span class="sc">-</span> ped_add_partial_mom)<span class="sc">^</span><span class="dv">2</span>))</span>
-<span id="cb25-57"><a href="#cb25-57" tabindex="-1"></a>  results<span class="sc">$</span>RMSE_classic_mom[i] <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((ped_add_classic_complete <span class="sc">-</span> ped_add_classic_mom)<span class="sc">^</span><span class="dv">2</span>))</span>
-<span id="cb25-58"><a href="#cb25-58" tabindex="-1"></a>  results<span class="sc">$</span>max_R_classic_mom[i] <span class="ot">&lt;-</span> <span class="fu">max</span>(<span class="fu">as.matrix</span>(ped_add_classic_mom))</span>
-<span id="cb25-59"><a href="#cb25-59" tabindex="-1"></a>  results<span class="sc">$</span>max_R_partial_mom[i] <span class="ot">&lt;-</span> <span class="fu">max</span>(<span class="fu">as.matrix</span>(ped_add_partial_mom))</span>
-<span id="cb25-60"><a href="#cb25-60" tabindex="-1"></a>  results<span class="sc">$</span>max_R_classic[i] <span class="ot">&lt;-</span> <span class="fu">max</span>(<span class="fu">as.matrix</span>(ped_add_classic_complete))</span>
+<span id="cb25-56"><a href="#cb25-56" tabindex="-1"></a>  ped_add_classic_mom <span class="ot">&lt;-</span> <span class="fu">ped2com</span>(df_fam_mom,</span>
+<span id="cb25-57"><a href="#cb25-57" tabindex="-1"></a>    <span class="at">isChild_method =</span> <span class="st">&quot;classic&quot;</span>,</span>
+<span id="cb25-58"><a href="#cb25-58" tabindex="-1"></a>    <span class="at">component =</span> <span class="st">&quot;additive&quot;</span>, <span class="at">adjacency_method =</span> <span class="st">&quot;direct&quot;</span>,</span>
+<span id="cb25-59"><a href="#cb25-59" tabindex="-1"></a>    <span class="at">sparse =</span> <span class="cn">FALSE</span></span>
+<span id="cb25-60"><a href="#cb25-60" tabindex="-1"></a>  )</span>
 <span id="cb25-61"><a href="#cb25-61" tabindex="-1"></a></span>
-<span id="cb25-62"><a href="#cb25-62" tabindex="-1"></a>  inbreeding_list[[i]] <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
-<span id="cb25-63"><a href="#cb25-63" tabindex="-1"></a>    <span class="at">df_fam =</span> df_fam,</span>
-<span id="cb25-64"><a href="#cb25-64" tabindex="-1"></a>    <span class="at">ped_add_partial_complete =</span> ped_add_partial_complete,</span>
-<span id="cb25-65"><a href="#cb25-65" tabindex="-1"></a>    <span class="at">ped_add_classic_complete =</span> ped_add_classic_complete,</span>
-<span id="cb25-66"><a href="#cb25-66" tabindex="-1"></a>    <span class="at">ped_add_partial_dad =</span> ped_add_partial_dad,</span>
-<span id="cb25-67"><a href="#cb25-67" tabindex="-1"></a>    <span class="at">ped_add_classic_dad =</span> ped_add_classic_dad,</span>
-<span id="cb25-68"><a href="#cb25-68" tabindex="-1"></a>    <span class="at">ped_add_partial_mom =</span> ped_add_partial_mom,</span>
-<span id="cb25-69"><a href="#cb25-69" tabindex="-1"></a>    <span class="at">ped_add_classic_mom =</span> ped_add_classic_mom</span>
-<span id="cb25-70"><a href="#cb25-70" tabindex="-1"></a>  )</span>
-<span id="cb25-71"><a href="#cb25-71" tabindex="-1"></a>}</span>
-<span id="cb25-72"><a href="#cb25-72" tabindex="-1"></a><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_partial_dad)^2):</span></span>
-<span id="cb25-73"><a href="#cb25-73" tabindex="-1"></a><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
-<span id="cb25-74"><a href="#cb25-74" tabindex="-1"></a><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_classic_dad)^2):</span></span>
-<span id="cb25-75"><a href="#cb25-75" tabindex="-1"></a><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
-<span id="cb25-76"><a href="#cb25-76" tabindex="-1"></a><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_partial_mom)^2):</span></span>
-<span id="cb25-77"><a href="#cb25-77" tabindex="-1"></a><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
-<span id="cb25-78"><a href="#cb25-78" tabindex="-1"></a><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_classic_mom)^2):</span></span>
-<span id="cb25-79"><a href="#cb25-79" tabindex="-1"></a><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
-<span id="cb25-80"><a href="#cb25-80" tabindex="-1"></a><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_partial_mom)^2):</span></span>
-<span id="cb25-81"><a href="#cb25-81" tabindex="-1"></a><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
-<span id="cb25-82"><a href="#cb25-82" tabindex="-1"></a><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_partial_dad)^2):</span></span>
-<span id="cb25-83"><a href="#cb25-83" tabindex="-1"></a><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
-<span id="cb25-84"><a href="#cb25-84" tabindex="-1"></a><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_classic_dad)^2):</span></span>
-<span id="cb25-85"><a href="#cb25-85" tabindex="-1"></a><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
-<span id="cb25-86"><a href="#cb25-86" tabindex="-1"></a><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_partial_mom)^2):</span></span>
-<span id="cb25-87"><a href="#cb25-87" tabindex="-1"></a><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
-<span id="cb25-88"><a href="#cb25-88" tabindex="-1"></a><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_classic_mom)^2):</span></span>
-<span id="cb25-89"><a href="#cb25-89" tabindex="-1"></a><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
-<span id="cb25-90"><a href="#cb25-90" tabindex="-1"></a><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_partial_mom)^2):</span></span>
-<span id="cb25-91"><a href="#cb25-91" tabindex="-1"></a><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
-<span id="cb25-92"><a href="#cb25-92" tabindex="-1"></a><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_partial_dad)^2):</span></span>
-<span id="cb25-93"><a href="#cb25-93" tabindex="-1"></a><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
-<span id="cb25-94"><a href="#cb25-94" tabindex="-1"></a><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_classic_dad)^2):</span></span>
-<span id="cb25-95"><a href="#cb25-95" tabindex="-1"></a><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
-<span id="cb25-96"><a href="#cb25-96" tabindex="-1"></a><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_partial_mom)^2):</span></span>
-<span id="cb25-97"><a href="#cb25-97" tabindex="-1"></a><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
-<span id="cb25-98"><a href="#cb25-98" tabindex="-1"></a><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_classic_mom)^2):</span></span>
-<span id="cb25-99"><a href="#cb25-99" tabindex="-1"></a><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
-<span id="cb25-100"><a href="#cb25-100" tabindex="-1"></a><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_partial_mom)^2):</span></span>
-<span id="cb25-101"><a href="#cb25-101" tabindex="-1"></a><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
-<span id="cb25-102"><a href="#cb25-102" tabindex="-1"></a><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_partial_dad)^2):</span></span>
-<span id="cb25-103"><a href="#cb25-103" tabindex="-1"></a><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
-<span id="cb25-104"><a href="#cb25-104" tabindex="-1"></a><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_classic_dad)^2):</span></span>
-<span id="cb25-105"><a href="#cb25-105" tabindex="-1"></a><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
-<span id="cb25-106"><a href="#cb25-106" tabindex="-1"></a><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_partial_mom)^2):</span></span>
-<span id="cb25-107"><a href="#cb25-107" tabindex="-1"></a><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
-<span id="cb25-108"><a href="#cb25-108" tabindex="-1"></a><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_classic_mom)^2):</span></span>
-<span id="cb25-109"><a href="#cb25-109" tabindex="-1"></a><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
-<span id="cb25-110"><a href="#cb25-110" tabindex="-1"></a><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_partial_mom)^2):</span></span>
-<span id="cb25-111"><a href="#cb25-111" tabindex="-1"></a><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
-<span id="cb25-112"><a href="#cb25-112" tabindex="-1"></a><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_partial_dad)^2):</span></span>
-<span id="cb25-113"><a href="#cb25-113" tabindex="-1"></a><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
-<span id="cb25-114"><a href="#cb25-114" tabindex="-1"></a><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_classic_dad)^2):</span></span>
-<span id="cb25-115"><a href="#cb25-115" tabindex="-1"></a><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
-<span id="cb25-116"><a href="#cb25-116" tabindex="-1"></a><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_partial_mom)^2):</span></span>
-<span id="cb25-117"><a href="#cb25-117" tabindex="-1"></a><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
-<span id="cb25-118"><a href="#cb25-118" tabindex="-1"></a><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_classic_mom)^2):</span></span>
-<span id="cb25-119"><a href="#cb25-119" tabindex="-1"></a><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
-<span id="cb25-120"><a href="#cb25-120" tabindex="-1"></a><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_partial_mom)^2):</span></span>
-<span id="cb25-121"><a href="#cb25-121" tabindex="-1"></a><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
-<span id="cb25-122"><a href="#cb25-122" tabindex="-1"></a><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_partial_dad)^2):</span></span>
-<span id="cb25-123"><a href="#cb25-123" tabindex="-1"></a><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
-<span id="cb25-124"><a href="#cb25-124" tabindex="-1"></a><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_classic_dad)^2):</span></span>
-<span id="cb25-125"><a href="#cb25-125" tabindex="-1"></a><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
-<span id="cb25-126"><a href="#cb25-126" tabindex="-1"></a><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_partial_mom)^2):</span></span>
-<span id="cb25-127"><a href="#cb25-127" tabindex="-1"></a><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
-<span id="cb25-128"><a href="#cb25-128" tabindex="-1"></a><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_classic_mom)^2):</span></span>
-<span id="cb25-129"><a href="#cb25-129" tabindex="-1"></a><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
-<span id="cb25-130"><a href="#cb25-130" tabindex="-1"></a><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_partial_mom)^2):</span></span>
-<span id="cb25-131"><a href="#cb25-131" tabindex="-1"></a><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
-<span id="cb25-132"><a href="#cb25-132" tabindex="-1"></a><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_partial_dad)^2):</span></span>
-<span id="cb25-133"><a href="#cb25-133" tabindex="-1"></a><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
-<span id="cb25-134"><a href="#cb25-134" tabindex="-1"></a><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_classic_dad)^2):</span></span>
-<span id="cb25-135"><a href="#cb25-135" tabindex="-1"></a><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
-<span id="cb25-136"><a href="#cb25-136" tabindex="-1"></a><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_partial_mom)^2):</span></span>
-<span id="cb25-137"><a href="#cb25-137" tabindex="-1"></a><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
-<span id="cb25-138"><a href="#cb25-138" tabindex="-1"></a><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_classic_mom)^2):</span></span>
-<span id="cb25-139"><a href="#cb25-139" tabindex="-1"></a><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
-<span id="cb25-140"><a href="#cb25-140" tabindex="-1"></a><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_partial_mom)^2):</span></span>
-<span id="cb25-141"><a href="#cb25-141" tabindex="-1"></a><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
-<span id="cb25-142"><a href="#cb25-142" tabindex="-1"></a><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_partial_dad)^2):</span></span>
-<span id="cb25-143"><a href="#cb25-143" tabindex="-1"></a><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
-<span id="cb25-144"><a href="#cb25-144" tabindex="-1"></a><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_classic_dad)^2):</span></span>
-<span id="cb25-145"><a href="#cb25-145" tabindex="-1"></a><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
-<span id="cb25-146"><a href="#cb25-146" tabindex="-1"></a><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_partial_mom)^2):</span></span>
-<span id="cb25-147"><a href="#cb25-147" tabindex="-1"></a><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span>
-<span id="cb25-148"><a href="#cb25-148" tabindex="-1"></a><span class="co">#&gt; Warning in mean.default((ped_add_classic_complete - ped_add_classic_mom)^2):</span></span>
-<span id="cb25-149"><a href="#cb25-149" tabindex="-1"></a><span class="co">#&gt; argument is not numeric or logical: returning NA</span></span></code></pre></div>
+<span id="cb25-62"><a href="#cb25-62" tabindex="-1"></a>  results<span class="sc">$</span>RMSE_partial_mom[i] <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((ped_add_classic_complete <span class="sc">-</span> ped_add_partial_mom)<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb25-63"><a href="#cb25-63" tabindex="-1"></a>  results<span class="sc">$</span>RMSE_classic_mom[i] <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((ped_add_classic_complete <span class="sc">-</span> ped_add_classic_mom)<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb25-64"><a href="#cb25-64" tabindex="-1"></a>  results<span class="sc">$</span>max_R_classic_mom[i] <span class="ot">&lt;-</span> <span class="fu">max</span>(<span class="fu">as.matrix</span>(ped_add_classic_mom))</span>
+<span id="cb25-65"><a href="#cb25-65" tabindex="-1"></a>  results<span class="sc">$</span>max_R_partial_mom[i] <span class="ot">&lt;-</span> <span class="fu">max</span>(<span class="fu">as.matrix</span>(ped_add_partial_mom))</span>
+<span id="cb25-66"><a href="#cb25-66" tabindex="-1"></a>  results<span class="sc">$</span>max_R_classic[i] <span class="ot">&lt;-</span> <span class="fu">max</span>(<span class="fu">as.matrix</span>(ped_add_classic_complete))</span>
+<span id="cb25-67"><a href="#cb25-67" tabindex="-1"></a></span>
+<span id="cb25-68"><a href="#cb25-68" tabindex="-1"></a>  inbreeding_list[[i]] <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb25-69"><a href="#cb25-69" tabindex="-1"></a>    <span class="at">df_fam =</span> df_fam,</span>
+<span id="cb25-70"><a href="#cb25-70" tabindex="-1"></a>    <span class="at">ped_add_partial_complete =</span> ped_add_partial_complete,</span>
+<span id="cb25-71"><a href="#cb25-71" tabindex="-1"></a>    <span class="at">ped_add_classic_complete =</span> ped_add_classic_complete,</span>
+<span id="cb25-72"><a href="#cb25-72" tabindex="-1"></a>    <span class="at">ped_add_partial_dad =</span> ped_add_partial_dad,</span>
+<span id="cb25-73"><a href="#cb25-73" tabindex="-1"></a>    <span class="at">ped_add_classic_dad =</span> ped_add_classic_dad,</span>
+<span id="cb25-74"><a href="#cb25-74" tabindex="-1"></a>    <span class="at">ped_add_partial_mom =</span> ped_add_partial_mom,</span>
+<span id="cb25-75"><a href="#cb25-75" tabindex="-1"></a>    <span class="at">ped_add_classic_mom =</span> ped_add_classic_mom</span>
+<span id="cb25-76"><a href="#cb25-76" tabindex="-1"></a>  )</span>
+<span id="cb25-77"><a href="#cb25-77" tabindex="-1"></a>}</span></code></pre></div>
 <div id="example-family-1" class="section level3">
 <h3>Example: Family <code>1</code></h3>
 <p>To understand what these matrices look like, we visualize them for
@@ -870,14 +796,13 @@ methods. A positive value means that the partial method had lower RMSE
 <div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" tabindex="-1"></a>results <span class="sc">%&gt;%</span></span>
 <span id="cb37-2"><a href="#cb37-2" tabindex="-1"></a>  <span class="fu">select</span>(RMSE_diff_mom, RMSE_diff_dad) <span class="sc">%&gt;%</span></span>
 <span id="cb37-3"><a href="#cb37-3" tabindex="-1"></a>  <span class="fu">summary</span>()</span>
-<span id="cb37-4"><a href="#cb37-4" tabindex="-1"></a><span class="co">#&gt;  RMSE_diff_mom RMSE_diff_dad</span></span>
-<span id="cb37-5"><a href="#cb37-5" tabindex="-1"></a><span class="co">#&gt;  Min.   : NA   Min.   : NA  </span></span>
-<span id="cb37-6"><a href="#cb37-6" tabindex="-1"></a><span class="co">#&gt;  1st Qu.: NA   1st Qu.: NA  </span></span>
-<span id="cb37-7"><a href="#cb37-7" tabindex="-1"></a><span class="co">#&gt;  Median : NA   Median : NA  </span></span>
-<span id="cb37-8"><a href="#cb37-8" tabindex="-1"></a><span class="co">#&gt;  Mean   :NaN   Mean   :NaN  </span></span>
-<span id="cb37-9"><a href="#cb37-9" tabindex="-1"></a><span class="co">#&gt;  3rd Qu.: NA   3rd Qu.: NA  </span></span>
-<span id="cb37-10"><a href="#cb37-10" tabindex="-1"></a><span class="co">#&gt;  Max.   : NA   Max.   : NA  </span></span>
-<span id="cb37-11"><a href="#cb37-11" tabindex="-1"></a><span class="co">#&gt;  NA&#39;s   :8     NA&#39;s   :8</span></span></code></pre></div>
+<span id="cb37-4"><a href="#cb37-4" tabindex="-1"></a><span class="co">#&gt;  RMSE_diff_mom      RMSE_diff_dad     </span></span>
+<span id="cb37-5"><a href="#cb37-5" tabindex="-1"></a><span class="co">#&gt;  Min.   :0.001222   Min.   :0.001222  </span></span>
+<span id="cb37-6"><a href="#cb37-6" tabindex="-1"></a><span class="co">#&gt;  1st Qu.:0.001869   1st Qu.:0.002036  </span></span>
+<span id="cb37-7"><a href="#cb37-7" tabindex="-1"></a><span class="co">#&gt;  Median :0.002538   Median :0.002520  </span></span>
+<span id="cb37-8"><a href="#cb37-8" tabindex="-1"></a><span class="co">#&gt;  Mean   :0.005763   Mean   :0.005786  </span></span>
+<span id="cb37-9"><a href="#cb37-9" tabindex="-1"></a><span class="co">#&gt;  3rd Qu.:0.005625   3rd Qu.:0.005625  </span></span>
+<span id="cb37-10"><a href="#cb37-10" tabindex="-1"></a><span class="co">#&gt;  Max.   :0.024221   Max.   :0.024221</span></span></code></pre></div>
 <p>In all families, both <code>RMSE_diff_mom</code> and
 <code>RMSE_diff_dad</code> are positive—indicating that the classic
 method produces larger the errors relative to the partial method. This
@@ -885,9 +810,9 @@ holds regardless of whether the missing parent is a mother or a
 father.</p>
 <p>To verify this directly:</p>
 <div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" tabindex="-1"></a><span class="fu">mean</span>(results<span class="sc">$</span>RMSE_diff_mom <span class="sc">&gt;</span> <span class="dv">0</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb38-2"><a href="#cb38-2" tabindex="-1"></a><span class="co">#&gt; [1] NaN</span></span>
+<span id="cb38-2"><a href="#cb38-2" tabindex="-1"></a><span class="co">#&gt; [1] 1</span></span>
 <span id="cb38-3"><a href="#cb38-3" tabindex="-1"></a><span class="fu">mean</span>(results<span class="sc">$</span>RMSE_diff_dad <span class="sc">&gt;</span> <span class="dv">0</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb38-4"><a href="#cb38-4" tabindex="-1"></a><span class="co">#&gt; [1] NaN</span></span></code></pre></div>
+<span id="cb38-4"><a href="#cb38-4" tabindex="-1"></a><span class="co">#&gt; [1] 1</span></span></code></pre></div>
 <p>These proportions show how often the partial method produces a lower
 RMSE across the dataset. This confirms the earlier findings: when
 pedigree data are incomplete, the partial parent method more faithfully
@@ -899,14 +824,13 @@ reconstructs the full-data relatedness matrix.</p>
 <span id="cb39-5"><a href="#cb39-5" tabindex="-1"></a>    <span class="sc">-</span>max_R_partial_dad, <span class="sc">-</span>max_R_classic_mom, <span class="sc">-</span>max_R_partial_mom, <span class="sc">-</span>max_R_classic</span>
 <span id="cb39-6"><a href="#cb39-6" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
 <span id="cb39-7"><a href="#cb39-7" tabindex="-1"></a>  <span class="fu">summary</span>()</span>
-<span id="cb39-8"><a href="#cb39-8" tabindex="-1"></a><span class="co">#&gt;  RMSE_partial_dad RMSE_partial_mom RMSE_classic_dad RMSE_classic_mom</span></span>
-<span id="cb39-9"><a href="#cb39-9" tabindex="-1"></a><span class="co">#&gt;  Min.   : NA      Min.   : NA      Min.   : NA      Min.   : NA     </span></span>
-<span id="cb39-10"><a href="#cb39-10" tabindex="-1"></a><span class="co">#&gt;  1st Qu.: NA      1st Qu.: NA      1st Qu.: NA      1st Qu.: NA     </span></span>
-<span id="cb39-11"><a href="#cb39-11" tabindex="-1"></a><span class="co">#&gt;  Median : NA      Median : NA      Median : NA      Median : NA     </span></span>
-<span id="cb39-12"><a href="#cb39-12" tabindex="-1"></a><span class="co">#&gt;  Mean   :NaN      Mean   :NaN      Mean   :NaN      Mean   :NaN     </span></span>
-<span id="cb39-13"><a href="#cb39-13" tabindex="-1"></a><span class="co">#&gt;  3rd Qu.: NA      3rd Qu.: NA      3rd Qu.: NA      3rd Qu.: NA     </span></span>
-<span id="cb39-14"><a href="#cb39-14" tabindex="-1"></a><span class="co">#&gt;  Max.   : NA      Max.   : NA      Max.   : NA      Max.   : NA     </span></span>
-<span id="cb39-15"><a href="#cb39-15" tabindex="-1"></a><span class="co">#&gt;  NA&#39;s   :8        NA&#39;s   :8        NA&#39;s   :8        NA&#39;s   :8</span></span></code></pre></div>
+<span id="cb39-8"><a href="#cb39-8" tabindex="-1"></a><span class="co">#&gt;  RMSE_partial_dad  RMSE_partial_mom  RMSE_classic_dad  RMSE_classic_mom </span></span>
+<span id="cb39-9"><a href="#cb39-9" tabindex="-1"></a><span class="co">#&gt;  Min.   :0.04773   Min.   :0.04773   Min.   :0.04895   Min.   :0.04895  </span></span>
+<span id="cb39-10"><a href="#cb39-10" tabindex="-1"></a><span class="co">#&gt;  1st Qu.:0.05570   1st Qu.:0.05349   1st Qu.:0.05774   1st Qu.:0.05555  </span></span>
+<span id="cb39-11"><a href="#cb39-11" tabindex="-1"></a><span class="co">#&gt;  Median :0.06206   Median :0.06899   Median :0.06457   Median :0.07158  </span></span>
+<span id="cb39-12"><a href="#cb39-12" tabindex="-1"></a><span class="co">#&gt;  Mean   :0.07545   Mean   :0.07686   Mean   :0.08124   Mean   :0.08262  </span></span>
+<span id="cb39-13"><a href="#cb39-13" tabindex="-1"></a><span class="co">#&gt;  3rd Qu.:0.08237   3rd Qu.:0.08323   3rd Qu.:0.08866   3rd Qu.:0.08866  </span></span>
+<span id="cb39-14"><a href="#cb39-14" tabindex="-1"></a><span class="co">#&gt;  Max.   :0.15547   Max.   :0.15547   Max.   :0.17969   Max.   :0.17969</span></span></code></pre></div>
 </div>
 </div>
 

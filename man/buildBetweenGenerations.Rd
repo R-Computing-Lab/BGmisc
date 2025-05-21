@@ -25,7 +25,7 @@ son status (ifson), and daughter status (ifdau), as well as couple IDs.}
 
 \item{sizeGens}{A numeric vector containing the sizes of each generation within the pedigree.}
 
-\item{verbose}{logical  If TRUE, print progress through stages of algorithm}
+\item{verbose}{logical  If TRUE, message progress through stages of algorithm}
 
 \item{marR}{Mating rate. A numeric value ranging from 0 to 1 which determines the proportion of mated (fertilized) couples in the pedigree within each generation. For instance, marR = 0.5 suggests 50 percent of the offspring in a specific generation will be mated and have their offspring.}
 

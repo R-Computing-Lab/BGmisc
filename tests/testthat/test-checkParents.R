@@ -25,3 +25,10 @@ test_that("checksif single parents found correctly in ASOIAF dataset", {
   repaired_df <- checkParentIDs(df_asoiaf, verbose = FALSE, repair = TRUE, parentswithoutrow = TRUE)
   expect_equal(nrow(repaired_df), nrow(df_asoiaf) + single_moms + single_dads)
 })
+
+test_that("verbose checks", {
+  data(ASOIAF)
+  df_asoiaf <- ASOIAF
+  expect_message(checkParentIDs(df_asoiaf, verbose = TRUE, repair = TRUE))
+  expect_message(checkParentIDs(df_asoiaf, verbose = TRUE, parentswithoutrow = TRUE))
+})

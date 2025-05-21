@@ -20,4 +20,3 @@ It utilizes regular expressions and the `tolower()` function to match column nam
 against a list of predefined standard names. The approach is case-insensitive and
 allows for flexible matching of column names.
 }
-\keyword{internal}

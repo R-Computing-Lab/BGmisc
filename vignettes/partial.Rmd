@@ -204,12 +204,14 @@ df$dadID[df$ID == 4] <- NA
 ped_add_partial_dad <- ped_add_partial <- ped2com(df,
   isChild_method = "partialparent",
   component = "additive",
-  adjacency_method = "direct"
+  adjacency_method = "direct",
+  sparse = FALSE
 )
 
 ped_add_classic_dad <- ped_add_classic <- ped2com(df,
   isChild_method = "classic",
-  component = "additive", adjacency_method = "direct"
+  component = "additive", adjacency_method = "direct",
+  sparse = FALSE
 )
 ```
 
@@ -318,13 +320,15 @@ for (i in 1:length(famIDs)) {
   ped_add_partial_complete <- ped2com(df_fam,
     isChild_method = "partialparent",
     component = "additive",
-    adjacency_method = "direct"
+    adjacency_method = "direct",
+    sparse = FALSE
   )
 
   ped_add_classic_complete <- ped2com(df_fam,
     isChild_method = "classic",
     component = "additive",
-    adjacency_method = "direct"
+    adjacency_method = "direct",
+    sparse = FALSE
   )
 
 
@@ -339,11 +343,13 @@ for (i in 1:length(famIDs)) {
   ped_add_partial_dad <- ped2com(df_fam_dad,
     isChild_method = "partialparent",
     component = "additive",
-    adjacency_method = "direct"
+    adjacency_method = "direct",
+    sparse = FALSE
   )
   ped_add_classic_dad <- ped2com(df_fam_dad,
     isChild_method = "classic",
-    component = "additive", adjacency_method = "direct"
+    component = "additive", adjacency_method = "direct",
+    sparse = FALSE
   )
 
   results$RMSE_partial_dad[i] <- sqrt(mean((ped_add_classic_complete - ped_add_partial_dad)^2))
@@ -355,12 +361,14 @@ for (i in 1:length(famIDs)) {
   ped_add_partial_mom <- ped2com(df_fam_mom,
     isChild_method = "partialparent",
     component = "additive",
-    adjacency_method = "direct"
+    adjacency_method = "direct",
+    sparse = FALSE
   )
 
   ped_add_classic_mom <- ped2com(df_fam_mom,
     isChild_method = "classic",
-    component = "additive", adjacency_method = "direct"
+    component = "additive", adjacency_method = "direct",
+    sparse = FALSE
   )
 
   results$RMSE_partial_mom[i] <- sqrt(mean((ped_add_classic_complete - ped_add_partial_mom)^2))

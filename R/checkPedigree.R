@@ -55,7 +55,7 @@ checkPedigreeNetwork <- function(ped, personID = "ID", momID = "momID", dadID = 
   if (verbose) {
     if (nrow(duplicate_edges) > 0) {
       message("Duplicate edges detected:")
-      print(duplicate_edges)
+      message(duplicate_edges)
     } else {
       message("No duplicate edges detected.")
     }
@@ -70,7 +70,7 @@ checkPedigreeNetwork <- function(ped, personID = "ID", momID = "momID", dadID = 
     results$cyclic_relationships <- cyclic_relationships
     if (verbose) {
       message("Cyclic relationships detected:")
-      print(cyclic_relationships)
+      message(cyclic_relationships)
     }
   } else {
     results$cyclic_relationships <- NULL

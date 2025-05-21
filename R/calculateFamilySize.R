@@ -44,7 +44,7 @@ calcFamilySizeByGen <- function(kpc, Ngen, marR) {
   # Calculate the number of individuals for the last generation
   lastGen <- ceiling(kpc^(Ngen - 1) * marR^(Ngen - 2))
   allGens <- c(2, midGens, lastGen)
-  # print(allGens)
+  # message(allGens)
   return(allGens)
 }
 #' @rdname calcFamilySizeByGen
