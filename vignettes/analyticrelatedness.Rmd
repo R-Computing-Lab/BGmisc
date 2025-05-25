@@ -409,8 +409,8 @@ for (i in 1:length(famIDs)) {
 
 
   # select first ID with a mom and dad
-  momid_to_cut <- df_fam$ID[!is.na(df_fam$momID)] %>% head(1)
-  dadid_to_cut <- df_fam$ID[!is.na(df_fam$dadID)] %>% head(1)
+  momid_to_cut <- head(df_fam$ID[!is.na(df_fam$momID)], 1)
+  dadid_to_cut <- head(df_fam$ID[!is.na(df_fam$dadID)], 1)
 
   df_fam_dad$dadID[df_fam$ID == dadid_to_cut] <- NA
 
@@ -561,8 +561,6 @@ corrplot(as.matrix(fam1$ped_add_classic_complete - fam1$ped_add_partial_dad),
 These plots show how each method responds to missing data, and whether it maintains consistency with the complete pedigree. We observe that the partial parent method typically introduces smaller deviations. If desired, this same diagnostic can be repeated for additional families, such as inbreeding_list[[2]].
 
 
-
-
 ## Summary
 
 Across all families in the inbreeding dataset, the results show a consistent pattern:
@@ -571,8 +569,8 @@ the partial parent method outperforms the classic method in reconstructing the a
 To make this explicit, we calculate the RMSE difference between methods. A positive value means that the partial method had lower RMSE (i.e., better accuracy) than the classic method:
 
 ```{r}
-results <- results %>%
-  as.data.frame() %>%
+results <- results |>
+  as.data.frame() |>
   mutate(
     RMSE_diff_dad = RMSE_classic_dad - RMSE_partial_dad,
     RMSE_diff_mom = RMSE_classic_mom - RMSE_partial_mom
@@ -583,9 +581,8 @@ We can then summarize the pattern across families:
 
 
 ```{r}
-results %>%
-  select(RMSE_diff_mom, RMSE_diff_dad) %>%
-  summary()
+
+  summary(select(results,RMSE_diff_mom, RMSE_diff_dad))
 ```
 
 In all families, both `RMSE_diff_mom` and `RMSE_diff_dad` are positive—indicating that the classic method produces larger the errors relative to the partial method. This holds regardless of whether the missing parent is a mother or a father.
@@ -600,12 +597,12 @@ mean(results$RMSE_diff_dad > 0, na.rm = TRUE)
 These proportions show how often the partial method produces a lower RMSE across the dataset. This confirms the earlier findings: when pedigree data are incomplete, the partial parent method more faithfully reconstructs the full-data relatedness matrix.
 
 ```{r}
-results %>%
-  as.data.frame() %>%
+results |>
+  as.data.frame() |>
   select(
     -famIDs, -RMSE_diff_mom, -RMSE_diff_dad, -max_R_classic_dad,
     -max_R_partial_dad, -max_R_classic_mom, -max_R_partial_mom, -max_R_classic
-  ) %>%
+  ) |>
   summary()
 ```
 

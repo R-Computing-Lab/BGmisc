@@ -22,3 +22,5 @@ vignettes/articles/paper.html
 .vscode/settings.json
 data-raw/logo_orange.png
 data-raw/Landers-Wilson-Garrison Tree.ged
+vignettes/understanding_relatedness.Rmd
+vignettes/rewritten_relatedness_vignette.Rmd
