@@ -1,8 +1,8 @@
 ---
-title: "Calculating and Inferring Relatedness Coefficients with BGmisc"
+title: "Understanding and Computing Relatedness from Pedigree Data"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Relatedness Coefficients}
+  %\VignetteIndexEntry{Understanding and Computing Relatedness from Pedigree Data}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -17,16 +17,22 @@ options(rmarkdown.html_vignette.check_title = FALSE)
 
 # Introduction
 
-This vignette demonstrates how to quantify relatedness using two functions from the `BGmisc` package: 
-- `calculateRelatedness` computes the relatedness coefficient based on known genealogical structure, and 
-- `inferRelatedness` infers the relatedness coefficient from observed phenotypic correlations under a fixed ACE model.
+When individuals share common ancestors, they are genetically related: they are expected to carry some proportion of alleles that are identical by descent. This expectation—called the relatedness coefficient—is central to many areas of genetics, including heritability estimation, pedigree-based modeling, twin and family studies, and the construction of kinship matrices for mixed-effects models.
 
+Understanding relatedness is key for interpreting familial resemblance, controlling for shared genetic structure in statistical models, and simulating or analyzing traits across multigenerational pedigrees. But while the idea that “siblings are 50% related” is familiar, the reasoning behind such numbers—and how to compute them across complex family structures—is less transparent.
+
+This vignette introduces the concept of relatedness from first principles and walks through how it is calculated from pedigree data. It begins with illustrative examples that explain expected relatedness values for familiar relationships using simplified functions. These examples clarify how shared ancestry translates into probabilistic expectations about genetic similarity.
+
+From there, the vignette introduces a general-purpose matrix-based method for computing pairwise relatedness across pedigrees. Using the ped2com() function from the BGmisc package, we demonstrate how to build additive genetic relationship matrices under both complete and incomplete parentage, and we evaluate how different assumptions affect the resulting estimates. The goal is to provide a clear, rigorous, and practical guide to computing relatedness in real data.
+
+
+# Relatedness Coefficient
 
 The relatedness coefficient \( r \) indexes the proportion of alleles shared identically by descent (IBD) between two individuals. This value ranges from 0 (no shared alleles by descent) to 1 (a perfect genetic match, which occurs when comparing an individual to themselves, their identical twin, or their clone). Values can be interpreted in the context of standard relationships: e.g., full siblings are expected to have \( r = 0.5 \), half siblings \( r = 0.25 \), and first cousins \( r = 0.125 \).
 
-# Calculating Relatedness Coefficient
+Wright’s (1922) classic formulation computes 𝑟 by summing across shared ancestry paths:
 
-The `calculateRelatedness` function offers a method to compute the relatedness coefficient based on shared ancestry. The function computes \( r \) based on generational distance to one or more shared ancestors, according to Wright's (1922) formulation:
+
 
 \[
 r_{bc} = \sum \left(\frac{1}{2}\right)^{n+n'+1} (1+f_a)
@@ -34,28 +40,31 @@ r_{bc} = \sum \left(\frac{1}{2}\right)^{n+n'+1} (1+f_a)
 
 Here, \( n \) and \( n' \) are the number of generations from each descendant to a common ancestor \( a \), and \( f_a \) is the inbreeding coefficient of \( a \), assumed to be zero unless specified otherwise.
 
+The function `calculateRelatedness` computes the relatedness coefficient based on the number of generations back to common ancestors, whether the individuals are full siblings, and other parameters. The function can be used to calculate relatedness for various family structures, including full siblings, half siblings, and cousins.
+
 
 ```{r}
 library(BGmisc)
-# Example usage:
+
 # For full siblings, the relatedness coefficient is expected to be 0.5:
 calculateRelatedness(generations = 1, full = TRUE)
 # For half siblings, the relatedness coefficient is expected to be 0.25:
 calculateRelatedness(generations = 1, full = FALSE)
 ```
 
+The logic reflects the number and type of shared parents. For full siblings, both parents are shared (generational paths = 1 + 1), while for half siblings only one is (effectively halving the probability of sharing an allele). In otherwords, when `full = TRUE`, each sibling is one generation from the shared pair of parents, yielding `r=0.5`. When `full = FALSE`, they share only one parent, yielding `r=0.25`.
 
-These examples illustrate how relatedness changes based on whether the siblings share both parents (full) or only one (half). When `full = TRUE`, each sibling is one generation from the shared pair of parents, yielding `r=0.5`. When `full = FALSE`, they share only one parent, yielding `r=0.25`.
+# Inferring r from Observed Phenotypic Correlation
 
-# Inferring Relatedness Coefficient
+In some cases, you observe a phenotypic correlation (e.g., height, cognition) between two individuals and want to infer what value of r would be consistent with that correlation under a fixed ACE model
 
- The `inferRelatedness` function solves for the relatedness coefficient \( r \) implied by an observed phenotypic correlation under a fixed ACE variance decomposition. Specifically, it inverts the equation:
+The `inferRelatedness` function inverts the equation:
 
  \[
 \text{obsR} = r \cdot a^2 + \text{sharedC} \cdot c^2
  \]
 
-to obtain:
+to solve for:
 
  \[
  r = \frac{\text{obsR} - \text{sharedC} \cdot c^2}{a^2}
