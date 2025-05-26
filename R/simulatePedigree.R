@@ -387,8 +387,14 @@ simulatePedigree <- function(kpc = 3,
   }
 
   df_Fam <- buildBetweenGenerations(
-    df_Fam = df_Fam, Ngen = Ngen,
-    sizeGens = sizeGens, verbose = verbose, marR = marR, sexR = sexR, kpc = kpc, rd_kpc = rd_kpc
+    df_Fam = df_Fam,
+    Ngen = Ngen,
+    sizeGens = sizeGens,
+    verbose = verbose,
+    marR = marR,
+    sexR = sexR,
+    kpc = kpc,
+    rd_kpc = rd_kpc
   )
 
   df_Fam <- df_Fam[, 1:7]

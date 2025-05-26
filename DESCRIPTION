@@ -38,6 +38,7 @@ Imports:
 Suggests: 
     corrplot,
     ggpedigree,
+    EasyMx,
     dplyr,
     knitr,
     OpenMx,
