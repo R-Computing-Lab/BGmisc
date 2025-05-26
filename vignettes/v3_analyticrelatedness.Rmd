@@ -23,7 +23,7 @@ Understanding relatedness is key for interpreting familial resemblance, controll
 
 This vignette introduces the concept of relatedness from first principles and walks through how it is calculated from pedigree data. It begins with illustrative examples that explain expected relatedness values for familiar relationships using simplified functions. These examples clarify how shared ancestry translates into probabilistic expectations about genetic similarity.
 
-From there, the vignette introduces a general-purpose matrix-based method for computing pairwise relatedness across pedigrees. Using the ped2com() function from the BGmisc package, we demonstrate how to build additive genetic relationship matrices under both complete and incomplete parentage, and we evaluate how different assumptions affect the resulting estimates. The goal is to provide a clear, rigorous, and practical guide to computing relatedness in real data.
+From there, the vignette introduces a general-purpose matrix-based method for computing pairwise relatedness across pedigrees. Using the `ped2com()` function, we demonstrate how to build additive genetic relationship matrices under both complete and incomplete parentage, and we evaluate how different assumptions affect the resulting estimates. The goal is to provide a clear, rigorous, and practical guide to computing relatedness in real data.
 
 
 # Relatedness Coefficient
@@ -45,7 +45,7 @@ The function `calculateRelatedness` computes the relatedness coefficient based o
 
 ```{r}
 library(BGmisc)
-
+# Example usage:
 # For full siblings, the relatedness coefficient is expected to be 0.5:
 calculateRelatedness(generations = 1, full = TRUE)
 # For half siblings, the relatedness coefficient is expected to be 0.25:
@@ -111,13 +111,20 @@ We begin with the `hazard` dataset. First, we examine behavior under complete pe
 
 ```{r}
 library(BGmisc)
-
+library(ggpedigree)
 data(hazard)
 
-df <- hazard # this is the data that we will use for the example
-```
-```{r, echo=FALSE}
-plotPedigree(df)
+df <- hazard |> dplyr::rename(personID = ID) # this is the data that we will use for the example
+
+# Plot the pedigree to visualize relationships
+
+ggpedigree(df, config = list(
+  personID = "personID",
+  momID = "momID",
+  dadID = "dadID",
+  famID = "famID",
+  code_male = 0
+))
 ```
 
 We compute the additive genetic relationship matrix using both the classic and partial parent methods. Because the pedigree is complete, we expect no differences in the resulting matrices.
@@ -141,24 +148,15 @@ The following plots display the full additive matrices. These matrices should be
 This can be confirmed visually and numerically.
 
 ```{r}
-library(corrplot)
-
-
-corrplot(as.matrix(ped_add_classic_complete),
-  method = "color", type = "lower", col.lim = c(0, 1),
-  is.corr = FALSE, title = "Additive component - Classic method",
-  order = "hclust",
-  tl.pos = "l", tl.col = "black", tl.srt = 5, tl.cex = 0.2,
-  col = COL1("Reds", 100), mar = c(0, 0, 2, 0)
+library(ggpedigree)
+ggRelatednessMatrix(as.matrix(ped_add_classic_complete),
+  config =
+    list(title = "Additive component - Classic method")
 )
 
-
-corrplot(as.matrix(ped_add_partial_complete),
-  method = "color", type = "lower", col.lim = c(0, 1),
-  is.corr = FALSE, title = "Additive component - Partial parent method",
-  order = "hclust",
-  tl.pos = "l", tl.col = "black", tl.srt = 5, tl.cex = 0.2,
-  col = COL1("Reds", 100), mar = c(0, 0, 2, 0)
+ggRelatednessMatrix(as.matrix(ped_add_partial_complete),
+  config =
+    list(title = "Additive component - Partial parent method")
 )
 ```
 
@@ -166,6 +164,7 @@ corrplot(as.matrix(ped_add_partial_complete),
 To verify this, we subtract one matrix from the other and calculate RMSE. The difference should be numerically zero. Indeed, it is `r sqrt(mean((ped_add_classic_complete-ped_add_partial_complete)^2))`.
 
 ```{r,warning=FALSE}
+library(corrplot)
 corrplot((as.matrix(ped_add_classic_complete) - as.matrix(ped_add_partial_complete)),
   method = "color", type = "lower", col.lim = c(0, 1),
   is.corr = FALSE, order = "hclust",
@@ -569,20 +568,17 @@ the partial parent method outperforms the classic method in reconstructing the a
 To make this explicit, we calculate the RMSE difference between methods. A positive value means that the partial method had lower RMSE (i.e., better accuracy) than the classic method:
 
 ```{r}
-results <- results |>
-  as.data.frame() |>
-  mutate(
-    RMSE_diff_dad = RMSE_classic_dad - RMSE_partial_dad,
-    RMSE_diff_mom = RMSE_classic_mom - RMSE_partial_mom
-  )
+results <- as.data.frame(results)
+
+results$RMSE_diff_dad <- results$RMSE_classic_dad - results$RMSE_partial_dad
+results$RMSE_diff_mom <- results$RMSE_classic_mom - results$RMSE_partial_mom
 ```
 
 We can then summarize the pattern across families:
 
 
 ```{r}
-
-  summary(select(results,RMSE_diff_mom, RMSE_diff_dad))
+summary(dplyr::select(results, RMSE_diff_mom, RMSE_diff_dad))
 ```
 
 In all families, both `RMSE_diff_mom` and `RMSE_diff_dad` are positive—indicating that the classic method produces larger the errors relative to the partial method. This holds regardless of whether the missing parent is a mother or a father.
@@ -599,7 +595,7 @@ These proportions show how often the partial method produces a lower RMSE across
 ```{r}
 results |>
   as.data.frame() |>
-  select(
+  dplyr::select(
     -famIDs, -RMSE_diff_mom, -RMSE_diff_dad, -max_R_classic_dad,
     -max_R_partial_dad, -max_R_classic_mom, -max_R_partial_mom, -max_R_classic
   ) |>

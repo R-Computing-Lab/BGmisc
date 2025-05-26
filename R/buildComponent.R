@@ -88,7 +88,8 @@ ped2com <- function(ped, component,
       "generation",
       "additive",
       "common nuclear",
-      "mitochondrial"
+      "mitochondrial",
+      "mtdna", "mitochondria"
     )
   )
 
@@ -270,7 +271,7 @@ ped2com <- function(ped, component,
     }
   }
 
-  if (config$component == "mitochondrial") {
+  if (config$component %in% c("mitochondrial", "mtdna", "mitochondria")) {
     r@x <- rep(1, length(r@x))
     # Assign 1 to all nonzero elements for mitochondrial component
   }
@@ -499,7 +500,7 @@ initializeCheckpoint <- function(config = list(
   # Set parent values depending on the component type
   if (component %in% c("generation", "additive")) {
     parVal <- .5
-  } else if (component %in% c("common nuclear", "mitochondrial")) {
+  } else if (component %in% c("common nuclear", "mitochondrial", "mtdna", "mitochondria")) {
     parVal <- 1
   } else {
     stop("Don't know how to set parental value")

@@ -24,3 +24,5 @@ data-raw/logo_orange.png
 data-raw/Landers-Wilson-Garrison Tree.ged
 vignettes/understanding_relatedness.Rmd
 vignettes/rewritten_relatedness_vignette.Rmd
+vignettes/understanding_relatedness.Xmd
+vignettes/rewritten_relatedness_vignette.Xmd

@@ -170,18 +170,18 @@ checkParentIDs <- function(ped, verbose = FALSE, repair = FALSE,
     newIDbase <- if (is.numeric(ped$ID)) max(ped$ID, na.rm = TRUE) + 1 else paste0("phantom-", seq_len(nrow(ped)))
     # Initialize a dataframe to store new entries
     # needs to have the same columns as ped
-   # get the columns of ped
+    # get the columns of ped
     ped_columns <- names(ped)
     #   ID famID momID dadID        name sex affected
-   # 1  1     1    NA    NA Walder Frey   M        0
+    # 1  1     1    NA    NA Walder Frey   M        0
     # Create a new dataframe with the same columns as ped and same data types
     new_entries <- data.frame(matrix(ncol = length(ped_columns), nrow = 0))
     colnames(new_entries) <- ped_columns
-    new_entry_base <- new_entries[1,]
+    new_entry_base <- new_entries[1, ]
 
     added_counter <- 0
 
-     inferred_sex <- if (length(validation_results$male_var) > 0 && !is.na(validation_results$male_var)) validation_results$male_var else 1
+    inferred_sex <- if (length(validation_results$male_var) > 0 && !is.na(validation_results$male_var)) validation_results$male_var else 1
 
     # Add dads when missing
     for (idx in which(is.na(ped$dadID) & !is.na(ped$momID))) {
@@ -195,7 +195,7 @@ checkParentIDs <- function(ped, verbose = FALSE, repair = FALSE,
     }
 
     # Add moms when missing
-     inferred_sex <- if (length(validation_results$female_var) > 0 && !is.na(validation_results$female_var)) validation_results$female_var else 0
+    inferred_sex <- if (length(validation_results$female_var) > 0 && !is.na(validation_results$female_var)) validation_results$female_var else 0
     for (idx in which(!is.na(ped$dadID) & is.na(ped$momID))) {
       new_id <- if (is.numeric(ped$ID)) newIDbase + added_counter else paste0("phantom-mom-", ped$ID[idx])
       added_counter <- added_counter + 1
@@ -267,7 +267,7 @@ addRowlessParents <- function(ped, verbose, validation_results) {
     new_entries <- data.frame(matrix(ncol = length(ped_columns), nrow = 0))
     colnames(new_entries) <- ped_columns
 
-    new_entry_base <- new_entries[1,]
+    new_entry_base <- new_entries[1, ]
 
 
     for (pid in missing_parents) {
@@ -302,10 +302,10 @@ addRowlessParents <- function(ped, verbose, validation_results) {
 #' @param dadID The new parent's father ID (default is NA)
 #' @return A single-row dataframe for the new parent
 addParentRow <- function(template_row, new_id, sex,
-                            momID= NA,
-                            dadID= NA) {
+                         momID = NA,
+                         dadID = NA) {
   new_row <- template_row
-  new_row[] <- NA  # set all columns to NA
+  new_row[] <- NA # set all columns to NA
   new_row$ID <- new_id
   new_row$momID <- NA
   new_row$dadID <- NA

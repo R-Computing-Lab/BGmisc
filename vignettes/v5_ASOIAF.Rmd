@@ -189,13 +189,12 @@ plt <- ggPedigree(df_repaired,
     affected_shape = 4,
     ped_width = 14,
     include_tooltips = TRUE,
-    label_nudge_y   = -.25,
-    include_labels  = TRUE,
-    label_method    = "geom_text",
+    label_nudge_y = -.25,
+    include_labels = TRUE,
+    label_method = "geom_text",
     segment_self_color = "purple",
-  tooltip_cols = c("name")
+    tooltip_cols = c("name")
   )
-
 )
 
 plt +

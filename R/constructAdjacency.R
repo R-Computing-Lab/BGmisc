@@ -29,7 +29,7 @@
       sDad <- (as.numeric(x["dadID"]) == ped$dadID)
       sDad[is.na(sDad)] <- FALSE
       val <- sMom & sDad
-    } else if (component %in% c("mitochondrial")) {
+    } else if (component %in% c("mitochondrial", "mtdna", "mitochondria")) {
       # Code for 'mitochondrial' component
       val <- (as.numeric(x["ID"]) == ped$momID)
       val[is.na(val)] <- FALSE
@@ -88,7 +88,7 @@
       sDad <- (ped$dadID[i] == ped$dadID)
       sDad[is.na(sDad)] <- FALSE
       val <- sMom & sDad
-    } else if (component %in% c("mitochondrial")) {
+    } else if (component %in% c("mitochondrial", "mtdna", "mitochondria")) {
       val <- (mom_index == i)
     } else {
       stop("Unknown relatedness component requested")
@@ -176,7 +176,7 @@
 
     iss <- unlist(iss_list, use.names = FALSE)
     jss <- unlist(jss_list, use.names = FALSE)
-  } else if (component %in% c("mitochondrial")) {
+  } else if (component %in% c("mitochondrial", "mtdna", "mitochondria")) {
     mIDs <- stats::na.omit(data.frame(rID = ped$ID, cID = ped$momID))
     iss <- c(mIDs$rID)
     jss <- c(mIDs$cID)

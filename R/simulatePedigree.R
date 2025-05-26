@@ -6,7 +6,7 @@
 #' @inheritParams simulatePedigree
 #' @inheritParams createGenDataFrame
 #' @return A data frame representing the simulated pedigree, including columns for family ID (`fam`),
-buildWithinGenerations <- function(sizeGens, marR, sexR, Ngen) {
+buildWithinGenerations <- function(sizeGens, marR, sexR, Ngen, verbose = FALSE) {
   for (i in 1:Ngen) {
     idGen <- as.numeric(paste(100, i, 1:sizeGens[i], sep = ""))
     # idGen <- ifelse(i==1,
@@ -134,7 +134,7 @@ buildWithinGenerations <- function(sizeGens, marR, sexR, Ngen) {
 #'         as well as assigning unique couple IDs. It does not return a value explicitly.
 #'
 
-buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose, marR, sexR, kpc, rd_kpc) {
+buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose = FALSE, marR, sexR, kpc, rd_kpc) {
   df_Fam$ifparent <- FALSE
   df_Fam$ifson <- FALSE
   df_Fam$ifdau <- FALSE
@@ -378,7 +378,10 @@ simulatePedigree <- function(kpc = 3,
   }
   df_Fam <- buildWithinGenerations(
     sizeGens = sizeGens,
-    Ngen = Ngen, sexR = sexR, marR = marR
+    Ngen = Ngen,
+    sexR = sexR,
+    marR = marR,
+    verbose = verbose
   )
   if (verbose) {
     message(
@@ -399,6 +402,7 @@ simulatePedigree <- function(kpc = 3,
 
   df_Fam <- df_Fam[, 1:7]
   df_Fam <- df_Fam[!(is.na(df_Fam$pat) & is.na(df_Fam$mat) & is.na(df_Fam$spID)), ]
+
   colnames(df_Fam)[c(2, 4, 5)] <- c("ID", "dadID", "momID")
 
   # connect the detached members
