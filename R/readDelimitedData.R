@@ -10,7 +10,7 @@
 #'
 #' @return A data frame containing the parsed data.
 #'
-#' @import data.table stringi
+#' @import data.table stringr
 #' @examples
 #' # Example usage
 #' df <- loadDelimitedData(path = 'data.txt', var_nrows = 100, delim = '|', as.is = TRUE)
@@ -23,7 +23,7 @@ readDelimitedData <- function(path='Z:/Data/2024/Smith_Burt_143000_Demographic_E
                        as.is=TRUE){
 
 #  require(data.table) # for transpose() list function
-#require(stringi) # for stri_split_fixed() function
+
 
   temp_x <- readLines(
     path,
@@ -36,19 +36,19 @@ readDelimitedData <- function(path='Z:/Data/2024/Smith_Burt_143000_Demographic_E
     temp_x <- temp_x[-1]
 
     # fix df
-    df <- as.data.frame(data.table::transpose(stringi::stri_split_fixed(temp_x,
-                                                   '|',
-                                                   n=length(temp_n)))[],
+    df <- as.data.frame(data.table::transpose(stringr::str_split_fixed(temp_x,
+                                                                       fixed('|'),
+                                                                       n=length(temp_n))),
                         col.names=temp_n)
   } else if(delim == ','){
     temp_n <- strsplit(temp_n, ',')[[1]]
     temp_x <- temp_x[-1]
 
     # fix df
-    df <- as.data.frame(data.table::transpose(stringi::stri_split_fixed(temp_x,
-                                     ',',
-                                     n=length(temp_n))),
-                    col.names=temp_n)
+    df <- as.data.frame(data.table::transpose(stringr::str_split_fixed(temp_x,
+                                                                       fixed(','),
+                                                                       n=length(temp_n))),
+                        col.names=temp_n)
   } else {
     stop("Uncoded Delim selected")
   }

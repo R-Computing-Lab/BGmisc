@@ -25,6 +25,6 @@ This function calculates confidence intervals for correlation coefficients using
 }
 \examples{
 tbl <- data.frame(rho = c(0.5, 0.7, 0.3), se = c(0.1, 0.2, 0.05))
-calculate_CIs(tbl, rho_var = "rho", se_var = "se", method = "raykov")
+calculateCIs(tbl, rho_var = "rho", se_var = "se", method = "raykov")
 
 }
