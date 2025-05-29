@@ -28,7 +28,7 @@ test_that("readGedcom reads and parses a GEDCOM file correctly", {
   df <- readGedcom(temp_file, verbose = TRUE, skinny = FALSE)
   # note to self, the code is not reading in the 2nd person. and is also not reading in the birth date and place
   # Check that the data frame has the expected structure
-  expect_true("id" %in% colnames(df))
+  expect_true("personID" %in% colnames(df))
   expect_true("name_given" %in% colnames(df))
   expect_true("name_surn" %in% colnames(df))
   expect_true("sex" %in% colnames(df))
@@ -130,7 +130,7 @@ test_that("readGedcom handles skinny option correctly", {
 test_that("processParents adds momID and dadID correctly", {
   # Create a data frame for testing
   df_temp <- data.frame(
-    id = c("I1", "I2", "I3"),
+    personID = c("I1", "I2", "I3"),
     sex = c("M", "F", "M"),
     FAMS = c("@F1@", "@F1@", NA),
     FAMC = c(NA, NA, "@F1@"),
@@ -154,7 +154,7 @@ test_that("processParents adds momID and dadID correctly", {
 
   # Create a more complex data frame for testing
   df_temp <- data.frame(
-    id = c("I1", "I2", "I3", "I4", "I5"),
+    personID = c("I1", "I2", "I3", "I4", "I5"),
     sex = c("M", "F", "M", "F", "M"),
     FAMS = c("@F1@", "@F1@", "@F2@", "@F2@", "@F3@"),
     FAMC = c(NA, NA, "@F1@", "@F1@", "@F2@"),
@@ -225,6 +225,7 @@ test_that("readGedcom parses death event correctly", {
 
   row.names(df) <- NULL
   row.names(df_leg) <- NULL
+  df_leg <- dplyr::rename(df_leg, personID = id)
   expect_equal(df_leg, df)
 
   unlink(temp_file)

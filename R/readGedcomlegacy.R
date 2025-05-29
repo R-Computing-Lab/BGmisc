@@ -60,12 +60,12 @@
   # Checks
   if (!file.exists(file_path)) stop("File does not exist: ", file_path)
   if (verbose) {
-    print(paste("Reading file:", file_path))
+    message(paste("Reading file:", file_path))
   }
   file <- data.frame(X1 = readLines(file_path))
   file_length <- nrow(file)
   if (verbose) {
-    print(paste0("File is ", file_length, " lines long"))
+    message(paste0("File is ", file_length, " lines long"))
   }
 
   # Count the number of rows containing specific patterns
@@ -107,7 +107,7 @@
   names(df_temp) <- all_var_names
 
   if (verbose) {
-    print("Parsing GEDCOM file")
+    message("Parsing GEDCOM file")
   }
   for (i in 1:length(file[1][[1]])) {
     tmpv <- file[1][[1]][[i]]
@@ -292,7 +292,7 @@
   df_temp <- df_temp[!is.na(df_temp$id), ]
 
   if (verbose) {
-    print(paste0("File has ", nrow(df_temp), " people"))
+    message(paste0("File has ", nrow(df_temp), " people"))
   }
   if (nrow(df_temp) == 0) {
     warning("No people found in file")
@@ -304,7 +304,7 @@
 
   if (post_process) {
     if (verbose) {
-      print("Post-processing data frame")
+      message("Post-processing data frame")
     }
     # Remove the first row (empty)
     df_temp <- .postProcessGedcom.legacy(
@@ -335,7 +335,7 @@
   # Add mom and dad ids
   if (add_parents) {
     if (verbose) {
-      print("Processing parents")
+      message("Processing parents")
     }
     df_temp <- .processParents.legacy(df_temp, datasource = "gedcom")
   }
@@ -347,13 +347,13 @@
   if (remove_empty_cols) {
     # Remove empty columns
     if (verbose) {
-      print("Removing empty columns")
+      message("Removing empty columns")
     }
     df_temp <- df_temp[, colSums(is.na(df_temp)) < nrow(df_temp)]
   }
   if (skinny) {
     if (verbose) {
-      print("Slimming down the data frame")
+      message("Slimming down the data frame")
     }
     df_temp <- df_temp[, colSums(is.na(df_temp)) < nrow(df_temp)]
     df_temp$FAMC <- NULL
@@ -595,7 +595,7 @@
 #' @keywords internal
 .collapseNames.legacy <- function(verbose, df_temp) {
   if (verbose) {
-    print("Combining Duplicate Columns")
+    message("Combining Duplicate Columns")
   }
   # need to check if any values aren't NA in name_given_pieces and name_surn_pieces
   # Combine `name_given` and `name_given_pieces`

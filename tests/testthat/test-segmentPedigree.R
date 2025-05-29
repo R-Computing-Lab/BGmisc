@@ -1,11 +1,3 @@
-test_that("hazard data loads", {
-  expect_silent(data(hazard))
-})
-
-test_that("inbreeding data loads", {
-  expect_silent(data(inbreeding))
-})
-
 test_that("ped2fam gets the right families for hazard data", {
   data(hazard)
   ds <- ped2fam(hazard, famID = "newFamID")

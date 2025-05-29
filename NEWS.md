@@ -1,3 +1,11 @@
+# BGmisc 1.4.1
+## In progress
+* replaced print with message in all functions
+* Exposed several internal functions to the user
+* refactored addPhantomParents to be more efficient
+* add mtdna and mitochondria as aliases for mitochondrial
+* reorganized unit tests
+
 # BGmisc 1.4.0
 * revived checkParents function to check for handling phantom parents and missing parents
 * added tests for checkParents function

@@ -1,7 +1,11 @@
 {
-    "folders": [
-        {
-            "path": "."
-        }
-    ]
+	"folders": [
+		{
+			"path": "../BGmisc_main"
+		},
+		{
+			"path": "../../2023/kinship2"
+		}
+	],
+	"settings": {}
 }

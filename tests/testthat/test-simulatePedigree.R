@@ -25,5 +25,5 @@ test_that("simulatePedigree verbose prints updates", {
   sexR <- .50
   marR <- .7
 
-  expect_output(simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR, verbose = TRUE), regexp = "Let's build the connection within each generation first")
+  expect_message(simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR, verbose = TRUE), regexp = "Let's build the connection within each generation first")
 })
