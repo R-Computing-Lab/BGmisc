@@ -4,7 +4,14 @@
 \alias{calculateCIs}
 \title{Calculate Confidence Intervals for Correlation Coefficients}
 \usage{
-calculateCIs(tbl, rho_var, se_var, method = "raykov", conf_level = 0.95)
+calculateCIs(
+  tbl,
+  rho_var,
+  se_var,
+  doubleentered = FALSE,
+  method = "raykov",
+  conf_level = 0.95
+)
 }
 \arguments{
 \item{tbl}{A data frame or tibble containing the correlation coefficient and standard error variables.}
@@ -13,12 +20,15 @@ calculateCIs(tbl, rho_var, se_var, method = "raykov", conf_level = 0.95)
 
 \item{se_var}{The name of the column in \code{tbl} that contains the standard errors.}
 
+\item{doubleentered}{Logical. If \code{TRUE}, the function assumes that the correlation coefficients are double-entered, which adjusts the standard errors accordingly. Default is \code{FALSE}.}
+
 \item{method}{The method to use for calculating the confidence intervals. Options are "raykov", "fisherz", "doubleenteredconserv", or "doubleentered".}
 
 \item{conf_level}{The confidence level for the intervals. Default is 0.95.}
 }
 \value{
 A modified version of \code{tbl} with additional columns for the confidence intervals and related statistics.
+Everything uses adjusted standard errors, including confidence intervals, z-tests, and p-values.
 }
 \description{
 This function calculates confidence intervals for correlation coefficients using different methods.
