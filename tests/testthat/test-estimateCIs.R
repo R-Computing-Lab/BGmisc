@@ -75,12 +75,9 @@ test_that("vectorized design effect column use", {
 
   expect_true("se_sez_adjusted" %in% colnames(result))
   expect_equal(nrow(result), 2)
-  se_sez_adjusted_test <-  result$se_sez_adjusted[1]
-  sez_adjusted_test  <-   result$se_sez[1]
-  expect_gt(se_sez_adjusted_test, sez_adjusted_test)
-  se_sez_adjusted_test <-  result$se_sez_adjusted[2]
-  sez_adjusted_test  <-   result$se_sez[2]
-  expect_gt(se_sez_adjusted_test, sez_adjusted_test)
+
+  expect_gt( result$se_sez_adjusted[1], result$se_sez[1])
+  expect_gt(result$se_sez_adjusted[2], result$se_sez[2])
 })
 
 test_that("scalar design effect override works", {
