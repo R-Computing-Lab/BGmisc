@@ -31,6 +31,14 @@ calculateCIs(
 
 \item{adjust_base}{A numeric value to adjust the standard errors. Default is 1.}
 
+\item{design_effect_m}{A numeric value for the design effect related to the mean. Default is \code{NULL}.}
+
+\item{design_effect_rho}{A numeric value for the design effect related to the correlation. Default is \code{NULL}.}
+
+\item{design_effect_m_col}{A character string specifying the column name for the design effect related to the mean. Default is \code{NULL}.}
+
+\item{design_effect_rho_col}{A character string specifying the column name for the design effect related to the correlation. Default is \code{NULL}.}
+
 \item{conf_level}{The confidence level for the intervals. Default is 0.95.}
 }
 \value{

@@ -9,6 +9,10 @@
 #' @param method The method to use for calculating the confidence intervals. Options are "raykov", "fisherz", "doubleenteredconserv", or "doubleentered".
 #' @param conf_level The confidence level for the intervals. Default is 0.95.
 #' @param adjust_base A numeric value to adjust the standard errors. Default is 1.
+#' @param design_effect_m A numeric value for the design effect related to the mean. Default is \code{NULL}.
+#' @param design_effect_rho A numeric value for the design effect related to the correlation. Default is \code{NULL}.
+#' @param design_effect_m_col A character string specifying the column name for the design effect related to the mean. Default is \code{NULL}.
+#' @param design_effect_rho_col A character string specifying the column name for the design effect related to the correlation. Default is \code{NULL}.
 #' @return A modified version of \code{tbl} with additional columns for the confidence intervals and related statistics.
 #' Everything uses adjusted standard errors, including confidence intervals, z-tests, and p-values.
 #' @examples

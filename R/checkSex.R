@@ -271,6 +271,7 @@ checkParentSex <- function(ped, parent_col, sex_col = "sex", verbose = FALSE) {
 #'
 #' @return The modal value of the vector. If the vector is empty or contains only NA values, returns NA.
 #' @keywords internal
+#' @importFrom stats na.omit
 .getModalValue <- function(x) {
   if (length(stats::na.omit(x)) == 0) {
     return(NA)

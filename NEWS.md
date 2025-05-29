@@ -5,6 +5,8 @@
 * refactored addPhantomParents to be more efficient
 * add mtdna and mitochondria as aliases for mitochondrial
 * reorganized unit tests
+* created function to calculate confidence intervals for relatedness coefficients
+* added tests for calculateCI
 
 # BGmisc 1.4.0
 * revived checkParents function to check for handling phantom parents and missing parents
