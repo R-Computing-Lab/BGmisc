@@ -5,4 +5,3 @@ test_that("hazard data loads", {
 test_that("inbreeding data loads", {
   expect_silent(data(inbreeding))
 })
-
