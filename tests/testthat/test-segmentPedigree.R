@@ -1,4 +1,3 @@
-
 test_that("ped2fam gets the right families for hazard data", {
   data(hazard)
   ds <- ped2fam(hazard, famID = "newFamID")
