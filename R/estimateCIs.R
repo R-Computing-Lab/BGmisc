@@ -30,7 +30,7 @@ calculateCIs <- function(tbl,
   # Load necessary packages
 
   # Get the name of the rho column regardless of input type
- if(mode(rho_var) != "character") {
+  if (mode(rho_var) != "character") {
     stop("method must be a character string")
   }
   # Convert the rho_var and se_var into column names
@@ -46,8 +46,8 @@ calculateCIs <- function(tbl,
   zp1tail_col_name <- paste0(rho_col_name, "_zp1tail")
   zp2tail_col_name <- paste0(rho_col_name, "_zp2tail")
   sez_col_name <- paste0(se_col_name, "_sez")
-  se_adjusted_col_name <- paste0(se_col_name,"_se_adjusted")
-  sez_adjusted_col_name <- paste0(se_col_name,"_sez_adjusted")
+  se_adjusted_col_name <- paste0(se_col_name, "_se_adjusted")
+  sez_adjusted_col_name <- paste0(se_col_name, "_sez_adjusted")
   waldp1tail_col_name <- paste0(rho_col_name, "_waldp1tail")
   waldp2tail_col_name <- paste0(rho_col_name, "_waldp2tail")
 
@@ -61,7 +61,7 @@ calculateCIs <- function(tbl,
     m_vals <- tbl_out[[design_effect_m_col]]
     rho_vals <- tbl_out[[design_effect_rho_col]]
     design_effect <- sqrt(1 + (m_vals - 1) * rho_vals)
-  } else if (doubleentered ==TRUE && is.null(design_effect_m) && is.null(design_effect_rho)) {
+  } else if (doubleentered == TRUE && is.null(design_effect_m) && is.null(design_effect_rho)) {
     design_effect <- rep(sqrt(1 + (2 - 1) * 1), n_rows)
   } else if (!is.null(design_effect_m) && !is.null(design_effect_rho)) {
     design_effect <- rep(sqrt(1 + (design_effect_m - 1) * design_effect_rho), n_rows)
@@ -69,7 +69,7 @@ calculateCIs <- function(tbl,
     design_effect <- rep(adjust_base, n_rows)
   }
 
-  z_crit <- qnorm((1 + conf_level)/2)
+  z_crit <- stats::qnorm((1 + conf_level) / 2)
 
   if (method == "raykov") {
     # Apply Fisher's r to z transform
@@ -87,11 +87,9 @@ calculateCIs <- function(tbl,
     ztest_vals <- tbl_out[[z_col_name]] / tbl_out[[sez_adjusted_col_name]]
 
     tbl_out[[ztest_col_name]] <- ztest_vals
-    tbl_out[[zp1tail_col_name]] <- pnorm(q = abs(ztest_vals), lower.tail = FALSE)
+    tbl_out[[zp1tail_col_name]] <- stats::pnorm(q = abs(ztest_vals), lower.tail = FALSE)
     tbl_out[[zp2tail_col_name]] <- 2 * tbl_out[[zp1tail_col_name]]
-
   } else {
-
     tbl_out[[se_adjusted_col_name]] <- tbl_out[[se_col_name]] * design_effect
 
     # Compute confidence intervals
@@ -100,7 +98,7 @@ calculateCIs <- function(tbl,
   }
   # Compute Wald statistics
   tbl_out[[wald_col_name]] <- tbl_out[[rho_col_name]] / tbl_out[[se_adjusted_col_name]]
-  tbl_out[[waldp1tail_col_name]] <- pnorm(q = abs(tbl_out[[wald_col_name]]), lower.tail = FALSE)
+  tbl_out[[waldp1tail_col_name]] <- stats::pnorm(q = abs(tbl_out[[wald_col_name]]), lower.tail = FALSE)
   tbl_out[[waldp2tail_col_name]] <- 2 * tbl_out[[waldp1tail_col_name]]
 
 
@@ -116,6 +114,10 @@ calculateCIs <- function(tbl,
 #' @details
 #' Credit to the psych package for the Fisher's r to z transformation.
 
-.fisherz <-  function(rho)  {0.5*log((1+rho)/(1-rho)) }   #converts r to z
+.fisherz <- function(rho) {
+  0.5 * log((1 + rho) / (1 - rho))
+} # converts r to z
 
-.fisherz2r <- function(z) {(exp(2*z)-1)/(1+exp(2*z)) }   #converts back again
+.fisherz2r <- function(z) {
+  (exp(2 * z) - 1) / (1 + exp(2 * z))
+} # converts back again
