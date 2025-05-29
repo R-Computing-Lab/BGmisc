@@ -37,6 +37,8 @@ Imports:
     methods
 Suggests: 
     corrplot,
+    ggpedigree,
+    discord,
     dplyr,
     EasyMx,
     knitr,

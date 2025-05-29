@@ -11,7 +11,6 @@
 #' @param adjust_base A numeric value to adjust the standard errors. Default is 1.
 #' @return A modified version of \code{tbl} with additional columns for the confidence intervals and related statistics.
 #' Everything uses adjusted standard errors, including confidence intervals, z-tests, and p-values.
-
 #' @examples
 #' tbl <- data.frame(rho = c(0.5, 0.7, 0.3), se = c(0.1, 0.2, 0.05))
 #' calculateCIs(tbl, rho_var = "rho", se_var = "se", method = "raykov")
@@ -23,6 +22,10 @@ calculateCIs <- function(tbl,
                          doubleentered = FALSE,
                          method = "raykov",
                          adjust_base = 1,
+                         design_effect_m = NULL,
+                         design_effect_rho = NULL,
+                         design_effect_m_col = NULL,
+                         design_effect_rho_col = NULL,
                          conf_level = 0.95) {
   # Load necessary packages
 
@@ -31,8 +34,8 @@ calculateCIs <- function(tbl,
     stop("method must be a character string")
   }
   # Convert the rho_var and se_var into column names
-  rho_col_name <- if (is_string(rho_var)) rho_var else deparse(substitute(rho_var))
-  se_col_name <- if (is_string(se_var)) se_var else deparse(substitute(se_var))
+  rho_col_name <- if (rlang::is_string(rho_var)) rho_var else rlang::deparse(substitute(rho_var))
+  se_col_name <- if (rlang::is_string(se_var)) se_var else rlang::deparse(substitute(se_var))
 
   # Construct new column names using paste0
   plusse_col_name <- paste0(rho_col_name, "_plusse")
@@ -50,25 +53,35 @@ calculateCIs <- function(tbl,
 
   # Create a copy of tbl to avoid modifying the original data frame
   tbl_out <- tbl
+  n_rows <- nrow(tbl_out)
 
-  if(doubleentered==TRUE){
-    adjust <- sqrt(2)
-  } else if(doubleentered==FALSE){
-    adjust <- adjust_base
+
+  # Resolve design effect vector
+  if (!is.null(design_effect_m_col) && !is.null(design_effect_rho_col)) {
+    m_vals <- tbl_out[[design_effect_m_col]]
+    rho_vals <- tbl_out[[design_effect_rho_col]]
+    design_effect <- sqrt(1 + (m_vals - 1) * rho_vals)
+  } else if (doubleentered ==TRUE && is.null(design_effect_m) && is.null(design_effect_rho)) {
+    design_effect <- rep(sqrt(1 + (2 - 1) * 1), n_rows)
+  } else if (!is.null(design_effect_m) && !is.null(design_effect_rho)) {
+    design_effect <- rep(sqrt(1 + (design_effect_m - 1) * design_effect_rho), n_rows)
+  } else {
+    design_effect <- rep(adjust_base, n_rows)
   }
-  ci_b <- adjust * qnorm((1 + conf_level)/2)
+
+  z_crit <- qnorm((1 + conf_level)/2)
 
   if (method == "raykov") {
     # Apply Fisher's r to z transform
-    z_vals <- psych::fisherz(tbl_out[[rho_col_name]])
+    z_vals <- .fisherz(tbl_out[[rho_col_name]])
     sez_vals <- tbl_out[[se_col_name]] / (1 - tbl_out[[rho_col_name]]^2)
 
     tbl_out[[z_col_name]] <- z_vals
     tbl_out[[sez_col_name]] <- sez_vals
-    tbl_out[[se_adjusted_col_name]] <- tbl_out[[se_col_name]] * adjust
+    tbl_out[[se_adjusted_col_name]] <- tbl_out[[se_col_name]] * design_effect
     tbl_out[[sez_adjusted_col_name]] <- tbl_out[[se_adjusted_col_name]] / (1 - tbl_out[[rho_col_name]]^2)
-    tbl_out[[plusse_col_name]] <- psych::fisherz2r(z_vals + ci_b * sez_vals)
-    tbl_out[[minusse_col_name]] <- psych::fisherz2r(z_vals - ci_b * sez_vals)
+    tbl_out[[plusse_col_name]] <- .fisherz2r(z_vals + z_crit * tbl_out[[sez_adjusted_col_name]])
+    tbl_out[[minusse_col_name]] <- .fisherz2r(z_vals - z_crit * tbl_out[[sez_adjusted_col_name]])
 
     # H0: r = 0. Compute z-test and p-values
     ztest_vals <- tbl_out[[z_col_name]] / tbl_out[[sez_adjusted_col_name]]
@@ -78,16 +91,12 @@ calculateCIs <- function(tbl,
     tbl_out[[zp2tail_col_name]] <- 2 * tbl_out[[zp1tail_col_name]]
 
   } else {
-    # Set the multiplier for CI calculations based on the method
-#    ci_multi <- switch(method,
-#                       "fisherz" = 1.96,  # 95% CI, can generalize to other levels
-#                       "doubleenteredconserv" = sqrt(2) * 1.96,
-#                       "doubleentered" = sqrt(2),
-#                       stop("method must be one of 'fisherz', 'doubleenteredconserv', or 'doubleentered'"))
+
+    tbl_out[[se_adjusted_col_name]] <- tbl_out[[se_col_name]] * design_effect
 
     # Compute confidence intervals
-    tbl_out[[plusse_col_name]] <- tbl_out[[rho_col_name]] + ci_b * tbl_out[[se_col_name]]
-    tbl_out[[minusse_col_name]] <- tbl_out[[rho_col_name]] - ci_b * tbl_out[[se_col_name]]
+    tbl_out[[plusse_col_name]] <- tbl_out[[rho_col_name]] + z_crit * tbl_out[[se_adjusted_col_name]]
+    tbl_out[[minusse_col_name]] <- tbl_out[[rho_col_name]] - z_crit * tbl_out[[se_adjusted_col_name]]
   }
   # Compute Wald statistics
   tbl_out[[wald_col_name]] <- tbl_out[[rho_col_name]] / tbl_out[[se_adjusted_col_name]]
@@ -97,4 +106,16 @@ calculateCIs <- function(tbl,
 
   return(tbl_out)
 }
+#' Fisher's r to z transformation and back
+#'
+#' These functions convert correlation coefficients (r) to Fisher's z-scores and back.
+#' @param rho A numeric vector of correlation coefficients.
+#' @param z A numeric vector of Fisher's z-scores.
+#' @return A numeric vector of transformed values.
+#' @keywords internal
+#' @details
+#' Credit to the psych package for the Fisher's r to z transformation.
 
+.fisherz <-  function(rho)  {0.5*log((1+rho)/(1-rho)) }   #converts r to z
+
+.fisherz2r <- function(z) {(exp(2*z)-1)/(1+exp(2*z)) }   #converts back again
