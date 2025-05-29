@@ -12,16 +12,16 @@
 standardizeColnames <- function(df, verbose = FALSE) {
   # Internal mapping of standardized names to possible variants
   mapping <- list(
-    "famID" = "^(?:fam(?:ily)?[\\.\\-_]?(?:id)?)",
-    "ID" = "^(?:i(?:d$|ndiv(?:idual)?)|p(?:erson)?[\\.\\-_]?id)",
-    "gen" = "^(?:gen(?:s|eration)?)",
-    "dadID" = "^(?:d(?:ad)?id|paid|fatherid|pid[\\.\\-_]?fath[er]*|sire)",
-    "patID" = "^(?:dat[\\.\\-_]?id|pat[\\.\\-_]?id|paternal[\\.\\-_]?(?:id)?)",
-    "momID" = "^(?:m(?:om|a|other)?[\\.\\-_]?id|pid[\\.\\-_]?moth[er]*|dame)",
-    "matID" = "^(?:mat[\\.\\-_]?id|maternal[\\.\\-_]?(?:id)?)",
-    "spID" = "^(?:s(?:pt)?id|spouse[\\.\\-_]?(?:id)?|partner[\\.\\-_]?(?:id)?|husb(?:and)?[\\.\\-_]?id|wife[\\.\\-_]?(?:id)?|pid[\\.\\-_]?spouse1?)",
-    "twinID" = "^(?:twin[\\.\\-_]?(?:id)?)",
-    "sex" = "^(?:sex|gender|female|m(?:a(?:le|n)|en)|wom[ae]n)"
+    "famID" = "^(?:fam(?:ily)?[\\.\\-_]?(?:id)?)$",
+    "ID" = "^(?:i(?:d$|ndiv(?:idual)?)|p(?:erson)?[\\.\\-_]?id)$",
+    "gen" = "^(?:gen(?:s|erations?)?)$",
+    "dadID" = "^(?:d(?:ad)?id|paid|fatherid|pid[\\.\\-_]?fath[er]*|sire(?:id)?)$",
+    "patID" = "^(?:dat[\\.\\-_]?id|pat[\\.\\-_]?id|paternal[\\.\\-_]?(?:id)?)$",
+    "momID" = "^(?:m(?:om|a|other)?[\\.\\-_]?id|pid[\\.\\-_]?moth[er]*|dame(?:id)?)$",
+    "matID" = "^(?:mat[\\.\\-_]?id|maternal[\\.\\-_]?(?:id)?)$",
+    "spID" = "^(?:s(?:pt)?id|spouse[\\.\\-_]?(?:id)?|partner[\\.\\-_]?(?:id)?|husb(?:and)?[\\.\\-_]?id|wife[\\.\\-_]?(?:id)?|pid[\\.\\-_]?spouse1?)$",
+    "twinID" = "^(?:twi?n[\\.\\-_]?(?:id)?)$",
+    "sex" = "^(?:sex|gender|female|m(?:a(?:le|n)|en)|wom[ae]n)$"
   )
   if (verbose) {
     message("Standardizing column names...")
