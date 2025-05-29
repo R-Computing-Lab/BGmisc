@@ -37,7 +37,7 @@ calculateCIs <- function(tbl,
 
   # Get the name of the rho column regardless of input type
   if (mode(rho_var) != "character") {
-    stop("method must be a character string")
+    stop("rho_var must be a character string")
   }
   # Convert the rho_var and se_var into column names
   rho_col_name <- if (is.character(rho_var) && length(rho_var) == 1) {
