@@ -1,15 +1,14 @@
 pandoc: 3.1.11
-pkgdown: 2.1.2
+pkgdown: 2.1.3
 pkgdown_sha: ~
 articles:
-  analyticrelatedness: analyticrelatedness.html
-  ASOIAF: ASOIAF.html
-  modelingvariancecomponents: modelingvariancecomponents.html
-  network: network.html
-  partial: partial.html
-  pedigree: pedigree.html
-  validation: validation.html
-last_built: 2025-05-20T20:23Z
+  v0_network: v0_network.html
+  v1_modelingvariancecomponents: v1_modelingvariancecomponents.html
+  v2_pedigree: v2_pedigree.html
+  v3_analyticrelatedness: v3_analyticrelatedness.html
+  v4_validation: v4_validation.html
+  v5_ASOIAF: v5_ASOIAF.html
+last_built: 2025-05-29T16:31Z
 urls:
   reference: https://r-computing-lab.github.io/BGmisc/reference
   article: https://r-computing-lab.github.io/BGmisc/articles
