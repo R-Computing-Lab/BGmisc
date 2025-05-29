@@ -17,6 +17,7 @@ options(citation.bibtex.max = 0)
 # BGmisc
 
 <!-- badges: start -->
+<a href="https://r-computing-lab.github.io/BGmisc/"><img src="man/figures/hex.png" align="right" height="139" alt="discord website" /></a>
 [![status](https://joss.theoj.org/papers/ee3a025be4f61584f977a7657d936187/status.svg)](https://joss.theoj.org/papers/10.21105/joss.06203) </br>
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![R package version](https://www.r-pkg.org/badges/version/BGmisc)](https://cran.r-project.org/package=BGmisc)

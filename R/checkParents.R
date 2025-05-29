@@ -13,6 +13,7 @@
 #' @param addphantoms A logical flag indicating whether to add phantom parents for missing parent IDs.
 #' @param parentswithoutrow A logical flag indicating whether to add parents without a row in the pedigree.
 #'
+#'
 #' @return Depending on the value of `repair`, either a list containing validation results or a repaired dataframe is returned.
 #' @examples
 #' \dontrun{
@@ -23,12 +24,9 @@
 checkParentIDs <- function(ped, verbose = FALSE, repair = FALSE,
                            repairsex = repair,
                            addphantoms = repair,
-                           parentswithoutrow = repair
-                           ) {
+                           parentswithoutrow = repair) {
   # Standardize column names in the input dataframe
-  ped_og <- ped
-  ped <- standardizeColnames(ped)
-
+  ped <- standardizeColnames(ped, verbose = verbose)
 
   # Initialize a list to store validation results
   validation_results <- list()
@@ -36,6 +34,7 @@ checkParentIDs <- function(ped, verbose = FALSE, repair = FALSE,
   if (verbose) {
     cat("Step 1: Checking for single parents...\n")
   }
+
 
   # Identify missing fathers and mothers
   missing_fathers <- ped$ID[which(is.na(ped$dadID) & !is.na(ped$momID))]
@@ -74,83 +73,33 @@ checkParentIDs <- function(ped, verbose = FALSE, repair = FALSE,
       cat("All parents are listed in the pedigree.\n")
     }
   }
-  validation_results$missing_parents <- validation_results$single_parents&length(rowless_parents) > 0
+  validation_results$missing_parents <- validation_results$single_parents & length(rowless_parents) > 0
 
   if (verbose) {
     cat("Step 2: Determining the if moms are the same sex and dads are same sex\n")
   }
   # Determine modal sex values for moms and dads
-  mom_sexes <- ped$sex[ped$ID %in% ped$momID]
-  dad_sexes <- ped$sex[ped$ID %in% ped$dadID]
+  mom_results <- checkParentSex(ped, parent_col = "momID", verbose = verbose)
+  dad_results <- checkParentSex(ped, parent_col = "dadID", verbose = verbose)
 
-  # Determine the most frequent sex for moms and dads
-  most_frequent_sex_mom <- names(sort(table(mom_sexes), decreasing = TRUE))[1]
-  most_frequent_sex_dad <- names(sort(table(dad_sexes), decreasing = TRUE))[1]
-
-  # are all moms/dads the same sex?
-  validation_results$mom_sex <- unique(mom_sexes)
-  validation_results$dad_sex <- unique(dad_sexes)
-
-  # Store the most frequent sex for moms and dads
-  if (is.numeric(ped$sex)) {
-    validation_results$female_var <- as.numeric(most_frequent_sex_mom)
-    validation_results$male_var <- as.numeric(most_frequent_sex_dad)
-  } else if (is.character(ped$sex) | is.factor(ped$sex)) {
-    validation_results$female_var <- most_frequent_sex_mom
-    validation_results$male_var <- most_frequent_sex_dad
-  } else {
-    print("You should never see this. If you do, then you have a problem with the data type of the sex variable")
-  }
-
-  # verbose
-  if (length(validation_results$mom_sex) == 1) {
-    if (verbose) {
-      cat(paste0(
-        "All moms are '",
-        validation_results$female_var,
-        "'.\n"
-      ))
-    }
-    validation_results$female_moms <- TRUE
-  } else {
-    validation_results$female_moms <- FALSE
-  }
-
-  if (length(validation_results$dad_sex) == 1) {
-    if (verbose) {
-      cat(paste0(
-        "All dads are '",
-        validation_results$male_var,
-        "'.\n"
-      ))
-    }
-    validation_results$male_dads <- TRUE
-  } else {
-    validation_results$male_dads <- FALSE
-  }
-  # Check for inconsistent sex
-  wrong_sex_moms <- ped$ID[which(ped$sex[ped$ID %in% ped$momID] != validation_results$female_var)]
-  wrong_sex_dads <- ped$ID[which(ped$sex[ped$ID %in% ped$dadID] != validation_results$male_var)]
-
-  validation_results$wrong_sex_moms <- wrong_sex_moms
-  validation_results$wrong_sex_dads <- wrong_sex_dads
-
-  if (verbose) {
-    if (length(wrong_sex_moms) > 0) {
-      cat("Some individuals listed as moms are not coded as", validation_results$female_var, "\n")
-    }
-    if (length(wrong_sex_dads) > 0) {
-      cat("Some individuals listed as dads are not coded as", validation_results$male_var, "\n")
-    }
-  }
+  validation_results$mom_sex <- mom_results$unique_sexes
+  validation_results$dad_sex <- dad_results$unique_sexes
+  validation_results$female_var <- mom_results$modal_sex
+  validation_results$male_var <- dad_results$modal_sex
+  validation_results$wrong_sex_moms <- mom_results$inconsistent_parents
+  validation_results$wrong_sex_dads <- dad_results$inconsistent_parents
+  validation_results$female_moms <- mom_results$all_same_sex
+  validation_results$male_dads <- dad_results$all_same_sex
 
   # Are any parents in both momID and dadID?
   momdad <- intersect(ped$dadID, ped$momID)
-  if (!is.na(momdad)&&length(momdad) > 0) {
+  if (length(momdad) > 0 && !is.na(momdad)) {
     validation_results$parents_in_both <- momdad
     if (verbose) {
-      cat(paste("Some individuals appear in both momID and dadID roles.\n",
-                "These individuals are:\n"))
+      cat(paste(
+        "Some individuals appear in both momID and dadID roles.\n",
+        "These individuals are:\n"
+      ))
       print(momdad)
     }
   }
@@ -162,12 +111,12 @@ checkParentIDs <- function(ped, verbose = FALSE, repair = FALSE,
       print(validation_results)
     }
     return(validation_results)
-  } else{
-  if (verbose) {
-    cat("Validation Results:\n")
-    print(validation_results)
-    cat("Step 3: Attempting to repair missing parents...\n")
-  }
+  } else {
+    if (verbose) {
+      cat("Validation Results:\n")
+      print(validation_results)
+      cat("Step 3: Attempting to repair missing parents...\n")
+    }
 
     cat("REPAIR IN EARLY ALPHA\n")
     # Initialize a list to track changes made during repair
@@ -177,32 +126,47 @@ checkParentIDs <- function(ped, verbose = FALSE, repair = FALSE,
       phantom_dads_added = c(),
       phantom_moms_added = c()
     )
-    if(repairsex){
-    # Fix sex of existing parents if wrong
-    mom_indices <- match(ped$momID, ped$ID)
-    dad_indices <- match(ped$dadID, ped$ID)
+    if (repairsex) {
+      # Fix sex of existing parents if wrong
+      mom_indices <- match(ped$momID, ped$ID)
+      dad_indices <- match(ped$dadID, ped$ID)
 
 
 
-    if (!is.na(validation_results$female_var)) {
-      corrected_moms <- ped$ID[mom_indices[!is.na(mom_indices)]]
-      ped$sex[mom_indices[!is.na(mom_indices)]] <- validation_results$female_var
-      changes$corrected_mom_sex <- corrected_moms
-      if (verbose && length(corrected_moms) > 0) {
-        cat("Corrected sex of moms for:", paste(corrected_moms, collapse = ", "), "\n")
+      if (length(validation_results$female_var) > 0 && !is.na(validation_results$female_var)) {
+        corrected_moms <- ped$ID[mom_indices[!is.na(mom_indices)]]
+        ped$sex[mom_indices[!is.na(mom_indices)]] <- validation_results$female_var
+        changes$corrected_mom_sex <- corrected_moms
+        if (verbose && length(corrected_moms) > 0) {
+          cat("Corrected sex of moms for:", paste(corrected_moms, collapse = ", "), "\n")
+        }
+      } else {
+        corrected_moms <- ped$ID[mom_indices[!is.na(mom_indices)]]
+        ped$sex[mom_indices[!is.na(mom_indices)]] <- 0
+
+        changes$corrected_mom_sex <- corrected_moms
+        if (verbose && length(corrected_moms) > 0) {
+          cat("Corrected sex of moms for:", paste(corrected_moms, collapse = ", "), "\n")
+        }
+      }
+      if (length(validation_results$male_var) > 0 && !is.na(validation_results$male_var)) {
+        corrected_dads <- ped$ID[dad_indices[!is.na(dad_indices)]]
+        ped$sex[dad_indices[!is.na(dad_indices)]] <- validation_results$male_var
+        changes$corrected_dad_sex <- corrected_dads
+        if (verbose && length(corrected_dads) > 0) {
+          cat("Corrected sex of dads for:", paste(corrected_dads, collapse = ", "), "\n")
+        }
+      } else {
+        corrected_dads <- ped$ID[dad_indices[!is.na(dad_indices)]]
+        ped$sex[dad_indices[!is.na(dad_indices)]] <- 1
+        changes$corrected_dad_sex <- corrected_dads
+        if (verbose && length(corrected_dads) > 0) {
+          cat("Corrected sex of dads for:", paste(corrected_dads, collapse = ", "), "\n")
+        }
       }
     }
-    if (!is.na(validation_results$male_var)) {
-      corrected_dads <- ped$ID[dad_indices[!is.na(dad_indices)]]
-      ped$sex[dad_indices[!is.na(dad_indices)]] <- validation_results$male_var
-      changes$corrected_dad_sex <- corrected_dads
-      if (verbose && length(corrected_dads) > 0) {
-        cat("Corrected sex of dads for:", paste(corrected_dads, collapse = ", "), "\n")
-      }
-    }
-    }
-}
-if (addphantoms){
+  }
+  if (addphantoms) {
     # Generate new IDs
     newIDbase <- if (is.numeric(ped$ID)) max(ped$ID, na.rm = TRUE) + 1 else paste0("phantom-", seq_len(nrow(ped)))
     new_entries <- data.frame()
@@ -217,7 +181,7 @@ if (addphantoms){
       new_entry$ID <- new_id
       new_entry$dadID <- NA
       new_entry$momID <- NA
-      new_entry$sex <- validation_results$male_var
+      new_entry$sex <- if (length(validation_results$male_var) > 0 && !is.na(validation_results$male_var)) validation_results$male_var else 1
       new_entries <- rbind(new_entries, new_entry)
     }
 
@@ -230,7 +194,7 @@ if (addphantoms){
       new_entry$ID <- new_id
       new_entry$dadID <- NA
       new_entry$momID <- NA
-      new_entry$sex <- validation_results$female_var
+      new_entry$sex <- if (length(validation_results$female_var) > 0 && !is.na(validation_results$female_var)) validation_results$female_var else 0
       new_entries <- rbind(new_entries, new_entry)
     }
 
@@ -248,10 +212,39 @@ if (addphantoms){
     if (verbose && length(changes$phantom_moms_added) > 0) {
       cat("Added phantom moms for:", paste(changes$phantom_moms_added, collapse = ", "), "\n")
     }
+  }
+  # add parents who appear in momID or dadID but are missing from ID
+  if (parentswithoutrow) {
+    # Add parents who appear in momID or dadID but are missing from ID
+    ped <- addRowlessParents(ped = ped, verbose = verbose, validation_results = validation_results)
+  }
+
+  if (verbose) {
+    cat("Changes Made:\n")
+    print(changes)
+  }
+  return(ped)
 }
-  # add phantom parents
-  if(parentswithoutrow){
+#' Repair Parent IDs
+#'
+#' This function repairs parent IDs in a pedigree.
+#' @inheritParams checkParentIDs
+#' @inherit checkParentIDs details
+#' @return A corrected pedigree
+repairParentIDs <- function(ped, verbose = FALSE) {
+  checkParentIDs(ped = ped, verbose = verbose, repair = TRUE)
+}
+
+#' Add addRowlessParents
+#'
+#' This function adds parents who appear in momID or dadID but are missing from ID
+#' @inheritParams checkParentIDs
+#' @param validation_results validation results
+
+addRowlessParents <- function(ped, verbose, validation_results) {
   # Add parents who appear in momID or dadID but are missing from ID
+  new_entries <- data.frame()
+
   listed_parents <- unique(c(ped$momID, ped$dadID))
   listed_parents <- listed_parents[!is.na(listed_parents)]
 
@@ -280,22 +273,11 @@ if (addphantoms){
       new_row$sex <- inferred_sex
       new_entries <- rbind(new_entries, new_row)
     }
-  }
-  ped <- merge(ped, new_entries, all = TRUE)
-  }
 
+    ped <- merge(ped, new_entries, all = TRUE)
     if (verbose) {
-      cat("Changes Made:\n")
-      print(changes)
+      cat("Added phantom parents for:", paste(new_entries$ID, collapse = ", "), "\n")
     }
-    return(ped)
-}
-#' Repair Parent IDs
-#'
-#' This function repairs parent IDs in a pedigree.
-#' @inheritParams checkParentIDs
-#' @inherit checkParentIDs details
-#' @return A corrected pedigree
-repairParentIDs <- function(ped, verbose = FALSE) {
-  checkParentIDs(ped = ped, verbose = verbose, repair = TRUE)
+  }
+  return(ped)
 }

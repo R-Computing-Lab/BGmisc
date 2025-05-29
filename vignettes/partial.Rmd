@@ -49,11 +49,13 @@ We compute the additive genetic relationship matrix using both the classic and p
 ped_add_partial_complete <- ped2com(df,
   isChild_method = "partialparent",
   component = "additive",
-  adjacency_method = "direct"
+  adjacency_method = "direct",
+  sparse = FALSE
 )
 ped_add_classic_complete <- ped2com(df,
   isChild_method = "classic",
-  component = "additive", adjacency_method = "direct"
+  component = "additive", adjacency_method = "direct",
+  sparse = FALSE
 )
 ```
 
@@ -67,22 +69,31 @@ library(corrplot)
 
 corrplot(as.matrix(ped_add_classic_complete),
   method = "color", type = "lower", col.lim = c(0, 1),
-  is.corr = FALSE, title = "Additive component - Classic method"
+  is.corr = FALSE, title = "Additive component - Classic method",
+  order = "hclust",
+  tl.pos = "l", tl.col = "black", tl.srt = 5, tl.cex = 0.2,
+  col = COL1("Reds", 100), mar = c(0, 0, 2, 0)
 )
+
 
 corrplot(as.matrix(ped_add_partial_complete),
   method = "color", type = "lower", col.lim = c(0, 1),
-  is.corr = FALSE, title = "Additive component - Partial parent method"
+  is.corr = FALSE, title = "Additive component - Partial parent method",
+  order = "hclust",
+  tl.pos = "l", tl.col = "black", tl.srt = 5, tl.cex = 0.2,
+  col = COL1("Reds", 100), mar = c(0, 0, 2, 0)
 )
 ```
 
 
 To verify this, we subtract one matrix from the other and calculate RMSE. The difference should be numerically zero. Indeed, it is `r sqrt(mean((ped_add_classic_complete-ped_add_partial_complete)^2))`.
 
-```{r}
-corrplot(as.matrix(ped_add_classic_complete - ped_add_partial_complete),
+```{r,warning=FALSE}
+corrplot((as.matrix(ped_add_classic_complete) - as.matrix(ped_add_partial_complete)),
   method = "color", type = "lower", col.lim = c(0, 1),
-  is.corr = FALSE
+  is.corr = FALSE, order = "hclust",
+  tl.pos = "l", tl.col = "black", tl.srt = 5, tl.cex = 0.2,
+  col = COL1("Reds", 100), mar = c(0, 0, 2, 0)
 )
 ```
 
@@ -101,12 +112,14 @@ df$momID[df$ID == 4] <- NA
 ped_add_partial_mom <- ped_add_partial <- ped2com(df,
   isChild_method = "partialparent",
   component = "additive",
-  adjacency_method = "direct"
+  adjacency_method = "direct",
+  sparse = FALSE
 )
 
 ped_add_classic_mom <- ped_add_classic <- ped2com(df,
   isChild_method = "classic",
-  component = "additive", adjacency_method = "direct"
+  component = "additive", adjacency_method = "direct",
+  sparse = FALSE
 )
 ```
 
@@ -119,12 +132,17 @@ The resulting additive matrices reflect this difference. The RMSE between the tw
 ```{r}
 corrplot(as.matrix(ped_add_classic),
   method = "color", type = "lower", col.lim = c(0, 1),
-  is.corr = FALSE, title = "Classic (mother removed)"
+  is.corr = FALSE, title = "Classic (mother removed)",
+  order = "hclust",
+  tl.pos = "l", tl.col = "black", tl.srt = 5, tl.cex = 0.2,
+  col = COL1("Reds", 100), mar = c(0, 0, 2, 0)
 )
-
 corrplot(as.matrix(ped_add_partial),
   method = "color", type = "lower", col.lim = c(0, 1),
-  is.corr = FALSE, title = "Partial (mother removed)"
+  is.corr = FALSE, title = "Partial (mother removed)",
+  order = "hclust",
+  tl.pos = "l", tl.col = "black", tl.srt = 5, tl.cex = 0.2,
+  col = COL1("Reds", 100), mar = c(0, 0, 2, 0)
 )
 ```
 
@@ -132,16 +150,19 @@ corrplot(as.matrix(ped_add_partial),
 We quantify the overall matrix difference:
 
 ```{r}
-sqrt(mean((ped_add_classic - ped_add_partial)^2))
+sqrt(mean((as.matrix(ped_add_classic) - as.matrix(ped_add_partial))^2))
 ```
 
 
 Next, we compare each method to the matrix from the complete pedigree. This evaluates how much each method deviates from the correct additive structure.
 
 ```{r}
-corrplot(as.matrix(ped_add_classic_complete - ped_add_classic),
+corrplot(as.matrix(ped_add_classic_complete) - as.matrix(ped_add_classic),
   method = "color", type = "lower", col.lim = c(0, 1),
-  is.corr = FALSE
+  is.corr = FALSE,
+  order = "hclust",
+  tl.pos = "l", tl.col = "black", tl.srt = 5, tl.cex = 0.2,
+  col = COL1("Reds", 100), mar = c(0, 0, 2, 0)
 )
 
 sqrt(mean((ped_add_classic_complete - ped_add_classic)^2))
@@ -152,7 +173,10 @@ The RMSE between the true additive component and the classic method is `r sqrt(m
 ```{r}
 corrplot(as.matrix(ped_add_classic_complete - ped_add_partial),
   method = "color", type = "lower", col.lim = c(0, 1),
-  is.corr = FALSE
+  is.corr = FALSE,
+  order = "hclust",
+  tl.pos = "l", tl.col = "black", tl.srt = 5, tl.cex = 0.2,
+  col = COL1("Reds", 100), mar = c(0, 0, 2, 0)
 )
 
 sqrt(mean((ped_add_classic_complete - ped_add_partial)^2))
@@ -190,17 +214,23 @@ ped_add_classic_dad <- ped_add_classic <- ped2com(df,
 ```
 
 
-As we can see, the two matrices are different. The RMSE between the two matrices is `r sqrt(mean((ped_add_classic-ped_add_partial)^2))`.
+As we can see, the two matrices are different. The RMSE between the two matrices is `r sqrt(mean((as.matrix(ped_add_classic)-as.matrix(ped_add_partial))^2))`.
 
 ```{r}
 corrplot(as.matrix(ped_add_classic_dad),
   method = "color", type = "lower", col.lim = c(0, 1),
-  is.corr = FALSE, title = "Classic (father removed)"
+  is.corr = FALSE, title = "Classic (father removed)",
+  order = "hclust",
+  tl.pos = "l", tl.col = "black", tl.srt = 5, tl.cex = 0.2,
+  col = COL1("Reds", 100), mar = c(0, 0, 2, 0)
 )
 
 corrplot(as.matrix(ped_add_partial_dad),
   method = "color", type = "lower", col.lim = c(0, 1),
-  is.corr = FALSE, title = "Partial (father removed)"
+  is.corr = FALSE, title = "Partial (father removed)",
+  order = "hclust",
+  tl.pos = "l", tl.col = "black", tl.srt = 5, tl.cex = 0.2,
+  col = COL1("Reds", 100), mar = c(0, 0, 2, 0)
 )
 ```
 
@@ -210,7 +240,10 @@ Again, we compare to the true matrix from the complete pedigree:
 ```{r}
 corrplot(as.matrix(ped_add_classic_complete - ped_add_classic),
   method = "color", type = "lower", col.lim = c(0, 1),
-  is.corr = FALSE
+  is.corr = FALSE,
+  order = "hclust",
+  tl.pos = "l", tl.col = "black", tl.srt = 5, tl.cex = 0.2,
+  col = COL1("Reds", 100), mar = c(0, 0, 2, 0)
 )
 
 sqrt(mean((ped_add_classic_complete - ped_add_classic)^2))
@@ -220,7 +253,10 @@ sqrt(mean((ped_add_classic_complete - ped_add_classic)^2))
 ```{r}
 corrplot(as.matrix(ped_add_classic_complete - ped_add_partial),
   method = "color", type = "lower", col.lim = c(0, 1),
-  is.corr = FALSE
+  is.corr = FALSE,
+  order = "hclust",
+  tl.pos = "l", tl.col = "black", tl.srt = 5, tl.cex = 0.2,
+  col = COL1("Reds", 100), mar = c(0, 0, 2, 0)
 )
 
 sqrt(mean((ped_add_classic_complete - ped_add_partial)^2))
@@ -239,7 +275,7 @@ data("inbreeding")
 
 df <- inbreeding
 
-FamIDs <- unique(df$FamID)
+famIDs <- unique(df$famID)
 ```
 
 For each one, we construct the additive relationship matrix under complete information and then simulate two missingness scenarios:
@@ -255,16 +291,16 @@ In each condition, we recompute the additive matrix using both the classic and p
 ```{r}
 inbreeding_list <- list()
 results <- data.frame(
-  FamIDs = FamIDs,
-  RMSE_partial_dad = rep(NA, length(FamIDs)),
-  RMSE_partial_mom = rep(NA, length(FamIDs)),
-  RMSE_classic_dad = rep(NA, length(FamIDs)),
-  RMSE_classic_mom = rep(NA, length(FamIDs)),
-  max_R_classic_dad = rep(NA, length(FamIDs)),
-  max_R_partial_dad = rep(NA, length(FamIDs)),
-  max_R_classic_mom = rep(NA, length(FamIDs)),
-  max_R_partial_mom = rep(NA, length(FamIDs)),
-  max_R_classic = rep(NA, length(FamIDs))
+  famIDs = famIDs,
+  RMSE_partial_dad = rep(NA, length(famIDs)),
+  RMSE_partial_mom = rep(NA, length(famIDs)),
+  RMSE_classic_dad = rep(NA, length(famIDs)),
+  RMSE_classic_mom = rep(NA, length(famIDs)),
+  max_R_classic_dad = rep(NA, length(famIDs)),
+  max_R_partial_dad = rep(NA, length(famIDs)),
+  max_R_classic_mom = rep(NA, length(famIDs)),
+  max_R_partial_mom = rep(NA, length(famIDs)),
+  max_R_classic = rep(NA, length(famIDs))
 )
 ```
 
@@ -272,9 +308,9 @@ The loop below performs this procedure for all families in the dataset and store
 
 
 ```{r}
-for (i in 1:length(FamIDs)) {
+for (i in 1:length(famIDs)) {
   # make three versions to filter down
-  df_fam_dad <- df_fam_mom <- df_fam <- df[df$FamID == FamIDs[i], ]
+  df_fam_dad <- df_fam_mom <- df_fam <- df[df$famID == famIDs[i], ]
 
   results$RMSE_partial_mom[i] <- sqrt(mean((ped_add_classic_complete - ped_add_partial_mom)^2))
 
@@ -345,7 +381,7 @@ for (i in 1:length(FamIDs)) {
 }
 ```
 
-### Example: Family ``r FamIDs[1]``
+### Example: Family ``r famIDs[1]``
 
 
 To understand what these matrices look like, we visualize them for one representative family. For this example, we select the first family in the dataset.
@@ -362,27 +398,42 @@ fam1 <- inbreeding_list[[1]]
 
 corrplot(as.matrix(fam1$ped_add_classic_complete),
   method = "color", type = "lower", col.lim = c(0, 1),
-  is.corr = FALSE, title = "Classic - Complete"
+  is.corr = FALSE, title = "Classic - Complete",
+  order = "hclust",
+  tl.pos = "l", tl.col = "black", tl.srt = 5, tl.cex = 0.2,
+  col = COL1("Reds", 100), mar = c(0, 0, 2, 0)
 )
 
 corrplot(as.matrix(fam1$ped_add_classic_mom),
   method = "color", type = "lower", col.lim = c(0, 1),
-  is.corr = FALSE, title = "Classic - Mom Missing"
+  is.corr = FALSE, title = "Classic - Mom Missing",
+  order = "hclust",
+  tl.pos = "l", tl.col = "black", tl.srt = 5, tl.cex = 0.2,
+  col = COL1("Reds", 100), mar = c(0, 0, 2, 0)
 )
 
 corrplot(as.matrix(fam1$ped_add_partial_mom),
   method = "color", type = "lower", col.lim = c(0, 1),
-  is.corr = FALSE, title = "Partial - Mom Missing"
+  is.corr = FALSE, title = "Partial - Mom Missing",
+  order = "hclust",
+  tl.pos = "l", tl.col = "black", tl.srt = 5, tl.cex = 0.2,
+  col = COL1("Reds", 100), mar = c(0, 0, 2, 0)
 )
 
 corrplot(as.matrix(fam1$ped_add_classic_dad),
   method = "color", type = "lower", col.lim = c(0, 1),
-  is.corr = FALSE, title = "Classic - Dad Missing"
+  is.corr = FALSE, title = "Classic - Dad Missing",
+  order = "hclust",
+  tl.pos = "l", tl.col = "black", tl.srt = 5, tl.cex = 0.2,
+  col = COL1("Reds", 100), mar = c(0, 0, 2, 0)
 )
 
 corrplot(as.matrix(fam1$ped_add_partial_dad),
   method = "color", type = "lower", col.lim = c(0, 1),
-  is.corr = FALSE, title = "Partial - Dad Missing"
+  is.corr = FALSE, title = "Partial - Dad Missing",
+  order = "hclust",
+  tl.pos = "l", tl.col = "black", tl.srt = 5, tl.cex = 0.2,
+  col = COL1("Reds", 100), mar = c(0, 0, 2, 0)
 )
 ```
 
@@ -392,22 +443,34 @@ To visualize the differences from the true matrix:
 ```{r}
 corrplot(as.matrix(fam1$ped_add_classic_complete - fam1$ped_add_classic_mom),
   method = "color", type = "lower", col.lim = c(0, 1),
-  is.corr = FALSE, title = "Classic Mom Diff from Complete"
+  is.corr = FALSE, title = "Classic Mom Diff from Complete",
+  order = "hclust",
+  tl.pos = "l", tl.col = "black", tl.srt = 5, tl.cex = 0.2,
+  col = COL1("Reds", 100), mar = c(0, 0, 2, 0)
 )
 
 corrplot(as.matrix(fam1$ped_add_classic_complete - fam1$ped_add_partial_mom),
   method = "color", type = "lower", col.lim = c(0, 1),
-  is.corr = FALSE, title = "Partial Mom Diff from Complete"
+  is.corr = FALSE, title = "Partial Mom Diff from Complete",
+  order = "hclust",
+  tl.pos = "l", tl.col = "black", tl.srt = 5, tl.cex = 0.2,
+  col = COL1("Reds", 100), mar = c(0, 0, 2, 0)
 )
 
 corrplot(as.matrix(fam1$ped_add_classic_complete - fam1$ped_add_classic_dad),
   method = "color", type = "lower", col.lim = c(0, 1),
-  is.corr = FALSE, title = "Classic Dad Diff from Complete"
+  is.corr = FALSE, title = "Classic Dad Diff from Complete",
+  order = "hclust",
+  tl.pos = "l", tl.col = "black", tl.srt = 5, tl.cex = 0.2,
+  col = COL1("Reds", 100), mar = c(0, 0, 2, 0)
 )
 
 corrplot(as.matrix(fam1$ped_add_classic_complete - fam1$ped_add_partial_dad),
   method = "color", type = "lower", col.lim = c(0, 1),
-  is.corr = FALSE, title = "Partial Dad Diff from Complete"
+  is.corr = FALSE, title = "Partial Dad Diff from Complete",
+  order = "hclust",
+  tl.pos = "l", tl.col = "black", tl.srt = 5, tl.cex = 0.2,
+  col = COL1("Reds", 100), mar = c(0, 0, 2, 0)
 )
 ```
 
@@ -456,7 +519,7 @@ These proportions show how often the partial method produces a lower RMSE across
 results %>%
   as.data.frame() %>%
   select(
-    -FamIDs, -RMSE_diff_mom, -RMSE_diff_dad, -max_R_classic_dad,
+    -famIDs, -RMSE_diff_mom, -RMSE_diff_dad, -max_R_classic_dad,
     -max_R_partial_dad, -max_R_classic_mom, -max_R_partial_mom, -max_R_classic
   ) %>%
   summary()

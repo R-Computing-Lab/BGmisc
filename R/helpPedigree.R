@@ -39,15 +39,17 @@ createGenDataFrame <- function(sizeGens, genIndex, idGen) {
 #'
 #' @param idGen Vector of IDs for the generation.
 #' @param sexR Numeric value indicating the sex ratio (proportion of males).
+#' @param code_male The value to use for males. Default is "M"
+#' @param code_female The value to use for females. Default is "F"
 #' @return Vector of sexes ("M" for male, "F" for female) for the offspring.
 #' @importFrom stats runif
-determineSex <- function(idGen, sexR) {
+determineSex <- function(idGen, sexR, code_male = "M", code_female = "F") {
   if (runif(1) > .5) {
-    sexVec1 <- rep("M", floor(length(idGen) * sexR))
-    sexVec2 <- rep("F", length(idGen) - length(sexVec1))
+    sexVec1 <- rep(code_male, floor(length(idGen) * sexR))
+    sexVec2 <- rep(code_female, length(idGen) - length(sexVec1))
   } else {
-    sexVec1 <- rep("F", floor(length(idGen) * (1 - sexR)))
-    sexVec2 <- rep("M", length(idGen) - length(sexVec1))
+    sexVec1 <- rep(code_female, floor(length(idGen) * (1 - sexR)))
+    sexVec2 <- rep(code_male, length(idGen) - length(sexVec1))
   }
   sexVec <- sample(c(sexVec1, sexVec2))
   return(sexVec)
@@ -60,7 +62,8 @@ determineSex <- function(idGen, sexR) {
 #'
 #' @param df_Ngen The dataframe for the current generation, including columns for individual IDs and spouse IDs.
 #' @return The input dataframe augmented with a 'coupleId' column, where each mated pair has a unique identifier.
-assignCoupleIds <- function(df_Ngen) {
+#' @export
+assignCoupleIDs <- function(df_Ngen) {
   df_Ngen$coupleId <- NA_character_ # Initialize the coupleId column with NAs
   usedCoupleIds <- character() # Initialize an empty character vector to track used IDs
 
@@ -85,6 +88,10 @@ assignCoupleIds <- function(df_Ngen) {
 
   return(df_Ngen)
 }
+
+
+#' @rdname assignCoupleIDs
+assignCoupleIds <- assignCoupleIDs
 
 #' Generate or Adjust Number of Kids per Couple Based on Mating Rate
 #'

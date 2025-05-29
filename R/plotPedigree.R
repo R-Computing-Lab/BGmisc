@@ -25,14 +25,14 @@ plotPedigree <- function(ped,
                          pconnect = .5,
                          ...) {
   # Standardize column names in the input dataframe
-  ped <- standardizeColnames(ped)
+  ped <- standardizeColnames(ped, verbose = verbose)
 
   # Define required columns
-  simulated_vars <- c("fam", "ID", "dadID", "momID", "sex")
+  simulated_vars <- c("famID", "ID", "dadID", "momID", "sex")
 
   # Check if dataframe contains the required columns
   if (all(simulated_vars %in% names(ped))) {
-    p <- ped[, c("fam", "ID", "dadID", "momID", "sex")]
+    p <- ped[, c("famID", "ID", "dadID", "momID", "sex")]
     colnames(p) <- c("ped", "id", "father", "mother", "sex")
 
     # data conversation

@@ -15,10 +15,10 @@
 makeTwins <- function(ped, ID_twin1 = NA_integer_, ID_twin2 = NA_integer_, gen_twin = 2, verbose = FALSE) {
   # Check if the ped is the same format as the output of simulatePedigree
   if (paste0(colnames(ped), collapse = "") != paste0(c(
-    "fam", "ID", "gen",
+    "famID", "ID", "gen",
     "dadID", "momID", "spID", "sex"
   ), collapse = "")) {
-    ped <- standardizeColnames(ped)
+    ped <- standardizeColnames(ped, verbose = verbose)
     if (verbose) {
       cat("The input pedigree is not in the same format as the output of simulatePedigree\n")
     }
@@ -128,10 +128,10 @@ makeInbreeding <- function(ped,
   if (paste0(colnames(ped),
     collapse = ""
   ) != paste0(
-    c("fam", "ID", "gen", "dadID", "momID", "spID", "sex"),
+    c("famID", "ID", "gen", "dadID", "momID", "spID", "sex"),
     collapse = ""
   )) {
-    ped <- standardizeColnames(ped)
+    ped <- standardizeColnames(ped, verbose = verbose)
     if (verbose) {
       cat("The input pedigree is not in the same format as the output of simulatePedigree\n")
     }
@@ -255,7 +255,7 @@ dropLink <- function(ped,
     if (!is.na(ID_drop)) {
       ped[ped$ID %in% ID_drop, c("dadID", "momID")] <- NA_integer_
     } else {
-      warning("No individual is dropped from his/her parents.")
+      warning("No individual is dropped from their parents.")
     }
   } else {
     ped[ped$ID == ID_drop, c("dadID", "momID")] <- NA_integer_

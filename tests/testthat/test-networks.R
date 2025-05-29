@@ -9,15 +9,15 @@ test_that("inbreeding data loads", {
 test_that("ped2fam gets the right families for hazard data", {
   data(hazard)
   ds <- ped2fam(hazard, famID = "newFamID")
-  tab <- table(ds$FamID, ds$newFamID)
-  expect_equal(ds$FamID, ds$newFamID)
+  tab <- table(ds$famID, ds$newFamID)
+  expect_equal(ds$famID, ds$newFamID)
 })
 
 test_that("ped2fam gets the right families for inbreeding data", {
   data(inbreeding)
   ds <- ped2fam(inbreeding, famID = "newFamID")
-  tab <- table(ds$FamID, ds$newFamID)
-  expect_equal(ds$FamID, ds$newFamID)
+  tab <- table(ds$famID, ds$newFamID)
+  expect_equal(ds$famID, ds$newFamID)
 })
 
 test_that("ped2graph produces a graph for hazard data with mothers", {

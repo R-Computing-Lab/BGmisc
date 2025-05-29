@@ -1,7 +1,14 @@
-# BGmisc 1.3.6
+# BGmisc 1.4.0
 * revived checkParents function to check for handling phantom parents and missing parents
 * added tests for checkParents function
 * added GoT analysis
+* reduced complexity of com2links, summarizePedigree, and checkIDs with the use of subfunctions
+* allow verbose argument to be passed to standardizeColnames
+* list SimPed and related_coef as aliases for functions
+* harmonizing function names like calcFamilySize from famSizeCal
+* implemented adjBeta function to evaluation alternative build method
+* reorganize file names to be more consistent
+* harmonized famID
 
 # BGmisc 1.3.5.1
 * Setting the default for the `sparse` argument in `ped2com()` to TRUE
