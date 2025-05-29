@@ -16,6 +16,8 @@
 #' calculateCIs(tbl, rho_var = "rho", se_var = "se", method = "raykov")
 #'
 #' @export
+#' @importFrom stats qnorm pnorm
+
 calculateCIs <- function(tbl,
                          rho_var,
                          se_var,
@@ -34,8 +36,18 @@ calculateCIs <- function(tbl,
     stop("method must be a character string")
   }
   # Convert the rho_var and se_var into column names
-  rho_col_name <- if (rlang::is_string(rho_var)) rho_var else rlang::deparse(substitute(rho_var))
-  se_col_name <- if (rlang::is_string(se_var)) se_var else rlang::deparse(substitute(se_var))
+  rho_col_name <- if (is.character(rho_var) && length(rho_var) == 1) {
+    rho_var
+  } else {
+    deparse(substitute(rho_var))
+  }
+
+  se_col_name <- if (is.character(se_var) && length(se_var) == 1) {
+    se_var
+  } else {
+    deparse(substitute(se_var))
+  }
+
 
   # Construct new column names using paste0
   plusse_col_name <- paste0(rho_col_name, "_plusse")
