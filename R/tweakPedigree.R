@@ -15,10 +15,10 @@
 makeTwins <- function(ped, ID_twin1 = NA_integer_, ID_twin2 = NA_integer_, gen_twin = 2, verbose = FALSE) {
   # Check if the ped is the same format as the output of simulatePedigree
   if (paste0(colnames(ped), collapse = "") != paste0(c(
-    "fam", "ID", "gen",
+    "famID", "ID", "gen",
     "dadID", "momID", "spID", "sex"
   ), collapse = "")) {
-    ped <- standardizeColnames(ped)
+    ped <- standardizeColnames(ped, verbose = verbose)
     if (verbose) {
       cat("The input pedigree is not in the same format as the output of simulatePedigree\n")
     }
@@ -42,7 +42,7 @@ makeTwins <- function(ped, ID_twin1 = NA_integer_, ID_twin2 = NA_integer_, gen_t
           # cat("loop", i, "\n")
           # check if i is equal to the number of individuals in the generation
           usedID <- c(usedID, ID_twin1)
-          # print(usedID)
+          # message(usedID)
           if (i < idx) {
             # randomly select one individual from the generation
             ID_twin1 <- resample(ped$ID[ped$gen == gen_twin & !(ped$ID %in% usedID) & !is.na(ped$dadID)], 1)
@@ -65,13 +65,13 @@ makeTwins <- function(ped, ID_twin1 = NA_integer_, ID_twin2 = NA_integer_, gen_t
           } else {
             # randomly select all males or females in the generation and put them in a vector
             selectGender <- ped$ID[ped$gen == gen_twin & ped$sex == resample(c("M", "F"), 1) & !is.na(ped$dadID) & !is.na(ped$momID)]
-            # print(selectGender)
+            # message(selectGender)
             if (length(selectGender) < 2) {
               stop("There are no available same-sex people in the generation to make twins")
             }
             # randomly select two individuals from the vector
             ID_DoubleTwin <- resample(selectGender, 2)
-            # print(ID_DoubleTwin)
+            # message(ID_DoubleTwin)
             # change the second person's dadID and momID to the first person's dadID and momID
             ped$dadID[ped$ID == ID_DoubleTwin[2]] <- ped$dadID[ped$ID == ID_DoubleTwin[1]]
             ped$momID[ped$ID == ID_DoubleTwin[2]] <- ped$momID[ped$ID == ID_DoubleTwin[1]]
@@ -128,10 +128,10 @@ makeInbreeding <- function(ped,
   if (paste0(colnames(ped),
     collapse = ""
   ) != paste0(
-    c("fam", "ID", "gen", "dadID", "momID", "spID", "sex"),
+    c("famID", "ID", "gen", "dadID", "momID", "spID", "sex"),
     collapse = ""
   )) {
-    ped <- standardizeColnames(ped)
+    ped <- standardizeColnames(ped, verbose = verbose)
     if (verbose) {
       cat("The input pedigree is not in the same format as the output of simulatePedigree\n")
     }
@@ -255,7 +255,7 @@ dropLink <- function(ped,
     if (!is.na(ID_drop)) {
       ped[ped$ID %in% ID_drop, c("dadID", "momID")] <- NA_integer_
     } else {
-      warning("No individual is dropped from his/her parents.")
+      warning("No individual is dropped from their parents.")
     }
   } else {
     ped[ped$ID == ID_drop, c("dadID", "momID")] <- NA_integer_

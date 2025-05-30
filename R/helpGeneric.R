@@ -24,10 +24,9 @@ rmvn <- function(n, sigma) {
 #' @param x vector of any length
 #' @return replaces null values in a vector to NA
 #'
-nullToNA <- function(x) {
+null2NA <- function(x) {
   if (length(x) == 0) {
     x <- NA
-
     # Handle case when x is a list
   } else if (is.list(x)) {
     for (i in seq_along(x)) {
@@ -39,6 +38,9 @@ nullToNA <- function(x) {
   return(x)
 }
 
+#' @rdname null2NA
+#'
+nullToNA <- null2NA
 
 #' modified tryCatch function
 #'
@@ -46,10 +48,14 @@ nullToNA <- function(x) {
 #' @keywords internal
 #' @return Fuses the nullToNA function with efunc
 #'
-try_na <- function(x) {
-  nullToNA(tryCatch(x, error = efunc))
+tryNA <- function(x) {
+  null2NA(tryCatch(x, error = efunc))
 }
+#' @rdname tryNA
+#' @keywords internal
 
+#'
+try_na <- tryNA
 #' Compute the null space of a matrix
 #'
 #' @param M a matrix of which the null space is desired
@@ -91,79 +97,9 @@ Null <- function(M) {
 #'
 #' @export
 resample <- function(x, ...) {
-  # print(length(x))
+  # message(length(x))
   if (length(x) == 0) {
     return(NA_integer_)
   }
   x[sample.int(length(x), ...)]
-}
-
-
-#' SimPed (Deprecated)
-#'
-#' This function is a wrapper around the new `simulatePedigree` function.
-#' `SimPed` has been deprecated, and it's advised to use `simulatePedigree` directly.
-#'
-#' @param ... Arguments to be passed to `simulatePedigree`.
-#' @return The same result as calling `simulatePedigree`.
-#' @seealso \code{\link{simulatePedigree}} for the updated function.
-#' @description When calling this function, a warning will be issued about its deprecation.
-#' @keywords deprecated
-#' @examples
-#' \dontrun{
-#' # This is an example of the deprecated function:
-#' SimPed(...)
-#' # It is recommended to use:
-#' simulatePedigree(...)
-#' }
-#' @export
-SimPed <- function(...) { # nolint: object_name_linter.
-  warning("The 'SimPed' function is deprecated. Please use 'simulatePedigree' instead.")
-  simulatePedigree(...)
-}
-
-#' related_coef (Deprecated)
-#'
-#' This function is a wrapper around the new `calculateRelatedness` function.
-#' `related_coef` has been deprecated, and it's advised to use `calculateRelatedness` directly.
-#'
-#' @param ... Arguments to be passed to `calculateRelatedness`.
-#' @return The same result as calling `calculateRelatedness`.
-#' @seealso \code{\link{calculateRelatedness}} for the updated function.
-#' @description When calling this function, a warning will be issued about its deprecation.
-#' @keywords deprecated
-#' @examples
-#' \dontrun{
-#' # This is an example of the deprecated function:
-#' related_coef(...)
-#' # It is recommended to use:
-#' calculateRelatedness(...)
-#' }
-#' @export
-related_coef <- function(...) {
-  warning("The 'related_coef' function is deprecated. Please use 'calculateRelatedness' instead.")
-  calculateRelatedness(...)
-}
-
-#' relatedness (Deprecated)
-#'
-#' This function is a wrapper around the new `inferRelatedness` function.
-#' `relatedness` has been deprecated, and it's advised to use `inferRelatedness` directly.
-#'
-#' @param ... Arguments to be passed to `inferRelatedness`.
-#' @return The same result as calling `inferRelatedness`.
-#' @seealso \code{\link{inferRelatedness}} for the updated function.
-#' @description When calling this function, a warning will be issued about its deprecation.
-#' @keywords deprecated
-#' @examples
-#' \dontrun{
-#' # This is an example of the deprecated function:
-#' relatedness(...)
-#' # It is recommended to use:
-#' inferRelatedness(...)
-#' }
-#' @export
-relatedness <- function(...) {
-  warning("The 'relatedness' function is deprecated. Please use 'inferRelatedness' instead.")
-  inferRelatedness(...)
 }

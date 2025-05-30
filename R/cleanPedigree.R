@@ -9,23 +9,22 @@
 #' @param verbose A logical indicating whether to print progress messages.
 #' @return A dataframe with standardized column names.
 #'
-#' @keywords internal
 standardizeColnames <- function(df, verbose = FALSE) {
   # Internal mapping of standardized names to possible variants
   mapping <- list(
-    "fam" = "^(?:fam(?:ily)?[\\.\\-_]?(?:id)?)",
-    "ID" = "^(?:i(?:d$|ndiv(?:idual)?)|p(?:erson)?[\\.\\-_]?id)",
-    "gen" = "^(?:gen(?:s|eration)?)",
-    "dadID" = "^(?:d(?:ad)?id|paid|fatherid|pid[\\.\\-_]?fath[er]*)",
-    "patID" = "^(?:dat[\\.\\-_]?id|pat[\\.\\-_]?id|paternal[\\.\\-_]?(?:id)?)",
-    "momID" = "^(?:m(?:om|a|other)?[\\.\\-_]?id|pid[\\.\\-_]?moth[er]*)",
-    "matID" = "^(?:mat[\\.\\-_]?id|maternal[\\.\\-_]?(?:id)?)",
-    "spID" = "^(?:s(?:pt)?id|spouse[\\.\\-_]?(?:id)?|partner[\\.\\-_]?(?:id)?|husb(?:and)?[\\.\\-_]?id|wife[\\.\\-_]?(?:id)?|pid[\\.\\-_]?spouse1?)",
-    "twinID" = "^(?:twin[\\.\\-_]?(?:id)?)",
-    "sex" = "^(?:sex|gender|female|m(?:a(?:le|n)|en)|wom[ae]n)"
+    "famID" = "^(?:fam(?:ily)?[\\.\\-_]?(?:id)?)$",
+    "ID" = "^(?:i(?:d$|ndiv(?:idual)?)|p(?:erson)?[\\.\\-_]?id)$",
+    "gen" = "^(?:gen(?:s|erations?)?)$",
+    "dadID" = "^(?:d(?:ad)?id|paid|fatherid|pid[\\.\\-_]?fath[er]*|sire(?:id)?)$",
+    "patID" = "^(?:dat[\\.\\-_]?id|pat[\\.\\-_]?id|paternal[\\.\\-_]?(?:id)?)$",
+    "momID" = "^(?:m(?:om|a|other)?[\\.\\-_]?id|pid[\\.\\-_]?moth[er]*|dame(?:id)?)$",
+    "matID" = "^(?:mat[\\.\\-_]?id|maternal[\\.\\-_]?(?:id)?)$",
+    "spID" = "^(?:s(?:pt)?id|spouse[\\.\\-_]?(?:id)?|partner[\\.\\-_]?(?:id)?|husb(?:and)?[\\.\\-_]?id|wife[\\.\\-_]?(?:id)?|pid[\\.\\-_]?spouse1?)$",
+    "twinID" = "^(?:twi?n[\\.\\-_]?(?:id)?)$",
+    "sex" = "^(?:sex|gender|female|m(?:a(?:le|n)|en)|wom[ae]n)$"
   )
   if (verbose) {
-    print("Standardizing column names...")
+    message("Standardizing column names...")
   }
   lowered_colnames <- tolower(colnames(df))
   for (standard_name in names(mapping)) {
@@ -60,9 +59,9 @@ standardizeColnames <- function(df, verbose = FALSE) {
 # check_sex = TRUE,
 # check_parents = TRUE,
 # verbose = FALSE) {
-# corrected_ped <- ped <- standardizeColnames(ped)
+# corrected_ped <- ped <- standardizeColnames(ped, verbose = verbose)
 # if (verbose) {
-# print("Repairing pedigree...")
+# message("Repairing pedigree...")
 # }
 # # applies a list of repair functions sequentially to a pedigree.
 # if (!is.null(repair_funs)) {
@@ -83,7 +82,7 @@ standardizeColnames <- function(df, verbose = FALSE) {
 # }
 # return(corrected_ped)
 # } else {
-# print("You should never see this message. If you do, that means the repair_funs variable in repairPedigree is broken")
+# message("You should never see this message. If you do, that means the repair_funs variable in repairPedigree is broken")
 # }
 # }
 
@@ -120,7 +119,7 @@ standardizeColnames <- function(df, verbose = FALSE) {
 
 # if (check_id) {
 # if (verbose) {
-# print("Checking IDs...")
+# message("Checking IDs...")
 # }
 # id_valid <- all(corrected_ped$ID == ped$ID)
 # } else {
@@ -128,7 +127,7 @@ standardizeColnames <- function(df, verbose = FALSE) {
 # }
 # if (check_parents) {
 # if (verbose) {
-# print("Checking parents...")
+# message("Checking parents...")
 # }
 # dadID_valid <- all(corrected_ped$dadID == ped$dadID)
 # momID_valid <- all(corrected_ped$momID == ped$momID)
@@ -138,7 +137,7 @@ standardizeColnames <- function(df, verbose = FALSE) {
 # }
 # if (check_sex) {
 # if (verbose) {
-# print("Checking sex...")
+# message("Checking sex...")
 # }
 # sex_valid <- all(corrected_ped$sex == ped$sex)
 # } else {
@@ -171,7 +170,7 @@ standardizeColnames <- function(df, verbose = FALSE) {
 # } else if (is_valid) {
 # return(corrected_ped)
 # } else {
-# print("Pedigree is not valid. Refer to the warnings for more details.")
+# message("Pedigree is not valid. Refer to the warnings for more details.")
 # return(warnings)
 # }
 # }

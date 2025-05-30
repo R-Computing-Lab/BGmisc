@@ -65,13 +65,12 @@ test_that("allGens behaves with Ngens", {
 
   result <- allGens(kpc = kpc, Ngen = Ngen, marR = marR)
 
- expect_equal(result, 2)
+  expect_equal(result, 2)
 
   Ngen <- 0
 
-  expect_error( allGens(kpc = kpc, Ngen = Ngen, marR = marR))
+  expect_error(allGens(kpc = kpc, Ngen = Ngen, marR = marR))
 
-  expect_error(allGens(kpc = kpc, Ngen= NULL, marR = marR))
-  expect_error(allGens(kpc = kpc, Ngen= -1, marR = marR))
+  expect_error(allGens(kpc = kpc, Ngen = NULL, marR = marR))
+  expect_error(allGens(kpc = kpc, Ngen = -1, marR = marR))
 })
-

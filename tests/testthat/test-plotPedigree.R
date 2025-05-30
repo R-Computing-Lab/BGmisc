@@ -32,3 +32,16 @@ test_that("pedigree plots correctly with affected variables", {
   # file.remove("Rplots.pdf")
 })
 # file.remove("Rplots.pdf")
+
+test_that("pedigree errs when affected variables named", {
+  data(inbreeding)
+
+  expect_error(plotPedigree(data, verbose = TRUE, affected = "affected"))
+})
+
+
+test_that("pedigree plots multiple families", {
+  data(inbreeding)
+  plotPedigree(inbreeding, verbose = TRUE)
+  expect_message(plotPedigree(inbreeding, verbose = TRUE))
+})

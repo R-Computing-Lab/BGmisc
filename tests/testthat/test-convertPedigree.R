@@ -1,7 +1,7 @@
 test_that("ped2add produces correct matrix dims, values, and dimnames for hazard", {
   tolerance <- 1e-10
   data(hazard)
-  add <- ped2add(hazard)
+  add <- ped2add(hazard, sparse = FALSE)
   # Check dimension
   expect_equal(dim(add), c(nrow(hazard), nrow(hazard)))
   # Check several values
@@ -21,7 +21,7 @@ test_that("ped2add produces correct matrix dims, values, and dimnames for hazard
 test_that("ped2add produces correct matrix dims, values, and dimnames for alternative transpose", {
   tolerance <- 1e-10
   data(hazard)
-  add <- ped2add(hazard, tcross.alt.crossprod = TRUE)
+  add <- ped2add(hazard, tcross.alt.crossprod = TRUE, sparse = FALSE)
   # Check dimension
   expect_equal(dim(add), c(nrow(hazard), nrow(hazard)), tolerance = tolerance)
   # Check several values
@@ -37,12 +37,12 @@ test_that("ped2add produces correct matrix dims, values, and dimnames for altern
   expect_equal(dn[[1]], dn[[2]])
   expect_equal(dn[[1]], as.character(hazard$ID))
 })
-# to do, combine the sets that are equalivant. shouldn't need to run 1000 expect equals
+# to do, combine the sets that are equivalent. shouldn't need to run 1000 expect equals
 
 test_that("ped2add produces correct matrix dims, values, and dimnames for inbreeding data", {
   tolerance <- 1e-10
   data(inbreeding)
-  add <- ped2add(inbreeding)
+  add <- ped2add(inbreeding, sparse = FALSE)
   # Check dimension
   expect_equal(dim(add), c(nrow(inbreeding), nrow(inbreeding)), tolerance = tolerance)
   # Check several values
@@ -62,7 +62,7 @@ test_that("ped2add produces correct matrix dims, values, and dimnames for inbree
 test_that("ped2add produces correct matrix dims, values, and dimnames for inbreeding data with alternative transpose", {
   tolerance <- 1e-10
   data(inbreeding)
-  add <- ped2add(inbreeding, transpose_method = "star")
+  add <- ped2add(inbreeding, transpose_method = "star", sparse = FALSE)
   # Check dimension
   expect_equal(dim(add), c(nrow(inbreeding), nrow(inbreeding)))
   # Check several values
@@ -81,7 +81,7 @@ test_that("ped2add produces correct matrix dims, values, and dimnames for inbree
 test_that("ped2add produces correct matrix dims, values, and dimnames for inbreeding data with 2nd alternative transpose", {
   tolerance <- 1e-10
   data(inbreeding)
-  add <- ped2add(inbreeding, transpose_method = "crossprod")
+  add <- ped2add(inbreeding, transpose_method = "crossprod", sparse = FALSE)
   # Check dimension
   expect_equal(dim(add), c(nrow(inbreeding), nrow(inbreeding)))
   # Check several values
@@ -101,7 +101,7 @@ test_that("ped2add produces correct matrix dims, values, and dimnames for inbree
 test_that("ped2add flattens diagonal for inbreeding data", {
   tolerance <- 1e-10
   data(inbreeding)
-  add <- ped2add(inbreeding, flatten.diag = TRUE)
+  add <- ped2add(inbreeding, flatten.diag = TRUE, sparse = FALSE)
   # Check dimension
   expect_equal(dim(add), c(nrow(inbreeding), nrow(inbreeding)), tolerance = tolerance)
   # Check several values
@@ -121,7 +121,7 @@ test_that("ped2mit produces correct matrix dims, values, and dimnames for inbree
   tolerance <- 1e-10
   # Check dimension
   data(inbreeding)
-  mit <- ped2mit(inbreeding)
+  mit <- ped2mit(inbreeding, sparse = FALSE)
   # Check dimension
   expect_equal(dim(mit), c(nrow(inbreeding), nrow(inbreeding)))
   # Check several values
@@ -142,7 +142,7 @@ test_that("ped2mit produces correct matrix dims, values, and dimnames for inbree
   tolerance <- 1e-10
   # Check dimension
   data(inbreeding)
-  mit <- ped2mit(inbreeding)
+  mit <- ped2mit(inbreeding, sparse = FALSE)
   # Check dimension
   expect_equal(dim(mit), c(nrow(inbreeding), nrow(inbreeding)), tolerance = tolerance)
   # Check several values
@@ -164,7 +164,7 @@ test_that("ped2cn produces correct matrix dims, values, and dimnames", {
 
   # Check dimension
   data(inbreeding)
-  cn <- ped2cn(inbreeding)
+  cn <- ped2cn(inbreeding, sparse = FALSE)
   expect_equal(dim(cn), c(
     nrow(inbreeding),
     nrow(inbreeding)
@@ -189,7 +189,7 @@ test_that("ped2cn produces correct matrix dims, values, and dimnames", {
 test_that("ped2ce produces correct matrix dims, values, and dimnames", {
   tolerance <- 1e-10
   data(inbreeding)
-  ce <- ped2ce(inbreeding)
+  ce <- ped2ce(inbreeding, sparse = FALSE)
   expect_equal(dim(ce), c(nrow(inbreeding), nrow(inbreeding)), tolerance = tolerance)
   # Check several values
   # expect_true(all(diag(ce) == 1))
@@ -207,7 +207,7 @@ test_that("ped2ce produces correct matrix dims, values, and dimnames", {
 
 test_that("ped2add verbose prints updates", {
   data(hazard)
-  expect_output(ped2add(hazard, verbose = TRUE), regexp = "Family Size =")
+  expect_output(ped2add(hazard, verbose = TRUE, sparse = FALSE), regexp = "Family Size =")
 })
 
 
@@ -246,6 +246,7 @@ test_that("ped2com handles checkpoint saving and resuming", {
     gen_checkpoint = file.path(save_path, "gen_checkpoint.rds"),
     newIsPar_checkpoint = file.path(save_path, "newIsPar_checkpoint.rds"),
     mtSum_checkpoint = file.path(save_path, "mtSum_checkpoint.rds"),
+    ram_checkpoint = file.path(save_path, "ram_checkpoint.rds"),
     r2_checkpoint = file.path(save_path, "r2_checkpoint.rds"),
     tcrossprod_checkpoint = file.path(save_path, "tcrossprod_checkpoint.rds"),
     count_checkpoint = file.path(save_path, "count_checkpoint.rds"),
@@ -256,7 +257,6 @@ test_that("ped2com handles checkpoint saving and resuming", {
   checkpoint_files_v1 <- list.files(save_path, pattern = "\\.rds$", full.names = TRUE)
 
   expect_equal(length(checkpoint_files_v1), length(checkpoint_files_v0))
-
   # Resume from checkpoint
   resumed_matrix <- ped2com(hazard,
     component = "additive", resume = TRUE, save_path = save_path,
@@ -297,14 +297,26 @@ test_that("adjacency_method  'indexed', 'loop', and direct produce the same resu
 test_that("adjacency_method  'indexed', 'loop', and direct produce the same results for common nuclear matrix", {
   data(hazard)
   tolerance <- 1e-10
-
+  adjBeta_method_1 <- 1
+  adjBeta_method_2 <- 4
+  adjBeta_method_3 <- 5
   # common nuclear
   ped_common_indexed <- ped2com(hazard, component = "common nuclear", adjacency_method = "indexed")
   ped_common_loop <- ped2com(hazard, component = "common nuclear", adjacency_method = "loop")
-  #  ped_common_direct <- ped2com(hazard, component = "common nuclear", adjacency_method = "direct")
+  ped_common_direct <- ped2com(hazard, component = "common nuclear", adjacency_method = "direct")
+  ped_common_adjBeta_1 <- ped2com(hazard, component = "common nuclear", adjacency_method = "beta", adjBeta_method = adjBeta_method_2)
+  ped_common_adjBeta_2 <- ped2com(hazard, component = "common nuclear", adjacency_method = "beta", adjBeta_method = adjBeta_method_3)
+
   expect_equal(ped_common_indexed, ped_common_loop, tolerance = tolerance)
-  # expect_equal(ped_common_loop, ped_common_direct, tolerance = tolerance)
-  # expect_equal(ped_common_indexed, ped_common_direct, tolerance = tolerance)
+  expect_equal(ped_common_loop, ped_common_direct, tolerance = tolerance)
+  expect_equal(ped_common_indexed, ped_common_direct, tolerance = tolerance)
+  expect_equal(ped_common_loop, ped_common_adjBeta_1, tolerance = tolerance)
+  expect_equal(ped_common_indexed, ped_common_adjBeta_1, tolerance = tolerance)
+  expect_equal(ped_common_loop, ped_common_adjBeta_2, tolerance = tolerance)
+  expect_equal(ped_common_indexed, ped_common_adjBeta_2, tolerance = tolerance)
+  expect_equal(ped_common_direct, ped_common_adjBeta_1, tolerance = tolerance)
+  expect_equal(ped_common_direct, ped_common_adjBeta_2, tolerance = tolerance)
+  expect_equal(ped_common_adjBeta_1, ped_common_adjBeta_2, tolerance = tolerance)
 })
 
 

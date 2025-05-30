@@ -25,14 +25,14 @@ plotPedigree <- function(ped,
                          pconnect = .5,
                          ...) {
   # Standardize column names in the input dataframe
-  ped <- standardizeColnames(ped)
+  ped <- standardizeColnames(ped, verbose = verbose)
 
   # Define required columns
-  simulated_vars <- c("fam", "ID", "dadID", "momID", "sex")
+  simulated_vars <- c("famID", "ID", "dadID", "momID", "sex")
 
   # Check if dataframe contains the required columns
   if (all(simulated_vars %in% names(ped))) {
-    p <- ped[, c("fam", "ID", "dadID", "momID", "sex")]
+    p <- ped[, c("famID", "ID", "dadID", "momID", "sex")]
     colnames(p) <- c("ped", "id", "father", "mother", "sex")
 
     # data conversation
@@ -83,11 +83,12 @@ plotPedigree <- function(ped,
       dadid = p$father,
       momid = p$mother,
       sex = p$sex,
-      famid = p$ped
+      famid = p$ped,
+      affected = p$affected
     )
     p3 <- p2["1"]
     if (verbose) {
-      print(p3)
+      message(p3)
       return(kinship2::plot.pedigree(p3,
         cex = cex,
         col = col,

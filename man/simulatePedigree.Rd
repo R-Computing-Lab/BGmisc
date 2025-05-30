@@ -2,6 +2,7 @@
 % Please edit documentation in R/simulatePedigree.R
 \name{simulatePedigree}
 \alias{simulatePedigree}
+\alias{SimPed}
 \title{Simulate Pedigrees
 This function simulates "balanced" pedigrees based on a group of parameters:
 1) k - Kids per couple;
@@ -19,6 +20,8 @@ simulatePedigree(
   balancedMar = TRUE,
   verbose = FALSE
 )
+
+SimPed(...)
 }
 \arguments{
 \item{kpc}{Number of kids per couple. An integer >= 2 that determines how many kids each fertilized mated couple will have in the pedigree. Default value is 3. Returns an error when kpc equals 1.}
@@ -35,7 +38,9 @@ simulatePedigree(
 
 \item{balancedMar}{Not fully developed yet. Always \code{TRUE} in the current version.}
 
-\item{verbose}{logical  If TRUE, print progress through stages of algorithm}
+\item{verbose}{logical  If TRUE, message progress through stages of algorithm}
+
+\item{...}{Additional arguments to be passed to other functions.}
 }
 \value{
 A \code{data.frame} with each row representing a simulated individual. The columns are as follows:

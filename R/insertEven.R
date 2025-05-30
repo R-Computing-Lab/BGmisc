@@ -12,7 +12,7 @@
 #' @export
 #' @seealso \code{\link{SimPed}} for the main function that uses this supporting function.
 
-evenInsert <- function(m, n, verbose = FALSE) {
+insertEven <- function(m, n, verbose = FALSE) {
   if (length(m) > length(n)) {
     temp <- m
     m <- n
@@ -24,11 +24,11 @@ evenInsert <- function(m, n, verbose = FALSE) {
     names(m)[i] <- ceiling(i * length(n) / length(m))
   }
   if (verbose) {
-    print(m)
+    message(m)
   }
   names(n) <- seq_along(n)
   if (verbose) {
-    print(n)
+    message(n)
   }
   vec <- c(m, n)
   vec <- vec[order(as.numeric(names(vec)))]
@@ -36,3 +36,7 @@ evenInsert <- function(m, n, verbose = FALSE) {
 
   return(vec)
 }
+
+#' @rdname insertEven
+#' @export
+evenInsert <- insertEven

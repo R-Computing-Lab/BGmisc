@@ -71,9 +71,9 @@ test_that("checkIDs verbose prints updates", {
   df <- ped2fam(potter, famID = "newFamID", personID = "personID")
   df_bound <- rbind(df, df[df$name == "Vernon Dursley", ])
   expect_output(checkIDs(df, verbose = TRUE, repair = TRUE),
-    regexp = "Changes Made:\\nlist\\(\\)"
+    regexp = "Checking IDs\\.\\.\\.\\\nStep 1: Checking for unique IDs\\.\\.\\."
   )
   expect_output(checkIDs(df_bound, verbose = TRUE, repair = TRUE),
-    regexp = "Changes Made:\\n\\$ID1\\n\\[1\\] "
+    regexp = "Checking IDs\\.\\.\\.\\\nStep 1: Checking for unique IDs\\.\\.\\."
   )
 })

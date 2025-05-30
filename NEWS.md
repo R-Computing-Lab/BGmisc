@@ -1,4 +1,29 @@
+# BGmisc 1.4.1
+* replaced print with message in all functions
+* Exposed several internal functions to the user
+* refactored addPhantomParents to be more efficient
+* add mtdna and mitochondria as aliases for mitochondrial
+* reorganized unit tests
+* introduces the new calculateCIs function for computing confidence intervals for correlation coefficients
+* added comprehensive tests and corresponding documentation updates for calculateCI
+
+# BGmisc 1.4.0
+* revived checkParents function to check for handling phantom parents and missing parents
+* added tests for checkParents function
+* added GoT analysis
+* reduced complexity of com2links, summarizePedigree, and checkIDs with the use of subfunctions
+* allow verbose argument to be passed to standardizeColnames
+* list SimPed and related_coef as aliases for functions
+* harmonizing function names like calcFamilySize from famSizeCal
+* implemented adjBeta function to evaluation alternative build method
+* reorganize file names to be more consistent
+* harmonized famID
+
+# BGmisc 1.3.5.1
+* Setting the default for the `sparse` argument in `ped2com()` to TRUE
+
 # BGmisc 1.3.5
+* Add calculateCIs and readDelimitedData functions
 * Added ASOIAF pedigree
 * Added com2links() function to convert components to kinship links, with accompanying tests
 * Added extractWikiFamilyTree() function to parse family trees from wiki templates, with accompanying tests
