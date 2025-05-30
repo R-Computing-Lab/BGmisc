@@ -5,6 +5,8 @@
 * refactored addPhantomParents to be more efficient
 * add mtdna and mitochondria as aliases for mitochondrial
 * reorganized unit tests
+* introduces the new calculateCIs function for computing confidence intervals for correlation coefficients
+* added comprehensive tests and corresponding documentation updates for calculateCI
 
 # BGmisc 1.4.0
 * revived checkParents function to check for handling phantom parents and missing parents
@@ -22,6 +24,7 @@
 * Setting the default for the `sparse` argument in `ped2com()` to TRUE
 
 # BGmisc 1.3.5
+* Add calculateCIs and readDelimitedData functions
 * Added ASOIAF pedigree
 * Added com2links() function to convert components to kinship links, with accompanying tests
 * Added extractWikiFamilyTree() function to parse family trees from wiki templates, with accompanying tests
