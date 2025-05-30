@@ -27,7 +27,7 @@ To illustrate this functionality, let us generate a pedigree. This pedigree has 
 ```{r}
 ## Loading Required Libraries
 library(BGmisc)
-
+library(ggpedigree)
 set.seed(5)
 df_ped <- simulatePedigree(
   kpc = 4,
@@ -53,7 +53,7 @@ summarizeFamilies(df_ped, famID = "fam")$family_summary
 ```
 ## Plotting Pedigree
 
-Pedigrees are visual diagrams that represent family relationships across generations. They are commonly used in genetics to trace the inheritance of specific traits or conditions. This vignette will guide you through visualizing simulated pedigrees using the `plotPedigree` function. This function is a wrapper function for `Kinship2`'s base R plotting.
+Pedigrees are visual diagrams that represent family relationships across generations. They are commonly used in genetics to trace the inheritance of specific traits or conditions. This vignette will guide you through visualizing simulated pedigrees using the `plotPedigree` function. This function is a wrapper function for `Kinship2`'s base R plotting. The sister package ggpedigree has a much nicer plotting function. It's also available on CRAN, but it is not a dependency of BGmisc. If you want to use ggpedigree, you can install it with `install.packages("ggpedigree")` and then use `ggplot2` syntax to plot pedigrees.
 
 ### Single Pedigree Visualization
 
@@ -64,6 +64,18 @@ To visualize a single simulated pedigree, use the `plotPedigree()` function.
 plotPedigree(df_ped)
 ```
 
+The nicer implementation of the `plotPedigree` function allows you to visualize the pedigree structure, including family relationships and individual characteristics. The plot displays individuals across generations, with lines connecting parents to their children, and spouses connected by horizontal lines.
+
+```{r, warning=FALSE, message=FALSE,fig.width=8, fig.height=6}
+library(ggpedigree)
+
+df_ped_recoded <- recodeSex(df_ped, code_male = "M", recode_male=1, recode_female = 0)
+
+ggpedigree::ggpedigree(df_ped_recoded,
+           personID = "ID",
+           code_male = 1) 
+
+```
 
 In the resulting plot, biological males are represented by squares, while biological females are represented by circles, following the standard pedigree conventions.
 
@@ -88,7 +100,36 @@ plotPedigree(df_ped_3, width = 3)
 
 # Plot the 4-generation pedigree
 plotPedigree(df_ped_4, width = 1)
+
 ```   
+
+Alternatively, you can use the `ggpedigree` package to plot multiple pedigrees side by side. This package allows for more customization and better aesthetics in pedigree visualization.
+
+```{r, echo=FALSE,fig.width=8, fig.height=6}
+library(ggplot2)
+
+df_ped_3$famID <- 1
+df_ped_3$fam <-NULL
+df_ped_3$ID <- df_ped_3$ID/100
+df_ped_3$dadID <- df_ped_3$dadID/100
+df_ped_3$momID <- df_ped_3$momID/100
+df_ped_3$spID <- df_ped_3$spID/100
+df_ped_4$famID <- 2
+df_ped_4$fam <-NULL
+
+df_ped_all <- rbind(df_ped_3, df_ped_4)
+df_ped_all <- recodeSex(df_ped_all, code_male = "M", 
+recode_male=1, 
+recode_female = 0)
+
+ggpedigree::ggpedigree(df_ped_all,
+           personID = "ID", 
+           famID = "famID",
+config = list(label_method = "geom_text",
+label_text_size =1),
+           code_male = 1) + 
+facet_wrap(~famID, scales = "free")
+```
 
 By examining the side-by-side plots, you can contrast and analyze the structures of different families, tracing the inheritance of specific traits or conditions if needed.
 

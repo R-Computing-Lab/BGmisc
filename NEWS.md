@@ -1,5 +1,4 @@
 # BGmisc 1.4.1
-## In progress
 * replaced print with message in all functions
 * Exposed several internal functions to the user
 * refactored addPhantomParents to be more efficient

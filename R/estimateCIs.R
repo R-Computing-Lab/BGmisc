@@ -124,7 +124,6 @@ calculateCIs <- function(tbl,
 #'
 #' These functions convert correlation coefficients (r) to Fisher's z-scores and back.
 #' @param rho A numeric vector of correlation coefficients.
-#' @param z A numeric vector of Fisher's z-scores.
 #' @return A numeric vector of transformed values.
 #' @keywords internal
 #' @details
@@ -134,6 +133,12 @@ calculateCIs <- function(tbl,
   0.5 * log((1 + rho) / (1 - rho))
 } # converts r to z
 
+
+#' @inherit .fisherz title
+#' @inherit .fisherz return
+#' @param z A numeric vector of Fisher's z-scores.
+#' @keywords internal
+#'
 .fisherz2r <- function(z) {
   (exp(2 * z) - 1) / (1 + exp(2 * z))
 } # converts back again

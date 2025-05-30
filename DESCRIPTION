@@ -38,6 +38,7 @@ Imports:
 Suggests: 
     corrplot,
     ggpedigree,
+    ggplot2,
     discord,
     dplyr,
     EasyMx,

@@ -8,8 +8,6 @@
 }
 \arguments{
 \item{rho}{A numeric vector of correlation coefficients.}
-
-\item{z}{A numeric vector of Fisher's z-scores.}
 }
 \value{
 A numeric vector of transformed values.
