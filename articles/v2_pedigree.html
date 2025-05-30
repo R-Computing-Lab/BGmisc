@@ -98,7 +98,7 @@ running the following code:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Loading Required Libraries</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/R-Computing-Lab/BGmisc/" class="external-link">BGmisc</a></span><span class="op">)</span></span>
-<span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/R-Computing-Lab/ggpedigree/" class="external-link">ggpedigree</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span>
 <span><span class="va">df_ped</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulatePedigree.html">simulatePedigree</a></span><span class="op">(</span></span>
 <span>  kpc <span class="op">=</span> <span class="fl">4</span>,</span>
@@ -175,7 +175,15 @@ allows you to visualize the pedigree structure, including family
 relationships and individual characteristics. The plot displays
 individuals across generations, with lines connecting parents to their
 children, and spouses connected by horizontal lines.</p>
-<p><img src="v2_pedigree_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/R-Computing-Lab/ggpedigree/" class="external-link">ggpedigree</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">df_ped_recoded</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/recodeSex.html">recodeSex</a></span><span class="op">(</span><span class="va">df_ped</span>, code_male <span class="op">=</span> <span class="st">"M"</span>, recode_male<span class="op">=</span><span class="fl">1</span>, recode_female <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">ggpedigree</span><span class="fu">::</span><span class="fu"><a href="https://r-computing-lab.github.io/ggpedigree/reference/ggPedigree.html" class="external-link">ggpedigree</a></span><span class="op">(</span><span class="va">df_ped_recoded</span>,</span>
+<span>           personID <span class="op">=</span> <span class="st">"ID"</span>,</span>
+<span>           code_male <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> </span></code></pre></div>
+<p><img src="v2_pedigree_files/figure-html/unnamed-chunk-6-1.png" width="768"></p>
 <p>In the resulting plot, biological males are represented by squares,
 while biological females are represented by circles, following the
 standard pedigree conventions.</p>
@@ -186,7 +194,7 @@ standard pedigree conventions.</p>
 <p>If you wish to compare different pedigrees side by side, you can plot
 them together. For instance, let’s visualize pedigrees for families
 spanning three and four generations, respectively.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">8</span><span class="op">)</span></span>
 <span><span class="co"># Simulate a family with 3 generations</span></span>
 <span><span class="va">df_ped_3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulatePedigree.html">simulatePedigree</a></span><span class="op">(</span>Ngen <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
@@ -208,7 +216,7 @@ spanning three and four generations, respectively.</p>
 <p>Alternatively, you can use the <code>ggpedigree</code> package to
 plot multiple pedigrees side by side. This package allows for more
 customization and better aesthetics in pedigree visualization.</p>
-<p><img src="v2_pedigree_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
+<p><img src="v2_pedigree_files/figure-html/unnamed-chunk-8-1.png" width="768"></p>
 <p>By examining the side-by-side plots, you can contrast and analyze the
 structures of different families, tracing the inheritance of specific
 traits or conditions if needed.</p>
