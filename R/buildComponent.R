@@ -538,6 +538,7 @@ loadOrComputeCheckpoint <- function(file, compute_fn, config, message_resume = N
 #' @param checkpoint_files A list of checkpoint file paths.
 #'
 #' @keywords internal
+#' @importFrom Matrix sparseMatrix
 .loadOrComputeIsPar <- function(iss, jss, parVal, ped, checkpoint_files, config) {
   isPar <- loadOrComputeCheckpoint(
     file = checkpoint_files$isPar,
@@ -574,6 +575,15 @@ loadOrComputeCheckpoint <- function(file, compute_fn, config, message_resume = N
 
   return(isChild)
 }
+
+#' Load or compute the inverse diagonal matrix
+#' @inheritParams loadOrComputeCheckpoint
+#' @inheritParams ped2com
+#' @param r The relatedness matrix.
+#' @importFrom Matrix Diagonal
+#' @keywords internal
+#' @return The computed inverse diagonal matrix.
+
 
 .loadOrComputeInverseDiagonal <- function(r, isChild, checkpoint_files, config) {
   r2 <- loadOrComputeCheckpoint(
@@ -623,12 +633,12 @@ loadOrComputeCheckpoint <- function(file, compute_fn, config, message_resume = N
   }
 
   if (config$resume && file.exists(checkpoint_files$iss) && file.exists(checkpoint_files$jss)) { # fix to check actual
-    if (config$verbose) cat("Resuming: Constructed matrix...\n")
+    if (config$verbose) message("Resuming: Constructed matrix...\n")
     jss <- readRDS(checkpoint_files$jss)
     iss <- readRDS(checkpoint_files$iss)
     list_of_adjacencies <- list(iss = iss, jss = jss)
   } else {
-    if (config$verbose) cat("Computing parent-child adjacency matrix...\n")
+    if (config$verbose) message("Computing parent-child adjacency matrix...\n")
     list_of_adjacencies <- computeParentAdjacency(
       ped = ped,
       save_rate_parlist = config$save_rate_parlist,
@@ -651,7 +661,7 @@ loadOrComputeCheckpoint <- function(file, compute_fn, config, message_resume = N
 
 
     if (config$verbose) {
-      cat("Constructed sparse matrix\n")
+      message("Constructed sparse matrix\n")
     }
     if (config$saveable) {
       saveRDS(list_of_adjacencies$jss, file = checkpoint_files$jss)
