@@ -153,7 +153,12 @@ across generations. They are commonly used in genetics to trace the
 inheritance of specific traits or conditions. This vignette will guide
 you through visualizing simulated pedigrees using the
 <code>plotPedigree</code> function. This function is a wrapper function
-for <code>Kinship2</code>’s base R plotting.</p>
+for <code>Kinship2</code>’s base R plotting. The sister package
+ggpedigree has a much nicer plotting function. It’s also available on
+CRAN, but it is not a dependency of BGmisc. If you want to use
+ggpedigree, you can install it with
+<code>install.packages("ggpedigree")</code> and then use
+<code>ggplot2</code> syntax to plot pedigrees.</p>
 <div class="section level4">
 <h4 id="single-pedigree-visualization">Single Pedigree Visualization<a class="anchor" aria-label="anchor" href="#single-pedigree-visualization"></a>
 </h4>
@@ -165,6 +170,12 @@ for <code>Kinship2</code>’s base R plotting.</p>
 <p><img src="v2_pedigree_files/figure-html/unnamed-chunk-5-1.png" width="768"></p>
 <pre><code><span><span class="co">#&gt; Did not plot the following people: 10032</span></span>
 <span><span class="co">#&gt; named list()</span></span></code></pre>
+<p>The nicer implementation of the <code>plotPedigree</code> function
+allows you to visualize the pedigree structure, including family
+relationships and individual characteristics. The plot displays
+individuals across generations, with lines connecting parents to their
+children, and spouses connected by horizontal lines.</p>
+<p><img src="v2_pedigree_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
 <p>In the resulting plot, biological males are represented by squares,
 while biological females are represented by circles, following the
 standard pedigree conventions.</p>
@@ -192,8 +203,12 @@ spanning three and four generations, respectively.</p>
 <span></span>
 <span><span class="co"># Plot the 4-generation pedigree</span></span>
 <span><span class="fu"><a href="../reference/plotPedigree.html">plotPedigree</a></span><span class="op">(</span><span class="va">df_ped_4</span>, width <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
-<p><img src="v2_pedigree_files/figure-html/unnamed-chunk-6-1.png" width="768"></p>
+<p><img src="v2_pedigree_files/figure-html/unnamed-chunk-7-1.png" width="768"></p>
 <pre><code><span><span class="co">#&gt; named list()</span></span></code></pre>
+<p>Alternatively, you can use the <code>ggpedigree</code> package to
+plot multiple pedigrees side by side. This package allows for more
+customization and better aesthetics in pedigree visualization.</p>
+<p><img src="v2_pedigree_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
 <p>By examining the side-by-side plots, you can contrast and analyze the
 structures of different families, tracing the inheritance of specific
 traits or conditions if needed.</p>
