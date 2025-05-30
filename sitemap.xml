@@ -27,6 +27,7 @@
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/calcAllGens.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/calcFamilySize.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/calcFamilySizeByGen.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/calculateCIs.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/calculateH.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/calculateRelatedness.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/calculateSummaryDT.html</loc></url>
@@ -55,7 +56,9 @@
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/dot-computeTranspose.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/dot-countPatternRows.legacy.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/dot-extract_info.legacy.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/dot-fisherz.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/dot-getModalValue.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/dot-loadOrComputeInverseDiagonal.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/dot-loadOrComputeIsChild.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/dot-loadOrComputeIsPar.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/dot-loadOrComputeParList.html</loc></url>
