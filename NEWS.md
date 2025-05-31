@@ -1,3 +1,6 @@
+# BGmisc 1.4.2
+* Added twinIDs for potter and asoiaf pedigrees
+
 # BGmisc 1.4.1
 * replaced print with message in all functions
 * Exposed several internal functions to the user
