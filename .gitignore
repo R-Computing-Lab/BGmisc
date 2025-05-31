@@ -12,8 +12,6 @@
 BGmisc.code-workspace
 R/.Rhistory
 benchmark_results.csv
-data-raw/ASOIAF.ged
-data-raw/ASOIAF_040725.ged
 dataRelatedPairs.csv
 dataRelatedPairs_new2.csv
 paper/paper.html

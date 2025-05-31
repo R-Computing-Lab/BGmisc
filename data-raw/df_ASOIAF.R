@@ -26,8 +26,12 @@ df <- ped2fam(ASOIAF, personID = "id") %>%
   mutate(
     momID = as.numeric(momID),
     dadID = as.numeric(dadID),
-    name = str_remove(name, "/")
-  )
+    name = str_remove(name, "/"),
+    twinID = case_match(name,
+      "Jaime Lannister" ~ 165,
+       "Cersei Lannister" ~ 164,
+      .default = NA_real_
+    ))
 
 # pedADD <- ped2com(df , personID = "id", momID = "momID",
 # dadID = "dadID", component = "additive", isChild_method = "partial_parent")

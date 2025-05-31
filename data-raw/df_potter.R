@@ -12,7 +12,7 @@ potter <- data.frame(
     11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
     21, 22, 23, 24, 25, 26, 27, 28, 29, 30
   ),
-  famID = rep("1", 30),
+  famID = rep(1, 30),
   name = c(
     "Vernon Dursley",
     "Marjorie Dursley",
@@ -33,7 +33,7 @@ potter <- data.frame(
     "Hermione Granger",
     "Fleur Delacour",
     "Gabrielle Delacour",
-    "Audrey UNKNOWN",
+    "Audrey",
     "James Potter II",
     "Albus Potter",
     "Lily Potter",
@@ -82,7 +82,7 @@ potter <- data.frame(
 
 potter[nrow(potter) + 1, ] <- list(
   101,
-  "1",
+  1,
   "Mother Dursley",
   0,
   NA,
@@ -92,7 +92,7 @@ potter[nrow(potter) + 1, ] <- list(
 )
 potter[nrow(potter) + 1, ] <- list(
   102,
-  "1",
+  1,
   "Father Dursley",
   0,
   NA,
@@ -102,7 +102,7 @@ potter[nrow(potter) + 1, ] <- list(
 )
 potter[nrow(potter) + 1, ] <- list(
   104,
-  "1",
+  1,
   "Father Evans",
   0,
   NA,
@@ -112,7 +112,7 @@ potter[nrow(potter) + 1, ] <- list(
 )
 potter[nrow(potter) + 1, ] <- list(
   103,
-  "1",
+  1,
   "Mother Evans",
   0,
   NA,
@@ -122,7 +122,7 @@ potter[nrow(potter) + 1, ] <- list(
 )
 potter[nrow(potter) + 1, ] <- list(
   106,
-  "1",
+  1,
   "Father Delacour",
   0,
   NA,
@@ -132,7 +132,7 @@ potter[nrow(potter) + 1, ] <- list(
 )
 potter[nrow(potter) + 1, ] <- list(
   105,
-  "1",
+  1,
   "Mother Delacour",
   0,
   NA,
@@ -140,6 +140,15 @@ potter[nrow(potter) + 1, ] <- list(
   106,
   0
 )
+
+potter <- potter %>%
+  mutate(
+    twinID = case_when(
+      name == "Fred Weasley" ~ 13,
+      name == "George Weasley" ~ 12,
+      TRUE ~ NA_real_
+    )
+  )
 
 # potter[nrow(potter) + 1,] <- list(personID,fam,name,gen,
 #                                momID,dadID,spouseID,sex)
@@ -153,7 +162,7 @@ usethis::use_data(potter, overwrite = TRUE, compress = "xz")
 potter_big <- readGedcom("data-raw/potter_big.ged")
 
 
-df <- ped2fam(potter_big, personID = "id") %>%
+df <- ped2fam(potter_big, personID = "personID") %>%
   select(
     -name_given,
     -name_surn,
@@ -162,7 +171,7 @@ df <- ped2fam(potter_big, personID = "id") %>%
     -FAMC,
     -FAMS
   ) %>%
-  rename(personID = id) %>%
+ # rename(personID = id) %>%
   mutate(
     personID = as.numeric(personID),
     momID = as.numeric(momID),
