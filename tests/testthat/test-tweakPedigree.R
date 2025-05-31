@@ -31,6 +31,11 @@ test_that("makeTwins - Twins specified by IDs", {
   result <- makeTwins(ped, ID_twin1 = 1, ID_twin2 = 2, verbose = TRUE)
   expect_equal(result, expected_result)
 
+  result2 <- makeTwins(ped, ID_twin1 = 1,
+                       ID_twin2 = 2,
+                       verbose = TRUE, zygosity = "DZ")
+  expected_result$zygosity[expected_result$zygosity=="MZ"] <- "DZ"
+  expect_equal(result2, expected_result)
  # hp <- makeTwins(potter, ID_twin1 = 12, ID_twin2 = 13, verbose = TRUE)
 })
 
