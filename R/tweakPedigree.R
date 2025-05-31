@@ -61,7 +61,7 @@ makeTwins <- function(ped, ID_twin1 = NA_integer_,
             } else if(zygosity == "OS"){
               twin2_Pool <- ped$ID[ped$ID != ID_twin1 & ped$gen == gen_twin & ped$sex != ped$sex[ped$ID == ID_twin1] & ped$dadID == ped$dadID[ped$ID == ID_twin1] & ped$momID == ped$momID[ped$ID == ID_twin1]]
          }   else {
-              stop("The zygosity should be either 'MZ' or 'DZ'")
+              stop("The zygosity should be either 'MZ', 'DZ', or 'OS'")
             }
 
             # if there is an non-NA value in the twin2_Pool, get rid of the NA value
