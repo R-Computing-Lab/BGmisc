@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">BGmisc</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,7 +64,7 @@
       <h1>Pedigree Simulation and Visualization with BGmisc</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/R-Computing-Lab/BGmisc/blob/v1.4.1/vignettes/v2_pedigree.Rmd" class="external-link"><code>vignettes/v2_pedigree.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/R-Computing-Lab/BGmisc/blob/main/vignettes/v2_pedigree.Rmd" class="external-link"><code>vignettes/v2_pedigree.Rmd</code></a></small>
       <div class="d-none name"><code>v2_pedigree.Rmd</code></div>
     </div>
 
@@ -178,11 +178,12 @@ children, and spouses connected by horizontal lines.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/R-Computing-Lab/ggpedigree/" class="external-link">ggpedigree</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">df_ped_recoded</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/recodeSex.html">recodeSex</a></span><span class="op">(</span><span class="va">df_ped</span>, code_male <span class="op">=</span> <span class="st">"M"</span>, recode_male<span class="op">=</span><span class="fl">1</span>, recode_female <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
+<span><span class="va">df_ped_recoded</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/recodeSex.html">recodeSex</a></span><span class="op">(</span><span class="va">df_ped</span>, code_male <span class="op">=</span> <span class="st">"M"</span>, recode_male <span class="op">=</span> <span class="fl">1</span>, recode_female <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">ggpedigree</span><span class="fu">::</span><span class="fu"><a href="https://r-computing-lab.github.io/ggpedigree/reference/ggPedigree.html" class="external-link">ggpedigree</a></span><span class="op">(</span><span class="va">df_ped_recoded</span>,</span>
-<span>           personID <span class="op">=</span> <span class="st">"ID"</span>,</span>
-<span>           code_male <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> </span></code></pre></div>
+<span>  personID <span class="op">=</span> <span class="st">"ID"</span>,</span>
+<span>  code_male <span class="op">=</span> <span class="fl">1</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <p><img src="v2_pedigree_files/figure-html/unnamed-chunk-6-1.png" width="768"></p>
 <p>In the resulting plot, biological males are represented by squares,
 while biological females are represented by circles, following the

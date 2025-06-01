@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">BGmisc</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,7 +64,7 @@
       <h1>ASOIAF: How related are Jon and Danny?</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/R-Computing-Lab/BGmisc/blob/v1.4.1/vignettes/v5_ASOIAF.Rmd" class="external-link"><code>vignettes/v5_ASOIAF.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/R-Computing-Lab/BGmisc/blob/main/vignettes/v5_ASOIAF.Rmd" class="external-link"><code>vignettes/v5_ASOIAF.Rmd</code></a></small>
       <div class="d-none name"><code>v5_ASOIAF.Rmd</code></div>
     </div>
 
@@ -100,13 +100,13 @@ and parent identifiers for a subset of characters drawn from the <em>A
 Song of Ice and Fire</em> canon.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">ASOIAF</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##   id famID momID dadID          name sex</span></span>
-<span><span class="co">## 1  1     1    NA    NA   Walder Frey   M</span></span>
-<span><span class="co">## 2  2     1    NA    NA   Perra Royce   F</span></span>
-<span><span class="co">## 3  3     1     2     1  Stevron Frey   M</span></span>
-<span><span class="co">## 4  4     1     2     1    Emmon Frey   M</span></span>
-<span><span class="co">## 5  5     1     2     1    Aenys Frey   M</span></span>
-<span><span class="co">## 6  6     1    NA    NA Corenna Swann   F</span></span></code></pre>
+<pre><code><span><span class="co">##   id famID momID dadID          name sex twinID</span></span>
+<span><span class="co">## 1  1     1    NA    NA   Walder Frey   M     NA</span></span>
+<span><span class="co">## 2  2     1    NA    NA   Perra Royce   F     NA</span></span>
+<span><span class="co">## 3  3     1     2     1  Stevron Frey   M     NA</span></span>
+<span><span class="co">## 4  4     1     2     1    Emmon Frey   M     NA</span></span>
+<span><span class="co">## 5  5     1     2     1    Aenys Frey   M     NA</span></span>
+<span><span class="co">## 6  6     1    NA    NA Corenna Swann   F     NA</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="prepare-and-validate-sex-codes">Prepare and Validate Sex Codes<a class="anchor" aria-label="anchor" href="#prepare-and-validate-sex-codes"></a>
