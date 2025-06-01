@@ -44,9 +44,10 @@ test_that("checkPedigreeNetwork detects individuals with excess parents in potte
   excess_parents_potter <- rbind(excess_parents_potter, extra_row)
 
   results <- checkPedigreeNetwork(excess_parents_potter,
-                                  personID = "personID",
-                                  momID = "momID",
-                                  dadID = "dadID", verbose = TRUE)
+    personID = "personID",
+    momID = "momID",
+    dadID = "dadID", verbose = TRUE
+  )
 
   expect_true("Harry Potter" %in% excess_parents_potter$name[excess_parents_potter$personID %in% results$individuals_with_excess_parents])
 })

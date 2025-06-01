@@ -1,6 +1,7 @@
 # BGmisc 1.4.2
 * Added twinIDs for potter and asoiaf pedigrees
 * Added twinID to simulatePedigree function, and extended to include MZ, DZ, and SS twins.
+* Added a few more tests for simulatePedigree
 
 # BGmisc 1.4.1
 * replaced print with message in all functions

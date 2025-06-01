@@ -17,7 +17,7 @@ makeTwins <- function(ped, ID_twin1 = NA_integer_,
                       ID_twin2 = NA_integer_,
                       gen_twin = 2,
                       verbose = FALSE,
-                      zygosity="MZ") {
+                      zygosity = "MZ") {
   # Check if the ped is the same format as the output of simulatePedigree
   if (paste0(colnames(ped), collapse = "") != paste0(c(
     "famID", "ID", "gen",
@@ -54,13 +54,13 @@ makeTwins <- function(ped, ID_twin1 = NA_integer_,
             ID_twin1 <- resample(ped$ID[ped$gen == gen_twin & !(ped$ID %in% usedID) & !is.na(ped$dadID)], 1)
             # cat("twin1", ID_twin1, "\n")
             # find one same sex sibling who has the same dadID and momID as the selected individual
-            if(zygosity %in% c("MZ","SS")){
+            if (zygosity %in% c("MZ", "SS")) {
               twin2_Pool <- ped$ID[ped$ID != ID_twin1 & ped$gen == gen_twin & ped$sex == ped$sex[ped$ID == ID_twin1] & ped$dadID == ped$dadID[ped$ID == ID_twin1] & ped$momID == ped$momID[ped$ID == ID_twin1]]
-            } else if(zygosity == "DZ"){
+            } else if (zygosity == "DZ") {
               twin2_Pool <- ped$ID[ped$ID != ID_twin1 & ped$gen == gen_twin & ped$dadID == ped$dadID[ped$ID == ID_twin1] & ped$momID == ped$momID[ped$ID == ID_twin1]]
-            } else if(zygosity == "OS"){
+            } else if (zygosity == "OS") {
               twin2_Pool <- ped$ID[ped$ID != ID_twin1 & ped$gen == gen_twin & ped$sex != ped$sex[ped$ID == ID_twin1] & ped$dadID == ped$dadID[ped$ID == ID_twin1] & ped$momID == ped$momID[ped$ID == ID_twin1]]
-         }   else {
+            } else {
               stop("The zygosity should be either 'MZ', 'DZ', or 'OS'")
             }
 
@@ -79,13 +79,13 @@ makeTwins <- function(ped, ID_twin1 = NA_integer_,
             # }
           } else {
             # randomly select all males or females in the generation and put them in a vector
-            if (zygosity %in% c("MZ","SS")) {
+            if (zygosity %in% c("MZ", "SS")) {
               selectGender <- ped$ID[ped$gen == gen_twin & ped$sex == resample(c("M", "F"), 1) & !is.na(ped$dadID) & !is.na(ped$momID)]
             } else if (zygosity %in% c("DZ")) {
               selectGender <- ped$ID[ped$gen == gen_twin & !is.na(ped$dadID) & !is.na(ped$momID)]
             } else if (zygosity %in% c("OS")) {
               stop("Opposite sex twins are not supported yet. Please use 'MZ' for monozygotic twins or SS for same-sex twins or 'DZ' for dizygotic twins.")
-             } else {
+            } else {
               stop("The zygosity should be either 'MZ' or 'DZ'")
             }
 
@@ -120,7 +120,7 @@ makeTwins <- function(ped, ID_twin1 = NA_integer_,
     cat("twin1", ID_twin1, "\n")
     cat("twin2", ID_twin2, "\n")
   }
-  names(ped)[names(ped)=="MZtwin"] <- "twinID"
+  names(ped)[names(ped) == "MZtwin"] <- "twinID"
   ped$zygosity[ped$ID == ID_twin1] <- zygosity
   ped$zygosity[ped$ID == ID_twin2] <- zygosity
   return(ped)

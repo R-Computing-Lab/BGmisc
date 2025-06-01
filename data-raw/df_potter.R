@@ -171,7 +171,7 @@ df <- ped2fam(potter_big, personID = "personID") %>%
     -FAMC,
     -FAMS
   ) %>%
- # rename(personID = id) %>%
+  # rename(personID = id) %>%
   mutate(
     personID = as.numeric(personID),
     momID = as.numeric(momID),
