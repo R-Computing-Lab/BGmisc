@@ -12,7 +12,8 @@ makeTwins(
   ID_twin1 = NA_integer_,
   ID_twin2 = NA_integer_,
   gen_twin = 2,
-  verbose = FALSE
+  verbose = FALSE,
+  zygosity = "MZ"
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ makeTwins(
 \item{gen_twin}{A vector of \code{generation} of the twin to be imputed.}
 
 \item{verbose}{logical.  If TRUE, print progress through stages of algorithm}
+
+\item{zygosity}{A character string indicating the zygosity of the twins. Default is "MZ" for monozygotic twins.}
 }
 \value{
 Returns a \code{data.frame} with MZ twins information added as a new column.

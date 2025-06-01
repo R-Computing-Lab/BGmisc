@@ -69,12 +69,12 @@ The nicer implementation of the `plotPedigree` function allows you to visualize 
 ```{r, warning=FALSE, message=FALSE,fig.width=8, fig.height=6}
 library(ggpedigree)
 
-df_ped_recoded <- recodeSex(df_ped, code_male = "M", recode_male=1, recode_female = 0)
+df_ped_recoded <- recodeSex(df_ped, code_male = "M", recode_male = 1, recode_female = 0)
 
 ggpedigree::ggpedigree(df_ped_recoded,
-           personID = "ID",
-           code_male = 1) 
-
+  personID = "ID",
+  code_male = 1
+)
 ```
 
 In the resulting plot, biological males are represented by squares, while biological females are represented by circles, following the standard pedigree conventions.
@@ -100,7 +100,6 @@ plotPedigree(df_ped_3, width = 3)
 
 # Plot the 4-generation pedigree
 plotPedigree(df_ped_4, width = 1)
-
 ```   
 
 Alternatively, you can use the `ggpedigree` package to plot multiple pedigrees side by side. This package allows for more customization and better aesthetics in pedigree visualization.
@@ -109,26 +108,31 @@ Alternatively, you can use the `ggpedigree` package to plot multiple pedigrees s
 library(ggplot2)
 
 df_ped_3$famID <- 1
-df_ped_3$fam <-NULL
-df_ped_3$ID <- df_ped_3$ID/100
-df_ped_3$dadID <- df_ped_3$dadID/100
-df_ped_3$momID <- df_ped_3$momID/100
-df_ped_3$spID <- df_ped_3$spID/100
+df_ped_3$fam <- NULL
+df_ped_3$ID <- df_ped_3$ID / 100
+df_ped_3$dadID <- df_ped_3$dadID / 100
+df_ped_3$momID <- df_ped_3$momID / 100
+df_ped_3$spID <- df_ped_3$spID / 100
 df_ped_4$famID <- 2
-df_ped_4$fam <-NULL
+df_ped_4$fam <- NULL
 
 df_ped_all <- rbind(df_ped_3, df_ped_4)
-df_ped_all <- recodeSex(df_ped_all, code_male = "M", 
-recode_male=1, 
-recode_female = 0)
+df_ped_all <- recodeSex(df_ped_all,
+  code_male = "M",
+  recode_male = 1,
+  recode_female = 0
+)
 
 ggpedigree::ggpedigree(df_ped_all,
-           personID = "ID", 
-           famID = "famID",
-config = list(label_method = "geom_text",
-label_text_size =1),
-           code_male = 1) + 
-facet_wrap(~famID, scales = "free")
+  personID = "ID",
+  famID = "famID",
+  config = list(
+    label_method = "geom_text",
+    label_text_size = 1
+  ),
+  code_male = 1
+) +
+  facet_wrap(~famID, scales = "free")
 ```
 
 By examining the side-by-side plots, you can contrast and analyze the structures of different families, tracing the inheritance of specific traits or conditions if needed.

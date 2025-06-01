@@ -26,13 +26,14 @@ test_that("checkPedigreeNetwork detects individuals with excess parents in potte
   # Artificially create an excess parent situation for Harry Potter
   new_parent <- data.frame(
     personID = "999",
-    famID = "1",
+    famID = 1,
     name = "New Parent",
     gen = 1,
     momID = NA,
     dadID = NA,
     spouseID = NA,
-    sex = "M"
+    sex = "M",
+    twinID = NA
   )
 
   excess_parents_potter <- rbind(excess_parents_potter, new_parent)
@@ -42,7 +43,11 @@ test_that("checkPedigreeNetwork detects individuals with excess parents in potte
   extra_row$dadID <- "999" # new parent
   excess_parents_potter <- rbind(excess_parents_potter, extra_row)
 
-  results <- checkPedigreeNetwork(excess_parents_potter, personID = "personID", momID = "momID", dadID = "dadID", verbose = TRUE)
+  results <- checkPedigreeNetwork(excess_parents_potter,
+    personID = "personID",
+    momID = "momID",
+    dadID = "dadID", verbose = TRUE
+  )
 
   expect_true("Harry Potter" %in% excess_parents_potter$name[excess_parents_potter$personID %in% results$individuals_with_excess_parents])
 })

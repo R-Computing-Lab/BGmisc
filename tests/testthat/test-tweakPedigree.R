@@ -18,17 +18,31 @@ test_that("makeTwins - Twins specified by IDs", {
     momID = c(NA, NA, 2, 2),
     spID = c(NA, NA, NA, NA),
     sex = c("M", "F", "M", "F"),
-    MZtwin = c(2, 1, NA, NA)
+    twinID = c(2, 1, NA, NA),
+    zygosity = c("MZ", "MZ", NA, NA)
   )
   result <- makeTwins(ped, ID_twin1 = 1, ID_twin2 = 2)
 
   expect_equal(result, expected_result)
+
   # does it handle weird variable names? "fam" = "famID"
 
   names(ped)[1] <- "fam"
 
-  result <- makeTwins(ped, ID_twin1 = 1, ID_twin2 = 2, verbose = TRUE)
-  expect_equal(result, expected_result)
+  result_badfam <- makeTwins(ped, ID_twin1 = 1, ID_twin2 = 2, verbose = TRUE)
+
+  expect_equal(result_badfam, expected_result)
+
+
+  result2 <- makeTwins(ped,
+    ID_twin1 = 1,
+    ID_twin2 = 2,
+    verbose = TRUE, zygosity = "DZ"
+  )
+
+  expected_result$zygosity[expected_result$zygosity == "MZ"] <- "DZ"
+  expect_equal(result2, expected_result)
+  # hp <- makeTwins(potter, ID_twin1 = 12, ID_twin2 = 13, verbose = TRUE)
 })
 
 test_that("makeTwins - Twins specified by generation", {
@@ -41,21 +55,39 @@ test_that("makeTwins - Twins specified by generation", {
   ped <- simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR)
   #
   result <- makeTwins(ped, gen_twin = gen_twin)
-  expect_equal(names(result), c("famID", "ID", "gen", "dadID", "momID", "spID", "sex", "MZtwin"))
+  expect_equal(names(result), c("famID", "ID", "gen", "dadID", "momID", "spID", "sex", "twinID", "zygosity"))
   # do we have the same people?
   expect_equal(result$ID, ped$ID)
   # did it make one pair of twins?
-  expect_equal(sum(!is.na(result$MZtwin)), 2)
+  expect_equal(sum(!is.na(result$twinID)), 2)
   # did it make the pair in the correct generation?
-  expect_equal(mean(result$gen[!is.na(result$MZtwin)]), gen_twin)
+  expect_equal(mean(result$gen[!is.na(result$twinID)]), gen_twin)
   # are they the same sex?
-  expect_equal(length(unique(result$sex[!is.na(result$MZtwin)])), 1)
+  expect_equal(length(unique(result$sex[!is.na(result$twinID)])), 1)
   # are they from the same family?
-  expect_equal(length(unique(result$fam[!is.na(result$MZtwin)])), 1)
+  expect_equal(length(unique(result$fam[!is.na(result$twinID)])), 1)
   # do they have the same mom?
-  expect_equal(length(unique(result$momID[!is.na(result$MZtwin)])), 1)
+  expect_equal(length(unique(result$momID[!is.na(result$twinID)])), 1)
   # do they have the same dad?
-  expect_equal(length(unique(result$dadID[!is.na(result$MZtwin)])), 1)
+  expect_equal(length(unique(result$dadID[!is.na(result$twinID)])), 1)
+
+  resultdz <- makeTwins(ped, gen_twin = gen_twin, zygosity = "DZ")
+
+  expect_equal(names(resultdz), c("famID", "ID", "gen", "dadID", "momID", "spID", "sex", "twinID", "zygosity"))
+  # do we have the same people?
+  expect_equal(resultdz$ID, ped$ID)
+  # did it make one pair of twins?
+  expect_equal(sum(!is.na(resultdz$twinID)), 2)
+  # did it make the pair in the correct generation?
+  expect_equal(mean(resultdz$gen[!is.na(resultdz$twinID)]), gen_twin)
+  # are they the same sex?
+  expect_equal(length(unique(resultdz$sex[!is.na(resultdz$twinID)])), 1)
+  # are they from the same family?
+  expect_equal(length(unique(resultdz$fam[!is.na(resultdz$twinID)])), 1)
+  # do they have the same mom?
+  expect_equal(length(unique(resultdz$momID[!is.na(resultdz$twinID)])), 1)
+  # do they have the same dad?
+  expect_equal(length(unique(resultdz$dadID[!is.na(resultdz$twinID)])), 1)
 })
 
 # Test for makeInbreeding function
