@@ -80,7 +80,7 @@ ped2fam <- function(ped, personID = "ID",
 #' @export
 #'
 ped2graph <- function(ped,
-                      personID = "personID",
+                      personID = "ID",
                       momID = "momID",
                       dadID = "dadID",
                       directed = TRUE,
@@ -179,7 +179,7 @@ ped2graph <- function(ped,
 #' for creating paternal line IDs
 #' @export
 #'
-ped2maternal <- function(ped, personID = "personID",
+ped2maternal <- function(ped, personID = "ID",
                          momID = "momID", dadID = "dadID",
                          matID = "matID", ...) {
   # Call to wrapper function

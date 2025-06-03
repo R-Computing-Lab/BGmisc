@@ -20,3 +20,4 @@ A numeric vector with the generated or adjusted number of kids per couple.
 This function generates or adjusts the number of kids per couple in a generation
 based on the specified average and whether the count should be randomly determined.
 }
+\keyword{internal}

@@ -6,7 +6,7 @@
 \usage{
 ped2graph(
   ped,
-  personID = "personID",
+  personID = "ID",
   momID = "momID",
   dadID = "dadID",
   directed = TRUE,

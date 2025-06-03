@@ -6,7 +6,7 @@
 \usage{
 ped2maternal(
   ped,
-  personID = "personID",
+  personID = "ID",
   momID = "momID",
   dadID = "dadID",
   matID = "matID",
