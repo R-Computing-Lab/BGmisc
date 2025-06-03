@@ -184,7 +184,7 @@ plt <- ggPedigree(df_repaired,
   config = list(
     status_unaffected_lab = 0,
     sex_color = TRUE,
-    point_size=2,
+    point_size=1,
     code_male = "M",
     status_affected_lab = 1,
     affected_shape = 4,

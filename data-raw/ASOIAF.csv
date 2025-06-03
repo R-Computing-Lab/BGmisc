@@ -347,31 +347,31 @@ id,famID,momID,dadID,name,sex,twinID
 346,6,344,340,Aemond Targaryen,M,NA
 347,6,344,340,Targaryen,M,NA
 348,6,344,340,Targaryen,F,NA
-349,16,351,350,Targaryen,U,NA
-350,16,NA,352,Jaehaerys 'The Conciliator' Targaryen,M,NA
-351,16,NA,352,Alysanne 'The Good' Targaryen,F,NA
-352,16,354,353,Aenys Targaryen,M,NA
-353,16,359,358,Aegon 'The Conqueror' Targaryen,M,NA
-354,16,359,358,Rhaenys Targaryen,F,NA
-355,16,359,358,Visenya Targaryen,F,NA
-356,16,355,353,Maegor Targaryen,M,NA
-357,17,NA,NA,Jeyne Westerling,F,NA
-358,16,NA,364,Aerion Targaryen,M,NA
-359,16,NA,NA,Velena Velaryon,F,NA
+349,6,351,350,Targaryen,U,NA
+350,6,NA,352,Jaehaerys 'The Conciliator' Targaryen,M,NA
+351,6,NA,352,Alysanne 'The Good' Targaryen,F,NA
+352,6,354,353,Aenys Targaryen,M,NA
+353,6,359,358,Aegon 'The Conqueror' Targaryen,M,NA
+354,6,359,358,Rhaenys Targaryen,F,NA
+355,6,359,358,Visenya Targaryen,F,NA
+356,6,355,353,Maegor Targaryen,M,NA
+357,16,NA,NA,Jeyne Westerling,F,NA
+358,6,NA,364,Aerion Targaryen,M,NA
+359,6,NA,NA,Velena Velaryon,F,NA
 360,6,NA,167,NA,U,NA
-361,16,NA,358,Orys Baratheon,M,NA
-362,18,NA,363,Argella Durrendon,F,NA
-363,18,NA,NA,Argilac 'The Arrogant' Durrendon,M,NA
-364,16,NA,365,Daemon Targaryen,M,NA
-365,16,370,368,Aerys Targaryen,M,NA
-366,16,NA,365,Aelix Targaryen,M,NA
-367,16,NA,365,Baelon Targaryen,M,NA
-368,16,372,371,Aegon Targaryen,M,NA
-369,16,370,368,Maegon Targaryen,M,NA
-370,16,372,371,Eleana Targaryen,F,NA
-371,16,NA,373,Gaemon Targaryen,M,NA
-372,16,NA,373,Daenys Targaryen,F,NA
-373,16,NA,NA,Aenar Targaryen,M,NA
+361,6,NA,358,Orys Baratheon,M,NA
+362,17,NA,363,Argella Durrendon,F,NA
+363,17,NA,NA,Argilac 'The Arrogant' Durrendon,M,NA
+364,6,NA,365,Daemon Targaryen,M,NA
+365,6,370,368,Aerys Targaryen,M,NA
+366,6,NA,365,Aelix Targaryen,M,NA
+367,6,NA,365,Baelon Targaryen,M,NA
+368,6,372,371,Aegon Targaryen,M,NA
+369,6,370,368,Maegon Targaryen,M,NA
+370,6,372,371,Eleana Targaryen,F,NA
+371,6,NA,373,Gaemon Targaryen,M,NA
+372,6,NA,373,Daenys Targaryen,F,NA
+373,6,NA,NA,Aenar Targaryen,M,NA
 374,6,376,375,Loras Tyrell,M,NA
 375,6,382,380,Mace Tyrell,M,NA
 376,6,407,406,Alerie Hightower,F,NA
@@ -379,14 +379,14 @@ id,famID,momID,dadID,name,sex,twinID
 378,6,376,375,Willas Tyrell,M,NA
 379,6,376,375,Margaery Tyrell,F,NA
 380,6,NA,393,Luthor Tyrell,M,NA
-381,19,NA,NA,Leonette Fossoway,F,NA
+381,18,NA,NA,Leonette Fossoway,F,NA
 382,6,NA,439,Olenna Redwyne,F,NA
 383,6,NA,393,Garth 'The Gross' Tyrell,M,NA
 384,6,NA,393,Moryn Tyrell,M,NA
 385,6,NA,393,Gormon Tyrell,M,NA
 386,6,382,380,Janna Tyrell,F,NA
 387,6,382,380,Mina Tyrell,F,NA
-388,20,NA,NA,Jon Fossoway,M,NA
+388,19,NA,NA,Jon Fossoway,M,NA
 389,6,NA,438,Paxter Redwyne,M,NA
 390,6,387,389,Horas 'Horror' Redwyne,M,391
 391,6,387,389,Hobber 'Slobber' Redwyne,M,390
@@ -403,11 +403,11 @@ id,famID,momID,dadID,name,sex,twinID
 402,6,NA,NA,Lia Serry,F,NA
 403,6,402,399,Elinor Tyrell,F,NA
 404,6,402,399,Luthor Tyrell,M,NA
-405,21,NA,NA,Leo Blackbar,M,NA
+405,20,NA,NA,Leo Blackbar,M,NA
 406,6,NA,425,Leyton Hightower,M,NA
 407,6,448,444,Rhea Florent,F,NA
 408,6,407,406,Baelor Hightower,M,NA
-409,22,NA,NA,Rhonda Rowan,F,NA
+409,21,NA,NA,Rhonda Rowan,F,NA
 410,6,407,406,Alysanne Hightower,F,NA
 411,6,NA,NA,Arthur Ambrose,M,NA
 412,6,407,406,Denyse Hightower,F,NA
@@ -416,26 +416,26 @@ id,famID,momID,dadID,name,sex,twinID
 415,6,407,406,Malora Hightower,F,NA
 416,6,407,406,Garth Hightower,M,NA
 417,6,407,406,Gunthor Hightower,M,NA
-418,23,NA,NA,Jeyne Fossoway,F,NA
+418,22,NA,NA,Jeyne Fossoway,F,NA
 419,6,407,406,Leyla Hightower,F,NA
-420,24,NA,NA,Jon Cupps,M,NA
+420,23,NA,NA,Jon Cupps,M,NA
 421,6,407,406,Humfrey Hightower,M,NA
 422,6,407,406,Lynesse Hightower,F,NA
-423,25,NA,488,Jorah Mormont,M,NA
-424,26,NA,NA,Tregar Ormollen,M,NA
+423,24,NA,488,Jorah Mormont,M,NA
+424,25,NA,NA,Tregar Ormollen,M,NA
 425,6,NA,426,Hightower,M,NA
 426,6,NA,NA,Hightower,M,NA
 427,6,NA,426,Gerold 'The White Bull' Hightower,M,NA
-428,27,NA,NA,Glover,F,NA
-429,25,NA,NA,Mormont,M,NA
-430,25,NA,429,Maege Mormont,F,NA
-431,25,430,NA,Dacey Mormont,F,NA
-432,25,430,NA,Alysane Mormont,F,NA
-433,25,430,NA,Lyra Mormont,F,NA
-434,25,430,NA,Jorelle Mormont,F,NA
-435,25,430,NA,Lyanna Mormont,F,NA
-436,25,432,NA,Snow,F,NA
-437,25,432,NA,Snow,M,NA
+428,26,NA,NA,Glover,F,NA
+429,24,NA,NA,Mormont,M,NA
+430,24,NA,429,Maege Mormont,F,NA
+431,24,430,NA,Dacey Mormont,F,NA
+432,24,430,NA,Alysane Mormont,F,NA
+433,24,430,NA,Lyra Mormont,F,NA
+434,24,430,NA,Jorelle Mormont,F,NA
+435,24,430,NA,Lyanna Mormont,F,NA
+436,24,432,NA,Snow,F,NA
+437,24,432,NA,Snow,M,NA
 438,6,NA,439,Redwyne,M,NA
 439,6,NA,NA,Runceford Redwyne,M,NA
 440,6,NA,443,Ryam Florent,M,NA
@@ -449,7 +449,7 @@ id,famID,momID,dadID,name,sex,twinID
 448,6,NA,NA,Melara Crane,F,NA
 449,6,448,444,Alekyne Florent,M,NA
 450,6,448,444,Melessa Florent,F,NA
-451,28,NA,NA,Rycherd Crane,M,NA
+451,27,NA,NA,Rycherd Crane,M,NA
 452,6,NA,447,Merrell Florent,M,NA
 453,6,NA,447,Omer Florent,M,NA
 454,6,NA,NA,Hosman Norcross,M,NA
@@ -479,14 +479,14 @@ id,famID,momID,dadID,name,sex,twinID
 478,6,479,476,Lomas Estermont,M,NA
 479,6,NA,480,Sylva 'Spotted Sylva' Santagar,F,NA
 480,6,NA,NA,Symon Santagar,M,NA
-481,29,NA,482,Ashara Dayne,F,NA
-482,29,NA,NA,Dayne,M,NA
-483,29,NA,482,Dayne,M,NA
-484,29,NA,482,Arthur Dayne,M,NA
-485,29,NA,482,Allyria Dayne,F,NA
-486,29,NA,483,Edric Dayne,M,NA
-487,30,NA,NA,Beric Dondarrion,M,NA
-488,25,NA,429,Jeor Mormont,M,NA
+481,28,NA,482,Ashara Dayne,F,NA
+482,28,NA,NA,Dayne,M,NA
+483,28,NA,482,Dayne,M,NA
+484,28,NA,482,Arthur Dayne,M,NA
+485,28,NA,482,Allyria Dayne,F,NA
+486,28,NA,483,Edric Dayne,M,NA
+487,29,NA,NA,Beric Dondarrion,M,NA
+488,24,NA,429,Jeor Mormont,M,NA
 489,6,NA,167,NA,U,NA
 490,6,NA,167,NA,U,NA
 491,6,NA,167,NA,U,NA
@@ -500,5 +500,5 @@ id,famID,momID,dadID,name,sex,twinID
 499,6,NA,500,Baratheon,M,NA
 500,6,NA,NA,Baratheon,M,NA
 501,6,NA,500,Harbert Baratheon,M,NA
-502,NA,NA,NA,Larra Rogare,F,NA
-503,NA,NA,NA,Rodrik Arryn,M,NA
+502,6,NA,NA,Larra Rogare,F,NA
+503,6,NA,NA,Rodrik Arryn,M,NA

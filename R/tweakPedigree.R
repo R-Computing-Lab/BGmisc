@@ -302,6 +302,7 @@ dropLink <- function(ped,
 #'
 #' @return A \code{data.frame} with the new person added to the existing pedigree.
 #'
+#' @export
 addPersonToPed <- function(ped, name = NULL, sex = NULL, momID = NA, dadID = NA, twinID = NULL, personID=NULL) {
   stopifnot(is.data.frame(ped))
 

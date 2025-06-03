@@ -90,7 +90,8 @@ df <- df %>%
 # if missing momID or dadID, assign the next available ID
 
 
-ASOIAF <- df %>%
+ASOIAF <- df %>% select(-famID) %>%
+  ped2fam(personID = "personID")  %>%
   rename(
     id = personID
   )

@@ -4,7 +4,7 @@
 \alias{adjustKidsPerCouple}
 \title{Generate or Adjust Number of Kids per Couple Based on Mating Rate}
 \usage{
-adjustKidsPerCouple(nMates, kpc, rd_kpc)
+adjustKidsPerCouple(nMates, kpc, rd_kpc = TRUE)
 }
 \arguments{
 \item{nMates}{Integer, the number of mated pairs in the generation.}
