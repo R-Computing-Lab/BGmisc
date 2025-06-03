@@ -287,7 +287,7 @@ id,famID,momID,dadID,name,sex,twinID
 286,6,NA,285,Targaryen,M,NA
 287,6,NA,282,Aemon Targaryen,M,NA
 288,6,NA,282,Rhaelle Targaryen,F,NA
-289,6,NA,282,Daella Targaryen,F,NA
+289,6,351,282,Daella Targaryen,F,NA
 290,6,303,302,Daeron Targaryen,M,NA
 291,6,NA,NA,Myriah Martell,F,NA
 292,6,291,290,Baelor 'Breakspear' Targaryen,M,NA
@@ -300,12 +300,12 @@ id,famID,momID,dadID,name,sex,twinID
 299,6,NA,292,Matarys Targaryen,M,NA
 300,6,NA,298,Targaryen,M,NA
 301,6,NA,298,Targaryen,M,NA
-302,6,NA,306,Aegon Targaryen,M,NA
-303,6,NA,306,Naerys Targaryen,F,NA
+302,6,502,306,Aegon Targaryen,M,NA
+303,6,502,306,Naerys Targaryen,F,NA
 304,6,303,302,Daenerys Targaryen,F,NA
 305,14,NA,NA,Maron Martell,M,NA
 306,6,NA,NA,Viserys Targaryen,M,NA
-307,6,NA,306,Aemon 'The Dragonknight' Targaryen,M,NA
+307,6,502,306,Aemon 'The Dragonknight' Targaryen,M,NA
 308,6,322,321,Daena Targaryen,F,NA
 309,6,NA,302,Aegor 'Bittersteel' Rivers,M,NA
 310,6,NA,302,Brynden 'Bloodraven' Targaryen,M,NA
@@ -339,7 +339,7 @@ id,famID,momID,dadID,name,sex,twinID
 338,6,323,333,Jeyne Waters,F,NA
 339,6,341,340,Rhaenyra Targaryen,F,NA
 340,6,NA,NA,Viserys Targaryen,M,NA
-341,6,NA,NA,Arryn,F,NA
+341,6,289,503,Aemma Arryn,F,NA
 342,6,341,340,Targaryen,M,NA
 343,6,341,340,Targaryen,M,NA
 344,6,NA,NA,Hightower,F,NA
@@ -352,8 +352,8 @@ id,famID,momID,dadID,name,sex,twinID
 351,16,NA,352,Alysanne 'The Good' Targaryen,F,NA
 352,16,354,353,Aenys Targaryen,M,NA
 353,16,359,358,Aegon 'The Conqueror' Targaryen,M,NA
-354,16,NA,NA,Rhaenys Targaryen,F,NA
-355,16,NA,NA,Visenya Targaryen,F,NA
+354,16,359,358,Rhaenys Targaryen,F,NA
+355,16,359,358,Visenya Targaryen,F,NA
 356,16,355,353,Maegor Targaryen,M,NA
 357,17,NA,NA,Jeyne Westerling,F,NA
 358,16,NA,364,Aerion Targaryen,M,NA
@@ -500,3 +500,5 @@ id,famID,momID,dadID,name,sex,twinID
 499,6,NA,500,Baratheon,M,NA
 500,6,NA,NA,Baratheon,M,NA
 501,6,NA,500,Harbert Baratheon,M,NA
+502,NA,NA,NA,Larra Rogare,F,NA
+503,NA,NA,NA,Rodrik Arryn,M,NA

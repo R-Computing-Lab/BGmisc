@@ -32,6 +32,7 @@ df <- ped2fam(ASOIAF, personID = "personID") %>%
       name == "Rhaenyra " ~ "Rhaenyra Targaryen",
       name == "Betharios " ~ "Betharios of Braavos",
       personID == 257 ~ "Princess Of Dorne",
+      personID == 341 ~ "Aemma Arryn",
       name == "Rowena " ~ "Rowena Arryn",
       name == "Pate " ~ "Pate of the Blue Fork",
       name == "Mellario " ~ "Mellario of Norvos",
@@ -55,6 +56,31 @@ df <- ped2fam(ASOIAF, personID = "personID") %>%
       "Hobber 'Slobber' Redwyne" ~ 390,
       "Horas 'Horror' Redwyne" ~ 391,
       .default = NA_real_
+    )
+  )
+# add new row for Naerys Targaryen's mother
+
+df <- addPersonToPed(ped = df, name= "Larra Rogare", sex="F", personID = 502, momID = NA, dadID = NA)
+df <- addPersonToPed(ped = df, name= "Rodrik Arryn", sex="M", personID = 503, momID = NA, dadID = NA)
+
+# fix 359 to be mom for Rhaenyra Targaryen
+df <- df %>%
+  mutate(
+    momID = case_when(
+      personID ==  354 ~ 359, # Rhaenyra Targaryen
+      personID ==  355 ~ 359, # Visenya Targaryen
+      personID ==  303 ~ 502, # Naerys Targaryen's mother is Larra Rogare
+      personID ==  302 ~ 502, # Aegon IV Targaryen's mother is Larra Rogare
+      personID ==  307 ~ 502, # Aemon Targaryen, the Dragonknight, mother is Larra Rogare
+      personID == 341 ~  289, # Aemma Arryn's mother is Daella Targaryen
+      personID ==  289 ~  351, # Daella Targaryen's mother is Alysanne Targaryen
+      TRUE ~ momID
+    ),
+    dadID = case_when(
+      personID ==  354 ~ 358, # Rhaenyra Targaryen
+      personID ==  355 ~ 358, # Visenya Targaryen
+      personID ==  341 ~ 503, # Aemma Arryn's  father is Rodrik Arryn
+      TRUE ~ dadID
     )
   )
 
