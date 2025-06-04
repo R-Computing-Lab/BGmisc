@@ -149,11 +149,18 @@ df_repaired <- checkParentIDs(df_got,
   parentswithoutrow = FALSE,
   repairsex = FALSE
 ) %>% mutate(
- # famID = 1,
+  # famID = 1,
   affected = case_when(
     ID %in% c(jon_id, dany_id, "365") ~ 1,
     TRUE ~ 0
   )
+)
+checkIDs(df_repaired)
+checkPedigreeNetwork(df_repaired,
+  personID = "ID",
+  momID = "momID",
+  dadID = "dadID",
+  verbose = TRUE
 )
 ```
 
@@ -168,7 +175,8 @@ We can now visualize the repaired pedigree using the `plotPedigree()` function. 
 
 ```{r, message=FALSE, warning=FALSE, fig.width=10, fig.height=8}
 plotPedigree(df_repaired %>% mutate(
- famID = 1), affected = df_repaired$affected, verbose = FALSE)
+  famID = 1
+), affected = df_repaired$affected, verbose = FALSE)
 ```
 
 
@@ -185,7 +193,7 @@ plt <- ggPedigree(df_repaired,
   config = list(
     status_unaffected_lab = 0,
     sex_color = TRUE,
-    point_size=.5,
+    point_size = .5,
     code_male = "M",
     status_affected_lab = 1,
     affected_shape = 4,

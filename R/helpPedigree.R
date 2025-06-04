@@ -106,8 +106,7 @@ assignCoupleIds <- assignCoupleIDs
 #' @return A numeric vector with the generated or adjusted number of kids per couple.
 #' @keywords internal
 adjustKidsPerCouple <- function(nMates, kpc, rd_kpc = TRUE) {
-  if (rd_kpc==TRUE) {
-
+  if (rd_kpc == TRUE) {
     diff <- nMates + 1
     while (diff > nMates) {
       random_numbers <- stats::rpois(nMates, kpc)

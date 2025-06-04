@@ -197,11 +197,11 @@ id,famID,momID,dadID,name,sex,twinID,zygosity
 196,6,188,187,Renly Baratheon,M,NA,NA
 197,6,NA,440,Selyse Florent,F,NA,NA
 198,6,197,195,Shireen Baratheon,F,NA,NA
-199,6,NA,200,Rhaelle Targaryen,F,NA,NA
-200,6,NA,282,Aegon Targaryen,M,NA,NA
-201,6,NA,200,Jaehaerys Targaryen,M,NA,NA
-202,6,NA,201,Aerys Targaryen,M,NA,NA
-203,6,NA,201,Rhaella Targaryen,F,NA,NA
+199,6,517,200,Rhaelle Targaryen,F,NA,NA
+200,6,516,282,Aegon V Targaryen,M,NA,NA
+201,6,517,200,Jaehaerys II Targaryen,M,NA,NA
+202,6,518,201,Aerys II Targaryen,M,NA,NA
+203,6,518,201,Rhaella Targaryen,F,NA,NA
 204,6,203,202,Rhaegar Targaryen,M,NA,NA
 205,6,203,202,Viserys Targaryen,M,NA,NA
 206,6,203,202,Daenerys Targaryen,F,NA,NA
@@ -255,9 +255,9 @@ id,famID,momID,dadID,name,sex,twinID,zygosity
 254,9,251,NA,Wallace Waynwood,M,NA,NA
 255,6,NA,NA,Tully,M,NA,NA
 256,6,NA,255,Brynden 'Blackfish' Tully,M,NA,NA
-257,6,NA,NA,Princess Of Dorne,F,NA,NA
+257,6,505,504,Princess Of Dorne,F,NA,NA
 258,10,NA,NA,Martell,U,NA,NA
-259,11,NA,NA,Lewyn Martell,M,NA,NA
+259,6,505,504,Lewyn Martell,M,NA,NA
 260,6,257,NA,Doran Martell,M,NA,NA
 261,6,257,NA,Mors Martell,M,NA,NA
 262,6,257,NA,Olyvar Martell,M,NA,NA
@@ -272,22 +272,22 @@ id,famID,momID,dadID,name,sex,twinID,zygosity
 271,6,264,263,Dorea Sand,F,NA,NA
 272,6,264,263,Loreza Sand,F,NA,NA
 273,6,NA,NA,Harmen Uller,M,NA,NA
-274,12,NA,NA,Uller,U,NA,NA
-275,13,NA,NA,Ulwyck Uller,M,NA,NA
+274,11,NA,NA,Uller,U,NA,NA
+275,12,NA,NA,Ulwyck Uller,M,NA,NA
 276,6,NA,NA,Mellario of Norvos,F,NA,NA
 277,6,276,260,Arianne Martell,F,NA,NA
 278,6,276,260,Quentyn Martell,M,NA,NA
 279,6,276,260,Trystane Martell,M,NA,NA
-280,6,NA,200,Duncan 'The Small' Targaryen,M,NA,NA
+280,6,517,200,Duncan 'The Small' Targaryen,M,NA,NA
 281,6,NA,200,Targaryen,M,NA,NA
 282,6,291,290,Maekar Targaryen,M,NA,NA
-283,6,NA,282,Daeron Targaryen,M,NA,NA
+283,6,516,282,Daeron (son of Maekar) Targaryen,M,NA,NA
 284,6,NA,283,Targaryen,F,NA,NA
-285,6,NA,282,Aerion Targaryen,M,NA,NA
+285,6,516,282,Aerion (son of Maekar) Targaryen,M,NA,NA
 286,6,NA,285,Targaryen,M,NA,NA
-287,6,NA,282,Aemon Targaryen,M,NA,NA
-288,6,NA,282,Rhaelle Targaryen,F,NA,NA
-289,6,351,282,Daella Targaryen,F,NA,NA
+287,6,516,282,Aemon Targaryen,M,NA,NA
+288,6,516,282,Rhae Targaryen,F,NA,NA
+289,6,516,282,Daella Targaryen (daughter of Maekar I),F,NA,NA
 290,6,303,302,Daeron Targaryen,M,NA,NA
 291,6,NA,NA,Myriah Martell,F,NA,NA
 292,6,291,290,Baelor 'Breakspear' Targaryen,M,NA,NA
@@ -303,8 +303,8 @@ id,famID,momID,dadID,name,sex,twinID,zygosity
 302,6,502,306,Aegon Targaryen,M,NA,NA
 303,6,502,306,Naerys Targaryen,F,NA,NA
 304,6,303,302,Daenerys Targaryen,F,NA,NA
-305,14,NA,NA,Maron Martell,M,NA,NA
-306,6,NA,NA,Viserys Targaryen,M,NA,NA
+305,13,NA,NA,Maron Martell,M,NA,NA
+306,6,339,536,Viserys Targaryen,M,NA,NA
 307,6,502,306,Aemon 'The Dragonknight' Targaryen,M,NA,NA
 308,6,322,321,Daena Targaryen,F,NA,NA
 309,6,NA,302,Aegor 'Bittersteel' Rivers,M,NA,NA
@@ -319,27 +319,27 @@ id,famID,momID,dadID,name,sex,twinID,zygosity
 318,6,NA,312,Blackfyre,M,NA,NA
 319,6,NA,312,Blackfyre,M,NA,NA
 320,6,NA,317,Maelys 'The Monstrous' Blackfyre,M,NA,NA
-321,6,339,NA,Aegon Targaryen,M,NA,NA
-322,6,NA,NA,Velaryon,F,NA,NA
+321,6,339,536,Aegon Targaryen,M,NA,NA
+322,6,535,529,Daenaera Velaryon,F,NA,NA
 323,6,322,321,Elaena Targaryen,F,NA,NA
 324,6,322,321,Rhaena Targaryen,F,NA,NA
-325,6,NA,NA,NA,M,NA,NA
-326,6,323,325,NA,U,NA,NA
-327,6,323,325,NA,U,NA,NA
-328,6,323,325,NA,U,NA,NA
-329,6,323,325,NA,U,NA,NA
-330,6,323,325,NA,U,NA,NA
+325,6,NA,NA,Ronnel Penrose,M,NA,NA
+326,6,323,528,Viserys Plumm,M,NA,NA
+327,6,323,325,Robin Penrose,M,NA,NA
+328,6,323,325,Laena Penrose,F,NA,NA
+329,6,323,325,Jocelyn Penrose,F,NA,NA
+330,6,323,325,Joy Penrose,F,NA,NA
 331,6,323,325,NA,U,NA,NA
 332,6,323,325,NA,U,NA,NA
-333,6,NA,NA,Alyn Velaryon,M,NA,NA
+333,6,520,522,Alyn Velaryon,M,NA,NA
 334,6,322,321,Daeron Targaryen,M,NA,NA
 335,6,322,321,Baelor Targaryen,M,NA,NA
-336,15,NA,NA,NA,F,NA,NA
+336,14,NA,NA,Companion of Alyn Velaryon,F,NA,NA
 337,6,323,333,Jon Waters,M,NA,NA
 338,6,323,333,Jeyne Waters,F,NA,NA
 339,6,341,340,Rhaenyra Targaryen,F,NA,NA
-340,6,NA,NA,Viserys Targaryen,M,NA,NA
-341,6,289,503,Aemma Arryn,F,NA,NA
+340,6,506,537,Viserys I Targaryen,M,NA,NA
+341,6,515,503,Aemma Arryn,F,NA,NA
 342,6,341,340,Targaryen,M,NA,NA
 343,6,341,340,Targaryen,M,NA,NA
 344,6,NA,NA,Hightower,F,NA,NA
@@ -349,20 +349,20 @@ id,famID,momID,dadID,name,sex,twinID,zygosity
 348,6,344,340,Targaryen,F,NA,NA
 349,6,351,350,Targaryen,U,NA,NA
 350,6,NA,352,Jaehaerys 'The Conciliator' Targaryen,M,NA,NA
-351,6,NA,352,Alysanne 'The Good' Targaryen,F,NA,NA
+351,6,510,352,Alysanne 'The Good' Targaryen,F,NA,NA
 352,6,354,353,Aenys Targaryen,M,NA,NA
 353,6,359,358,Aegon 'The Conqueror' Targaryen,M,NA,NA
 354,6,359,358,Rhaenys Targaryen,F,NA,NA
 355,6,359,358,Visenya Targaryen,F,NA,NA
 356,6,355,353,Maegor Targaryen,M,NA,NA
-357,16,NA,NA,Jeyne Westerling,F,NA,NA
-358,6,NA,364,Aerion Targaryen,M,NA,NA
+357,15,NA,NA,Jeyne Westerling,F,NA,NA
+358,6,NA,364,Aerion (son of Daemion) Targaryen,M,NA,NA
 359,6,NA,NA,Velena Velaryon,F,NA,NA
-360,6,NA,167,NA,U,NA,NA
+360,6,NA,167,Bastard of Robert Baratheon,U,NA,NA
 361,6,NA,358,Orys Baratheon,M,NA,NA
-362,17,NA,363,Argella Durrendon,F,NA,NA
-363,17,NA,NA,Argilac 'The Arrogant' Durrendon,M,NA,NA
-364,6,NA,365,Daemon Targaryen,M,NA,NA
+362,6,NA,363,Argella Durrendon,F,NA,NA
+363,6,NA,NA,Argilac 'The Arrogant' Durrendon,M,NA,NA
+364,6,NA,365,Daemion Targaryen (Lord of Dragonstone),M,NA,NA
 365,6,370,368,Aerys Targaryen,M,NA,NA
 366,6,NA,365,Aelix Targaryen,M,NA,NA
 367,6,NA,365,Baelon Targaryen,M,NA,NA
@@ -379,14 +379,14 @@ id,famID,momID,dadID,name,sex,twinID,zygosity
 378,6,376,375,Willas Tyrell,M,NA,NA
 379,6,376,375,Margaery Tyrell,F,NA,NA
 380,6,NA,393,Luthor Tyrell,M,NA,NA
-381,18,NA,NA,Leonette Fossoway,F,NA,NA
+381,16,NA,NA,Leonette Fossoway,F,NA,NA
 382,6,NA,439,Olenna Redwyne,F,NA,NA
 383,6,NA,393,Garth 'The Gross' Tyrell,M,NA,NA
 384,6,NA,393,Moryn Tyrell,M,NA,NA
 385,6,NA,393,Gormon Tyrell,M,NA,NA
 386,6,382,380,Janna Tyrell,F,NA,NA
 387,6,382,380,Mina Tyrell,F,NA,NA
-388,19,NA,NA,Jon Fossoway,M,NA,NA
+388,17,NA,NA,Jon Fossoway,M,NA,NA
 389,6,NA,438,Paxter Redwyne,M,NA,NA
 390,6,387,389,Horas 'Horror' Redwyne,M,391,unknown
 391,6,387,389,Hobber 'Slobber' Redwyne,M,390,unknown
@@ -403,11 +403,11 @@ id,famID,momID,dadID,name,sex,twinID,zygosity
 402,6,NA,NA,Lia Serry,F,NA,NA
 403,6,402,399,Elinor Tyrell,F,NA,NA
 404,6,402,399,Luthor Tyrell,M,NA,NA
-405,20,NA,NA,Leo Blackbar,M,NA,NA
+405,18,NA,NA,Leo Blackbar,M,NA,NA
 406,6,NA,425,Leyton Hightower,M,NA,NA
 407,6,448,444,Rhea Florent,F,NA,NA
 408,6,407,406,Baelor Hightower,M,NA,NA
-409,21,NA,NA,Rhonda Rowan,F,NA,NA
+409,19,NA,NA,Rhonda Rowan,F,NA,NA
 410,6,407,406,Alysanne Hightower,F,NA,NA
 411,6,NA,NA,Arthur Ambrose,M,NA,NA
 412,6,407,406,Denyse Hightower,F,NA,NA
@@ -416,26 +416,26 @@ id,famID,momID,dadID,name,sex,twinID,zygosity
 415,6,407,406,Malora Hightower,F,NA,NA
 416,6,407,406,Garth Hightower,M,NA,NA
 417,6,407,406,Gunthor Hightower,M,NA,NA
-418,22,NA,NA,Jeyne Fossoway,F,NA,NA
+418,20,NA,NA,Jeyne Fossoway,F,NA,NA
 419,6,407,406,Leyla Hightower,F,NA,NA
-420,23,NA,NA,Jon Cupps,M,NA,NA
+420,21,NA,NA,Jon Cupps,M,NA,NA
 421,6,407,406,Humfrey Hightower,M,NA,NA
 422,6,407,406,Lynesse Hightower,F,NA,NA
-423,24,NA,488,Jorah Mormont,M,NA,NA
-424,25,NA,NA,Tregar Ormollen,M,NA,NA
+423,22,NA,488,Jorah Mormont,M,NA,NA
+424,23,NA,NA,Tregar Ormollen,M,NA,NA
 425,6,NA,426,Hightower,M,NA,NA
 426,6,NA,NA,Hightower,M,NA,NA
 427,6,NA,426,Gerold 'The White Bull' Hightower,M,NA,NA
-428,26,NA,NA,Glover,F,NA,NA
-429,24,NA,NA,Mormont,M,NA,NA
-430,24,NA,429,Maege Mormont,F,NA,NA
-431,24,430,NA,Dacey Mormont,F,NA,NA
-432,24,430,NA,Alysane Mormont,F,NA,NA
-433,24,430,NA,Lyra Mormont,F,NA,NA
-434,24,430,NA,Jorelle Mormont,F,NA,NA
-435,24,430,NA,Lyanna Mormont,F,NA,NA
-436,24,432,NA,Snow,F,NA,NA
-437,24,432,NA,Snow,M,NA,NA
+428,24,NA,NA,Glover,F,NA,NA
+429,22,NA,NA,Mormont,M,NA,NA
+430,22,NA,429,Maege Mormont,F,NA,NA
+431,22,430,NA,Dacey Mormont,F,NA,NA
+432,22,430,NA,Alysane Mormont,F,NA,NA
+433,22,430,NA,Lyra Mormont,F,NA,NA
+434,22,430,NA,Jorelle Mormont,F,NA,NA
+435,22,430,NA,Lyanna Mormont,F,NA,NA
+436,22,432,NA,Snow,F,NA,NA
+437,22,432,NA,Snow,M,NA,NA
 438,6,NA,439,Redwyne,M,NA,NA
 439,6,NA,NA,Runceford Redwyne,M,NA,NA
 440,6,NA,443,Ryam Florent,M,NA,NA
@@ -449,7 +449,7 @@ id,famID,momID,dadID,name,sex,twinID,zygosity
 448,6,NA,NA,Melara Crane,F,NA,NA
 449,6,448,444,Alekyne Florent,M,NA,NA
 450,6,448,444,Melessa Florent,F,NA,NA
-451,27,NA,NA,Rycherd Crane,M,NA,NA
+451,25,NA,NA,Rycherd Crane,M,NA,NA
 452,6,NA,447,Merrell Florent,M,NA,NA
 453,6,NA,447,Omer Florent,M,NA,NA
 454,6,NA,NA,Hosman Norcross,M,NA,NA
@@ -479,26 +479,60 @@ id,famID,momID,dadID,name,sex,twinID,zygosity
 478,6,479,476,Lomas Estermont,M,NA,NA
 479,6,NA,480,Sylva 'Spotted Sylva' Santagar,F,NA,NA
 480,6,NA,NA,Symon Santagar,M,NA,NA
-481,28,NA,482,Ashara Dayne,F,NA,NA
-482,28,NA,NA,Dayne,M,NA,NA
-483,28,NA,482,Dayne,M,NA,NA
-484,28,NA,482,Arthur Dayne,M,NA,NA
-485,28,NA,482,Allyria Dayne,F,NA,NA
-486,28,NA,483,Edric Dayne,M,NA,NA
-487,29,NA,NA,Beric Dondarrion,M,NA,NA
-488,24,NA,429,Jeor Mormont,M,NA,NA
-489,6,NA,167,NA,U,NA,NA
-490,6,NA,167,NA,U,NA,NA
-491,6,NA,167,NA,U,NA,NA
-492,6,NA,167,NA,U,NA,NA
-493,6,NA,167,NA,U,NA,NA
-494,6,NA,167,NA,U,NA,NA
-495,6,NA,167,NA,U,NA,NA
-496,6,NA,167,NA,U,NA,NA
-497,6,NA,167,NA,U,NA,NA
-498,6,NA,167,NA,U,NA,NA
+481,26,NA,482,Ashara Dayne,F,NA,NA
+482,26,NA,NA,Dayne,M,NA,NA
+483,26,NA,482,Dayne,M,NA,NA
+484,26,NA,482,Arthur Dayne,M,NA,NA
+485,26,NA,482,Allyria Dayne,F,NA,NA
+486,26,NA,483,Edric Dayne,M,NA,NA
+487,27,NA,NA,Beric Dondarrion,M,NA,NA
+488,22,NA,429,Jeor Mormont,M,NA,NA
+489,6,NA,167,Bastard of Robert Baratheon,U,NA,NA
+490,6,NA,167,Bastard of Robert Baratheon,U,NA,NA
+491,6,NA,167,Bastard of Robert Baratheon,U,NA,NA
+492,6,NA,167,Bastard of Robert Baratheon,U,NA,NA
+493,6,NA,167,Bastard of Robert Baratheon,U,NA,NA
+494,6,NA,167,Bastard of Robert Baratheon,U,NA,NA
+495,6,NA,167,Bastard of Robert Baratheon,U,NA,NA
+496,6,NA,167,Bastard of Robert Baratheon,U,NA,NA
+497,6,NA,167,Bastard of Robert Baratheon,U,NA,NA
+498,6,NA,167,Bastard of Robert Baratheon,U,NA,NA
 499,6,NA,500,Baratheon,M,NA,NA
 500,6,NA,NA,Baratheon,M,NA,NA
 501,6,NA,500,Harbert Baratheon,M,NA,NA
 502,6,NA,NA,Larra Rogare,F,NA,NA
 503,6,NA,NA,Rodrik Arryn,M,NA,NA
+504,6,NA,NA,Father of Princess of Dorne,M,NA,NA
+505,6,NA,NA,Mother of Princess of Dorne,F,NA,NA
+506,6,351,350,Alyssa Targaryen,F,NA,NA
+507,6,362,361,Davos Baratheon,M,NA,NA
+508,6,362,361,Unknown Baratheon,M,NA,NA
+509,6,NA,508,Rogar Baratheon,M,NA,NA
+510,6,527,526,Alyssa Velaryon,F,NA,NA
+511,6,510,509,Boremund Baratheon,M,NA,NA
+512,6,510,509,Jocelyn Baratheon,F,NA,NA
+513,6,351,350,Aemon Targaryen (son of Jaehaerys I),M,NA,NA
+514,6,512,513,Rhaenys Targaryen (daughter of Aemon),F,NA,NA
+515,6,351,350,Daella Targaryen (daughter of Jaehaerys I),F,NA,NA
+516,6,NA,NA,Dyanna Dayne,F,NA,NA
+517,6,NA,NA,Betha Blackwood,F,NA,NA
+518,6,517,200,Shaera Targaryen,F,NA,NA
+519,6,517,200,Daeron Targaryen (son of Aegon V),M,NA,NA
+520,6,NA,NA,Marilda of Hull,F,NA,NA
+521,6,520,522,Addam Velaryon of Hull,M,NA,NA
+522,6,514,523,Laenor Velaryon,M,NA,NA
+523,6,534,524,Corlys Velaryon,M,NA,NA
+524,6,NA,525,Corwyn Velaryon,M,NA,NA
+525,6,527,526,Daemon Velaryon,M,NA,NA
+526,6,NA,NA,Aethan Velaryon,M,NA,NA
+527,6,NA,NA,Alarra Massey,F,NA,NA
+528,6,NA,NA,Ossifer Plumm,M,NA,NA
+529,6,531,532,Daeron Velaryon,M,NA,NA
+530,6,531,532,Daemion Velaryon,M,NA,NA
+531,6,NA,NA,Wife of Vaemond Velaryon,F,NA,NA
+532,6,NA,533,Vaemond Velaryon,M,NA,NA
+533,6,534,524,Second-born son of Corwyn Velaryon,M,NA,NA
+534,6,NA,NA,Unknown wife of Corwyn Velaryon,F,NA,NA
+535,6,NA,NA,Hazel Harte,F,NA,NA
+536,6,506,537,Daemon Targaryen,M,NA,NA
+537,6,351,350,Baelon Targaryen (son of Jaehaerys I),M,NA,NA

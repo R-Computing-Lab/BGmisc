@@ -44,13 +44,12 @@ test_that("makeTwins - Twins specified by IDs", {
   expect_equal(result2, expected_result)
   # hp <- makeTwins(potter, ID_twin1 = 12, ID_twin2 = 13, verbose = TRUE)
   result3 <- makeTwins(ped,
-                       ID_twin1 = 1,
-                       ID_twin2 = 2,
-                       verbose = TRUE, zygosity = "SS"
+    ID_twin1 = 1,
+    ID_twin2 = 2,
+    verbose = TRUE, zygosity = "SS"
   )
   expected_result$zygosity[expected_result$zygosity == "DZ"] <- "SS"
   expect_equal(result3, expected_result)
-
 })
 
 test_that("makeTwins - mz Twins specified by generation", {
@@ -78,17 +77,16 @@ test_that("makeTwins - mz Twins specified by generation", {
   expect_equal(length(unique(result$momID[!is.na(result$twinID)])), 1)
   # do they have the same dad?
   expect_equal(length(unique(result$dadID[!is.na(result$twinID)])), 1)
-}
-)
+})
 
-  test_that("makeTwins - dz Twins specified by generation", {
-    set.seed(15)
-    Ngen <- 4
-    kpc <- 4
-    sexR <- .50
-    marR <- .7
-    gen_twin <- 2
-    ped <- simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR)
+test_that("makeTwins - dz Twins specified by generation", {
+  set.seed(15)
+  Ngen <- 4
+  kpc <- 4
+  sexR <- .50
+  marR <- .7
+  gen_twin <- 2
+  ped <- simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR)
   resultdz <- makeTwins(ped, gen_twin = gen_twin, zygosity = "DZ")
 
   expect_equal(names(resultdz), c("famID", "ID", "gen", "dadID", "momID", "spID", "sex", "twinID", "zygosity"))
@@ -106,16 +104,15 @@ test_that("makeTwins - mz Twins specified by generation", {
   expect_equal(length(unique(resultdz$momID[!is.na(resultdz$twinID)])), 1)
   # do they have the same dad?
   expect_equal(length(unique(resultdz$dadID[!is.na(resultdz$twinID)])), 1)
-}
-)
-  test_that("makeTwins - os Twins specified by generation", {
-    set.seed(15)
-    Ngen <- 4
-    kpc <- 4
-    sexR <- .50
-    marR <- .7
-    gen_twin <- 2
-    ped <- simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR)
+})
+test_that("makeTwins - os Twins specified by generation", {
+  set.seed(15)
+  Ngen <- 4
+  kpc <- 4
+  sexR <- .50
+  marR <- .7
+  gen_twin <- 2
+  ped <- simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR)
   resultss <- makeTwins(ped, gen_twin = gen_twin, zygosity = "SS")
   expect_equal(names(resultss), c("famID", "ID", "gen", "dadID", "momID", "spID", "sex", "twinID", "zygosity"))
   # do we have the same people?
@@ -132,7 +129,6 @@ test_that("makeTwins - mz Twins specified by generation", {
   expect_equal(length(unique(resultss$momID[!is.na(resultss$twinID)])), 1)
   # do they have the same dad?
   expect_equal(length(unique(resultss$dadID[!is.na(resultss$twinID)])), 1)
-
 })
 
 # Test for makeInbreeding function
@@ -207,8 +203,8 @@ test_that("makeInbreeding - Inbred mates specified by generation and non inpleme
   ped <- simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR)
 
   expect_error(makeInbreeding(ped,
-                              gen_inbred = gen_inbred,
-                              type_inbred = type_inbred, verbose = TRUE
+    gen_inbred = gen_inbred,
+    type_inbred = type_inbred, verbose = TRUE
   ), regexp = "The type of inbreeding should be either 'sib' or 'cousin'")
 })
 
@@ -275,5 +271,3 @@ test_that("dropLink - Drop specified by generation", {
   # are there more missing moms?
   expect_lt(sum(is.na(ped$momID[ped$gen == gen_drop])), sum(is.na(result$momID[result$gen == gen_drop])))
 })
-
-

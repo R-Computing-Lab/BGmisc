@@ -297,54 +297,54 @@ dropLink <- function(ped,
 #' @param sex A value representing the sex of the new person.
 #' @param momID Optional. The ID of the mother of the new person. If not provided, it will be set to \code{NA}.
 #' @param dadID Optional. The ID of the father of the new person. If not provided, it will be set to \code{NA}.
-#'@param twinID Optional. The ID of the twin of the new person. If not provided, it will be set to \code{NA}.
-#'@param personID Optional. The ID of the new person. If not provided, it will be generated as the maximum existing personID + 1.
+#' @param twinID Optional. The ID of the twin of the new person. If not provided, it will be set to \code{NA}.
+#' @param personID Optional. The ID of the new person. If not provided, it will be generated as the maximum existing personID + 1.
 #'
 #' @return A \code{data.frame} with the new person added to the existing pedigree.
 #'
 #' @export
-addPersonToPed <- function(ped, name = NULL, sex = NULL, momID = NA, dadID = NA, twinID = NULL, personID=NULL) {
+addPersonToPed <- function(ped, name = NULL, sex = NULL, momID = NA, dadID = NA, twinID = NULL, personID = NULL) {
   stopifnot(is.data.frame(ped))
 
-    # Copy structure from an existing row
-    new_row <- ped[1, , drop = FALSE]
+  # Copy structure from an existing row
+  new_row <- ped[1, , drop = FALSE]
 
-    # Blank out all values
-    new_row[1, ] <- NA
+  # Blank out all values
+  new_row[1, ] <- NA
 
-    # Assign new values
-    if (!is.null(personID)) {
-      new_row$personID <- personID
-    } else {
-      # Generate a new personID based on the maximum existing personID
-        new_row$personID <- max(ped$personID, na.rm = TRUE) + 1
-    }
-    if (!is.null(name) && "name" %in% colnames(ped)) {
-      new_row$name <- name
-    } else if ("name" %in% colnames(ped)) {
-      new_row$name <- NA_character_
-    }
-    if(!is.null(twinID) && "twinID" %in% colnames(ped)) {
-      new_row$twinID <- twinID
-    } else if ("twinID" %in% colnames(ped)) {
-      new_row$twinID <- NA_integer_
-    }
-    if(!is.null(momID) && "momID" %in% colnames(ped)) {
-      new_row$momID <- momID
-    } else if ("momID" %in% colnames(ped)) {
-      new_row$momID <- NA_integer_
-    }
-    if(!is.null(dadID) && "dadID" %in% colnames(ped)) {
-      new_row$dadID <- dadID
-    } else if ("dadID" %in% colnames(ped)) {
-      new_row$dadID <- NA_integer_
-    }
-if(!is.null(sex) && "sex" %in% colnames(ped)) {
-  new_row$sex      <- sex
+  # Assign new values
+  if (!is.null(personID)) {
+    new_row$personID <- personID
+  } else {
+    # Generate a new personID based on the maximum existing personID
+    new_row$personID <- max(ped$personID, na.rm = TRUE) + 1
+  }
+  if (!is.null(name) && "name" %in% colnames(ped)) {
+    new_row$name <- name
+  } else if ("name" %in% colnames(ped)) {
+    new_row$name <- NA_character_
+  }
+  if (!is.null(twinID) && "twinID" %in% colnames(ped)) {
+    new_row$twinID <- twinID
+  } else if ("twinID" %in% colnames(ped)) {
+    new_row$twinID <- NA_integer_
+  }
+  if (!is.null(momID) && "momID" %in% colnames(ped)) {
+    new_row$momID <- momID
+  } else if ("momID" %in% colnames(ped)) {
+    new_row$momID <- NA_integer_
+  }
+  if (!is.null(dadID) && "dadID" %in% colnames(ped)) {
+    new_row$dadID <- dadID
+  } else if ("dadID" %in% colnames(ped)) {
+    new_row$dadID <- NA_integer_
+  }
+  if (!is.null(sex) && "sex" %in% colnames(ped)) {
+    new_row$sex <- sex
   } else if ("sex" %in% colnames(ped)) {
-  new_row$sex <- NA_character_
+    new_row$sex <- NA_character_
   }
 
-    # Append to data frame
-    rbind(ped, new_row)
+  # Append to data frame
+  rbind(ped, new_row)
 }
