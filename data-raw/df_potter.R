@@ -147,6 +147,10 @@ potter <- potter %>%
       name == "Fred Weasley" ~ 13,
       name == "George Weasley" ~ 12,
       TRUE ~ NA_real_
+    ),
+    zygosity = case_when(
+      !is.na(twinID) ~ "mz",
+      TRUE ~ NA_character_
     )
   )
 
@@ -157,6 +161,7 @@ write_csv(potter, here("data-raw", "potter.csv"))
 usethis::use_data(potter, overwrite = TRUE, compress = "xz")
 
 
+if(FALSE){
 
 ## Create dataframe
 potter_big <- readGedcom("data-raw/potter_big.ged")
@@ -364,3 +369,5 @@ potter_clean <- potter_clean %>%
 # Left join by name
 potter_join <- potter_clean %>%
   full_join(df_clean, by = c("personID"), suffix = c("", "_df"))
+
+}

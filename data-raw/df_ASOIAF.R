@@ -94,7 +94,12 @@ ASOIAF <- df %>% select(-famID) %>%
   ped2fam(personID = "personID")  %>%
   rename(
     id = personID
-  )
+  ) %>% mutate(
+    zygosity = case_when(
+      id %in% c(164, 165 )~ "dz", # Jaime Lannister
+      !is.na(twinID) ~ "unknown",
+      TRUE ~ NA_character_
+    ))
 
 
 write_csv(ASOIAF, here("data-raw", "ASOIAF.csv"))

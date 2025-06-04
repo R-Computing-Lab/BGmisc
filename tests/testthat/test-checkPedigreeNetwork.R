@@ -33,7 +33,8 @@ test_that("checkPedigreeNetwork detects individuals with excess parents in potte
     dadID = NA,
     spouseID = NA,
     sex = "M",
-    twinID = NA
+    twinID = NA,
+    zygosity = NA
   )
 
   excess_parents_potter <- rbind(excess_parents_potter, new_parent)
