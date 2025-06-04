@@ -18,7 +18,7 @@
 #' idGen <- 101:105 # Example IDs for the 2nd generation
 #' df_Ngen <- createGenDataFrame(sizeGens, genIndex, idGen)
 #' print(df_Ngen)
-#' @keywords internal
+#' @export
 createGenDataFrame <- function(sizeGens, genIndex, idGen) {
   df_Ngen <- data.frame(
     fam = rep(paste("fam", 1), sizeGens[genIndex], sep = ""),
