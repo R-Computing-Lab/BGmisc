@@ -11,7 +11,11 @@ A data frame (and ped object) with 36 rows and 8 variables
 data(potter)
 }
 \description{
-A dataset created purely from imagination that includes a subset of the Potter extended family.
+A dataset created  for educational and illustrative use, containing a fictional pedigree modeled after characters from the Harry Potter series.
+This data is structured for use in software demonstrations involving pedigree diagrams, inheritance structures, and kinship modeling.
+This dataset is not intended to represent any real individuals or families.
+It includes no narrative content or protected expression from the original works and is provided solely for educational purposes.
+This dataset is not endorsed by or affiliated with the creators or copyright holders of the Harry Potter series.
 }
 \details{
 The variables are as follows:
@@ -25,6 +29,8 @@ The variables are as follows:
   \item \code{dadID}:  ID of the father
   \item \code{spouseID}: ID of the spouse
   \item \code{sex}:  Sex of the ID: 1 is male; 0 is female
+  \item \code{twinID}:  ID of the twin, if applicable
+  \item \code{zygosity}: Zygosity of the twin, if applicable. mz is monozygotic; dz is dizygotic
 
 }
 

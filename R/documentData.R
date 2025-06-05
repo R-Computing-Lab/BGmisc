@@ -16,7 +16,7 @@
 #'     \item Extended Family 8: A father-son pairs has children with a corresponding mother-daughter pair.
 #' }
 ##'
-##' Although not all of the above structures are technically inbreeding, they aim to test pedigree diagramming and path tracing algorithms.
+##' Although not all of the above structures are technically inbreeding, they aim to test pedigree diagramming and path tracing algorithms.  This dataset is not intended to represent any real individuals or families.
 ##'
 ##' The variables are as follows:
 ##'
@@ -70,7 +70,11 @@ NULL
 
 ##' Fictional pedigree data on a wizarding family
 ##'
-##' A dataset created purely from imagination that includes a subset of the Potter extended family.
+##' A dataset created  for educational and illustrative use, containing a fictional pedigree modeled after characters from the Harry Potter series.
+##' This data is structured for use in software demonstrations involving pedigree diagrams, inheritance structures, and kinship modeling.
+##' This dataset is not intended to represent any real individuals or families.
+##' It includes no narrative content or protected expression from the original works and is provided solely for educational purposes.
+##' This dataset is not endorsed by or affiliated with the creators or copyright holders of the Harry Potter series.
 ##'
 ##' The variables are as follows:
 ##'
@@ -83,6 +87,8 @@ NULL
 ##'   \item \code{dadID}:  ID of the father
 ##'   \item \code{spouseID}: ID of the spouse
 ##'   \item \code{sex}:  Sex of the ID: 1 is male; 0 is female
+##'   \item \code{twinID}:  ID of the twin, if applicable
+##'   \item \code{zygosity}: Zygosity of the twin, if applicable. mz is monozygotic; dz is dizygotic
 ##'
 ##' }
 ##'
@@ -122,9 +128,13 @@ NULL
 ##' @format A data frame with 3110 observations
 NULL
 
-##' A song of ice and fire pedigree data
+##' A pedigree of ice and fire
 ##'
-##' A dataset created from the Song of Ice and Fire series by George R. R. Martin. Core data is from the [Westeros.org forum](https://asoiaf.westeros.org/index.php?/topic/88863-all-the-family-trees/).
+##' A structured dataset of fictional characters derived from the Song of Ice and Fire universe by George R. R. Martin.
+##' The character relationships were partially based on a GEDCOM file publicly posted in the [Westeros.org forum](https://asoiaf.westeros.org/index.php?/topic/88863-all-the-family-trees/), and were updated based on publicly available summaries from [A Wiki of Ice and Fire](https://awoiaf.westeros.org/index.php/Main_Page).
+##' This dataset was created for educational and illustrative purposes, such as demonstrating pedigree construction, relationship tracing, and algorithmic logic in family-based data.
+##' It includes no narrative content or protected expression from the original works.
+##' No rights to the characters, names, or intellectual property of George R. R. Martin or HBO are claimed, and the dataset is not intended to represent any real individuals or families.
 ##'
 ##'
 ##'
@@ -135,11 +145,13 @@ NULL
 ##'   \item \code{dadID}:  ID of the father
 ##'   \item \code{name}:  Name of the person
 ##'   \item \code{sex}: Biological sex
+##'   \item \code{twinID}:  ID of the twin, if applicable
+##'   \item \code{zygosity}: Zygosity of the twin, if applicable. mz is monozygotic; dz is dizygotic
 ##'   }
 ##'
 ##' @docType data
 ##' @keywords datasets
 ##' @name ASOIAF
 ##' @usage data(ASOIAF)
-##' @format A data frame with 501 observations
+##' @format A data frame with 503 observations
 NULL

@@ -28,7 +28,7 @@ The types of inbreeding are as follows:
     \item Extended Family 8: A father-son pairs has children with a corresponding mother-daughter pair.
 }
 
-Although not all of the above structures are technically inbreeding, they aim to test pedigree diagramming and path tracing algorithms.
+Although not all of the above structures are technically inbreeding, they aim to test pedigree diagramming and path tracing algorithms.  This dataset is not intended to represent any real individuals or families.
 
 The variables are as follows:
 

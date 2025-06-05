@@ -43,6 +43,7 @@ createGenDataFrame <- function(sizeGens, genIndex, idGen) {
 #' @param code_female The value to use for females. Default is "F"
 #' @return Vector of sexes ("M" for male, "F" for female) for the offspring.
 #' @importFrom stats runif
+#' @export
 determineSex <- function(idGen, sexR, code_male = "M", code_female = "F") {
   if (runif(1) > .5) {
     sexVec1 <- rep(code_male, floor(length(idGen) * sexR))
@@ -62,7 +63,7 @@ determineSex <- function(idGen, sexR, code_male = "M", code_female = "F") {
 #'
 #' @param df_Ngen The dataframe for the current generation, including columns for individual IDs and spouse IDs.
 #' @return The input dataframe augmented with a 'coupleId' column, where each mated pair has a unique identifier.
-#' @export
+#' @keywords internal
 #'
 assignCoupleIDs <- function(df_Ngen) {
   df_Ngen$coupleId <- NA_character_ # Initialize the coupleId column with NAs
@@ -103,10 +104,9 @@ assignCoupleIds <- assignCoupleIDs
 #' @inheritParams simulatePedigree
 #'
 #' @return A numeric vector with the generated or adjusted number of kids per couple.
-adjustKidsPerCouple <- function(nMates, kpc, rd_kpc) {
-  if (rd_kpc) {
-    # cat("number of mates",nMates, "\n")
-
+#' @keywords internal
+adjustKidsPerCouple <- function(nMates, kpc, rd_kpc = TRUE) {
+  if (rd_kpc == TRUE) {
     diff <- nMates + 1
     while (diff > nMates) {
       random_numbers <- stats::rpois(nMates, kpc)
