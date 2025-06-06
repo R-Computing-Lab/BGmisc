@@ -8,7 +8,7 @@ library(BGmisc)
 
 
 ## Create dataframe
-ASOIAF <- readGedcom("data-raw/ASOIAF.ged") %>%
+ASOIAF<-  ged <- readGedcom("data-raw/ASOIAF.ged") %>%
   mutate(name = str_remove(name, "/"))
 
 # ASOIAF <- readGedcom("data-raw/ASOIAF_040725.ged")
@@ -39,6 +39,7 @@ df <- ped2fam(ASOIAF, personID = "personID") %>%
       name == "Mellario " ~ "Mellario of Norvos",
       personID == 289 ~ "Daella Targaryen (daughter of Maekar I)",
       personID == 201 ~ "Jaehaerys II Targaryen",
+      personID ==  482 ~ "Lord Dayne (father of Edric)", #https://awoiaf.westeros.org/index.php/Lord_Dayne_(father_of_Edric)
       personID == 202 ~ "Aerys II Targaryen",
       personID == 200 ~ "Aegon V Targaryen",
       personID == 336 ~ "Companion of Alyn Velaryon",
@@ -55,6 +56,12 @@ df <- ped2fam(ASOIAF, personID = "personID") %>%
       personID == 340 ~ "Viserys I Targaryen",
       personID == 283 ~ "Daeron (son of Maekar) Targaryen",
       personID == 288 ~ "Rhae Targaryen", # not Rhaelle Targaryen
+      personID == 237 ~"Youngest daughter of Elys Waynwood",
+      personID == 344 ~ "Alicent Hightower",
+      personID == 348 ~ "Helaena Targaryen",
+      personID == 347 ~ "Daeron Targaryen" ,
+      personID ==  343 ~ "Baelon Targaryen (son of Viserys I)",
+      personID ==   317 ~ "Father of Maelys I Blackfyre",
       TRUE ~ name
     ),
     twinID = case_match(name,
@@ -76,7 +83,15 @@ df <- ped2fam(ASOIAF, personID = "personID") %>%
       "Horas 'Horror' Redwyne" ~ 391,
       .default = NA_real_
     )
-  )
+  ) %>%   mutate(
+    zygosity = case_when(
+      personID  %in% c(164, 165) ~ "dz", # Jaime Lannister
+      !is.na(twinID) ~ "unknown",
+      TRUE ~ NA_character_
+    )
+    )
+
+
 # add new row for Naerys Targaryen's mother
 
 df <- df %>%
@@ -251,8 +266,86 @@ df <- df %>%
   addPersonToPed(
     name = "Baelon Targaryen (son of Jaehaerys I)",
     sex = "M", personID = 537, momID = 351, dadID = 350
-  ) # %>%
+  )  %>%
 # https://awoiaf.westeros.org/index.php/Baelon_Targaryen_(son_of_Jaehaerys_I)
+  addPersonToPed(
+    name = "Wife of Jasper Arryn",
+    sex = "F", personID = 538, momID = NA, dadID = NA) %>%
+  addPersonToPed(
+    name = "Otto Hightower",
+    sex = "M", personID = 539, momID = 543, dadID = 542) %>%
+# https://awoiaf.westeros.org/index.php/Otto_Hightower
+  addPersonToPed(
+    name = "Gwayne Hightower",
+    sex = "M", personID = 540, momID = 541, dadID = 539) %>%
+  addPersonToPed(
+    name = "wife of Otto Hightower",
+    sex = "F", personID = 541, momID = NA, dadID = NA)  %>%
+  addPersonToPed(
+    name = "Father of Otto Hightower",
+    sex = "M", personID = 542, momID = NA, dadID = NA) %>%
+  addPersonToPed(
+    name = "Mother of Otto Hightower",
+    sex = "F", personID = 543, momID = NA, dadID = NA) %>%
+  addPersonToPed(
+    name = "Lord Hightower",
+    sex = "M", personID = 544, momID = 543, dadID = 542) %>%
+addPersonToPed(
+  name = "Laena Velaryon",
+  sex = "F", personID = 545, momID = 514, dadID = 523) %>%
+  addPersonToPed(
+    name = "Baela	Targaryen",
+    sex = "F", personID = 546, momID = 545, dadID = 536,
+    twinID = 547, zygosity="unknown") %>%
+  addPersonToPed(
+    name = "Rhaena Targaryen",
+    sex = "F", personID = 547, momID = 545, dadID = 536,
+    twinID = 546, zygosity="unknown") %>%
+  addPersonToPed(name = "Visenya Targaryen (daughter of Rhaenyra)",
+                 sex = "F", personID = 548,    momID =    339, dadID = 536) %>%
+  addPersonToPed(name = "Harwin Strong",
+                 sex = "M", personID = 549, momID = NA, dadID = 553) %>%
+  addPersonToPed(name = "Jacaerys Velaryon",
+                 sex = "M", personID = 550, momID = 339, dadID = 549) %>%
+  addPersonToPed(name = "Lucerys Velaryon",
+                 sex = "M", personID = 551, momID = 339, dadID = 549) %>%
+  addPersonToPed(name = "Joffrey Velaryon",
+                 sex = "M", personID = 552, momID = 339, dadID = 549) %>%
+  addPersonToPed(name = "Lyonel Strong",
+                 sex = "M", personID = 553, momID = NA, dadID = NA) %>%
+  addPersonToPed(name = "Alys Rivers",
+                 sex = "F", personID = 554, momID = NA, dadID = 553) %>%
+  addPersonToPed(name = "Son of Alys Rivers",
+                 sex = "M", personID = 555, momID = 554, dadID = 346) %>%
+  addPersonToPed(name = "Jaehaera Targaryen",
+                 sex = "F", personID = 556, momID = 348, dadID = 345,
+                 twinID = 557, zygosity="dz") %>%
+  addPersonToPed(name = "Jaehaerys Targaryen (son of Aegon II)",
+                 sex = "M", personID = 557, momID = 348, dadID = 345,
+                 twinID = 556, zygosity = "dz"
+                 ) %>%
+  addPersonToPed(name = "Maelor Targaryen (son of Aegon II)",
+                 sex = "M", personID = 558, momID = 348, dadID = 345) %>%
+  addPersonToPed(name = "Laena Velaryon (daughter of Baela Targaryen)",
+                 sex = "F", personID = 559, momID = 546, dadID = 333) %>%
+  addPersonToPed(name = "Rohanne of Tyrosh",
+                 sex = "F", personID = 560, momID = NA, dadID = NA) %>%
+  # https://awoiaf.westeros.org/index.php/Rohanne_of_Tyrosh
+  addPersonToPed(name = "Daemon III Blackfyre",
+                 sex = "M", personID = 561, momID = NA, dadID = 316) %>%
+  addPersonToPed(name = "Calla Blackfyre",
+                 sex = "F", personID = 562, momID = 560, dadID = 312) %>%
+# https://awoiaf.westeros.org/index.php/Calla_Blackfyre
+
+  addPersonToPed(name = "Barba Bracken",
+                 sex = "F", personID = 563, momID = NA, dadID = NA) %>%
+  addPersonToPed(name = "Lord Frey",
+                 sex = "M", personID = 564, momID = NA, dadID = NA) %>%
+  addPersonToPed(name = "Lady Butterwell",
+                 sex = "F", personID = 565, momID = 566, dadID = 564) %>%
+  addPersonToPed(name = "Lady Frey",
+                 sex = "F", personID = 566, momID = NA, dadID = NA)
+
 df <- df %>%
   mutate(
     sex = case_when(
@@ -264,6 +357,9 @@ df <- df %>%
       TRUE ~ sex
     ),
     momID = case_when(
+      personID == 309 ~ 563, # Barba Bracken is the mother of Aegor Rivers
+      personID %in% c(313:319) ~ 560, # Blackfyres
+      personID == 344 ~ 541, # Alicent Hightower's mother is the wife of Otto Hightower
       personID == 354 ~ 359, # Rhaenys Targaryen
       personID == 355 ~ 359, # Visenya Targaryen,
       personID == 303 ~ 502, # Naerys Targaryen's mother is Larra Rogare
@@ -284,24 +380,28 @@ df <- df %>%
       personID == 322 ~ 535, # Daenaera Velaryon's mother is Hazel Harte
       personID == 306 ~ 339, #  Viserys II's mother is Rhaenyra Targaryen
       personID == 351 ~ 510, # Alysanne Targaryen's mom is Alyssa Velaryon
-      personID == 283 ~ 516, # 	Dyanna Dayne is mother of Daeron Targaryen (son of Maekar I)
-      personID == 287 ~ 516, # Dyanna Dayne is mother of Aemon Targaryen (son of Maekar I)
-      personID == 285 ~ 516, # Dyanna Dayne is mother of Aerion (son of Maekar) Targaryen
-      personID == 288 ~ 516, # Dyanna Dayne is mother of Rhae Targaryen
+      personID %in% c(283, # # 	Dyanna Dayne is mother of Daeron Targaryen (son of Maekar I)
+                      287, #  Aemon Targaryen (son of Maekar I)
+                      285, # Aerion (son of Maekar) Targaryen
+                      288) ~ 516, #  Rhae Targaryen
+      personID %in% c(226, 232, 231) ~ 538, # kids of  Jasper
+      personID == 1 ~ 566, # Walder Frey's mother
       TRUE ~ momID
     ),
     dadID = case_when(
+      personID == 344 ~ 539, # Alicent Hightower's father is Otto Hightower
       personID == 354 ~ 358, # Rhaenys Targaryen
       personID == 355 ~ 358, # Visenya Targaryen
       personID == 341 ~ 503, # Aemma Arryn's  father is Rodrik Arryn
       personID == 257 ~ 504, # Princess of Dorne's father is the Father of Princess of Dorne
       personID == 259 ~ 504, # Lewyn Martell's father is the Father of Princess of Dorne
       personID == 333 ~ 522, # Alyn Velaryon's father is officially Laenor Velaryon (but it's probably Corlys Velaryon)
-      personID == 326 ~ 528, # Viserys Plumm
-      personID == 322 ~ 529, #   Daenaera Velaryon's father is Daeron Velaryon
+      personID == 326 ~ 528, #  Viserys Plumm
+      personID == 322 ~ 529, #  Daenaera Velaryon's father is Daeron Velaryon
       personID == 306 ~ 536, #  Viserys II's father is Daemon Targaryen
       personID == 321 ~ 536, # Aegon III's father is Daemon Targaryen
       personID == 340 ~ 537, # Baelon Targaryen
+      personID == 1 ~ 564, # Walder Frey's father is Lord Frey
       TRUE ~ dadID
     )
   )
@@ -316,7 +416,7 @@ ASOIAF <- df %>%
   ) %>%
   mutate(
     zygosity = case_when(
-      id %in% c(164, 165) ~ "dz", # Jaime Lannister
+      !is.na(zygosity) ~ zygosity,
       !is.na(twinID) ~ "unknown",
       TRUE ~ NA_character_
     )

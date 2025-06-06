@@ -298,12 +298,13 @@ dropLink <- function(ped,
 #' @param momID Optional. The ID of the mother of the new person. If not provided, it will be set to \code{NA}.
 #' @param dadID Optional. The ID of the father of the new person. If not provided, it will be set to \code{NA}.
 #' @param twinID Optional. The ID of the twin of the new person. If not provided, it will be set to \code{NA}.
+#' @param zygosity Optional. A character string indicating the zygosity of the new person. If not provided, it will be set to \code{NA}.
 #' @param personID Optional. The ID of the new person. If not provided, it will be generated as the maximum existing personID + 1.
 #'
 #' @return A \code{data.frame} with the new person added to the existing pedigree.
 #'
 #' @export
-addPersonToPed <- function(ped, name = NULL, sex = NULL, momID = NA, dadID = NA, twinID = NULL, personID = NULL) {
+addPersonToPed <- function(ped, name = NULL, sex = NULL, momID = NA, dadID = NA, twinID = NULL, personID = NULL, zygosity = NULL) {
   stopifnot(is.data.frame(ped))
 
   # Copy structure from an existing row
@@ -343,6 +344,11 @@ addPersonToPed <- function(ped, name = NULL, sex = NULL, momID = NA, dadID = NA,
     new_row$sex <- sex
   } else if ("sex" %in% colnames(ped)) {
     new_row$sex <- NA_character_
+  }
+  if (!is.null(zygosity) && "zygosity" %in% colnames(ped)) {
+    new_row$zygosity <- zygosity
+  } else if ("zygosity" %in% colnames(ped)) {
+    new_row$zygosity <- NA_character_
   }
 
   # Append to data frame

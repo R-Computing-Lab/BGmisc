@@ -138,7 +138,7 @@ Many real-world and fictional pedigrees contain individuals with unknown or part
 
 - Create "phantom" placeholders for the missing parent
 
--Optionally repair and harmonize parent fields
+- Optionally repair and harmonize parent fields
 
 To facilitate plotting, we check for individuals with one known parent but a missing other. For those cases, we assign a placeholder ID to the missing parent.
 
@@ -160,12 +160,11 @@ checkPedigreeNetwork(df_repaired,
   personID = "ID",
   momID = "momID",
   dadID = "dadID",
-  verbose = TRUE
+  verbose = FALSE
 )
 ```
 
 This code creates new IDs for individuals with one known parent and a missing other. It checks if either `momID` or `dadID` is missing, and if so, it assigns a new ID based on the row number. This allows us to visualize the pedigree even when some parental information is incomplete.
-
 
 
 ## Visualize the Pedigree
@@ -185,7 +184,7 @@ plotPedigree(df_repaired %>% mutate(
 Here is the same pedigree, but using `ggPedigree()` from {ggpedigree}. This function provides a more flexible and customizable way to visualize pedigrees, allowing for easy integration with other `ggplot2` functions.
 
 
-```{r message=FALSE, warning=FALSE}
+```{r, message=FALSE, warning=FALSE, fig.width=10, fig.height=8}
 library(ggpedigree)
 plt <- ggPedigree(df_repaired,
   status_col = "affected",
