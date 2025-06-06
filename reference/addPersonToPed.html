@@ -58,7 +58,8 @@ A function to add a new person to an existing pedigree <code>data.frame</code>.<
 <span>  momID <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  dadID <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  twinID <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  personID <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  personID <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  zygosity <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -92,6 +93,10 @@ A function to add a new person to an existing pedigree <code>data.frame</code>.<
 
 <dt id="arg-personid">personID<a class="anchor" aria-label="anchor" href="#arg-personid"></a></dt>
 <dd><p>Optional. The ID of the new person. If not provided, it will be generated as the maximum existing personID + 1.</p></dd>
+
+
+<dt id="arg-zygosity">zygosity<a class="anchor" aria-label="anchor" href="#arg-zygosity"></a></dt>
+<dd><p>Optional. A character string indicating the zygosity of the new person. If not provided, it will be set to <code>NA</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
