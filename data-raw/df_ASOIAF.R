@@ -92,8 +92,6 @@ df <- ped2fam(ASOIAF, personID = "personID") %>%
     )
 
 
-# add new row for Naerys Targaryen's mother
-
 df <- df %>%
   addPersonToPed(
     name = "Larra Rogare", sex = "F",
@@ -302,7 +300,7 @@ addPersonToPed(
     sex = "F", personID = 547, momID = 545, dadID = 536,
     twinID = 546, zygosity="unknown") %>%
   addPersonToPed(name = "Visenya Targaryen (daughter of Rhaenyra)",
-                 sex = "F", personID = 548,    momID =    339, dadID = 536) %>%
+                 sex = "F", personID = 548, momID =    339, dadID = 536) %>%
   addPersonToPed(name = "Harwin Strong",
                  sex = "M", personID = 549, momID = NA, dadID = 553) %>%
   addPersonToPed(name = "Jacaerys Velaryon",
@@ -344,7 +342,20 @@ addPersonToPed(
   addPersonToPed(name = "Lady Butterwell",
                  sex = "F", personID = 565, momID = 566, dadID = 564) %>%
   addPersonToPed(name = "Lady Frey",
-                 sex = "F", personID = 566, momID = NA, dadID = NA)
+                 sex = "F", personID = 566, momID = NA, dadID = NA) %>%
+  addPersonToPed(
+    name = "Mother of Maron Martell", sex = "F",
+    personID = 567, momID = NA, dadID = NA
+  ) %>%
+  addPersonToPed(
+    name = "Prince of Dorne (father of Maron)", sex = "M",
+    personID = 568, momID = NA, dadID = NA
+  ) %>%
+# https://awoiaf.westeros.org/index.php/Prince_of_Dorne_(father_of_Maron)
+  addPersonToPed(
+    name = "Maron Martell", sex = "M",
+    personID = 569, momID = 567, dadID = 568
+  )
 
 df <- df %>%
   mutate(
@@ -357,6 +368,7 @@ df <- df %>%
       TRUE ~ sex
     ),
     momID = case_when(
+      personID ==  291 ~ 567, # Myriah Martell's mother is the Mother of Maron Martell
       personID == 309 ~ 563, # Barba Bracken is the mother of Aegor Rivers
       personID %in% c(313:319) ~ 560, # Blackfyres
       personID == 344 ~ 541, # Alicent Hightower's mother is the wife of Otto Hightower
@@ -389,6 +401,7 @@ df <- df %>%
       TRUE ~ momID
     ),
     dadID = case_when(
+      personID ==  291 ~ 568, # Myriah Martell's mother is the Father of Maron Martell
       personID == 344 ~ 539, # Alicent Hightower's father is Otto Hightower
       personID == 354 ~ 358, # Rhaenys Targaryen
       personID == 355 ~ 358, # Visenya Targaryen
@@ -410,7 +423,7 @@ df <- df %>%
 
 ASOIAF <- df %>%
   select(-famID) %>%
-  ped2fam(personID = "personID") %>%
+  ped2fam(personID = "personID",famID = "famID") %>%
   rename(
     id = personID
   ) %>%

@@ -289,7 +289,7 @@ id,famID,momID,dadID,name,sex,twinID,zygosity
 288,6,516,282,Rhae Targaryen,F,NA,NA
 289,6,516,282,Daella Targaryen (daughter of Maekar I),F,NA,NA
 290,6,303,302,Daeron Targaryen,M,NA,NA
-291,6,NA,NA,Myriah Martell,F,NA,NA
+291,6,567,568,Myriah Martell,F,NA,NA
 292,6,291,290,Baelor 'Breakspear' Targaryen,M,NA,NA
 293,6,291,290,Aerys Targaryen,M,NA,NA
 294,6,291,290,Aelinor Targaryen,F,NA,NA
@@ -565,3 +565,6 @@ id,famID,momID,dadID,name,sex,twinID,zygosity
 564,1,NA,NA,Lord Frey,M,NA,NA
 565,1,566,564,Lady Butterwell,F,NA,NA
 566,1,NA,NA,Lady Frey,F,NA,NA
+567,6,NA,NA,Mother of Maron Martell,F,NA,NA
+568,6,NA,NA,Prince of Dorne (father of Maron),M,NA,NA
+569,6,567,568,Maron Martell,M,NA,NA
