@@ -210,7 +210,7 @@ id,famID,momID,dadID,name,sex,twinID,zygosity
 209,6,207,204,Aegon Targaryen,M,NA,NA
 210,6,468,212,Lyanna Stark,F,NA,NA
 211,6,210,204,Jon Snow,M,NA,NA
-212,6,NA,464,Rickard Stark,M,NA,NA
+212,6,571,464,Rickard Stark,M,NA,NA
 213,6,468,212,Brandon Stark,M,NA,NA
 214,6,468,212,Eddard Stark,M,NA,NA
 215,6,468,212,Benjen Stark,M,NA,NA
@@ -220,7 +220,7 @@ id,famID,momID,dadID,name,sex,twinID,zygosity
 219,6,216,214,Arya Stark,F,NA,NA
 220,6,216,214,Brandon 'Bran' Stark,M,NA,NA
 221,6,216,214,Rickon Stark,M,NA,NA
-222,6,NA,255,Hoster Tully,M,NA,NA
+222,6,570,255,Hoster Tully,M,NA,NA
 223,6,NA,NA,Minisa Whent,F,NA,NA
 224,6,223,222,Lysa Tully,F,NA,NA
 225,6,223,222,Edmure Tully,M,NA,NA
@@ -253,8 +253,8 @@ id,famID,momID,dadID,name,sex,twinID,zygosity
 252,9,251,NA,Morton Waynwood,M,NA,NA
 253,9,251,NA,Donnel Waynwood,M,NA,NA
 254,9,251,NA,Wallace Waynwood,M,NA,NA
-255,6,NA,NA,Tully,M,NA,NA
-256,6,NA,255,Brynden 'Blackfish' Tully,M,NA,NA
+255,6,NA,NA,Lord Tully,M,NA,NA
+256,6,570,255,Brynden 'Blackfish' Tully,M,NA,NA
 257,6,505,504,Princess Of Dorne,F,NA,NA
 258,10,NA,NA,Martell,U,NA,NA
 259,6,505,504,Lewyn Martell,M,NA,NA
@@ -463,12 +463,12 @@ id,famID,momID,dadID,name,sex,twinID,zygosity
 462,6,450,457,Dickon Tarly,M,NA,NA
 463,6,410,411,Alyn Ambrose,M,NA,NA
 464,6,467,465,Edwyle Stark,M,NA,NA
-465,6,NA,NA,Stark,M,NA,NA
-466,6,467,465,Brandon Stark,M,NA,NA
-467,6,NA,NA,NA,F,NA,NA
-468,6,NA,NA,Flint,F,NA,NA
-469,6,467,465,Stark,F,NA,NA
-470,6,NA,NA,Royce,M,NA,NA
+465,6,576,575,Willam Stark,M,NA,NA
+466,6,574,465,Brandon Stark,M,NA,NA
+467,6,NA,NA,Melantha Blackwood,F,NA,NA
+468,6,572,573,Lyarra Stark,F,NA,NA
+469,6,467,465,Jocelyn Stark,F,NA,NA
+470,6,NA,NA,Benedict Royce,M,NA,NA
 471,6,469,470,Royce,F,NA,NA
 472,6,469,470,Royce,F,NA,NA
 473,6,469,470,Royce,F,NA,NA
@@ -568,3 +568,16 @@ id,famID,momID,dadID,name,sex,twinID,zygosity
 567,6,NA,NA,Mother of Maron Martell,F,NA,NA
 568,6,NA,NA,Prince of Dorne (father of Maron),M,NA,NA
 569,6,567,568,Maron Martell,M,NA,NA
+570,6,NA,NA,Mother of Hoster Tully,F,NA,NA
+571,6,NA,NA,Marna Locke,F,NA,NA
+572,6,NA,NA,Arya Flint,F,NA,NA
+573,6,576,575,Rodrik Stark,M,NA,NA
+574,6,NA,NA,Lyanne Glover,F,NA,NA
+575,6,NA,NA,Beron Stark,M,NA,NA
+576,6,NA,NA,Lorra Royce,F,NA,NA
+577,6,576,575,Donnor Stark,M,NA,NA
+578,6,576,575,Artos Stark,M,NA,NA
+579,6,576,575,Berena Stark,F,NA,NA
+580,6,576,575,Alysanne Stark,F,NA,NA
+581,6,576,575,Errold Stark,M,NA,NA
+582,6,572,573,Branda Stark,F,NA,NA

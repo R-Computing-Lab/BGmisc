@@ -62,6 +62,12 @@ df <- ped2fam(ASOIAF, personID = "personID") %>%
       personID == 347 ~ "Daeron Targaryen" ,
       personID ==  343 ~ "Baelon Targaryen (son of Viserys I)",
       personID ==   317 ~ "Father of Maelys I Blackfyre",
+      personID ==   255 ~ "Lord Tully",
+      personID ==  468 ~ "Lyarra Stark",
+      personID ==  465 ~ "Willam Stark",
+      personID == 469 ~ "Jocelyn Stark",
+      personID ==  470 ~ "Benedict Royce",
+      personID == 467 ~ "Melantha Blackwood",
       TRUE ~ name
     ),
     twinID = case_match(name,
@@ -355,7 +361,59 @@ addPersonToPed(
   addPersonToPed(
     name = "Maron Martell", sex = "M",
     personID = 569, momID = 567, dadID = 568
-  )
+  )%>%
+  addPersonToPed(
+    name = "Mother of Hoster Tully", sex = "F",
+    personID = 570, momID = NA, dadID = NA
+  ) %>%   addPersonToPed(
+    name = "Marna Locke", sex = "F",
+    personID = 571, momID = NA, dadID = NA
+  ) %>%   addPersonToPed(
+    name = "Arya Flint", sex = "F",
+    personID = 572, momID = NA, dadID = NA
+  ) %>%
+  addPersonToPed(
+    name = "Rodrik Stark", sex = "M",
+    personID = 573, momID = 576, dadID = 575
+  )  %>%
+  addPersonToPed(
+    name = "Lyanne Glover", sex = "F",
+    personID = 574, momID = NA, dadID = NA
+  )   %>%
+  addPersonToPed(
+    name = "Beron Stark", sex = "M",
+    personID = 575, momID = NA, dadID = NA
+  )   %>%
+  addPersonToPed(
+    name = "Lorra Royce", sex = "F",
+    personID = 576, momID = NA, dadID = NA
+  ) %>%
+  addPersonToPed(
+    name = "Donnor Stark", sex = "M",
+    personID = 577, momID = 576, dadID = 575
+  )  %>%
+  addPersonToPed(
+    name = "Artos Stark", sex = "M",
+    personID = 578, momID = 576, dadID = 575
+  )   %>%
+  addPersonToPed(
+    name = "Berena Stark", sex = "F",
+    personID = 579, momID = 576, dadID = 575
+  )   %>%
+  addPersonToPed(
+    name = "Alysanne Stark", sex = "F",
+    personID = 580, momID = 576, dadID = 575
+  ) %>%
+  addPersonToPed(
+    name = "Errold Stark", sex = "M",
+    personID = 581, momID = 576, dadID = 575)  %>%
+  addPersonToPed(
+    name = "Branda Stark", sex = "F",
+    personID = 582, momID = 572, dadID = 573)
+
+
+
+
 
 df <- df %>%
   mutate(
@@ -368,6 +426,12 @@ df <- df %>%
       TRUE ~ sex
     ),
     momID = case_when(
+      personID ==  465 ~ 576,  #Lorra Royce
+      personID ==  466 ~  574, # Lyanne Glover is the mother of Brandon Stark
+      personID ==  468  ~  572, # Arya Flint's is the Mother of Lyarra Stark
+      personID %in%  c(222,256) ~ 570,
+      personID == 212 ~ 571, # Marna Locke is the mother of Rickard Stark
+
       personID ==  291 ~ 567, # Myriah Martell's mother is the Mother of Maron Martell
       personID == 309 ~ 563, # Barba Bracken is the mother of Aegor Rivers
       personID %in% c(313:319) ~ 560, # Blackfyres
@@ -401,6 +465,7 @@ df <- df %>%
       TRUE ~ momID
     ),
     dadID = case_when(
+      personID ==  465 ~ 575,  #Beron Stark
       personID ==  291 ~ 568, # Myriah Martell's mother is the Father of Maron Martell
       personID == 344 ~ 539, # Alicent Hightower's father is Otto Hightower
       personID == 354 ~ 358, # Rhaenys Targaryen
@@ -415,6 +480,7 @@ df <- df %>%
       personID == 321 ~ 536, # Aegon III's father is Daemon Targaryen
       personID == 340 ~ 537, # Baelon Targaryen
       personID == 1 ~ 564, # Walder Frey's father is Lord Frey
+      personID ==  468  ~  573, # Rodrik	Stark's is the Father of Lyarra Stark
       TRUE ~ dadID
     )
   )
