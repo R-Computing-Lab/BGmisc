@@ -40,6 +40,12 @@ son status (ifson), and daughter status (ifdau), as well as couple IDs.}
 
 \item{rd_kpc}{logical. If TRUE, the number of kids per mate will be randomly generated from a poisson distribution with mean kpc. If FALSE, the number of kids per mate will be fixed at kpc.}
 
+\item{personID}{character.  Name of the column in ped for the person ID variable}
+
+\item{momID}{character.  Name of the column in ped for the mother ID variable}
+
+\item{dadID}{character.  Name of the column in ped for the father ID variable}
+
 \item{code_male}{The value to use for males. Default is "M"}
 
 \item{code_female}{The value to use for females. Default is "F"}

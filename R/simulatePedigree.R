@@ -360,7 +360,8 @@ buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose = FALSE, mar
 #' @param code_male The value to use for males. Default is "M"
 #' @param code_female The value to use for females. Default is "F"
 #' @param ... Additional arguments to be passed to other functions.
-
+#' @inheritParams ped2fam
+#' @param spouseID The name of the column that will contain the spouse ID in the output data frame. Default is "spID".
 #' @return A \code{data.frame} with each row representing a simulated individual. The columns are as follows:
 #' \itemize{
 #'   \item{fam: The family id of each simulated individual. It is 'fam1' in a single simulated pedigree.}

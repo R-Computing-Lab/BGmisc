@@ -1,3 +1,6 @@
+# BGmisc 1.4.3
+* transferred plotPedigree to ggpedigree
+
 # BGmisc 1.4.2
 * Added twinIDs for potter and asoiaf pedigrees
 * Added twinID to simulatePedigree function, and extended to include MZ, DZ, and SS twins.
