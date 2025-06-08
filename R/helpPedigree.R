@@ -142,7 +142,7 @@ adjustKidsPerCouple <- function(nMates, kpc, rd_kpc = TRUE) {
 #' This subfunction marks individuals in a generation as potential sons, daughters,
 #' or parents based on their relationships and assigns unique couple IDs. It processes
 #' the assignment of roles and relationships within and between generations in a pedigree simulation.
-#'
+#' @inheritParams determineSex
 #' @param df_Ngen A data frame for the current generation being processed.
 #'        It must include columns for individual IDs (`id`), spouse IDs (`spID`), sex (`sex`),
 #'        and any previously assigned roles (`ifparent`, `ifson`, `ifdau`).
@@ -157,7 +157,7 @@ adjustKidsPerCouple <- function(nMates, kpc, rd_kpc = TRUE) {
 #'         also returned for integration into the larger pedigree data frame (`df_Fam`).
 #'
 
-markPotentialChildren <- function(df_Ngen, i, Ngen, sizeGens, CoupleF) {
+markPotentialChildren <- function(df_Ngen, i, Ngen, sizeGens, CoupleF, code_male = "M", code_female = "F") {
   # Step 2.1: mark a group of potential sons and daughters in the i th generation
 
   # get all couple ids
@@ -171,7 +171,7 @@ markPotentialChildren <- function(df_Ngen, i, Ngen, sizeGens, CoupleF) {
   # change the ifson and ifdau based on coupleGirl and coupleBoy
   for (j in 1:sizeGens[i]) {
     if (is.na(df_Ngen$spID[j])) {
-      if (df_Ngen$sex[j] == "F") {
+      if (df_Ngen$sex[j] == code_female) {
         df_Ngen$ifdau[j] <- TRUE
         # usedIds <- c(usedIds, df_Ngen$id[j])
       } else {
@@ -179,9 +179,9 @@ markPotentialChildren <- function(df_Ngen, i, Ngen, sizeGens, CoupleF) {
         # usedIds <- c(usedIds, df_Ngen$id[j])
       }
     } else {
-      if (df_Ngen$coupleId[j] %in% coupleBoy && df_Ngen$sex[j] == "M") {
+      if (df_Ngen$coupleId[j] %in% coupleBoy && df_Ngen$sex[j] == code_male) {
         df_Ngen$ifson[j] <- TRUE
-      } else if (df_Ngen$coupleId[j] %in% coupleGirl && df_Ngen$sex[j] == "F") {
+      } else if (df_Ngen$coupleId[j] %in% coupleGirl && df_Ngen$sex[j] == code_female) {
         df_Ngen$ifdau[j] <- TRUE
       } else {
         next

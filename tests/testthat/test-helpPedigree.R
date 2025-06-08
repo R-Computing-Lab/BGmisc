@@ -116,13 +116,13 @@ test_that("addPersonToPed works as expected with zygosity", {
   expect_true(is.na(updated2$zygosity[3]))
 
   # Add person with missing optional fields
-  updated3 <- addPersonToPed(ped)
-  expect_equal(nrow(updated3), 3)
-  expect_true(is.na(updated3$name[3]))
-  expect_true(is.na(updated3$sex[3]))
-  expect_true(is.na(updated3$twinID[3]))
-  expect_true(is.na(updated3$momID[3]))
-  expect_true(is.na(updated3$dadID[3]))
+  updated3 <- addPersonToPed(updated2)
+  expect_equal(nrow(updated3), 4)
+  expect_true(is.na(updated3$name[4]))
+  expect_true(is.na(updated3$sex[4]))
+  expect_true(is.na(updated3$twinID[4]))
+  expect_true(is.na(updated3$momID[4]))
+  expect_true(is.na(updated3$dadID[4]))
 
-  expect_equal(updated3$personID[3], max(ped$personID, na.rm = TRUE) + 1)
+  expect_equal(updated3$personID[4], max(ped$personID, na.rm = TRUE) + 2)
 })

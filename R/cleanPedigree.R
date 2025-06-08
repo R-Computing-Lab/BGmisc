@@ -21,7 +21,8 @@ standardizeColnames <- function(df, verbose = FALSE) {
     "matID" = "^(?:mat[\\.\\-_]?id|maternal[\\.\\-_]?(?:id)?)$",
     "spID" = "^(?:s(?:pt)?id|spouse[\\.\\-_]?(?:id)?|partner[\\.\\-_]?(?:id)?|husb(?:and)?[\\.\\-_]?id|wife[\\.\\-_]?(?:id)?|pid[\\.\\-_]?spouse1?)$",
     "twinID" = "^(?:twi?n[\\.\\-_]?(?:id)?)$",
-    "sex" = "^(?:sex|gender|female|m(?:a(?:le|n)|en)|wom[ae]n)$"
+    "zygosity" = "^(?:zyg(o[sc]ity)?)$",
+    "sex" = "^(?:sex|gender|females?|m(?:a(?:les?|n)|en)|wom[aey]n)$"
   )
   if (verbose) {
     message("Standardizing column names...")

@@ -55,6 +55,3 @@ We recognize the importance of using language and methodologies that affirm and 
 package express unequivocal support for folx in the transgender
 and LGBTQ+ communities.
 }
-\seealso{
-\code{\link{plotPedigree}}
-}
