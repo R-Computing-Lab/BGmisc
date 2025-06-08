@@ -57,14 +57,7 @@ Pedigrees are visual diagrams that represent family relationships across generat
 
 ### Single Pedigree Visualization
 
-To visualize a single simulated pedigree, use the `plotPedigree()` function.
-
-```{r,fig.width=8,fig.height=6}
-# Plot the simulated pedigree
-plotPedigree(df_ped)
-```
-
-The nicer implementation of the `plotPedigree` function allows you to visualize the pedigree structure, including family relationships and individual characteristics. The plot displays individuals across generations, with lines connecting parents to their children, and spouses connected by horizontal lines.
+To visualize a single simulated pedigree, use the the `plotPedigree` function allows you to visualize the pedigree structure, including family relationships and individual characteristics. The plot displays individuals across generations, with lines connecting parents to their children, and spouses connected by horizontal lines.
 
 ```{r, warning=FALSE, message=FALSE,fig.width=8, fig.height=6}
 library(ggpedigree)
@@ -91,18 +84,9 @@ df_ped_3 <- simulatePedigree(Ngen = 3)
 
 # Simulate a family with 4 generations
 df_ped_4 <- simulatePedigree(Ngen = 4)
-
-# Set up plotting parameters for side-by-side display
-par(mfrow = c(1, 2))
-
-# Plot the 3-generation pedigree
-plotPedigree(df_ped_3, width = 3)
-
-# Plot the 4-generation pedigree
-plotPedigree(df_ped_4, width = 1)
 ```   
 
-Alternatively, you can use the `ggpedigree` package to plot multiple pedigrees side by side. This package allows for more customization and better aesthetics in pedigree visualization.
+You can use the `ggpedigree` package to plot multiple pedigrees side by side. This package allows for more customization and better aesthetics in pedigree visualization.
 
 ```{r, echo=FALSE,fig.width=8, fig.height=6}
 library(ggplot2)

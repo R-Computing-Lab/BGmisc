@@ -25,9 +25,11 @@ test_that("simulated pedigree generates expected data structure but supply var n
   code_male <- "M"
   code_female <- "Fe"
   personID <- "Id"
-  results <- simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR,
-                              code_female= code_female,personID=personID,
-                              code_male = code_male)
+  results <- simulatePedigree(
+    kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR,
+    code_female = code_female, personID = personID,
+    code_male = code_male
+  )
   # Check that dimnames are correct
   expect_equal(length(results$Id), 57, tolerance = 1e-8)
   expect_equal(length(results), 7, tolerance = 1e-8)

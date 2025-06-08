@@ -9,7 +9,7 @@
 buildWithinGenerations <- function(sizeGens, marR, sexR, Ngen, verbose = FALSE,
                                    personID = "ID",
                                    momID = "momID",
-                                   dadID= "dadID",
+                                   dadID = "dadID",
                                    code_male = "M", code_female = "F") {
   for (i in 1:Ngen) {
     idGen <- as.numeric(paste(100, i, 1:sizeGens[i], sep = ""))
@@ -26,9 +26,11 @@ buildWithinGenerations <- function(sizeGens, marR, sexR, Ngen, verbose = FALSE,
 
     ### Let's deal with the sex in each generation first
 
-    df_Ngen$sex <- determineSex(idGen = idGen, sexR = sexR,
-                                code_male = code_male,
-                                code_female = code_female)
+    df_Ngen$sex <- determineSex(
+      idGen = idGen, sexR = sexR,
+      code_male = code_male,
+      code_female = code_female
+    )
 
     # message(paste("tiger",i))
     # The first generation
@@ -141,9 +143,9 @@ buildWithinGenerations <- function(sizeGens, marR, sexR, Ngen, verbose = FALSE,
 #'
 
 buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose = FALSE, marR, sexR, kpc,
-                                    rd_kpc,  personID = "ID",
+                                    rd_kpc, personID = "ID",
                                     momID = "momID",
-                                    dadID= "dadID",
+                                    dadID = "dadID",
                                     code_male = "M", code_female = "F") {
   df_Fam$ifparent <- FALSE
   df_Fam$ifson <- FALSE
@@ -207,9 +209,8 @@ buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose = FALSE, mar
         Ngen = Ngen,
         sizeGens = sizeGens,
         CoupleF = CoupleF,
-        code_male=code_male,
-        code_female=code_female
-
+        code_male = code_male,
+        code_female = code_female
       )
       if (verbose) {
         message(
@@ -263,8 +264,10 @@ buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose = FALSE, mar
         IdOfp <- evenInsert(IdSon, IdDau)
 
         # generate link kids to the couples
-        random_numbers <- adjustKidsPerCouple(nMates = sum(df_Ngen$ifparent) / 2, kpc = kpc,
-                                              rd_kpc = rd_kpc)
+        random_numbers <- adjustKidsPerCouple(
+          nMates = sum(df_Ngen$ifparent) / 2, kpc = kpc,
+          rd_kpc = rd_kpc
+        )
 
         # cat("final random numbers",random_numbers, "\n")
         # cat("mean",sum(random_numbers)/length(random_numbers), "\n")
@@ -360,7 +363,8 @@ buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose = FALSE, mar
 #' @param code_male The value to use for males. Default is "M"
 #' @param code_female The value to use for females. Default is "F"
 #' @param ... Additional arguments to be passed to other functions.
-
+#' @inheritParams ped2fam
+#' @param spouseID The name of the column that will contain the spouse ID in the output data frame. Default is "spID".
 #' @return A \code{data.frame} with each row representing a simulated individual. The columns are as follows:
 #' \itemize{
 #'   \item{fam: The family id of each simulated individual. It is 'fam1' in a single simulated pedigree.}
@@ -383,10 +387,10 @@ simulatePedigree <- function(kpc = 3,
                              verbose = FALSE,
                              personID = "ID",
                              momID = "momID",
-                             dadID= "dadID",
+                             dadID = "dadID",
                              spouseID = "spouseID",
-                             code_male="M",
-                             code_female="F") {
+                             code_male = "M",
+                             code_female = "F") {
   # SexRatio: ratio of male over female in the offspring setting; used in the between generation combinations
   # SexRatio <- sexR / (1 - sexR)
 
@@ -406,7 +410,7 @@ simulatePedigree <- function(kpc = 3,
     verbose = verbose,
     personID = personID,
     momID = momID,
-    dadID= dadID,
+    dadID = dadID,
     code_male = code_male,
     code_female = code_female
   )
@@ -427,7 +431,7 @@ simulatePedigree <- function(kpc = 3,
     rd_kpc = rd_kpc,
     personID = personID,
     momID = momID,
-    dadID= dadID,
+    dadID = dadID,
     code_male = code_male,
     code_female = code_female
   )

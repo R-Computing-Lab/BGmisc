@@ -26,7 +26,7 @@ id,famID,momID,dadID,name,sex,twinID,zygosity
 25,1,24,23,Steffon Frey,M,NA,NA
 26,1,24,23,Walda 'Fair Walda' Frey,F,NA,NA
 27,1,24,23,Bryan Frey,M,NA,NA
-28,1,NA,158,Genna Lannister,F,NA,NA
+28,1,584,158,Genna Lannister,F,NA,NA
 29,1,28,4,Cleos Frey,M,NA,NA
 30,1,28,4,Lyonel Frey,M,NA,NA
 31,1,28,4,Tion Frey,M,NA,NA
@@ -119,7 +119,7 @@ id,famID,momID,dadID,name,sex,twinID,zygosity
 118,1,NA,NA,Sylwa Paege,F,NA,NA
 119,1,118,106,Hoster Frey,M,NA,NA
 120,1,118,106,Merianne Frey,F,NA,NA
-121,1,NA,153,Flement Brax,M,NA,NA
+121,1,583,153,Flement Brax,M,NA,NA
 122,1,107,121,Robert Brax,M,NA,NA
 123,1,107,121,Walder Brax,M,NA,NA
 124,1,107,121,Jon Brax,M,NA,NA
@@ -152,16 +152,16 @@ id,famID,momID,dadID,name,sex,twinID,zygosity
 151,1,NA,144,Aemon Rivers,M,NA,NA
 152,1,NA,151,Walda Rivers,F,NA,NA
 153,1,NA,156,Andros Brax,M,NA,NA
-154,1,NA,153,Tytos Brax,M,NA,NA
-155,1,NA,153,Robert Brax,M,NA,NA
+154,1,583,153,Tytos Brax,M,NA,NA
+155,1,583,153,Robert Brax,M,NA,NA
 156,1,NA,NA,Brax,M,NA,NA
 157,1,NA,156,Rupert Brax,M,NA,NA
-158,1,NA,179,Tytos Lannister,M,NA,NA
-159,1,NA,158,Tywin Lannister,M,NA,NA
-160,1,NA,158,Kevan Lannister,M,NA,NA
-161,1,NA,158,Tygett Lannister,M,NA,NA
-162,1,NA,158,Gerion Lannister,M,NA,NA
-163,1,NA,182,Joanna Lannister,F,NA,NA
+158,1,585,179,Tytos Lannister,M,NA,NA
+159,1,584,158,Tywin Lannister,M,NA,NA
+160,1,584,158,Kevan Lannister,M,NA,NA
+161,1,584,158,Tygett Lannister,M,NA,NA
+162,1,584,158,Gerion Lannister,M,NA,NA
+163,1,586,182,Joanna Lannister,F,NA,NA
 164,1,163,159,Jaime Lannister,M,165,dz
 165,1,163,159,Cersei Lannister,F,164,dz
 166,1,163,159,Tyrion Lannister,M,NA,NA
@@ -177,11 +177,11 @@ id,famID,momID,dadID,name,sex,twinID,zygosity
 176,1,NA,NA,Darlessa Marbrand,F,NA,NA
 177,1,176,161,Tyrek Lannister,M,NA,NA
 178,1,NA,162,Joy Hill,F,NA,NA
-179,1,NA,NA,Lannister,M,NA,NA
-180,1,NA,179,Lannister,M,NA,NA
-181,1,NA,179,Lannister,M,NA,NA
-182,1,NA,179,Lannister,M,NA,NA
-183,1,NA,182,Stafford Lannister,M,NA,NA
+179,1,NA,NA,Gerold Lannister,M,NA,NA
+180,1,585,179,Tywald Lannister,M,NA,NA
+181,1,585,179,Tion Lannister,M,NA,NA
+182,1,585,179,Jason Lannister,M,NA,NA
+183,1,586,182,Stafford Lannister,M,NA,NA
 184,1,NA,183,Daven Lannister,M,NA,NA
 185,1,NA,183,Cerenna Lannister,F,NA,NA
 186,1,NA,183,Myrielle Lannister,F,NA,NA
@@ -205,7 +205,7 @@ id,famID,momID,dadID,name,sex,twinID,zygosity
 204,6,203,202,Rhaegar Targaryen,M,NA,NA
 205,6,203,202,Viserys Targaryen,M,NA,NA
 206,6,203,202,Daenerys Targaryen,F,NA,NA
-207,6,257,NA,Elia Martell,F,NA,NA
+207,6,257,595,Elia Martell,F,NA,NA
 208,6,207,204,Rhaenys Targaryen,F,NA,NA
 209,6,207,204,Aegon Targaryen,M,NA,NA
 210,6,468,212,Lyanna Stark,F,NA,NA
@@ -258,10 +258,10 @@ id,famID,momID,dadID,name,sex,twinID,zygosity
 257,6,505,504,Princess Of Dorne,F,NA,NA
 258,10,NA,NA,Martell,U,NA,NA
 259,6,505,504,Lewyn Martell,M,NA,NA
-260,6,257,NA,Doran Martell,M,NA,NA
-261,6,257,NA,Mors Martell,M,NA,NA
-262,6,257,NA,Olyvar Martell,M,NA,NA
-263,6,257,NA,Oberyn 'The Red Viper' Martell,M,NA,NA
+260,6,257,595,Doran Martell,M,NA,NA
+261,6,257,595,Mors Martell,M,NA,NA
+262,6,257,595,Olyvar Martell,M,NA,NA
+263,6,257,595,Oberyn 'The Red Viper' Martell,M,NA,NA
 264,6,NA,273,Ellaria Sand,F,NA,NA
 265,6,264,263,Elia Sand,F,NA,NA
 266,6,NA,263,Obara Sand,F,NA,NA
@@ -296,19 +296,19 @@ id,famID,momID,dadID,name,sex,twinID,zygosity
 295,6,291,290,Rhaegel Targaryen,M,NA,NA
 296,6,NA,295,Targaryen,M,NA,NA
 297,6,NA,295,Targaryen,M,NA,NA
-298,6,NA,292,Valarr Targaryen,M,NA,NA
-299,6,NA,292,Matarys Targaryen,M,NA,NA
+298,6,589,292,Valarr Targaryen,M,NA,NA
+299,6,589,292,Matarys Targaryen,M,NA,NA
 300,6,NA,298,Targaryen,M,NA,NA
 301,6,NA,298,Targaryen,M,NA,NA
 302,6,502,306,Aegon Targaryen,M,NA,NA
 303,6,502,306,Naerys Targaryen,F,NA,NA
-304,6,303,302,Daenerys Targaryen,F,NA,NA
+304,6,303,302,Daenerys Targaryen,F,594,dz
 305,13,NA,NA,Maron Martell,M,NA,NA
 306,6,339,536,Viserys Targaryen,M,NA,NA
 307,6,502,306,Aemon 'The Dragonknight' Targaryen,M,NA,NA
 308,6,322,321,Daena Targaryen,F,NA,NA
 309,6,563,302,Aegor 'Bittersteel' Rivers,M,NA,NA
-310,6,NA,302,Brynden 'Bloodraven' Targaryen,M,NA,NA
+310,6,591,302,Brynden 'Bloodraven' Targaryen,M,NA,NA
 311,6,NA,302,Shiera Seastar,F,NA,NA
 312,6,308,302,Daemon Blackfyre,M,NA,NA
 313,6,560,312,Aegon Blackfyre,M,314,unknown
@@ -362,10 +362,10 @@ id,famID,momID,dadID,name,sex,twinID,zygosity
 361,6,NA,358,Orys Baratheon,M,NA,NA
 362,6,NA,363,Argella Durrendon,F,NA,NA
 363,6,NA,NA,Argilac 'The Arrogant' Durrendon,M,NA,NA
-364,6,NA,365,Daemion Targaryen (Lord of Dragonstone),M,NA,NA
+364,6,590,365,Daemion Targaryen (Lord of Dragonstone),M,NA,NA
 365,6,370,368,Aerys Targaryen,M,NA,NA
-366,6,NA,365,Aelix Targaryen,M,NA,NA
-367,6,NA,365,Baelon Targaryen,M,NA,NA
+366,6,590,365,Aelix Targaryen,M,NA,NA
+367,6,590,365,Baelon Targaryen,M,NA,NA
 368,6,372,371,Aegon Targaryen,M,NA,NA
 369,6,370,368,Maegon Targaryen,M,NA,NA
 370,6,372,371,Eleana Targaryen,F,NA,NA
@@ -563,7 +563,7 @@ id,famID,momID,dadID,name,sex,twinID,zygosity
 562,6,560,312,Calla Blackfyre,F,NA,NA
 563,6,NA,NA,Barba Bracken,F,NA,NA
 564,1,NA,NA,Lord Frey,M,NA,NA
-565,1,566,564,Lady Butterwell,F,NA,NA
+565,1,566,564,Lady Butterwell Frey,F,NA,NA
 566,1,NA,NA,Lady Frey,F,NA,NA
 567,6,NA,NA,Mother of Maron Martell,F,NA,NA
 568,6,NA,NA,Prince of Dorne (father of Maron),M,NA,NA
@@ -581,3 +581,16 @@ id,famID,momID,dadID,name,sex,twinID,zygosity
 580,6,576,575,Alysanne Stark,F,NA,NA
 581,6,576,575,Errold Stark,M,NA,NA
 582,6,572,573,Branda Stark,F,NA,NA
+583,1,NA,NA,Wife of Andros Brax,F,NA,NA
+584,1,NA,NA,Jeyne Marbrand,F,NA,NA
+585,1,NA,NA,Rohanne Webber,F,NA,NA
+586,1,NA,NA,Marla Prester,F,NA,NA
+587,1,NA,NA,Alys Stackspear,F,NA,NA
+588,1,587,182,Damon Lannister,M,NA,NA
+589,6,NA,NA,Jena Dondarrion,F,NA,NA
+590,6,NA,NA,Wife of Aerys,F,NA,NA
+591,6,NA,NA,Melissa Blackwood,F,NA,NA
+592,6,591,302,Gwenys Rivers,F,NA,NA
+593,6,591,302,Mya Rivers,F,NA,NA
+594,6,303,302,Stillborn Twin Targaryen,M,304,dz
+595,6,NA,NA,Consort of Dorne (Father of Doran Martell),M,NA,NA
