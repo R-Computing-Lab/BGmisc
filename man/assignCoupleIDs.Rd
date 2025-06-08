@@ -19,3 +19,4 @@ The input dataframe augmented with a 'coupleId' column, where each mated pair ha
 This subfunction assigns a unique couple ID to each mated pair in the generation.
 Unmated individuals are assigned NA for their couple ID.
 }
+\keyword{internal}

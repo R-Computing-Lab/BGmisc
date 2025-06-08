@@ -18,7 +18,13 @@ simulatePedigree(
   rd_kpc = FALSE,
   balancedSex = TRUE,
   balancedMar = TRUE,
-  verbose = FALSE
+  verbose = FALSE,
+  personID = "ID",
+  momID = "momID",
+  dadID = "dadID",
+  spouseID = "spouseID",
+  code_male = "M",
+  code_female = "F"
 )
 
 SimPed(...)
@@ -38,7 +44,19 @@ SimPed(...)
 
 \item{balancedMar}{Not fully developed yet. Always \code{TRUE} in the current version.}
 
-\item{verbose}{logical  If TRUE, print progress through stages of algorithm}
+\item{verbose}{logical  If TRUE, message progress through stages of algorithm}
+
+\item{personID}{character.  Name of the column in ped for the person ID variable}
+
+\item{momID}{character.  Name of the column in ped for the mother ID variable}
+
+\item{dadID}{character.  Name of the column in ped for the father ID variable}
+
+\item{spouseID}{The name of the column that will contain the spouse ID in the output data frame. Default is "spID".}
+
+\item{code_male}{The value to use for males. Default is "M"}
+
+\item{code_female}{The value to use for females. Default is "F"}
 
 \item{...}{Additional arguments to be passed to other functions.}
 }

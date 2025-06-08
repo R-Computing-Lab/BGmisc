@@ -66,7 +66,7 @@ checkParentIDs <- function(ped, verbose = FALSE, repair = FALSE,
     validation_results$rowless_parents <- rowless_parents
     if (verbose) {
       cat("Some parents are not listed in the pedigree:\n")
-      print(rowless_parents)
+      message(rowless_parents)
     }
   } else {
     if (verbose) {
@@ -89,7 +89,7 @@ checkParentIDs <- function(ped, verbose = FALSE, repair = FALSE,
   validation_results$wrong_sex_moms <- mom_results$inconsistent_parents
   validation_results$wrong_sex_dads <- dad_results$inconsistent_parents
   validation_results$female_moms <- mom_results$all_same_sex
-  validation_results$male_dads   <- dad_results$all_same_sex
+  validation_results$male_dads <- dad_results$all_same_sex
 
   # Are any parents in both momID and dadID?
   momdad <- intersect(ped$dadID, ped$momID)
@@ -100,7 +100,7 @@ checkParentIDs <- function(ped, verbose = FALSE, repair = FALSE,
         "Some individuals appear in both momID and dadID roles.\n",
         "These individuals are:\n"
       ))
-      print(momdad)
+      message(momdad)
     }
   }
 
@@ -108,13 +108,13 @@ checkParentIDs <- function(ped, verbose = FALSE, repair = FALSE,
   if (!repair) {
     if (verbose) {
       cat("Validation Results:\n")
-      print(validation_results)
+      message(validation_results)
     }
     return(validation_results)
   } else {
     if (verbose) {
       cat("Validation Results:\n")
-      print(validation_results)
+      message(validation_results)
       cat("Step 3: Attempting to repair missing parents...\n")
     }
 
@@ -130,7 +130,6 @@ checkParentIDs <- function(ped, verbose = FALSE, repair = FALSE,
       # Fix sex of existing parents if wrong
       mom_indices <- match(ped$momID, ped$ID)
       dad_indices <- match(ped$dadID, ped$ID)
-
 
 
       if (length(validation_results$female_var) > 0 && !is.na(validation_results$female_var)) {
@@ -169,32 +168,39 @@ checkParentIDs <- function(ped, verbose = FALSE, repair = FALSE,
   if (addphantoms) {
     # Generate new IDs
     newIDbase <- if (is.numeric(ped$ID)) max(ped$ID, na.rm = TRUE) + 1 else paste0("phantom-", seq_len(nrow(ped)))
-    new_entries <- data.frame()
+    # Initialize a dataframe to store new entries
+    # needs to have the same columns as ped
+    # get the columns of ped
+    ped_columns <- names(ped)
+    #   ID famID momID dadID        name sex affected
+    # 1  1     1    NA    NA Walder Frey   M        0
+    # Create a new dataframe with the same columns as ped and same data types
+    new_entries <- data.frame(matrix(ncol = length(ped_columns), nrow = 0))
+    colnames(new_entries) <- ped_columns
+    new_entry_base <- new_entries[1, ]
+
     added_counter <- 0
+
+    inferred_sex <- if (length(validation_results$male_var) > 0 && !is.na(validation_results$male_var)) validation_results$male_var else 1
 
     # Add dads when missing
     for (idx in which(is.na(ped$dadID) & !is.na(ped$momID))) {
       new_id <- if (is.numeric(ped$ID)) newIDbase + added_counter else paste0("phantom-dad-", ped$ID[idx])
       added_counter <- added_counter + 1
       ped$dadID[idx] <- new_id
-      new_entry <- ped[1, ]
-      new_entry$ID <- new_id
-      new_entry$dadID <- NA
-      new_entry$momID <- NA
-      new_entry$sex <- if (length(validation_results$male_var) > 0 && !is.na(validation_results$male_var)) validation_results$male_var else 1
+
+
+      new_entry <- addParentRow(new_entry_base, new_id = new_id, dadID = NA, momID = NA, sex = inferred_sex)
       new_entries <- rbind(new_entries, new_entry)
     }
 
     # Add moms when missing
+    inferred_sex <- if (length(validation_results$female_var) > 0 && !is.na(validation_results$female_var)) validation_results$female_var else 0
     for (idx in which(!is.na(ped$dadID) & is.na(ped$momID))) {
       new_id <- if (is.numeric(ped$ID)) newIDbase + added_counter else paste0("phantom-mom-", ped$ID[idx])
       added_counter <- added_counter + 1
       ped$momID[idx] <- new_id
-      new_entry <- ped[1, ]
-      new_entry$ID <- new_id
-      new_entry$dadID <- NA
-      new_entry$momID <- NA
-      new_entry$sex <- if (length(validation_results$female_var) > 0 && !is.na(validation_results$female_var)) validation_results$female_var else 0
+      new_entry <- addParentRow(new_entry_base, new_id = new_id, dadID = NA, momID = NA, sex = inferred_sex)
       new_entries <- rbind(new_entries, new_entry)
     }
 
@@ -221,7 +227,7 @@ checkParentIDs <- function(ped, verbose = FALSE, repair = FALSE,
 
   if (verbose) {
     cat("Changes Made:\n")
-    print(changes)
+    message(changes)
   }
   return(ped)
 }
@@ -254,8 +260,15 @@ addRowlessParents <- function(ped, verbose, validation_results) {
   if (length(missing_parents) > 0) {
     if (verbose) {
       cat("Adding parents who were listed in momID/dadID but missing from ID:\n")
-      print(missing_parents)
+      message(missing_parents)
     }
+    ped_columns <- names(ped)
+    # Create a new dataframe with the same columns as ped and same data types
+    new_entries <- data.frame(matrix(ncol = length(ped_columns), nrow = 0))
+    colnames(new_entries) <- ped_columns
+
+    new_entry_base <- new_entries[1, ]
+
 
     for (pid in missing_parents) {
       role <- unique(
@@ -266,12 +279,9 @@ addRowlessParents <- function(ped, verbose, validation_results) {
       )
       inferred_sex <- if ("mom" %in% role) validation_results$female_var else validation_results$male_var
 
-      new_row <- ped[1, ]
-      new_row$ID <- pid
-      new_row$dadID <- NA
-      new_row$momID <- NA
-      new_row$sex <- inferred_sex
-      new_entries <- rbind(new_entries, new_row)
+      new_entry <- addParentRow(new_entry_base, new_id = pid, dadID = NA, momID = NA, sex = inferred_sex)
+
+      new_entries <- rbind(new_entries, new_entry)
     }
 
     ped <- merge(ped, new_entries, all = TRUE)
@@ -280,4 +290,26 @@ addRowlessParents <- function(ped, verbose, validation_results) {
     }
   }
   return(ped)
+}
+
+
+#' Create a properly formatted parent row for the pedigree
+#'
+#' @param template_row A single row from ped, used as a template for column structure
+#' @param new_id The new parent's ID
+#' @param sex The new parent's sex value (e.g., 0 for female, 1 for male, or "F"/"M")
+#' @param momID The new parent's mother ID (default is NA)
+#' @param dadID The new parent's father ID (default is NA)
+#' @return A single-row dataframe for the new parent
+addParentRow <- function(template_row, new_id, sex,
+                         momID = NA,
+                         dadID = NA) {
+  new_row <- template_row
+  new_row[] <- NA # set all columns to NA
+  new_row$ID <- new_id
+  new_row$momID <- NA
+  new_row$dadID <- NA
+  new_row$sex <- sex
+  # You can add more column initializations here if needed
+  return(new_row)
 }

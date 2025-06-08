@@ -1,0 +1,124 @@
+---
+title: "Pedigree Simulation and Visualization with BGmisc"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Pedigree}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+options(rmarkdown.html_vignette.check_title = FALSE)
+```
+
+# Introduction
+
+Unlike Tolstoy, where *only* happy families are alike, all pedigrees are alike -- or at least, all simulated pedigrees are alike. The `simulatePedigree` function generates a pedigree with a user-specified number of generations and individuals per generation. This function provides users the opportunity to test family models in pedigrees with a customized pedigree length and width.
+
+These pedigrees can be simulated as a function of several parameters, including the number of children per mate, generations, sex ratio of newborns, and mating rate. Given that large family pedigrees are difficult to collect or access, simulated pedigrees serve as an efficient tool for researchers. These simulated pedigrees are useful for building family-based statistical models, and evaluating their statistical properties, such as power, bias, and computational efficiency.
+
+
+To illustrate this functionality, let us generate a pedigree. This pedigree has a total of four generations (`Ngen`), in which each person who "mates", grows a family with four offspring (`kpc`). In our scenario, the number of male and female newborns is equal, but can be adjusted via (`sexR`). In this illustration 70% of individuals will mate and bear offspring (`marR`). Such a pedigree structure can be simulated by running the following code:
+
+```{r}
+## Loading Required Libraries
+library(BGmisc)
+library(ggpedigree)
+set.seed(5)
+df_ped <- simulatePedigree(
+  kpc = 4,
+  Ngen = 4,
+  sexR = .5,
+  marR = .7
+)
+summary(df_ped)
+```
+
+The simulation output is a `data.frame` with `r length(df_ped$ID)` rows and `r length(df_ped)` columns. Each row corresponds to a simulated individual.
+
+```{r}
+df_ped[21, ]
+```
+
+The columns represents the individual's family ID, the individual's personal ID, the generation the individual is in, the IDs of their father and mother, the ID of their spouse, and the biological sex of the individual, respectively.
+
+## Summarizing Pedigrees
+
+```{r}
+summarizeFamilies(df_ped, famID = "fam")$family_summary
+```
+## Plotting Pedigree
+
+Pedigrees are visual diagrams that represent family relationships across generations. They are commonly used in genetics to trace the inheritance of specific traits or conditions. This vignette will guide you through visualizing simulated pedigrees using the `plotPedigree` function. This function is a wrapper function for `Kinship2`'s base R plotting. The sister package ggpedigree has a much nicer plotting function. It's also available on CRAN, but it is not a dependency of BGmisc. If you want to use ggpedigree, you can install it with `install.packages("ggpedigree")` and then use `ggplot2` syntax to plot pedigrees.
+
+### Single Pedigree Visualization
+
+To visualize a single simulated pedigree, use the the `plotPedigree` function allows you to visualize the pedigree structure, including family relationships and individual characteristics. The plot displays individuals across generations, with lines connecting parents to their children, and spouses connected by horizontal lines.
+
+```{r, warning=FALSE, message=FALSE,fig.width=8, fig.height=6}
+library(ggpedigree)
+
+df_ped_recoded <- recodeSex(df_ped, code_male = "M", recode_male = 1, recode_female = 0)
+
+ggpedigree::ggpedigree(df_ped_recoded,
+  personID = "ID",
+  code_male = 1
+)
+```
+
+In the resulting plot, biological males are represented by squares, while biological females are represented by circles, following the standard pedigree conventions.
+
+### Visualizing Multiple Pedigrees Side-by-Side
+
+If you wish to compare different pedigrees side by side, you can plot them together. For instance, let's visualize pedigrees for families spanning three and four generations, respectively.
+
+
+```{r,fig.width=8, fig.height=6}
+set.seed(8)
+# Simulate a family with 3 generations
+df_ped_3 <- simulatePedigree(Ngen = 3)
+
+# Simulate a family with 4 generations
+df_ped_4 <- simulatePedigree(Ngen = 4)
+```   
+
+You can use the `ggpedigree` package to plot multiple pedigrees side by side. This package allows for more customization and better aesthetics in pedigree visualization.
+
+```{r, echo=FALSE,fig.width=8, fig.height=6}
+library(ggplot2)
+
+df_ped_3$famID <- 1
+df_ped_3$fam <- NULL
+df_ped_3$ID <- df_ped_3$ID / 100
+df_ped_3$dadID <- df_ped_3$dadID / 100
+df_ped_3$momID <- df_ped_3$momID / 100
+df_ped_3$spID <- df_ped_3$spID / 100
+df_ped_4$famID <- 2
+df_ped_4$fam <- NULL
+
+df_ped_all <- rbind(df_ped_3, df_ped_4)
+df_ped_all <- recodeSex(df_ped_all,
+  code_male = "M",
+  recode_male = 1,
+  recode_female = 0
+)
+
+ggpedigree::ggpedigree(df_ped_all,
+  personID = "ID",
+  famID = "famID",
+  config = list(
+    label_method = "geom_text",
+    label_text_size = 1
+  ),
+  code_male = 1
+) +
+  facet_wrap(~famID, scales = "free")
+```
+
+By examining the side-by-side plots, you can contrast and analyze the structures of different families, tracing the inheritance of specific traits or conditions if needed.
+
+

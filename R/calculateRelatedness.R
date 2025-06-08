@@ -46,16 +46,16 @@ calculateRelatedness <- function(
   coef <- .5^path
 
   # If full siblings, the coefficient is doubled
-  if (full) {
+  if (full == TRUE) {
     coef <- coef * 2
   }
   # If not considering segregating genes, adjust the coefficient
-  if (!segregating) {
+  if (segregating == FALSE) {
     coef <- coef * .01 + .99
   }
 
   # If empirical adjustment is needed
-  if (empirical) {
+  if (empirical == TRUE) {
     denom_emp <- denom_m * total_m * weight_m + total_a * weight_a
     if (denom_emp == 0) stop("Denominator in empirical adjustment is zero.")
 
@@ -107,6 +107,7 @@ inferRelatedness <- function(obsR, aceA = .9, aceC = 0, sharedC = 0) {
 }
 
 #' @rdname inferRelatedness
+#' @keywords internal
 relatedness <- function(...) {
   warning("The 'relatedness' function is deprecated. Please use 'inferRelatedness' instead.")
   inferRelatedness(...)

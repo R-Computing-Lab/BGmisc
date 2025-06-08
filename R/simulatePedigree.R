@@ -6,7 +6,11 @@
 #' @inheritParams simulatePedigree
 #' @inheritParams createGenDataFrame
 #' @return A data frame representing the simulated pedigree, including columns for family ID (`fam`),
-buildWithinGenerations <- function(sizeGens, marR, sexR, Ngen) {
+buildWithinGenerations <- function(sizeGens, marR, sexR, Ngen, verbose = FALSE,
+                                   personID = "ID",
+                                   momID = "momID",
+                                   dadID = "dadID",
+                                   code_male = "M", code_female = "F") {
   for (i in 1:Ngen) {
     idGen <- as.numeric(paste(100, i, 1:sizeGens[i], sep = ""))
     # idGen <- ifelse(i==1,
@@ -22,16 +26,20 @@ buildWithinGenerations <- function(sizeGens, marR, sexR, Ngen) {
 
     ### Let's deal with the sex in each generation first
 
-    df_Ngen$sex <- determineSex(idGen = idGen, sexR = sexR)
+    df_Ngen$sex <- determineSex(
+      idGen = idGen, sexR = sexR,
+      code_male = code_male,
+      code_female = code_female
+    )
 
-    # print(paste("tiger",i))
+    # message(paste("tiger",i))
     # The first generation
     if (i == 1) {
       df_Ngen$spID[1] <- df_Ngen$id[2]
       df_Ngen$spID[2] <- df_Ngen$id[1]
 
-      df_Ngen$sex[1] <- "F"
-      df_Ngen$sex[2] <- "M"
+      df_Ngen$sex[1] <- code_female
+      df_Ngen$sex[2] <- code_male
     }
 
     ## Connect male and female into couples in each generations
@@ -40,8 +48,8 @@ buildWithinGenerations <- function(sizeGens, marR, sexR, Ngen) {
     usedMaleIds <- numeric()
     # reserve the single persons
     if (i != 1 && i != Ngen) {
-      nMerriedFemale <- round(sum(df_Ngen$sex == "F") * marR_crt)
-      nMerriedMale <- round(sum(df_Ngen$sex == "M") * marR_crt)
+      nMerriedFemale <- round(sum(df_Ngen$sex == code_female) * marR_crt)
+      nMerriedMale <- round(sum(df_Ngen$sex == code_male) * marR_crt)
       # make sure there are same numbers of married males and females
       if (nMerriedFemale >= nMerriedMale) {
         nMerriedFemale <- nMerriedMale
@@ -49,15 +57,15 @@ buildWithinGenerations <- function(sizeGens, marR, sexR, Ngen) {
         nMerriedMale <- nMerriedFemale
       }
       # get the number of single males and females
-      nSingleFemale <- sum(df_Ngen$sex == "F") - nMerriedFemale
-      nSingleMale <- sum(df_Ngen$sex == "M") - nMerriedMale
+      nSingleFemale <- sum(df_Ngen$sex == code_female) - nMerriedFemale
+      nSingleMale <- sum(df_Ngen$sex == code_male) - nMerriedMale
 
 
       # sample single ids from male ids and female ids
-      usedFemaleIds <- sample(df_Ngen$id[df_Ngen$sex == "F"], nSingleFemale)
-      ## print(c("Used F", usedFemaleIds))
-      usedMaleIds <- sample(df_Ngen$id[df_Ngen$sex == "M"], nSingleMale)
-      ## print(c("Used M", usedMaleIds))
+      usedFemaleIds <- sample(df_Ngen$id[df_Ngen$sex == code_female], nSingleFemale)
+      ## message(c("Used F", usedFemaleIds))
+      usedMaleIds <- sample(df_Ngen$id[df_Ngen$sex == code_male], nSingleMale)
+      ## message(c("Used M", usedMaleIds))
 
       usedIds <- c(usedFemaleIds, usedMaleIds)
 
@@ -67,10 +75,10 @@ buildWithinGenerations <- function(sizeGens, marR, sexR, Ngen) {
           next
         } else {
           # idx <- j+1
-          if (df_Ngen$sex[j] == "F") {
+          if (df_Ngen$sex[j] == code_female) {
             for (k in seq_len(nrow(df_Ngen))) {
               idr <- df_Ngen$id[k]
-              tgt <- (!(idr %in% usedIds)) & df_Ngen$sex[k] == "M"
+              tgt <- (!(idr %in% usedIds)) & df_Ngen$sex[k] == code_male
               # tgt <- ifelse(is.na(tgt),FALSE,TRUE)
               if (tgt) {
                 df_Ngen$spID[j] <- df_Ngen$id[k]
@@ -84,7 +92,7 @@ buildWithinGenerations <- function(sizeGens, marR, sexR, Ngen) {
           } else {
             for (k in seq_len(nrow(df_Ngen))) {
               idr <- df_Ngen$id[k]
-              tgt <- (!(idr %in% usedIds)) & df_Ngen$sex[k] == "F"
+              tgt <- (!(idr %in% usedIds)) & df_Ngen$sex[k] == code_female
               # tgt <- ifelse(is.na(tgt),FALSE,TRUE)
               if (tgt) {
                 df_Ngen$spID[j] <- df_Ngen$id[k]
@@ -97,7 +105,7 @@ buildWithinGenerations <- function(sizeGens, marR, sexR, Ngen) {
             }
           }
         }
-        # print(usedIds)
+        # message(usedIds)
       }
     }
     if (i == 1) {
@@ -134,7 +142,11 @@ buildWithinGenerations <- function(sizeGens, marR, sexR, Ngen) {
 #'         as well as assigning unique couple IDs. It does not return a value explicitly.
 #'
 
-buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose, marR, sexR, kpc, rd_kpc) {
+buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose = FALSE, marR, sexR, kpc,
+                                    rd_kpc, personID = "ID",
+                                    momID = "momID",
+                                    dadID = "dadID",
+                                    code_male = "M", code_female = "F") {
   df_Fam$ifparent <- FALSE
   df_Fam$ifson <- FALSE
   df_Fam$ifdau <- FALSE
@@ -171,7 +183,7 @@ buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose, marR, sexR,
       # Start to connect children with mother and father
       #
       if (verbose) {
-        print(
+        message(
           "Step 2.1: mark a group of potential sons and daughters in the i th generation"
         )
       }
@@ -186,9 +198,9 @@ buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose, marR, sexR,
       # get the number of linked female and male children after excluding the single children
       # get a vector of single person id in the ith generation
       IdSingle <- df_Ngen$id[is.na(df_Ngen$spID)]
-      SingleF <- sum(df_Ngen$sex == "F" & is.na(df_Ngen$spID))
+      SingleF <- sum(df_Ngen$sex == code_female & is.na(df_Ngen$spID))
       CoupleF <- N_LinkedFemale - SingleF
-      SingleM <- sum(df_Ngen$sex == "M" & is.na(df_Ngen$spID))
+      SingleM <- sum(df_Ngen$sex == code_male & is.na(df_Ngen$spID))
       CoupleM <- N_LinkedMale - SingleM
 
       df_Fam[df_Fam$gen == i, ] <- markPotentialChildren(
@@ -196,10 +208,12 @@ buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose, marR, sexR,
         i = i,
         Ngen = Ngen,
         sizeGens = sizeGens,
-        CoupleF = CoupleF
+        CoupleF = CoupleF,
+        code_male = code_male,
+        code_female = code_female
       )
       if (verbose) {
-        print(
+        message(
           "Step 2.2: mark a group of potential parents in the i-1 th generation"
         )
       }
@@ -230,7 +244,7 @@ buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose, marR, sexR,
       df_Ngen <- df_Ngen[order(as.numeric(rownames(df_Ngen))), , drop = FALSE]
       df_Fam[df_Fam$gen == i - 1, ] <- df_Ngen
       if (verbose) {
-        print(
+        message(
           "Step 2.3: connect the i and i-1 th generation"
         )
       }
@@ -242,15 +256,18 @@ buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose, marR, sexR,
         sizeI <- sizeGens[i - 1]
         sizeII <- sizeGens[i]
         # create a vector with ordered ids that should be connected to a parent
-        # print(df_Ngen)
+        # message(df_Ngen)
         IdSon <- df_Ngen$id[df_Ngen$ifson == TRUE & df_Ngen$gen == i]
-        # print(IdSon)
+        # message(IdSon)
         IdDau <- df_Ngen$id[df_Ngen$ifdau == TRUE & df_Ngen$gen == i]
-        # print(IdDau)
+        # message(IdDau)
         IdOfp <- evenInsert(IdSon, IdDau)
 
         # generate link kids to the couples
-        random_numbers <- adjustKidsPerCouple(nMates = sum(df_Ngen$ifparent) / 2, kpc = kpc, rd_kpc = rd_kpc)
+        random_numbers <- adjustKidsPerCouple(
+          nMates = sum(df_Ngen$ifparent) / 2, kpc = kpc,
+          rd_kpc = rd_kpc
+        )
 
         # cat("final random numbers",random_numbers, "\n")
         # cat("mean",sum(random_numbers)/length(random_numbers), "\n")
@@ -264,12 +281,12 @@ buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose, marR, sexR,
           # check if the id is used
           if (!df_Ngen$id[l] %in% usedIds) {
             # check if the member can be a parent
-            if (df_Ngen$ifparent[l] == TRUE && df_Ngen$sex[l] == "F") {
+            if (df_Ngen$ifparent[l] == TRUE && df_Ngen$sex[l] == code_female) {
               usedIds <- c(usedIds, df_Ngen$id[l], df_Ngen$spID[l])
               IdMa <- c(IdMa, rep(df_Ngen$id[l], random_numbers[idx]))
               IdPa <- c(IdPa, rep(df_Ngen$spID[l], random_numbers[idx]))
               idx <- idx + 1
-            } else if (df_Ngen$ifparent[l] == TRUE && df_Ngen$sex[l] == "M") {
+            } else if (df_Ngen$ifparent[l] == TRUE && df_Ngen$sex[l] == code_male) {
               usedIds <- c(usedIds, df_Ngen$id[l], df_Ngen$spID[l])
               IdPa <- c(IdPa, rep(df_Ngen$id[l], random_numbers[idx]))
               IdMa <- c(IdMa, rep(df_Ngen$spID[l], random_numbers[idx]))
@@ -286,7 +303,7 @@ buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose, marR, sexR,
         ### making sure sampling out the single people instead of couples
         if (length(IdPa) - length(IdOfp) > 0) {
           if (verbose) {
-            print("length of IdPa", length(IdPa), "\n")
+            message("length of IdPa", length(IdPa), "\n")
           }
           IdRm <- sample.int(length(IdPa), size = length(IdPa) - length(IdOfp))
           IdPa <- IdPa[-IdRm]
@@ -307,17 +324,17 @@ buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose, marR, sexR,
         #       IdRm <- sample.int(length(IdOfp),size =length(IdOfp)-length(IdMa))
         #       IdOfp <- IdOfp[-IdRm]
         # }
-        # print(matrix(c(IdPa, IdMa), ncol = 2))
+        # message(matrix(c(IdPa, IdMa), ncol = 2))
 
-        # print(IdPa)
-        # print(IdOfp)
+        # message(IdPa)
+        # message(IdOfp)
 
         # put the IdMa and IdPa into the dfFam with correspondent OfpId
         for (m in seq_along(IdOfp)) {
           df_Ngen[df_Ngen$id == IdOfp[m], "pat"] <- IdPa[m]
           df_Ngen[df_Ngen$id == IdOfp[m], "mat"] <- IdMa[m]
         }
-        # print(df_Ngen)
+        # message(df_Ngen)
         df_Fam[df_Fam$gen == i, ] <- df_Ngen[df_Ngen$gen == i, ]
         df_Fam[df_Fam$gen == i - 1, ] <- df_Ngen[df_Ngen$gen == i - 1, ]
       }
@@ -342,9 +359,12 @@ buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose, marR, sexR,
 #' @param rd_kpc logical. If TRUE, the number of kids per mate will be randomly generated from a poisson distribution with mean kpc. If FALSE, the number of kids per mate will be fixed at kpc.
 #' @param balancedSex Not fully developed yet. Always \code{TRUE} in the current version.
 #' @param balancedMar Not fully developed yet. Always \code{TRUE} in the current version.
-#' @param verbose logical  If TRUE, print progress through stages of algorithm
+#' @param verbose logical  If TRUE, message progress through stages of algorithm
+#' @param code_male The value to use for males. Default is "M"
+#' @param code_female The value to use for females. Default is "F"
 #' @param ... Additional arguments to be passed to other functions.
-
+#' @inheritParams ped2fam
+#' @param spouseID The name of the column that will contain the spouse ID in the output data frame. Default is "spID".
 #' @return A \code{data.frame} with each row representing a simulated individual. The columns are as follows:
 #' \itemize{
 #'   \item{fam: The family id of each simulated individual. It is 'fam1' in a single simulated pedigree.}
@@ -364,7 +384,13 @@ simulatePedigree <- function(kpc = 3,
                              rd_kpc = FALSE,
                              balancedSex = TRUE,
                              balancedMar = TRUE,
-                             verbose = FALSE) {
+                             verbose = FALSE,
+                             personID = "ID",
+                             momID = "momID",
+                             dadID = "dadID",
+                             spouseID = "spouseID",
+                             code_male = "M",
+                             code_female = "F") {
   # SexRatio: ratio of male over female in the offspring setting; used in the between generation combinations
   # SexRatio <- sexR / (1 - sexR)
 
@@ -372,31 +398,51 @@ simulatePedigree <- function(kpc = 3,
   sizeGens <- allGens(kpc = kpc, Ngen = Ngen, marR = marR)
   #  famSizeIndex <- 1:sum(sizeGens)
   if (verbose) {
-    print(
+    message(
       "Step 1: Let's build the connection within each generation first"
     )
   }
   df_Fam <- buildWithinGenerations(
     sizeGens = sizeGens,
-    Ngen = Ngen, sexR = sexR, marR = marR
+    Ngen = Ngen,
+    sexR = sexR,
+    marR = marR,
+    verbose = verbose,
+    personID = personID,
+    momID = momID,
+    dadID = dadID,
+    code_male = code_male,
+    code_female = code_female
   )
   if (verbose) {
-    print(
+    message(
       "Step 2: Let's try to build connection between each two generations"
     )
   }
 
   df_Fam <- buildBetweenGenerations(
-    df_Fam = df_Fam, Ngen = Ngen,
-    sizeGens = sizeGens, verbose = verbose, marR = marR, sexR = sexR, kpc = kpc, rd_kpc = rd_kpc
+    df_Fam = df_Fam,
+    Ngen = Ngen,
+    sizeGens = sizeGens,
+    verbose = verbose,
+    marR = marR,
+    sexR = sexR,
+    kpc = kpc,
+    rd_kpc = rd_kpc,
+    personID = personID,
+    momID = momID,
+    dadID = dadID,
+    code_male = code_male,
+    code_female = code_female
   )
 
   df_Fam <- df_Fam[, 1:7]
   df_Fam <- df_Fam[!(is.na(df_Fam$pat) & is.na(df_Fam$mat) & is.na(df_Fam$spID)), ]
-  colnames(df_Fam)[c(2, 4, 5)] <- c("ID", "dadID", "momID")
+
+  colnames(df_Fam)[c(2, 4, 5)] <- c(personID, dadID, momID)
 
   # connect the detached members
-  df_Fam[is.na(df_Fam$momID) & is.na(df_Fam$dadID) & df_Fam$gen > 1, ]
+  df_Fam[is.na(df_Fam[[momID]]) & is.na(df_Fam[[dadID]]) & df_Fam$gen > 1, ]
   # if the sex rate is .5, make there is a 50% chance to change male to female and female to male
   # doesn't seem to produce the expected results, sometimes leads to moms being classified as dads
   #  if (sexR == .5 & runif(1) > .5) {
@@ -404,7 +450,7 @@ simulatePedigree <- function(kpc = 3,
   #    df_Fam$sex[df_Fam$sex == "F"] <- "M"
   #    df_Fam$sex[df_Fam$sex == "F1"] <- "F"
   #  }
-  # print(df_Fam)
+  # message(df_Fam)
   return(df_Fam)
 }
 

@@ -1,7 +1,7 @@
 .adjLoop <- function(ped, component, saveable, resume,
                      save_path, verbose, lastComputed,
-                     nr, checkpoint_files, update_rate,
-                     parList, lens, save_rate_parlist,
+                     checkpoint_files, update_rate,
+                     parList, lens, save_rate_parlist, config,
                      ...) {
   # Loop through each individual in the pedigree
   # Build the adjacency matrix for parent-child relationships
@@ -10,7 +10,7 @@
   ped$dadID <- as.numeric(ped$dadID)
   ped$ID <- as.numeric(ped$ID)
 
-  for (i in (lastComputed + 1):nr) {
+  for (i in (lastComputed + 1):config$nr) {
     x <- ped[i, , drop = FALSE]
     # Handle parentage according to the 'component' specified
     if (component %in% c("generation", "additive")) {
@@ -29,7 +29,7 @@
       sDad <- (as.numeric(x["dadID"]) == ped$dadID)
       sDad[is.na(sDad)] <- FALSE
       val <- sMom & sDad
-    } else if (component %in% c("mitochondrial")) {
+    } else if (component %in% c("mitochondrial", "mtdna", "mitochondria")) {
       # Code for 'mitochondrial' component
       val <- (as.numeric(x["ID"]) == ped$momID)
       val[is.na(val)] <- FALSE
@@ -43,7 +43,7 @@
     lens[i] <- length(wv)
     # Print progress if verbose is TRUE
     if (verbose && (i %% update_rate == 0)) {
-      cat(paste0("Done with ", i, " of ", nr, "\n"))
+      cat(paste0("Done with ", i, " of ", config$nr, "\n"))
     }
     # Checkpointing every save_rate iterations
     if (saveable && (i %% save_rate_parlist == 0)) {
@@ -52,7 +52,7 @@
       if (verbose) cat("Checkpointed parlist saved at iteration", i, "\n")
     }
   }
-  jss <- rep(1L:nr, times = lens)
+  jss <- rep(1L:config$nr, times = lens)
   iss <- unlist(parList)
   list_of_adjacency <- list(iss = iss, jss = jss)
   return(list_of_adjacency)
@@ -60,8 +60,8 @@
 
 .adjIndexed <- function(ped, component, saveable, resume,
                         save_path, verbose, lastComputed,
-                        nr, checkpoint_files, update_rate,
-                        parList, lens, save_rate_parlist) {
+                        checkpoint_files, update_rate,
+                        parList, lens, save_rate_parlist, config) {
   # Loop through each individual in the pedigree
   # Build the adjacency matrix for parent-child relationships
   # Is person in column j the parent of the person in row i? .5 for yes, 0 for no.
@@ -75,7 +75,7 @@
   mom_index <- match(ped$momID, ped$ID, nomatch = 0)
   dad_index <- match(ped$dadID, ped$ID, nomatch = 0)
 
-  for (i in (lastComputed + 1):nr) {
+  for (i in (lastComputed + 1):config$nr) {
     if (component %in% c("generation", "additive")) {
       sMom <- (mom_index == i)
       sDad <- (dad_index == i)
@@ -88,7 +88,7 @@
       sDad <- (ped$dadID[i] == ped$dadID)
       sDad[is.na(sDad)] <- FALSE
       val <- sMom & sDad
-    } else if (component %in% c("mitochondrial")) {
+    } else if (component %in% c("mitochondrial", "mtdna", "mitochondria")) {
       val <- (mom_index == i)
     } else {
       stop("Unknown relatedness component requested")
@@ -100,7 +100,7 @@
 
     # Print progress if verbose is TRUE
     if (verbose && (i %% update_rate == 0)) {
-      cat(paste0("Done with ", i, " of ", nr, "\n"))
+      cat(paste0("Done with ", i, " of ", config$nr, "\n"))
     }
 
     # Checkpointing every save_rate iterations
@@ -110,7 +110,7 @@
       if (verbose) cat("Checkpointed parlist saved at iteration", i, "\n")
     }
   }
-  jss <- rep(1L:nr, times = lens)
+  jss <- rep(1L:config$nr, times = lens)
   iss <- unlist(parList)
   list_of_adjacency <- list(iss = iss, jss = jss)
   return(list_of_adjacency)
@@ -118,8 +118,8 @@
 
 .adjDirect <- function(ped, component, saveable, resume,
                        save_path, verbose, lastComputed,
-                       nr, checkpoint_files, update_rate,
-                       parList, lens, save_rate_parlist,
+                       checkpoint_files, update_rate,
+                       parList, lens, save_rate_parlist, config,
                        ...) {
   # Loop through each individual in the pedigree
   # Build the adjacency matrix for parent-child relationships
@@ -176,8 +176,7 @@
 
     iss <- unlist(iss_list, use.names = FALSE)
     jss <- unlist(jss_list, use.names = FALSE)
-
-  } else if (component %in% c("mitochondrial")) {
+  } else if (component %in% c("mitochondrial", "mtdna", "mitochondria")) {
     mIDs <- stats::na.omit(data.frame(rID = ped$ID, cID = ped$momID))
     iss <- c(mIDs$rID)
     jss <- c(mIDs$cID)
@@ -197,7 +196,6 @@
                      adjBeta_method = 5,
                      parList = NULL,
                      lastComputed = 0,
-                     nr = NULL,
                      lens = NULL,
                      saveable = FALSE,
                      resume = FALSE,
@@ -206,6 +204,7 @@
                      save_rate_parlist = NULL,
                      update_rate = NULL,
                      checkpoint_files = NULL,
+                     config,
                      ...) { # 1) Pairwise compare mother IDs
   if (adjBeta_method == 1) {
     # gets slow when data are bigger. much slower than indexed
@@ -267,7 +266,7 @@
       jss = unlist(jss_list, use.names = FALSE)
     )
   } else if (adjBeta_method == 3) {
-    nr <- nrow(ped)
+    # nr <- nrow(ped)
     # terrible
     # Define a scalar-checking function:
     f_check <- function(i, j) {
@@ -283,7 +282,7 @@
     vf_check <- Vectorize(f_check)
 
     # Now outer() calls vf_check(...) in a way that yields scalar results
-    adj <- outer(seq_len(nr), seq_len(nr), FUN = vf_check)
+    adj <- outer(seq_len(config$nr), seq_len(config$nr), FUN = vf_check)
 
     # Extract which cells of adj are TRUE
     w <- which(adj, arr.ind = TRUE)
@@ -384,7 +383,7 @@
       ped = ped, component = component,
       saveable = saveable, resume = resume,
       save_path = save_path, verbose = verbose,
-      lastComputed = lastComputed, nr = nr,
+      lastComputed = lastComputed, config = config,
       checkpoint_files = checkpoint_files,
       update_rate = update_rate, parList = parList,
       lens = lens, save_rate_parlist = save_rate_parlist
@@ -397,7 +396,7 @@
 #' Compute Parent Adjacency Matrix with Multiple Approaches
 #' @inheritParams ped2com
 #' @inherit ped2com details
-#' @param nr the number of rows in the pedigree dataset
+#' @param config a configuration list that passes parameters to the function
 #' @param lastComputed the last computed index
 #' @param parList a list of parent-child relationships
 #' @param lens a vector of the lengths of the parent-child relationships
@@ -410,99 +409,97 @@ computeParentAdjacency <- function(ped, component,
                                    saveable, resume,
                                    save_path,
                                    verbose = FALSE,
-                                   lastComputed = 0, nr,
+                                   lastComputed = 0,
                                    checkpoint_files,
                                    update_rate,
                                    parList, lens, save_rate_parlist,
                                    adjBeta_method = NULL,
+                                   config,
                                    ...) {
   if (!adjacency_method %in% c("loop", "indexed", "direct", "beta")) {
     stop("Invalid method specified. Choose from 'loop', 'direct', 'indexed', or 'beta'.")
   }
   # For loop/indexed/direct: skip if already complete
-  if (adjacency_method != "beta" && lastComputed >= nr) {
+  if (adjacency_method != "beta" && lastComputed >= config$nr) {
     list_of_adjacency <- NULL
   } else {
     list_of_adjacency <- switch(adjacency_method,
-
-                                "loop" = {
-                                  # Original version
-                                  .adjLoop(
-                                    ped = ped,
-                                    component = component,
-                                    saveable = saveable,
-                                    resume = resume,
-                                    save_path = save_path,
-                                    verbose = verbose,
-                                    lastComputed = lastComputed,
-                                    nr = nr,
-                                    checkpoint_files = checkpoint_files,
-                                    update_rate = update_rate,
-                                    parList = parList,
-                                    lens = lens,
-                                    save_rate_parlist = save_rate_parlist,
-                                    ...
-                                  )
-                                },
-
-                                "indexed" = {
-                                  # Garrison version
-                                  .adjIndexed(ped = ped,
-                                    component = component,
-                                    saveable = saveable,
-                                    resume = resume,
-                                    save_path = save_path,
-                                    verbose = verbose,
-                                    lastComputed = lastComputed,
-                                    nr = nr,
-                                    checkpoint_files = checkpoint_files,
-                                    update_rate = update_rate,
-                                    parList = parList,
-                                    lens = lens,
-                                    save_rate_parlist = save_rate_parlist,
-                                    ...
-                                  )
-                                },
-
-                                "direct" = {
-                                  # Hunter version
-                                  .adjDirect(
-                                    ped = ped,
-                                    component = component,
-                                    saveable = saveable,
-                                    resume = resume,
-                                    save_path = save_path,
-                                    verbose = verbose,
-                                    lastComputed = lastComputed,
-                                    nr = nr,
-                                    checkpoint_files = checkpoint_files,
-                                    update_rate = update_rate,
-                                    parList = parList,
-                                    lens = lens,
-                                    save_rate_parlist = save_rate_parlist,
-                                    ...
-                                  )
-                                },
-
-                                "beta" = {
-                                  .adjBeta(
-                                    ped = ped,
-                                    adjBeta_method = adjBeta_method,
-                                    component = component,
-                                    saveable = saveable,
-                                    resume = resume,
-                                    save_path = save_path,
-                                    verbose = verbose,
-                                    lastComputed = lastComputed,
-                                    nr = nr,
-                                    checkpoint_files = checkpoint_files,
-                                    update_rate = update_rate,
-                                    parList = parList,
-                                    lens = lens,
-                                    save_rate_parlist = save_rate_parlist,
-                                    ...
-                                  )
-                                }
+      "loop" = {
+        # Original version
+        .adjLoop(
+          ped = ped,
+          component = component,
+          saveable = saveable,
+          resume = resume,
+          save_path = save_path,
+          verbose = verbose,
+          lastComputed = lastComputed,
+          checkpoint_files = checkpoint_files,
+          update_rate = update_rate,
+          parList = parList,
+          lens = lens,
+          save_rate_parlist = save_rate_parlist,
+          config = config,
+          ...
+        )
+      },
+      "indexed" = {
+        # Garrison version
+        .adjIndexed(
+          ped = ped,
+          component = component,
+          saveable = saveable,
+          resume = resume,
+          save_path = save_path,
+          verbose = verbose,
+          lastComputed = lastComputed,
+          checkpoint_files = checkpoint_files,
+          update_rate = update_rate,
+          parList = parList,
+          lens = lens,
+          save_rate_parlist = save_rate_parlist,
+          config = config,
+          ...
+        )
+      },
+      "direct" = {
+        # Hunter version
+        .adjDirect(
+          ped = ped,
+          component = component,
+          saveable = saveable,
+          resume = resume,
+          save_path = save_path,
+          verbose = verbose,
+          lastComputed = lastComputed,
+          checkpoint_files = checkpoint_files,
+          update_rate = update_rate,
+          parList = parList,
+          lens = lens,
+          save_rate_parlist = save_rate_parlist,
+          config = config,
+          ...
+        )
+      },
+      "beta" = {
+        .adjBeta(
+          ped = ped,
+          adjBeta_method = adjBeta_method,
+          component = component,
+          saveable = saveable,
+          resume = resume,
+          save_path = save_path,
+          verbose = verbose,
+          lastComputed = lastComputed,
+          checkpoint_files = checkpoint_files,
+          update_rate = update_rate,
+          parList = parList,
+          lens = lens,
+          save_rate_parlist = save_rate_parlist,
+          config = config,
+          ...
+        )
+      }
     )
   }
   if (saveable) {

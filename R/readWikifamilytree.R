@@ -17,12 +17,12 @@ readWikifamilytree <- function(text = NULL, verbose = FALSE, file_path = NULL, .
     if (!file.exists(file_path)) stop("File does not exist: ", file_path)
 
     if (verbose) {
-      print(paste("Reading file:", file_path))
+      message(paste("Reading file:", file_path))
     }
     file <- data.frame(X1 = readLines(file_path))
     file_length <- nrow(file)
     if (verbose) {
-      print(paste0("File is ", file_length, " lines long"))
+      message(paste0("File is ", file_length, " lines long"))
     }
     text <- paste0(file$X1, collapse = "\n")
   }
@@ -289,7 +289,7 @@ traceTreePaths <- function(tree_long, deduplicate = TRUE) {
 
   # Map keys to IDs
   person_nodes <- active_cells[!is.na(active_cells$id), c("key", "id")]
-  id_map <- setNames(person_nodes$id, person_nodes$key)
+  id_map <- stats::setNames(person_nodes$id, person_nodes$key)
 
   # Find all pairs of people and trace paths
   person_keys <- names(id_map)

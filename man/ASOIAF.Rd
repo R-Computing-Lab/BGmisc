@@ -3,15 +3,19 @@
 \docType{data}
 \name{ASOIAF}
 \alias{ASOIAF}
-\title{A song of ice and fire pedigree data}
+\title{A pedigree of ice and fire}
 \format{
-A data frame with 501 observations
+A data frame with 503 observations
 }
 \usage{
 data(ASOIAF)
 }
 \description{
-A dataset created from the Song of Ice and Fire series by George R. R. Martin. Core data is from the [Westeros.org forum](https://asoiaf.westeros.org/index.php?/topic/88863-all-the-family-trees/).
+A structured dataset of fictional characters derived from the Song of Ice and Fire universe by George R. R. Martin.
+The character relationships were partially based on a GEDCOM file publicly posted in the [Westeros.org forum](https://asoiaf.westeros.org/index.php?/topic/88863-all-the-family-trees/), and were updated based on publicly available summaries from [A Wiki of Ice and Fire](https://awoiaf.westeros.org/index.php/Main_Page).
+This dataset was created for educational and illustrative purposes, such as demonstrating pedigree construction, relationship tracing, and algorithmic logic in family-based data.
+It includes no narrative content or protected expression from the original works.
+No rights to the characters, names, or intellectual property of George R. R. Martin or HBO are claimed, and the dataset is not intended to represent any real individuals or families.
 }
 \details{
 The variables are as follows:
@@ -21,6 +25,8 @@ The variables are as follows:
   \item \code{dadID}:  ID of the father
   \item \code{name}:  Name of the person
   \item \code{sex}: Biological sex
+  \item \code{twinID}:  ID of the twin, if applicable
+  \item \code{zygosity}: Zygosity of the twin, if applicable. mz is monozygotic; dz is dizygotic
   }
 }
 \keyword{datasets}

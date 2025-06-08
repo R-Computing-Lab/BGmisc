@@ -5,16 +5,20 @@
 
 <!-- badges: start -->
 
+<a href="https://r-computing-lab.github.io/BGmisc/"><img src="man/figures/hex.png" align="right" height="139" alt="discord website" /></a>
 [![status](https://joss.theoj.org/papers/ee3a025be4f61584f977a7657d936187/status.svg)](https://joss.theoj.org/papers/10.21105/joss.06203)
 </br> [![Project Status: Active – The project has reached a stable,
 usable state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
-[![R package version](https://www.r-pkg.org/badges/version/BGmisc)](https://cran.r-project.org/package=BGmisc)
+[![R package
+version](https://www.r-pkg.org/badges/version/BGmisc)](https://cran.r-project.org/package=BGmisc)
 [![Package
 downloads](https://cranlogs.r-pkg.org/badges/grand-total/BGmisc)](https://cran.r-project.org/package=BGmisc)</br>
 [![R-CMD-check](https://github.com/R-Computing-Lab/BGmisc/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/R-Computing-Lab/BGmisc/actions/workflows/R-CMD-check.yaml)
-[![Dev Main branch](https://github.com/R-Computing-Lab/BGmisc/actions/workflows/R-CMD-dev_maincheck.yaml/badge.svg)](https://github.com/R-Computing-Lab/BGmisc/actions/workflows/R-CMD-dev_maincheck.yaml)
-[![Codecov test coverage](https://codecov.io/gh/R-Computing-Lab/BGmisc/graph/badge.svg?token=2IARK2XSA6)](https://app.codecov.io/gh/R-Computing-Lab/BGmisc)
+[![Dev Main
+branch](https://github.com/R-Computing-Lab/BGmisc/actions/workflows/R-CMD-dev_maincheck.yaml/badge.svg)](https://github.com/R-Computing-Lab/BGmisc/actions/workflows/R-CMD-dev_maincheck.yaml)
+[![Codecov test
+coverage](https://codecov.io/gh/R-Computing-Lab/BGmisc/graph/badge.svg?token=2IARK2XSA6)](https://app.codecov.io/gh/R-Computing-Lab/BGmisc)
 ![License](https://img.shields.io/badge/License-GPL_v3-blue.svg)
 <!-- badges: end -->
 
