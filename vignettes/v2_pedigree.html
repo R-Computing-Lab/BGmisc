@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Pedigree Simulation and Visualization with BGmisc</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Pedigree Simulation and Visualization with
+BGmisc</h1>
+
+
+
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>Unlike Tolstoy, where <em>only</em> happy families are alike, all
+pedigrees are alike – or at least, all simulated pedigrees are alike.
+The <code>simulatePedigree</code> function generates a pedigree with a
+user-specified number of generations and individuals per generation.
+This function provides users the opportunity to test family models in
+pedigrees with a customized pedigree length and width.</p>
+<p>These pedigrees can be simulated as a function of several parameters,
+including the number of children per mate, generations, sex ratio of
+newborns, and mating rate. Given that large family pedigrees are
+difficult to collect or access, simulated pedigrees serve as an
+efficient tool for researchers. These simulated pedigrees are useful for
+building family-based statistical models, and evaluating their
+statistical properties, such as power, bias, and computational
+efficiency.</p>
+<p>To illustrate this functionality, let us generate a pedigree. This
+pedigree has a total of four generations (<code>Ngen</code>), in which
+each person who “mates”, grows a family with four offspring
+(<code>kpc</code>). In our scenario, the number of male and female
+newborns is equal, but can be adjusted via (<code>sexR</code>). In this
+illustration 70% of individuals will mate and bear offspring
+(<code>marR</code>). Such a pedigree structure can be simulated by
+running the following code:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="do">## Loading Required Libraries</span></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(BGmisc)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">library</span>(ggpedigree)</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">5</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>df_ped <span class="ot">&lt;-</span> <span class="fu">simulatePedigree</span>(</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>  <span class="at">kpc =</span> <span class="dv">4</span>,</span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>  <span class="at">Ngen =</span> <span class="dv">4</span>,</span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>  <span class="at">sexR =</span> .<span class="dv">5</span>,</span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a>  <span class="at">marR =</span> .<span class="dv">7</span></span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a>)</span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a><span class="fu">summary</span>(df_ped)</span>
+<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a><span class="co">#&gt;      fam                  ID              gen            dadID       </span></span>
+<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a><span class="co">#&gt;  Length:57          Min.   : 10011   Min.   :1.000   Min.   : 10012  </span></span>
+<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a><span class="co">#&gt;  Class :character   1st Qu.: 10036   1st Qu.:3.000   1st Qu.: 10024  </span></span>
+<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a><span class="co">#&gt;  Mode  :character   Median :100312   Median :3.000   Median : 10037  </span></span>
+<span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a><span class="co">#&gt;                     Mean   : 59171   Mean   :3.298   Mean   : 42859  </span></span>
+<span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a><span class="co">#&gt;                     3rd Qu.:100416   3rd Qu.:4.000   3rd Qu.:100311  </span></span>
+<span id="cb1-18"><a href="#cb1-18" tabindex="-1"></a><span class="co">#&gt;                     Max.   :100432   Max.   :4.000   Max.   :100320  </span></span>
+<span id="cb1-19"><a href="#cb1-19" tabindex="-1"></a><span class="co">#&gt;                                                      NA&#39;s   :13      </span></span>
+<span id="cb1-20"><a href="#cb1-20" tabindex="-1"></a><span class="co">#&gt;      momID             spID            sex           </span></span>
+<span id="cb1-21"><a href="#cb1-21" tabindex="-1"></a><span class="co">#&gt;  Min.   : 10011   Min.   : 10011   Length:57         </span></span>
+<span id="cb1-22"><a href="#cb1-22" tabindex="-1"></a><span class="co">#&gt;  1st Qu.: 10022   1st Qu.: 10025   Class :character  </span></span>
+<span id="cb1-23"><a href="#cb1-23" tabindex="-1"></a><span class="co">#&gt;  Median : 10036   Median : 10036   Mode  :character  </span></span>
+<span id="cb1-24"><a href="#cb1-24" tabindex="-1"></a><span class="co">#&gt;  Mean   : 42859   Mean   : 40124                     </span></span>
+<span id="cb1-25"><a href="#cb1-25" tabindex="-1"></a><span class="co">#&gt;  3rd Qu.:100316   3rd Qu.:100311                     </span></span>
+<span id="cb1-26"><a href="#cb1-26" tabindex="-1"></a><span class="co">#&gt;  Max.   :100318   Max.   :100320                     </span></span>
+<span id="cb1-27"><a href="#cb1-27" tabindex="-1"></a><span class="co">#&gt;  NA&#39;s   :13       NA&#39;s   :33</span></span></code></pre></div>
+<p>The simulation output is a <code>data.frame</code> with 57 rows and 7
+columns. Each row corresponds to a simulated individual.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>df_ped[<span class="dv">21</span>, ]</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co">#&gt;      fam     ID gen dadID momID   spID sex</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co">#&gt; 21 fam 1 100312   3 10024 10022 100317   M</span></span></code></pre></div>
+<p>The columns represents the individual’s family ID, the individual’s
+personal ID, the generation the individual is in, the IDs of their
+father and mother, the ID of their spouse, and the biological sex of the
+individual, respectively.</p>
+<div id="summarizing-pedigrees" class="section level2">
+<h2>Summarizing Pedigrees</h2>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">summarizeFamilies</span>(df_ped, <span class="at">famID =</span> <span class="st">&quot;fam&quot;</span>)<span class="sc">$</span>family_summary</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co">#&gt;       fam count gen_mean gen_median gen_min gen_max    gen_sd spID_mean</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#&gt;    &lt;char&gt; &lt;int&gt;    &lt;num&gt;      &lt;num&gt;   &lt;num&gt;   &lt;num&gt;     &lt;num&gt;     &lt;num&gt;</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co">#&gt; 1:  fam 1    57 3.298246          3       1       4 0.8229935   40123.5</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#&gt;    spID_median spID_min spID_max  spID_sd</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="co">#&gt;          &lt;num&gt;    &lt;num&gt;    &lt;num&gt;    &lt;num&gt;</span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co">#&gt; 1:     10035.5    10011   100320 43476.96</span></span></code></pre></div>
+</div>
+<div id="plotting-pedigree" class="section level2">
+<h2>Plotting Pedigree</h2>
+<p>Pedigrees are visual diagrams that represent family relationships
+across generations. They are commonly used in genetics to trace the
+inheritance of specific traits or conditions. This vignette will guide
+you through visualizing simulated pedigrees using the
+<code>plotPedigree</code> function. This function is a wrapper function
+for <code>Kinship2</code>’s base R plotting. The sister package
+ggpedigree has a much nicer plotting function. It’s also available on
+CRAN, but it is not a dependency of BGmisc. If you want to use
+ggpedigree, you can install it with
+<code>install.packages(&quot;ggpedigree&quot;)</code> and then use
+<code>ggplot2</code> syntax to plot pedigrees.</p>
+<div id="single-pedigree-visualization" class="section level3">
+<h3>Single Pedigree Visualization</h3>
+<p>To visualize a single simulated pedigree, use the the
+<code>plotPedigree</code> function allows you to visualize the pedigree
+structure, including family relationships and individual
+characteristics. The plot displays individuals across generations, with
+lines connecting parents to their children, and spouses connected by
+horizontal lines.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">library</span>(ggpedigree)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>df_ped_recoded <span class="ot">&lt;-</span> <span class="fu">recodeSex</span>(df_ped, <span class="at">code_male =</span> <span class="st">&quot;M&quot;</span>, <span class="at">recode_male =</span> <span class="dv">1</span>, <span class="at">recode_female =</span> <span class="dv">0</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>ggpedigree<span class="sc">::</span><span class="fu">ggpedigree</span>(df_ped_recoded,</span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>  <span class="at">personID =</span> <span class="st">&quot;ID&quot;</span>,</span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>  <span class="at">code_male =</span> <span class="dv">1</span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>)</span></code></pre></div>
+<p><img role="img" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAwAAAAJACAMAAAANcPFkAAAA9lBMVEUAAAAAADoAAGYAOmYAOpAAZrY6AAA6ADo6AGY6Ojo6OmY6OpA6ZmY6ZpA6ZrY6kLY6kNtEAVRmAABmADpmAGZmOgBmOjpmOmZmOpBmZjpmZmZmZpBmZrZmkGZmkJBmkLZmkNtmtttmtv+QOgCQOjqQOmaQZgCQZjqQZmaQZpCQkDqQkGaQkJCQtpCQttuQtv+Q27aQ2/+2ZgC2Zjq2Zma2ZpC2kDq2kGa2kJC2tma2tpC225C22/+2/7a2/9u2///bkDrbkGbbkJDbtmbbtpDb25Db27bb/7bb/9vb///95yX/tmb/25D/27b/29v//7b//9v///9AmN22AAAACXBIWXMAAA7DAAAOwwHHb6hkAAAeGElEQVR4nO2dDXvbxpGA0bum6SlOGuburETOXV01OclVey4tpbq7qKHVNIkZyRXx///MAaQkEMAugBU+djDzvo/52CKHuzOz+4ogBchJCmCYJHYCADFBADANAoBpEABMgwBgGgQA0yAAmAYBwDQIAKZBADANAoBpEABMgwBgGgQA0yAAmAYBwDQIAKZBADANAoBpEABMgwBgGgQA0yAAmAYBwDQIAKZBADANAoBpEABMgwBgGgQA0yAAmAYBwDQIAKZBADANAoBpEABMgwBgGgQA0yAAmAYBwDQIAKZBADANAoBpEABMgwBgGgQA0yAAmAYBwDQIAKZBADANAoBpEABMgwBgGgQA0yAAmAYBwDQIAKZBADANAoBpEABMgwBgGgQA0yAAmAYBwDQIAKZBADANAoBpEABMgwBgGgQA0yAAmAYBwDQIAKZBADANAoBpEABMgwBgGgQA0yAAmAYBwDQIAKZBADANAoBpEABMgwBgGgQA0yAAmAYBwDQIAKZBADANAoBpEABMgwBgGgQA0yAAmAYBIvDzHrFzsQ4CRMAvwCIjSkpmQYAIeAVYLDBgYhAgAj4BFgsMmBoEiIBHgMUCAyYHASLgFmCxwIDpQYAIIIAcECAC+wIkjyBADBAgArVXgO0qIEAMECACbgF4ExwDBIiARwA+Bo0AAkTAJwA/CJseBIiAVwBOhZgcBJAAqxANWi8BViEatF4CrEI0aL0EWIVo0HoJsArRoPUSYBWiQesn5ZvV5vLgKr9t/33y7PX27sT16O4G44IAE7I5OVhdH29eXWa3d9m/3y43X2/3eOJ6NP86br4WQIAJ2awvVufL9OKL7PZd9u80vft8nT+QuB7dbCNgXBBgUi5W2aa+OMpu2z+br5bbuxPnoykCjA8CTMrF6nq5OT3LbvkWvzu82t2duB5FgClAgEm5WL0/PHmZ3/J/nz87elEcAlUfRYApQAAJsArRoPUSYBWiQeslwCpEg9ZLgFWIBq2XAKsQDVovAVYhGrReAqxCNGi9BFiFaNB6CbAK0aD1EmAVokHrJcAqRIPWS4BViAatlwCrEA1aLwFWIRq0XgKsQjRovQRYhWjQegmwCtGg9RJgFaJB6yXAKkSD1kuAVYgGrZcAqxANWi8BViEatF4CrEI0aL0EWIVo0HoJsArRoPUSYBWiQeslwCpEg9ZLgFWIBq2XAKsQDVovAVYhGrReAqxCNGi9BFiFaNB6CbAK0aD1EmAVokHrJcAqRIPWS4BViAatlwCrEA1aLwFWIRq0XgKsQjRovQRYhWjQegmwCtGg9RJgFaJB6yXAKkSD1kuAVYgGrZcAqxANWi8BViEatF4CrEI0aL0EWIVo0HoJsArRoPUSYBWiQeslwCpEg9ZLgFWIhsHWJ5aJ3XxxGOzIhCVH7K57aoPL3YLBjiAAFBjsCAJAgcGOIAAUGOwIAkCBwY4gABQY7AgCQIHBjiAAFBjsCAJAgcGOIAAUGOwIAkCBwY4gABQY7AgCQIHBjiAAFBjsCAJAgcGOIAAUGOwIAkCBwY4gABQY7AgCQIHBjiAAFBjsCAJAgcGOIAAUGOwIAkCBwY4gABQY7AgCQIHBjiAAFBjsCAJAgcGOIAAUGOwIAkCBwY4gABQY7AgCQIHBjiAAFBjsCAJAgcGOIAAUGOwIAkCBwY4gABQY7AgCQIHBjiAAFBjsCAJAgcGOIAAUGOwIAkCBwY4gABQY7AgCQIHBjiAAFBjsCAJAgcGOIAAUGOwIAkCBwY4gABQY7AgCQIHBjiAAFBjsCAJAgcGOIAAUGOwIAkCBwY4gABQY7AgCQIHBjiAAFBjsCAJAgcGOIAAUGOwIAkCBwY4gABQY7AgCQIHBjiAAFBjsCAJAgdKO/LxH+ZFFRswEhpw/pEp/rG2sCbBYTGOAL4FB5w+pEgHcGBNgsZjIAE8Cw84fUiUCuLElwGIxlQHuBAaeP6RKBHBjSoDFYjIDnAkMPX9IlQjgBgEmTAAB5GFAgOSRSAKMNn9IlQjgxoAA+de7MmO+AiQjzF/f1P5ZEMCNKQHSyfa/W4Ch53cL4J4FAdzYEOCxyqn2v0eAged3bOqSAS2xkJoTIJ1o//tegoad37Wp9wxojQUjAuwXOc3+9wow6PxeARyzIIAbcwJESWCkFJyb2jMTArhRKkAJCTXaOAV1hljoloQaEUAoBrolosTJkvhmtUkOrjaX2e3k2evN6dFv11NNPUtE7I5xkVDiVDlsTg5W18fJq8vjzau/LDdff/tyoolni4TdMS4iKpxMgPXF6nyZXHyxTC9W6d3n3x88/91EU88UEdtjVERUOF0SF6ts5ydHq+wfm6+W79e5CEp4myTJL5YDDypiewxJdgx8WRwDZwUe+x/dRYw5/+b046v83sT5aP710PNfrK6Xm9Mku/318Cr921V6vhx6iki8/aesWTfl9eyPMgF2x8Cbx2Pg1e1+w6qP/iGPGHX+s+Xd5/mb0MT56HfZ14NOn+YCvD88eZlkt/NnRy9+ODj5zdAzRGLz++1KvvnlsG/qtQmwPQZOH4+B3yXfH/sfXae77Tne/OvN5fZtaOLObj3a8YmydU1zAT4t/pkk2cvB2+x46O6zT5ue1I66Rm2PgS8ejoGvk5tj/6Npfht1/jT98UXxClB/dLwDdHULmx39JLvNvvn9B9kBUfZK8OaD/E8/1PVpdwx8tjsG3iRHzz9a+x5N7w6vxp0//ftqewyeuB9FgDDyd8HZhr/J3wzcfXac3n74p1/3baC6Pu2Ogd/fHwMnafUVYP/Rk+w29I+JyjP8cLg9Bk/cjz7tI5ryG+nro6MXTo2dK1t5E355MPiHACNz99kv1293V759mhvR+y2xOgFKSKluwDxqb/PT2y+7Tlp7i368+ePcfk58++Hy7eP74DdJ3yMgMVtkHKRUN6QAtbfZp55XEYcAleeenh0sh8tsZLKdf//XzcMPA27+6a+f9X0JkLJFRkFMcYMmUnkjfeM928Exa/m5b46H/hh4TN7k+z5/A7z5ffYSkFmQvw3Yvh/og5g9MgZiihtYgNIb6YYfdNWnLT/3fDmrnxO/vT/y334MmtmQ/0hg+4lQH8TskREQU9uwiZTfSL9r+B7uEqD8Fv30k0FTmyFiNsnwyCktWiZyWiAWxS2SU1q8TOT0QCp6OySoMgSQi94OCapM3H8UA4+obZCkwmLmIqkPElHbH0mFIYBctPZHUl1xc5HUCYFobY+kuiLnIqkV8lDaHVFlIYBglHZHVFmxk4k9v2h0NkdWVdGziZ6AYHT2RlZV0bOJnoBgVPZGVlECshGQwnAM+wvuVbXmAVlFCchGQAqDMfB/caKpNQ8Iq0lCOhJyGIah/5MrPZ0pEFaTiHREJDEAvv9m8PZXD1fLuLn1/foILY3ZQ1pJIvIRkUR/vP/RrHeDtz2upDH7SCtJRj4ysuhLqwB3n+W/M27z1Vn2crD7TVr5a8Px9vHdYxV09GUfaRVJyUdKHr1oFeDNp+nbD7ZXCt/+6oP83rt/XeZ/5Y/vHqugoi0lpFUkJR8pefTCL8Cvtr81Lt/ud//2+Gsv8y8zsnvuVcj+VRlRRVv2EVeQmITEJNIH75vg3StAdpST/8KIkgBv8t+kmwvwmev/F1DRlX3EFSQnITmZ9MDzMeiDALvv8HsCbH+H6PYQqP7dP0dFU/aQV4+cjORk0gf3jwH23gPc/HK9J0D+wO2Hy/v3ADe1/11AR1MK5NUjKCNBqfTA+WOwvU+BfrHcfwXIf53WP//78f2nQPX/YUlHTx4RWI6klCTlIgRdLRFYjaiURCUjA10tEViNrJRkZSMBVR2RWIywnISlEx9VDZFYjLCchKUTH00NEVmLtKSk5RMbTf0QWYu4pMQlFBdF7RBZiryk5GUUFUXtEFmKwKQEphQRPd2QWYnErCTmFA09zZBZicSsJOYUDTXNEFqIyLREJtWJn/cYZsT59qKC0EJkpiUzqw4ggA+pdcjMS2ZWHUAAH0LrEJqW2Lza8AqQXwGcpm8eL3pv+y0Rj8y1ExWkliE1L7mJNeMX4MOP1+nd818jgCyk5iU3sWb8Avz6i2V6e5Rf/tX8a1CqzLQRFcRWITYxwZk10SDA/x6n139q/zUoVebZhypiqxCbmOjU/DQI8O0nm6+/fbw03vtrUKrMsg1V5BYhNzPJqflpEOC7Vz99uT3yb/41KFVm2YYqYosQm1iO6OQ8NAiwOj/7dLvtm38NSpU5dqGK3BrkZpYjOzsnTQLc/GJ5f/Df9GtQqsywCTXk1iA3sxzZ2TlpEuB+97f8GpQq0zchkY3A/IU1tf8WeDoafhL8lBn7ZRny7A4CdL93mOZ2EqD3eJ1HmOHrRhMIEBqLAKpAgNBYBFAFAoTGIoAqECA0FgFUgQChsQigCgQIjUUAVSBAaCwCqAIBQmMRQBUIEBqLAKpAgNBYBFAFAoTGIoAqECA0FgFUgQChsQigCgQIjUUAVSBAaCwCqAIBQmMRQBUIEBqLAKpAgNBYBFAFAoTGIoAqECA0FgFUgQChsQigCgQIjUUAVSBAaCwCqAIBQmMRQBUIEBqLAKpAgNBYBFAFAoTGIoAqECA0FgFUgQChsQigCgQIjUUAVSBAaCwCqAIBQmMRQBUIEBqLAKpAgNBYBFAFAoTGIoAqECA0FgFUgQChsQigCgQIjUUAVSBAaCwCqAIBQmMRQBUIEBqLAKpAgNBYBFAFAoTGIoAqECA0FgFUgQChsQigCgQIjUUAVSBAaCwCqAIBQmMRQBUIEBqLAKpAgNBYBFAFAoTGIoAqECA0FgFUgQChsQigCgQIjUUAVSBAaCwCqAIBQmMRQBUIEBqLAKpAgNBYBFAFAoTGIoAqECA0FgFUgQChsQigCgQIjUUAVYxTzs97lB9ZZDx1pPJQXUYKzaN9zFqEO8HQtPs1rB4TMp4/1h8XvhRSmViAxSKwWd6udxopMI/2MesRgQJ4pujVMEdMyHi9BQheVElMK8BiEdosX9e7jRSWR/uYjogwAXxT9GmYKyZkvL4ChC+qJCYVYLEIbpan6x1HCsqjfUxXRJAA3il6NMwZEzJeTwGesKiSmFKAxSK8We6udx0pJI/2MZ0RIQL4p3h6w9wxIeP1E+ApiyoJBOg+JgIgQEf2W5U80luA4JFC8hhPgA5pP71h7Zu6bbwnCdBrUSUx0SvAdpreAgSPFJLHeAJ0SPvpDeu4qRvGe5IAj4MigAvn8g/zJjgJGcm9DzzPDtlsDQk6721rQFCi7Uk5NnUSEOvGUWnZgKYni2VSAdLwVnl2UseRPPvK8+zum60hwael7dmwncp0xYSM11OAJyyqJCYRoJgkuFW+ndRtJN8+8Dy762ZrSvBpaQcm2pp2yHh9BQhfVElMLEAa2irvTuo0kncfeJ7dbbM1Jui8t7UBoYm2pe1IKgmIdeKqtDCgLUepTHJq04CT9B0qzqlcT5h18ERHqXz+Z8ZNUYGg/Y8AMxh0UhBgAp406dCZjlP57A2YoIDwKb5ZbS4Prra304+vHr7uPJbj6SfPXnuSqQen6dvjtoiuU+9G8mZdDr8+Onpx9fhYUhnr8uB1l+L9uSSrptxdTfv4yhddZOl57vmzZVi2sRAowObkYHV9vHl1md+Wd5+/u/963W0s19PfLjdfr1zJuILT2+fHLREdp17fj+TJuhae3n5ZPJiUH8z+/uO6vfqGvJPVxpu7p2mvWmdMPM897vBcEUgUYH2xOl+mF19kt+xby8uHr1fdxnI9PU3z7eVIxhW8efX9cdtwHafejeRLuhqebk6LoTdJ+cGLs4Nle/FNeWcCeHNv6nkzifO5ty+ycmbB+AI8YYaLVdb5i6NVvgA/vljff73qOlb96enmq6UnnXrw9fLmuGW4jlNf7kbyZ10Z+qa0aZLSg/91/PAi1pVa3knakHu9ytuDI/+LXZGl87nXL/O/58DgApSPB7PjyMT/oO9AMd+Em9Oz7PanVbr9RpR/HSBA9el3h49Hs3UBKsHfXR49/2jdOFzHqd88243UJEBp6GzwPZLSg//S6ftxY2UtAlSr/Md6/xXJR+J87sX27zkwsADV48G/LJPiWLD2oO9A8WL1/vDkZX67PTz5zcPXnbOtP/382dHDN6S6ANXgNK2+AtQjuk6dj9SQdDm88i0+KT14e3j6Safq/Xm3CFCt8vbFSZfDmMT53MOzwGxjMbQAlePB82VS9Lz6YPiB4gDZzuPXYPR53pQjjjXodAyefvl48IekdBxZOUQOPVAcIlkEmMOg0zGCAPvHg/+dlI4jyw8ehB4ozlKAp084jx8Gz9yAEQQoHbkmpePIyoOhB4oI0BNeAmqMnP2wwyNATxCgxpwEGGawiderx3QzEWDeBoybvLwXANsC8BJQAwFGps90M3kJQICJRp+jAL1mm4kAszZg1NwHHhwBeoMAVWYkwN5ojhPQTzucvD5CUgGzVU6EOj36bdtPAZtSdbWgfcRvktq1DR2uM6ie3/Xs9cP1Ge15SmfM3Md6AXBeMLB8OOHZz24dk73VL1+CEkh1Q7sMLFpQTfqHDmeB+BvoasFt64jZsxLHlRYt1xnUz+/afH1WPo1rxgbMUgDXKfqbtvOKHtYxKV3ZsncJShjVbXHpNHBPgErSNwfPf9c6ibeDrha0j5hFJdVntV9nULtsIb37/KR8bioCTDH23nCuU/Tbzit6XMdkX5sOJ/y2DPd4NYvLwP0WlJP+sfnCgvrTK9Rb8L7DiBerpPKsNx2uM6jMtflqeX99Roc8pTNi6iO+Ba6fgP73DucV3a9jsqfNTYcDkZbhHjeTw8CkHL+fdHbo1X4iVKMA1Rb8rcOImQCVZ3W57qs8158Pr9L76zO6JCqcuQpQPwE9/7uZ+3VM9q5s6XPVRnlb/KdrsIoApROhDtoT7n4pwbYFHUbMBKg1rv06g/Jc+cUVPx6WrxVAgPFH7j/e/TomxeqHXmXoGu7xzD7H9uudMz8MHhtLAgw90AQzzUWA+RqAACOCAPIZLXGx+9+6ABwDlUCA8RhgotkIMFsDxsp78HEHHHCqtRpiHo6BRgYBRmOQaWYjwFwNmEs3hhzQuAC8BOyDAKOBAHMAAcZC7tULc1nzSZjLdwOrAszIAAQYc1QEGJC5LPoUzOSnIoOOOMlKDTXJfASYpwEWBZhkpSQLwEtAwUz6a1eAGb0EIMB4Y85OANlnbnAM9Mg82jvwiOYF4CXgEfHfrccYEgEQ4AH5u3WEIcdfKOlnLnEM9ID83TrCkLMSYCZHqWMOOybij9fHGBMBOAZ6YBYCiD6zaPTxZyTADA2Yxd6aRZKjjY8AYzKLvTWLJEcbf05HKwiAAMMPz0vAiAyd8Cz2PwIgwAMIMAJzEGBWo47IHNZqbgLM4ZsKLwH3IMDwIMCMmMFplvM4qhpz8DkZgACDMzcB5vKCxUtADgLMYGwEGA+jP7JBgNGGRYChmZkA80l3Vl6NhfjTFudzWDXi0DPqLAIMDQLMqrMIMDQzE2BO6c5r2HEYMNlZtXO0RUIABBiUuS3SnLowt96OwXDJzqubYy3SvNKd17Cj0DnXpDcjDTvWuPMa1jnuSMOO1YUodBeg7729B5hZCtbq7Z9CFBBAxWQqUogCAqiYTEUKUUAAFZOpSCEKCKBiMhUpRAEBVEymIoUoIICKyVSkEAUEUDGZihSigAAqJlORQhQQQMVkKlKIAgKomExFClFAABWTqUghCgigYjIVKUQBAVRMpiKFKCCAislUpBAFBFAxmYoUooAAKiZTkUIUEEDFZCpSiAICqJhMRQpRQAAVk6lIIQoIoGIyFSlEAQFUTKYihSgggIrJVKQQBQRQMZmKFKKAAComU5FCFBBAxWQqUogCAqiYTEUKUUAAFZOpSCEKCKBiMhUpRAEBVEymIoUoIICKyVSkEAUEUDGZihSigAAqJlORQhQQQMVkKlKIAgKomExFClFAABWTqUghCgigYjIVKUQBAVRMpiKFKCCAislUpBAFBFAxmYoUooAAKiZTkUIUEEDFZCpSiAICqJhMRQpRQAAVk6lIIQoIoGIyFSlEAQFUTKYihSgggIrJVKQQBQRQMZmKFKKAAComU5FCFBBAxWQqUogCAqiYTEUKUUAAFZOpSCEKCKBiMhUpRAEBVEymIoUoIICKyVSkEAUEUDGZihSigAAqJlORQhQQQMVkKlKIAgKomExFClFAABWTqUghCgigYjIVKUQBAVRMpiKFKCCAislUpBCFjqksMp5878/7PGlY9wDeYd3jjjCsu7KQegeprGu9/VPoXa//3kh0E2CxcCXd9V5vgzoPG7hNnOOOMay7spB6h6isc739U+hdr/feWHQSYLFwJd35Xl+Dug8btk2c444yrLuykHoHqKx7vf1T6F2v795odBFgsXAl3f1eT4MChg3aJs4RxhnWXVlIvf0rC6i3fwq96/XcG48OAiwWrqQD7nU3KGTYkDVyjjDSsO7KQurtnUJIvf1T6F2v+96IIECfYd2VhdTbO4WQevun0Lte970RQYA+w7orC6m3dwoh9fZPoXe97nsjggB9hnVXFlJv7xRC6u2fQu963fdGhDfBfYZ1VxZSb//KAurtn0Lvej33xoOPQfsM664spN4BKuteLx+D1uEHYX2GdVcWUu8QlXWut38Kvev13hsLToXoM6y7spB6B6msa739U+hdr//eSAg6LQlgehAATIMAQ/HNanN5cJXf0vTt8eb046uw+KPfrqdJdATqte/+HRB/8uz1dPnu8XQBykXkX+9uLSH5313Gujx43RyxOX+2bBko76pnJRyBvi3oqqLG5uRgdX28eXWZ3da3z4+vl3efN23oavzty8ZJK91oLsbVmIZqNiduV+st8qyeq/btvzvWnsf/Zbn52tXX0XmqANUi8q/zW0tImv3daazs6z+uGyPe1ltcDXubdfXMtRKuwG9fVqP8VTjC1her82V68UV2++7V98fp5tI9nif+5uD57/yTlrvRVkzA3ts2cumKd7Vo5Vo9d+35174N7e5V8zeM0XiyAJUi8q/zW1tIXm+XsS7ODpbNEbcvalus1tmsqyeulXAFfl/ago1TOzuS5bxKL46y29nyJhvxxxfNC1qOf7/eT7M6abkbLRk6GtNYjXuvulr0zrV67tpPV34BnL3afOWvcEyefghULSKvt1JzPeR6+3eHsd4cl18SHUO9dGyxSljW1Qv3StQDy1uwpVBn2PVyc3q23Jz8x9Hzj/5vlWbbp4ly/P9clePLk1a70ZihszEN1dweHDlf1Oot8qyeq/aj7OsmAarxfz5secs0Fn0E2C9i7RagEvLd5fbvDmNVvy3VIy5cW6wc9lPW1Wv3StQD/3bl2bKuQp1h7w9PXua3NL05vj08+Y23da74g3J8eVLny5gv+LTRvXo1/1i792qtRRvP6rlq3/27Y+1Z/Pmzo5ZXzJHoI8B+EZ5XgHqI5xWgGnh7ePpJW8TZJy0D5V390b0S9cAfDjxb1lXF6FS3yGm9Vn+wozGe2G0jX7j3ar1Fa/fqzRo+BgXT+ARwfFrW+MkuwCxxC+D5YNL76RrATPEI0PnTMoBZ4zsEqn9a5vk8EWDO+AWoflrm+TwRYM74Bah+Wtb8yS7ALOFjUDANAoBpEABMM6wArpPNaxc6OIJarx5pn2w3kfNc/R4jXh8dvXCk5po6YGTPefVh6XlSc073zaop+qkZbK+i8FxM4IjeLnK/BRqBIQXwnGxePo/R+TO2lqtHukyWT/Sd81x917UvrlVzngGf3n7ZMTAgV+dVEaEFp67UnJG7Sxh80al7XzucdtX9B+fFBK7ofJHfuS+miMmgAjhPna/sbWdQy9UjXSbbnq/uOFffeZGMUzjXiM4TJZ2BQY3xnVcfVLD3U2l3i72fYXv2dd3pzpdbePK9fOm9mCIewx4COU6dr1/o4Dq/vu3qkQ6TbSfqdu3L2iOcY8SbroEhuXrPqw8ZxJOaKzJviz/a7bPT6XrdvosJXFnki6xegOqPz+7qFzrUg/7eevVI+2Q/bSfqdu2LTzjHiF0uEfip/WKO0hMOznzn1QcM8tE66KT/xgY7OuR2ul6372KCevTuEiH1AlR/fOa40MF1an/b1SPtk+0mcgtQXTWfcPUR37kP7l1TB+TquSqijfIgTe876i1uuaKs2iHH9636uNurKDwXE9Sjd4usXACROFbtScLppd6hk1gXaE2OAQEA/CAAmAYBwDQIAKZBADANAoBpEABMgwBgGgQA0yAAmAYBwDQIAKZBADANAoBpEABMgwBgGgQA0yAAmAYBwDT/D8krTROXIk+SAAAAAElFTkSuQmCC" /><!-- --></p>
+<p>In the resulting plot, biological males are represented by squares,
+while biological females are represented by circles, following the
+standard pedigree conventions.</p>
+</div>
+<div id="visualizing-multiple-pedigrees-side-by-side" class="section level3">
+<h3>Visualizing Multiple Pedigrees Side-by-Side</h3>
+<p>If you wish to compare different pedigrees side by side, you can plot
+them together. For instance, let’s visualize pedigrees for families
+spanning three and four generations, respectively.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">8</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="co"># Simulate a family with 3 generations</span></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>df_ped_3 <span class="ot">&lt;-</span> <span class="fu">simulatePedigree</span>(<span class="at">Ngen =</span> <span class="dv">3</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="co"># Simulate a family with 4 generations</span></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>df_ped_4 <span class="ot">&lt;-</span> <span class="fu">simulatePedigree</span>(<span class="at">Ngen =</span> <span class="dv">4</span>)</span></code></pre></div>
+<p>You can use the <code>ggpedigree</code> package to plot multiple
+pedigrees side by side. This package allows for more customization and
+better aesthetics in pedigree visualization.</p>
+<p><img role="img" src="data:image/png;base64,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" /><!-- --></p>
+<p>By examining the side-by-side plots, you can contrast and analyze the
+structures of different families, tracing the inheritance of specific
+traits or conditions if needed.</p>
+</div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

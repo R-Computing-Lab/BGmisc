@@ -12,8 +12,6 @@
 BGmisc.code-workspace
 R/.Rhistory
 benchmark_results.csv
-data-raw/ASOIAF.ged
-data-raw/ASOIAF_040725.ged
 dataRelatedPairs.csv
 dataRelatedPairs_new2.csv
 paper/paper.html
@@ -22,3 +20,8 @@ vignettes/articles/paper.html
 .vscode/settings.json
 data-raw/logo_orange.png
 data-raw/Landers-Wilson-Garrison Tree.ged
+vignettes/understanding_relatedness.Rmd
+vignettes/rewritten_relatedness_vignette.Rmd
+vignettes/understanding_relatedness.Xmd
+vignettes/rewritten_relatedness_vignette.Xmd
+data-raw/catlogo.svg

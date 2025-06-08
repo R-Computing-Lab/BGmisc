@@ -42,6 +42,6 @@ test_that("pedigree errs when affected variables named", {
 
 test_that("pedigree plots multiple families", {
   data(inbreeding)
-
-  expect_output(plotPedigree(inbreeding, verbose = TRUE))
+  plotPedigree(inbreeding, verbose = TRUE)
+  expect_message(plotPedigree(inbreeding, verbose = TRUE))
 })

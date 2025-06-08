@@ -7,12 +7,17 @@
 #' @param ID_twin2 A vector of \code{ID} of the second twin.
 #' @param verbose logical.  If TRUE, print progress through stages of algorithm
 #' @param gen_twin A vector of \code{generation} of the twin to be imputed.
+#' @param zygosity A character string indicating the zygosity of the twins. Default is "MZ" for monozygotic twins.
 #' @return Returns a \code{data.frame} with MZ twins information added as a new column.
 #' @export
 
 # A function to impute twins in the simulated pedigree \code{data.frame}.
 # Twins can be imputed by specifying their IDs or by specifying the generation the twin should be imputed.
-makeTwins <- function(ped, ID_twin1 = NA_integer_, ID_twin2 = NA_integer_, gen_twin = 2, verbose = FALSE) {
+makeTwins <- function(ped, ID_twin1 = NA_integer_,
+                      ID_twin2 = NA_integer_,
+                      gen_twin = 2,
+                      verbose = FALSE,
+                      zygosity = "MZ") {
   # Check if the ped is the same format as the output of simulatePedigree
   if (paste0(colnames(ped), collapse = "") != paste0(c(
     "famID", "ID", "gen",
@@ -25,6 +30,7 @@ makeTwins <- function(ped, ID_twin1 = NA_integer_, ID_twin2 = NA_integer_, gen_t
     # stop("The input pedigree is not in the same format as the output of simulatePedigree")
   }
   ped$MZtwin <- NA_integer_
+  ped$zygosity <- NA_character_
   # Check if the two IDs are provided
   if (is.na(ID_twin1) || is.na(ID_twin2)) {
     # Check if the generation is provided
@@ -42,13 +48,22 @@ makeTwins <- function(ped, ID_twin1 = NA_integer_, ID_twin2 = NA_integer_, gen_t
           # cat("loop", i, "\n")
           # check if i is equal to the number of individuals in the generation
           usedID <- c(usedID, ID_twin1)
-          # print(usedID)
+          # message(usedID)
           if (i < idx) {
             # randomly select one individual from the generation
             ID_twin1 <- resample(ped$ID[ped$gen == gen_twin & !(ped$ID %in% usedID) & !is.na(ped$dadID)], 1)
             # cat("twin1", ID_twin1, "\n")
             # find one same sex sibling who has the same dadID and momID as the selected individual
-            twin2_Pool <- ped$ID[ped$ID != ID_twin1 & ped$gen == gen_twin & ped$sex == ped$sex[ped$ID == ID_twin1] & ped$dadID == ped$dadID[ped$ID == ID_twin1] & ped$momID == ped$momID[ped$ID == ID_twin1]]
+            if (zygosity %in% c("MZ", "SS")) {
+              twin2_Pool <- ped$ID[ped$ID != ID_twin1 & ped$gen == gen_twin & ped$sex == ped$sex[ped$ID == ID_twin1] & ped$dadID == ped$dadID[ped$ID == ID_twin1] & ped$momID == ped$momID[ped$ID == ID_twin1]]
+            } else if (zygosity == "DZ") {
+              twin2_Pool <- ped$ID[ped$ID != ID_twin1 & ped$gen == gen_twin & ped$dadID == ped$dadID[ped$ID == ID_twin1] & ped$momID == ped$momID[ped$ID == ID_twin1]]
+            } else if (zygosity == "OS") {
+              twin2_Pool <- ped$ID[ped$ID != ID_twin1 & ped$gen == gen_twin & ped$sex != ped$sex[ped$ID == ID_twin1] & ped$dadID == ped$dadID[ped$ID == ID_twin1] & ped$momID == ped$momID[ped$ID == ID_twin1]]
+            } else {
+              stop("The zygosity should be either 'MZ', 'DZ', or 'OS'")
+            }
+
             # if there is an non-NA value in the twin2_Pool, get rid of the NA value
             if (all(is.na(twin2_Pool))) {
               cat("twin2_Pool is all NA\n")
@@ -64,14 +79,23 @@ makeTwins <- function(ped, ID_twin1 = NA_integer_, ID_twin2 = NA_integer_, gen_t
             # }
           } else {
             # randomly select all males or females in the generation and put them in a vector
-            selectGender <- ped$ID[ped$gen == gen_twin & ped$sex == resample(c("M", "F"), 1) & !is.na(ped$dadID) & !is.na(ped$momID)]
-            # print(selectGender)
+            if (zygosity %in% c("MZ", "SS")) {
+              selectGender <- ped$ID[ped$gen == gen_twin & ped$sex == resample(c("M", "F"), 1) & !is.na(ped$dadID) & !is.na(ped$momID)]
+            } else if (zygosity %in% c("DZ")) {
+              selectGender <- ped$ID[ped$gen == gen_twin & !is.na(ped$dadID) & !is.na(ped$momID)]
+            } else if (zygosity %in% c("OS")) {
+              stop("Opposite sex twins are not supported yet. Please use 'MZ' for monozygotic twins or SS for same-sex twins or 'DZ' for dizygotic twins.")
+            } else {
+              stop("The zygosity should be either 'MZ' or 'DZ'")
+            }
+
+            # message(selectGender)
             if (length(selectGender) < 2) {
               stop("There are no available same-sex people in the generation to make twins")
             }
             # randomly select two individuals from the vector
             ID_DoubleTwin <- resample(selectGender, 2)
-            # print(ID_DoubleTwin)
+            # message(ID_DoubleTwin)
             # change the second person's dadID and momID to the first person's dadID and momID
             ped$dadID[ped$ID == ID_DoubleTwin[2]] <- ped$dadID[ped$ID == ID_DoubleTwin[1]]
             ped$momID[ped$ID == ID_DoubleTwin[2]] <- ped$momID[ped$ID == ID_DoubleTwin[1]]
@@ -84,6 +108,7 @@ makeTwins <- function(ped, ID_twin1 = NA_integer_, ID_twin2 = NA_integer_, gen_t
         # Impute the IDs of the twin in the MZtwin column
         ped$MZtwin[ped$ID == ID_twin1] <- ID_twin2
         ped$MZtwin[ped$ID == ID_twin2] <- ID_twin1
+        # Set the zygosity of the twins
       }
     }
   } else {
@@ -95,6 +120,9 @@ makeTwins <- function(ped, ID_twin1 = NA_integer_, ID_twin2 = NA_integer_, gen_t
     cat("twin1", ID_twin1, "\n")
     cat("twin2", ID_twin2, "\n")
   }
+  names(ped)[names(ped) == "MZtwin"] <- "twinID"
+  ped$zygosity[ped$ID == ID_twin1] <- zygosity
+  ped$zygosity[ped$ID == ID_twin2] <- zygosity
   return(ped)
 }
 
@@ -261,4 +289,68 @@ dropLink <- function(ped,
     ped[ped$ID == ID_drop, c("dadID", "momID")] <- NA_integer_
   }
   return(ped)
+}
+#' addPersonToTree
+#' A function to add a new person to an existing pedigree \code{data.frame}.
+#' @param ped A \code{data.frame} representing the existing pedigree.
+#' @param name Optional. A character string representing the name of the new person. If not provided, the name will be set to \code{NA}.
+#' @param sex A value representing the sex of the new person.
+#' @param momID Optional. The ID of the mother of the new person. If not provided, it will be set to \code{NA}.
+#' @param dadID Optional. The ID of the father of the new person. If not provided, it will be set to \code{NA}.
+#' @param twinID Optional. The ID of the twin of the new person. If not provided, it will be set to \code{NA}.
+#' @param zygosity Optional. A character string indicating the zygosity of the new person. If not provided, it will be set to \code{NA}.
+#' @param personID Optional. The ID of the new person. If not provided, it will be generated as the maximum existing personID + 1.
+#'
+#' @return A \code{data.frame} with the new person added to the existing pedigree.
+#'
+#' @export
+addPersonToPed <- function(ped, name = NULL, sex = NULL, momID = NA, dadID = NA, twinID = NULL, personID = NULL, zygosity = NULL) {
+  stopifnot(is.data.frame(ped))
+
+  # Copy structure from an existing row
+  new_row <- ped[1, , drop = FALSE]
+
+  # Blank out all values
+  new_row[1, ] <- NA
+
+  # Assign new values
+  if (!is.null(personID)) {
+    new_row$personID <- personID
+  } else {
+    # Generate a new personID based on the maximum existing personID
+    new_row$personID <- max(ped$personID, na.rm = TRUE) + 1
+  }
+  if (!is.null(name) && "name" %in% colnames(ped)) {
+    new_row$name <- name
+  } else if ("name" %in% colnames(ped)) {
+    new_row$name <- NA_character_
+  }
+  if (!is.null(twinID) && "twinID" %in% colnames(ped)) {
+    new_row$twinID <- twinID
+  } else if ("twinID" %in% colnames(ped)) {
+    new_row$twinID <- NA_integer_
+  }
+  if (!is.null(momID) && "momID" %in% colnames(ped)) {
+    new_row$momID <- momID
+  } else if ("momID" %in% colnames(ped)) {
+    new_row$momID <- NA_integer_
+  }
+  if (!is.null(dadID) && "dadID" %in% colnames(ped)) {
+    new_row$dadID <- dadID
+  } else if ("dadID" %in% colnames(ped)) {
+    new_row$dadID <- NA_integer_
+  }
+  if (!is.null(sex) && "sex" %in% colnames(ped)) {
+    new_row$sex <- sex
+  } else if ("sex" %in% colnames(ped)) {
+    new_row$sex <- NA_character_
+  }
+  if (!is.null(zygosity) && "zygosity" %in% colnames(ped)) {
+    new_row$zygosity <- zygosity
+  } else if ("zygosity" %in% colnames(ped)) {
+    new_row$zygosity <- NA_character_
+  }
+
+  # Append to data frame
+  rbind(ped, new_row)
 }

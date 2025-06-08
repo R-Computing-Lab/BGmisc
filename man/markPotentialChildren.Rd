@@ -4,7 +4,15 @@
 \alias{markPotentialChildren}
 \title{Mark and Assign children}
 \usage{
-markPotentialChildren(df_Ngen, i, Ngen, sizeGens, CoupleF)
+markPotentialChildren(
+  df_Ngen,
+  i,
+  Ngen,
+  sizeGens,
+  CoupleF,
+  code_male = "M",
+  code_female = "F"
+)
 }
 \arguments{
 \item{df_Ngen}{A data frame for the current generation being processed.
@@ -18,6 +26,10 @@ and any previously assigned roles (`ifparent`, `ifson`, `ifdau`).}
 \item{sizeGens}{Numeric vector, containing the size (number of individuals) of each generation.}
 
 \item{CoupleF}{Integer, IT MIGHT BE the number of couples in the current generation.}
+
+\item{code_male}{The value to use for males. Default is "M"}
+
+\item{code_female}{The value to use for females. Default is "F"}
 }
 \value{
 Modifies `df_Ngen` in place by updating or adding columns related to individual roles

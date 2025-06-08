@@ -1,502 +1,596 @@
-id,famID,momID,dadID,name,sex
-1,1,NA,NA,Walder Frey,M
-2,1,NA,NA,Perra Royce,F
-3,1,2,1,Stevron Frey,M
-4,1,2,1,Emmon Frey,M
-5,1,2,1,Aenys Frey,M
-6,1,NA,NA,Corenna Swann,F
-7,1,6,3,Ryman Frey,M
-8,1,NA,7,Edwyn Frey,M
-9,1,NA,7,Walder 'Black Walder' Frey,M
-10,1,NA,7,Petyr Frey,M
-11,1,NA,NA,Janyce Hunter,F
-12,1,11,8,Walda Frey,F
-13,1,NA,NA,Mylenda Caron,F
-14,1,13,10,Perra Frey,F
-15,1,NA,NA,Jeyne Lydden,F
-16,1,15,3,Aegon 'Jinglebell' Frey,M
-17,1,15,3,Maegelle Frey,F
-18,1,NA,NA,Dafyn Vance,M
-19,1,17,18,Marianne Vance,F
-20,1,17,18,Walder Vance,M
-21,1,17,18,Patrek Vance,M
-22,1,NA,NA,Marsella Waynwood,F
-23,1,22,3,Walton Frey,M
-24,1,NA,NA,Deana Hardyng,F
-25,1,24,23,Steffon Frey,M
-26,1,24,23,Walda 'Fair Walda' Frey,F
-27,1,24,23,Bryan Frey,M
-28,1,NA,158,Genna Lannister,F
-29,1,28,4,Cleos Frey,M
-30,1,28,4,Lyonel Frey,M
-31,1,28,4,Tion Frey,M
-32,1,28,4,Walder 'Red Walder' Frey,M
-33,1,NA,NA,Jeyne Darry,F
-34,1,33,29,Tywin 'Ty' Frey,M
-35,1,33,29,Willem Frey,M
-36,1,NA,NA,Tyana Wylde,F
-37,1,36,5,Aegon 'Bloodborn' Frey,M
-38,1,36,5,Rhaegar Frey,M
-39,1,NA,NA,Jeyne Beesbury,F
-40,1,39,38,Robert Frey,M
-41,1,39,38,Walda 'White Walda' Frey,F
-42,1,39,38,Jonos Frey,M
-43,1,2,1,Perriane Frey,F
-44,1,NA,NA,Leslyn Haigh,M
-45,1,43,44,Harys Haigh,M
-46,1,43,44,Donnel Haigh,M
-47,1,43,44,Alyn Haigh,M
-48,1,NA,45,Walder Haigh,M
-49,1,NA,NA,Cyrenna Swann,F
-50,1,49,1,Jared Frey,M
-51,1,49,1,Luceon Frey,M
-52,1,NA,NA,Alys Frey,F
-53,1,52,50,Tytos Frey,M
-54,1,52,50,Kyra Frey,F
-55,1,NA,NA,Zhoe Blanetree,F
-56,1,55,53,Zia Frey,F
-57,1,55,53,Zachery Frey,M
-58,1,NA,NA,Garse Goodbrook,M
-59,1,54,58,Walder Goodbrook,M
-60,1,54,58,Jeyne Goodbrook,F
-61,1,NA,NA,Amarei Crakehall,F
-62,1,61,1,Hosteen Frey,M
-63,1,61,1,Lythene Frey,F
-64,1,61,1,Symond Frey,M
-65,1,61,1,Danwell Frey,M
-66,1,61,1,Merrett Frey,M
-67,1,61,1,Geremy Frey,M
-68,1,61,1,Raymund Frey,M
-69,1,NA,NA,Bellena Hawick,F
-70,1,69,62,Arwood Frey,M
-71,1,NA,NA,Ryella Royce,F
-72,1,71,70,Ryella Frey,F
-73,1,71,70,Androw Frey,M
-74,1,71,70,Alyn Frey,M
-75,1,71,70,Hostella Frey,F
-76,1,NA,NA,Lucias Vypren,M
-77,1,63,76,Damon Vypren,M
-78,1,63,76,Elyana Vypren,F
-79,1,NA,NA,Jon Wylde,M
-80,1,78,79,Rickard Wylde,M
-81,1,NA,NA,Betharios ,F
-82,1,81,64,Alesander Frey,M
-83,1,81,64,Alyx Frey,F
-84,1,81,64,Bradamar Frey,M
-85,2,NA,NA,Wynafrei Whent,F
-86,1,NA,NA,Mariya Derry,F
-87,1,86,66,Amerei 'Gatehouse Ami' Frey,F
-88,3,NA,NA,Pate ,M
-89,1,86,66,Walda 'Fat Walda' Frey,F
-90,1,86,66,Marissa Frey,F
-91,1,86,66,Walder 'Little Walder' Frey,M
-92,1,NA,NA,Carolei Waynwood,F
-93,1,92,67,Sandor Frey,M
-94,1,92,67,Cynthea Frey,F
-95,1,NA,NA,Beony Beesbury,F
-96,1,95,68,Robert Frey,M
-97,1,95,68,Malwyn Frey,M
-98,1,95,68,Sarra Frey,F
-99,1,95,68,Serra Frey,F
-100,1,95,68,Cersei Frey,F
-101,1,95,68,Tywin Frey,M
-102,1,95,68,Jaime Frey,M
-103,1,NA,NA,Alyssa Blackwood,F
-104,1,103,1,Lothar Frey,M
-105,1,103,1,Jammos Frey,M
-106,1,103,1,Whalen Frey,M
-107,1,103,1,Morya Frey,F
-108,1,103,1,Tyta Frey,F
-109,1,NA,NA,Leonella Lefford,F
-110,1,109,104,Tysane Frey,F
-111,1,109,104,Walda Frey,F
-112,1,109,104,Emberlei Frey,F
-113,1,109,104,Leana Frey,F
-114,1,NA,NA,Sallei Paege,F
-115,1,114,105,Walder 'Big Walder' Frey,M
-116,1,114,105,Dickon Frey,M
-117,1,114,105,Mathis Frey,M
-118,1,NA,NA,Sylwa Paege,F
-119,1,118,106,Hoster Frey,M
-120,1,118,106,Merianne Frey,F
-121,1,NA,153,Flement Brax,M
-122,1,107,121,Robert Brax,M
-123,1,107,121,Walder Brax,M
-124,1,107,121,Jon Brax,M
-125,4,NA,NA,Sarya Whent,F
-126,1,NA,NA,Bethany Rosby,F
-127,1,126,1,Perwyn Frey,M
-128,1,126,1,Benfrey Frey,M
-129,1,126,1,Willamen Frey,M
-130,1,126,1,Olyvar Frey,M
-131,1,126,1,Roslin Frey,F
-132,1,NA,NA,Jyanna Frey,F
-133,1,132,128,Della Frey,F
-134,1,132,128,Osmund Frey,M
-135,1,NA,NA,Annara Farring,F
-136,1,135,1,Arwyn Frey,M
-137,1,135,1,Wendel Frey,M
-138,1,135,1,Colmar Frey,M
-139,1,135,1,Waltyr Frey,M
-140,1,135,1,Elmar Frey,M
-141,1,135,1,Shirei Frey,F
-142,5,NA,NA,Joyeuse Erenford,F
-143,1,NA,144,Walda Rivers,F
-144,1,NA,1,Walder Rivers,M
-145,1,NA,1,Melwys Rivers,M
-146,1,NA,1,Jeyne Rivers,F
-147,1,NA,1,Martyn Rivers,M
-148,1,NA,1,Ryger Rivers,M
-149,1,NA,1,Ronel Rivers,M
-150,1,NA,1,Mellara Rivers,F
-151,1,NA,144,Aemon Rivers,M
-152,1,NA,151,Walda Rivers,F
-153,1,NA,156,Andros Brax,M
-154,1,NA,153,Tytos Brax,M
-155,1,NA,153,Robert Brax,M
-156,1,NA,NA,Brax,M
-157,1,NA,156,Rupert Brax,M
-158,1,NA,179,Tytos Lannister,M
-159,1,NA,158,Tywin Lannister,M
-160,1,NA,158,Kevan Lannister,M
-161,1,NA,158,Tygett Lannister,M
-162,1,NA,158,Gerion Lannister,M
-163,1,NA,182,Joanna Lannister,F
-164,1,163,159,Jaime Lannister,M
-165,1,163,159,Cersei Lannister,F
-166,1,163,159,Tyrion Lannister,M
-167,6,188,187,Robert Baratheon,M
-168,1,165,164,Joffrey Baratheon,M
-169,1,165,164,Myrcella Baratheon,F
-170,1,165,164,Tommen Baratheon,M
-171,1,NA,NA,Dorna Swyft,F
-172,1,171,160,Lancel Lannister,M
-173,1,171,160,Willem Lannister,M
-174,1,171,160,Martyn Lannister,M
-175,1,171,160,Janei Lannister,F
-176,1,NA,NA,Darlessa Marbrand,F
-177,1,176,161,Tyrek Lannister,M
-178,1,NA,162,Joy Hill,F
-179,1,NA,NA,Lannister,M
-180,1,NA,179,Lannister,M
-181,1,NA,179,Lannister,M
-182,1,NA,179,Lannister,M
-183,1,NA,182,Stafford Lannister,M
-184,1,NA,183,Daven Lannister,M
-185,1,NA,183,Cerenna Lannister,F
-186,1,NA,183,Myrielle Lannister,F
-187,6,199,499,Steffon Baratheon,M
-188,6,479,476,Cassana Estermont,F
-189,6,NA,447,Delena Florent,F
-190,6,189,167,Edric Storm,M
-191,6,NA,167,Barra Waters,F
-192,6,NA,167,Mya Stone,F
-193,6,NA,167,Gendry Waters,M
-194,6,NA,167,Bella Rivers,F
-195,6,188,187,Stannis Baratheon,M
-196,6,188,187,Renly Baratheon,M
-197,6,NA,440,Selyse Florent,F
-198,6,197,195,Shireen Baratheon,F
-199,6,NA,200,Rhaelle Targaryen,F
-200,6,NA,282,Aegon Targaryen,M
-201,6,NA,200,Jaehaerys Targaryen,M
-202,6,NA,201,Aerys Targaryen,M
-203,6,NA,201,Rhaella Targaryen,F
-204,6,203,202,Rhaegar Targaryen,M
-205,6,203,202,Viserys Targaryen,M
-206,6,203,202,Daenerys Targaryen,F
-207,6,257,NA,Elia Martell,F
-208,6,207,204,Rhaenys Targaryen,F
-209,6,207,204,Aegon Targaryen,M
-210,6,468,212,Lyanna Stark,F
-211,6,210,204,Jon Snow,M
-212,6,NA,464,Rickard Stark,M
-213,6,468,212,Brandon Stark,M
-214,6,468,212,Eddard Stark,M
-215,6,468,212,Benjen Stark,M
-216,6,223,222,Catelyn Tully,F
-217,6,216,214,Robb Stark,M
-218,6,216,214,Sansa Stark,F
-219,6,216,214,Arya Stark,F
-220,6,216,214,Brandon 'Bran' Stark,M
-221,6,216,214,Rickon Stark,M
-222,6,NA,255,Hoster Tully,M
-223,6,NA,NA,Minisa Whent,F
-224,6,223,222,Lysa Tully,F
-225,6,223,222,Edmure Tully,M
-226,6,NA,230,Jon Arryn,M
-227,6,224,226,Robert Arryn,M
-228,7,NA,NA,Jeyne Royce,F
-229,8,NA,NA,Rowena ,F
-230,6,NA,NA,Jasper Arryn,M
-231,6,NA,230,Alys Arryn,F
-232,6,NA,230,Ronnel Arryn,M
-233,6,NA,249,Elys Waynwood,M
-234,6,231,233,Waynwood,F
-235,6,NA,NA,Denys Arryn,M
-236,6,234,235,Arryn,U
-237,6,231,233,Waynwood,F
-238,6,NA,NA,Hardyng,M
-239,6,237,238,Harrold Hardyng,M
-240,6,231,233,Waynwood,F
-241,6,231,233,Waynwood,F
-242,6,231,233,Waynwood,F
-243,6,231,233,Waynwood,F
-244,6,231,233,Waynwood,F
-245,6,231,233,Waynwood,F
-246,6,231,233,Jasper Waynwood,M
-247,6,NA,NA,Belmore,F
-248,6,247,232,Elbert Arryn,M
-249,6,NA,NA,Waynwood,M
-250,6,NA,249,Waynwood,U
-251,9,NA,NA,Anya Waynwood,F
-252,9,251,NA,Morton Waynwood,M
-253,9,251,NA,Donnel Waynwood,M
-254,9,251,NA,Wallace Waynwood,M
-255,6,NA,NA,Tully,M
-256,6,NA,255,Brynden 'Blackfish' Tully,M
-257,6,NA,NA,'Princess Of Dorne' ,F
-258,10,NA,NA,Martell,U
-259,11,NA,NA,Lewyn Martell,M
-260,6,257,NA,Doran Martell,M
-261,6,257,NA,Mors Martell,M
-262,6,257,NA,Olyvar Martell,M
-263,6,257,NA,Oberyn 'The Red Viper' Martell,M
-264,6,NA,273,Ellaria Sand,F
-265,6,264,263,Elia Sand,F
-266,6,NA,263,Obara Sand,F
-267,6,NA,263,Nymeria Sand,F
-268,6,NA,263,Tyene Sand,F
-269,6,NA,263,Sarella Sand,F
-270,6,264,263,Obella Sand,F
-271,6,264,263,Dorea Sand,F
-272,6,264,263,Loreza Sand,F
-273,6,NA,NA,Harmen Uller,M
-274,12,NA,NA,Uller,U
-275,13,NA,NA,Ulwyck Uller,M
-276,6,NA,NA,Mellario ,F
-277,6,276,260,Arianne Martell,F
-278,6,276,260,Quentyn Martell,M
-279,6,276,260,Trystane Martell,M
-280,6,NA,200,Duncan 'The Small' Targaryen,M
-281,6,NA,200,Targaryen,M
-282,6,291,290,Maekar Targaryen,M
-283,6,NA,282,Daeron Targaryen,M
-284,6,NA,283,Targaryen,F
-285,6,NA,282,Aerion Targaryen,M
-286,6,NA,285,Targaryen,M
-287,6,NA,282,Aemon Targaryen,M
-288,6,NA,282,Rhaelle Targaryen,F
-289,6,NA,282,Daella Targaryen,F
-290,6,303,302,Daeron Targaryen,M
-291,6,NA,NA,Myriah Martell,F
-292,6,291,290,Baelor 'Breakspear' Targaryen,M
-293,6,291,290,Aerys Targaryen,M
-294,6,291,290,Aelinor Targaryen,F
-295,6,291,290,Rhaegel Targaryen,M
-296,6,NA,295,Targaryen,M
-297,6,NA,295,Targaryen,M
-298,6,NA,292,Valarr Targaryen,M
-299,6,NA,292,Matarys Targaryen,M
-300,6,NA,298,Targaryen,M
-301,6,NA,298,Targaryen,M
-302,6,NA,306,Aegon Targaryen,M
-303,6,NA,306,Naerys ,F
-304,6,303,302,Daenerys Targaryen,F
-305,14,NA,NA,Maron Martell,M
-306,6,NA,NA,Viserys Targaryen,M
-307,6,NA,306,Aemon 'The Dragonknight' Targaryen,M
-308,6,322,321,Daena Targaryen,F
-309,6,NA,302,Aegor 'Bittersteel' Rivers,M
-310,6,NA,302,Brynden 'Bloodraven' Targaryen,M
-311,6,NA,302,Shiera Seastar,F
-312,6,308,302,Daemon Blackfyre,M
-313,6,NA,312,Aegon Blackfyre,M
-314,6,NA,312,Aemon Blackfyre,M
-315,6,NA,312,Daemon Blackfyre,M
-316,6,NA,312,Haegon Blackfyre,M
-317,6,NA,312,Blackfyre,M
-318,6,NA,312,Blackfyre,M
-319,6,NA,312,Blackfyre,M
-320,6,NA,317,Maelys 'The Monstrous' Blackfyre,M
-321,6,339,NA,Aegon Targaryen,M
-322,6,NA,NA,Velaryon,F
-323,6,322,321,Elaena Targaryen,F
-324,6,322,321,Rhaena Targaryen,F
-325,6,NA,NA,NA,M
-326,6,323,325,NA,U
-327,6,323,325,NA,U
-328,6,323,325,NA,U
-329,6,323,325,NA,U
-330,6,323,325,NA,U
-331,6,323,325,NA,U
-332,6,323,325,NA,U
-333,6,NA,NA,Alyn Velaryon,M
-334,6,322,321,Daeron Targaryen,M
-335,6,322,321,Baelor Targaryen,M
-336,15,NA,NA,NA,F
-337,6,323,333,Jon Waters,M
-338,6,323,333,Jeyne Waters,F
-339,6,341,340,Rhaenyra ,F
-340,6,NA,NA,Viserys Targaryen,M
-341,6,NA,NA,Arryn,F
-342,6,341,340,Targaryen,M
-343,6,341,340,Targaryen,M
-344,6,NA,NA,Hightower,F
-345,6,344,340,Aegon Targaryen,M
-346,6,344,340,Aemond Targaryen,M
-347,6,344,340,Targaryen,M
-348,6,344,340,Targaryen,F
-349,16,351,350,Targaryen,U
-350,16,NA,352,Jaehaerys 'The Conciliator' Targaryen,M
-351,16,NA,352,Alysanne 'The Good' Targaryen,F
-352,16,354,353,Aenys Targaryen,M
-353,16,359,358,Aegon 'The Conqueror' Targaryen,M
-354,16,NA,NA,Rhaenys Targaryen,F
-355,16,NA,NA,Visenya Targaryen,F
-356,16,355,353,Maegor Targaryen,M
-357,17,NA,NA,Jeyne Westerling,F
-358,16,NA,364,Aerion Targaryen,M
-359,16,NA,NA,Velena Velaryon,F
-360,6,NA,167,NA,U
-361,16,NA,358,Orys Baratheon,M
-362,18,NA,363,Argella Durrendon,F
-363,18,NA,NA,Argilac 'The Arrogant' Durrendon,M
-364,16,NA,365,Daemon Targaryen,M
-365,16,370,368,Aerys Targaryen,M
-366,16,NA,365,Aelix Targaryen,M
-367,16,NA,365,Baelon Targaryen,M
-368,16,372,371,Aegon Targaryen,M
-369,16,370,368,Maegon Targaryen,M
-370,16,372,371,Eleana Targaryen,F
-371,16,NA,373,Gaemon Targaryen,M
-372,16,NA,373,Daenys Targaryen,F
-373,16,NA,NA,Aenar Targaryen,M
-374,6,376,375,Loras Tyrell,M
-375,6,382,380,Mace Tyrell,M
-376,6,407,406,Alerie Hightower,F
-377,6,376,375,Garlan Tyrell,M
-378,6,376,375,Willas Tyrell,M
-379,6,376,375,Margaery Tyrell,F
-380,6,NA,393,Luthor Tyrell,M
-381,19,NA,NA,Leonette Fossoway,F
-382,6,NA,439,Olenna Redwyne,F
-383,6,NA,393,Garth 'The Gross' Tyrell,M
-384,6,NA,393,Moryn Tyrell,M
-385,6,NA,393,Gormon Tyrell,M
-386,6,382,380,Janna Tyrell,F
-387,6,382,380,Mina Tyrell,F
-388,20,NA,NA,Jon Fossoway,M
-389,6,NA,438,Paxter Redwyne,M
-390,6,387,389,Horas 'Horror' Redwyne,M
-391,6,387,389,Hobber 'Slobber' Redwyne,M
-392,6,387,389,Desmera Redwyne,F
-393,6,NA,NA,Tyrell,M
-394,6,NA,383,Garse Flowers,M
-395,6,NA,384,Luthor Tyrell,M
-396,6,NA,383,Garrett Flowers,M
-397,6,NA,384,Leo 'The Lazy' Tyrell,M
-398,6,NA,NA,Elyn Norridge,F
-399,6,398,395,Theodore Tyrell,M
-400,6,398,395,Olene Tyrell,F
-401,6,398,395,Medwick Tyrell,M
-402,6,NA,NA,Lia Serry,F
-403,6,402,399,Elinor Tyrell,F
-404,6,402,399,Luthor Tyrell,M
-405,21,NA,NA,Leo Blackbar,M
-406,6,NA,425,Leyton Hightower,M
-407,6,448,444,Rhea Florent,F
-408,6,407,406,Baelor Hightower,M
-409,22,NA,NA,Rhonda Rowan,F
-410,6,407,406,Alysanne Hightower,F
-411,6,NA,NA,Arthur Ambrose,M
-412,6,407,406,Denyse Hightower,F
-413,6,NA,NA,Desmond Redwyne,M
-414,6,412,413,Denys Redwyne,M
-415,6,407,406,Malora Hightower,F
-416,6,407,406,Garth Hightower,M
-417,6,407,406,Gunthor Hightower,M
-418,23,NA,NA,Jeyne Fossoway,F
-419,6,407,406,Leyla Hightower,F
-420,24,NA,NA,Jon Cupps,M
-421,6,407,406,Humfrey Hightower,M
-422,6,407,406,Lynesse Hightower,F
-423,25,NA,488,Jorah Mormont,M
-424,26,NA,NA,Tregar Ormollen,M
-425,6,NA,426,Hightower,M
-426,6,NA,NA,Hightower,M
-427,6,NA,426,Gerold 'The White Bull' Hightower,M
-428,27,NA,NA,Glover,F
-429,25,NA,NA,Mormont,M
-430,25,NA,429,Maege Mormont,F
-431,25,430,NA,Dacey Mormont,F
-432,25,430,NA,Alysane Mormont,F
-433,25,430,NA,Lyra Mormont,F
-434,25,430,NA,Jorelle Mormont,F
-435,25,430,NA,Lyanna Mormont,F
-436,25,432,NA,Snow,F
-437,25,432,NA,Snow,M
-438,6,NA,439,Redwyne,M
-439,6,NA,NA,Runceford Redwyne,M
-440,6,NA,443,Ryam Florent,M
-441,6,NA,440,Imry Florent,M
-442,6,NA,440,Erren Florent,M
-443,6,NA,NA,Florent,M
-444,6,NA,443,Alester Florent,M
-445,6,NA,443,Axell Florent,M
-446,6,NA,443,Rylene Florent,F
-447,6,NA,443,Colin Florent,M
-448,6,NA,NA,Melara Crane,F
-449,6,448,444,Alekyne Florent,M
-450,6,448,444,Melessa Florent,F
-451,28,NA,NA,Rycherd Crane,M
-452,6,NA,447,Merrell Florent,M
-453,6,NA,447,Omer Florent,M
-454,6,NA,NA,Hosman Norcross,M
-455,6,189,454,Alester Norcross,M
-456,6,189,454,Renly Norcross,M
-457,6,NA,NA,Randyll Tarly,M
-458,6,450,457,Samwell Tarly,M
-459,6,450,457,Talla Tarly,F
-460,6,450,457,Tarly,F
-461,6,450,457,Tarly,F
-462,6,450,457,Dickon Tarly,M
-463,6,410,411,Alyn Ambrose,M
-464,6,467,465,Edwyle Stark,M
-465,6,NA,NA,Stark,M
-466,6,467,465,Brandon Stark,M
-467,6,NA,NA,NA,F
-468,6,NA,NA,Flint,F
-469,6,467,465,Stark,F
-470,6,NA,NA,Royce,M
-471,6,469,470,Royce,F
-472,6,469,470,Royce,F
-473,6,469,470,Royce,F
-474,6,NA,NA,Arryn,M
-475,6,471,474,Arryn,U
-476,6,NA,NA,Eldon Estermont,M
-477,6,479,476,Aemon Estermont,M
-478,6,479,476,Lomas Estermont,M
-479,6,NA,480,Sylva 'Spotted Sylva' Santagar,F
-480,6,NA,NA,Symon Santagar,M
-481,29,NA,482,Ashara Dayne,F
-482,29,NA,NA,Dayne,M
-483,29,NA,482,Dayne,M
-484,29,NA,482,Arthur Dayne,M
-485,29,NA,482,Allyria Dayne,F
-486,29,NA,483,Edric Dayne,M
-487,30,NA,NA,Beric Dondarrion,M
-488,25,NA,429,Jeor Mormont,M
-489,6,NA,167,NA,U
-490,6,NA,167,NA,U
-491,6,NA,167,NA,U
-492,6,NA,167,NA,U
-493,6,NA,167,NA,U
-494,6,NA,167,NA,U
-495,6,NA,167,NA,U
-496,6,NA,167,NA,U
-497,6,NA,167,NA,U
-498,6,NA,167,NA,U
-499,6,NA,500,Baratheon,M
-500,6,NA,NA,Baratheon,M
-501,6,NA,500,Harbert Baratheon,M
+id,famID,momID,dadID,name,sex,twinID,zygosity
+1,1,566,564,Walder Frey,M,NA,NA
+2,1,NA,NA,Perra Royce,F,NA,NA
+3,1,2,1,Stevron Frey,M,NA,NA
+4,1,2,1,Emmon Frey,M,NA,NA
+5,1,2,1,Aenys Frey,M,NA,NA
+6,1,NA,NA,Corenna Swann,F,NA,NA
+7,1,6,3,Ryman Frey,M,NA,NA
+8,1,NA,7,Edwyn Frey,M,NA,NA
+9,1,NA,7,Walder 'Black Walder' Frey,M,NA,NA
+10,1,NA,7,Petyr Frey,M,NA,NA
+11,1,NA,NA,Janyce Hunter,F,NA,NA
+12,1,11,8,Walda Frey,F,NA,NA
+13,1,NA,NA,Mylenda Caron,F,NA,NA
+14,1,13,10,Perra Frey,F,NA,NA
+15,1,NA,NA,Jeyne Lydden,F,NA,NA
+16,1,15,3,Aegon 'Jinglebell' Frey,M,NA,NA
+17,1,15,3,Maegelle Frey,F,NA,NA
+18,1,NA,NA,Dafyn Vance,M,NA,NA
+19,1,17,18,Marianne Vance,F,NA,NA
+20,1,17,18,Walder Vance,M,NA,NA
+21,1,17,18,Patrek Vance,M,NA,NA
+22,1,NA,NA,Marsella Waynwood,F,NA,NA
+23,1,22,3,Walton Frey,M,NA,NA
+24,1,NA,NA,Deana Hardyng,F,NA,NA
+25,1,24,23,Steffon Frey,M,NA,NA
+26,1,24,23,Walda 'Fair Walda' Frey,F,NA,NA
+27,1,24,23,Bryan Frey,M,NA,NA
+28,1,584,158,Genna Lannister,F,NA,NA
+29,1,28,4,Cleos Frey,M,NA,NA
+30,1,28,4,Lyonel Frey,M,NA,NA
+31,1,28,4,Tion Frey,M,NA,NA
+32,1,28,4,Walder 'Red Walder' Frey,M,NA,NA
+33,1,NA,NA,Jeyne Darry,F,NA,NA
+34,1,33,29,Tywin 'Ty' Frey,M,NA,NA
+35,1,33,29,Willem Frey,M,NA,NA
+36,1,NA,NA,Tyana Wylde,F,NA,NA
+37,1,36,5,Aegon 'Bloodborn' Frey,M,NA,NA
+38,1,36,5,Rhaegar Frey,M,NA,NA
+39,1,NA,NA,Jeyne Beesbury,F,NA,NA
+40,1,39,38,Robert Frey,M,NA,NA
+41,1,39,38,Walda 'White Walda' Frey,F,NA,NA
+42,1,39,38,Jonos Frey,M,NA,NA
+43,1,2,1,Perriane Frey,F,NA,NA
+44,1,NA,NA,Leslyn Haigh,M,NA,NA
+45,1,43,44,Harys Haigh,M,NA,NA
+46,1,43,44,Donnel Haigh,M,NA,NA
+47,1,43,44,Alyn Haigh,M,NA,NA
+48,1,NA,45,Walder Haigh,M,NA,NA
+49,1,NA,NA,Cyrenna Swann,F,NA,NA
+50,1,49,1,Jared Frey,M,NA,NA
+51,1,49,1,Luceon Frey,M,NA,NA
+52,1,NA,NA,Alys Frey,F,NA,NA
+53,1,52,50,Tytos Frey,M,NA,NA
+54,1,52,50,Kyra Frey,F,NA,NA
+55,1,NA,NA,Zhoe Blanetree,F,NA,NA
+56,1,55,53,Zia Frey,F,NA,NA
+57,1,55,53,Zachery Frey,M,NA,NA
+58,1,NA,NA,Garse Goodbrook,M,NA,NA
+59,1,54,58,Walder Goodbrook,M,NA,NA
+60,1,54,58,Jeyne Goodbrook,F,NA,NA
+61,1,NA,NA,Amarei Crakehall,F,NA,NA
+62,1,61,1,Hosteen Frey,M,NA,NA
+63,1,61,1,Lythene Frey,F,NA,NA
+64,1,61,1,Symond Frey,M,NA,NA
+65,1,61,1,Danwell Frey,M,NA,NA
+66,1,61,1,Merrett Frey,M,NA,NA
+67,1,61,1,Geremy Frey,M,NA,NA
+68,1,61,1,Raymund Frey,M,NA,NA
+69,1,NA,NA,Bellena Hawick,F,NA,NA
+70,1,69,62,Arwood Frey,M,NA,NA
+71,1,NA,NA,Ryella Royce,F,NA,NA
+72,1,71,70,Ryella Frey,F,NA,NA
+73,1,71,70,Androw Frey,M,74,unknown
+74,1,71,70,Alyn Frey,M,73,unknown
+75,1,71,70,Hostella Frey,F,NA,NA
+76,1,NA,NA,Lucias Vypren,M,NA,NA
+77,1,63,76,Damon Vypren,M,NA,NA
+78,1,63,76,Elyana Vypren,F,NA,NA
+79,1,NA,NA,Jon Wylde,M,NA,NA
+80,1,78,79,Rickard Wylde,M,NA,NA
+81,1,NA,NA,Betharios of Braavos,F,NA,NA
+82,1,81,64,Alesander Frey,M,NA,NA
+83,1,81,64,Alyx Frey,F,NA,NA
+84,1,81,64,Bradamar Frey,M,NA,NA
+85,2,NA,NA,Wynafrei Whent,F,NA,NA
+86,1,NA,NA,Mariya Derry,F,NA,NA
+87,1,86,66,Amerei 'Gatehouse Ami' Frey,F,NA,NA
+88,3,NA,NA,Pate of the Blue Fork,M,NA,NA
+89,1,86,66,Walda 'Fat Walda' Frey,F,NA,NA
+90,1,86,66,Marissa Frey,F,NA,NA
+91,1,86,66,Walder 'Little Walder' Frey,M,NA,NA
+92,1,NA,NA,Carolei Waynwood,F,NA,NA
+93,1,92,67,Sandor Frey,M,NA,NA
+94,1,92,67,Cynthea Frey,F,NA,NA
+95,1,NA,NA,Beony Beesbury,F,NA,NA
+96,1,95,68,Robert Frey,M,NA,NA
+97,1,95,68,Malwyn Frey,M,NA,NA
+98,1,95,68,Sarra Frey,F,99,unknown
+99,1,95,68,Serra Frey,F,98,unknown
+100,1,95,68,Cersei Frey,F,NA,NA
+101,1,95,68,Tywin Frey,M,102,unknown
+102,1,95,68,Jaime Frey,M,101,unknown
+103,1,NA,NA,Alyssa Blackwood,F,NA,NA
+104,1,103,1,Lothar Frey,M,NA,NA
+105,1,103,1,Jammos Frey,M,NA,NA
+106,1,103,1,Whalen Frey,M,NA,NA
+107,1,103,1,Morya Frey,F,NA,NA
+108,1,103,1,Tyta Frey,F,NA,NA
+109,1,NA,NA,Leonella Lefford,F,NA,NA
+110,1,109,104,Tysane Frey,F,NA,NA
+111,1,109,104,Walda Frey,F,NA,NA
+112,1,109,104,Emberlei Frey,F,NA,NA
+113,1,109,104,Leana Frey,F,NA,NA
+114,1,NA,NA,Sallei Paege,F,NA,NA
+115,1,114,105,Walder 'Big Walder' Frey,M,NA,NA
+116,1,114,105,Dickon Frey,M,117,unknown
+117,1,114,105,Mathis Frey,M,116,unknown
+118,1,NA,NA,Sylwa Paege,F,NA,NA
+119,1,118,106,Hoster Frey,M,NA,NA
+120,1,118,106,Merianne Frey,F,NA,NA
+121,1,583,153,Flement Brax,M,NA,NA
+122,1,107,121,Robert Brax,M,NA,NA
+123,1,107,121,Walder Brax,M,NA,NA
+124,1,107,121,Jon Brax,M,NA,NA
+125,4,NA,NA,Sarya Whent,F,NA,NA
+126,1,NA,NA,Bethany Rosby,F,NA,NA
+127,1,126,1,Perwyn Frey,M,NA,NA
+128,1,126,1,Benfrey Frey,M,NA,NA
+129,1,126,1,Willamen Frey,M,NA,NA
+130,1,126,1,Olyvar Frey,M,NA,NA
+131,1,126,1,Roslin Frey,F,NA,NA
+132,1,NA,NA,Jyanna Frey,F,NA,NA
+133,1,132,128,Della Frey,F,NA,NA
+134,1,132,128,Osmund Frey,M,NA,NA
+135,1,NA,NA,Annara Farring,F,NA,NA
+136,1,135,1,Arwyn Frey,M,NA,NA
+137,1,135,1,Wendel Frey,M,NA,NA
+138,1,135,1,Colmar Frey,M,NA,NA
+139,1,135,1,Waltyr Frey,M,NA,NA
+140,1,135,1,Elmar Frey,M,NA,NA
+141,1,135,1,Shirei Frey,F,NA,NA
+142,5,NA,NA,Joyeuse Erenford,F,NA,NA
+143,1,NA,144,Walda Rivers,F,NA,NA
+144,1,NA,1,Walder Rivers,M,NA,NA
+145,1,NA,1,Melwys Rivers,M,NA,NA
+146,1,NA,1,Jeyne Rivers,F,NA,NA
+147,1,NA,1,Martyn Rivers,M,NA,NA
+148,1,NA,1,Ryger Rivers,M,NA,NA
+149,1,NA,1,Ronel Rivers,M,NA,NA
+150,1,NA,1,Mellara Rivers,F,NA,NA
+151,1,NA,144,Aemon Rivers,M,NA,NA
+152,1,NA,151,Walda Rivers,F,NA,NA
+153,1,NA,156,Andros Brax,M,NA,NA
+154,1,583,153,Tytos Brax,M,NA,NA
+155,1,583,153,Robert Brax,M,NA,NA
+156,1,NA,NA,Brax,M,NA,NA
+157,1,NA,156,Rupert Brax,M,NA,NA
+158,1,585,179,Tytos Lannister,M,NA,NA
+159,1,584,158,Tywin Lannister,M,NA,NA
+160,1,584,158,Kevan Lannister,M,NA,NA
+161,1,584,158,Tygett Lannister,M,NA,NA
+162,1,584,158,Gerion Lannister,M,NA,NA
+163,1,586,182,Joanna Lannister,F,NA,NA
+164,1,163,159,Jaime Lannister,M,165,dz
+165,1,163,159,Cersei Lannister,F,164,dz
+166,1,163,159,Tyrion Lannister,M,NA,NA
+167,6,188,187,Robert Baratheon,M,NA,NA
+168,1,165,164,Joffrey Baratheon,M,NA,NA
+169,1,165,164,Myrcella Baratheon,F,NA,NA
+170,1,165,164,Tommen Baratheon,M,NA,NA
+171,1,NA,NA,Dorna Swyft,F,NA,NA
+172,1,171,160,Lancel Lannister,M,NA,NA
+173,1,171,160,Willem Lannister,M,174,unknown
+174,1,171,160,Martyn Lannister,M,173,unknown
+175,1,171,160,Janei Lannister,F,NA,NA
+176,1,NA,NA,Darlessa Marbrand,F,NA,NA
+177,1,176,161,Tyrek Lannister,M,NA,NA
+178,1,NA,162,Joy Hill,F,NA,NA
+179,1,NA,NA,Gerold Lannister,M,NA,NA
+180,1,585,179,Tywald Lannister,M,NA,NA
+181,1,585,179,Tion Lannister,M,NA,NA
+182,1,585,179,Jason Lannister,M,NA,NA
+183,1,586,182,Stafford Lannister,M,NA,NA
+184,1,NA,183,Daven Lannister,M,NA,NA
+185,1,NA,183,Cerenna Lannister,F,NA,NA
+186,1,NA,183,Myrielle Lannister,F,NA,NA
+187,6,199,499,Steffon Baratheon,M,NA,NA
+188,6,479,476,Cassana Estermont,F,NA,NA
+189,6,NA,447,Delena Florent,F,NA,NA
+190,6,189,167,Edric Storm,M,NA,NA
+191,6,NA,167,Barra Waters,F,NA,NA
+192,6,NA,167,Mya Stone,F,NA,NA
+193,6,NA,167,Gendry Waters,M,NA,NA
+194,6,NA,167,Bella Rivers,F,NA,NA
+195,6,188,187,Stannis Baratheon,M,NA,NA
+196,6,188,187,Renly Baratheon,M,NA,NA
+197,6,NA,440,Selyse Florent,F,NA,NA
+198,6,197,195,Shireen Baratheon,F,NA,NA
+199,6,517,200,Rhaelle Targaryen,F,NA,NA
+200,6,516,282,Aegon V Targaryen,M,NA,NA
+201,6,517,200,Jaehaerys II Targaryen,M,NA,NA
+202,6,518,201,Aerys II Targaryen,M,NA,NA
+203,6,518,201,Rhaella Targaryen,F,NA,NA
+204,6,203,202,Rhaegar Targaryen,M,NA,NA
+205,6,203,202,Viserys Targaryen,M,NA,NA
+206,6,203,202,Daenerys Targaryen,F,NA,NA
+207,6,257,595,Elia Martell,F,NA,NA
+208,6,207,204,Rhaenys Targaryen,F,NA,NA
+209,6,207,204,Aegon Targaryen,M,NA,NA
+210,6,468,212,Lyanna Stark,F,NA,NA
+211,6,210,204,Jon Snow,M,NA,NA
+212,6,571,464,Rickard Stark,M,NA,NA
+213,6,468,212,Brandon Stark,M,NA,NA
+214,6,468,212,Eddard Stark,M,NA,NA
+215,6,468,212,Benjen Stark,M,NA,NA
+216,6,223,222,Catelyn Tully,F,NA,NA
+217,6,216,214,Robb Stark,M,NA,NA
+218,6,216,214,Sansa Stark,F,NA,NA
+219,6,216,214,Arya Stark,F,NA,NA
+220,6,216,214,Brandon 'Bran' Stark,M,NA,NA
+221,6,216,214,Rickon Stark,M,NA,NA
+222,6,570,255,Hoster Tully,M,NA,NA
+223,6,NA,NA,Minisa Whent,F,NA,NA
+224,6,223,222,Lysa Tully,F,NA,NA
+225,6,223,222,Edmure Tully,M,NA,NA
+226,6,538,230,Jon Arryn,M,NA,NA
+227,6,224,226,Robert Arryn,M,NA,NA
+228,7,NA,NA,Jeyne Royce,F,NA,NA
+229,8,NA,NA,Rowena Arryn,F,NA,NA
+230,6,NA,NA,Jasper Arryn,M,NA,NA
+231,6,538,230,Alys Arryn,F,NA,NA
+232,6,538,230,Ronnel Arryn,M,NA,NA
+233,6,NA,249,Elys Waynwood,M,NA,NA
+234,6,231,233,Waynwood,F,NA,NA
+235,6,NA,NA,Denys Arryn,M,NA,NA
+236,6,234,235,Arryn,U,NA,NA
+237,6,231,233,Youngest daughter of Elys Waynwood,F,NA,NA
+238,6,NA,NA,Hardyng,M,NA,NA
+239,6,237,238,Harrold Hardyng,M,NA,NA
+240,6,231,233,Waynwood,F,NA,NA
+241,6,231,233,Waynwood,F,NA,NA
+242,6,231,233,Waynwood,F,NA,NA
+243,6,231,233,Waynwood,F,NA,NA
+244,6,231,233,Waynwood,F,NA,NA
+245,6,231,233,Waynwood,F,NA,NA
+246,6,231,233,Jasper Waynwood,M,NA,NA
+247,6,NA,NA,Belmore,F,NA,NA
+248,6,247,232,Elbert Arryn,M,NA,NA
+249,6,NA,NA,Waynwood,M,NA,NA
+250,6,NA,249,Waynwood,U,NA,NA
+251,9,NA,NA,Anya Waynwood,F,NA,NA
+252,9,251,NA,Morton Waynwood,M,NA,NA
+253,9,251,NA,Donnel Waynwood,M,NA,NA
+254,9,251,NA,Wallace Waynwood,M,NA,NA
+255,6,NA,NA,Lord Tully,M,NA,NA
+256,6,570,255,Brynden 'Blackfish' Tully,M,NA,NA
+257,6,505,504,Princess Of Dorne,F,NA,NA
+258,10,NA,NA,Martell,U,NA,NA
+259,6,505,504,Lewyn Martell,M,NA,NA
+260,6,257,595,Doran Martell,M,NA,NA
+261,6,257,595,Mors Martell,M,NA,NA
+262,6,257,595,Olyvar Martell,M,NA,NA
+263,6,257,595,Oberyn 'The Red Viper' Martell,M,NA,NA
+264,6,NA,273,Ellaria Sand,F,NA,NA
+265,6,264,263,Elia Sand,F,NA,NA
+266,6,NA,263,Obara Sand,F,NA,NA
+267,6,NA,263,Nymeria Sand,F,NA,NA
+268,6,NA,263,Tyene Sand,F,NA,NA
+269,6,NA,263,Sarella Sand,F,NA,NA
+270,6,264,263,Obella Sand,F,NA,NA
+271,6,264,263,Dorea Sand,F,NA,NA
+272,6,264,263,Loreza Sand,F,NA,NA
+273,6,NA,NA,Harmen Uller,M,NA,NA
+274,11,NA,NA,Uller,U,NA,NA
+275,12,NA,NA,Ulwyck Uller,M,NA,NA
+276,6,NA,NA,Mellario of Norvos,F,NA,NA
+277,6,276,260,Arianne Martell,F,NA,NA
+278,6,276,260,Quentyn Martell,M,NA,NA
+279,6,276,260,Trystane Martell,M,NA,NA
+280,6,517,200,Duncan 'The Small' Targaryen,M,NA,NA
+281,6,NA,200,Targaryen,M,NA,NA
+282,6,291,290,Maekar Targaryen,M,NA,NA
+283,6,516,282,Daeron (son of Maekar) Targaryen,M,NA,NA
+284,6,NA,283,Targaryen,F,NA,NA
+285,6,516,282,Aerion (son of Maekar) Targaryen,M,NA,NA
+286,6,NA,285,Targaryen,M,NA,NA
+287,6,516,282,Aemon Targaryen,M,NA,NA
+288,6,516,282,Rhae Targaryen,F,NA,NA
+289,6,516,282,Daella Targaryen (daughter of Maekar I),F,NA,NA
+290,6,303,302,Daeron Targaryen,M,NA,NA
+291,6,567,568,Myriah Martell,F,NA,NA
+292,6,291,290,Baelor 'Breakspear' Targaryen,M,NA,NA
+293,6,291,290,Aerys Targaryen,M,NA,NA
+294,6,291,290,Aelinor Targaryen,F,NA,NA
+295,6,291,290,Rhaegel Targaryen,M,NA,NA
+296,6,NA,295,Targaryen,M,NA,NA
+297,6,NA,295,Targaryen,M,NA,NA
+298,6,589,292,Valarr Targaryen,M,NA,NA
+299,6,589,292,Matarys Targaryen,M,NA,NA
+300,6,NA,298,Targaryen,M,NA,NA
+301,6,NA,298,Targaryen,M,NA,NA
+302,6,502,306,Aegon Targaryen,M,NA,NA
+303,6,502,306,Naerys Targaryen,F,NA,NA
+304,6,303,302,Daenerys Targaryen,F,594,dz
+305,13,NA,NA,Maron Martell,M,NA,NA
+306,6,339,536,Viserys Targaryen,M,NA,NA
+307,6,502,306,Aemon 'The Dragonknight' Targaryen,M,NA,NA
+308,6,322,321,Daena Targaryen,F,NA,NA
+309,6,563,302,Aegor 'Bittersteel' Rivers,M,NA,NA
+310,6,591,302,Brynden 'Bloodraven' Targaryen,M,NA,NA
+311,6,NA,302,Shiera Seastar,F,NA,NA
+312,6,308,302,Daemon Blackfyre,M,NA,NA
+313,6,560,312,Aegon Blackfyre,M,314,unknown
+314,6,560,312,Aemon Blackfyre,M,313,unknown
+315,6,560,312,Daemon Blackfyre,M,NA,NA
+316,6,560,312,Haegon Blackfyre,M,NA,NA
+317,6,560,312,Father of Maelys I Blackfyre,M,NA,NA
+318,6,560,312,Blackfyre,M,NA,NA
+319,6,560,312,Blackfyre,M,NA,NA
+320,6,NA,317,Maelys 'The Monstrous' Blackfyre,M,NA,NA
+321,6,339,536,Aegon Targaryen,M,NA,NA
+322,6,535,529,Daenaera Velaryon,F,NA,NA
+323,6,322,321,Elaena Targaryen,F,NA,NA
+324,6,322,321,Rhaena Targaryen,F,NA,NA
+325,6,NA,NA,Ronnel Penrose,M,NA,NA
+326,6,323,528,Viserys Plumm,M,NA,NA
+327,6,323,325,Robin Penrose,M,NA,NA
+328,6,323,325,Laena Penrose,F,NA,NA
+329,6,323,325,Jocelyn Penrose,F,NA,NA
+330,6,323,325,Joy Penrose,F,NA,NA
+331,6,323,325,NA,U,NA,NA
+332,6,323,325,NA,U,NA,NA
+333,6,520,522,Alyn Velaryon,M,NA,NA
+334,6,322,321,Daeron Targaryen,M,NA,NA
+335,6,322,321,Baelor Targaryen,M,NA,NA
+336,14,NA,NA,Companion of Alyn Velaryon,F,NA,NA
+337,6,323,333,Jon Waters,M,NA,NA
+338,6,323,333,Jeyne Waters,F,NA,NA
+339,6,341,340,Rhaenyra Targaryen,F,NA,NA
+340,6,506,537,Viserys I Targaryen,M,NA,NA
+341,6,515,503,Aemma Arryn,F,NA,NA
+342,6,341,340,Targaryen,M,NA,NA
+343,6,341,340,Baelon Targaryen (son of Viserys I),M,NA,NA
+344,6,541,539,Alicent Hightower,F,NA,NA
+345,6,344,340,Aegon Targaryen,M,NA,NA
+346,6,344,340,Aemond Targaryen,M,NA,NA
+347,6,344,340,Daeron Targaryen,M,NA,NA
+348,6,344,340,Helaena Targaryen,F,NA,NA
+349,6,351,350,Targaryen,U,NA,NA
+350,6,NA,352,Jaehaerys 'The Conciliator' Targaryen,M,NA,NA
+351,6,510,352,Alysanne 'The Good' Targaryen,F,NA,NA
+352,6,354,353,Aenys Targaryen,M,NA,NA
+353,6,359,358,Aegon 'The Conqueror' Targaryen,M,NA,NA
+354,6,359,358,Rhaenys Targaryen,F,NA,NA
+355,6,359,358,Visenya Targaryen,F,NA,NA
+356,6,355,353,Maegor Targaryen,M,NA,NA
+357,15,NA,NA,Jeyne Westerling,F,NA,NA
+358,6,NA,364,Aerion (son of Daemion) Targaryen,M,NA,NA
+359,6,NA,NA,Velena Velaryon,F,NA,NA
+360,6,NA,167,Bastard of Robert Baratheon,U,NA,NA
+361,6,NA,358,Orys Baratheon,M,NA,NA
+362,6,NA,363,Argella Durrendon,F,NA,NA
+363,6,NA,NA,Argilac 'The Arrogant' Durrendon,M,NA,NA
+364,6,590,365,Daemion Targaryen (Lord of Dragonstone),M,NA,NA
+365,6,370,368,Aerys Targaryen,M,NA,NA
+366,6,590,365,Aelix Targaryen,M,NA,NA
+367,6,590,365,Baelon Targaryen,M,NA,NA
+368,6,372,371,Aegon Targaryen,M,NA,NA
+369,6,370,368,Maegon Targaryen,M,NA,NA
+370,6,372,371,Eleana Targaryen,F,NA,NA
+371,6,NA,373,Gaemon Targaryen,M,NA,NA
+372,6,NA,373,Daenys Targaryen,F,NA,NA
+373,6,NA,NA,Aenar Targaryen,M,NA,NA
+374,6,376,375,Loras Tyrell,M,NA,NA
+375,6,382,380,Mace Tyrell,M,NA,NA
+376,6,407,406,Alerie Hightower,F,NA,NA
+377,6,376,375,Garlan Tyrell,M,NA,NA
+378,6,376,375,Willas Tyrell,M,NA,NA
+379,6,376,375,Margaery Tyrell,F,NA,NA
+380,6,NA,393,Luthor Tyrell,M,NA,NA
+381,16,NA,NA,Leonette Fossoway,F,NA,NA
+382,6,NA,439,Olenna Redwyne,F,NA,NA
+383,6,NA,393,Garth 'The Gross' Tyrell,M,NA,NA
+384,6,NA,393,Moryn Tyrell,M,NA,NA
+385,6,NA,393,Gormon Tyrell,M,NA,NA
+386,6,382,380,Janna Tyrell,F,NA,NA
+387,6,382,380,Mina Tyrell,F,NA,NA
+388,17,NA,NA,Jon Fossoway,M,NA,NA
+389,6,NA,438,Paxter Redwyne,M,NA,NA
+390,6,387,389,Horas 'Horror' Redwyne,M,391,unknown
+391,6,387,389,Hobber 'Slobber' Redwyne,M,390,unknown
+392,6,387,389,Desmera Redwyne,F,NA,NA
+393,6,NA,NA,Tyrell,M,NA,NA
+394,6,NA,383,Garse Flowers,M,NA,NA
+395,6,NA,384,Luthor Tyrell,M,NA,NA
+396,6,NA,383,Garrett Flowers,M,NA,NA
+397,6,NA,384,Leo 'The Lazy' Tyrell,M,NA,NA
+398,6,NA,NA,Elyn Norridge,F,NA,NA
+399,6,398,395,Theodore Tyrell,M,NA,NA
+400,6,398,395,Olene Tyrell,F,NA,NA
+401,6,398,395,Medwick Tyrell,M,NA,NA
+402,6,NA,NA,Lia Serry,F,NA,NA
+403,6,402,399,Elinor Tyrell,F,NA,NA
+404,6,402,399,Luthor Tyrell,M,NA,NA
+405,18,NA,NA,Leo Blackbar,M,NA,NA
+406,6,NA,425,Leyton Hightower,M,NA,NA
+407,6,448,444,Rhea Florent,F,NA,NA
+408,6,407,406,Baelor Hightower,M,NA,NA
+409,19,NA,NA,Rhonda Rowan,F,NA,NA
+410,6,407,406,Alysanne Hightower,F,NA,NA
+411,6,NA,NA,Arthur Ambrose,M,NA,NA
+412,6,407,406,Denyse Hightower,F,NA,NA
+413,6,NA,NA,Desmond Redwyne,M,NA,NA
+414,6,412,413,Denys Redwyne,M,NA,NA
+415,6,407,406,Malora Hightower,F,NA,NA
+416,6,407,406,Garth Hightower,M,NA,NA
+417,6,407,406,Gunthor Hightower,M,NA,NA
+418,20,NA,NA,Jeyne Fossoway,F,NA,NA
+419,6,407,406,Leyla Hightower,F,NA,NA
+420,21,NA,NA,Jon Cupps,M,NA,NA
+421,6,407,406,Humfrey Hightower,M,NA,NA
+422,6,407,406,Lynesse Hightower,F,NA,NA
+423,22,NA,488,Jorah Mormont,M,NA,NA
+424,23,NA,NA,Tregar Ormollen,M,NA,NA
+425,6,NA,426,Hightower,M,NA,NA
+426,6,NA,NA,Hightower,M,NA,NA
+427,6,NA,426,Gerold 'The White Bull' Hightower,M,NA,NA
+428,24,NA,NA,Glover,F,NA,NA
+429,22,NA,NA,Mormont,M,NA,NA
+430,22,NA,429,Maege Mormont,F,NA,NA
+431,22,430,NA,Dacey Mormont,F,NA,NA
+432,22,430,NA,Alysane Mormont,F,NA,NA
+433,22,430,NA,Lyra Mormont,F,NA,NA
+434,22,430,NA,Jorelle Mormont,F,NA,NA
+435,22,430,NA,Lyanna Mormont,F,NA,NA
+436,22,432,NA,Snow,F,NA,NA
+437,22,432,NA,Snow,M,NA,NA
+438,6,NA,439,Redwyne,M,NA,NA
+439,6,NA,NA,Runceford Redwyne,M,NA,NA
+440,6,NA,443,Ryam Florent,M,NA,NA
+441,6,NA,440,Imry Florent,M,NA,NA
+442,6,NA,440,Erren Florent,M,NA,NA
+443,6,NA,NA,Florent,M,NA,NA
+444,6,NA,443,Alester Florent,M,NA,NA
+445,6,NA,443,Axell Florent,M,NA,NA
+446,6,NA,443,Rylene Florent,F,NA,NA
+447,6,NA,443,Colin Florent,M,NA,NA
+448,6,NA,NA,Melara Crane,F,NA,NA
+449,6,448,444,Alekyne Florent,M,NA,NA
+450,6,448,444,Melessa Florent,F,NA,NA
+451,25,NA,NA,Rycherd Crane,M,NA,NA
+452,6,NA,447,Merrell Florent,M,NA,NA
+453,6,NA,447,Omer Florent,M,NA,NA
+454,6,NA,NA,Hosman Norcross,M,NA,NA
+455,6,189,454,Alester Norcross,M,NA,NA
+456,6,189,454,Renly Norcross,M,NA,NA
+457,6,NA,NA,Randyll Tarly,M,NA,NA
+458,6,450,457,Samwell Tarly,M,NA,NA
+459,6,450,457,Talla Tarly,F,NA,NA
+460,6,450,457,Tarly,F,NA,NA
+461,6,450,457,Tarly,F,NA,NA
+462,6,450,457,Dickon Tarly,M,NA,NA
+463,6,410,411,Alyn Ambrose,M,NA,NA
+464,6,467,465,Edwyle Stark,M,NA,NA
+465,6,576,575,Willam Stark,M,NA,NA
+466,6,574,465,Brandon Stark,M,NA,NA
+467,6,NA,NA,Melantha Blackwood,F,NA,NA
+468,6,572,573,Lyarra Stark,F,NA,NA
+469,6,467,465,Jocelyn Stark,F,NA,NA
+470,6,NA,NA,Benedict Royce,M,NA,NA
+471,6,469,470,Royce,F,NA,NA
+472,6,469,470,Royce,F,NA,NA
+473,6,469,470,Royce,F,NA,NA
+474,6,NA,NA,Arryn,M,NA,NA
+475,6,471,474,Arryn,U,NA,NA
+476,6,NA,NA,Eldon Estermont,M,NA,NA
+477,6,479,476,Aemon Estermont,M,NA,NA
+478,6,479,476,Lomas Estermont,M,NA,NA
+479,6,NA,480,Sylva 'Spotted Sylva' Santagar,F,NA,NA
+480,6,NA,NA,Symon Santagar,M,NA,NA
+481,26,NA,482,Ashara Dayne,F,NA,NA
+482,26,NA,NA,Lord Dayne (father of Edric),M,NA,NA
+483,26,NA,482,Dayne,M,NA,NA
+484,26,NA,482,Arthur Dayne,M,NA,NA
+485,26,NA,482,Allyria Dayne,F,NA,NA
+486,26,NA,483,Edric Dayne,M,NA,NA
+487,27,NA,NA,Beric Dondarrion,M,NA,NA
+488,22,NA,429,Jeor Mormont,M,NA,NA
+489,6,NA,167,Bastard of Robert Baratheon,U,NA,NA
+490,6,NA,167,Bastard of Robert Baratheon,U,NA,NA
+491,6,NA,167,Bastard of Robert Baratheon,U,NA,NA
+492,6,NA,167,Bastard of Robert Baratheon,U,NA,NA
+493,6,NA,167,Bastard of Robert Baratheon,U,NA,NA
+494,6,NA,167,Bastard of Robert Baratheon,U,NA,NA
+495,6,NA,167,Bastard of Robert Baratheon,U,NA,NA
+496,6,NA,167,Bastard of Robert Baratheon,U,NA,NA
+497,6,NA,167,Bastard of Robert Baratheon,U,NA,NA
+498,6,NA,167,Bastard of Robert Baratheon,U,NA,NA
+499,6,NA,500,Baratheon,M,NA,NA
+500,6,NA,NA,Baratheon,M,NA,NA
+501,6,NA,500,Harbert Baratheon,M,NA,NA
+502,6,NA,NA,Larra Rogare,F,NA,NA
+503,6,NA,NA,Rodrik Arryn,M,NA,NA
+504,6,NA,NA,Father of Princess of Dorne,M,NA,NA
+505,6,NA,NA,Mother of Princess of Dorne,F,NA,NA
+506,6,351,350,Alyssa Targaryen,F,NA,NA
+507,6,362,361,Davos Baratheon,M,NA,NA
+508,6,362,361,Unknown Baratheon,M,NA,NA
+509,6,NA,508,Rogar Baratheon,M,NA,NA
+510,6,527,526,Alyssa Velaryon,F,NA,NA
+511,6,510,509,Boremund Baratheon,M,NA,NA
+512,6,510,509,Jocelyn Baratheon,F,NA,NA
+513,6,351,350,Aemon Targaryen (son of Jaehaerys I),M,NA,NA
+514,6,512,513,Rhaenys Targaryen (daughter of Aemon),F,NA,NA
+515,6,351,350,Daella Targaryen (daughter of Jaehaerys I),F,NA,NA
+516,6,NA,NA,Dyanna Dayne,F,NA,NA
+517,6,NA,NA,Betha Blackwood,F,NA,NA
+518,6,517,200,Shaera Targaryen,F,NA,NA
+519,6,517,200,Daeron Targaryen (son of Aegon V),M,NA,NA
+520,6,NA,NA,Marilda of Hull,F,NA,NA
+521,6,520,522,Addam Velaryon of Hull,M,NA,NA
+522,6,514,523,Laenor Velaryon,M,NA,NA
+523,6,534,524,Corlys Velaryon,M,NA,NA
+524,6,NA,525,Corwyn Velaryon,M,NA,NA
+525,6,527,526,Daemon Velaryon,M,NA,NA
+526,6,NA,NA,Aethan Velaryon,M,NA,NA
+527,6,NA,NA,Alarra Massey,F,NA,NA
+528,6,NA,NA,Ossifer Plumm,M,NA,NA
+529,6,531,532,Daeron Velaryon,M,NA,NA
+530,6,531,532,Daemion Velaryon,M,NA,NA
+531,6,NA,NA,Wife of Vaemond Velaryon,F,NA,NA
+532,6,NA,533,Vaemond Velaryon,M,NA,NA
+533,6,534,524,Second-born son of Corwyn Velaryon,M,NA,NA
+534,6,NA,NA,Unknown wife of Corwyn Velaryon,F,NA,NA
+535,6,NA,NA,Hazel Harte,F,NA,NA
+536,6,506,537,Daemon Targaryen,M,NA,NA
+537,6,351,350,Baelon Targaryen (son of Jaehaerys I),M,NA,NA
+538,6,NA,NA,Wife of Jasper Arryn,F,NA,NA
+539,6,543,542,Otto Hightower,M,NA,NA
+540,6,541,539,Gwayne Hightower,M,NA,NA
+541,6,NA,NA,wife of Otto Hightower,F,NA,NA
+542,6,NA,NA,Father of Otto Hightower,M,NA,NA
+543,6,NA,NA,Mother of Otto Hightower,F,NA,NA
+544,6,543,542,Lord Hightower,M,NA,NA
+545,6,514,523,Laena Velaryon,F,NA,NA
+546,6,545,536,Baela	Targaryen,F,547,unknown
+547,6,545,536,Rhaena Targaryen,F,546,unknown
+548,6,339,536,Visenya Targaryen (daughter of Rhaenyra),F,NA,NA
+549,6,NA,553,Harwin Strong,M,NA,NA
+550,6,339,549,Jacaerys Velaryon,M,NA,NA
+551,6,339,549,Lucerys Velaryon,M,NA,NA
+552,6,339,549,Joffrey Velaryon,M,NA,NA
+553,6,NA,NA,Lyonel Strong,M,NA,NA
+554,6,NA,553,Alys Rivers,F,NA,NA
+555,6,554,346,Son of Alys Rivers,M,NA,NA
+556,6,348,345,Jaehaera Targaryen,F,557,dz
+557,6,348,345,Jaehaerys Targaryen (son of Aegon II),M,556,dz
+558,6,348,345,Maelor Targaryen (son of Aegon II),M,NA,NA
+559,6,546,333,Laena Velaryon (daughter of Baela Targaryen),F,NA,NA
+560,6,NA,NA,Rohanne of Tyrosh,F,NA,NA
+561,6,NA,316,Daemon III Blackfyre,M,NA,NA
+562,6,560,312,Calla Blackfyre,F,NA,NA
+563,6,NA,NA,Barba Bracken,F,NA,NA
+564,1,NA,NA,Lord Frey,M,NA,NA
+565,1,566,564,Lady Butterwell Frey,F,NA,NA
+566,1,NA,NA,Lady Frey,F,NA,NA
+567,6,NA,NA,Mother of Maron Martell,F,NA,NA
+568,6,NA,NA,Prince of Dorne (father of Maron),M,NA,NA
+569,6,567,568,Maron Martell,M,NA,NA
+570,6,NA,NA,Mother of Hoster Tully,F,NA,NA
+571,6,NA,NA,Marna Locke,F,NA,NA
+572,6,NA,NA,Arya Flint,F,NA,NA
+573,6,576,575,Rodrik Stark,M,NA,NA
+574,6,NA,NA,Lyanne Glover,F,NA,NA
+575,6,NA,NA,Beron Stark,M,NA,NA
+576,6,NA,NA,Lorra Royce,F,NA,NA
+577,6,576,575,Donnor Stark,M,NA,NA
+578,6,576,575,Artos Stark,M,NA,NA
+579,6,576,575,Berena Stark,F,NA,NA
+580,6,576,575,Alysanne Stark,F,NA,NA
+581,6,576,575,Errold Stark,M,NA,NA
+582,6,572,573,Branda Stark,F,NA,NA
+583,1,NA,NA,Wife of Andros Brax,F,NA,NA
+584,1,NA,NA,Jeyne Marbrand,F,NA,NA
+585,1,NA,NA,Rohanne Webber,F,NA,NA
+586,1,NA,NA,Marla Prester,F,NA,NA
+587,1,NA,NA,Alys Stackspear,F,NA,NA
+588,1,587,182,Damon Lannister,M,NA,NA
+589,6,NA,NA,Jena Dondarrion,F,NA,NA
+590,6,NA,NA,Wife of Aerys,F,NA,NA
+591,6,NA,NA,Melissa Blackwood,F,NA,NA
+592,6,591,302,Gwenys Rivers,F,NA,NA
+593,6,591,302,Mya Rivers,F,NA,NA
+594,6,303,302,Stillborn Twin Targaryen,M,304,dz
+595,6,NA,NA,Consort of Dorne (Father of Doran Martell),M,NA,NA

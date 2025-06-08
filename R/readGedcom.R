@@ -72,7 +72,7 @@ readGedcom <- function(file_path,
 
   # List of variables to initialize
   all_var_names <- unlist(list(
-    identifiers = c("id", "momID", "dadID"),
+    identifiers = c("personID", "momID", "dadID"),
     names = c(
       "name", "name_given", "name_given_pieces", "name_surn", "name_surn_pieces", "name_marriedsurn",
       "name_nick", "name_npfx", "name_nsfx"
@@ -201,7 +201,7 @@ parseIndividualBlock <- function(block, pattern_rows, all_var_names, verbose = F
 
     # Process individual identifier (e.g., "@ INDI ...")
     if (grepl("@ INDI", line)) {
-      record$id <- stringr::str_extract(line, "(?<=@.)\\d*(?=@)")
+      record$personID <- stringr::str_extract(line, "(?<=@.)\\d*(?=@)")
       i <- i + 1
       next
     }
@@ -292,7 +292,7 @@ parseIndividualBlock <- function(block, pattern_rows, all_var_names, verbose = F
   }
 
   # If the record has no ID, return NULL.
-  if (is.na(record$id)) {
+  if (is.na(record$personID)) {
     return(NULL)
   }
   return(record)
@@ -496,7 +496,7 @@ processParents <- function(df_temp, datasource) {
   if (datasource == "gedcom") {
     required_cols <- c("FAMC", "sex", "FAMS")
   } else if (datasource == "wiki") {
-    required_cols <- c("id")
+    required_cols <- c("personID")
   } else {
     stop("Invalid datasource")
   }
@@ -532,16 +532,16 @@ mapFAMS2parents <- function(df_temp) {
       for (fams_id in fams_ids) {
         if (!is.null(family_to_parents[[fams_id]])) {
           if (df_temp$sex[i] == "M") {
-            family_to_parents[[fams_id]]$father <- df_temp$id[i]
+            family_to_parents[[fams_id]]$father <- df_temp$personID[i]
           } else if (df_temp$sex[i] == "F") {
-            family_to_parents[[fams_id]]$mother <- df_temp$id[i]
+            family_to_parents[[fams_id]]$mother <- df_temp$personID[i]
           }
         } else {
           family_to_parents[[fams_id]] <- list()
           if (df_temp$sex[i] == "M") {
-            family_to_parents[[fams_id]]$father <- df_temp$id[i]
+            family_to_parents[[fams_id]]$father <- df_temp$personID[i]
           } else if (df_temp$sex[i] == "F") {
-            family_to_parents[[fams_id]]$mother <- df_temp$id[i]
+            family_to_parents[[fams_id]]$mother <- df_temp$personID[i]
           }
         }
       }

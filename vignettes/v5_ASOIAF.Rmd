@@ -21,6 +21,7 @@ We begin by loading the required libraries and examining the structure of the bu
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 library(BGmisc)
 library(tidyverse)
+library(ggpedigree)
 data(ASOIAF)
 ```
 
@@ -137,7 +138,7 @@ Many real-world and fictional pedigrees contain individuals with unknown or part
 
 - Create "phantom" placeholders for the missing parent
 
--Optionally repair and harmonize parent fields
+- Optionally repair and harmonize parent fields
 
 To facilitate plotting, we check for individuals with one known parent but a missing other. For those cases, we assign a placeholder ID to the missing parent.
 
@@ -148,22 +149,64 @@ df_repaired <- checkParentIDs(df_got,
   parentswithoutrow = FALSE,
   repairsex = FALSE
 ) %>% mutate(
-  famID = 1,
+  # famID = 1,
   affected = case_when(
     ID %in% c(jon_id, dany_id, "365") ~ 1,
     TRUE ~ 0
   )
+)
+checkIDs(df_repaired)
+checkPedigreeNetwork(df_repaired,
+  personID = "ID",
+  momID = "momID",
+  dadID = "dadID",
+  verbose = FALSE
 )
 ```
 
 This code creates new IDs for individuals with one known parent and a missing other. It checks if either `momID` or `dadID` is missing, and if so, it assigns a new ID based on the row number. This allows us to visualize the pedigree even when some parental information is incomplete.
 
 
-
 ## Visualize the Pedigree
 
+### Plotting the Pedigree with `kinship2::plot.pedigree()`
 We can now visualize the repaired pedigree using the `plotPedigree()` function. This function generates a plot of the pedigree, with individuals colored based on their affected status. In this case, we highlight Jon and Daenerys as "affected" individuals. Otherwise they would be difficult to distinguish from the rest of the pedigree.
 
-```{r, message=FALSE, warning=FALSE}
-plotPedigree(df_repaired, affected = df_repaired$affected, verbose = FALSE)
+```{r eval=FALSE, fig.height=8, fig.width=10, message=FALSE, warning=FALSE, include=FALSE}
+plotPedigree(df_repaired %>% mutate(
+  famID = 1
+), affected = df_repaired$affected, verbose = FALSE)
+```
+
+
+## Visualize the Pedigree with `ggPedigree()`
+
+Here is the same pedigree, but using `ggPedigree()` from {ggpedigree}. This function provides a more flexible and customizable way to visualize pedigrees, allowing for easy integration with other `ggplot2` functions.
+
+
+```{r, message=FALSE, warning=FALSE, fig.width=10, fig.height=8}
+library(ggpedigree)
+plt <- ggPedigree(df_repaired,
+  status_col = "affected",
+  personID = "ID",
+  config = list(
+    status_unaffected_lab = 0,
+    sex_color = TRUE,
+    point_size = .5,
+    code_male = "M",
+    status_affected_lab = 1,
+    affected_shape = 4,
+    ped_width = 14,
+    include_tooltips = TRUE,
+    label_nudge_y = -.25,
+    include_labels = TRUE,
+    label_method = "geom_text",
+    segment_self_color = "purple",
+    tooltip_cols = c("name")
+  )
+)
+
+plt +
+  theme(legend.position = "none") +
+  labs(title = "ASOIAF Pedigree: Jon Snow and Daenerys Targaryen")
 ```

@@ -4,7 +4,7 @@
 \alias{adjustKidsPerCouple}
 \title{Generate or Adjust Number of Kids per Couple Based on Mating Rate}
 \usage{
-adjustKidsPerCouple(nMates, kpc, rd_kpc)
+adjustKidsPerCouple(nMates, kpc, rd_kpc = TRUE)
 }
 \arguments{
 \item{nMates}{Integer, the number of mated pairs in the generation.}
@@ -20,3 +20,4 @@ A numeric vector with the generated or adjusted number of kids per couple.
 This function generates or adjusts the number of kids per couple in a generation
 based on the specified average and whether the count should be randomly determined.
 }
+\keyword{internal}

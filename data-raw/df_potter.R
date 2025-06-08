@@ -12,7 +12,7 @@ potter <- data.frame(
     11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
     21, 22, 23, 24, 25, 26, 27, 28, 29, 30
   ),
-  famID = rep("1", 30),
+  famID = rep(1, 30),
   name = c(
     "Vernon Dursley",
     "Marjorie Dursley",
@@ -33,7 +33,7 @@ potter <- data.frame(
     "Hermione Granger",
     "Fleur Delacour",
     "Gabrielle Delacour",
-    "Audrey UNKNOWN",
+    "Audrey",
     "James Potter II",
     "Albus Potter",
     "Lily Potter",
@@ -82,7 +82,7 @@ potter <- data.frame(
 
 potter[nrow(potter) + 1, ] <- list(
   101,
-  "1",
+  1,
   "Mother Dursley",
   0,
   NA,
@@ -92,7 +92,7 @@ potter[nrow(potter) + 1, ] <- list(
 )
 potter[nrow(potter) + 1, ] <- list(
   102,
-  "1",
+  1,
   "Father Dursley",
   0,
   NA,
@@ -102,7 +102,7 @@ potter[nrow(potter) + 1, ] <- list(
 )
 potter[nrow(potter) + 1, ] <- list(
   104,
-  "1",
+  1,
   "Father Evans",
   0,
   NA,
@@ -112,7 +112,7 @@ potter[nrow(potter) + 1, ] <- list(
 )
 potter[nrow(potter) + 1, ] <- list(
   103,
-  "1",
+  1,
   "Mother Evans",
   0,
   NA,
@@ -122,7 +122,7 @@ potter[nrow(potter) + 1, ] <- list(
 )
 potter[nrow(potter) + 1, ] <- list(
   106,
-  "1",
+  1,
   "Father Delacour",
   0,
   NA,
@@ -132,7 +132,7 @@ potter[nrow(potter) + 1, ] <- list(
 )
 potter[nrow(potter) + 1, ] <- list(
   105,
-  "1",
+  1,
   "Mother Delacour",
   0,
   NA,
@@ -141,6 +141,19 @@ potter[nrow(potter) + 1, ] <- list(
   0
 )
 
+potter <- potter %>%
+  mutate(
+    twinID = case_when(
+      name == "Fred Weasley" ~ 13,
+      name == "George Weasley" ~ 12,
+      TRUE ~ NA_real_
+    ),
+    zygosity = case_when(
+      !is.na(twinID) ~ "mz",
+      TRUE ~ NA_character_
+    )
+  )
+
 # potter[nrow(potter) + 1,] <- list(personID,fam,name,gen,
 #                                momID,dadID,spouseID,sex)
 
@@ -148,89 +161,49 @@ write_csv(potter, here("data-raw", "potter.csv"))
 usethis::use_data(potter, overwrite = TRUE, compress = "xz")
 
 
-
-## Create dataframe
-potter_big <- readGedcom("data-raw/potter_big.ged")
-
-
-df <- ped2fam(potter_big, personID = "id") %>%
-  select(
-    -name_given,
-    -name_surn,
-    -death_date,
-    -birth_date,
-    -FAMC,
-    -FAMS
-  ) %>%
-  rename(personID = id) %>%
-  mutate(
-    personID = as.numeric(personID),
-    momID = as.numeric(momID),
-    dadID = as.numeric(dadID),
-    name = str_remove(name, "/")
-  ) %>%
-  arrange(name)
+if (FALSE) {
+  ## Create dataframe
+  potter_big <- readGedcom("data-raw/potter_big.ged")
 
 
-potter_clean <- potter %>%
-  arrange(name) %>%
-  mutate(
-    personID = as.numeric(personID) * 1000,
-    momID = as.numeric(momID) * 1000,
-    dadID = as.numeric(dadID) * 1000
-  )
+  df <- ped2fam(potter_big, personID = "personID") %>%
+    select(
+      -name_given,
+      -name_surn,
+      -death_date,
+      -birth_date,
+      -FAMC,
+      -FAMS
+    ) %>%
+    # rename(personID = id) %>%
+    mutate(
+      personID = as.numeric(personID),
+      momID = as.numeric(momID),
+      dadID = as.numeric(dadID),
+      name = str_remove(name, "/")
+    ) %>%
+    arrange(name)
 
-# merge  so that I have all of A and all the Bs that match A
 
-df_clean <- df %>%
-  mutate(name = str_trim(str_to_lower(name)))
+  potter_clean <- potter %>%
+    arrange(name) %>%
+    mutate(
+      personID = as.numeric(personID) * 1000,
+      momID = as.numeric(momID) * 1000,
+      dadID = as.numeric(dadID) * 1000
+    )
+
+  # merge  so that I have all of A and all the Bs that match A
+
+  df_clean <- df %>%
+    mutate(name = str_trim(str_to_lower(name)))
 
 
 
-potter_clean <- potter_clean %>%
-  mutate(
-    personID = case_match(
-      personID,
-      22000 ~ 15,
-      9000 ~ 18,
-      6000 ~ 10,
-      18000 ~ 29,
-      7000 ~ 1,
-      17000 ~ 25,
-      25000 ~ 27,
-      13000 ~ 20,
-      19000 ~ 34,
-      23000 ~ 16,
-      10000 ~ 17,
-      14000 ~ 22,
-      3000 ~ 8,
-      24000 ~ 26,
-      1000 ~ 9,
-      26000 ~ 30,
-      21000 ~ 14,
-      11000 ~ 19,
-      8000 ~ 13,
-      5000 ~ 2,
-      15000 ~ 23,
-      16000 ~ 24,
-      4000 ~ 3,
-      2000 ~ -2000,
-      101000 ~ 12,
-      102000 ~ 11,
-      20000 ~ -20000,
-      27000 ~ -27000,
-      106000 ~ 32,
-      105000 ~ 33,
-      29000 ~ 17,
-      103000 ~ 7,
-      104000 ~ 6,
-      12000 ~ 21,
-      30000 ~ -30000,
-      28000 ~ -28000,
-      .default = personID
-    ), dadID =
-      case_match(
-        dadID,
+  potter_clean <- potter_clean %>%
+    mutate(
+      personID = case_match(
+        personID,
         22000 ~ 15,
         9000 ~ 18,
         6000 ~ 10,
@@ -254,104 +227,145 @@ potter_clean <- potter_clean %>%
         15000 ~ 23,
         16000 ~ 24,
         4000 ~ 3,
-        2000 ~ 2000,
+        2000 ~ -2000,
         101000 ~ 12,
         102000 ~ 11,
-        20000 ~ 20000,
-        27000 ~ 27000,
+        20000 ~ -20000,
+        27000 ~ -27000,
         106000 ~ 32,
         105000 ~ 33,
         29000 ~ 17,
         103000 ~ 7,
         104000 ~ 6,
         12000 ~ 21,
-        30000 ~ 30000,
-        28000 ~ 28000,
-        .default = dadID
-      ), momID =
-      case_match(
-        momID,
-        22000 ~ 15,
-        9000 ~ 18,
-        6000 ~ 10,
-        18000 ~ 29,
-        7000 ~ 1,
-        17000 ~ 25,
-        25000 ~ 27,
-        13000 ~ 20,
-        19000 ~ 34,
-        23000 ~ 16,
-        10000 ~ 17,
-        14000 ~ 22,
-        3000 ~ 8,
-        24000 ~ 26,
-        1000 ~ 9,
-        26000 ~ 30,
-        21000 ~ 14,
-        11000 ~ 19,
-        8000 ~ 13,
-        5000 ~ 2,
-        15000 ~ 23,
-        16000 ~ 24,
-        4000 ~ 3,
-        2000 ~ 2000,
-        101000 ~ 12,
-        102000 ~ 11,
-        20000 ~ 20000,
-        27000 ~ 27000,
-        106000 ~ 32,
-        105000 ~ 33,
-        29000 ~ 17,
-        103000 ~ 7,
-        104000 ~ 6,
-        12000 ~ 21,
-        30000 ~ 30000,
-        28000 ~ 28000,
-        .default = momID
-      ), spouseID =
-      case_match(
-        spouseID,
-        22000 ~ 15,
-        9000 ~ 18,
-        6000 ~ 10,
-        18000 ~ 29,
-        7000 ~ 1,
-        17000 ~ 25,
-        25000 ~ 27,
-        13000 ~ 20,
-        19000 ~ 34,
-        23000 ~ 16,
-        10000 ~ 17,
-        14000 ~ 22,
-        3000 ~ 8,
-        24000 ~ 26,
-        1000 ~ 9,
-        26000 ~ 30,
-        21000 ~ 14,
-        11000 ~ 19,
-        8000 ~ 13,
-        5000 ~ 2,
-        15000 ~ 23,
-        16000 ~ 24,
-        4000 ~ 3,
-        2000 ~ 2000,
-        101000 ~ 12,
-        102000 ~ 11,
-        20000 ~ 20000,
-        27000 ~ 27000,
-        106000 ~ 32,
-        105000 ~ 33,
-        29000 ~ 17,
-        103000 ~ 7,
-        104000 ~ 6,
-        12000 ~ 21,
-        30000 ~ 30000,
-        28000 ~ 28000,
-        .default = spouseID
-      )
-  )
+        30000 ~ -30000,
+        28000 ~ -28000,
+        .default = personID
+      ), dadID =
+        case_match(
+          dadID,
+          22000 ~ 15,
+          9000 ~ 18,
+          6000 ~ 10,
+          18000 ~ 29,
+          7000 ~ 1,
+          17000 ~ 25,
+          25000 ~ 27,
+          13000 ~ 20,
+          19000 ~ 34,
+          23000 ~ 16,
+          10000 ~ 17,
+          14000 ~ 22,
+          3000 ~ 8,
+          24000 ~ 26,
+          1000 ~ 9,
+          26000 ~ 30,
+          21000 ~ 14,
+          11000 ~ 19,
+          8000 ~ 13,
+          5000 ~ 2,
+          15000 ~ 23,
+          16000 ~ 24,
+          4000 ~ 3,
+          2000 ~ 2000,
+          101000 ~ 12,
+          102000 ~ 11,
+          20000 ~ 20000,
+          27000 ~ 27000,
+          106000 ~ 32,
+          105000 ~ 33,
+          29000 ~ 17,
+          103000 ~ 7,
+          104000 ~ 6,
+          12000 ~ 21,
+          30000 ~ 30000,
+          28000 ~ 28000,
+          .default = dadID
+        ), momID =
+        case_match(
+          momID,
+          22000 ~ 15,
+          9000 ~ 18,
+          6000 ~ 10,
+          18000 ~ 29,
+          7000 ~ 1,
+          17000 ~ 25,
+          25000 ~ 27,
+          13000 ~ 20,
+          19000 ~ 34,
+          23000 ~ 16,
+          10000 ~ 17,
+          14000 ~ 22,
+          3000 ~ 8,
+          24000 ~ 26,
+          1000 ~ 9,
+          26000 ~ 30,
+          21000 ~ 14,
+          11000 ~ 19,
+          8000 ~ 13,
+          5000 ~ 2,
+          15000 ~ 23,
+          16000 ~ 24,
+          4000 ~ 3,
+          2000 ~ 2000,
+          101000 ~ 12,
+          102000 ~ 11,
+          20000 ~ 20000,
+          27000 ~ 27000,
+          106000 ~ 32,
+          105000 ~ 33,
+          29000 ~ 17,
+          103000 ~ 7,
+          104000 ~ 6,
+          12000 ~ 21,
+          30000 ~ 30000,
+          28000 ~ 28000,
+          .default = momID
+        ), spouseID =
+        case_match(
+          spouseID,
+          22000 ~ 15,
+          9000 ~ 18,
+          6000 ~ 10,
+          18000 ~ 29,
+          7000 ~ 1,
+          17000 ~ 25,
+          25000 ~ 27,
+          13000 ~ 20,
+          19000 ~ 34,
+          23000 ~ 16,
+          10000 ~ 17,
+          14000 ~ 22,
+          3000 ~ 8,
+          24000 ~ 26,
+          1000 ~ 9,
+          26000 ~ 30,
+          21000 ~ 14,
+          11000 ~ 19,
+          8000 ~ 13,
+          5000 ~ 2,
+          15000 ~ 23,
+          16000 ~ 24,
+          4000 ~ 3,
+          2000 ~ 2000,
+          101000 ~ 12,
+          102000 ~ 11,
+          20000 ~ 20000,
+          27000 ~ 27000,
+          106000 ~ 32,
+          105000 ~ 33,
+          29000 ~ 17,
+          103000 ~ 7,
+          104000 ~ 6,
+          12000 ~ 21,
+          30000 ~ 30000,
+          28000 ~ 28000,
+          .default = spouseID
+        )
+    )
 
 
-# Left join by name
-potter_join <- potter_clean %>%
-  full_join(df_clean, by = c("personID"), suffix = c("", "_df"))
+  # Left join by name
+  potter_join <- potter_clean %>%
+    full_join(df_clean, by = c("personID"), suffix = c("", "_df"))
+}

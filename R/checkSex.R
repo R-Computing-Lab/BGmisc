@@ -79,7 +79,7 @@ checkSex <- function(ped, code_male = NULL, code_female = NULL, verbose = FALSE,
   if (repair == FALSE) {
     if (verbose) {
       cat("Checks Made:\n")
-      print(validation_results)
+      message(validation_results)
     }
     return(validation_results)
   } else {
@@ -105,7 +105,7 @@ checkSex <- function(ped, code_male = NULL, code_female = NULL, verbose = FALSE,
 
     if (verbose) {
       cat("Changes Made:\n")
-      print(changes)
+      message(changes)
     }
     return(ped)
   }
@@ -118,7 +118,6 @@ checkSex <- function(ped, code_male = NULL, code_female = NULL, verbose = FALSE,
 #' the repair of the sex coding in a pedigree dataframe.
 #'
 #' @inheritParams checkSex
-#' @inheritParams plotPedigree
 #' @inherit checkSex details
 #' @return A modified version of the input data.frame \code{ped}, containing an additional or modified 'sex_recode' column where the 'sex' values are recoded according to \code{code_male}. NA values in the 'sex' column are preserved.
 #' @examples
@@ -139,7 +138,6 @@ repairSex <- function(ped, verbose = FALSE, code_male = NULL, code_female = NULL
 #' It sets the `repair` flag to TRUE automatically and forwards any additional parameters to `checkSex`.
 #'
 #' @inheritParams checkSex
-#' @inheritParams plotPedigree
 #' @param code_na The current value used for missing values.
 #' @param recode_na The value to use for missing values. Default is NA_character_
 #' @param recode_male The value to use for males. Default is "M"
@@ -147,8 +145,7 @@ repairSex <- function(ped, verbose = FALSE, code_male = NULL, code_female = NULL
 #' @inherit checkSex details
 #' @return A modified version of the input data.frame \code{ped}, containing an additional or modified 'sex_recode' column where the 'sex' values are recoded according to \code{code_male}. NA values in the 'sex' column are preserved.
 #' @export
-#' @seealso \code{\link{plotPedigree}}
-#' @export
+
 recodeSex <- function(
     ped, verbose = FALSE, code_male = NULL, code_na = NULL, code_female = NULL,
     recode_male = "M", recode_female = "F", recode_na = NA_character_) {
@@ -271,6 +268,7 @@ checkParentSex <- function(ped, parent_col, sex_col = "sex", verbose = FALSE) {
 #'
 #' @return The modal value of the vector. If the vector is empty or contains only NA values, returns NA.
 #' @keywords internal
+#' @importFrom stats na.omit
 .getModalValue <- function(x) {
   if (length(stats::na.omit(x)) == 0) {
     return(NA)

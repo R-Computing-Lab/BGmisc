@@ -1,3 +1,27 @@
+# BGmisc 1.4.3.1
+* Updated ASOIAF pedigree to reduce missing parents
+
+# BGmisc 1.4.3
+* transferred plotPedigree to ggpedigree
+
+# BGmisc 1.4.2
+* Added twinIDs for potter and asoiaf pedigrees
+* Added twinID to simulatePedigree function, and extended to include MZ, DZ, and SS twins.
+* Added a few more tests for simulatePedigree
+* Added function to easily add new person to a pedigree
+* Updated ASOIAF pedigree to reduce missing parents
+* Added a few more tests for simulatePedigree helpers
+* Allow simulatePedigree to accept variable names and coding for sex
+
+# BGmisc 1.4.1
+* replaced print with message in all functions
+* Exposed several internal functions to the user
+* refactored addPhantomParents to be more efficient
+* add mtdna and mitochondria as aliases for mitochondrial
+* reorganized unit tests
+* introduces the new calculateCIs function for computing confidence intervals for correlation coefficients
+* added comprehensive tests and corresponding documentation updates for calculateCI
+
 # BGmisc 1.4.0
 * revived checkParents function to check for handling phantom parents and missing parents
 * added tests for checkParents function
@@ -14,6 +38,7 @@
 * Setting the default for the `sparse` argument in `ped2com()` to TRUE
 
 # BGmisc 1.3.5
+* Add calculateCIs and readDelimitedData functions
 * Added ASOIAF pedigree
 * Added com2links() function to convert components to kinship links, with accompanying tests
 * Added extractWikiFamilyTree() function to parse family trees from wiki templates, with accompanying tests

@@ -4,7 +4,18 @@
 \alias{buildWithinGenerations}
 \title{Process Generations for Pedigree Simulation}
 \usage{
-buildWithinGenerations(sizeGens, marR, sexR, Ngen)
+buildWithinGenerations(
+  sizeGens,
+  marR,
+  sexR,
+  Ngen,
+  verbose = FALSE,
+  personID = "ID",
+  momID = "momID",
+  dadID = "dadID",
+  code_male = "M",
+  code_female = "F"
+)
 }
 \arguments{
 \item{sizeGens}{A numeric vector containing the sizes of each generation within the pedigree.}
@@ -14,6 +25,18 @@ buildWithinGenerations(sizeGens, marR, sexR, Ngen)
 \item{sexR}{Sex ratio of offspring. A numeric value ranging from 0 to 1 that determines the proportion of males in all offspring in this pedigree. For instance, 0.4 means 40 percent of the offspring will be male.}
 
 \item{Ngen}{Number of generations. An integer >= 2 that determines how many generations the simulated pedigree will have. The first generation is always a fertilized couple. The last generation has no mated individuals.}
+
+\item{verbose}{logical  If TRUE, message progress through stages of algorithm}
+
+\item{personID}{character.  Name of the column in ped for the person ID variable}
+
+\item{momID}{character.  Name of the column in ped for the mother ID variable}
+
+\item{dadID}{character.  Name of the column in ped for the father ID variable}
+
+\item{code_male}{The value to use for males. Default is "M"}
+
+\item{code_female}{The value to use for females. Default is "F"}
 }
 \value{
 A data frame representing the simulated pedigree, including columns for family ID (`fam`),
