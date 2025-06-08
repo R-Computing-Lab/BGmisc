@@ -471,12 +471,13 @@ To understand what these matrices look like, we visualize them for one represent
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 library(ggpedigree)
-df<-inbreeding_list[[1]]$df_fam
+df <- inbreeding_list[[1]]$df_fam
 
 ggpedigree(df,
-  verbose = FALSE,personID = "ID",
- config= list(
-              code_male=0)
+  verbose = FALSE, personID = "ID",
+  config = list(
+    code_male = 0
+  )
 )
 ```
 

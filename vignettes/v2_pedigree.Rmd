@@ -84,8 +84,6 @@ df_ped_3 <- simulatePedigree(Ngen = 3)
 
 # Simulate a family with 4 generations
 df_ped_4 <- simulatePedigree(Ngen = 4)
-
-
 ```   
 
 You can use the `ggpedigree` package to plot multiple pedigrees side by side. This package allows for more customization and better aesthetics in pedigree visualization.
