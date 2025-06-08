@@ -52,7 +52,8 @@ different extended families have no relations.
 
 
 ```{r, echo=FALSE, results='hide', out.width='50%', fig.cap="Potter Family Pedigree"}
-plotPedigree(potter, code_male = 1, verbose = TRUE)
+library(ggpedigree)
+ggpedigree(potter, code_male = 1, verbose = TRUE)
 ```
 
 We will use the `potter` pedigree data as an example. For convenience, we've renamed the family ID variable to `oldfam` to avoid confusion with the new family ID variable we will create.
@@ -161,6 +162,8 @@ Subsetting a pedigree allows researchers to focus on specific family lines or in
 
 
 ```{r, echo=FALSE, results='hide', out.width='50%', fig.cap="Potter Subset Pedigree"}
+library(ggpedigree)
+
 names(potter)[names(potter) == "oldfam"] <- "famID"
 subset_rows <- c(1:8, 11:36)
 subset_potter <- potter[subset_rows, ]
@@ -168,7 +171,7 @@ subset_potter <- potter[subset_rows, ]
 subset_potter$dadID[subset_potter$dadID %in% c(9, 10)] <- NA
 subset_potter$momID[subset_potter$momID %in% c(9, 10)] <- NA
 
-plotPedigree(subset_potter, code_male = 1, verbose = TRUE)
+ggpedigree(subset_potter, code_male = 1, verbose = TRUE)
 ```
 
 In the plot above, we have removed Arthur Weasley (person 9) and Molly Prewett (person 10) from the `potter` dataset. As a result, the connections between their children are lost. 
@@ -182,5 +185,5 @@ subset_rows <- c(1:5, 31:36)
 subset_potter <- potter[subset_rows, ]
 ```
 ```{r, echo=FALSE, results='hide', out.width='50%'}
-plotPedigree(subset_potter, code_male = 1, verbose = TRUE)
+ggpedigree(subset_potter, code_male = 1, verbose = TRUE)
 ```

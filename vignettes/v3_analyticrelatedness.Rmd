@@ -470,8 +470,14 @@ for (i in 1:length(famIDs)) {
 To understand what these matrices look like, we visualize them for one representative family. For this example, we select the first family in the dataset.
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
-plotPedigree(inbreeding_list[[1]]$df_fam,
-  verbose = FALSE
+library(ggpedigree)
+df <- inbreeding_list[[1]]$df_fam
+
+ggpedigree(df,
+  verbose = FALSE, personID = "ID",
+  config = list(
+    code_male = 0
+  )
 )
 ```
 
