@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">BGmisc</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.3.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -584,8 +584,7 @@ values.</p>
 one representative family. For this example, we select the first family
 in the dataset.</p>
 <p><img src="v3_analyticrelatedness_files/figure-html/unnamed-chunk-22-1.png" width="700"></p>
-<pre><code><span><span class="co">#&gt; named list()</span></span></code></pre>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># pull the first family from the list</span></span>
 <span><span class="va">fam1</span> <span class="op">&lt;-</span> <span class="va">inbreeding_list</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
 <span></span>
@@ -597,7 +596,7 @@ in the dataset.</p>
 <span>  col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/corrplot/man/COL1.html" class="external-link">COL1</a></span><span class="op">(</span><span class="st">"Reds"</span>, <span class="fl">100</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">0</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p><img src="v3_analyticrelatedness_files/figure-html/unnamed-chunk-23-1.png" width="700"></p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/corrplot/man/corrplot.html" class="external-link">corrplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">fam1</span><span class="op">$</span><span class="va">ped_add_classic_mom</span><span class="op">)</span>,</span>
 <span>  method <span class="op">=</span> <span class="st">"color"</span>, type <span class="op">=</span> <span class="st">"lower"</span>, col.lim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,</span>
@@ -607,7 +606,7 @@ in the dataset.</p>
 <span>  col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/corrplot/man/COL1.html" class="external-link">COL1</a></span><span class="op">(</span><span class="st">"Reds"</span>, <span class="fl">100</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">0</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p><img src="v3_analyticrelatedness_files/figure-html/unnamed-chunk-23-2.png" width="700"></p>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/corrplot/man/corrplot.html" class="external-link">corrplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">fam1</span><span class="op">$</span><span class="va">ped_add_partial_mom</span><span class="op">)</span>,</span>
 <span>  method <span class="op">=</span> <span class="st">"color"</span>, type <span class="op">=</span> <span class="st">"lower"</span>, col.lim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,</span>
@@ -617,7 +616,7 @@ in the dataset.</p>
 <span>  col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/corrplot/man/COL1.html" class="external-link">COL1</a></span><span class="op">(</span><span class="st">"Reds"</span>, <span class="fl">100</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">0</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p><img src="v3_analyticrelatedness_files/figure-html/unnamed-chunk-23-3.png" width="700"></p>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/corrplot/man/corrplot.html" class="external-link">corrplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">fam1</span><span class="op">$</span><span class="va">ped_add_classic_dad</span><span class="op">)</span>,</span>
 <span>  method <span class="op">=</span> <span class="st">"color"</span>, type <span class="op">=</span> <span class="st">"lower"</span>, col.lim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,</span>
@@ -627,7 +626,7 @@ in the dataset.</p>
 <span>  col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/corrplot/man/COL1.html" class="external-link">COL1</a></span><span class="op">(</span><span class="st">"Reds"</span>, <span class="fl">100</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">0</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p><img src="v3_analyticrelatedness_files/figure-html/unnamed-chunk-23-4.png" width="700"></p>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/corrplot/man/corrplot.html" class="external-link">corrplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">fam1</span><span class="op">$</span><span class="va">ped_add_partial_dad</span><span class="op">)</span>,</span>
 <span>  method <span class="op">=</span> <span class="st">"color"</span>, type <span class="op">=</span> <span class="st">"lower"</span>, col.lim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,</span>
@@ -638,7 +637,7 @@ in the dataset.</p>
 <span><span class="op">)</span></span></code></pre></div>
 <p><img src="v3_analyticrelatedness_files/figure-html/unnamed-chunk-23-5.png" width="700"></p>
 <p>To visualize the differences from the true matrix:</p>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/corrplot/man/corrplot.html" class="external-link">corrplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">fam1</span><span class="op">$</span><span class="va">ped_add_classic_complete</span> <span class="op">-</span> <span class="va">fam1</span><span class="op">$</span><span class="va">ped_add_classic_mom</span><span class="op">)</span>,</span>
 <span>  method <span class="op">=</span> <span class="st">"color"</span>, type <span class="op">=</span> <span class="st">"lower"</span>, col.lim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,</span>
 <span>  is.corr <span class="op">=</span> <span class="cn">FALSE</span>, title <span class="op">=</span> <span class="st">"Classic Mom Diff from Complete"</span>,</span>
@@ -647,7 +646,7 @@ in the dataset.</p>
 <span>  col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/corrplot/man/COL1.html" class="external-link">COL1</a></span><span class="op">(</span><span class="st">"Reds"</span>, <span class="fl">100</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">0</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p><img src="v3_analyticrelatedness_files/figure-html/unnamed-chunk-24-1.png" width="700"></p>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/corrplot/man/corrplot.html" class="external-link">corrplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">fam1</span><span class="op">$</span><span class="va">ped_add_classic_complete</span> <span class="op">-</span> <span class="va">fam1</span><span class="op">$</span><span class="va">ped_add_partial_mom</span><span class="op">)</span>,</span>
 <span>  method <span class="op">=</span> <span class="st">"color"</span>, type <span class="op">=</span> <span class="st">"lower"</span>, col.lim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,</span>
@@ -657,7 +656,7 @@ in the dataset.</p>
 <span>  col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/corrplot/man/COL1.html" class="external-link">COL1</a></span><span class="op">(</span><span class="st">"Reds"</span>, <span class="fl">100</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">0</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p><img src="v3_analyticrelatedness_files/figure-html/unnamed-chunk-24-2.png" width="700"></p>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/corrplot/man/corrplot.html" class="external-link">corrplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">fam1</span><span class="op">$</span><span class="va">ped_add_classic_complete</span> <span class="op">-</span> <span class="va">fam1</span><span class="op">$</span><span class="va">ped_add_classic_dad</span><span class="op">)</span>,</span>
 <span>  method <span class="op">=</span> <span class="st">"color"</span>, type <span class="op">=</span> <span class="st">"lower"</span>, col.lim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,</span>
@@ -667,7 +666,7 @@ in the dataset.</p>
 <span>  col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/corrplot/man/COL1.html" class="external-link">COL1</a></span><span class="op">(</span><span class="st">"Reds"</span>, <span class="fl">100</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">0</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p><img src="v3_analyticrelatedness_files/figure-html/unnamed-chunk-24-3.png" width="700"></p>
-<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/corrplot/man/corrplot.html" class="external-link">corrplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">fam1</span><span class="op">$</span><span class="va">ped_add_classic_complete</span> <span class="op">-</span> <span class="va">fam1</span><span class="op">$</span><span class="va">ped_add_partial_dad</span><span class="op">)</span>,</span>
 <span>  method <span class="op">=</span> <span class="st">"color"</span>, type <span class="op">=</span> <span class="st">"lower"</span>, col.lim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,</span>
@@ -694,13 +693,13 @@ either a mother or a father is missing.</p>
 <p>To make this explicit, we calculate the RMSE difference between
 methods. A positive value means that the partial method had lower RMSE
 (i.e., better accuracy) than the classic method:</p>
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">results</span><span class="op">$</span><span class="va">RMSE_diff_dad</span> <span class="op">&lt;-</span> <span class="va">results</span><span class="op">$</span><span class="va">RMSE_classic_dad</span> <span class="op">-</span> <span class="va">results</span><span class="op">$</span><span class="va">RMSE_partial_dad</span></span>
 <span><span class="va">results</span><span class="op">$</span><span class="va">RMSE_diff_mom</span> <span class="op">&lt;-</span> <span class="va">results</span><span class="op">$</span><span class="va">RMSE_classic_mom</span> <span class="op">-</span> <span class="va">results</span><span class="op">$</span><span class="va">RMSE_partial_mom</span></span></code></pre></div>
 <p>We can then summarize the pattern across families:</p>
-<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">results</span>, <span class="va">RMSE_diff_mom</span>, <span class="va">RMSE_diff_dad</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;  RMSE_diff_mom      RMSE_diff_dad     </span></span>
 <span><span class="co">#&gt;  Min.   :0.001222   Min.   :0.001222  </span></span>
@@ -715,7 +714,7 @@ method produces larger the errors relative to the partial method. This
 holds regardless of whether the missing parent is a mother or a
 father.</p>
 <p>To verify this directly:</p>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">results</span><span class="op">$</span><span class="va">RMSE_diff_mom</span> <span class="op">&gt;</span> <span class="fl">0</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 1</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">results</span><span class="op">$</span><span class="va">RMSE_diff_dad</span> <span class="op">&gt;</span> <span class="fl">0</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
@@ -724,7 +723,7 @@ father.</p>
 RMSE across the dataset. This confirms the earlier findings: when
 pedigree data are incomplete, the partial parent method more faithfully
 reconstructs the full-data relatedness matrix.</p>
-<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">results</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span></span>
