@@ -101,6 +101,7 @@ df <- ped2fam(ASOIAF, personID = "personID") %>%
   mutate(
     zygosity = case_when(
       personID %in% c(164, 165) ~ "dz", # Jaime Lannister
+
       !is.na(twinID) ~ "unknown",
       TRUE ~ NA_character_
     )
@@ -542,11 +543,32 @@ df <- df %>%
   addPersonToPed(
     name = "Kiera of Tyrosh", sex = "F",
     personID = 600, momID = NA, dadID = NA
-  ) #%>%
-#  addPersonToPed(
-#    name = "", sex = "F",
- #   personID = 601, momID = NA, dadID = NA
-#  )
+  ) %>%
+  addPersonToPed(
+    name = "Aerea Targaryen", sex = "F",
+    personID = 601, momID = 596, dadID = 597,
+    twinID = 602, zygosity = "mz"
+ ) %>%
+  addPersonToPed(
+    name = "Rhaella Targaryen (daughter of Aegon)", sex = "F",
+    personID = 602, momID = 596, dadID = 597,
+    twinID = 601, zygosity = "mz"
+  )  %>%
+  addPersonToPed(
+    name = "Erryk Cargyll", sex = "M",
+    personID = 603, momID = 605, dadID = 606,
+    twinID = 604, zygosity = "mz"
+  )  %>%   addPersonToPed(
+    name = "Arryk Cargyll", sex = "M",
+    personID = 604, momID = 605, dadID = 606,
+    twinID = 603, zygosity = "mz"
+  )  %>%  addPersonToPed(
+    name = "Father Cargyll", sex = "M",
+    personID = 606, momID = NA, dadID = NA
+  )  %>%   addPersonToPed(
+    name = "Mother Cargyll", sex = "F",
+    personID = 605, momID = NA, dadID = NA
+  )
 
 # modify existing people
 df <- df %>%

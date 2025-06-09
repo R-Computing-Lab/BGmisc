@@ -198,7 +198,7 @@ plt <- ggPedigree(df_repaired_renamed,
   interactive = TRUE,
   config = list(
     status_unaffected_lab = 0,
-    point_size = .5,
+    point_size = .75,
     code_male = "M",
     status_affected_lab = 1,
     affected_shape = 4,
@@ -210,16 +210,23 @@ plt <- ggPedigree(df_repaired_renamed,
     label_method = "geom_text",
     #segment_self_color = "purple",
     sex_color_include = FALSE,
-    focal_fill_personID = 339,#353,
+    focal_fill_personID = 353, #339,#353,
     focal_fill_include = TRUE,
     tooltip_columns = c( "personID","name", "focal_fill"),
     focal_fill_force_zero = TRUE,
     focal_fill_mid_color = "orange",
     focal_fill_low_color = "#9F2A63FF",
-    focal_fill_na_value = "black"
+    focal_fill_na_value = "black",
+    value_rounding_digits = 4
 ))
 
-plt # +
- # theme(legend.position = "none") +
-#  labs(title = "ASOIAF Pedigree: Jon Snow and Daenerys Targaryen")
+# reduce file size for CRAN
+if (interactive()) {
+  # If running interactively, use plotly::partial_bundle
+  # to reduce file size for CRAN
+  plotly::partial_bundle(plt)
+} else {
+  plotly::partial_bundle(plt, local = TRUE)
+}
 ```
+

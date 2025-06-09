@@ -599,3 +599,9 @@ id,famID,momID,dadID,name,sex,twinID,zygosity
 598,6,510,352,Viserys Targaryen (son of Aenys I),M,NA,NA
 599,6,510,352,Vaella Targaryen,F,NA,NA
 600,6,NA,NA,Kiera of Tyrosh,F,NA,NA
+601,6,596,597,Aerea Targaryen,F,602,mz
+602,6,596,597,Rhaella Targaryen (daughter of Aegon),F,601,mz
+603,28,605,606,Erryk Cargyll,M,604,mz
+604,28,605,606,Arryk Cargyll,M,603,mz
+605,28,NA,NA,Mother Cargyll,F,NA,NA
+606,28,NA,NA,Father Cargyll,M,NA,NA
