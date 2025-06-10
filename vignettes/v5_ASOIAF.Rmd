@@ -124,7 +124,7 @@ We can then filter the pairwise relatedness table to isolate the dyad of interes
 jon_dany_row <- df_links %>%
   filter(ID1 == jon_id | ID2 == jon_id) %>%
   filter(ID1 %in% dany_id | ID2 %in% dany_id) %>% # round to nearest 4th decimal
-  mutate(across(c(addRel, mitRel, cnRel), ~ round(.x, 4)))
+  mutate(across(c(addRel, mitRel, cnuRel), ~ round(.x, 4)))
 
 jon_dany_row
 ```
@@ -145,7 +145,7 @@ daemon_id <- df_got %>%
 rhaenyra_daemon_row <- df_links %>% 
   filter(ID1 == rhaenyra_id | ID2 == rhaenyra_id) %>%
   filter(ID1 %in% daemon_id | ID2 %in% daemon_id) %>% # round to nearest 4th decimal
-  mutate(across(c(addRel, mitRel, cnRel), ~ round(.x, 4)))
+  mutate(across(c(addRel, mitRel, cnuRel), ~ round(.x, 4)))
 
 rhaenyra_daemon_row
 ```
