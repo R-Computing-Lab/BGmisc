@@ -87,19 +87,22 @@ the minimum, median, and maximum values.}
 A data.frame (or list) containing summary statistics for family, maternal, and paternal lines, as well as the 5 oldest and biggest lines.
 }
 \description{
-This function summarizes pedigree data, by
-computing key summary statistics for all numeric variables and identifying the
-originating member (founder) for each family, maternal, and paternal lineage.
+This function summarizes pedigree data, by computing key summary statistics
+for all numeric variables and identifying the originating member (founder)
+for each family, maternal, and paternal lineage.
 }
 \details{
-The function calculates standard descriptive statistics, including the count of individuals in
-each lineage, means, medians, minimum and maximum values, and standard deviations.
-Additionally, if `five_num_summary = TRUE`, the function includes the first and third quartiles (Q1, Q3)
-to provide a more detailed distributional summary. Users can also specify variables to exclude from
-the analysis via `skip_var`.
+The function calculates standard descriptive statistics, including the count
+of individuals in each lineage, means, medians, minimum and maximum values,
+and standard deviations.
+Additionally, if `five_num_summary = TRUE`, the function includes the first
+and third quartiles (Q1, Q3) to provide a more detailed distributional
+summary. Users can also specify variables to exclude from the analysis via
+`skip_var`.
 
-Beyond summary statistics, the function identifies the founding member of each lineage
-based on the specified sorting variable (`founder_sort_var`), defaulting to birth year (`byr`)
-when available or `personID` otherwise. Users can retrieve the largest and oldest
-lineages by setting `nbiggest` and `noldest`, respectively.
+Beyond summary statistics, the function identifies the founding member of
+each lineage based on the specified sorting variable (`founder_sort_var`),
+defaulting to birth year (`byr`) when available or `personID` otherwise.
+Users can retrieve the largest and oldest lineages by setting `nbiggest`
+and `noldest`, respectively.
 }

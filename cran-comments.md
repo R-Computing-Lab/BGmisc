@@ -1,19 +1,9 @@
 
 # Description
 
-This update includes several enhancements and bug fixes to the BGmisc package, improving its functionality and usability for behavior genetics analysis. The key changes include:
-- **New Features**: 
-  - Added `calculateCIs` function for computing confidence intervals for correlation coefficients.
-  - Introduced `addPhantomParents` function to handle phantom parents more efficiently.
-  - Added aliases for mitochondrial-related terms (`mtdna`, `mitochondria`).
-- **Performance Improvements**:
-  - Refactored `addPhantomParents` for better efficiency.
-  - Optimized the `com2links`, `summarizePedigree`, and `checkIDs` functions to reduce complexity.
-- **Documentation and Testing**:
-  - Updated documentation to reflect new features and improvements.
-  - Added comprehensive tests for the `calculateCIs` function and other new features.
-  - Reorganized unit tests for better structure and clarity.
+This update includes minor enhancements, a major update to the ASOIAF dataset, and rewritten vignettes to use ggpedigree.
 
+I am also moving the lone plotting function from BGmisc to ggpedigree package. I maintain both packages. As promised, now that the ggpedigree package update is on CRAN, I am uploading the new version of BGmisc that does not include the plotting function. 
 
 # Test Environments
 
