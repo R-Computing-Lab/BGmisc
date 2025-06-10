@@ -28,6 +28,7 @@ df <- ped2fam(ASOIAF, personID = "personID") %>%
     momID = as.numeric(momID),
     dadID = as.numeric(dadID),
     name = case_when(
+      personID == 274 ~ "Lord Uller",
       personID == 322 ~ "Daenaera Velaryon",
       name == "Naerys " ~ "Naerys Targaryen",
       name == "Rhaenyra " ~ "Rhaenyra Targaryen",
@@ -101,7 +102,6 @@ df <- ped2fam(ASOIAF, personID = "personID") %>%
   mutate(
     zygosity = case_when(
       personID %in% c(164, 165) ~ "dz", # Jaime Lannister
-
       !is.na(twinID) ~ "unknown",
       TRUE ~ NA_character_
     )
@@ -441,7 +441,7 @@ df <- df %>%
   ) %>%
   addPersonToPed(
     name = "Beron Stark", sex = "M",
-    personID = 575, momID = NA, dadID = NA
+    personID = 575, momID = 607, dadID = 606
   ) %>%
   addPersonToPed(
     name = "Lorra Royce", sex = "F",
@@ -568,7 +568,26 @@ df <- df %>%
   )  %>%   addPersonToPed(
     name = "Mother Cargyll", sex = "F",
     personID = 605, momID = NA, dadID = NA
+  ) %>% addPersonToPed(
+    name = "Brandon Stark (son of Cregan)", sex = "M",
+    personID = 606, momID = 608, dadID = 609
+  ) %>% addPersonToPed(
+    name = "Alys Karstark (wife of Brandon)", sex = "F",
+    personID = 607, momID = NA, dadID = NA
+  ) %>% addPersonToPed(
+    name = "Lynara Stark", sex = "F",
+    personID = 608, momID = NA, dadID = NA
+  )  %>% addPersonToPed(
+    name = "Cregan Stark", sex = "M",
+    personID = 609, momID = 611, dadID = 610
+  )  %>% addPersonToPed(
+    name = "Rickon Stark (son of Benjen)", sex = "M",
+    personID = 610, momID = NA, dadID = NA
+  )  %>% addPersonToPed(
+    name = "Gilliane Glover", sex = "F",
+    personID = 611, momID = NA, dadID = NA
   )
+
 
 # modify existing people
 df <- df %>%
@@ -579,6 +598,7 @@ df <- df %>%
       personID == 328 ~ "F",
       personID == 329 ~ "F",
       personID == 330 ~ "F",
+      personID ==  274 ~ "M",
       TRUE ~ sex
     ),
     momID = case_when(
@@ -621,17 +641,18 @@ df <- df %>%
       personID == 306 ~ 339, #  Viserys II's mother is Rhaenyra Targaryen
       personID %in% c(351,350) ~ 510, # Alysanne Targaryen's mom is Alyssa Velaryon
       personID %in% c(
-        283, # # 	Dyanna Dayne is mother of Daeron Targaryen (son of Maekar I)
+        283, # # Daeron Targaryen (son of Maekar I)
         287, #  Aemon Targaryen (son of Maekar I)
         285, # Aerion (son of Maekar) Targaryen
-        288
-      ) ~ 516, #  Rhae Targaryen
+        288 #  Rhae Targaryen
+      ) ~ 516,  #	Dyanna Dayne is mother of
       personID %in% c(226, 232, 231) ~ 538, # kids of  Jasper
       personID == 1 ~ 566, # Walder Frey's mother
       personID == 284 ~ 600,
       TRUE ~ momID
     ),
     dadID = case_when(
+      personID %in% c(273,275) ~ 274,
       personID %in% c(207, 260:263) ~ 595,
       personID == 465 ~ 575, # Beron Stark
       personID == 291 ~ 568, # Myriah Martell's mother is the Father of Maron Martell

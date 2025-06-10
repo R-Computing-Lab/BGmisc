@@ -201,7 +201,6 @@ As we can see, the repaired pedigree now has unique IDs for all individuals, and
 
 ## Visualize the Pedigree
 
-### Visualize the Pedigree with `ggPedigree()`
 
 We can now visualize the repaired pedigree using the `ggPedigree()` function  from {ggpedigree}. This function generates a plot of the pedigree, with individuals colored based on their affected status. In this case, we highlight Jon and Daenerys as "affected" individuals. Otherwise they would be difficult to distinguish from the rest of the pedigree. To make the plot more informative, we also fill every member of the tree by how related they are to Rhaenyra Targaryen, who is the focal individual in this case.
 
