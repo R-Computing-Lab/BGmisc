@@ -174,8 +174,8 @@ df_repaired <- checkParentIDs(df_got,
 ) %>% mutate(
   # famID = 1,
   affected = case_when(
-    ID %in% c(jon_id, dany_id, "365") ~ 1,
-    TRUE ~ 0
+    ID %in% c(jon_id, dany_id, "365") ~ T,
+    TRUE ~ F
   )
 )
 ```
@@ -184,16 +184,22 @@ This code creates new IDs for individuals with one known parent and a missing ot
 
 ```{r}
 
-checkIDs(df_repaired)
+checkIDs <- checkIDs(df_repaired, verbose = TRUE)
+
+#checkIDs
+```
 
 
+```{r}
 # Check for unique IDs and parent-child relationships
-checkPedigreeNetwork(df_repaired,
+checkPedigreeNetwork<- checkPedigreeNetwork(df_repaired,
   personID = "ID",
   momID = "momID",
   dadID = "dadID",
-  verbose = FALSE
+  verbose = TRUE
 )
+
+checkPedigreeNetwork
 ```
 
 As we can see, the repaired pedigree now has unique IDs for all individuals, and the parent-child relationships are intact. The function `checkIDs()` confirms that all IDs are unique, while `checkPedigreeNetwork()` verifies that there are no structural issues like individuals with more than two parents or cyclic relationships.
@@ -210,7 +216,8 @@ This function provides a more flexible and customizable way to visualize pedigre
 ```{r eval=FALSE, fig.height=8, fig.width=10, message=FALSE, warning=FALSE, include=FALSE}
 plotPedigree(df_repaired %>% mutate(
   famID = 1
-), affected = df_repaired$affected, verbose = FALSE)
+), affected = df_repaired$affected, 
+verbose = FALSE)
 ```
 
 
@@ -220,21 +227,17 @@ library(ggpedigree)
 df_repaired_renamed <- df_repaired %>% rename(
   personID = ID
 )
-plt <- ggPedigree(df_repaired_renamed,
-  status_col = "affected",
+plt <- ggpedigree(df_repaired_renamed,
+  overlay_column = "affected",
   personID = "personID",
   interactive = FALSE,
   config = list(
-    status_unaffected_lab = 0,
+   overlay_include = TRUE,
     point_size = .75,
     code_male = "M",
-    status_affected_lab = 1,
-    affected_shape = 4,
     ped_width = 14,
-    include_tooltips = TRUE,
     label_nudge_y = -.25,
     include_labels = TRUE,
-    tooltip_include = TRUE,
     label_method = "geom_text",
     #segment_self_color = "purple",
     sex_color_include = FALSE,
@@ -244,6 +247,7 @@ plt <- ggPedigree(df_repaired_renamed,
     focal_fill_force_zero = TRUE,
     focal_fill_mid_color = "orange",
     focal_fill_low_color = "#9F2A63FF",
+    focal_fill_legend_title = "Relatedness to \nRhaenyra Targaryen",
     focal_fill_na_value = "black",
     value_rounding_digits = 4
 ))
