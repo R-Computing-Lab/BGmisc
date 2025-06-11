@@ -28,6 +28,8 @@ df <- ped2fam(ASOIAF, personID = "personID") %>%
     momID = as.numeric(momID),
     dadID = as.numeric(dadID),
     name = case_when(
+      personID ==393 ~ "Lord Tyrell",
+      personID == 86 ~  "Mariya Darry",
       personID == 274 ~ "Lord Uller",
       personID == 322 ~ "Daenaera Velaryon",
       name == "Naerys " ~ "Naerys Targaryen",
@@ -77,6 +79,7 @@ df <- ped2fam(ASOIAF, personID = "personID") %>%
       personID %in% c(300:301) ~ "Stillborn Targaryen",
       personID == 284 ~ "Vaella Targaryen",
       personID == 499  ~ "Ormund Baratheon",
+      personID == 425 ~ "Lord High Tower",
       TRUE ~ name
     ),
     twinID = case_match(name,
@@ -586,7 +589,13 @@ df <- df %>%
   )  %>% addPersonToPed(
     name = "Gilliane Glover", sex = "F",
     personID = 611, momID = NA, dadID = NA
-  )
+  ) %>%  addPersonToPed(
+    name = "Raymar Royce", sex = "M",
+    personID = 612, momID = NA, dadID = NA) %>%
+  addPersonToPed(
+    name = "Mother of Luthor Tyrell", sex = "F",
+    personID = 613, momID = NA, dadID = NA)
+
 
 
 # modify existing people
@@ -602,6 +611,7 @@ df <- df %>%
       TRUE ~ sex
     ),
     momID = case_when(
+      personID %in% c(385,384,383,380) ~ 613,
       personID %in% c(300:301) ~ 600,
       personID %in% c(281) ~ 517,
       personID %in% c(310) ~ 591,
@@ -652,6 +662,7 @@ df <- df %>%
       TRUE ~ momID
     ),
     dadID = case_when(
+      personID == 470 ~ 612, # Raymar Royce
       personID %in% c(273,275) ~ 274,
       personID %in% c(207, 260:263) ~ 595,
       personID == 465 ~ 575, # Beron Stark
@@ -726,3 +737,11 @@ if (checkis_acyclic$is_acyclic) {
 } else {
   message("The pedigree contains cyclic relationships.")
 }
+
+ASOIAF %>% filter(is.na(momID) & is.na(dadID)) %>%
+  select(id, name, famID, momID, dadID, sex) %>%
+  mutate(
+    first_name = str_extract(name, "^[^ ]+"),
+    last_name = str_extract(name, "[^ ]+$"),
+  ) %>%
+  arrange(last_name,id)
