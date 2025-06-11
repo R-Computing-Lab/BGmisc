@@ -12,7 +12,7 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-options(rmarkdown.html_vignette.check_title = FALSE)
+#options(rmarkdown.html_vignette.check_title = FALSE)
 ```
 
 # Introduction
@@ -610,4 +610,4 @@ results |>
 
 
 
-
+This summary provides an overview of the RMSE values for each method across families, highlighting the consistent advantage of the partial parent method in reconstructing relatedness when parental data are missing.

@@ -28,6 +28,7 @@ df <- ped2fam(ASOIAF, personID = "personID") %>%
     momID = as.numeric(momID),
     dadID = as.numeric(dadID),
     name = case_when(
+      personID == 274 ~ "Lord Uller",
       personID == 322 ~ "Daenaera Velaryon",
       name == "Naerys " ~ "Naerys Targaryen",
       name == "Rhaenyra " ~ "Rhaenyra Targaryen",
@@ -38,6 +39,7 @@ df <- ped2fam(ASOIAF, personID = "personID") %>%
       name == "Pate " ~ "Pate of the Blue Fork",
       name == "Mellario " ~ "Mellario of Norvos",
       personID == 289 ~ "Daella Targaryen (daughter of Maekar I)",
+      personID == 281 ~ "Daeron Targaryen (son of Aegon V)",
       personID == 201 ~ "Jaehaerys II Targaryen",
       personID == 482 ~ "Lord Dayne (father of Edric)", # https://awoiaf.westeros.org/index.php/Lord_Dayne_(father_of_Edric)
       personID == 202 ~ "Aerys II Targaryen",
@@ -72,6 +74,9 @@ df <- ped2fam(ASOIAF, personID = "personID") %>%
       personID == 180 ~ "Tywald Lannister",
       personID == 181 ~ "Tion Lannister",
       personID == 182 ~ "Jason Lannister",
+      personID %in% c(300:301) ~ "Stillborn Targaryen",
+      personID == 284 ~ "Vaella Targaryen",
+      personID == 499  ~ "Ormund Baratheon",
       TRUE ~ name
     ),
     twinID = case_match(name,
@@ -110,7 +115,7 @@ df <- df %>%
   ) %>%
   addPersonToPed(
     name = "Rodrik Arryn", sex = "M",
-    personID = 503, momID = NA, dadID = NA
+    personID = 503, momID = NA, dadID = 519
   ) %>%
   addPersonToPed(
     name = "Father of Princess of Dorne",
@@ -185,10 +190,10 @@ df <- df %>%
   ) %>%
   # https://awoiaf.westeros.org/index.php/Shaera_Targaryen
   addPersonToPed(
-    name = "Daeron Targaryen (son of Aegon V)",
-    sex = "M", personID = 519, momID = 517, dadID = 200
+    name = "Rymond Arryn",
+    sex = "M", personID = 519, momID = NA, dadID = NA
   ) %>%
-  # https://awoiaf.westeros.org/index.php/Daeron_Targaryen_(son_of_Aegon_V)
+  # https://awoiaf.westeros.org/index.php/Rymond_Arryn
   addPersonToPed(
     name = "Marilda of Hull",
     sex = "F", personID = 520, momID = NA, dadID = NA
@@ -291,7 +296,7 @@ df <- df %>%
     sex = "M", personID = 540, momID = 541, dadID = 539
   ) %>%
   addPersonToPed(
-    name = "wife of Otto Hightower",
+    name = "Wife of Otto Hightower",
     sex = "F", personID = 541, momID = NA, dadID = NA
   ) %>%
   addPersonToPed(
@@ -436,7 +441,7 @@ df <- df %>%
   ) %>%
   addPersonToPed(
     name = "Beron Stark", sex = "M",
-    personID = 575, momID = NA, dadID = NA
+    personID = 575, momID = 607, dadID = 606
   ) %>%
   addPersonToPed(
     name = "Lorra Royce", sex = "F",
@@ -468,46 +473,120 @@ df <- df %>%
   ) %>%
   addPersonToPed(
     name = "Wife of Andros Brax", sex = "F",
-    personID = 583, momID=NA, dadID=NA
+    personID = 583, momID = NA, dadID = NA
   ) %>%
   addPersonToPed(
     name = "Jeyne Marbrand", sex = "F",
-    personID = 584, momID=NA, dadID=NA) %>%
+    personID = 584, momID = NA, dadID = NA
+  ) %>%
   addPersonToPed(
     name = "Rohanne Webber", sex = "F",
-    personID = 585, momID=NA, dadID=NA) %>%
+    personID = 585, momID = NA, dadID = NA
+  ) %>%
   addPersonToPed(
     name = "Marla Prester", sex = "F",
-    personID = 586, momID=NA, dadID=NA) %>%
+    personID = 586, momID = NA, dadID = NA
+  ) %>%
   addPersonToPed(
     name = "Alys Stackspear", sex = "F",
-    personID = 587, momID=NA, dadID=NA) %>%
+    personID = 587, momID = NA, dadID = NA
+  ) %>%
   addPersonToPed(
     name = "Damon Lannister", sex = "M",
-    personID = 588, momID=587, dadID=182) %>%
+    personID = 588, momID = 587, dadID = 182
+  ) %>%
   addPersonToPed(
-    name= "Jena Dondarrion",  sex = "F",
-    personID = 589, momID=NA, dadID=NA) %>%
+    name = "Jena Dondarrion", sex = "F",
+    personID = 589, momID = NA, dadID = NA
+  ) %>%
   addPersonToPed(
-    name= "Wife of Aerys",  sex = "F",
-    personID = 590, momID=NA, dadID=NA)%>%
+    name = "Wife of Aerys", sex = "F",
+    personID = 590, momID = NA, dadID = NA
+  ) %>%
   addPersonToPed(
-    name= "Melissa Blackwood",  sex = "F",
-    personID = 591, momID=NA, dadID=NA)%>%
+    name = "Melissa Blackwood", sex = "F",
+    personID = 591, momID = NA, dadID = NA
+  ) %>%
   addPersonToPed(
-    name= "Gwenys Rivers",  sex = "F",
-    personID = 592, momID=591, dadID=302)%>%
+    name = "Gwenys Rivers", sex = "F",
+    personID = 592, momID = 591, dadID = 302
+  ) %>%
   addPersonToPed(
-    name= "Mya Rivers",  sex = "F",
-    personID = 593, momID=591, dadID=302) %>%
+    name = "Mya Rivers", sex = "F",
+    personID = 593, momID = 591, dadID = 302
+  ) %>%
   addPersonToPed(
     name = "Stillborn Twin Targaryen", sex = "M",
     personID = 594, momID = 303, dadID = 302,
-    twinID = 304, zygosity = "dz") %>%
+    twinID = 304, zygosity = "dz"
+  ) %>%
   addPersonToPed(
-    name = "Consort of Dorne (Father of Doran Martell)",sex = "M",
-    personID = 595, momID = NA, dadID = NA)
-
+    name = "Consort of Dorne (Father of Doran Martell)", sex = "M",
+    personID = 595, momID = NA, dadID = NA
+  ) %>%
+  addPersonToPed(
+    name = "Rhaena Targaryen (daughter of Aenys I)", sex = "F",
+    personID = 596, momID = 510, dadID = 352
+  ) %>%
+  addPersonToPed(
+    name = "Aegon Targaryen (son of Aenys I)", sex = "M",
+    personID = 597, momID = 510, dadID = 352
+  ) %>%
+  addPersonToPed(
+    name = "Viserys Targaryen (son of Aenys I)", sex = "M",
+    personID = 598, momID = 510, dadID = 352
+  ) %>%
+  addPersonToPed(
+    name = "Vaella Targaryen", sex = "F",
+    personID = 599, momID = 510, dadID = 352
+  ) %>%
+  addPersonToPed(
+    name = "Kiera of Tyrosh", sex = "F",
+    personID = 600, momID = NA, dadID = NA
+  ) %>%
+  addPersonToPed(
+    name = "Aerea Targaryen", sex = "F",
+    personID = 601, momID = 596, dadID = 597,
+    twinID = 602, zygosity = "mz"
+ ) %>%
+  addPersonToPed(
+    name = "Rhaella Targaryen (daughter of Aegon)", sex = "F",
+    personID = 602, momID = 596, dadID = 597,
+    twinID = 601, zygosity = "mz"
+  )  %>%
+  addPersonToPed(
+    name = "Erryk Cargyll", sex = "M",
+    personID = 603, momID = 605, dadID = 606,
+    twinID = 604, zygosity = "mz"
+  )  %>%   addPersonToPed(
+    name = "Arryk Cargyll", sex = "M",
+    personID = 604, momID = 605, dadID = 606,
+    twinID = 603, zygosity = "mz"
+  )  %>%  addPersonToPed(
+    name = "Father Cargyll", sex = "M",
+    personID = 606, momID = NA, dadID = NA
+  )  %>%   addPersonToPed(
+    name = "Mother Cargyll", sex = "F",
+    personID = 605, momID = NA, dadID = NA
+  ) %>% addPersonToPed(
+    name = "Brandon Stark (son of Cregan)", sex = "M",
+    personID = 606, momID = 608, dadID = 609
+  ) %>% addPersonToPed(
+    name = "Alys Karstark (wife of Brandon)", sex = "F",
+    personID = 607, momID = NA, dadID = NA
+  ) %>% addPersonToPed(
+    name = "Lynara Stark", sex = "F",
+    personID = 608, momID = NA, dadID = NA
+  )  %>% addPersonToPed(
+    name = "Cregan Stark", sex = "M",
+    personID = 609, momID = 611, dadID = 610
+  )  %>% addPersonToPed(
+    name = "Rickon Stark (son of Benjen)", sex = "M",
+    personID = 610, momID = NA, dadID = NA
+  )  %>% addPersonToPed(
+    name = "Gilliane Glover", sex = "F",
+    personID = 611, momID = NA, dadID = NA
+  )
 
 
 # modify existing people
@@ -519,22 +598,24 @@ df <- df %>%
       personID == 328 ~ "F",
       personID == 329 ~ "F",
       personID == 330 ~ "F",
+      personID ==  274 ~ "M",
       TRUE ~ sex
     ),
     momID = case_when(
+      personID %in% c(300:301) ~ 600,
+      personID %in% c(281) ~ 517,
       personID %in% c(310) ~ 591,
-      personID %in% c(364,366,367) ~ 590,
+      personID %in% c(364, 366, 367) ~ 590,
       personID %in% c(298:299) ~ 589, # Jena Dondarrion
-      personID %in% c(163,183) ~ 586,
-      personID %in% c(158,180,181,182) ~ 585, #Rohanne Webber
-      personID %in% c(28,159:162) ~ 584,  # Jeyne Marbrand is mother of Tywin Lannisteretc
-      personID %in% c(154,155,121) ~ 583, # all the braxes share the same mother
+      personID %in% c(163, 183) ~ 586,
+      personID %in% c(158, 180, 181, 182) ~ 585, # Rohanne Webber
+      personID %in% c(28, 159:162) ~ 584, # Jeyne Marbrand is mother of Tywin Lannisteretc
+      personID %in% c(154, 155, 121) ~ 583, # all the braxes share the same mother
       personID == 465 ~ 576, # Lorra Royce
       personID == 466 ~ 574, # Lyanne Glover is the mother of Brandon Stark
       personID == 468 ~ 572, # Arya Flint's is the Mother of Lyarra Stark
       personID %in% c(222, 256) ~ 570,
       personID == 212 ~ 571, # Marna Locke is the mother of Rickard Stark
-
       personID == 291 ~ 567, # Myriah Martell's mother is the Mother of Maron Martell
       personID == 309 ~ 563, # Barba Bracken is the mother of Aegor Rivers
       personID %in% c(313:319) ~ 560, # Blackfyres
@@ -558,19 +639,21 @@ df <- df %>%
       personID == 333 ~ 520, # Alyn Velaryon's mother is Marilda of Hull
       personID == 322 ~ 535, # Daenaera Velaryon's mother is Hazel Harte
       personID == 306 ~ 339, #  Viserys II's mother is Rhaenyra Targaryen
-      personID == 351 ~ 510, # Alysanne Targaryen's mom is Alyssa Velaryon
+      personID %in% c(351,350) ~ 510, # Alysanne Targaryen's mom is Alyssa Velaryon
       personID %in% c(
-        283, # # 	Dyanna Dayne is mother of Daeron Targaryen (son of Maekar I)
+        283, # # Daeron Targaryen (son of Maekar I)
         287, #  Aemon Targaryen (son of Maekar I)
         285, # Aerion (son of Maekar) Targaryen
-        288
-      ) ~ 516, #  Rhae Targaryen
+        288 #  Rhae Targaryen
+      ) ~ 516,  #	Dyanna Dayne is mother of
       personID %in% c(226, 232, 231) ~ 538, # kids of  Jasper
       personID == 1 ~ 566, # Walder Frey's mother
+      personID == 284 ~ 600,
       TRUE ~ momID
     ),
     dadID = case_when(
-      personID %in% c(207,260:263) ~ 595,
+      personID %in% c(273,275) ~ 274,
+      personID %in% c(207, 260:263) ~ 595,
       personID == 465 ~ 575, # Beron Stark
       personID == 291 ~ 568, # Myriah Martell's mother is the Father of Maron Martell
       personID == 344 ~ 539, # Alicent Hightower's father is Otto Hightower
@@ -593,7 +676,7 @@ df <- df %>%
       personID == 304 ~ 594,
       TRUE ~ twinID
     )
-)
+  )
 
 
 

@@ -12,6 +12,8 @@ usable state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![R package
 version](https://www.r-pkg.org/badges/version/BGmisc)](https://cran.r-project.org/package=BGmisc)
+[![CRAN
+checks](https://badges.cranchecks.info/worst/BGmisc.svg)](https://cran.r-project.org/web/checks/check_results_BGmisc.html)
 [![Package
 downloads](https://cranlogs.r-pkg.org/badges/grand-total/BGmisc)](https://cran.r-project.org/package=BGmisc)</br>
 [![R-CMD-check](https://github.com/R-Computing-Lab/BGmisc/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/R-Computing-Lab/BGmisc/actions/workflows/R-CMD-check.yaml)

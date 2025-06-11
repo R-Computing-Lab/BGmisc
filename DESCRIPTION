@@ -42,7 +42,6 @@ Suggests:
     discord,
     dplyr,
     EasyMx,
-    dplyr,
     knitr,
     OpenMx,
     rmarkdown,

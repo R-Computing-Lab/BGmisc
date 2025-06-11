@@ -12,6 +12,7 @@ summarizeFounder(ped_dt, group_var, sort_var, foo_summary_dt, verbose)
 \item{verbose}{Logical, if TRUE, print progress messages.}
 }
 \description{
-This function summarizes the originating members for each line in a pedigree. It is supposed to be used internally by the \code{summarize_pedigree} function.
+This function summarizes the originating members for each line in a pedigree.
+It is supposed to be used internally by the \code{summarize_pedigree} function.
 }
 \keyword{internal}
