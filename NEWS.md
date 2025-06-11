@@ -1,6 +1,11 @@
-# BGmisc 1.4.3.1
-* Updated ASOIAF pedigree to reduce missing parents.
+# BGmisc 1.4.3.2
 * Slightly expanded vignettes to include more examples of the new features in BGmisc and ggpedigree.
+* Updated ASOIAF pedigree to reduce missing parents.
+* Added tests to check if data are acyclic
+
+# BGmisc 1.4.3.1
+## CRAN submission
+* Updated ASOIAF pedigree to reduce missing parents.
 
 # BGmisc 1.4.3
 * transferred plotPedigree to ggpedigree
