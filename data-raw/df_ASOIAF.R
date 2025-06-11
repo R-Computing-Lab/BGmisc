@@ -444,7 +444,7 @@ df <- df %>%
   ) %>%
   addPersonToPed(
     name = "Beron Stark", sex = "M",
-    personID = 575, momID = 607, dadID = 606
+    personID = 575, momID = 608, dadID = 607
   ) %>%
   addPersonToPed(
     name = "Lorra Royce", sex = "F",
@@ -565,37 +565,36 @@ df <- df %>%
     name = "Arryk Cargyll", sex = "M",
     personID = 604, momID = 605, dadID = 606,
     twinID = 603, zygosity = "mz"
-  )  %>%  addPersonToPed(
-    name = "Father Cargyll", sex = "M",
-    personID = 606, momID = NA, dadID = NA
   )  %>%   addPersonToPed(
     name = "Mother Cargyll", sex = "F",
     personID = 605, momID = NA, dadID = NA
   ) %>% addPersonToPed(
+    name = "Father Cargyll", sex = "M",
+    personID = 606, momID = NA, dadID = NA
+  )  %>%  addPersonToPed(
     name = "Brandon Stark (son of Cregan)", sex = "M",
-    personID = 606, momID = 608, dadID = 609
+    personID = 607, momID = 609, dadID = 610
   ) %>% addPersonToPed(
     name = "Alys Karstark (wife of Brandon)", sex = "F",
-    personID = 607, momID = NA, dadID = NA
+    personID = 608, momID = NA, dadID = NA
   ) %>% addPersonToPed(
     name = "Lynara Stark", sex = "F",
-    personID = 608, momID = NA, dadID = NA
+    personID = 609, momID = NA, dadID = NA
   )  %>% addPersonToPed(
     name = "Cregan Stark", sex = "M",
-    personID = 609, momID = 611, dadID = 610
+    personID = 610, momID = 612, dadID = 611
   )  %>% addPersonToPed(
     name = "Rickon Stark (son of Benjen)", sex = "M",
-    personID = 610, momID = NA, dadID = NA
+    personID = 611, momID = NA, dadID = NA
   )  %>% addPersonToPed(
     name = "Gilliane Glover", sex = "F",
-    personID = 611, momID = NA, dadID = NA
+    personID = 612, momID = NA, dadID = NA
   ) %>%  addPersonToPed(
     name = "Raymar Royce", sex = "M",
-    personID = 612, momID = NA, dadID = NA) %>%
+    personID = 613, momID = NA, dadID = NA) %>%
   addPersonToPed(
     name = "Mother of Luthor Tyrell", sex = "F",
-    personID = 613, momID = NA, dadID = NA)
-
+    personID = 614, momID = NA, dadID = NA)
 
 
 # modify existing people
@@ -611,7 +610,7 @@ df <- df %>%
       TRUE ~ sex
     ),
     momID = case_when(
-      personID %in% c(385,384,383,380) ~ 613,
+      personID %in% c(385,384,383,380) ~ 614,
       personID %in% c(300:301) ~ 600,
       personID %in% c(281) ~ 517,
       personID %in% c(310) ~ 591,
@@ -662,7 +661,7 @@ df <- df %>%
       TRUE ~ momID
     ),
     dadID = case_when(
-      personID == 470 ~ 612, # Raymar Royce
+      personID == 470 ~ 613, # Raymar Royce
       personID %in% c(273,275) ~ 274,
       personID %in% c(207, 260:263) ~ 595,
       personID == 465 ~ 575, # Beron Stark
@@ -712,7 +711,7 @@ ASOIAF <- df %>%
 df_repaired <- checkSex(ASOIAF,
   code_male = 1,
   code_female = 0,
-  verbose = FALSE, repair = TRUE
+  verbose = TRUE, repair = TRUE
 ) %>%
   checkParentIDs(
     addphantoms = TRUE,
@@ -723,6 +722,7 @@ df_repaired <- checkSex(ASOIAF,
 
 
 checkIDs(df_repaired)
+
 checkis_acyclic <- checkPedigreeNetwork(df_repaired,
   personID = "ID",
   momID = "momID",

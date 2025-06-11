@@ -573,7 +573,7 @@ id,famID,momID,dadID,name,sex,twinID,zygosity
 572,6,NA,NA,Arya Flint,F,NA,NA
 573,6,576,575,Rodrik Stark,M,NA,NA
 574,6,NA,NA,Lyanne Glover,F,NA,NA
-575,6,NA,NA,Beron Stark,M,NA,NA
+575,6,608,607,Beron Stark,M,NA,NA
 576,6,NA,NA,Lorra Royce,F,NA,NA
 577,6,576,575,Donnor Stark,M,NA,NA
 578,6,576,575,Artos Stark,M,NA,NA
@@ -605,3 +605,9 @@ id,famID,momID,dadID,name,sex,twinID,zygosity
 604,26,605,606,Arryk Cargyll,M,603,mz
 605,26,NA,NA,Mother Cargyll,F,NA,NA
 606,26,NA,NA,Father Cargyll,M,NA,NA
+607,6,609,610,Brandon Stark (son of Cregan),M,NA,NA
+608,6,NA,NA,Alys Karstark (wife of Brandon),F,NA,NA
+609,6,NA,NA,Lynara Stark,F,NA,NA
+610,6,612,611,Cregan Stark,M,NA,NA
+611,6,NA,NA,Rickon Stark (son of Benjen),M,NA,NA
+612,6,NA,NA,Gilliane Glover,F,NA,NA

@@ -182,6 +182,21 @@ test_that("summarizePedigrees() works for single-entry pedigree", {
   expect_equal(df_summarized$oldest_families$byr_mean, 1920)
 })
 
+# network check
+test_that("summarizePedigrees() works for network pedigree", {
+  df <- data.frame(
+    ID = 1:5,
+    momID = c(NA, 1, 1, NA, 4),
+    dadID = c(NA, 2, 2, NA, 5),
+    famID = c(1, 1, 1, 2, 2),
+    byr = c(1922, 1945, 1950, 1930, 1960)
+  )
+
+  df_summarized <- summarizePedigrees(df, byr = "byr", network_checks = TRUE)
+  expect_equal(nrow(df_summarized$family_summary), 2)
+  expect_equal(df_summarized$family_summary$byr_mean, c(1939, 1945))
+})
+
 # Test: summarizePedigrees is used when SummarisePedigrees
 test_that("SummarizePedigrees works like SummarisePedigrees", {
   df <- ped2fam(potter, famID = "newFamID", personID = "personID")
