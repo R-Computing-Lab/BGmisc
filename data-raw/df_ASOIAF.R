@@ -28,7 +28,7 @@ df <- ped2fam(ASOIAF, personID = "personID") %>%
     momID = as.numeric(momID),
     dadID = as.numeric(dadID),
     name = case_when(
-      personID ==393 ~ "Lord Tyrell",
+      personID == 393 ~ "Lord Tyrell",
       personID == 86 ~  "Mariya Darry",
       personID == 274 ~ "Lord Uller",
       personID == 322 ~ "Daenaera Velaryon",
