@@ -143,7 +143,7 @@ daemon_id <- df_got %>%
 
 rhaenyra_daemon_row <- df_links %>%
   filter(ID1 == rhaenyra_id | ID2 == rhaenyra_id) %>%
-  filter(ID1 %in% daemon_id | ID2 %in% daemon_id) %>% # round to nearest 4th decimal
+  filter(ID1 %in% daemon_id | ID2 %in% daemon_id) %>% # round to 4th decimal
   mutate(across(c(addRel, mitRel, cnuRel), ~ round(.x, 4)))
 
 rhaenyra_daemon_row

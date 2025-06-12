@@ -1,5 +1,5 @@
 linters: linters_with_defaults(
   line_length_linter = NULL,
-  commented_code_linter = NULL, 
-  object_name_linter=NULL) # see vignette("lintr")
+  commented_code_linter = NULL,
+  object_name_linter= NULL) # see vignette("lintr")
 encoding: "UTF-8"

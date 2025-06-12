@@ -339,7 +339,7 @@ findFounder <- function(data, group_var, sort_var) {
 
 summarizeFounder <- function(ped_dt, group_var, sort_var,
                              foo_summary_dt, verbose) {
-  if (verbose) {
+  if (verbose == TRUE) {
     message(paste0(
       "Finding originating members for ",
       "group_var"

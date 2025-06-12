@@ -28,7 +28,9 @@ df <- ped2fam(ASOIAF, personID = "personID") %>%
     momID = as.numeric(momID),
     dadID = as.numeric(dadID),
     name = case_when(
+      personID == 429 ~ "Lord Mormont",
       personID == 393 ~ "Lord Tyrell",
+      personID == 443 ~ "Lord Florent",
       personID == 86 ~ "Mariya Darry",
       personID == 274 ~ "Lord Uller",
       personID == 322 ~ "Daenaera Velaryon",
@@ -229,7 +231,7 @@ df <- df %>%
   # https://awoiaf.westeros.org/index.php/Daemon_Velaryon
   addPersonToPed(
     name = "Aethan Velaryon",
-    sex = "M", personID = 526, momID = NA, dadID = NA
+    sex = "M", personID = 526, momID = 617, dadID = 616
   ) %>%
   # https://awoiaf.westeros.org/index.php/Aethan_Velaryon
   addPersonToPed(
@@ -392,7 +394,6 @@ df <- df %>%
     sex = "F", personID = 562, momID = 560, dadID = 312
   ) %>%
   # https://awoiaf.westeros.org/index.php/Calla_Blackfyre
-
   addPersonToPed(
     name = "Barba Bracken",
     sex = "F", personID = 563, momID = NA, dadID = NA
@@ -606,6 +607,22 @@ df <- df %>%
   addPersonToPed(
     name = "Mother of Luthor Tyrell", sex = "F",
     personID = 614, momID = NA, dadID = NA
+  )  %>%
+  addPersonToPed(
+    name = "Mother of Jeor Mormont", sex = "F",
+    personID = 615, momID = NA, dadID = NA
+  )  %>%
+  addPersonToPed(
+    name = "Daemon Velaryon", sex = "M",
+    personID = 616, momID = NA, dadID = NA
+  )  %>%
+  addPersonToPed(
+    name = "Wife of Daemon Velaryon", sex = "F",
+    personID = 617, momID = NA, dadID = NA
+  ) %>%
+  addPersonToPed(
+    name = "Corlys Velaryon (son of Daemon)", sex = "M",
+    personID = 618, momID = 617, dadID = 616
   )
 
 
@@ -622,6 +639,8 @@ df <- df %>%
       TRUE ~ sex
     ),
     momID = case_when(
+      personID %in% c(422,376,408,410,412,415,416,417,419,421) ~ NA, # has one of 4 potential mothers
+      personID %in% c(488,430) ~ 615,
       personID %in% c(385, 384, 383, 380) ~ 614,
       personID %in% c(300:301) ~ 600,
       personID %in% c(281) ~ 517,
@@ -673,6 +692,7 @@ df <- df %>%
       TRUE ~ momID
     ),
     dadID = case_when(
+      personID == 422 ~ 406,
       personID == 470 ~ 613, # Raymar Royce
       personID %in% c(273, 275) ~ 274,
       personID %in% c(207, 260:263) ~ 595,

@@ -352,13 +352,26 @@ buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose = FALSE, mar
 #' 4) r - Mating rate.
 #'
 #' @importFrom stats runif
-#' @param kpc Number of kids per couple. An integer >= 2 that determines how many kids each fertilized mated couple will have in the pedigree. Default value is 3. Returns an error when kpc equals 1.
-#' @param Ngen Number of generations. An integer >= 2 that determines how many generations the simulated pedigree will have. The first generation is always a fertilized couple. The last generation has no mated individuals.
-#' @param sexR Sex ratio of offspring. A numeric value ranging from 0 to 1 that determines the proportion of males in all offspring in this pedigree. For instance, 0.4 means 40 percent of the offspring will be male.
-#' @param marR Mating rate. A numeric value ranging from 0 to 1 which determines the proportion of mated (fertilized) couples in the pedigree within each generation. For instance, marR = 0.5 suggests 50 percent of the offspring in a specific generation will be mated and have their offspring.
-#' @param rd_kpc logical. If TRUE, the number of kids per mate will be randomly generated from a poisson distribution with mean kpc. If FALSE, the number of kids per mate will be fixed at kpc.
-#' @param balancedSex Not fully developed yet. Always \code{TRUE} in the current version.
-#' @param balancedMar Not fully developed yet. Always \code{TRUE} in the current version.
+#' @param kpc Number of kids per couple. An integer >= 2 that determines how
+#' many kids each fertilized mated couple will have in the pedigree. Default
+#' value is 3. Returns an error when kpc equals 1.
+#' @param Ngen Number of generations. An integer >= 2 that determines how many
+#' generations the simulated pedigree will have. The first generation is always
+#' a fertilized couple. The last generation has no mated individuals.
+#' @param sexR Sex ratio of offspring. A numeric value ranging from 0 to 1 that
+#' determines the proportion of males in all offspring in this pedigree. For
+#' instance, 0.4 means 40 percent of the offspring will be male.
+#' @param marR Mating rate. A numeric value ranging from 0 to 1 which determines
+#' the proportion of mated (fertilized) couples in the pedigree within each
+#' generation. For instance, marR  = 0.5 suggests 50 percent of the offspring in
+#'  a specific generation will be  mated and have their offspring.
+#' @param rd_kpc logical. If TRUE, the number of kids per mate will be randomly
+#' generated from a poisson distribution with mean kpc. If FALSE, the number of
+#' kids per mate will be fixed at kpc.
+#' @param balancedSex Not fully developed yet. Always \code{TRUE} in the
+#' current version.
+#' @param balancedMar Not fully developed yet. Always \code{TRUE} in the
+#' current version.
 #' @param verbose logical  If TRUE, message progress through stages of algorithm
 #' @param code_male The value to use for males. Default is "M"
 #' @param code_female The value to use for females. Default is "F"
