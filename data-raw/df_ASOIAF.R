@@ -29,7 +29,7 @@ df <- ped2fam(ASOIAF, personID = "personID") %>%
     dadID = as.numeric(dadID),
     name = case_when(
       personID == 393 ~ "Lord Tyrell",
-      personID == 86 ~  "Mariya Darry",
+      personID == 86 ~ "Mariya Darry",
       personID == 274 ~ "Lord Uller",
       personID == 322 ~ "Daenaera Velaryon",
       name == "Naerys " ~ "Naerys Targaryen",
@@ -78,7 +78,7 @@ df <- ped2fam(ASOIAF, personID = "personID") %>%
       personID == 182 ~ "Jason Lannister",
       personID %in% c(300:301) ~ "Stillborn Targaryen",
       personID == 284 ~ "Vaella Targaryen",
-      personID == 499  ~ "Ormund Baratheon",
+      personID == 499 ~ "Ormund Baratheon",
       personID == 425 ~ "Lord High Tower",
       TRUE ~ name
     ),
@@ -551,50 +551,62 @@ df <- df %>%
     name = "Aerea Targaryen", sex = "F",
     personID = 601, momID = 596, dadID = 597,
     twinID = 602, zygosity = "mz"
- ) %>%
+  ) %>%
   addPersonToPed(
     name = "Rhaella Targaryen (daughter of Aegon)", sex = "F",
     personID = 602, momID = 596, dadID = 597,
     twinID = 601, zygosity = "mz"
-  )  %>%
+  ) %>%
   addPersonToPed(
     name = "Erryk Cargyll", sex = "M",
     personID = 603, momID = 605, dadID = 606,
     twinID = 604, zygosity = "mz"
-  )  %>%   addPersonToPed(
+  ) %>%
+  addPersonToPed(
     name = "Arryk Cargyll", sex = "M",
     personID = 604, momID = 605, dadID = 606,
     twinID = 603, zygosity = "mz"
-  )  %>%   addPersonToPed(
+  ) %>%
+  addPersonToPed(
     name = "Mother Cargyll", sex = "F",
     personID = 605, momID = NA, dadID = NA
-  ) %>% addPersonToPed(
+  ) %>%
+  addPersonToPed(
     name = "Father Cargyll", sex = "M",
     personID = 606, momID = NA, dadID = NA
-  )  %>%  addPersonToPed(
+  ) %>%
+  addPersonToPed(
     name = "Brandon Stark (son of Cregan)", sex = "M",
     personID = 607, momID = 609, dadID = 610
-  ) %>% addPersonToPed(
+  ) %>%
+  addPersonToPed(
     name = "Alys Karstark (wife of Brandon)", sex = "F",
     personID = 608, momID = NA, dadID = NA
-  ) %>% addPersonToPed(
+  ) %>%
+  addPersonToPed(
     name = "Lynara Stark", sex = "F",
     personID = 609, momID = NA, dadID = NA
-  )  %>% addPersonToPed(
+  ) %>%
+  addPersonToPed(
     name = "Cregan Stark", sex = "M",
     personID = 610, momID = 612, dadID = 611
-  )  %>% addPersonToPed(
+  ) %>%
+  addPersonToPed(
     name = "Rickon Stark (son of Benjen)", sex = "M",
     personID = 611, momID = NA, dadID = NA
-  )  %>% addPersonToPed(
+  ) %>%
+  addPersonToPed(
     name = "Gilliane Glover", sex = "F",
     personID = 612, momID = NA, dadID = NA
-  ) %>%  addPersonToPed(
+  ) %>%
+  addPersonToPed(
     name = "Raymar Royce", sex = "M",
-    personID = 613, momID = NA, dadID = NA) %>%
+    personID = 613, momID = NA, dadID = NA
+  ) %>%
   addPersonToPed(
     name = "Mother of Luthor Tyrell", sex = "F",
-    personID = 614, momID = NA, dadID = NA)
+    personID = 614, momID = NA, dadID = NA
+  )
 
 
 # modify existing people
@@ -606,11 +618,11 @@ df <- df %>%
       personID == 328 ~ "F",
       personID == 329 ~ "F",
       personID == 330 ~ "F",
-      personID ==  274 ~ "M",
+      personID == 274 ~ "M",
       TRUE ~ sex
     ),
     momID = case_when(
-      personID %in% c(385,384,383,380) ~ 614,
+      personID %in% c(385, 384, 383, 380) ~ 614,
       personID %in% c(300:301) ~ 600,
       personID %in% c(281) ~ 517,
       personID %in% c(310) ~ 591,
@@ -648,13 +660,13 @@ df <- df %>%
       personID == 333 ~ 520, # Alyn Velaryon's mother is Marilda of Hull
       personID == 322 ~ 535, # Daenaera Velaryon's mother is Hazel Harte
       personID == 306 ~ 339, #  Viserys II's mother is Rhaenyra Targaryen
-      personID %in% c(351,350) ~ 510, # Alysanne Targaryen's mom is Alyssa Velaryon
+      personID %in% c(351, 350) ~ 510, # Alysanne Targaryen's mom is Alyssa Velaryon
       personID %in% c(
         283, # # Daeron Targaryen (son of Maekar I)
         287, #  Aemon Targaryen (son of Maekar I)
         285, # Aerion (son of Maekar) Targaryen
         288 #  Rhae Targaryen
-      ) ~ 516,  #	Dyanna Dayne is mother of
+      ) ~ 516, # 	Dyanna Dayne is mother of
       personID %in% c(226, 232, 231) ~ 538, # kids of  Jasper
       personID == 1 ~ 566, # Walder Frey's mother
       personID == 284 ~ 600,
@@ -662,7 +674,7 @@ df <- df %>%
     ),
     dadID = case_when(
       personID == 470 ~ 613, # Raymar Royce
-      personID %in% c(273,275) ~ 274,
+      personID %in% c(273, 275) ~ 274,
       personID %in% c(207, 260:263) ~ 595,
       personID == 465 ~ 575, # Beron Stark
       personID == 291 ~ 568, # Myriah Martell's mother is the Father of Maron Martell
@@ -738,10 +750,11 @@ if (checkis_acyclic$is_acyclic) {
   message("The pedigree contains cyclic relationships.")
 }
 
-ASOIAF %>% filter(is.na(momID) & is.na(dadID)) %>%
+ASOIAF %>%
+  filter(is.na(momID) & is.na(dadID)) %>%
   select(id, name, famID, momID, dadID, sex) %>%
   mutate(
     first_name = str_extract(name, "^[^ ]+"),
     last_name = str_extract(name, "[^ ]+$"),
   ) %>%
-  arrange(last_name,id)
+  arrange(last_name, id)
