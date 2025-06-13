@@ -231,7 +231,7 @@ df_repaired_renamed <- df_repaired %>% rename(
 plt <- ggpedigree(df_repaired_renamed,
   overlay_column = "affected",
   personID = "personID",
-  interactive = TRUE,
+  interactive = FALSE,
   config = list(
     overlay_include = TRUE,
     point_size = .75,

@@ -12,7 +12,6 @@ sliceFamilies(
   chunk_size = 2e+07,
   max_lines = 1e+13,
   input_file = NULL,
-  input_file_base = NULL,
   progress_csv = "progress.csv",
   progress_status = "progress.txt",
   file_column_names = c("ID1", "ID2", "addRel", "mitRel", "cnuRel")
@@ -25,6 +24,8 @@ sliceFamilies(
 
 \item{bin_width}{Width of additive relatedness bins (default is 0.10)}
 
+\item{degreerelatedness}{Maximum degree of relatedness to consider (default 12)}
+
 \item{chunk_size}{Number of lines to read in each chunk (default 2e7)}
 
 \item{max_lines}{Max number of lines to process from input file (default 1e13)}
@@ -35,7 +36,7 @@ sliceFamilies(
 
 \item{progress_status}{Path to a text file for logging progress status (default "progress.txt")}
 
-\item{input_dir}{Directory containing input CSV files}
+\item{file_column_names}{Names of the columns in the input file (default c("ID1", "ID2", "addRel", "mitRel", "cnuRel"))}
 }
 \value{
 NULL. Writes CSV files to disk and updates progress logs.

@@ -7,12 +7,14 @@
 #' @param outcome_name Name of the outcome variable (used for naming input/output files)
 #' @param biggest Logical; whether to process the "biggest" family dataset (TRUE) or all-but-biggest (FALSE)
 #' @param bin_width Width of additive relatedness bins (default is 0.10)
-#' @param input_dir Directory containing input CSV files
 #' @param chunk_size Number of lines to read in each chunk (default 2e7)
 #' @param max_lines Max number of lines to process from input file (default 1e13)
 #' @param input_file Path to the input CSV file. If NULL, defaults to a specific file based on `biggest` flag.
 #' @param progress_csv Path to a CSV file for tracking progress (default "progress.csv")
 #' @param progress_status Path to a text file for logging progress status (default "progress.txt")
+#' @param file_column_names Names of the columns in the input file (default c("ID1", "ID2", "addRel", "mitRel", "cnuRel"))
+#' @param degreerelatedness Maximum degree of relatedness to consider (default 12)
+#'
 #' @return NULL. Writes CSV files to disk and updates progress logs.
 #' @export
 #'
@@ -24,7 +26,6 @@ sliceFamilies <- function(
   chunk_size = 2e7,
   max_lines = 1e13,
   input_file = NULL,
-  input_file_base = NULL,
   progress_csv = "progress.csv",
   progress_status = "progress.txt",
   file_column_names= c("ID1", "ID2", "addRel", "mitRel", "cnuRel")
