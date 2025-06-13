@@ -15,7 +15,8 @@ addPersonToPed(
   personID = NULL,
   zygosity = NULL,
   notes = NULL,
-  url = NULL
+  url = NULL,
+  overwrite = FALSE
 )
 }
 \arguments{
@@ -35,9 +36,10 @@ addPersonToPed(
 
 \item{zygosity}{Optional. A character string indicating the zygosity of the new person. If not provided, it will be set to \code{NA}.}
 
-\item{notes}{Optional. Notes column}
+\item{notes}{Optional. A character string for notes about the new person. If not provided, it will be set to \code{NA}.}
 
-\item{url}{Optional. The URL of the character}
+\item{url}{Optional. A URL column for the new person. If not provided, it will be set to \code{NA}.
+@param overwrite Logical. If \code{TRUE}, the function will overwrite an existing person with the same \code{personID}. If \code{FALSE}, it will stop if a person with the same \code{personID} already exists.}
 }
 \value{
 A \code{data.frame} with the new person added to the existing pedigree.

@@ -165,7 +165,7 @@ Many real-world and fictional pedigrees contain individuals with unknown or part
 To facilitate plotting, we check for individuals with one known parent but a missing other. For those cases, we assign a placeholder ID to the missing parent.
 
 ```{r}
-df_repaired <- checkParentIDs(df_got,
+df_repaired <- checkParentIDs(df_got %>% filter(famID == 6),
   addphantoms = TRUE,
   repair = TRUE,
   parentswithoutrow = FALSE,
@@ -173,7 +173,7 @@ df_repaired <- checkParentIDs(df_got,
 ) %>% mutate(
   # famID = 1,
   affected = case_when(
-    ID %in% c(jon_id, dany_id, "365") ~ T,
+    ID %in% c(jon_id, dany_id, 339) ~ T,
     TRUE ~ F
   )
 )
@@ -231,7 +231,7 @@ df_repaired_renamed <- df_repaired %>% rename(
 plt <- ggpedigree(df_repaired_renamed,
   overlay_column = "affected",
   personID = "personID",
-  interactive = FALSE,
+  interactive = TRUE,
   config = list(
     overlay_include = TRUE,
     point_size = .75,
@@ -242,13 +242,13 @@ plt <- ggpedigree(df_repaired_renamed,
     label_method = "geom_text",
     # segment_self_color = "purple",
     sex_color_include = FALSE,
-    focal_fill_personID = 339, # 353,
+   focal_fill_personID =353, #339, # 353,
     focal_fill_include = TRUE,
     tooltip_columns = c("personID", "name", "focal_fill"),
     focal_fill_force_zero = TRUE,
     focal_fill_mid_color = "orange",
     focal_fill_low_color = "#9F2A63FF",
-    focal_fill_legend_title = "Relatedness to \nRhaenyra Targaryen",
+    focal_fill_legend_title = "Relatedness to \nAegon Targaryen",
     focal_fill_na_value = "black",
     value_rounding_digits = 4
   )
