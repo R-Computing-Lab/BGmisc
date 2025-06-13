@@ -300,11 +300,13 @@ dropLink <- function(ped,
 #' @param twinID Optional. The ID of the twin of the new person. If not provided, it will be set to \code{NA}.
 #' @param zygosity Optional. A character string indicating the zygosity of the new person. If not provided, it will be set to \code{NA}.
 #' @param personID Optional. The ID of the new person. If not provided, it will be generated as the maximum existing personID + 1.
+#' @param notes Optional. Notes column
+#' @param url Optional. The URL of the character
 #'
 #' @return A \code{data.frame} with the new person added to the existing pedigree.
 #'
 #' @export
-addPersonToPed <- function(ped, name = NULL, sex = NULL, momID = NA, dadID = NA, twinID = NULL, personID = NULL, zygosity = NULL) {
+addPersonToPed <- function(ped, name = NULL, sex = NULL, momID = NA, dadID = NA, twinID = NULL, personID = NULL, zygosity = NULL, notes = NULL, url = NULL) {
   stopifnot(is.data.frame(ped))
 
   # Copy structure from an existing row
@@ -350,7 +352,16 @@ addPersonToPed <- function(ped, name = NULL, sex = NULL, momID = NA, dadID = NA,
   } else if ("zygosity" %in% colnames(ped)) {
     new_row$zygosity <- NA_character_
   }
-
+  if (!is.null(notes) && "notes" %in% colnames(ped)) {
+    new_row$notes <- notes
+  } else if ("notes" %in% colnames(ped)) {
+    new_row$notes <- NA_character_
+  }
+    if (!is.null(url) && "url" %in% colnames(ped)) {
+    new_row$url <- url
+  } else if ("url" %in% colnames(ped)) {
+    new_row$url <- NA_character_
+  }
   # Append to data frame
   rbind(ped, new_row)
 }

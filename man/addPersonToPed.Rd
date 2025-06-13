@@ -13,7 +13,9 @@ addPersonToPed(
   dadID = NA,
   twinID = NULL,
   personID = NULL,
-  zygosity = NULL
+  zygosity = NULL,
+  notes = NULL,
+  url = NULL
 )
 }
 \arguments{
@@ -32,6 +34,10 @@ addPersonToPed(
 \item{personID}{Optional. The ID of the new person. If not provided, it will be generated as the maximum existing personID + 1.}
 
 \item{zygosity}{Optional. A character string indicating the zygosity of the new person. If not provided, it will be set to \code{NA}.}
+
+\item{notes}{Optional. Notes column}
+
+\item{url}{Optional. The URL of the character}
 }
 \value{
 A \code{data.frame} with the new person added to the existing pedigree.

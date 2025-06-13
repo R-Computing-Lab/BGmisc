@@ -26,19 +26,30 @@ Must include columns for family ID, individual ID, generation number, spouse ID 
 and sex. This data frame is updated in place to include flags for parental status (ifparent),
 son status (ifson), and daughter status (ifdau), as well as couple IDs.}
 
-\item{Ngen}{Number of generations. An integer >= 2 that determines how many generations the simulated pedigree will have. The first generation is always a fertilized couple. The last generation has no mated individuals.}
+\item{Ngen}{Number of generations. An integer >= 2 that determines how many
+generations the simulated pedigree will have. The first generation is always
+a fertilized couple. The last generation has no mated individuals.}
 
 \item{sizeGens}{A numeric vector containing the sizes of each generation within the pedigree.}
 
 \item{verbose}{logical  If TRUE, message progress through stages of algorithm}
 
-\item{marR}{Mating rate. A numeric value ranging from 0 to 1 which determines the proportion of mated (fertilized) couples in the pedigree within each generation. For instance, marR = 0.5 suggests 50 percent of the offspring in a specific generation will be mated and have their offspring.}
+\item{marR}{Mating rate. A numeric value ranging from 0 to 1 which determines
+the proportion of mated (fertilized) couples in the pedigree within each
+generation. For instance, marR  = 0.5 suggests 50 percent of the offspring in
+ a specific generation will be  mated and have their offspring.}
 
-\item{sexR}{Sex ratio of offspring. A numeric value ranging from 0 to 1 that determines the proportion of males in all offspring in this pedigree. For instance, 0.4 means 40 percent of the offspring will be male.}
+\item{sexR}{Sex ratio of offspring. A numeric value ranging from 0 to 1 that
+determines the proportion of males in all offspring in this pedigree. For
+instance, 0.4 means 40 percent of the offspring will be male.}
 
-\item{kpc}{Number of kids per couple. An integer >= 2 that determines how many kids each fertilized mated couple will have in the pedigree. Default value is 3. Returns an error when kpc equals 1.}
+\item{kpc}{Number of kids per couple. An integer >= 2 that determines how
+many kids each fertilized mated couple will have in the pedigree. Default
+value is 3. Returns an error when kpc equals 1.}
 
-\item{rd_kpc}{logical. If TRUE, the number of kids per mate will be randomly generated from a poisson distribution with mean kpc. If FALSE, the number of kids per mate will be fixed at kpc.}
+\item{rd_kpc}{logical. If TRUE, the number of kids per mate will be randomly
+generated from a poisson distribution with mean kpc. If FALSE, the number of
+kids per mate will be fixed at kpc.}
 
 \item{personID}{character.  Name of the column in ped for the person ID variable}
 

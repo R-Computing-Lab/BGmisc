@@ -268,6 +268,18 @@ plt
 
 This plot can provide an interactive visualization of the ASOIAF pedigree (if interactive is set to TRUE), allowing users to explore relationships and affected status. The focal individual is highlighted, and tooltips provide additional information about each character. 
 
+
+
+```{r eval=FALSE, include=FALSE}
+df_repaired %>%
+  filter(!is.na(name)) %>%
+  arrange(ID) %>%
+  knitr::kable(caption = "Key Characters in ASOIAF Pedigree")
+
+```
+
+
+
 ## Conclusion
 
 In this vignette, we demonstrated how to reconstruct and analyze the *A Song of Ice and Fire* pedigree using the `BGmisc` package. We computed additive and common nuclear relatedness coefficients for key characters, revealing the complexities of their relationships. By handling incomplete parentage data and visualizing the pedigree, we provided a comprehensive overview of how related Jon Snow and Daenerys Targaryen truly are.
