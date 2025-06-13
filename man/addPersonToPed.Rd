@@ -22,24 +22,36 @@ addPersonToPed(
 \arguments{
 \item{ped}{A \code{data.frame} representing the existing pedigree.}
 
-\item{name}{Optional. A character string representing the name of the new person. If not provided, the name will be set to \code{NA}.}
+\item{name}{Optional. A character string representing the name of the new
+person. If not provided, the name will be set to \code{NA}.}
 
 \item{sex}{A value representing the sex of the new person.}
 
-\item{momID}{Optional. The ID of the mother of the new person. If not provided, it will be set to \code{NA}.}
+\item{momID}{Optional. The ID of the mother of the new person. If not
+provided, it will be set to \code{NA}.}
 
-\item{dadID}{Optional. The ID of the father of the new person. If not provided, it will be set to \code{NA}.}
+\item{dadID}{Optional. The ID of the father of the new person. If not
+provided, it will be set to \code{NA}.}
 
-\item{twinID}{Optional. The ID of the twin of the new person. If not provided, it will be set to \code{NA}.}
+\item{twinID}{Optional. The ID of the twin of the new person. If not
+provided, it will be set to \code{NA}.}
 
-\item{personID}{Optional. The ID of the new person. If not provided, it will be generated as the maximum existing personID + 1.}
+\item{personID}{Optional. The ID of the new person. If not provided, it will
+be generated as the maximum existing personID + 1.}
 
-\item{zygosity}{Optional. A character string indicating the zygosity of the new person. If not provided, it will be set to \code{NA}.}
+\item{zygosity}{Optional. A character string indicating the zygosity of the
+new person. If not provided, it will be set to \code{NA}.}
 
-\item{notes}{Optional. A character string for notes about the new person. If not provided, it will be set to \code{NA}.}
+\item{notes}{Optional. A character string for notes about the new person. If
+not provided, it will be set to \code{NA}.}
 
-\item{url}{Optional. A URL column for the new person. If not provided, it will be set to \code{NA}.
-@param overwrite Logical. If \code{TRUE}, the function will overwrite an existing person with the same \code{personID}. If \code{FALSE}, it will stop if a person with the same \code{personID} already exists.}
+\item{url}{Optional. A URL column for the new person. If not provided, it
+will be set to \code{NA}.}
+
+\item{overwrite}{Logical. If \code{TRUE}, the function will overwrite an
+existing person with the same \code{personID}. If \code{FALSE}, it will stop
+if a person with the same
+\code{personID} already exists.}
 }
 \value{
 A \code{data.frame} with the new person added to the existing pedigree.

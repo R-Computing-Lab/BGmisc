@@ -290,24 +290,41 @@ dropLink <- function(ped,
   }
   return(ped)
 }
+
 #' addPersonToTree
 #' A function to add a new person to an existing pedigree \code{data.frame}.
 #' @param ped A \code{data.frame} representing the existing pedigree.
-#' @param name Optional. A character string representing the name of the new person. If not provided, the name will be set to \code{NA}.
+#' @param name Optional. A character string representing the name of the new
+#' person. If not provided, the name will be set to \code{NA}.
 #' @param sex A value representing the sex of the new person.
-#' @param momID Optional. The ID of the mother of the new person. If not provided, it will be set to \code{NA}.
-#' @param dadID Optional. The ID of the father of the new person. If not provided, it will be set to \code{NA}.
-#' @param twinID Optional. The ID of the twin of the new person. If not provided, it will be set to \code{NA}.
-#' @param zygosity Optional. A character string indicating the zygosity of the new person. If not provided, it will be set to \code{NA}.
-#' @param personID Optional. The ID of the new person. If not provided, it will be generated as the maximum existing personID + 1.
-#' @param notes Optional. A character string for notes about the new person. If not provided, it will be set to \code{NA}.
-#' @param url Optional. A URL column for the new person. If not provided, it will be set to \code{NA}.
-#'  @param overwrite Logical. If \code{TRUE}, the function will overwrite an existing person with the same \code{personID}. If \code{FALSE}, it will stop if a person with the same \code{personID} already exists.
+#' @param momID Optional. The ID of the mother of the new person. If not
+#' provided, it will be set to \code{NA}.
+#' @param dadID Optional. The ID of the father of the new person. If not
+#' provided, it will be set to \code{NA}.
+#' @param twinID Optional. The ID of the twin of the new person. If not
+#' provided, it will be set to \code{NA}.
+#' @param zygosity Optional. A character string indicating the zygosity of the
+#' new person. If not provided, it will be set to \code{NA}.
+#' @param personID Optional. The ID of the new person. If not provided, it will
+#' be generated as the maximum existing personID + 1.
+#' @param notes Optional. A character string for notes about the new person. If
+#' not provided, it will be set to \code{NA}.
+#' @param url Optional. A URL column for the new person. If not provided, it
+#' will be set to \code{NA}.
+#' @param overwrite Logical. If \code{TRUE}, the function will overwrite an
+#' existing person with the same \code{personID}. If \code{FALSE}, it will stop
+#' if a person with the same
+#' \code{personID} already exists.
 #'
 #' @return A \code{data.frame} with the new person added to the existing pedigree.
 #'
 #' @export
-addPersonToPed <- function(ped, name = NULL, sex = NULL, momID = NA, dadID = NA, twinID = NULL, personID = NULL, zygosity = NULL, notes = NULL, url = NULL, overwrite=FALSE) {
+addPersonToPed <- function(ped, name = NULL,
+                           sex = NULL, momID = NA,
+                           dadID = NA, twinID = NULL,
+                           personID = NULL, zygosity = NULL,
+                           notes = NULL, url = NULL,
+                           overwrite=FALSE) {
   stopifnot(is.data.frame(ped))
 if (overwrite == TRUE) {
     # Check if the personID already exists in the pedigree
