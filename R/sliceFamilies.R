@@ -14,7 +14,9 @@
 #' @param progress_status Path to a text file for logging progress status (default "progress.txt")
 #' @param file_column_names Names of the columns in the input file (default c("ID1", "ID2", "addRel", "mitRel", "cnuRel"))
 #' @param degreerelatedness Maximum degree of relatedness to consider (default 12)
-#'
+#' @param folder_prefix Prefix for the output folder (default "data")
+#' @param data_directory Directory where output files will be saved. If NULL, it is constructed based on `outcome_name` and `folder_prefix`.
+#' @param verbose Logical; whether to print progress messages (default FALSE)
 #' @return NULL. Writes CSV files to disk and updates progress logs.
 #' @export
 #'
@@ -30,6 +32,7 @@ sliceFamilies <- function(
     progress_csv = "progress.csv",
     progress_status = "progress.txt",
     data_directory = NULL,
+    verbose = FALSE,
     file_column_names = c("ID1", "ID2", "addRel", "mitRel", "cnuRel")) {
 
   bin_width_string <- as.character(bin_width * 100)
@@ -40,17 +43,18 @@ sliceFamilies <- function(
       data_directory <- paste0(outcome_name, "/", folder_prefix, "/links_", bin_width_string, "/")
     } else {
       data_directory <- paste0(outcome_name, "/", folder_prefix, "/links_allbut_", bin_width_string, "/")
-    }
-  }
-    # Ensure the outcome_name directory exists
-    if (!base::dir.exists(data_directory)) {
+    }     # Ensure the outcome_name directory exist
+  } else  if (!base::dir.exists(data_directory)) {
         dir.create(data_directory, showWarnings = FALSE, recursive = TRUE)
       }
-
-  input_file <- if (biggest == TRUE && is.null(input_file)) {
-    base::paste0(outcome_name, "_dataBiggestRelatedPairsTake2.csv")
-  } else if (biggest == FALSE && is.null(input_file)) {
-    base::paste0(outcome_name, "_dataAllbutBiggestRelatedPairsTake2.csv")
+    # Ensure the outcome_name directory exist
+  #   input_file <-  if (biggest == TRUE && is.null(input_file)) {
+ #   base::paste0(outcome_name, "_dataBiggestRelatedPairsTake2.csv")
+ # } else if (biggest == FALSE && is.null(input_file)) {
+ #   base::paste0(outcome_name, "_dataAllbutBiggestRelatedPairsTake2.csv")
+ # }
+  if(verbose) {
+    message("Output folder: ", data_directory)
   }
 
 
@@ -81,8 +85,11 @@ sliceFamilies <- function(
   total_lines <- 0
 
 
-
+# pick up where left off if progress file exists
   if (base::file.exists(progress_csv)) {
+    if(verbose==TRUE) {
+      message("Resuming from previous progress...")
+    }
     progress_data <- data.table::fread(progress_csv, header = TRUE)
     start_line <- progress_data$start_line
     total_lines <- progress_data$total_lines
@@ -111,12 +118,15 @@ sliceFamilies <- function(
           base::round(dataRelatedPair_merge$addRel, 6) < range_max &
           dataRelatedPair_merge$mitRel == 1,
       ]
-
+      file_name <- NULL
       if (base::nrow(range_data) > 0) {
-        file_name <- base::paste0(data_directory,"/df_mt1_r", range_min, "-r", range_max, ".csv"
+
+        file_name <- base::paste0(data_directory,"df_mt1_r", range_min, "-r", range_max, ".csv"
           )
 
-
+        if(verbose) {
+          print(file_name)
+        }
         data.table::fwrite(range_data,
           file = file_name,
           sep = ",",
@@ -131,12 +141,14 @@ sliceFamilies <- function(
           base::round(dataRelatedPair_merge$addRel, 6) < range_max &
           dataRelatedPair_merge$mitRel == 0,
       ]
-
+      file_name <- NULL
       if (base::nrow(range_data) > 0) {
-          base::paste0(data_directory, "df_mt0_r", range_min, "-r", range_max, ".csv"
+
+        file_name <- base::paste0(data_directory, "df_mt0_r", range_min, "-r", range_max, ".csv"
           )
-
-
+        if(verbose) {
+          print(file_name)
+        }
         data.table::fwrite(range_data,
           file = file_name,
           sep = ",",

@@ -1,5 +1,5 @@
 # BGmisc 1.4.4
-* Added sliceFamilies function
+* Added sliceFamilies function with working tests
 
 # BGmisc 1.4.3.2
 * Slightly expanded vignettes to include more examples of the new features in BGmisc and ggpedigree.
