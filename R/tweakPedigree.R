@@ -324,31 +324,31 @@ addPersonToPed <- function(ped, name = NULL,
                            dadID = NA, twinID = NULL,
                            personID = NULL, zygosity = NULL,
                            notes = NULL, url = NULL,
-                           overwrite=FALSE) {
+                           overwrite = FALSE) {
   stopifnot(is.data.frame(ped))
-if (overwrite == TRUE) {
+  if (overwrite == TRUE) {
     # Check if the personID already exists in the pedigree
     # Copy structure from an existing row
 
-  new_row <- ped[ped$personID==personID, ]
-# drop the row with the personID
-  if (nrow(new_row) == 0) {
-    stop("The personID does not exist in the pedigree. Set overwrite=FALSE to add a new person with a new ID.")
-  }
-  # Remove the row with the personID
- #ped <-  ped[ped$personID!=personID, ]
+    new_row <- ped[ped$personID == personID, ]
+    # drop the row with the personID
+    if (nrow(new_row) == 0) {
+      stop("The personID does not exist in the pedigree. Set overwrite=FALSE to add a new person with a new ID.")
+    }
+    # Remove the row with the personID
+    # ped <-  ped[ped$personID!=personID, ]
   } else {
     # Check if the personID already exists in the pedigree
     if (!is.null(personID) && personID %in% ped$personID) {
       stop("The personID already exists in the pedigree. Set overwrite=TRUE to overwrite the existing person.")
     }
 
-  # Copy structure from an existing row
-  new_row <- ped[1, , drop = FALSE]
+    # Copy structure from an existing row
+    new_row <- ped[1, , drop = FALSE]
 
-  # Blank out all values
-  new_row[1, ] <- NA
-}
+    # Blank out all values
+    new_row[1, ] <- NA
+  }
   # Assign new values
   if (!is.null(personID)) {
     new_row$personID <- personID
@@ -391,19 +391,17 @@ if (overwrite == TRUE) {
   } else if ("notes" %in% colnames(ped)) {
     new_row$notes <- NA_character_
   }
-    if (!is.null(url) && "url" %in% colnames(ped)) {
+  if (!is.null(url) && "url" %in% colnames(ped)) {
     new_row$url <- url
   } else if ("url" %in% colnames(ped)) {
     new_row$url <- NA_character_
   }
   # Append to data frame
-  if(overwrite == TRUE) {
-    ped[ped$personID==personID, ] <- new_row
+  if (overwrite == TRUE) {
+    ped[ped$personID == personID, ] <- new_row
 
     return(ped)
   } else {
-     return(rbind(ped, new_row))
+    return(rbind(ped, new_row))
   }
-
-
 }

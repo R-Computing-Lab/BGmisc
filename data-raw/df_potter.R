@@ -8,9 +8,7 @@ library(BGmisc)
 
 potter <- data.frame(
   personID = c(
-    1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-    11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
-    21, 22, 23, 24, 25, 26, 27, 28, 29, 30
+    1:30
   ),
   famID = rep(1, 30),
   name = c(
@@ -141,6 +139,7 @@ potter[nrow(potter) + 1, ] <- list(
   0
 )
 
+
 potter <- potter %>%
   mutate(
     twinID = case_when(
@@ -157,10 +156,22 @@ potter <- potter %>%
 # potter[nrow(potter) + 1,] <- list(personID,fam,name,gen,
 #                                momID,dadID,spouseID,sex)
 
-write_csv(potter, here("data-raw", "potter.csv"))
-usethis::use_data(potter, overwrite = TRUE, compress = "xz")
 
 
+checkis_acyclic <- checkPedigreeNetwork(potter,
+  personID = "personID",
+  momID = "momID",
+  dadID = "dadID",
+  verbose = TRUE
+)
+checkis_acyclic
+if (checkis_acyclic$is_acyclic) {
+  message("The pedigree is acyclic.")
+  write_csv(potter, here("data-raw", "potter.csv"))
+  usethis::use_data(potter, overwrite = TRUE, compress = "xz")
+} else {
+  message("The pedigree contains cyclic relationships.")
+}
 if (FALSE) {
   ## Create dataframe
   potter_big <- readGedcom("data-raw/potter_big.ged")

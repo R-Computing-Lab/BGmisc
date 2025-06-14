@@ -21,5 +21,3 @@ test_that("determineSex works", {
 
   expect_equal(sum(df == "M") / length(df), sexR, tolerance = 0.1)
 })
-
-

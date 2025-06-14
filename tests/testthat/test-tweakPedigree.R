@@ -339,8 +339,6 @@ test_that("addPersonToPed works as expected", {
   expect_equal(updated4$sex[2], "M")
   expect_true(is.na(updated4$twinID[2]))
   expect_equal(updated4$twinID[1], NA_integer_)
-
-
 })
 
 test_that("addPersonToPed works as expected with zygosity", {

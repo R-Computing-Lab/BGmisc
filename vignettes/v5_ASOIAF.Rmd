@@ -242,7 +242,7 @@ plt <- ggpedigree(df_repaired_renamed,
     label_method = "geom_text",
     # segment_self_color = "purple",
     sex_color_include = FALSE,
-   focal_fill_personID =353, #339, # 353,
+    focal_fill_personID = 353, # 339, # 353,
     focal_fill_include = TRUE,
     tooltip_columns = c("personID", "name", "focal_fill"),
     focal_fill_force_zero = TRUE,
@@ -275,7 +275,6 @@ df_repaired %>%
   filter(!is.na(name)) %>%
   arrange(ID) %>%
   knitr::kable(caption = "Key Characters in ASOIAF Pedigree")
-
 ```
 
 
