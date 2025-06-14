@@ -1,5 +1,6 @@
 # BGmisc 1.4.4
 * Added sliceFamilies function with working tests
+* Added option to restore variable names in selected places
 
 # BGmisc 1.4.3.2
 * Slightly expanded vignettes to include more examples of the new features in BGmisc and ggpedigree.

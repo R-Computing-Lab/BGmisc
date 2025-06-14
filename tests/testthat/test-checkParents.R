@@ -16,7 +16,7 @@ test_that("checkParentIDs identifies parent coding correctly in potter dataset",
 test_that("checksif single parents found correctly in ASOIAF dataset", {
   data(ASOIAF)
   df_asoiaf <- ASOIAF
-  results <- checkParentIDs(df_asoiaf, verbose = FALSE, repair = FALSE)
+  results <- checkParentIDs(df_asoiaf, verbose = FALSE, repair = FALSE, personID = "id")
   expect_true(results$single_parents)
   single_dads <- length(df_asoiaf$id[!is.na(df_asoiaf$dadID) & is.na(df_asoiaf$momID)])
   single_moms <- length(df_asoiaf$id[is.na(df_asoiaf$dadID) & !is.na(df_asoiaf$momID)])
