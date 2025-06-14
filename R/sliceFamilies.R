@@ -34,26 +34,25 @@ sliceFamilies <- function(
     data_directory = NULL,
     verbose = FALSE,
     file_column_names = c("ID1", "ID2", "addRel", "mitRel", "cnuRel")) {
-
   bin_width_string <- as.character(bin_width * 100)
 
-  if(is.null(data_directory)) {
+  if (is.null(data_directory)) {
     # Set the data directory based on the outcome name and folder prefix
     if (biggest) {
       data_directory <- file.path(outcome_name, folder_prefix, paste0("links_", bin_width_string))
     } else {
       data_directory <- file.path(outcome_name, folder_prefix, paste0("links_allbut_", bin_width_string))
-    }     # Ensure the outcome_name directory exist
-  } else  if (!base::dir.exists(data_directory)) {
-        dir.create(data_directory, showWarnings = FALSE, recursive = TRUE)
-      }
-    # Ensure the data_directory exists, creating it along with any necessary parent directories
+    } # Ensure the outcome_name directory exist
+  } else if (!base::dir.exists(data_directory)) {
+    dir.create(data_directory, showWarnings = FALSE, recursive = TRUE)
+  }
+  # Ensure the data_directory exists, creating it along with any necessary parent directories
   #   input_file <-  if (biggest == TRUE && is.null(input_file)) {
- #   base::paste0(outcome_name, "_dataBiggestRelatedPairsTake2.csv")
- # } else if (biggest == FALSE && is.null(input_file)) {
- #   base::paste0(outcome_name, "_dataAllbutBiggestRelatedPairsTake2.csv")
- # }
-  if(verbose) {
+  #   base::paste0(outcome_name, "_dataBiggestRelatedPairsTake2.csv")
+  # } else if (biggest == FALSE && is.null(input_file)) {
+  #   base::paste0(outcome_name, "_dataAllbutBiggestRelatedPairsTake2.csv")
+  # }
+  if (verbose) {
     message("Output folder: ", data_directory)
   }
 
@@ -85,9 +84,9 @@ sliceFamilies <- function(
   total_lines <- 0
 
 
-# pick up where left off if progress file exists
+  # pick up where left off if progress file exists
   if (base::file.exists(progress_csv)) {
-    if(verbose==TRUE) {
+    if (verbose == TRUE) {
       message("Resuming from previous progress...")
     }
     progress_data <- data.table::fread(progress_csv, header = TRUE)
@@ -98,7 +97,6 @@ sliceFamilies <- function(
   start_time <- base::Sys.time()
 
   while (start_line <= max_lines) {
-
     dataRelatedPair_merge <- data.table::fread(input_file,
       skip = start_line - 1,
       nrows = chunk_size,
@@ -120,11 +118,9 @@ sliceFamilies <- function(
       ]
       file_name <- NULL
       if (base::nrow(range_data) > 0) {
+        file_name <- base::paste0(data_directory, "df_mt1_r", range_min, "-r", range_max, ".csv")
 
-        file_name <- base::paste0(data_directory,"df_mt1_r", range_min, "-r", range_max, ".csv"
-          )
-
-        if(verbose) {
+        if (verbose) {
           print(file_name)
         }
         data.table::fwrite(range_data,
@@ -143,10 +139,8 @@ sliceFamilies <- function(
       ]
       file_name <- NULL
       if (base::nrow(range_data) > 0) {
-
-        file_name <- base::paste0(data_directory, "df_mt0_r", range_min, "-r", range_max, ".csv"
-          )
-        if(verbose) {
+        file_name <- base::paste0(data_directory, "df_mt0_r", range_min, "-r", range_max, ".csv")
+        if (verbose) {
           print(file_name)
         }
         data.table::fwrite(range_data,

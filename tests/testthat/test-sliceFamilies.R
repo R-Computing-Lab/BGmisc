@@ -22,13 +22,13 @@ test_that("sliceFamilies creates correct output files for both mitRel = 1 and 0"
     biggest = TRUE,
     bin_width = 0.10,
     degreerelatedness = 12,
-    chunk_size = 30,  # small chunk size to force chunk logic
+    chunk_size = 30, # small chunk size to force chunk logic
     max_lines = 1000,
     input_file = "dataRelatedPairs.csv",
     progress_csv = "progress.csv",
     progress_status = "progress.txt",
-    data_directory = "testout/data/links_10/"#,
-   # file_column_names = names(test_data)
+    data_directory = "testout/data/links_10/" # ,
+    # file_column_names = names(test_data)
   )
 
 
@@ -55,19 +55,19 @@ test_that("sliceFamilies creates correct output files for both mitRel = 1 and 0"
   stat <- readLines("progress.txt")
   expect_true(any(grepl("Done!", stat)))
 
-#remove.file("dataRelatedPairs.csv")
-#delete.file(files)
+  # remove.file("dataRelatedPairs.csv")
+  # delete.file(files)
   unlink(output_dir, recursive = TRUE)
   unlink("progress.csv")
   unlink("progress.txt")
 
-#  setwd(old_wd)
+  #  setwd(old_wd)
 })
 
-#test_that("sliceFamilies correctly defaults to filename based on `biggest`", {
+# test_that("sliceFamilies correctly defaults to filename based on `biggest`", {
 #  local_tempdir() -> tmp
- # old_wd <- getwd()
- # setwd(tmp)
+# old_wd <- getwd()
+# setwd(tmp)
 
 #  dummy_file_big <- "AD_demo_datacnmitBiggestRelatedPairs_2nddegree_take1.csv"
 #  dummy_file_all <- "AD_demo_dataAllbutBiggestRelatedPairsTake2.csv"
@@ -76,14 +76,14 @@ test_that("sliceFamilies creates correct output files for both mitRel = 1 and 0"
 #  fwrite(data, dummy_file_big)
 #  fwrite(data, dummy_file_all)
 
-  # Run with biggest = TRUE and no input_file
- # sliceFamilies(outcome_name = "AD_demo", biggest = TRUE, chunk_size = 10, max_lines = 50)
+# Run with biggest = TRUE and no input_file
+# sliceFamilies(outcome_name = "AD_demo", biggest = TRUE, chunk_size = 10, max_lines = 50)
 
-  # Run with biggest = FALSE and no input_file
- # sliceFamilies(outcome_name = "AD_demo", biggest = FALSE, chunk_size = 10, max_lines = 50)
+# Run with biggest = FALSE and no input_file
+# sliceFamilies(outcome_name = "AD_demo", biggest = FALSE, chunk_size = 10, max_lines = 50)
 
 #  expect_true(file.exists("AD_demo/data/links_10/progress.csv") ||
 #              file.exists("AD_demo/data/links_allbut_10/progress.csv"))
 
 #  setwd(old_wd)
-#})
+# })

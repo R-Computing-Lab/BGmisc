@@ -379,7 +379,7 @@ test_that("addPersonToPed works as expected with zygosity", {
   expect_true(is.na(updated$url[3]))
 
   # Add person with generated ID
-  updated2 <- addPersonToPed(ped, name = "Dana", sex = "F", url ="http://example.com")
+  updated2 <- addPersonToPed(ped, name = "Dana", sex = "F", url = "http://example.com")
   expect_equal(nrow(updated2), 3)
   expect_equal(updated2$name[3], "Dana")
   expect_equal(updated2$sex[3], "F")
