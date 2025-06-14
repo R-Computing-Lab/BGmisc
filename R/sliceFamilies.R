@@ -40,14 +40,14 @@ sliceFamilies <- function(
   if(is.null(data_directory)) {
     # Set the data directory based on the outcome name and folder prefix
     if (biggest) {
-      data_directory <- paste0(outcome_name, "/", folder_prefix, "/links_", bin_width_string, "/")
+      data_directory <- file.path(outcome_name, folder_prefix, paste0("links_", bin_width_string))
     } else {
-      data_directory <- paste0(outcome_name, "/", folder_prefix, "/links_allbut_", bin_width_string, "/")
+      data_directory <- file.path(outcome_name, folder_prefix, paste0("links_allbut_", bin_width_string))
     }     # Ensure the outcome_name directory exist
   } else  if (!base::dir.exists(data_directory)) {
         dir.create(data_directory, showWarnings = FALSE, recursive = TRUE)
       }
-    # Ensure the outcome_name directory exist
+    # Ensure the data_directory exists, creating it along with any necessary parent directories
   #   input_file <-  if (biggest == TRUE && is.null(input_file)) {
  #   base::paste0(outcome_name, "_dataBiggestRelatedPairsTake2.csv")
  # } else if (biggest == FALSE && is.null(input_file)) {
