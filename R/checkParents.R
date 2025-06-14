@@ -12,6 +12,11 @@
 #' @param repairsex A logical flag indicating whether to attempt repairs on sex of the parents
 #' @param addphantoms A logical flag indicating whether to add phantom parents for missing parent IDs.
 #' @param parentswithoutrow A logical flag indicating whether to add parents without a row in the pedigree.
+#' @param  famID Character. Column name for family IDs.
+#' @param  personID Character. Column name for individual IDs.
+#' @param momID Character. Column name for maternal IDs.
+#' @param dadID Character. Column name for paternal IDs.
+
 #'
 #'
 #' @return Depending on the value of `repair`, either a list containing validation results or a repaired dataframe is returned.
@@ -24,7 +29,11 @@
 checkParentIDs <- function(ped, verbose = FALSE, repair = FALSE,
                            repairsex = repair,
                            addphantoms = repair,
-                           parentswithoutrow = repair) {
+                           parentswithoutrow = repair,
+                           famID = "famID",
+                           personID = "ID",
+                           momID    = "momID",
+                           dadID    = "dadID") {
   # Standardize column names in the input dataframe
   ped <- standardizeColnames(ped, verbose = verbose)
 
@@ -185,22 +194,22 @@ checkParentIDs <- function(ped, verbose = FALSE, repair = FALSE,
 
     # Add dads when missing
     for (idx in which(is.na(ped$dadID) & !is.na(ped$momID))) {
-      new_id <- if (is.numeric(ped$ID)) newIDbase + added_counter else paste0("phantom-dad-", ped$ID[idx])
+      newID <- if (is.numeric(ped$ID)) newIDbase + added_counter else paste0("phantom-dad-", ped$ID[idx])
       added_counter <- added_counter + 1
-      ped$dadID[idx] <- new_id
+      ped$dadID[idx] <- newID
 
 
-      new_entry <- addParentRow(new_entry_base, new_id = new_id, dadID = NA, momID = NA, sex = inferred_sex)
+      new_entry <- addParentRow(new_entry_base, newID = newID, dadID = NA, momID = NA, sex = inferred_sex)
       new_entries <- rbind(new_entries, new_entry)
     }
 
     # Add moms when missing
     inferred_sex <- if (length(validation_results$female_var) > 0 && !is.na(validation_results$female_var)) validation_results$female_var else 0
     for (idx in which(!is.na(ped$dadID) & is.na(ped$momID))) {
-      new_id <- if (is.numeric(ped$ID)) newIDbase + added_counter else paste0("phantom-mom-", ped$ID[idx])
+      newID <- if (is.numeric(ped$ID)) newIDbase + added_counter else paste0("phantom-mom-", ped$ID[idx])
       added_counter <- added_counter + 1
-      ped$momID[idx] <- new_id
-      new_entry <- addParentRow(new_entry_base, new_id = new_id, dadID = NA, momID = NA, sex = inferred_sex)
+      ped$momID[idx] <- newID
+      new_entry <- addParentRow(new_entry_base, newID = newID, dadID = NA, momID = NA, sex = inferred_sex)
       new_entries <- rbind(new_entries, new_entry)
     }
 
@@ -229,6 +238,12 @@ checkParentIDs <- function(ped, verbose = FALSE, repair = FALSE,
     cat("Changes Made:\n")
     message(changes)
   }
+
+     # restore orginal names that the user orginally provided
+  names(ped)[names(ped) == "ID"] <- personID
+  names(ped)[names(ped) == "momID"] <- momID
+  names(ped)[names(ped) == "dadID"] <- dadID
+  names(ped)[names(ped) == "famID"] <- famID
   return(ped)
 }
 #' Repair Parent IDs
@@ -237,8 +252,13 @@ checkParentIDs <- function(ped, verbose = FALSE, repair = FALSE,
 #' @inheritParams checkParentIDs
 #' @inherit checkParentIDs details
 #' @return A corrected pedigree
-repairParentIDs <- function(ped, verbose = FALSE) {
-  checkParentIDs(ped = ped, verbose = verbose, repair = TRUE)
+repairParentIDs <- function(ped, verbose = FALSE,
+                           famID = "famID",
+                           personID = "ID",
+                           momID = "momID",
+                           dadID = "dadID") {
+  checkParentIDs(ped = ped, verbose = verbose, repair = TRUE,
+                 personID= personID, momID = momID, dadID = dadID, famID = famID)
 }
 
 #' Add addRowlessParents
@@ -279,7 +299,7 @@ addRowlessParents <- function(ped, verbose, validation_results) {
       )
       inferred_sex <- if ("mom" %in% role) validation_results$female_var else validation_results$male_var
 
-      new_entry <- addParentRow(new_entry_base, new_id = pid, dadID = NA, momID = NA, sex = inferred_sex)
+      new_entry <- addParentRow(new_entry_base, newID = pid, dadID = NA, momID = NA, sex = inferred_sex)
 
       new_entries <- rbind(new_entries, new_entry)
     }
@@ -289,6 +309,9 @@ addRowlessParents <- function(ped, verbose, validation_results) {
       cat("Added phantom parents for:", paste(new_entries$ID, collapse = ", "), "\n")
     }
   }
+
+
+
   return(ped)
 }
 
@@ -296,17 +319,17 @@ addRowlessParents <- function(ped, verbose, validation_results) {
 #' Create a properly formatted parent row for the pedigree
 #'
 #' @param template_row A single row from ped, used as a template for column structure
-#' @param new_id The new parent's ID
+#' @param newID The new parent's ID
 #' @param sex The new parent's sex value (e.g., 0 for female, 1 for male, or "F"/"M")
 #' @param momID The new parent's mother ID (default is NA)
 #' @param dadID The new parent's father ID (default is NA)
 #' @return A single-row dataframe for the new parent
-addParentRow <- function(template_row, new_id, sex,
+addParentRow <- function(template_row, newID, sex,
                          momID = NA,
                          dadID = NA) {
   new_row <- template_row
   new_row[] <- NA # set all columns to NA
-  new_row$ID <- new_id
+  new_row$ID <- newID
   new_row$momID <- NA
   new_row$dadID <- NA
   new_row$sex <- sex
