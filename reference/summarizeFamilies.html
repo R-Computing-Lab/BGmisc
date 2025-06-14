@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">BGmisc</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.3.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.3.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -38,7 +38,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Summarize the families in a pedigree</h1>
-      <small class="dont-index">Source: <a href="https://github.com/R-Computing-Lab/BGmisc/blob/v1.4.3.1/R/summarizePedigree.R" class="external-link"><code>R/summarizePedigree.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/R-Computing-Lab/BGmisc/blob/main/R/summarizePedigree.R" class="external-link"><code>R/summarizePedigree.R</code></a></small>
       <div class="d-none name"><code>summarizeFamilies.Rd</code></div>
     </div>
 
@@ -63,7 +63,8 @@
 <span>  noldest <span class="op">=</span> <span class="fl">5</span>,</span>
 <span>  skip_var <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  five_num_summary <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  network_checks <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">summariseFamilies</span><span class="op">(</span></span>
@@ -81,7 +82,8 @@
 <span>  noldest <span class="op">=</span> <span class="fl">5</span>,</span>
 <span>  skip_var <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  five_num_summary <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  network_checks <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -149,6 +151,10 @@ the minimum, median, and maximum values.</p></dd>
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
 <dd><p>Logical, if TRUE, print progress messages.</p></dd>
+
+
+<dt id="arg-network-checks">network_checks<a class="anchor" aria-label="anchor" href="#arg-network-checks"></a></dt>
+<dd><p>Logical. If `TRUE`, performs network checks on the pedigree data.</p></dd>
 
 </dl></div>
     <div class="section level2">

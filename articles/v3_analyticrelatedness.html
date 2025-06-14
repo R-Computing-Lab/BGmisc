@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">BGmisc</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.3.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.3.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,7 +64,7 @@
       <h1>Understanding and Computing Relatedness from Pedigree Data</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/R-Computing-Lab/BGmisc/blob/v1.4.3.1/vignettes/v3_analyticrelatedness.Rmd" class="external-link"><code>vignettes/v3_analyticrelatedness.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/R-Computing-Lab/BGmisc/blob/main/vignettes/v3_analyticrelatedness.Rmd" class="external-link"><code>vignettes/v3_analyticrelatedness.Rmd</code></a></small>
       <div class="d-none name"><code>v3_analyticrelatedness.Rmd</code></div>
     </div>
 
@@ -500,7 +500,7 @@ relatedness structure when parental data are partially missing.</p>
 dataset and stores both the RMSEs and the maximum relatedness
 values.</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">famIDs</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<code class="sourceCode R"><span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="va">famIDs</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="co"># make three versions to filter down</span></span>
 <span>  <span class="va">df_fam_dad</span> <span class="op">&lt;-</span> <span class="va">df_fam_mom</span> <span class="op">&lt;-</span> <span class="va">df_fam</span> <span class="op">&lt;-</span> <span class="va">df</span><span class="op">[</span><span class="va">df</span><span class="op">$</span><span class="va">famID</span> <span class="op">==</span> <span class="va">famIDs</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, <span class="op">]</span></span>
 <span></span>
@@ -576,7 +576,8 @@ values.</p>
 <span>    ped_add_partial_mom <span class="op">=</span> <span class="va">ped_add_partial_mom</span>,</span>
 <span>    ped_add_classic_mom <span class="op">=</span> <span class="va">ped_add_classic_mom</span></span>
 <span>  <span class="op">)</span></span>
-<span><span class="op">}</span></span></code></pre></div>
+<span><span class="op">}</span></span>
+<span><span class="co">#&gt; Warning in seq_len(famIDs): first element used of 'length.out' argument</span></span></code></pre></div>
 <div class="section level4">
 <h4 id="example-family-1">Example: Family <code>1</code><a class="anchor" aria-label="anchor" href="#example-family-1"></a>
 </h4>
@@ -702,12 +703,13 @@ methods. A positive value means that the partial method had lower RMSE
 <div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">results</span>, <span class="va">RMSE_diff_mom</span>, <span class="va">RMSE_diff_dad</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;  RMSE_diff_mom      RMSE_diff_dad     </span></span>
-<span><span class="co">#&gt;  Min.   :0.001222   Min.   :0.001222  </span></span>
-<span><span class="co">#&gt;  1st Qu.:0.001869   1st Qu.:0.002036  </span></span>
-<span><span class="co">#&gt;  Median :0.002538   Median :0.002520  </span></span>
-<span><span class="co">#&gt;  Mean   :0.005763   Mean   :0.005786  </span></span>
-<span><span class="co">#&gt;  3rd Qu.:0.005625   3rd Qu.:0.005625  </span></span>
-<span><span class="co">#&gt;  Max.   :0.024221   Max.   :0.024221</span></span></code></pre></div>
+<span><span class="co">#&gt;  Min.   :0.002127   Min.   :0.002127  </span></span>
+<span><span class="co">#&gt;  1st Qu.:0.002127   1st Qu.:0.002127  </span></span>
+<span><span class="co">#&gt;  Median :0.002127   Median :0.002127  </span></span>
+<span><span class="co">#&gt;  Mean   :0.002127   Mean   :0.002127  </span></span>
+<span><span class="co">#&gt;  3rd Qu.:0.002127   3rd Qu.:0.002127  </span></span>
+<span><span class="co">#&gt;  Max.   :0.002127   Max.   :0.002127  </span></span>
+<span><span class="co">#&gt;  NA's   :7          NA's   :7</span></span></code></pre></div>
 <p>In all families, both <code>RMSE_diff_mom</code> and
 <code>RMSE_diff_dad</code> are positive—indicating that the classic
 method produces larger the errors relative to the partial method. This
@@ -732,12 +734,13 @@ reconstructs the full-data relatedness matrix.</p>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt;  RMSE_partial_dad  RMSE_partial_mom  RMSE_classic_dad  RMSE_classic_mom </span></span>
-<span><span class="co">#&gt;  Min.   :0.04773   Min.   :0.04773   Min.   :0.04895   Min.   :0.04895  </span></span>
-<span><span class="co">#&gt;  1st Qu.:0.05570   1st Qu.:0.05349   1st Qu.:0.05774   1st Qu.:0.05555  </span></span>
-<span><span class="co">#&gt;  Median :0.06206   Median :0.06899   Median :0.06457   Median :0.07158  </span></span>
-<span><span class="co">#&gt;  Mean   :0.07545   Mean   :0.07686   Mean   :0.08124   Mean   :0.08262  </span></span>
-<span><span class="co">#&gt;  3rd Qu.:0.08237   3rd Qu.:0.08323   3rd Qu.:0.08866   3rd Qu.:0.08866  </span></span>
-<span><span class="co">#&gt;  Max.   :0.15547   Max.   :0.15547   Max.   :0.17969   Max.   :0.17969</span></span></code></pre></div>
+<span><span class="co">#&gt;  Min.   :0.05634   Min.   :0.05634   Min.   :0.05846   Min.   :0.05846  </span></span>
+<span><span class="co">#&gt;  1st Qu.:0.05634   1st Qu.:0.05634   1st Qu.:0.05846   1st Qu.:0.05846  </span></span>
+<span><span class="co">#&gt;  Median :0.05634   Median :0.05634   Median :0.05846   Median :0.05846  </span></span>
+<span><span class="co">#&gt;  Mean   :0.05634   Mean   :0.05634   Mean   :0.05846   Mean   :0.05846  </span></span>
+<span><span class="co">#&gt;  3rd Qu.:0.05634   3rd Qu.:0.05634   3rd Qu.:0.05846   3rd Qu.:0.05846  </span></span>
+<span><span class="co">#&gt;  Max.   :0.05634   Max.   :0.05634   Max.   :0.05846   Max.   :0.05846  </span></span>
+<span><span class="co">#&gt;  NA's   :7         NA's   :7         NA's   :7         NA's   :7</span></span></code></pre></div>
 <p>This summary provides an overview of the RMSE values for each method
 across families, highlighting the consistent advantage of the partial
 parent method in reconstructing relatedness when parental data are
