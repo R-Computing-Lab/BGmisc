@@ -26,26 +26,33 @@ sliceFamilies <- function(
     chunk_size = 2e7,
     max_lines = 1e13,
     input_file = NULL,
+    folder_prefix = "data",
     progress_csv = "progress.csv",
     progress_status = "progress.txt",
+    data_directory = NULL,
     file_column_names = c("ID1", "ID2", "addRel", "mitRel", "cnuRel")) {
+
   bin_width_string <- as.character(bin_width * 100)
-  # Ensure the outcome_name directory exists
-  if (biggest == TRUE && !base::dir.exists(file.path(outcome_name, "data", paste0("links_", bin_width_string)))) {
-    dir.create(file.path(outcome_name, "data", paste0("links_", bin_width_string)),
-      showWarnings = FALSE, recursive = TRUE
-    )
-  } else if (biggest == FALSE && !base::dir.exists(file.path(
-    outcome_name,
-    "data", paste0(
-      "links_allbut_",
-      bin_width_string
-    )
-  ))) {
-    dir.create(file.path(outcome_name, "data", paste0("links_allbut_", bin_width_string)),
-      showWarnings = FALSE, recursive = TRUE
-    )
+
+  if(is.null(data_directory)) {
+    # Set the data directory based on the outcome name and folder prefix
+    if (biggest) {
+      data_directory <- paste0(outcome_name, "/", folder_prefix, "/links_", bin_width_string, "/")
+    } else {
+      data_directory <- paste0(outcome_name, "/", folder_prefix, "/links_allbut_", bin_width_string, "/")
+    }
   }
+    # Ensure the outcome_name directory exists
+    if (!base::dir.exists(data_directory)) {
+        dir.create(data_directory, showWarnings = FALSE, recursive = TRUE)
+      }
+
+  input_file <- if (biggest == TRUE && is.null(input_file)) {
+    base::paste0(outcome_name, "_dataBiggestRelatedPairsTake2.csv")
+  } else if (biggest == FALSE && is.null(input_file)) {
+    base::paste0(outcome_name, "_dataAllbutBiggestRelatedPairsTake2.csv")
+  }
+
 
   # create binning ranges for additive relatedness
   addRel_center <- 2^(0:(-degreerelatedness))
@@ -73,11 +80,7 @@ sliceFamilies <- function(
   end_line <- chunk_size + 1
   total_lines <- 0
 
-  input_file <- if (biggest == TRUE && is.null(input_file)) {
-    base::paste0(outcome_name, "_datacnmitBiggestRelatedPairs_2nddegree_take1.csv")
-  } else if (biggest == FALSE && is.null(input_file)) {
-    base::paste0(outcome_name, "_dataAllbutBiggestRelatedPairsTake2.csv")
-  }
+
 
   if (base::file.exists(progress_csv)) {
     progress_data <- data.table::fread(progress_csv, header = TRUE)
@@ -88,6 +91,7 @@ sliceFamilies <- function(
   start_time <- base::Sys.time()
 
   while (start_line <= max_lines) {
+
     dataRelatedPair_merge <- data.table::fread(input_file,
       skip = start_line - 1,
       nrows = chunk_size,
@@ -109,17 +113,9 @@ sliceFamilies <- function(
       ]
 
       if (base::nrow(range_data) > 0) {
-        file_name <- if (biggest) {
-          base::paste0(
-            outcome_name, "/data/links_", bin_width_string,
-            "/df_mt1_r", range_min, "-r", range_max, ".csv"
+        file_name <- base::paste0(data_directory,"/df_mt1_r", range_min, "-r", range_max, ".csv"
           )
-        } else {
-          base::paste0(
-            outcome_name, "/data/links_allbut_", bin_width_string,
-            "/df_mt1_r", range_min, "-r", range_max, ".csv"
-          )
-        }
+
 
         data.table::fwrite(range_data,
           file = file_name,
@@ -137,17 +133,9 @@ sliceFamilies <- function(
       ]
 
       if (base::nrow(range_data) > 0) {
-        file_name <- if (biggest) {
-          base::paste0(
-            outcome_name, "/data/links_", bin_width_string,
-            "/df_mt0_r", range_min, "-r", range_max, ".csv"
+          base::paste0(data_directory, "df_mt0_r", range_min, "-r", range_max, ".csv"
           )
-        } else {
-          base::paste0(
-            outcome_name, "/data/links_allbut_", bin_width_string,
-            "/df_mt0_r", range_min, "-r", range_max, ".csv"
-          )
-        }
+
 
         data.table::fwrite(range_data,
           file = file_name,
