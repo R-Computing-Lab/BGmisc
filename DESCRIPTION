@@ -36,17 +36,18 @@ Imports:
     methods
 Suggests: 
     corrplot,
-    ggpedigree,
-    kinship2,
-    ggplot2,
     discord,
     dplyr,
     EasyMx,
+    ggpedigree,
+    ggplot2,
+    kinship2,
     knitr,
     OpenMx,
     rmarkdown,
     testthat (>= 3.0.0),
-    tidyverse
+    tidyverse,
+    withr
 VignetteBuilder: 
     knitr
 Config/testthat/edition: 3

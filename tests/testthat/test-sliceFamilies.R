@@ -3,9 +3,8 @@ library(data.table)
 library(withr)
 
 test_that("sliceFamilies creates correct output files for both mitRel = 1 and 0", {
-   local_tempdir() -> tmp
-   old_wd <- getwd()
-   setwd(tmp)
+  withr::local_tempdir() -> tmp
+  withr::local_dir(tmp)
   # Create test input data
   data(hazard)
   ad_ped_matrix <- ped2com(hazard, component = "additive", adjacency_method = "direct", sparse = TRUE)
@@ -17,9 +16,6 @@ test_that("sliceFamilies creates correct output files for both mitRel = 1 and 0"
     mit_ped_matrix = mit_ped_matrix, cn_ped_matrix = cn_ped_matrix,
     writetodisk = TRUE, rel_pairs_file = "dataRelatedPairs.csv"
   )
-
-
-
   # Run function
   sliceFamilies(
     outcome_name = "testout",
@@ -65,7 +61,7 @@ test_that("sliceFamilies creates correct output files for both mitRel = 1 and 0"
   unlink("progress.csv")
   unlink("progress.txt")
 
-  setwd(old_wd)
+#  setwd(old_wd)
 })
 
 #test_that("sliceFamilies correctly defaults to filename based on `biggest`", {
