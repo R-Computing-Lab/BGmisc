@@ -351,6 +351,7 @@ test_that("addPersonToPed works as expected with zygosity", {
     dadID = c(NA, NA),
     twinID = c(NA_integer_, NA_integer_),
     zygosity = c(NA_character_, NA_character_),
+    url = NA_character_,
     stringsAsFactors = FALSE
   )
 
@@ -363,7 +364,8 @@ test_that("addPersonToPed works as expected with zygosity", {
     dadID = 2,
     twinID = NA,
     personID = 10,
-    zygosity = NA
+    zygosity = NA,
+    overwrite = FALSE
   )
 
   expect_equal(nrow(updated), 3)
@@ -374,14 +376,16 @@ test_that("addPersonToPed works as expected with zygosity", {
   expect_equal(updated$dadID[3], 2)
   expect_true(is.na(updated$twinID[3]))
   expect_true(is.na(updated$zygosity[3]))
+  expect_true(is.na(updated$url[3]))
 
   # Add person with generated ID
-  updated2 <- addPersonToPed(ped, name = "Dana", sex = "F")
+  updated2 <- addPersonToPed(ped, name = "Dana", sex = "F", url ="http://example.com")
   expect_equal(nrow(updated2), 3)
   expect_equal(updated2$name[3], "Dana")
   expect_equal(updated2$sex[3], "F")
   expect_equal(updated2$personID[3], max(ped$personID, na.rm = TRUE) + 1)
   expect_true(is.na(updated2$zygosity[3]))
+  expect_true(!is.na(updated2$url[3]))
 
   # Add person with missing optional fields
   updated3 <- addPersonToPed(updated2)
@@ -391,6 +395,7 @@ test_that("addPersonToPed works as expected with zygosity", {
   expect_true(is.na(updated3$twinID[4]))
   expect_true(is.na(updated3$momID[4]))
   expect_true(is.na(updated3$dadID[4]))
+  expect_true(is.na(updated3$zygosity[4]))
 
   expect_equal(updated3$personID[4], max(ped$personID, na.rm = TRUE) + 2)
 })
