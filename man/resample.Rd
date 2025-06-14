@@ -24,3 +24,4 @@ This function performs resampling of the elements in a vector `x`. It randomly
 shuffles the elements of `x` and returns a vector of the resampled elements. If `x`
 is empty, it returns `NA_integer_`.
 }
+\keyword{internal}

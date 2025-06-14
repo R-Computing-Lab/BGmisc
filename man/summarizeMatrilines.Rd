@@ -20,7 +20,8 @@ summarizeMatrilines(
   noldest = 5,
   skip_var = NULL,
   five_num_summary = FALSE,
-  verbose = FALSE
+  verbose = FALSE,
+  network_checks = FALSE
 )
 
 summariseMatrilines(
@@ -38,7 +39,8 @@ summariseMatrilines(
   noldest = 5,
   skip_var = NULL,
   five_num_summary = FALSE,
-  verbose = FALSE
+  verbose = FALSE,
+  network_checks = FALSE
 )
 }
 \arguments{
@@ -73,6 +75,8 @@ Defaults to `byr` (if available) or `personID` otherwise.}
 the minimum, median, and maximum values.}
 
 \item{verbose}{Logical, if TRUE, print progress messages.}
+
+\item{network_checks}{Logical. If `TRUE`, performs network checks on the pedigree data.}
 }
 \description{
 Summarize the maternal lines in a pedigree

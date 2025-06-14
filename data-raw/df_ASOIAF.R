@@ -27,7 +27,12 @@ df <- ped2fam(ASOIAF, personID = "personID") %>%
   mutate(
     momID = as.numeric(momID),
     dadID = as.numeric(dadID),
+    personID = as.numeric(personID),
     name = case_when(
+      personID == 429 ~ "Lord Mormont",
+      personID == 393 ~ "Lord Tyrell",
+      personID == 443 ~ "Lord Florent",
+      personID == 86 ~ "Mariya Darry",
       personID == 274 ~ "Lord Uller",
       personID == 322 ~ "Daenaera Velaryon",
       name == "Naerys " ~ "Naerys Targaryen",
@@ -41,16 +46,16 @@ df <- ped2fam(ASOIAF, personID = "personID") %>%
       personID == 289 ~ "Daella Targaryen (daughter of Maekar I)",
       personID == 281 ~ "Daeron Targaryen (son of Aegon V)",
       personID == 201 ~ "Jaehaerys II Targaryen",
-      personID == 482 ~ "Lord Dayne (father of Edric)", # https://awoiaf.westeros.org/index.php/Lord_Dayne_(father_of_Edric)
+      personID == 482 ~ "Lord Dayne (father of Edric)",
       personID == 202 ~ "Aerys II Targaryen",
       personID == 200 ~ "Aegon V Targaryen",
-      personID == 336 ~ "Companion of Alyn Velaryon",
       is.na(.data$name) & personID %in% c(360, 489:498) ~ "Bastard of Robert Baratheon",
       personID == 326 ~ "Viserys Plumm",
       personID == 327 ~ "Robin Penrose",
       personID == 328 ~ "Laena Penrose",
       personID == 329 ~ "Jocelyn Penrose",
       personID == 330 ~ "Joy Penrose",
+       personID == 294 ~ "Aelinor Penrose",
       personID == 325 ~ "Ronnel Penrose",
       personID == 285 ~ "Aerion (son of Maekar) Targaryen",
       personID == 358 ~ "Aerion (son of Daemion) Targaryen",
@@ -76,8 +81,82 @@ df <- ped2fam(ASOIAF, personID = "personID") %>%
       personID == 182 ~ "Jason Lannister",
       personID %in% c(300:301) ~ "Stillborn Targaryen",
       personID == 284 ~ "Vaella Targaryen",
-      personID == 499  ~ "Ormund Baratheon",
+      personID == 499 ~ "Ormund Baratheon",
+      personID == 425 ~ "Lord High Tower",
+      personID == 366 ~ "Aelyx Targaryen",
+      personID %in% c(331:332) ~ "Unknown Penrose", # was speculative
       TRUE ~ name
+    ),
+    url = case_when(
+      personID == 1 ~ "https://awoiaf.westeros.org/index.php/Walder_Frey",
+      personID == 2 ~ "https://awoiaf.westeros.org/index.php/Perra_Royce",
+      personID == 3 ~ "https://awoiaf.westeros.org/index.php/Stevron_Frey",
+      personID == 4 ~ "https://awoiaf.westeros.org/index.php/Emmon_Frey",
+      personID == 5 ~ "https://awoiaf.westeros.org/index.php/Aenys_Frey",
+      personID == 9 ~ "https://awoiaf.westeros.org/index.php/Walder_Frey_(son_of_Ryman)",
+      personID == 16 ~ "https://awoiaf.westeros.org/index.php/Aegon_Frey_(son_of_Stevron)",
+      personID == 26 ~ "https://awoiaf.westeros.org/index.php/Walda_Frey_(daughter_of_Walton)",
+      personID == 32 ~ "https://awoiaf.westeros.org/index.php/Walder_Frey_(son_of_Emmon)",
+      personID == 34 ~ "https://awoiaf.westeros.org/index.php/Tywin_Frey",
+      personID == 37 ~ "https://awoiaf.westeros.org/index.php/Aegon_Frey_(son_of_Aenys)",
+      personID == 41 ~ "https://awoiaf.westeros.org/index.php/Walda_Frey_(daughter_of_Rhaegar)",
+      personID == 87 ~ "https://awoiaf.westeros.org/index.php/Amerei_Frey",
+      personID == 89 ~ "https://awoiaf.westeros.org/index.php/Walda_Frey_(daughter_of_Merrett)",
+      personID == 91 ~ "https://awoiaf.westeros.org/index.php/Walder_Frey_(son_of_Merrett)",
+      personID == 115 ~ "https://awoiaf.westeros.org/index.php/Walder_Frey_(son_of_Jammos)",
+      personID == 156 ~ NA_character_,
+      personID == 191 ~ "https://awoiaf.westeros.org/index.php/Barra",
+      personID == 193 ~ "https://awoiaf.westeros.org/index.php/Gendry",
+      personID == 194 ~ "https://awoiaf.westeros.org/index.php/Bella",
+      personID == 209 ~ "https://awoiaf.westeros.org/index.php/Aegon_Targaryen_(son_of_Rhaegar)",
+      personID == 220 ~ "https://awoiaf.westeros.org/index.php/Bran_Stark",
+      personID %in% c(234,240:245, 237 ,249, 250) ~ "https://awoiaf.westeros.org/index.php/House_Waynwood",
+      personID %in% c(236, 238) ~ NA_character_,
+      personID == 256 ~ "https://awoiaf.westeros.org/index.php/Brynden_Tully",
+      personID == 257 ~ "https://awoiaf.westeros.org/index.php/Princess_of_Dorne_(mother_of_Doran)",
+      personID == 258 ~ NA_character_,
+      personID == 263 ~ "https://awoiaf.westeros.org/index.php/Oberyn_Martell",
+      personID == 274 ~ "https://awoiaf.westeros.org/index.php/Harmen_Uller#Family",
+      personID == 280 ~ "https://awoiaf.westeros.org/index.php/Duncan_Targaryen",
+      personID == 283 ~ "https://awoiaf.westeros.org/index.php/Daeron_Targaryen_(son_of_Maekar_I)",
+      personID == 285 ~ "https://awoiaf.westeros.org/index.php/Aerion_Targaryen",
+      personID == 292 ~ "https://awoiaf.westeros.org/index.php/Baelor_Targaryen_(son_of_Daeron_II)",
+      personID == 294 ~ "https://awoiaf.westeros.org/index.php/Aelinor_Penrose",
+      personID %in% c(300:301,318:319) ~ NA_character_,
+      personID == 302 ~ "https://awoiaf.westeros.org/index.php/Aegon_IV_Targaryen",
+      personID == 307 ~ "https://awoiaf.westeros.org/index.php/Aemon_Targaryen_(son_of_Viserys_II)",
+      personID == 309 ~ "https://awoiaf.westeros.org/index.php/Aegor_Rivers",
+      personID == 310 ~ "https://awoiaf.westeros.org/index.php/Brynden_Rivers",
+      personID == 313 ~ "https://awoiaf.westeros.org/index.php/Aegon_Blackfyre",
+      personID == 317 ~ "https://awoiaf.westeros.org/index.php/Maelys_I_Blackfyre#Family",
+      personID == 320 ~ "https://awoiaf.westeros.org/index.php/Maelys_I_Blackfyre",
+      personID == 321 ~ "https://awoiaf.westeros.org/index.php/Aegon_III_Targaryen",
+      personID %in% c(331:332) ~ "https://awoiaf.westeros.org/index.php/House_Penrose",
+      personID == 345 ~ "https://awoiaf.westeros.org/index.php/Aegon_II_Targaryen",
+      personID == 350 ~ "https://awoiaf.westeros.org/index.php/Jaehaerys_I_Targaryen",
+      personID == 351 ~ "https://awoiaf.westeros.org/index.php/Alysanne_Targaryen",
+      personID == 353 ~ "https://awoiaf.westeros.org/index.php/Aegon_I_Targaryen",
+      personID == 358 ~ "https://awoiaf.westeros.org/index.php/Aerion_Targaryen_(son_of_Daemion)",
+      personID %in% c(360, 489:498) ~ "https://awoiaf.westeros.org/index.php/Robert_I_Baratheon#Family",
+      personID == 363 ~ "https://awoiaf.westeros.org/index.php/Argilac_Durrandon",
+      personID == 364 ~ "https://awoiaf.westeros.org/index.php/Daemion_Targaryen",
+      personID == 365 ~ "https://awoiaf.westeros.org/index.php/Aerys_Targaryen_(son_of_Aegon)",
+      personID == 366 ~ "https://awoiaf.westeros.org/index.php/Aelyx_Targaryen",
+      personID == 368 ~ "https://awoiaf.westeros.org/index.php/Aegon_Targaryen_(son_of_Gaemon)",
+      personID == 370 ~ "https://awoiaf.westeros.org/index.php/Elaena_Targaryen_(daughter_of_Gaemon)",
+      personID == 383 ~ "https://awoiaf.westeros.org/index.php/Garth_Tyrell",
+      personID == 390 ~ "https://awoiaf.westeros.org/index.php/Horas_Redwyne",
+      personID == 391 ~ "https://awoiaf.westeros.org/index.php/Hobber_Redwyne",
+      personID == 397 ~ "https://awoiaf.westeros.org/index.php/Leo_Tyrell_(son_of_Moryn)",
+      personID %in% c(425:426) ~ "https://awoiaf.westeros.org/index.php/House_Hightower#House_Hightower_at_the_end_of_the_third_century",
+      personID == 427 ~ "https://awoiaf.westeros.org/index.php/Gerold_Hightower",
+      personID %in% c(428, 436:438) ~ NA_character_,
+      personID %in% c(460:461)  ~ NA_character_,
+      personID %in% c(471:475) ~ NA_character_,
+      personID == 479 ~ "https://awoiaf.westeros.org/index.php/Sylva_Santagar",
+      personID == 482 ~ "https://awoiaf.westeros.org/index.php/Lord_Dayne_(father_of_Edric)",
+      personID == 483 ~ NA_character_, # No specific URL available
+      TRUE ~ paste0("https://awoiaf.westeros.org/index.php/", str_replace_all(name, " ", "_"))
     ),
     twinID = case_match(name,
       "Jaime Lannister" ~ 165,
@@ -107,157 +186,176 @@ df <- ped2fam(ASOIAF, personID = "personID") %>%
     )
   )
 
-# Add new people to the pedigree
 df <- df %>%
+  addPersonToPed(name  ="Aliandra Martell", sex='F',
+                 personID = 336, momID = 620, dadID = 619,
+                 url = "https://awoiaf.westeros.org/index.php/Aliandra_Martell",
+                 overwrite=TRUE) %>%
+    addPersonToPed(name  ="Anya Waynwood", sex='F',
+                 personID = 251, momID = NA, dadID = 250,
+                 url = "https://awoiaf.westeros.org/index.php/Anya_Waynwood",
+                 overwrite=TRUE)  %>%
+  addPersonToPed(
+    name = "Father of Anya Waynwood", sex = "M",
+    personID = 250, momID = NA, dadID = 249,
+    url = "https://awoiaf.westeros.org/index.php/Anya_Waynwood",overwrite=TRUE
+  ) %>%
+
+  # Add new people to the pedigree
   addPersonToPed(
     name = "Larra Rogare", sex = "F",
-    personID = 502, momID = NA, dadID = NA
+    personID = 502, momID = 627, dadID = 625,
+    url = "https://awoiaf.westeros.org/index.php/Larra_Rogare"
   ) %>%
   addPersonToPed(
     name = "Rodrik Arryn", sex = "M",
-    personID = 503, momID = NA, dadID = 519
+    personID = 503, momID = NA, dadID = 519,
+    url = "https://awoiaf.westeros.org/index.php/Rodrik_Arryn"
   ) %>%
   addPersonToPed(
     name = "Father of Princess of Dorne",
-    sex = "M", personID = 504, momID = NA, dadID = NA
+    sex = "M", personID = 504, momID = NA, dadID = NA,
+    url = NA_character_ # No specific URL available
   ) %>%
   addPersonToPed(
     name = "Mother of Princess of Dorne",
-    sex = "F", personID = 505, momID = NA, dadID = NA
+    sex = "F", personID = 505, momID = NA, dadID = NA,
+    url = NA_character_ # No specific URL available
   ) %>%
   addPersonToPed(
     name = "Alyssa Targaryen",
-    sex = "F", personID = 506, momID = 351, dadID = 350
-  ) %>% # https://awoiaf.westeros.org/index.php/Alyssa_Targaryen
+    sex = "F", personID = 506, momID = 351, dadID = 350,
+    url = "https://awoiaf.westeros.org/index.php/Alyssa_Targaryen"
+  ) %>%
   addPersonToPed(
     name = "Davos Baratheon",
-    sex = "M", personID = 507, momID = 362, dadID = 361
+    sex = "M", personID = 507, momID = 362, dadID = 361,
+    url = "https://awoiaf.westeros.org/index.php/Davos_Baratheon"
   ) %>%
-  # https://awoiaf.westeros.org/index.php/Davos_Baratheon
   addPersonToPed(
     name = "Unknown Baratheon",
-    sex = "M", personID = 508, momID = 362, dadID = 361
+    sex = "M", personID = 508, momID = 362, dadID = 361,
+    url = "https://awoiaf.westeros.org/index.php/Davos_Baratheon#cite_note-4"
   ) %>%
-  # https://awoiaf.westeros.org/index.php/Davos_Baratheon#cite_note-4
   addPersonToPed(
     name = "Rogar Baratheon",
-    sex = "M", personID = 509, momID = NA, # Unknown
-    dadID = 508
-  ) %>% # https://awoiaf.westeros.org/index.php/Rogar_Baratheon
+    sex = "M", personID = 509, momID = NA, dadID = 508,
+    url = "https://awoiaf.westeros.org/index.php/Rogar_Baratheon"
+  ) %>%
   addPersonToPed(
     name = "Alyssa Velaryon",
-    sex = "F", personID = 510, momID = 527, #
-    dadID = 526
-  ) %>% # https://awoiaf.westeros.org/index.php/Alyssa_Velaryon
+    sex = "F", personID = 510, momID = 527, dadID = 526,
+    url = "https://awoiaf.westeros.org/index.php/Alyssa_Velaryon"
+  ) %>%
   addPersonToPed(
     name = "Boremund Baratheon",
-    sex = "M", personID = 511, momID = 510, # Alyssa Velaryon
-    dadID = 509
-  ) %>% # https://awoiaf.westeros.org/index.php/Boremund_Baratheon
+    sex = "M", personID = 511, momID = 510, dadID = 509,
+    url = "https://awoiaf.westeros.org/index.php/Boremund_Baratheon"
+  ) %>%
   addPersonToPed(
     name = "Jocelyn Baratheon",
-    sex = "F", personID = 512, momID = 510,
-    dadID = 509
-  ) %>% # https://awoiaf.westeros.org/index.php/Jocelyn_Baratheon
+    sex = "F", personID = 512, momID = 510, dadID = 509,
+    url = "https://awoiaf.westeros.org/index.php/Jocelyn_Baratheon"
+  ) %>%
   addPersonToPed(
     name = "Aemon Targaryen (son of Jaehaerys I)",
-    sex = "M", personID = 513, momID = 351, dadID = 350
+    sex = "M", personID = 513, momID = 351, dadID = 350,
+    url = "https://awoiaf.westeros.org/index.php/Aemon_Targaryen_(son_of_Jaehaerys_I)"
   ) %>%
-  # https://awoiaf.westeros.org/index.php/Aemon_Targaryen_(son_of_Jaehaerys_I)
   addPersonToPed(
     name = "Rhaenys Targaryen (daughter of Aemon)",
-    sex = "F", personID = 514, momID = 512,
-    dadID = 513
-  ) %>% # https://awoiaf.westeros.org/index.php/Rhaenys_Targaryen_(daughter_of_Aemon)
+    sex = "F", personID = 514, momID = 512, dadID = 513,
+    url = "https://awoiaf.westeros.org/index.php/Rhaenys_Targaryen_(daughter_of_Aemon)"
+  ) %>%
   addPersonToPed(
     name = "Daella Targaryen (daughter of Jaehaerys I)",
-    sex = "F", personID = 515, momID = 351, dadID = 350
+    sex = "F", personID = 515, momID = 351, dadID = 350,
+    url = "https://awoiaf.westeros.org/index.php/Daella_Targaryen_(daughter_of_Jaehaerys_I)"
   ) %>%
-  # https://awoiaf.westeros.org/index.php/Daella_Targaryen_(daughter_of_Jaehaerys_I)
   addPersonToPed(
     name = "Dyanna Dayne",
-    sex = "F", personID = 516, momID = NA, dadID = NA
+    sex = "F", personID = 516, momID = NA, dadID = NA,
+    url = "https://awoiaf.westeros.org/index.php/Dyanna_Dayne"
   ) %>%
-  # %>% # https://awoiaf.westeros.org/index.php/Dyanna_Dayne
   addPersonToPed(
     name = "Betha Blackwood",
-    sex = "F", personID = 517, momID = NA, dadID = NA
+    sex = "F", personID = 517, momID = NA, dadID = NA,
+    url = "https://awoiaf.westeros.org/index.php/Betha_Blackwood"
   ) %>%
-  # https://awoiaf.westeros.org/index.php/Betha_Blackwood
   addPersonToPed(
     name = "Shaera Targaryen",
-    sex = "F", personID = 518, momID = 517, dadID = 200
+    sex = "F", personID = 518, momID = 517, dadID = 200,
+    url = "https://awoiaf.westeros.org/index.php/Shaera_Targaryen"
   ) %>%
-  # https://awoiaf.westeros.org/index.php/Shaera_Targaryen
   addPersonToPed(
     name = "Rymond Arryn",
-    sex = "M", personID = 519, momID = NA, dadID = NA
+    sex = "M", personID = 519, momID = NA, dadID = NA,
+    url = "https://awoiaf.westeros.org/index.php/Rymond_Arryn"
   ) %>%
-  # https://awoiaf.westeros.org/index.php/Rymond_Arryn
   addPersonToPed(
     name = "Marilda of Hull",
-    sex = "F", personID = 520, momID = NA, dadID = NA
+    sex = "F", personID = 520, momID = NA, dadID = NA,
+    url = "https://awoiaf.westeros.org/index.php/Marilda_of_Hull"
   ) %>%
-  # https://awoiaf.westeros.org/index.php/Marilda_of_Hull
   addPersonToPed(
     name = "Addam Velaryon of Hull",
-    sex = "M", personID = 521, momID = 520, dadID = 522
+    sex = "M", personID = 521, momID = 520, dadID = 522,
+    url = "https://awoiaf.westeros.org/index.php/Addam_Velaryon"
   ) %>%
-  # https://awoiaf.westeros.org/index.php/Addam_Velaryon
   addPersonToPed(
     name = "Laenor Velaryon",
-    sex = "M", personID = 522, momID = 514, dadID = 523
+    sex = "M", personID = 522, momID = 514, dadID = 523,
+    url = "https://awoiaf.westeros.org/index.php/Laenor_Velaryon"
   ) %>%
-  # https://awoiaf.westeros.org/index.php/Laenor_Velaryon
   addPersonToPed(
     name = "Corlys Velaryon",
-    sex = "M", personID = 523, momID = 534, dadID = 524
+    sex = "M", personID = 523, momID = 534, dadID = 524,
+    url = "https://awoiaf.westeros.org/index.php/Corlys_Velaryon"
   ) %>%
-  # https://awoiaf.westeros.org/index.php/Corlys_Velaryon
   addPersonToPed(
     name = "Corwyn Velaryon",
-    sex = "M", personID = 524, momID = NA, dadID = 525
+    sex = "M", personID = 524, momID = NA, dadID = 525,
+    url = "https://awoiaf.westeros.org/index.php/Corwyn_Velaryon"
   ) %>%
-  # https://awoiaf.westeros.org/index.php/Corwyn_Velaryon
   addPersonToPed(
     name = "Daemon Velaryon",
-    sex = "M", personID = 525, momID = 527, dadID = 526
+    sex = "M", personID = 525, momID = 527, dadID = 526,
+    url = "https://awoiaf.westeros.org/index.php/Daemon_Velaryon_(son_of_Aethan)"
   ) %>%
-  # https://awoiaf.westeros.org/index.php/Daemon_Velaryon
   addPersonToPed(
     name = "Aethan Velaryon",
-    sex = "M", personID = 526, momID = NA, dadID = NA
+    sex = "M", personID = 526, momID = 617, dadID = 616,
+    url = "https://awoiaf.westeros.org/index.php/Aethan_Velaryon"
   ) %>%
-  # https://awoiaf.westeros.org/index.php/Aethan_Velaryon
   addPersonToPed(
     name = "Alarra Massey",
-    sex = "F", personID = 527, momID = NA, dadID = NA
+    sex = "F", personID = 527, momID = NA, dadID = NA,
+    url = "https://awoiaf.westeros.org/index.php/Alarra_Massey"
   ) %>%
-  # https://awoiaf.westeros.org/index.php/Alarra_Massey
   addPersonToPed(
     name = "Ossifer Plumm",
-    sex = "M", personID = 528, momID = NA, dadID = NA
+    sex = "M", personID = 528, momID = NA, dadID = NA,
+    url = "https://awoiaf.westeros.org/index.php/Ossifer_Plumm"
   ) %>%
-  # https://awoiaf.westeros.org/index.php/Ossifer_Plumm
   addPersonToPed(
     name = "Daeron Velaryon",
-    sex = "M", personID = 529, momID = 531, dadID = 532
+    sex = "M", personID = 529, momID = 531, dadID = 532,
+    url = "https://awoiaf.westeros.org/index.php/Daeron_Velaryon"
   ) %>%
-  # https://awoiaf.westeros.org/index.php/Daeron_Velaryon
   addPersonToPed(
     name = "Daemion Velaryon",
-    sex = "M", personID = 530, momID = 531, dadID = 532
+    sex = "M", personID = 530, momID = 531, dadID = 532,
+    url = "https://awoiaf.westeros.org/index.php/Daemion_Velaryon"
   ) %>%
-  # https://awoiaf.westeros.org/index.php/Daemion_Velaryon
   addPersonToPed(
     name = "Wife of Vaemond Velaryon",
     sex = "F", personID = 531, momID = NA, dadID = NA
   ) %>%
   addPersonToPed(
     name = "Vaemond Velaryon",
-    sex = "M", personID = 532, momID = NA, dadID = 533
+    sex = "M", personID = 532, momID = NA, dadID = 533,
+    url = "https://awoiaf.westeros.org/index.php/Vaemond_Velaryon"
   ) %>%
-  # https://awoiaf.westeros.org/index.php/Vaemond_Velaryon
   addPersonToPed(
     name = "Second-born son of Corwyn Velaryon",
     sex = "M", personID = 533, momID = 534, dadID = 524
@@ -268,32 +366,32 @@ df <- df %>%
   ) %>%
   addPersonToPed(
     name = "Hazel Harte",
-    sex = "F", personID = 535, momID = NA, dadID = NA
+    sex = "F", personID = 535, momID = NA, dadID = NA,
+    url = "https://awoiaf.westeros.org/index.php/Hazel_Harte"
   ) %>%
-  # https://awoiaf.westeros.org/index.php/Hazel_Harte
-  # add person for
   addPersonToPed(
     name = "Daemon Targaryen",
-    sex = "M", personID = 536, momID = 506, dadID = 537
+    sex = "M", personID = 536, momID = 506, dadID = 537,
+    url = "https://awoiaf.westeros.org/index.php/Daemon_Targaryen"
   ) %>%
-  # https://awoiaf.westeros.org/index.php/Daemon_Targaryen
   addPersonToPed(
     name = "Baelon Targaryen (son of Jaehaerys I)",
-    sex = "M", personID = 537, momID = 351, dadID = 350
+    sex = "M", personID = 537, momID = 351, dadID = 350,
+    url = "https://awoiaf.westeros.org/index.php/Baelon_Targaryen_(son_of_Jaehaerys_I)"
   ) %>%
-  # https://awoiaf.westeros.org/index.php/Baelon_Targaryen_(son_of_Jaehaerys_I)
   addPersonToPed(
     name = "Wife of Jasper Arryn",
     sex = "F", personID = 538, momID = NA, dadID = NA
   ) %>%
   addPersonToPed(
     name = "Otto Hightower",
-    sex = "M", personID = 539, momID = 543, dadID = 542
+    sex = "M", personID = 539, momID = 543, dadID = 542,
+    url = "https://awoiaf.westeros.org/index.php/Otto_Hightower"
   ) %>%
-  # https://awoiaf.westeros.org/index.php/Otto_Hightower
   addPersonToPed(
     name = "Gwayne Hightower",
-    sex = "M", personID = 540, momID = 541, dadID = 539
+    sex = "M", personID = 540, momID = 541, dadID = 539,
+    url = "https://awoiaf.westeros.org/index.php/Gwayne_Hightower"
   ) %>%
   addPersonToPed(
     name = "Wife of Otto Hightower",
@@ -313,45 +411,55 @@ df <- df %>%
   ) %>%
   addPersonToPed(
     name = "Laena Velaryon",
-    sex = "F", personID = 545, momID = 514, dadID = 523
+    sex = "F", personID = 545, momID = 514, dadID = 523,
+    url = "https://awoiaf.westeros.org/index.php/Laena_Velaryon"
   ) %>%
   addPersonToPed(
     name = "Baela	Targaryen",
     sex = "F", personID = 546, momID = 545, dadID = 536,
-    twinID = 547, zygosity = "unknown"
+    twinID = 547, zygosity = "unknown",
+    url = "https://awoiaf.westeros.org/index.php/Baela_Targaryen"
   ) %>%
   addPersonToPed(
     name = "Rhaena Targaryen",
     sex = "F", personID = 547, momID = 545, dadID = 536,
-    twinID = 546, zygosity = "unknown"
+    twinID = 546, zygosity = "unknown",
+    url = "https://awoiaf.westeros.org/index.php/Rhaena_Targaryen"
   ) %>%
   addPersonToPed(
     name = "Visenya Targaryen (daughter of Rhaenyra)",
-    sex = "F", personID = 548, momID = 339, dadID = 536
+    sex = "F", personID = 548, momID = 339, dadID = 536,
+    url = "https://awoiaf.westeros.org/index.php/Visenya_Targaryen_(daughter_of_Rhaenyra)"
   ) %>%
   addPersonToPed(
     name = "Harwin Strong",
-    sex = "M", personID = 549, momID = NA, dadID = 553
+    sex = "M", personID = 549, momID = NA, dadID = 553,
+    url = "https://awoiaf.westeros.org/index.php/Harwin_Strong"
   ) %>%
   addPersonToPed(
     name = "Jacaerys Velaryon",
-    sex = "M", personID = 550, momID = 339, dadID = 549
+    sex = "M", personID = 550, momID = 339, dadID = 549,
+    url = "https://awoiaf.westeros.org/index.php/Jacaerys_Velaryon"
   ) %>%
   addPersonToPed(
     name = "Lucerys Velaryon",
-    sex = "M", personID = 551, momID = 339, dadID = 549
+    sex = "M", personID = 551, momID = 339, dadID = 549,
+    url = "https://awoiaf.westeros.org/index.php/Lucerys_Velaryon"
   ) %>%
   addPersonToPed(
     name = "Joffrey Velaryon",
-    sex = "M", personID = 552, momID = 339, dadID = 549
+    sex = "M", personID = 552, momID = 339, dadID = 549,
+    url = "https://awoiaf.westeros.org/index.php/Joffrey_Velaryon"
   ) %>%
   addPersonToPed(
     name = "Lyonel Strong",
-    sex = "M", personID = 553, momID = NA, dadID = NA
+    sex = "M", personID = 553, momID = NA, dadID = NA,
+    url = "https://awoiaf.westeros.org/index.php/Lyonel_Strong"
   ) %>%
   addPersonToPed(
     name = "Alys Rivers",
-    sex = "F", personID = 554, momID = NA, dadID = 553
+    sex = "F", personID = 554, momID = NA, dadID = 553,
+    url = "https://awoiaf.westeros.org/index.php/Alys_Rivers"
   ) %>%
   addPersonToPed(
     name = "Son of Alys Rivers",
@@ -360,39 +468,44 @@ df <- df %>%
   addPersonToPed(
     name = "Jaehaera Targaryen",
     sex = "F", personID = 556, momID = 348, dadID = 345,
-    twinID = 557, zygosity = "dz"
+    twinID = 557, zygosity = "dz",
+    url = "https://awoiaf.westeros.org/index.php/Jaehaera_Targaryen"
   ) %>%
   addPersonToPed(
     name = "Jaehaerys Targaryen (son of Aegon II)",
     sex = "M", personID = 557, momID = 348, dadID = 345,
-    twinID = 556, zygosity = "dz"
+    twinID = 556, zygosity = "dz",
+    url = "https://awoiaf.westeros.org/index.php/Jaehaerys_Targaryen_(son_of_Aegon_II)"
   ) %>%
   addPersonToPed(
     name = "Maelor Targaryen (son of Aegon II)",
-    sex = "M", personID = 558, momID = 348, dadID = 345
+    sex = "M", personID = 558, momID = 348, dadID = 345,
+    url = "https://awoiaf.westeros.org/index.php/Maelor_Targaryen"
   ) %>%
   addPersonToPed(
     name = "Laena Velaryon (daughter of Baela Targaryen)",
-    sex = "F", personID = 559, momID = 546, dadID = 333
+    sex = "F", personID = 559, momID = 546, dadID = 333,
+    url = "https://awoiaf.westeros.org/index.php/Laena_Velaryon"
   ) %>%
   addPersonToPed(
     name = "Rohanne of Tyrosh",
-    sex = "F", personID = 560, momID = NA, dadID = NA
+    sex = "F", personID = 560, momID = NA, dadID = NA,
+    url = "https://awoiaf.westeros.org/index.php/Rohanne_of_Tyrosh"
   ) %>%
-  # https://awoiaf.westeros.org/index.php/Rohanne_of_Tyrosh
   addPersonToPed(
     name = "Daemon III Blackfyre",
-    sex = "M", personID = 561, momID = NA, dadID = 316
+    sex = "M", personID = 561, momID = NA, dadID = 316,
+    url = "https://awoiaf.westeros.org/index.php/Daemon_III_Blackfyre"
   ) %>%
   addPersonToPed(
     name = "Calla Blackfyre",
-    sex = "F", personID = 562, momID = 560, dadID = 312
+    sex = "F", personID = 562, momID = 560, dadID = 312,
+    url = "https://awoiaf.westeros.org/index.php/Calla_Blackfyre"
   ) %>%
-  # https://awoiaf.westeros.org/index.php/Calla_Blackfyre
-
   addPersonToPed(
     name = "Barba Bracken",
-    sex = "F", personID = 563, momID = NA, dadID = NA
+    sex = "F", personID = 563, momID = NA, dadID = NA,
+    url = "https://awoiaf.westeros.org/index.php/Barba_Bracken"
   ) %>%
   addPersonToPed(
     name = "Lord Frey",
@@ -412,12 +525,13 @@ df <- df %>%
   ) %>%
   addPersonToPed(
     name = "Prince of Dorne (father of Maron)", sex = "M",
-    personID = 568, momID = NA, dadID = NA
+    personID = 568, momID = NA, dadID = NA,
+    url = "https://awoiaf.westeros.org/index.php/Prince_of_Dorne_(father_of_Maron)"
   ) %>%
-  # https://awoiaf.westeros.org/index.php/Prince_of_Dorne_(father_of_Maron)
   addPersonToPed(
     name = "Maron Martell", sex = "M",
-    personID = 569, momID = 567, dadID = 568
+    personID = 569, momID = 567, dadID = 568,
+    url = "https://awoiaf.westeros.org/index.php/Maron_Martell"
   ) %>%
   addPersonToPed(
     name = "Mother of Hoster Tully", sex = "F",
@@ -425,51 +539,63 @@ df <- df %>%
   ) %>%
   addPersonToPed(
     name = "Marna Locke", sex = "F",
-    personID = 571, momID = NA, dadID = NA
+    personID = 571, momID = NA, dadID = NA,
+    url = "https://awoiaf.westeros.org/index.php/Marna_Locke"
   ) %>%
   addPersonToPed(
     name = "Arya Flint", sex = "F",
-    personID = 572, momID = NA, dadID = NA
+    personID = 572, momID = NA, dadID = NA,
+    url = "https://awoiaf.westeros.org/index.php/Arya_Flint"
   ) %>%
   addPersonToPed(
     name = "Rodrik Stark", sex = "M",
-    personID = 573, momID = 576, dadID = 575
+    personID = 573, momID = 576, dadID = 575,
+    url = "https://awoiaf.westeros.org/index.php/Rodrik_Stark"
   ) %>%
   addPersonToPed(
     name = "Lyanne Glover", sex = "F",
-    personID = 574, momID = NA, dadID = NA
+    personID = 574, momID = NA, dadID = NA,
+    url = "https://awoiaf.westeros.org/index.php/Lyanne_Glover"
   ) %>%
   addPersonToPed(
     name = "Beron Stark", sex = "M",
-    personID = 575, momID = 607, dadID = 606
+    personID = 575, momID = 608, dadID = 607,
+    url = "https://awoiaf.westeros.org/index.php/Beron_Stark"
   ) %>%
   addPersonToPed(
     name = "Lorra Royce", sex = "F",
-    personID = 576, momID = NA, dadID = NA
+    personID = 576, momID = NA, dadID = NA,
+    url = "https://awoiaf.westeros.org/index.php/Lorra_Royce"
   ) %>%
   addPersonToPed(
     name = "Donnor Stark", sex = "M",
-    personID = 577, momID = 576, dadID = 575
+    personID = 577, momID = 576, dadID = 575,
+    url = "https://awoiaf.westeros.org/index.php/Donnor_Stark"
   ) %>%
   addPersonToPed(
     name = "Artos Stark", sex = "M",
-    personID = 578, momID = 576, dadID = 575
+    personID = 578, momID = 576, dadID = 575,
+    url = "https://awoiaf.westeros.org/index.php/Artos_Stark"
   ) %>%
   addPersonToPed(
     name = "Berena Stark", sex = "F",
-    personID = 579, momID = 576, dadID = 575
+    personID = 579, momID = 576, dadID = 575,
+    url = "https://awoiaf.westeros.org/index.php/Berena_Stark"
   ) %>%
   addPersonToPed(
     name = "Alysanne Stark", sex = "F",
-    personID = 580, momID = 576, dadID = 575
+    personID = 580, momID = 576, dadID = 575,
+    url = "https://awoiaf.westeros.org/index.php/Alysanne_Stark"
   ) %>%
   addPersonToPed(
     name = "Errold Stark", sex = "M",
-    personID = 581, momID = 576, dadID = 575
+    personID = 581, momID = 576, dadID = 575,
+    url = "https://awoiaf.westeros.org/index.php/Errold_Stark"
   ) %>%
   addPersonToPed(
     name = "Branda Stark", sex = "F",
-    personID = 582, momID = 572, dadID = 573
+    personID = 582, momID = 572, dadID = 573,
+    url = "https://awoiaf.westeros.org/index.php/Branda_Stark"
   ) %>%
   addPersonToPed(
     name = "Wife of Andros Brax", sex = "F",
@@ -477,27 +603,33 @@ df <- df %>%
   ) %>%
   addPersonToPed(
     name = "Jeyne Marbrand", sex = "F",
-    personID = 584, momID = NA, dadID = NA
+    personID = 584, momID = NA, dadID = NA,
+    url = "https://awoiaf.westeros.org/index.php/Jeyne_Marbrand"
   ) %>%
   addPersonToPed(
     name = "Rohanne Webber", sex = "F",
-    personID = 585, momID = NA, dadID = NA
+    personID = 585, momID = NA, dadID = NA,
+    url = "https://awoiaf.westeros.org/index.php/Rohanne_Webber"
   ) %>%
   addPersonToPed(
     name = "Marla Prester", sex = "F",
-    personID = 586, momID = NA, dadID = NA
+    personID = 586, momID = NA, dadID = NA,
+    url = "https://awoiaf.westeros.org/index.php/Marla_Prester"
   ) %>%
   addPersonToPed(
     name = "Alys Stackspear", sex = "F",
-    personID = 587, momID = NA, dadID = NA
+    personID = 587, momID = NA, dadID = NA,
+    url = "https://awoiaf.westeros.org/index.php/Alys_Stackspear"
   ) %>%
   addPersonToPed(
     name = "Damon Lannister", sex = "M",
-    personID = 588, momID = 587, dadID = 182
+    personID = 588, momID = 587, dadID = 182,
+    url = "https://awoiaf.westeros.org/index.php/Damon_Lannister"
   ) %>%
   addPersonToPed(
     name = "Jena Dondarrion", sex = "F",
-    personID = 589, momID = NA, dadID = NA
+    personID = 589, momID = NA, dadID = NA,
+    url = "https://awoiaf.westeros.org/index.php/Jena_Dondarrion"
   ) %>%
   addPersonToPed(
     name = "Wife of Aerys", sex = "F",
@@ -505,15 +637,18 @@ df <- df %>%
   ) %>%
   addPersonToPed(
     name = "Melissa Blackwood", sex = "F",
-    personID = 591, momID = NA, dadID = NA
+    personID = 591, momID = NA, dadID = NA,
+    url = "https://awoiaf.westeros.org/index.php/Melissa_Blackwood"
   ) %>%
   addPersonToPed(
     name = "Gwenys Rivers", sex = "F",
-    personID = 592, momID = 591, dadID = 302
+    personID = 592, momID = 591, dadID = 302,
+    url = "https://awoiaf.westeros.org/index.php/Gwenys_Rivers"
   ) %>%
   addPersonToPed(
     name = "Mya Rivers", sex = "F",
-    personID = 593, momID = 591, dadID = 302
+    personID = 593, momID = 591, dadID = 302,
+    url = "https://awoiaf.westeros.org/index.php/Mya_Rivers"
   ) %>%
   addPersonToPed(
     name = "Stillborn Twin Targaryen", sex = "M",
@@ -526,66 +661,193 @@ df <- df %>%
   ) %>%
   addPersonToPed(
     name = "Rhaena Targaryen (daughter of Aenys I)", sex = "F",
-    personID = 596, momID = 510, dadID = 352
+    personID = 596, momID = 510, dadID = 352,
+    url = "https://awoiaf.westeros.org/index.php/Rhaena_Targaryen_(daughter_of_Aenys_I)"
   ) %>%
   addPersonToPed(
     name = "Aegon Targaryen (son of Aenys I)", sex = "M",
-    personID = 597, momID = 510, dadID = 352
+    personID = 597, momID = 510, dadID = 352,
+    url = "https://awoiaf.westeros.org/index.php/Aegon_Targaryen_(son_of_Aenys_I)"
   ) %>%
   addPersonToPed(
     name = "Viserys Targaryen (son of Aenys I)", sex = "M",
-    personID = 598, momID = 510, dadID = 352
+    personID = 598, momID = 510, dadID = 352,
+    url = "https://awoiaf.westeros.org/index.php/Viserys_Targaryen_(son_of_Aenys_I)"
   ) %>%
   addPersonToPed(
     name = "Vaella Targaryen", sex = "F",
-    personID = 599, momID = 510, dadID = 352
+    personID = 599, momID = 510, dadID = 352,
+    url = "https://awoiaf.westeros.org/index.php/Vaella_Targaryen"
   ) %>%
   addPersonToPed(
     name = "Kiera of Tyrosh", sex = "F",
-    personID = 600, momID = NA, dadID = NA
+    personID = 600, momID = NA, dadID = NA,
+    url = "https://awoiaf.westeros.org/index.php/Kiera_of_Tyrosh"
   ) %>%
   addPersonToPed(
     name = "Aerea Targaryen", sex = "F",
     personID = 601, momID = 596, dadID = 597,
-    twinID = 602, zygosity = "mz"
- ) %>%
+    twinID = 602, zygosity = "mz",
+    url = "https://awoiaf.westeros.org/index.php/Aerea_Targaryen"
+  ) %>%
   addPersonToPed(
     name = "Rhaella Targaryen (daughter of Aegon)", sex = "F",
     personID = 602, momID = 596, dadID = 597,
-    twinID = 601, zygosity = "mz"
-  )  %>%
+    twinID = 601, zygosity = "mz",
+    url = "https://awoiaf.westeros.org/index.php/Rhaella_Targaryen_(daughter_of_Aegon)"
+  ) %>%
   addPersonToPed(
     name = "Erryk Cargyll", sex = "M",
     personID = 603, momID = 605, dadID = 606,
-    twinID = 604, zygosity = "mz"
-  )  %>%   addPersonToPed(
+    twinID = 604, zygosity = "mz",
+    url = "https://awoiaf.westeros.org/index.php/Erryk_Cargyll"
+  ) %>%
+  addPersonToPed(
     name = "Arryk Cargyll", sex = "M",
     personID = 604, momID = 605, dadID = 606,
-    twinID = 603, zygosity = "mz"
-  )  %>%  addPersonToPed(
-    name = "Father Cargyll", sex = "M",
-    personID = 606, momID = NA, dadID = NA
-  )  %>%   addPersonToPed(
+    twinID = 603, zygosity = "mz",
+    url = "https://awoiaf.westeros.org/index.php/Arryk_Cargyll"
+  ) %>%
+  addPersonToPed(
     name = "Mother Cargyll", sex = "F",
     personID = 605, momID = NA, dadID = NA
-  ) %>% addPersonToPed(
+  ) %>%
+  addPersonToPed(
+    name = "Father Cargyll", sex = "M",
+    personID = 606, momID = NA, dadID = NA
+  ) %>%
+  addPersonToPed(
     name = "Brandon Stark (son of Cregan)", sex = "M",
-    personID = 606, momID = 608, dadID = 609
-  ) %>% addPersonToPed(
+    personID = 607, momID = 609, dadID = 610,
+    url = "https://awoiaf.westeros.org/index.php/Brandon_Stark_(son_of_Cregan)"
+  ) %>%
+  addPersonToPed(
     name = "Alys Karstark (wife of Brandon)", sex = "F",
-    personID = 607, momID = NA, dadID = NA
-  ) %>% addPersonToPed(
+    personID = 608, momID = NA, dadID = NA,
+    url = "https://awoiaf.westeros.org/index.php/Alys_Karstark_(wife_of_Brandon)"
+  ) %>%
+  addPersonToPed(
     name = "Lynara Stark", sex = "F",
-    personID = 608, momID = NA, dadID = NA
-  )  %>% addPersonToPed(
+    personID = 609, momID = NA, dadID = NA,
+    url = "https://awoiaf.westeros.org/index.php/Lynara_Stark"
+  ) %>%
+  addPersonToPed(
     name = "Cregan Stark", sex = "M",
-    personID = 609, momID = 611, dadID = 610
-  )  %>% addPersonToPed(
+    personID = 610, momID = 612, dadID = 611,
+    url = "https://awoiaf.westeros.org/index.php/Cregan_Stark"
+  ) %>%
+  addPersonToPed(
     name = "Rickon Stark (son of Benjen)", sex = "M",
-    personID = 610, momID = NA, dadID = NA
-  )  %>% addPersonToPed(
+    personID = 611, momID = NA, dadID = NA,
+    url = "https://awoiaf.westeros.org/index.php/Rickon_Stark_(son_of_Benjen)"
+  ) %>%
+  addPersonToPed(
     name = "Gilliane Glover", sex = "F",
-    personID = 611, momID = NA, dadID = NA
+    personID = 612, momID = NA, dadID = NA,
+    url = "https://awoiaf.westeros.org/index.php/Gilliane_Glover"
+  ) %>%
+  addPersonToPed(
+    name = "Raymar Royce", sex = "M",
+    personID = 613, momID = NA, dadID = NA,
+    url = "https://awoiaf.westeros.org/index.php/Raymar_Royce"
+  ) %>%
+  addPersonToPed(
+    name = "Mother of Luthor Tyrell", sex = "F",
+    personID = 614, momID = NA, dadID = NA
+  ) %>%
+  addPersonToPed(
+    name = "Mother of Jeor Mormont", sex = "F",
+    personID = 615, momID = NA, dadID = NA
+  ) %>%
+  addPersonToPed(
+    name = "Daemon Velaryon", sex = "M",
+    personID = 616, momID = NA, dadID = NA,
+    url = "https://awoiaf.westeros.org/index.php/Daemon_Velaryon_(son_of_Corlys)"
+  ) %>%
+  addPersonToPed(
+    name = "Wife of Daemon Velaryon", sex = "F",
+    personID = 617, momID = NA, dadID = NA
+  ) %>%
+  addPersonToPed(
+    name = "Corlys Velaryon (son of Daemon)", sex = "M",
+    personID = 618, momID = 617, dadID = 616,
+    url = "https://awoiaf.westeros.org/index.php/Corlys_Velaryon_(son_of_Daemon)"
+  ) %>%  addPersonToPed(
+    name = "Qoren Nymeros Martell", sex = "M",
+    personID = 619, momID = NA, dadID = NA,
+    url = "https://awoiaf.westeros.org/index.php/Qoren_Martell"
+  )  %>%  addPersonToPed(
+    name = "Wife of Qoren Nymeros Martell", sex = "F",
+    personID = 620, momID = NA, dadID = NA,
+    url = "https://awoiaf.westeros.org/index.php/Qoren_Martell#Family"
+  )   %>%  addPersonToPed(
+    name = "Coryanne Martell", sex = "F",
+    personID = 621, momID = 620, dadID = 619,
+    url = "https://awoiaf.westeros.org/index.php/Coryanne_Martell"
+  )   %>%  addPersonToPed(
+    name = "Qyle Martell", sex = "M",
+    personID = 622, momID = 620, dadID = 619,
+    url = "https://awoiaf.westeros.org/index.php/Qyle_Martell"
+  )  %>%  addPersonToPed(
+    name = "Father of Lysandro Rogare", sex = "M",
+    personID = 623, momID = NA, dadID = NA,
+    url = "https://awoiaf.westeros.org/index.php/Lysandro_Rogare#Family"
+  )  %>%  addPersonToPed(
+    name =  "Mother of Lysandro Rogare",sex = "F",
+    personID = 624, momID = NA, dadID = NA,
+    url = "https://awoiaf.westeros.org/index.php/Lysandro_Rogare#Family"
+  )    %>%  addPersonToPed(
+    name = "Lysandro Rogare", sex = "M",
+    personID = 625, momID = 624, dadID = 623,
+    url = "https://awoiaf.westeros.org/index.php/Lysandro_Rogare"
+  )     %>%  addPersonToPed(
+    name = "Drazenko Rogare", sex = "M",
+    personID = 626, momID = 624, dadID = 623,
+    url = "https://awoiaf.westeros.org/index.php/Drazenko_Rogare"
+  ) %>%  addPersonToPed(
+    name = "Wife of Lysandro Rogare", sex = "F",
+    personID = 627, momID = NA, dadID = NA,
+    url = "https://awoiaf.westeros.org/index.php/Lysandro_Rogare#Family"
+  ) %>% addPersonToPed(
+    name = "Lysaro Rogare", sex = "M",
+    personID = 628, momID = 627, dadID = 625,
+    url = "https://awoiaf.westeros.org/index.php/Lysaro_Rogare"
+  ) %>%   addPersonToPed(
+    name = "Fredo Rogare", sex = "M",
+    personID = 629, momID = 627, dadID = 625,
+    url = "https://awoiaf.westeros.org/index.php/Fredo_Rogare"
+  )  %>%   addPersonToPed(
+    name = "Drako Rogare", sex = "M",
+    personID = 630, momID = 627, dadID = 625,
+    url = "https://awoiaf.westeros.org/index.php/Drako_Rogare"
+  )  %>%   addPersonToPed(
+    name = "Moredo Rogare", sex = "M",
+    personID = 631, momID = 627, dadID = 625,
+    url = "https://awoiaf.westeros.org/index.php/Moredo_Rogare"
+  )  %>%   addPersonToPed(
+    name = "Lotho Rogare", sex = "M",
+    personID = 632, momID = 627, dadID = 625,
+    url = "https://awoiaf.westeros.org/index.php/Lotho_Rogare"
+  )  %>%   addPersonToPed(
+    name = "Roggerio Rogare", sex = "M",
+    personID = 633, momID = 627, dadID = 625,
+    url = "https://awoiaf.westeros.org/index.php/Roggerio_Rogare"
+  )   %>%   addPersonToPed(
+    name = "Marra Rogare", sex = "F",
+    personID = 634, momID = 627, dadID = 625,
+    url = "https://awoiaf.westeros.org/index.php/Marra_Rogare"
+  )    %>%   addPersonToPed(
+    name = "Lysara Rogare", sex = "F",
+    personID = 635, momID = 627, dadID = 625,
+    url = "https://awoiaf.westeros.org/index.php/Lysara_Rogare"
+  )  %>%   addPersonToPed(
+    name = "Husband of Anya Waynwood", sex = "M",
+    personID = 636, momID = NA, dadID = NA,
+    url = "https://awoiaf.westeros.org/index.php/Anya_Waynwood"
+  ) %>%   addPersonToPed(
+    name = "Stillborn daughter of Jon Arryn", sex = "F",
+    personID = 637, momID = 228, dadID = 226,
+    url = "https://awoiaf.westeros.org/index.php/Jeyne_Royce"
   )
 
 
@@ -598,10 +860,14 @@ df <- df %>%
       personID == 328 ~ "F",
       personID == 329 ~ "F",
       personID == 330 ~ "F",
-      personID ==  274 ~ "M",
+      personID == 274 ~ "M",
+      personID ==  236 ~ "M",
       TRUE ~ sex
     ),
     momID = case_when(
+      personID %in% c(422, 376, 408, 410, 412, 415, 416, 417, 419, 421) ~ NA, # has one of 4 potential mothers
+      personID %in% c(488, 430) ~ 615,
+      personID %in% c(385, 384, 383, 380) ~ 614,
       personID %in% c(300:301) ~ 600,
       personID %in% c(281) ~ 517,
       personID %in% c(310) ~ 591,
@@ -639,20 +905,25 @@ df <- df %>%
       personID == 333 ~ 520, # Alyn Velaryon's mother is Marilda of Hull
       personID == 322 ~ 535, # Daenaera Velaryon's mother is Hazel Harte
       personID == 306 ~ 339, #  Viserys II's mother is Rhaenyra Targaryen
-      personID %in% c(351,350) ~ 510, # Alysanne Targaryen's mom is Alyssa Velaryon
+      personID %in% c(351, 350) ~ 510, # Alysanne Targaryen's mom is Alyssa Velaryon
       personID %in% c(
         283, # # Daeron Targaryen (son of Maekar I)
         287, #  Aemon Targaryen (son of Maekar I)
         285, # Aerion (son of Maekar) Targaryen
         288 #  Rhae Targaryen
-      ) ~ 516,  #	Dyanna Dayne is mother of
+      ) ~ 516, # 	Dyanna Dayne is mother of
       personID %in% c(226, 232, 231) ~ 538, # kids of  Jasper
       personID == 1 ~ 566, # Walder Frey's mother
       personID == 284 ~ 600,
+      personID == 294 ~ NA,
       TRUE ~ momID
     ),
     dadID = case_when(
-      personID %in% c(273,275) ~ 274,
+      personID %in% c(252:254) ~ 636,
+      personID == 422 ~ 406,
+      personID == 294 ~ NA,
+      personID == 470 ~ 613, # Raymar Royce
+      personID %in% c(273, 275) ~ 274,
       personID %in% c(207, 260:263) ~ 595,
       personID == 465 ~ 575, # Beron Stark
       personID == 291 ~ 568, # Myriah Martell's mother is the Father of Maron Martell
@@ -701,7 +972,7 @@ ASOIAF <- df %>%
 df_repaired <- checkSex(ASOIAF,
   code_male = 1,
   code_female = 0,
-  verbose = FALSE, repair = TRUE
+  verbose = TRUE, repair = TRUE
 ) %>%
   checkParentIDs(
     addphantoms = TRUE,
@@ -712,6 +983,7 @@ df_repaired <- checkSex(ASOIAF,
 
 
 checkIDs(df_repaired)
+
 checkis_acyclic <- checkPedigreeNetwork(df_repaired,
   personID = "ID",
   momID = "momID",
@@ -726,3 +998,12 @@ if (checkis_acyclic$is_acyclic) {
 } else {
   message("The pedigree contains cyclic relationships.")
 }
+
+ASOIAF %>%
+  filter(is.na(momID) & is.na(dadID)) %>%
+  select(id, name, famID, momID, dadID, sex) %>%
+  mutate(
+    first_name = str_extract(name, "^[^ ]+"),
+    last_name = str_extract(name, "[^ ]+$"),
+  ) %>%
+  arrange(last_name, id)

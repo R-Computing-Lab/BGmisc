@@ -134,7 +134,6 @@ This table contains the additive nuclear relatedness estimates for Jon and Daene
 Likewise, when we examine the relatedness for a different pair, such as Rhaenyra Targaryen and Damemon Targaryen, we can see how the relatedness coefficients vary across different characters in the dataset.
 
 ```{r}
-
 rhaenyra_id <- df_got %>%
   filter(name == "Rhaenyra Targaryen") %>%
   pull(ID)
@@ -142,9 +141,9 @@ daemon_id <- df_got %>%
   filter(name == "Daemon Targaryen") %>%
   pull(ID)
 
-rhaenyra_daemon_row <- df_links %>% 
+rhaenyra_daemon_row <- df_links %>%
   filter(ID1 == rhaenyra_id | ID2 == rhaenyra_id) %>%
-  filter(ID1 %in% daemon_id | ID2 %in% daemon_id) %>% # round to nearest 4th decimal
+  filter(ID1 %in% daemon_id | ID2 %in% daemon_id) %>% # round to 4th decimal
   mutate(across(c(addRel, mitRel, cnuRel), ~ round(.x, 4)))
 
 rhaenyra_daemon_row
@@ -166,7 +165,7 @@ Many real-world and fictional pedigrees contain individuals with unknown or part
 To facilitate plotting, we check for individuals with one known parent but a missing other. For those cases, we assign a placeholder ID to the missing parent.
 
 ```{r}
-df_repaired <- checkParentIDs(df_got,
+df_repaired <- checkParentIDs(df_got %>% filter(famID == 6),
   addphantoms = TRUE,
   repair = TRUE,
   parentswithoutrow = FALSE,
@@ -174,7 +173,7 @@ df_repaired <- checkParentIDs(df_got,
 ) %>% mutate(
   # famID = 1,
   affected = case_when(
-    ID %in% c(jon_id, dany_id, "365") ~ T,
+    ID %in% c(jon_id, dany_id, 339) ~ T,
     TRUE ~ F
   )
 )
@@ -183,16 +182,15 @@ df_repaired <- checkParentIDs(df_got,
 This code creates new IDs for individuals with one known parent and a missing other. It checks if either `momID` or `dadID` is missing, and if so, it assigns a new ID based on the row number. This allows us to visualize the pedigree even when some parental information is incomplete. Now we can check the repaired pedigree for unique IDs and parent-child relationships.
 
 ```{r}
-
 checkIDs <- checkIDs(df_repaired, verbose = TRUE)
 
-#checkIDs
+# checkIDs
 ```
 
 
 ```{r}
 # Check for unique IDs and parent-child relationships
-checkPedigreeNetwork<- checkPedigreeNetwork(df_repaired,
+checkPedigreeNetwork <- checkPedigreeNetwork(df_repaired,
   personID = "ID",
   momID = "momID",
   dadID = "dadID",
@@ -214,10 +212,13 @@ This function provides a more flexible and customizable way to visualize pedigre
 
 
 ```{r eval=FALSE, fig.height=8, fig.width=10, message=FALSE, warning=FALSE, include=FALSE}
-plotPedigree(df_repaired %>% mutate(
-  famID = 1
-), affected = df_repaired$affected, 
-verbose = FALSE)
+plotPedigree(
+  df_repaired %>% mutate(
+    famID = 1
+  ),
+  affected = df_repaired$affected,
+  verbose = FALSE
+)
 ```
 
 
@@ -232,39 +233,51 @@ plt <- ggpedigree(df_repaired_renamed,
   personID = "personID",
   interactive = FALSE,
   config = list(
-   overlay_include = TRUE,
+    overlay_include = TRUE,
     point_size = .75,
     code_male = "M",
     ped_width = 14,
     label_nudge_y = -.25,
     include_labels = TRUE,
     label_method = "geom_text",
-    #segment_self_color = "purple",
+    # segment_self_color = "purple",
     sex_color_include = FALSE,
-    focal_fill_personID = 339,#353,
+    focal_fill_personID = 353, # 339, # 353,
     focal_fill_include = TRUE,
-    tooltip_columns = c( "personID","name", "focal_fill"),
+    tooltip_columns = c("personID", "name", "focal_fill"),
     focal_fill_force_zero = TRUE,
     focal_fill_mid_color = "orange",
     focal_fill_low_color = "#9F2A63FF",
-    focal_fill_legend_title = "Relatedness to \nRhaenyra Targaryen",
+    focal_fill_legend_title = "Relatedness to \nAegon Targaryen",
     focal_fill_na_value = "black",
     value_rounding_digits = 4
-))
+  )
+)
 
 plt
 
 # reduce file size for CRAN
-#if (interactive()) {
-  # If running interactively, use plotly::partial_bundle
-  # to reduce file size for CRAN
+# if (interactive()) {
+# If running interactively, use plotly::partial_bundle
+# to reduce file size for CRAN
 #  plotly::partial_bundle(plt)
-#} else {
+# } else {
 #  plotly::partial_bundle(plt, local = TRUE)
-#}
+# }
 ```
 
 This plot can provide an interactive visualization of the ASOIAF pedigree (if interactive is set to TRUE), allowing users to explore relationships and affected status. The focal individual is highlighted, and tooltips provide additional information about each character. 
+
+
+
+```{r eval=FALSE, include=FALSE}
+df_repaired %>%
+  filter(!is.na(name)) %>%
+  arrange(ID) %>%
+  knitr::kable(caption = "Key Characters in ASOIAF Pedigree")
+```
+
+
 
 ## Conclusion
 

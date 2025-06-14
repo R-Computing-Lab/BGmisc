@@ -81,11 +81,15 @@ test_that("summarizeMatrilines() works", {
 # Test: SummarizeMatrilines is used when SummariseMatrilines
 test_that("SummarizeMatrilines works like SummariseMatrilines", {
   df <- ped2fam(potter, famID = "newFamID", personID = "personID")
-  df_summarized <- summarizeMatrilines(df, famID = "newFamID", personID = "personID",
-                                       verbose = TRUE)
-  df_summarised <- summariseMatrilines(df, famID = "newFamID",
-                                       personID = "personID",
-                                       verbose = TRUE)
+  df_summarized <- summarizeMatrilines(df,
+    famID = "newFamID", personID = "personID",
+    verbose = TRUE
+  )
+  df_summarised <- summariseMatrilines(df,
+    famID = "newFamID",
+    personID = "personID",
+    verbose = TRUE
+  )
   expect_equal(df_summarised, df_summarized)
 })
 # Test Case 5: Does this function work for summarizePatrilines
@@ -147,7 +151,7 @@ test_that("summarizePedigrees works when all numeric variables are skipped", {
     age = c(30, 40, 50, 60, 70)
   )
 
-  df_summarized <- summarizePedigrees(df, skip_var = c("age"),verbose = TRUE)
+  df_summarized <- summarizePedigrees(df, skip_var = c("age"), verbose = TRUE)
   expect_true(all(!grepl("age", names(df_summarized$family_summary))))
 })
 
@@ -177,9 +181,24 @@ test_that("summarizePedigrees() throws error on invalid column names", {
 # Test Case 10: Handling single entry pedigree
 test_that("summarizePedigrees() works for single-entry pedigree", {
   df <- data.frame(ID = 1, momID = NA, dadID = NA, famID = 1, byr = 1920)
-  df_summarized <- summarizePedigrees(df, byr = "byr",verbose = TRUE)
+  df_summarized <- summarizePedigrees(df, byr = "byr", verbose = TRUE)
   expect_equal(nrow(df_summarized$family_summary), 1)
   expect_equal(df_summarized$oldest_families$byr_mean, 1920)
+})
+
+# network check
+test_that("summarizePedigrees() works for network pedigree", {
+  df <- data.frame(
+    ID = 1:5,
+    momID = c(NA, 1, 1, NA, 4),
+    dadID = c(NA, 2, 2, NA, 5),
+    famID = c(1, 1, 1, 2, 2),
+    byr = c(1922, 1945, 1950, 1930, 1960)
+  )
+
+  df_summarized <- summarizePedigrees(df, byr = "byr", network_checks = TRUE)
+  expect_equal(nrow(df_summarized$family_summary), 2)
+  expect_equal(df_summarized$family_summary$byr_mean, c(1939, 1945))
 })
 
 # Test: summarizePedigrees is used when SummarisePedigrees
@@ -213,22 +232,27 @@ test_that("SummarizePedigrees verboses", {
 
   expect_message(
     summarizePedigrees(df,
-                       famID = "newFamID", personID = "personID",
-                       verbose = TRUE,
-                       network_checks = TRUE, type = c("families")))
+      famID = "newFamID", personID = "personID",
+      verbose = TRUE,
+      network_checks = TRUE, type = c("families")
+    )
+  )
   expect_message(
     summarizePedigrees(df,
-                       famID = "newFamID",
-                       personID = "personID",
-                       verbose = TRUE,
-                       network_checks = TRUE,
-                       type = c("matrilines")))
+      famID = "newFamID",
+      personID = "personID",
+      verbose = TRUE,
+      network_checks = TRUE,
+      type = c("matrilines")
+    )
+  )
   expect_message(
-    summarizePedigrees(df,famID = "newFamID",
-                       personID = "personID",
-                       verbose = TRUE,
-                       network_checks = TRUE,
-                       type = c("patrilines")))
-
-
+    summarizePedigrees(df,
+      famID = "newFamID",
+      personID = "personID",
+      verbose = TRUE,
+      network_checks = TRUE,
+      type = c("patrilines")
+    )
+  )
 })

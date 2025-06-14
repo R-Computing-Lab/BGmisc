@@ -20,11 +20,18 @@ buildWithinGenerations(
 \arguments{
 \item{sizeGens}{A numeric vector containing the sizes of each generation within the pedigree.}
 
-\item{marR}{Mating rate. A numeric value ranging from 0 to 1 which determines the proportion of mated (fertilized) couples in the pedigree within each generation. For instance, marR = 0.5 suggests 50 percent of the offspring in a specific generation will be mated and have their offspring.}
+\item{marR}{Mating rate. A numeric value ranging from 0 to 1 which determines
+the proportion of mated (fertilized) couples in the pedigree within each
+generation. For instance, marR  = 0.5 suggests 50 percent of the offspring in
+ a specific generation will be  mated and have their offspring.}
 
-\item{sexR}{Sex ratio of offspring. A numeric value ranging from 0 to 1 that determines the proportion of males in all offspring in this pedigree. For instance, 0.4 means 40 percent of the offspring will be male.}
+\item{sexR}{Sex ratio of offspring. A numeric value ranging from 0 to 1 that
+determines the proportion of males in all offspring in this pedigree. For
+instance, 0.4 means 40 percent of the offspring will be male.}
 
-\item{Ngen}{Number of generations. An integer >= 2 that determines how many generations the simulated pedigree will have. The first generation is always a fertilized couple. The last generation has no mated individuals.}
+\item{Ngen}{Number of generations. An integer >= 2 that determines how many
+generations the simulated pedigree will have. The first generation is always
+a fertilized couple. The last generation has no mated individuals.}
 
 \item{verbose}{logical  If TRUE, message progress through stages of algorithm}
 

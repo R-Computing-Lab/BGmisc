@@ -95,7 +95,7 @@ Null <- function(M) {
 #' vector `x` and the additional arguments provided via `...`.
 #'
 #'
-#' @export
+#' @keywords internal
 resample <- function(x, ...) {
   # message(length(x))
   if (length(x) == 0) {

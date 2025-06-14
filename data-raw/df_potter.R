@@ -8,9 +8,7 @@ library(BGmisc)
 
 potter <- data.frame(
   personID = c(
-    1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-    11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
-    21, 22, 23, 24, 25, 26, 27, 28, 29, 30
+    1:30
   ),
   famID = rep(1, 30),
   name = c(
@@ -141,6 +139,7 @@ potter[nrow(potter) + 1, ] <- list(
   0
 )
 
+
 potter <- potter %>%
   mutate(
     twinID = case_when(
@@ -157,215 +156,19 @@ potter <- potter %>%
 # potter[nrow(potter) + 1,] <- list(personID,fam,name,gen,
 #                                momID,dadID,spouseID,sex)
 
-write_csv(potter, here("data-raw", "potter.csv"))
-usethis::use_data(potter, overwrite = TRUE, compress = "xz")
 
 
-if (FALSE) {
-  ## Create dataframe
-  potter_big <- readGedcom("data-raw/potter_big.ged")
-
-
-  df <- ped2fam(potter_big, personID = "personID") %>%
-    select(
-      -name_given,
-      -name_surn,
-      -death_date,
-      -birth_date,
-      -FAMC,
-      -FAMS
-    ) %>%
-    # rename(personID = id) %>%
-    mutate(
-      personID = as.numeric(personID),
-      momID = as.numeric(momID),
-      dadID = as.numeric(dadID),
-      name = str_remove(name, "/")
-    ) %>%
-    arrange(name)
-
-
-  potter_clean <- potter %>%
-    arrange(name) %>%
-    mutate(
-      personID = as.numeric(personID) * 1000,
-      momID = as.numeric(momID) * 1000,
-      dadID = as.numeric(dadID) * 1000
-    )
-
-  # merge  so that I have all of A and all the Bs that match A
-
-  df_clean <- df %>%
-    mutate(name = str_trim(str_to_lower(name)))
-
-
-
-  potter_clean <- potter_clean %>%
-    mutate(
-      personID = case_match(
-        personID,
-        22000 ~ 15,
-        9000 ~ 18,
-        6000 ~ 10,
-        18000 ~ 29,
-        7000 ~ 1,
-        17000 ~ 25,
-        25000 ~ 27,
-        13000 ~ 20,
-        19000 ~ 34,
-        23000 ~ 16,
-        10000 ~ 17,
-        14000 ~ 22,
-        3000 ~ 8,
-        24000 ~ 26,
-        1000 ~ 9,
-        26000 ~ 30,
-        21000 ~ 14,
-        11000 ~ 19,
-        8000 ~ 13,
-        5000 ~ 2,
-        15000 ~ 23,
-        16000 ~ 24,
-        4000 ~ 3,
-        2000 ~ -2000,
-        101000 ~ 12,
-        102000 ~ 11,
-        20000 ~ -20000,
-        27000 ~ -27000,
-        106000 ~ 32,
-        105000 ~ 33,
-        29000 ~ 17,
-        103000 ~ 7,
-        104000 ~ 6,
-        12000 ~ 21,
-        30000 ~ -30000,
-        28000 ~ -28000,
-        .default = personID
-      ), dadID =
-        case_match(
-          dadID,
-          22000 ~ 15,
-          9000 ~ 18,
-          6000 ~ 10,
-          18000 ~ 29,
-          7000 ~ 1,
-          17000 ~ 25,
-          25000 ~ 27,
-          13000 ~ 20,
-          19000 ~ 34,
-          23000 ~ 16,
-          10000 ~ 17,
-          14000 ~ 22,
-          3000 ~ 8,
-          24000 ~ 26,
-          1000 ~ 9,
-          26000 ~ 30,
-          21000 ~ 14,
-          11000 ~ 19,
-          8000 ~ 13,
-          5000 ~ 2,
-          15000 ~ 23,
-          16000 ~ 24,
-          4000 ~ 3,
-          2000 ~ 2000,
-          101000 ~ 12,
-          102000 ~ 11,
-          20000 ~ 20000,
-          27000 ~ 27000,
-          106000 ~ 32,
-          105000 ~ 33,
-          29000 ~ 17,
-          103000 ~ 7,
-          104000 ~ 6,
-          12000 ~ 21,
-          30000 ~ 30000,
-          28000 ~ 28000,
-          .default = dadID
-        ), momID =
-        case_match(
-          momID,
-          22000 ~ 15,
-          9000 ~ 18,
-          6000 ~ 10,
-          18000 ~ 29,
-          7000 ~ 1,
-          17000 ~ 25,
-          25000 ~ 27,
-          13000 ~ 20,
-          19000 ~ 34,
-          23000 ~ 16,
-          10000 ~ 17,
-          14000 ~ 22,
-          3000 ~ 8,
-          24000 ~ 26,
-          1000 ~ 9,
-          26000 ~ 30,
-          21000 ~ 14,
-          11000 ~ 19,
-          8000 ~ 13,
-          5000 ~ 2,
-          15000 ~ 23,
-          16000 ~ 24,
-          4000 ~ 3,
-          2000 ~ 2000,
-          101000 ~ 12,
-          102000 ~ 11,
-          20000 ~ 20000,
-          27000 ~ 27000,
-          106000 ~ 32,
-          105000 ~ 33,
-          29000 ~ 17,
-          103000 ~ 7,
-          104000 ~ 6,
-          12000 ~ 21,
-          30000 ~ 30000,
-          28000 ~ 28000,
-          .default = momID
-        ), spouseID =
-        case_match(
-          spouseID,
-          22000 ~ 15,
-          9000 ~ 18,
-          6000 ~ 10,
-          18000 ~ 29,
-          7000 ~ 1,
-          17000 ~ 25,
-          25000 ~ 27,
-          13000 ~ 20,
-          19000 ~ 34,
-          23000 ~ 16,
-          10000 ~ 17,
-          14000 ~ 22,
-          3000 ~ 8,
-          24000 ~ 26,
-          1000 ~ 9,
-          26000 ~ 30,
-          21000 ~ 14,
-          11000 ~ 19,
-          8000 ~ 13,
-          5000 ~ 2,
-          15000 ~ 23,
-          16000 ~ 24,
-          4000 ~ 3,
-          2000 ~ 2000,
-          101000 ~ 12,
-          102000 ~ 11,
-          20000 ~ 20000,
-          27000 ~ 27000,
-          106000 ~ 32,
-          105000 ~ 33,
-          29000 ~ 17,
-          103000 ~ 7,
-          104000 ~ 6,
-          12000 ~ 21,
-          30000 ~ 30000,
-          28000 ~ 28000,
-          .default = spouseID
-        )
-    )
-
-
-  # Left join by name
-  potter_join <- potter_clean %>%
-    full_join(df_clean, by = c("personID"), suffix = c("", "_df"))
+checkis_acyclic <- checkPedigreeNetwork(potter,
+  personID = "personID",
+  momID = "momID",
+  dadID = "dadID",
+  verbose = TRUE
+)
+checkis_acyclic
+if (checkis_acyclic$is_acyclic) {
+  message("The pedigree is acyclic.")
+  write_csv(potter, here("data-raw", "potter.csv"))
+  usethis::use_data(potter, overwrite = TRUE, compress = "xz")
+} else {
+  message("The pedigree contains cyclic relationships.")
 }
