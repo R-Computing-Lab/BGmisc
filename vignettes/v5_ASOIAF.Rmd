@@ -165,7 +165,7 @@ Many real-world and fictional pedigrees contain individuals with unknown or part
 To facilitate plotting, we check for individuals with one known parent but a missing other. For those cases, we assign a placeholder ID to the missing parent.
 
 ```{r}
-df_repaired <- checkParentIDs(df_got %>% filter(famID == 6),
+df_repaired <- checkParentIDs(df_got,# %>% filter(famID == 1),
   addphantoms = TRUE,
   repair = TRUE,
   parentswithoutrow = FALSE,
@@ -231,12 +231,12 @@ df_repaired_renamed <- df_repaired %>% rename(
 plt <- ggpedigree(df_repaired_renamed,
   overlay_column = "affected",
   personID = "personID",
-  interactive = FALSE,
+  interactive = F,
   config = list(
     overlay_include = TRUE,
     point_size = .75,
     code_male = "M",
-    ped_width = 14,
+    ped_width = 17,
     label_nudge_y = -.25,
     include_labels = TRUE,
     label_method = "geom_text",

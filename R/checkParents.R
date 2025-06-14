@@ -32,8 +32,8 @@ checkParentIDs <- function(ped, verbose = FALSE, repair = FALSE,
                            parentswithoutrow = repair,
                            famID = "famID",
                            personID = "ID",
-                           momID    = "momID",
-                           dadID    = "dadID") {
+                           momID = "momID",
+                           dadID = "dadID") {
   # Standardize column names in the input dataframe
   ped <- standardizeColnames(ped, verbose = verbose)
 
@@ -239,7 +239,7 @@ checkParentIDs <- function(ped, verbose = FALSE, repair = FALSE,
     message(changes)
   }
 
-     # restore orginal names that the user orginally provided
+  # restore orginal names that the user orginally provided
   names(ped)[names(ped) == "ID"] <- personID
   names(ped)[names(ped) == "momID"] <- momID
   names(ped)[names(ped) == "dadID"] <- dadID
@@ -253,12 +253,14 @@ checkParentIDs <- function(ped, verbose = FALSE, repair = FALSE,
 #' @inherit checkParentIDs details
 #' @return A corrected pedigree
 repairParentIDs <- function(ped, verbose = FALSE,
-                           famID = "famID",
-                           personID = "ID",
-                           momID = "momID",
-                           dadID = "dadID") {
-  checkParentIDs(ped = ped, verbose = verbose, repair = TRUE,
-                 personID= personID, momID = momID, dadID = dadID, famID = famID)
+                            famID = "famID",
+                            personID = "ID",
+                            momID = "momID",
+                            dadID = "dadID") {
+  checkParentIDs(
+    ped = ped, verbose = verbose, repair = TRUE,
+    personID = personID, momID = momID, dadID = dadID, famID = famID
+  )
 }
 
 #' Add addRowlessParents
