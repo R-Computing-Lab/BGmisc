@@ -5,6 +5,8 @@
 * Slightly expanded vignettes to include more examples of the new features in BGmisc and ggpedigree.
 * Updated ASOIAF pedigree to reduce missing parents.
 * Added tests to check if data are acyclic
+* reduce file size for royal92
+
 
 # BGmisc 1.4.3.1
 ## CRAN submission
