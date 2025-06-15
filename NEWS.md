@@ -1,5 +1,7 @@
 # BGmisc 1.4.4
 * Added sliceFamilies function with working tests
+* Better messaging for sliceFamilies
+* Now has some error handling for sliceFamilies
 * Added option to restore variable names in selected places
 
 # BGmisc 1.4.3.2

@@ -27,6 +27,8 @@ test_that("sliceFamilies creates correct output files for both mitRel = 1 and 0"
     input_file = "dataRelatedPairs.csv",
     progress_csv = "progress.csv",
     progress_status = "progress.txt",
+    error_handling = TRUE,
+    verbose = TRUE,
     data_directory = "testout/data/links_10/" # ,
     # file_column_names = names(test_data)
   )

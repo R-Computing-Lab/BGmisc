@@ -17,6 +17,8 @@
 #' @param folder_prefix Prefix for the output folder (default "data")
 #' @param data_directory Directory where output files will be saved. If NULL, it is constructed based on `outcome_name` and `folder_prefix`.
 #' @param verbose Logical; whether to print progress messages (default FALSE)
+#' @param addRel_ceiling Numeric. Maximum relatedness value to bin to. Default is 1.5
+#' @param error_handling Logical. Should more aggressive error handing be attemptted? Default is false
 #' @return NULL. Writes CSV files to disk and updates progress logs.
 #' @export
 #'
@@ -27,18 +29,20 @@ sliceFamilies <- function(
     degreerelatedness = 12,
     chunk_size = 2e7,
     max_lines = 1e13,
+    addRel_ceiling = 1.5,
     input_file = NULL,
     folder_prefix = "data",
     progress_csv = "progress.csv",
     progress_status = "progress.txt",
     data_directory = NULL,
     verbose = FALSE,
+    error_handling = FALSE,
     file_column_names = c("ID1", "ID2", "addRel", "mitRel", "cnuRel")) {
   bin_width_string <- as.character(bin_width * 100)
 
   if (is.null(data_directory)) {
     # Set the data directory based on the outcome name and folder prefix
-    if (biggest) {
+    if (biggest == TRUE) {
       data_directory <- file.path(outcome_name, folder_prefix, paste0("links_", bin_width_string))
     } else {
       data_directory <- file.path(outcome_name, folder_prefix, paste0("links_allbut_", bin_width_string))
@@ -47,12 +51,15 @@ sliceFamilies <- function(
     dir.create(data_directory, showWarnings = FALSE, recursive = TRUE)
   }
   # Ensure the data_directory exists, creating it along with any necessary parent directories
-  #   input_file <-  if (biggest == TRUE && is.null(input_file)) {
-  #   base::paste0(outcome_name, "_dataBiggestRelatedPairsTake2.csv")
-  # } else if (biggest == FALSE && is.null(input_file)) {
-  #   base::paste0(outcome_name, "_dataAllbutBiggestRelatedPairsTake2.csv")
-  # }
-  if (verbose) {
+  if (is.null(input_file) && biggest == TRUE) {
+    input_file <- base::paste0(outcome_name, "_dataBiggestRelatedPairsTake2.csv")
+  } else if (is.null(input_file) && biggest == FALSE) {
+    input_file <- base::paste0(outcome_name, "_dataAllbutBiggestRelatedPairsTake2.csv")
+  } else if (!base::file.exists(input_file)) {
+    stop("Input file does not exist: ", input_file)
+  }
+
+  if (verbose == TRUE) {
     message("Output folder: ", data_directory)
   }
 
@@ -69,7 +76,7 @@ sliceFamilies <- function(
   addRel_real_mins <- addRel_maxs_temp[-1]
 
   addRel_maxs <- c(
-    1.5,
+    addRel_ceiling,
     base::sort(c(addRel_real_maxs, addRel_maxs_temp), decreasing = TRUE),
     addRel_mins_temp[length(addRel_mins_temp)]
   )
@@ -97,14 +104,79 @@ sliceFamilies <- function(
   start_time <- base::Sys.time()
 
   while (start_line <= max_lines) {
-    dataRelatedPair_merge <- data.table::fread(input_file,
-      skip = start_line - 1,
-      nrows = chunk_size,
-      header = FALSE,
-      sep = ",",
-      fill = TRUE
+    # error handling
+
+    dataRelatedPair_merge <- tryCatch(
+      {
+        data.table::fread(input_file,
+          skip = start_line - 1,
+          nrows = chunk_size,
+          header = FALSE,
+          sep = ",",
+          fill = TRUE
+        )
+      },
+      error = function(e) {
+        message("Error reading file: ", e$message)
+        writeLines <- base::paste0("Error reading file at line ", start_line, ": ", e$message)
+        base::cat(writeLines, "\n", file = progress_status, append = TRUE)
+        return(NULL)
+      }
     )
 
+    if (error_handling == TRUE) {
+      if (is.null(dataRelatedPair_merge)) {
+        message("Trying smaller chunk size due to error.")
+        chunk_size <- chunk_size / 2
+        message("New chunk size: ", chunk_size)
+        dataRelatedPair_merge <- tryCatch(
+          {
+            data.table::fread(input_file,
+              skip = start_line - 1,
+              nrows = chunk_size,
+              header = FALSE,
+              sep = ",",
+              fill = TRUE
+            )
+          },
+          error = function(e) {
+            message("Error reading file: ", e$message)
+            writeLines <- base::paste0("Error reading file at line ", start_line, ": ", e$message, "\n Trying smaller chunk size: ", chunk_size)
+            base::cat(writeLines, "\n", file = progress_status, append = TRUE)
+            return(NULL)
+          }
+        )
+      }
+      if (is.null(dataRelatedPair_merge)) {
+        message("Trying even smaller chunk size due to error.")
+        chunk_size <- chunk_size / 2
+        message("New chunk size: ", chunk_size)
+        dataRelatedPair_merge <- tryCatch(
+          {
+            data.table::fread(input_file,
+              skip = start_line - 1,
+              nrows = chunk_size,
+              header = FALSE,
+              sep = ",",
+              fill = TRUE
+            )
+          },
+          error = function(e) {
+            message("Error reading file: ", e$message)
+            writeLines <- base::paste0("Error reading file at line ", start_line, ": ", e$message, "\n Trying smaller chunk size: ", chunk_size)
+            base::cat(writeLines, "\n", file = progress_status, append = TRUE)
+            return(NULL)
+          }
+        )
+      }
+    }
+    if (is.null(dataRelatedPair_merge)) {
+      message("No data read from file or error occurred. Skipping.")
+      writeLines <- base::paste0("No data read from file or error occurred at line ", start_line)
+      base::cat(writeLines, "\n", file = progress_status, append = TRUE)
+      start_line <- start_line + chunk_size
+      next
+    }
     base::colnames(dataRelatedPair_merge) <- file_column_names
 
     for (i in 1:length(addRel_maxs)) {
@@ -121,7 +193,7 @@ sliceFamilies <- function(
         file_name <- base::paste0(data_directory, "df_mt1_r", range_min, "-r", range_max, ".csv")
 
         if (verbose) {
-          print(file_name)
+          message(file_name)
         }
         data.table::fwrite(range_data,
           file = file_name,
@@ -141,7 +213,7 @@ sliceFamilies <- function(
       if (base::nrow(range_data) > 0) {
         file_name <- base::paste0(data_directory, "df_mt0_r", range_min, "-r", range_max, ".csv")
         if (verbose) {
-          print(file_name)
+          message(file_name)
         }
         data.table::fwrite(range_data,
           file = file_name,
@@ -152,9 +224,11 @@ sliceFamilies <- function(
         )
       }
     }
-
+    base::message(start_line)
     df_nrows <- base::nrow(dataRelatedPair_merge)
-
+    if (verbose) {
+      message("Processed ", df_nrows, " rows from lines ", start_line, " to ", end_line)
+    }
     # update the line ranges for the next iteration
     end_line <- start_line + chunk_size - 1
 
@@ -168,12 +242,12 @@ sliceFamilies <- function(
     elapsed <- end_time - start_time
     total_lines <- total_lines + df_nrows
 
-    base::print(start_line)
+
 
     # update start line for next iteration
     start_line <- end_line + 1
 
-    base::print(start_line)
+    base::message(start_line)
 
     progress_data <- base::data.frame(
       start_line = start_line,
@@ -192,13 +266,17 @@ sliceFamilies <- function(
   # Create a status text summarizing the process
   statstext <- base::paste0(
     "Done!\n Total Lines read: ", total_lines,
+    " \nInput File: ", input_file,
+    " \nOutput Directory: ", data_directory,
+    " \nBin Width: ", bin_width,
+    " \nFinal chunk size: ", chunk_size,
     " \nStart Line: ", start_line,
     " \nEnd Line: ", end_line,
     " \nTime: ", elapsed
   )
 
   # Write the final status to the progress file
-  base::cat(statstext, "\n", file = progress_status_conn)
+  base::cat(statstext, "\n", file = progress_status_conn, append = TRUE)
 
   # Close the progress file
   base::close(progress_status_conn)
