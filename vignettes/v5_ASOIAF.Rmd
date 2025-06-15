@@ -173,8 +173,8 @@ df_repaired <- checkParentIDs(df_got, # %>% filter(famID == 1),
 ) %>% mutate(
   # famID = 1,
   affected = case_when(
-    ID %in% c(jon_id, dany_id, 339) ~ T,
-    TRUE ~ F
+    ID %in% c(jon_id, dany_id, 339) ~ TRUE,
+    TRUE ~ FALSE
   )
 )
 ```
@@ -231,7 +231,7 @@ df_repaired_renamed <- df_repaired %>% rename(
 plt <- ggpedigree(df_repaired_renamed,
   overlay_column = "affected",
   personID = "personID",
-  interactive = F,
+  interactive = FALSE,
   config = list(
     overlay_include = TRUE,
     point_size = .75,
