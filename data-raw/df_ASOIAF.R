@@ -192,12 +192,14 @@ df <- df %>%
     name = "Father of Anya Waynwood", sex = "M",
     personID = 250, momID = NA, dadID = 249,
     url = "https://awoiaf.westeros.org/index.php/Anya_Waynwood", overwrite = TRUE
-  )  %>%  addPersonToPed(
+  ) %>%
+  addPersonToPed(
     name = "Anya Waynwood", sex = "F",
     personID = 251, momID = NA, dadID = 250,
     url = "https://awoiaf.westeros.org/index.php/Anya_Waynwood",
     overwrite = TRUE
-  ) %>%   addPersonToPed(
+  ) %>%
+  addPersonToPed(
     personID = 259,
     name = "Lewyn Martell",
     sex = "M",
@@ -217,7 +219,7 @@ df <- df %>%
     personID = 332, momID = NA, dadID = 331,
     url = "https://awoiaf.westeros.org/index.php/Cortnay_Penrose",
     overwrite = TRUE
-  )  %>%
+  ) %>%
   addPersonToPed(
     personID = 333,
     name = "Alyn Velaryon",
@@ -232,7 +234,7 @@ df <- df %>%
     personID = 336, momID = 620, dadID = 619,
     url = "https://awoiaf.westeros.org/index.php/Aliandra_Martell",
     overwrite = TRUE
-  )  %>%
+  ) %>%
   addPersonToPed(
     personID = 340,
     name = "Viserys I Targaryen",
@@ -241,14 +243,16 @@ df <- df %>%
     dadID = 537,
     url = "https://awoiaf.westeros.org/index.php/Viserys_I_Targaryen",
     overwrite = TRUE
-  ) %>% addPersonToPed(
+  ) %>%
+  addPersonToPed(
     personID = 344,
     name = "Alicent Hightower",
     sex = "F",
     momID = 541,
     dadID = 539,
     url = "https://awoiaf.westeros.org/index.php/Alicent_Hightower",
-    overwrite = TRUE) %>%
+    overwrite = TRUE
+  ) %>%
   # Add new people to the pedigree
   addPersonToPed(
     name = "Larra Rogare", sex = "F",
@@ -1043,7 +1047,7 @@ ASOIAF <- df %>%
   mutate(
     zygosity = case_when(
       id %in% c(337, 338, 304) ~ "dz",
-      id %in% c(390, 391,99, 98) ~ "mz",
+      id %in% c(390, 391, 99, 98) ~ "mz",
       !is.na(zygosity) ~ zygosity,
       !is.na(twinID) ~ "unknown",
       TRUE ~ NA_character_

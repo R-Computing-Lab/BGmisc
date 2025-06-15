@@ -11,12 +11,14 @@ sliceFamilies(
   degreerelatedness = 12,
   chunk_size = 2e+07,
   max_lines = 1e+13,
+  addRel_ceiling = 1.5,
   input_file = NULL,
   folder_prefix = "data",
   progress_csv = "progress.csv",
   progress_status = "progress.txt",
   data_directory = NULL,
   verbose = FALSE,
+  error_handling = FALSE,
   file_column_names = c("ID1", "ID2", "addRel", "mitRel", "cnuRel")
 )
 }
@@ -33,6 +35,8 @@ sliceFamilies(
 
 \item{max_lines}{Max number of lines to process from input file (default 1e13)}
 
+\item{addRel_ceiling}{Numeric. Maximum relatedness value to bin to. Default is 1.5}
+
 \item{input_file}{Path to the input CSV file. If NULL, defaults to a specific file based on `biggest` flag.}
 
 \item{folder_prefix}{Prefix for the output folder (default "data")}
@@ -44,6 +48,8 @@ sliceFamilies(
 \item{data_directory}{Directory where output files will be saved. If NULL, it is constructed based on `outcome_name` and `folder_prefix`.}
 
 \item{verbose}{Logical; whether to print progress messages (default FALSE)}
+
+\item{error_handling}{Logical. Should more aggressive error handing be attemptted? Default is false}
 
 \item{file_column_names}{Names of the columns in the input file (default c("ID1", "ID2", "addRel", "mitRel", "cnuRel"))}
 }
