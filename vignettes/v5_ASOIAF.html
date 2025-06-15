@@ -534,8 +534,8 @@ to the missing parent.</p>
 <span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a>) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(</span>
 <span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a>  <span class="co"># famID = 1,</span></span>
 <span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a>  <span class="at">affected =</span> <span class="fu">case_when</span>(</span>
-<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a>    ID <span class="sc">%in%</span> <span class="fu">c</span>(jon_id, dany_id, <span class="dv">339</span>) <span class="sc">~</span> T,</span>
-<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a>    <span class="cn">TRUE</span> <span class="sc">~</span> F</span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a>    ID <span class="sc">%in%</span> <span class="fu">c</span>(jon_id, dany_id, <span class="dv">339</span>) <span class="sc">~</span> <span class="cn">TRUE</span>,</span>
+<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a>    <span class="cn">TRUE</span> <span class="sc">~</span> <span class="cn">FALSE</span></span>
 <span id="cb12-11"><a href="#cb12-11" tabindex="-1"></a>  )</span>
 <span id="cb12-12"><a href="#cb12-12" tabindex="-1"></a>)</span></code></pre></div>
 <pre><code>## REPAIR IN EARLY ALPHA</code></pre>
@@ -603,7 +603,7 @@ functions.</p>
 <span id="cb25-6"><a href="#cb25-6" tabindex="-1"></a>plt <span class="ot">&lt;-</span> <span class="fu">ggpedigree</span>(df_repaired_renamed,</span>
 <span id="cb25-7"><a href="#cb25-7" tabindex="-1"></a>  <span class="at">overlay_column =</span> <span class="st">&quot;affected&quot;</span>,</span>
 <span id="cb25-8"><a href="#cb25-8" tabindex="-1"></a>  <span class="at">personID =</span> <span class="st">&quot;personID&quot;</span>,</span>
-<span id="cb25-9"><a href="#cb25-9" tabindex="-1"></a>  <span class="at">interactive =</span> F,</span>
+<span id="cb25-9"><a href="#cb25-9" tabindex="-1"></a>  <span class="at">interactive =</span> <span class="cn">FALSE</span>,</span>
 <span id="cb25-10"><a href="#cb25-10" tabindex="-1"></a>  <span class="at">config =</span> <span class="fu">list</span>(</span>
 <span id="cb25-11"><a href="#cb25-11" tabindex="-1"></a>    <span class="at">overlay_include =</span> <span class="cn">TRUE</span>,</span>
 <span id="cb25-12"><a href="#cb25-12" tabindex="-1"></a>    <span class="at">point_size =</span> .<span class="dv">75</span>,</span>

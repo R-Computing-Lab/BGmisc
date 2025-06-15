@@ -30,5 +30,6 @@ test_that("verbose checks", {
   data(ASOIAF)
   df_asoiaf <- ASOIAF
   expect_message(checkParentIDs(df_asoiaf, verbose = TRUE, repair = TRUE))
+  expect_message(repairParentIDs(df_asoiaf, verbose = TRUE))
   expect_message(checkParentIDs(df_asoiaf, verbose = TRUE, parentswithoutrow = TRUE))
 })

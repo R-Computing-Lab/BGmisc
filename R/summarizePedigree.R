@@ -83,7 +83,7 @@ summarizePedigrees <- function(ped, famID = "famID", personID = "ID",
   ## If founder_sort_var is NULL, sort by byr if it's present, otherwise sort by personID
   if (is.null(founder_sort_var) && is.null(byr)) {
     founder_sort_var <- personID
-  } else if (is.null(founder_sort_var) & !is.null(byr)) {
+  } else if (is.null(founder_sort_var) && !is.null(byr)) {
     founder_sort_var <- byr
   }
 
