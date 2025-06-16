@@ -58,12 +58,14 @@ Operates on a potentially large file by reading in chunks and binning links by a
 <span>  degreerelatedness <span class="op">=</span> <span class="fl">12</span>,</span>
 <span>  chunk_size <span class="op">=</span> <span class="fl">2e+07</span>,</span>
 <span>  max_lines <span class="op">=</span> <span class="fl">1e+13</span>,</span>
+<span>  addRel_ceiling <span class="op">=</span> <span class="fl">1.5</span>,</span>
 <span>  input_file <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  folder_prefix <span class="op">=</span> <span class="st">"data"</span>,</span>
 <span>  progress_csv <span class="op">=</span> <span class="st">"progress.csv"</span>,</span>
 <span>  progress_status <span class="op">=</span> <span class="st">"progress.txt"</span>,</span>
 <span>  data_directory <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  error_handling <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  file_column_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ID1"</span>, <span class="st">"ID2"</span>, <span class="st">"addRel"</span>, <span class="st">"mitRel"</span>, <span class="st">"cnuRel"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -96,6 +98,10 @@ Operates on a potentially large file by reading in chunks and binning links by a
 <dd><p>Max number of lines to process from input file (default 1e13)</p></dd>
 
 
+<dt id="arg-addrel-ceiling">addRel_ceiling<a class="anchor" aria-label="anchor" href="#arg-addrel-ceiling"></a></dt>
+<dd><p>Numeric. Maximum relatedness value to bin to. Default is 1.5</p></dd>
+
+
 <dt id="arg-input-file">input_file<a class="anchor" aria-label="anchor" href="#arg-input-file"></a></dt>
 <dd><p>Path to the input CSV file. If NULL, defaults to a specific file based on `biggest` flag.</p></dd>
 
@@ -118,6 +124,10 @@ Operates on a potentially large file by reading in chunks and binning links by a
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
 <dd><p>Logical; whether to print progress messages (default FALSE)</p></dd>
+
+
+<dt id="arg-error-handling">error_handling<a class="anchor" aria-label="anchor" href="#arg-error-handling"></a></dt>
+<dd><p>Logical. Should more aggressive error handing be attemptted? Default is false</p></dd>
 
 
 <dt id="arg-file-column-names">file_column_names<a class="anchor" aria-label="anchor" href="#arg-file-column-names"></a></dt>
