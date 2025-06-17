@@ -434,8 +434,8 @@ id,famID,momID,dadID,name,sex,url,twinID,zygosity
 433,19,430,NA,Lyra Mormont,F,https://awoiaf.westeros.org/index.php/Lyra_Mormont,NA,NA
 434,19,430,NA,Jorelle Mormont,F,https://awoiaf.westeros.org/index.php/Jorelle_Mormont,NA,NA
 435,19,430,NA,Lyanna Mormont,F,https://awoiaf.westeros.org/index.php/Lyanna_Mormont,NA,NA
-436,19,432,NA,Snow,F,NA,NA,NA
-437,19,432,NA,Snow,M,NA,NA,NA
+436,19,432,NA,Snow,F,https://awoiaf.westeros.org/index.php/Alysane_Mormont#Family,NA,NA
+437,19,432,NA,Snow,M,https://awoiaf.westeros.org/index.php/Alysane_Mormont#Family,NA,NA
 438,12,NA,439,Redwyne,M,NA,NA,NA
 439,12,NA,NA,Runceford Redwyne,M,https://awoiaf.westeros.org/index.php/Runceford_Redwyne,NA,NA
 440,1,NA,443,Ryam Florent,M,https://awoiaf.westeros.org/index.php/Ryam_Florent,NA,NA
