@@ -38,7 +38,6 @@ sliceFamilies <- function(
     verbose = FALSE,
     error_handling = FALSE,
     file_column_names = c("ID1", "ID2", "addRel", "mitRel", "cnuRel")) {
-
   bin_width_string <- as.character(bin_width * 100)
 
   if (is.null(data_directory)) {
