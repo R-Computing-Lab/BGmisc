@@ -245,7 +245,7 @@ id,famID,momID,dadID,name,sex,url,twinID,zygosity
 244,1,231,233,Waynwood,F,https://awoiaf.westeros.org/index.php/House_Waynwood,NA,NA
 245,1,231,233,Waynwood,F,https://awoiaf.westeros.org/index.php/House_Waynwood,NA,NA
 246,1,231,233,Jasper Waynwood,M,https://awoiaf.westeros.org/index.php/Jasper_Waynwood,NA,NA
-247,1,NA,NA,Belmore,F,https://awoiaf.westeros.org/index.php/Belmore,NA,NA
+247,1,NA,NA,Lady Belmore,F,https://awoiaf.westeros.org/index.php/House_Belmore#House_Belmore_at_the_end_of_the_third_century,NA,NA
 248,1,247,232,Elbert Arryn,M,https://awoiaf.westeros.org/index.php/Elbert_Arryn,NA,NA
 249,1,NA,NA,Waynwood,M,https://awoiaf.westeros.org/index.php/House_Waynwood,NA,NA
 250,1,NA,249,Father of Anya Waynwood,M,https://awoiaf.westeros.org/index.php/Anya_Waynwood,NA,NA
@@ -609,10 +609,10 @@ id,famID,momID,dadID,name,sex,url,twinID,zygosity
 608,1,NA,NA,Alys Karstark (wife of Brandon),F,https://awoiaf.westeros.org/index.php/Alys_Karstark_(wife_of_Brandon),NA,NA
 609,1,NA,NA,Lynara Stark,F,https://awoiaf.westeros.org/index.php/Lynara_Stark,NA,NA
 610,1,612,611,Cregan Stark,M,https://awoiaf.westeros.org/index.php/Cregan_Stark,NA,NA
-611,1,NA,NA,Rickon Stark (son of Benjen),M,https://awoiaf.westeros.org/index.php/Rickon_Stark_(son_of_Benjen),NA,NA
+611,1,648,647,Rickon Stark (son of Benjen),M,https://awoiaf.westeros.org/index.php/Rickon_Stark_(son_of_Benjen),NA,NA
 612,1,NA,NA,Gilliane Glover,F,https://awoiaf.westeros.org/index.php/Gilliane_Glover,NA,NA
 613,1,NA,NA,Raymar Royce,M,https://awoiaf.westeros.org/index.php/Raymar_Royce,NA,NA
-614,12,NA,NA,Mother of Luthor Tyrell,F,NA,NA,NA
+614,12,NA,NA,Mother of Luthor Tyrell,F,https://awoiaf.westeros.org/index.php/Luthor_Tyrell_(son_of_Moryn),NA,NA
 615,19,NA,NA,Mother of Jeor Mormont,F,https://awoiaf.westeros.org/index.php/House_Mormont#House_Mormont_at_the_end_of_the_third_century,NA,NA
 616,1,NA,NA,Daemon Velaryon,M,https://awoiaf.westeros.org/index.php/Daemon_Velaryon,NA,NA
 617,1,NA,NA,Wife of Daemon Velaryon,F,https://awoiaf.westeros.org/index.php/Daemon_Velaryon#Family,NA,NA
@@ -645,3 +645,10 @@ id,famID,momID,dadID,name,sex,url,twinID,zygosity
 644,1,642,610,Mariah Stark,F,https://awoiaf.westeros.org/index.php/Mariah_Stark,NA,NA
 645,1,642,610,Raya Stark,F,https://awoiaf.westeros.org/index.php/Raya_Stark,NA,NA
 646,1,642,610,Alys Stark,F,https://awoiaf.westeros.org/index.php/Alys_Stark,NA,NA
+647,1,NA,NA,Benjen Stark (lord),M,https://awoiaf.westeros.org/index.php/Benjen_Stark_(lord),NA,NA
+648,1,NA,NA,Lysa Locke,F,https://awoiaf.westeros.org/index.php/Lysa_Locke,NA,NA
+649,1,648,647,Bennard Stark,M,https://awoiaf.westeros.org/index.php/Bennard_Stark,NA,NA
+650,1,NA,NA,Margaret Karstark,F,https://awoiaf.westeros.org/index.php/Margaret_Karstark,NA,NA
+651,1,650,649,Benjen Stark (son of Bennard),M,https://awoiaf.westeros.org/index.php/Benjen_Stark_(son_of_Bennard),NA,NA
+652,1,650,649,Brandon Stark (son of Bennard),M,https://awoiaf.westeros.org/index.php/Brandon_Stark_(son_of_Bennard),NA,NA
+653,1,650,649,Elric Stark,M,https://awoiaf.westeros.org/index.php/Elric_Stark,NA,NA

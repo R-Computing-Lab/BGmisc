@@ -151,7 +151,7 @@ df <- ped2fam(ASOIAF, personID = "personID") %>%
       personID == 427 ~ "https://awoiaf.westeros.org/index.php/Gerold_Hightower",
       personID %in% c(428) ~ NA_character_,
       personID %in% c(436:437) ~ "https://awoiaf.westeros.org/index.php/Alysane_Mormont#Family",
-      personID %in% c(438,460:461) ~ NA_character_,
+      personID %in% c(438, 460:461) ~ NA_character_,
       personID %in% c(471:475) ~ NA_character_,
       personID == 479 ~ "https://awoiaf.westeros.org/index.php/Sylva_Santagar",
       personID == 482 ~ "https://awoiaf.westeros.org/index.php/Lord_Dayne_(father_of_Edric)",
@@ -190,6 +190,14 @@ df <- ped2fam(ASOIAF, personID = "personID") %>%
 
 df <- df %>%
   addPersonToPed(
+    personID = 247,
+    name = "Lady Belmore",
+    sex = "F",
+    momID = NA, dadID = NA,
+    url = "https://awoiaf.westeros.org/index.php/House_Belmore#House_Belmore_at_the_end_of_the_third_century",
+    overwrite = TRUE
+  ) %>%
+  addPersonToPed(
     name = "Father of Anya Waynwood", sex = "M",
     personID = 250, momID = NA, dadID = 249,
     url = "https://awoiaf.westeros.org/index.php/Anya_Waynwood", overwrite = TRUE
@@ -199,7 +207,8 @@ df <- df %>%
     personID = 251, momID = NA, dadID = 250,
     url = "https://awoiaf.westeros.org/index.php/Anya_Waynwood",
     overwrite = TRUE
-  ) %>%   addPersonToPed(
+  ) %>%
+  addPersonToPed(
     name = "Consort of Dorne (Father of Doran Martell)", sex = "M",
     personID = 258, momID = NA, dadID = NA,
     url = "https://awoiaf.westeros.org/index.php/Princess_of_Dorne_(mother_of_Doran)#Family",
@@ -812,7 +821,7 @@ df <- df %>%
   ) %>%
   addPersonToPed(
     name = "Rickon Stark (son of Benjen)", sex = "M",
-    personID = 611, momID = NA, dadID = NA,
+    personID = 611, momID = 648, dadID = 647,
     url = "https://awoiaf.westeros.org/index.php/Rickon_Stark_(son_of_Benjen)"
   ) %>%
   addPersonToPed(
@@ -827,7 +836,8 @@ df <- df %>%
   ) %>%
   addPersonToPed(
     name = "Mother of Luthor Tyrell", sex = "F",
-    personID = 614, momID = NA, dadID = NA
+    personID = 614, momID = NA, dadID = NA,
+    url = "https://awoiaf.westeros.org/index.php/Luthor_Tyrell_(son_of_Moryn)"
   ) %>%
   addPersonToPed(
     name = "Mother of Jeor Mormont", sex = "F",
@@ -949,43 +959,80 @@ df <- df %>%
     personID = 638, momID = 131, dadID = 225,
     url = "https://awoiaf.westeros.org/index.php/Roslin_Frey"
   ) %>%
-    addPersonToPed(
+  addPersonToPed(
     name = "Samwell Blackwood", sex = "M",
     personID = 639, momID = 641, dadID = 640,
     url = "https://awoiaf.westeros.org/index.php/Samwell_Blackwood"
-  ) %>%  addPersonToPed(
+  ) %>%
+  addPersonToPed(
     name = "Lord Blackwood", sex = "M",
     personID = 640, momID = NA, dadID = NA,
     url = "https://awoiaf.westeros.org/index.php/Samwell_Blackwood#Family"
-  ) %>%  addPersonToPed(
+  ) %>%
+  addPersonToPed(
     name = "Lady Blackwood", sex = "F",
     personID = 641, momID = NA, dadID = NA,
     url = "https://awoiaf.westeros.org/index.php/Samwell_Blackwood#Family"
   ) %>%
-    addPersonToPed(
+  addPersonToPed(
     name = "Alysanne Blackwood", sex = "F",
     personID = 642, momID = 641, dadID = 640,
     url = "https://awoiaf.westeros.org/index.php/Alysanne_Blackwood"
   ) %>%
-    addPersonToPed(
+  addPersonToPed(
     name = "Sarra Stark", sex = "F",
     personID = 643, momID = 642, dadID = 610,
     url = "https://awoiaf.westeros.org/index.php/Sarra_Stark"
   ) %>%
-    addPersonToPed(
+  addPersonToPed(
     name = "Mariah Stark", sex = "F",
     personID = 644, momID = 642, dadID = 610,
     url = "https://awoiaf.westeros.org/index.php/Mariah_Stark"
-  )  %>%
-    addPersonToPed(
+  ) %>%
+  addPersonToPed(
     name = "Raya Stark", sex = "F",
     personID = 645, momID = 642, dadID = 610,
     url = "https://awoiaf.westeros.org/index.php/Raya_Stark"
-  )  %>%
-    addPersonToPed(
+  ) %>%
+  addPersonToPed(
     name = "Alys Stark", sex = "F",
     personID = 646, momID = 642, dadID = 610,
     url = "https://awoiaf.westeros.org/index.php/Alys_Stark"
+  ) %>%
+  addPersonToPed(
+    name = "Benjen Stark (lord)", sex = "M",
+    personID = 647, momID = NA, dadID = NA,
+    url = "https://awoiaf.westeros.org/index.php/Benjen_Stark_(lord)"
+  ) %>%
+  addPersonToPed(
+    name = "Lysa Locke", sex = "F",
+    personID = 648, momID = NA, dadID = NA,
+    url = "https://awoiaf.westeros.org/index.php/Lysa_Locke"
+  ) %>%
+  addPersonToPed(
+    name = "Bennard Stark", sex = "M",
+    personID = 649, momID = 648, dadID = 647,
+    url = "https://awoiaf.westeros.org/index.php/Bennard_Stark"
+  ) %>%
+  addPersonToPed(
+    name = "Margaret Karstark", sex = "F",
+    personID = 650, momID = NA, dadID = NA,
+    url = "https://awoiaf.westeros.org/index.php/Margaret_Karstark"
+  ) %>%
+  addPersonToPed(
+    name = "Benjen Stark (son of Bennard)", sex = "M",
+    personID = 651, momID = 650, dadID = 649,
+    url = "https://awoiaf.westeros.org/index.php/Benjen_Stark_(son_of_Bennard)"
+  ) %>%
+  addPersonToPed(
+    name = "Brandon Stark (son of Bennard)", sex = "M",
+    personID = 652, momID = 650, dadID = 649,
+    url = "https://awoiaf.westeros.org/index.php/Brandon_Stark_(son_of_Bennard)"
+  ) %>%
+  addPersonToPed(
+    name = "Elric Stark", sex = "M",
+    personID = 653, momID = 650, dadID = 649,
+    url = "https://awoiaf.westeros.org/index.php/Elric_Stark"
   )
 
 

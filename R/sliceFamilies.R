@@ -112,8 +112,10 @@ sliceFamilies <- function(
       chunk_size = chunk_size
     )
     data.table::fwrite(progress_data, file = progress_csv, sep = ",", col.names = TRUE)
-    writeLines <- base::paste0("Starting from line ", start_line,
-                               " with chunk size: ", chunk_size, "\nStart time: ", base::Sys.time())
+    writeLines <- base::paste0(
+      "Starting from line ", start_line,
+      " with chunk size: ", chunk_size, "\nStart time: ", base::Sys.time()
+    )
     base::cat(writeLines, "\n", file = progress_status, append = FALSE)
   }
 
@@ -292,7 +294,7 @@ sliceFamilies <- function(
     " \nStart Line: ", start_line,
     " \nEnd Line: ", end_line,
     " \nTime: ", elapsed,
-   " \nCompleted at: ", base::Sys.time()
+    " \nCompleted at: ", base::Sys.time()
   )
 
   # Write the final status to the progress file
