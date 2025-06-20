@@ -1033,7 +1033,106 @@ df <- df %>%
     name = "Elric Stark", sex = "M",
     personID = 653, momID = 650, dadID = 649,
     url = "https://awoiaf.westeros.org/index.php/Elric_Stark"
+  ) %>%
+  addPersonToPed(
+    name = "Selwyn Tarth", sex = "M", personID = 654,
+    momID = NA, dadID = NA,
+    url = "https://awoiaf.westeros.org/index.php/Selwyn_Tarth"
+  ) %>%
+  addPersonToPed(
+    name = "Unknown wife of Selwyn Tarth", sex = "F", personID = 655,
+    momID = NA, dadID = NA,
+    url = "https://awoiaf.westeros.org/index.php/Selwyn_Tarth#Family"
+  ) %>%
+  addPersonToPed(
+    name = "Galladon Tarth", sex = "M", personID = 656,
+    dadID = 654, momID = 655,
+    url = "https://awoiaf.westeros.org/index.php/Galladon_Tarth"
+  ) %>%
+  addPersonToPed(
+    name = "Arianne Tarth", sex = "F", personID = 657,
+    dadID = 654, momID = 655,
+    url = "https://awoiaf.westeros.org/index.php/Arianne_Tarth"
+  ) %>%
+  addPersonToPed(
+    name = "Alysanne Tarth", sex = "F", personID = 658,
+    dadID = 654, momID = 655,
+    url = "https://awoiaf.westeros.org/index.php/Alysanne_Tarth"
+  ) %>%
+  addPersonToPed(
+    name = "Brienne of Tarth", sex = "F", personID = 659,
+    dadID = 654, momID = 655,
+    url = "https://awoiaf.westeros.org/index.php/Brienne_of_Tarth"
+  ) %>%
+  addPersonToPed(
+    name = "Jonos Bracken", sex = "M", personID = 660,
+    url = "https://awoiaf.westeros.org/index.php/Jonos_Bracken",
+    momID = 674, dadID = 673,
+  ) %>%
+  addPersonToPed(
+    name = "Unknown first wife of Jonos Bracken", sex = "F", personID = 661
+  ) %>%
+  addPersonToPed(
+    name = "Barbara Bracken", sex = "F", personID = 662,
+    dadID = 660, momID = 661,
+    url = "https://awoiaf.westeros.org/index.php/Barbara_Bracken"
+  ) %>%
+  addPersonToPed(
+    name = "Jayne Bracken", sex = "F", personID = 663,
+    dadID = 660, momID = 661,
+    url = "https://awoiaf.westeros.org/index.php/Jayne_Bracken"
+  ) %>%
+  addPersonToPed(
+    name = "Unknown second wife of Jonos Bracken", sex = "F", personID = 664,
+    url = "https://awoiaf.westeros.org/index.php/Jonos_Bracken#Family"
+  ) %>%
+  addPersonToPed(
+    name = "Lady Bracken (third wife of Jonos)", sex = "F", personID = 665,
+    url = "https://awoiaf.westeros.org/index.php/Lady_Bracken"
+  ) %>%
+  addPersonToPed(
+    name = "Catelyn Bracken", sex = "F", personID = 666,
+    dadID = 660, momID = 665,
+    url = "https://awoiaf.westeros.org/index.php/Catelyn_Bracken"
+  ) %>%
+  addPersonToPed(
+    name = "Bess Bracken", sex = "F", personID = 667,
+    dadID = 660, momID = 665,
+    url = "https://awoiaf.westeros.org/index.php/Bess_Bracken"
+  ) %>%
+  addPersonToPed(
+    name = "Alysanne Bracken", sex = "F", personID = 668,
+    dadID = 660, momID = 665,
+    url = "https://awoiaf.westeros.org/index.php/Alysanne_Bracken"
+  ) %>%
+  addPersonToPed(
+    name = "Hendry Bracken", sex = "M", personID = 669,
+    dadID = 670, momID = NA,
+    url = "https://awoiaf.westeros.org/index.php/Hendry_Bracken"
+  ) %>%
+  addPersonToPed(
+    name = "Unknown sibling of Jonos Bracken", sex = "M", personID = 670,
+    momID = 674, dadID = 673,
+    url = "https://awoiaf.westeros.org/index.php/Jonos_Bracken#Family"
+  ) %>%
+  addPersonToPed(
+    name = "mother of Harry Rivers", sex = "F", personID = 671,
+    url = "https://awoiaf.westeros.org/index.php/Harry_Rivers"
+  ) %>%
+  addPersonToPed(
+    name = "Harry Rivers", sex = "M", personID = 672,
+    dadID = 660, momID = 671,
+    url = "https://awoiaf.westeros.org/index.php/Harry_Rivers"
+  ) %>%
+  addPersonToPed(
+    name = "Father of Jonas Bracken", sex = "M", personID = 673,
+    url = "https://awoiaf.westeros.org/index.php/Jonos_Bracken#Family"
+  ) %>%
+  addPersonToPed(
+    name = "Mother of Jonas Bracken", sex = "F", personID = 674,
+    url = "https://awoiaf.westeros.org/index.php/Jonos_Bracken#Family"
   )
+
 
 
 # modify existing people

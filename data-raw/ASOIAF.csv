@@ -652,3 +652,24 @@ id,famID,momID,dadID,name,sex,url,twinID,zygosity
 651,1,650,649,Benjen Stark (son of Bennard),M,https://awoiaf.westeros.org/index.php/Benjen_Stark_(son_of_Bennard),NA,NA
 652,1,650,649,Brandon Stark (son of Bennard),M,https://awoiaf.westeros.org/index.php/Brandon_Stark_(son_of_Bennard),NA,NA
 653,1,650,649,Elric Stark,M,https://awoiaf.westeros.org/index.php/Elric_Stark,NA,NA
+654,26,NA,NA,Selwyn Tarth,M,https://awoiaf.westeros.org/index.php/Selwyn_Tarth,NA,NA
+655,26,NA,NA,Unknown wife of Selwyn Tarth,F,https://awoiaf.westeros.org/index.php/Selwyn_Tarth#Family,NA,NA
+656,26,655,654,Galladon Tarth,M,https://awoiaf.westeros.org/index.php/Galladon_Tarth,NA,NA
+657,26,655,654,Arianne Tarth,F,https://awoiaf.westeros.org/index.php/Arianne_Tarth,NA,NA
+658,26,655,654,Alysanne Tarth,F,https://awoiaf.westeros.org/index.php/Alysanne_Tarth,NA,NA
+659,26,655,654,Brienne of Tarth,F,https://awoiaf.westeros.org/index.php/Brienne_of_Tarth,NA,NA
+660,27,674,673,Jonos Bracken,M,https://awoiaf.westeros.org/index.php/Jonos_Bracken,NA,NA
+661,27,NA,NA,Unknown first wife of Jonos Bracken,F,NA,NA,NA
+662,27,661,660,Barbara Bracken,F,https://awoiaf.westeros.org/index.php/Barbara_Bracken,NA,NA
+663,27,661,660,Jayne Bracken,F,https://awoiaf.westeros.org/index.php/Jayne_Bracken,NA,NA
+664,28,NA,NA,Unknown second wife of Jonos Bracken,F,https://awoiaf.westeros.org/index.php/Jonos_Bracken#Family,NA,NA
+665,27,NA,NA,Lady Bracken (third wife of Jonos),F,https://awoiaf.westeros.org/index.php/Lady_Bracken,NA,NA
+666,27,665,660,Catelyn Bracken,F,https://awoiaf.westeros.org/index.php/Catelyn_Bracken,NA,NA
+667,27,665,660,Bess Bracken,F,https://awoiaf.westeros.org/index.php/Bess_Bracken,NA,NA
+668,27,665,660,Alysanne Bracken,F,https://awoiaf.westeros.org/index.php/Alysanne_Bracken,NA,NA
+669,27,NA,670,Hendry Bracken,M,https://awoiaf.westeros.org/index.php/Hendry_Bracken,NA,NA
+670,27,674,673,Unknown sibling of Jonos Bracken,M,https://awoiaf.westeros.org/index.php/Jonos_Bracken#Family,NA,NA
+671,27,NA,NA,mother of Harry Rivers,F,https://awoiaf.westeros.org/index.php/Harry_Rivers,NA,NA
+672,27,671,660,Harry Rivers,M,https://awoiaf.westeros.org/index.php/Harry_Rivers,NA,NA
+673,27,NA,NA,Father of Jonas Bracken,M,https://awoiaf.westeros.org/index.php/Jonos_Bracken#Family,NA,NA
+674,27,NA,NA,Mother of Jonas Bracken,F,https://awoiaf.westeros.org/index.php/Jonos_Bracken#Family,NA,NA
