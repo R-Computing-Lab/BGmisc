@@ -234,9 +234,9 @@ id,famID,momID,dadID,name,sex,url,twinID,zygosity
 233,1,NA,249,Elys Waynwood,M,https://awoiaf.westeros.org/index.php/Elys_Waynwood,NA,NA
 234,1,231,233,Waynwood,F,https://awoiaf.westeros.org/index.php/House_Waynwood,NA,NA
 235,1,NA,NA,Denys Arryn,M,https://awoiaf.westeros.org/index.php/Denys_Arryn,NA,NA
-236,1,234,235,Arryn,M,NA,NA,NA
+236,1,234,235,Arryn,M,https://awoiaf.westeros.org/index.php/House_Arryn,NA,NA
 237,1,231,233,Youngest daughter of Elys Waynwood,F,https://awoiaf.westeros.org/index.php/House_Waynwood,NA,NA
-238,1,NA,NA,Hardyng,M,NA,NA,NA
+238,1,NA,NA,Hardyng,M,https://awoiaf.westeros.org/index.php/House_Hardyng,NA,NA
 239,1,237,238,Harrold Hardyng,M,https://awoiaf.westeros.org/index.php/Harrold_Hardyng,NA,NA
 240,1,231,233,Waynwood,F,https://awoiaf.westeros.org/index.php/House_Waynwood,NA,NA
 241,1,231,233,Waynwood,F,https://awoiaf.westeros.org/index.php/House_Waynwood,NA,NA
@@ -284,7 +284,7 @@ id,famID,momID,dadID,name,sex,url,twinID,zygosity
 283,1,516,282,Daeron (son of Maekar) Targaryen,M,https://awoiaf.westeros.org/index.php/Daeron_Targaryen_(son_of_Maekar_I),NA,NA
 284,1,600,283,Vaella Targaryen,F,https://awoiaf.westeros.org/index.php/Vaella_Targaryen,NA,NA
 285,1,516,282,Aerion (son of Maekar) Targaryen,M,https://awoiaf.westeros.org/index.php/Aerion_Targaryen,NA,NA
-286,1,NA,285,Unknown Targaryen,M,https://awoiaf.westeros.org/index.php/Unknown_Targaryen,NA,NA
+286,1,NA,285,Unknown Targaryen,M,https://awoiaf.westeros.org/index.php/House_Targaryen,NA,NA
 287,1,516,282,Aemon Targaryen,M,https://awoiaf.westeros.org/index.php/Aemon_Targaryen,NA,NA
 288,1,516,282,Rhae Targaryen,F,https://awoiaf.westeros.org/index.php/Rhae_Targaryen,NA,NA
 289,1,516,282,Daella Targaryen (daughter of Maekar I),F,https://awoiaf.westeros.org/index.php/Daella_Targaryen_(daughter_of_Maekar_I),NA,NA
@@ -294,8 +294,8 @@ id,famID,momID,dadID,name,sex,url,twinID,zygosity
 293,1,291,290,Aerys Targaryen,M,https://awoiaf.westeros.org/index.php/Aerys_Targaryen,NA,NA
 294,7,NA,NA,Aelinor Penrose,F,https://awoiaf.westeros.org/index.php/Aelinor_Penrose,NA,NA
 295,1,291,290,Rhaegel Targaryen,M,https://awoiaf.westeros.org/index.php/Rhaegel_Targaryen,NA,NA
-296,1,NA,295,Targaryen,M,https://awoiaf.westeros.org/index.php/Targaryen,NA,NA
-297,1,NA,295,Targaryen,M,https://awoiaf.westeros.org/index.php/Targaryen,NA,NA
+296,1,NA,295,Targaryen,M,https://awoiaf.westeros.org/index.php/House_Targaryen,NA,NA
+297,1,NA,295,Targaryen,M,https://awoiaf.westeros.org/index.php/House_Targaryen,NA,NA
 298,1,589,292,Valarr Targaryen,M,https://awoiaf.westeros.org/index.php/Valarr_Targaryen,NA,NA
 299,1,589,292,Matarys Targaryen,M,https://awoiaf.westeros.org/index.php/Matarys_Targaryen,NA,NA
 300,1,600,298,Stillborn Targaryen,M,https://awoiaf.westeros.org/index.php/Valarr_Targaryen#Family,NA,NA
@@ -347,7 +347,7 @@ id,famID,momID,dadID,name,sex,url,twinID,zygosity
 346,1,344,340,Aemond Targaryen,M,https://awoiaf.westeros.org/index.php/Aemond_Targaryen,NA,NA
 347,1,344,340,Daeron Targaryen,M,https://awoiaf.westeros.org/index.php/Daeron_Targaryen,NA,NA
 348,1,344,340,Helaena Targaryen,F,https://awoiaf.westeros.org/index.php/Helaena_Targaryen,NA,NA
-349,1,351,350,Targaryen,U,https://awoiaf.westeros.org/index.php/Targaryen,NA,NA
+349,1,351,350,Targaryen,U,https://awoiaf.westeros.org/index.php/House_Targaryen,NA,NA
 350,1,510,352,Jaehaerys 'The Conciliator' Targaryen,M,https://awoiaf.westeros.org/index.php/Jaehaerys_I_Targaryen,NA,NA
 351,1,510,352,Alysanne 'The Good' Targaryen,F,https://awoiaf.westeros.org/index.php/Alysanne_Targaryen,NA,NA
 352,1,354,353,Aenys Targaryen,M,https://awoiaf.westeros.org/index.php/Aenys_Targaryen,NA,NA
@@ -426,7 +426,7 @@ id,famID,momID,dadID,name,sex,url,twinID,zygosity
 425,12,NA,426,Lord High Tower,M,https://awoiaf.westeros.org/index.php/House_Hightower#House_Hightower_at_the_end_of_the_third_century,NA,NA
 426,12,NA,NA,Hightower,M,https://awoiaf.westeros.org/index.php/House_Hightower#House_Hightower_at_the_end_of_the_third_century,NA,NA
 427,12,NA,426,Gerold 'The White Bull' Hightower,M,https://awoiaf.westeros.org/index.php/Gerold_Hightower,NA,NA
-428,21,NA,NA,Glover,F,NA,NA,NA
+428,21,NA,NA,Glover,F,https://awoiaf.westeros.org/index.php/House_Glover,NA,NA
 429,19,NA,NA,Lord Mormont,M,https://awoiaf.westeros.org/index.php/Lord_Mormont,NA,NA
 430,19,615,429,Maege Mormont,F,https://awoiaf.westeros.org/index.php/Maege_Mormont,NA,NA
 431,19,430,NA,Dacey Mormont,F,https://awoiaf.westeros.org/index.php/Dacey_Mormont,NA,NA
@@ -498,7 +498,7 @@ id,famID,momID,dadID,name,sex,url,twinID,zygosity
 497,1,NA,167,Bastard of Robert Baratheon,U,https://awoiaf.westeros.org/index.php/Robert_I_Baratheon#Family,NA,NA
 498,1,NA,167,Bastard of Robert Baratheon,U,https://awoiaf.westeros.org/index.php/Robert_I_Baratheon#Family,NA,NA
 499,1,NA,500,Ormund Baratheon,M,https://awoiaf.westeros.org/index.php/Ormund_Baratheon,NA,NA
-500,1,NA,NA,Baratheon,M,https://awoiaf.westeros.org/index.php/Baratheon,NA,NA
+500,1,NA,NA,Unknown Baratheon,M,https://awoiaf.westeros.org/index.php/House_Baratheon,NA,NA
 501,1,NA,500,Harbert Baratheon,M,https://awoiaf.westeros.org/index.php/Harbert_Baratheon,NA,NA
 502,1,627,625,Larra Rogare,F,https://awoiaf.westeros.org/index.php/Larra_Rogare,NA,NA
 503,1,NA,519,Rodrik Arryn,M,https://awoiaf.westeros.org/index.php/Rodrik_Arryn,NA,NA
@@ -507,7 +507,7 @@ id,famID,momID,dadID,name,sex,url,twinID,zygosity
 506,1,351,350,Alyssa Targaryen,F,https://awoiaf.westeros.org/index.php/Alyssa_Targaryen,NA,NA
 507,1,362,361,Davos Baratheon,M,https://awoiaf.westeros.org/index.php/Davos_Baratheon,NA,NA
 508,1,362,361,Unknown Baratheon,M,https://awoiaf.westeros.org/index.php/Davos_Baratheon#cite_note-4,NA,NA
-509,1,NA,508,Rogar Baratheon,M,https://awoiaf.westeros.org/index.php/Rogar_Baratheon,NA,NA
+509,1,675,508,Rogar Baratheon,M,https://awoiaf.westeros.org/index.php/Rogar_Baratheon,NA,NA
 510,1,527,526,Alyssa Velaryon,F,https://awoiaf.westeros.org/index.php/Alyssa_Velaryon,NA,NA
 511,1,510,509,Boremund Baratheon,M,https://awoiaf.westeros.org/index.php/Boremund_Baratheon,NA,NA
 512,1,510,509,Jocelyn Baratheon,F,https://awoiaf.westeros.org/index.php/Jocelyn_Baratheon,NA,NA
@@ -673,3 +673,7 @@ id,famID,momID,dadID,name,sex,url,twinID,zygosity
 672,27,671,660,Harry Rivers,M,https://awoiaf.westeros.org/index.php/Harry_Rivers,NA,NA
 673,27,NA,NA,Father of Jonas Bracken,M,https://awoiaf.westeros.org/index.php/Jonos_Bracken#Family,NA,NA
 674,27,NA,NA,Mother of Jonas Bracken,F,https://awoiaf.westeros.org/index.php/Jonos_Bracken#Family,NA,NA
+675,1,NA,NA,Mother of Rogar Baratheon,F,https://awoiaf.westeros.org/index.php/Rogar_Baratheon#Family,NA,NA
+676,1,675,508,Garon Baratheon,M,https://awoiaf.westeros.org/index.php/Garon_Baratheon,NA,NA
+678,1,675,508,Ronnal Baratheon,M,https://awoiaf.westeros.org/index.php/Ronnal_Baratheon,NA,NA
+679,1,675,508,Orryn Baratheon,M,https://awoiaf.westeros.org/index.php/Orryn_Baratheon,NA,NA

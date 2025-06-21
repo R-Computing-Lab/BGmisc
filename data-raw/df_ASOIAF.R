@@ -28,62 +28,62 @@ df <- ped2fam(ASOIAF, personID = "personID") %>%
     dadID = as.numeric(dadID),
     personID = as.numeric(personID),
     name = case_when(
-      personID == 429 ~ "Lord Mormont",
-      personID == 393 ~ "Lord Tyrell",
-      personID == 443 ~ "Lord Florent",
-      personID == 86 ~ "Mariya Darry",
-      personID == 274 ~ "Lord Uller",
-      personID == 322 ~ "Daenaera Velaryon",
       name == "Naerys " ~ "Naerys Targaryen",
       name == "Rhaenyra " ~ "Rhaenyra Targaryen",
       name == "Betharios " ~ "Betharios of Braavos",
-      personID == 257 ~ "Princess Of Dorne",
-      personID == 341 ~ "Aemma Arryn",
       name == "Rowena " ~ "Rowena Arryn",
       name == "Pate " ~ "Pate of the Blue Fork",
       name == "Mellario " ~ "Mellario of Norvos",
-      personID == 289 ~ "Daella Targaryen (daughter of Maekar I)",
-      personID == 281 ~ "Daeron Targaryen (son of Aegon V)",
-      personID == 201 ~ "Jaehaerys II Targaryen",
-      personID == 482 ~ "Lord Dayne (father of Edric)",
-      personID == 202 ~ "Aerys II Targaryen",
-      personID == 200 ~ "Aegon V Targaryen",
       is.na(.data$name) &
         personID %in% c(360, 489:498) ~ "Bastard of Robert Baratheon",
+      personID == 86 ~ "Mariya Darry",
+      personID == 179 ~ "Gerold Lannister",
+      personID == 180 ~ "Tywald Lannister",
+      personID == 181 ~ "Tion Lannister",
+      personID == 182 ~ "Jason Lannister",
+      personID == 200 ~ "Aegon V Targaryen",
+      personID == 201 ~ "Jaehaerys II Targaryen",
+      personID == 202 ~ "Aerys II Targaryen",
+      personID == 237 ~ "Youngest daughter of Elys Waynwood",
+      personID == 255 ~ "Lord Tully",
+      personID == 257 ~ "Princess Of Dorne",
+      personID == 274 ~ "Lord Uller",
+      personID == 281 ~ "Daeron Targaryen (son of Aegon V)",
+      personID == 283 ~ "Daeron (son of Maekar) Targaryen",
+      personID == 284 ~ "Vaella Targaryen",
+      personID == 285 ~ "Aerion (son of Maekar) Targaryen",
+      personID == 286 ~ "Unknown Targaryen",
+      personID == 288 ~ "Rhae Targaryen", # not Rhaelle Targaryen
+      personID == 289 ~ "Daella Targaryen (daughter of Maekar I)",
+      personID == 294 ~ "Aelinor Penrose",
+      personID %in% c(300:301) ~ "Stillborn Targaryen",
+      personID == 317 ~ "Father of Maelys I Blackfyre",
+      personID == 322 ~ "Daenaera Velaryon",
+      personID == 325 ~ "Ronnel Penrose",
       personID == 326 ~ "Viserys Plumm",
       personID == 327 ~ "Robin Penrose",
       personID == 328 ~ "Laena Penrose",
       personID == 329 ~ "Jocelyn Penrose",
       personID == 330 ~ "Joy Penrose",
-      personID == 286 ~ "Unknown Targaryen",
-      personID == 294 ~ "Aelinor Penrose",
-      personID == 325 ~ "Ronnel Penrose",
-      personID == 285 ~ "Aerion (son of Maekar) Targaryen",
+      personID == 341 ~ "Aemma Arryn",
+      personID == 343 ~ "Baelon Targaryen (son of Viserys I)",
+      personID == 347 ~ "Daeron Targaryen",
+      personID == 348 ~ "Helaena Targaryen",
       personID == 358 ~ "Aerion (son of Daemion) Targaryen",
       personID == 364 ~ "Daemion Targaryen (Lord of Dragonstone)",
-      personID == 283 ~ "Daeron (son of Maekar) Targaryen",
-      personID == 288 ~ "Rhae Targaryen", # not Rhaelle Targaryen
-      personID == 237 ~ "Youngest daughter of Elys Waynwood",
-      personID == 348 ~ "Helaena Targaryen",
-      personID == 347 ~ "Daeron Targaryen",
-      personID == 343 ~ "Baelon Targaryen (son of Viserys I)",
-      personID == 317 ~ "Father of Maelys I Blackfyre",
-      personID == 255 ~ "Lord Tully",
-      personID == 468 ~ "Lyarra Stark",
+      personID == 366 ~ "Aelyx Targaryen",
+      personID == 393 ~ "Lord Tyrell",
+      personID == 425 ~ "Lord High Tower",
+      personID == 429 ~ "Lord Mormont",
+      personID == 443 ~ "Lord Florent",
       personID == 465 ~ "Willam Stark",
+      personID == 467 ~ "Melantha Blackwood",
+      personID == 468 ~ "Lyarra Stark",
       personID == 469 ~ "Jocelyn Stark",
       personID == 470 ~ "Benedict Royce",
-      personID == 467 ~ "Melantha Blackwood",
-      personID == 179 ~ "Gerold Lannister",
-      personID == 180 ~ "Tywald Lannister",
-      personID == 181 ~ "Tion Lannister",
-      personID == 182 ~ "Jason Lannister",
-      personID %in% c(300:301) ~ "Stillborn Targaryen",
-      personID == 284 ~ "Vaella Targaryen",
+      personID == 482 ~ "Lord Dayne (father of Edric)",
       personID == 499 ~ "Ormund Baratheon",
-      personID == 425 ~ "Lord High Tower",
-      personID == 366 ~ "Aelyx Targaryen",
-      #    personID %in% c(331:332) ~ "Unknown Penrose", # was speculative
+      personID == 500 ~ "Unknown Baratheon",
       TRUE ~ name
     ),
     url = case_when(
@@ -110,7 +110,8 @@ df <- ped2fam(ASOIAF, personID = "personID") %>%
       personID == 209 ~ "https://awoiaf.westeros.org/index.php/Aegon_Targaryen_(son_of_Rhaegar)",
       personID == 220 ~ "https://awoiaf.westeros.org/index.php/Bran_Stark",
       personID %in% c(234, 240:245, 237, 249, 250) ~ "https://awoiaf.westeros.org/index.php/House_Waynwood",
-      personID %in% c(236, 238) ~ NA_character_,
+      personID == 236 ~ "https://awoiaf.westeros.org/index.php/House_Arryn",
+      personID == 238 ~ "https://awoiaf.westeros.org/index.php/House_Hardyng",
       personID == 256 ~ "https://awoiaf.westeros.org/index.php/Brynden_Tully",
       personID == 257 ~ "https://awoiaf.westeros.org/index.php/Princess_of_Dorne_(mother_of_Doran)",
       personID == 258 ~ NA_character_,
@@ -119,8 +120,11 @@ df <- ped2fam(ASOIAF, personID = "personID") %>%
       personID == 280 ~ "https://awoiaf.westeros.org/index.php/Duncan_Targaryen",
       personID == 283 ~ "https://awoiaf.westeros.org/index.php/Daeron_Targaryen_(son_of_Maekar_I)",
       personID == 285 ~ "https://awoiaf.westeros.org/index.php/Aerion_Targaryen",
+      personID == 286 ~ "https://awoiaf.westeros.org/index.php/House_Targaryen",
       personID == 292 ~ "https://awoiaf.westeros.org/index.php/Baelor_Targaryen_(son_of_Daeron_II)",
       personID == 294 ~ "https://awoiaf.westeros.org/index.php/Aelinor_Penrose",
+      personID == 296 ~ "https://awoiaf.westeros.org/index.php/House_Targaryen",
+      personID == 297 ~ "https://awoiaf.westeros.org/index.php/House_Targaryen",
       personID %in% c(300:301) ~ "https://awoiaf.westeros.org/index.php/Valarr_Targaryen#Family",
       personID %in% c(318:319) ~ "https://awoiaf.westeros.org/index.php/House_Blackfyre#Family",
       personID == 302 ~ "https://awoiaf.westeros.org/index.php/Aegon_IV_Targaryen",
@@ -132,6 +136,7 @@ df <- ped2fam(ASOIAF, personID = "personID") %>%
       personID == 320 ~ "https://awoiaf.westeros.org/index.php/Maelys_I_Blackfyre",
       personID == 321 ~ "https://awoiaf.westeros.org/index.php/Aegon_III_Targaryen",
       personID == 345 ~ "https://awoiaf.westeros.org/index.php/Aegon_II_Targaryen",
+      personID == 349 ~ "https://awoiaf.westeros.org/index.php/House_Targaryen",
       personID == 350 ~ "https://awoiaf.westeros.org/index.php/Jaehaerys_I_Targaryen",
       personID == 351 ~ "https://awoiaf.westeros.org/index.php/Alysanne_Targaryen",
       personID == 353 ~ "https://awoiaf.westeros.org/index.php/Aegon_I_Targaryen",
@@ -149,13 +154,14 @@ df <- ped2fam(ASOIAF, personID = "personID") %>%
       personID == 397 ~ "https://awoiaf.westeros.org/index.php/Leo_Tyrell_(son_of_Moryn)",
       personID %in% c(425:426) ~ "https://awoiaf.westeros.org/index.php/House_Hightower#House_Hightower_at_the_end_of_the_third_century",
       personID == 427 ~ "https://awoiaf.westeros.org/index.php/Gerold_Hightower",
-      personID %in% c(428) ~ NA_character_,
+      personID %in% c(428) ~ "https://awoiaf.westeros.org/index.php/House_Glover",
       personID %in% c(436:437) ~ "https://awoiaf.westeros.org/index.php/Alysane_Mormont#Family",
       personID %in% c(438, 460:461) ~ NA_character_,
       personID %in% c(471:475) ~ NA_character_,
       personID == 479 ~ "https://awoiaf.westeros.org/index.php/Sylva_Santagar",
       personID == 482 ~ "https://awoiaf.westeros.org/index.php/Lord_Dayne_(father_of_Edric)",
       personID == 483 ~ NA_character_, # No specific URL available
+      personID == 500 ~ "https://awoiaf.westeros.org/index.php/House_Baratheon",
       TRUE ~ paste0("https://awoiaf.westeros.org/index.php/", str_replace_all(name, " ", "_"))
     ),
     twinID = case_match(name,
@@ -306,7 +312,7 @@ df <- df %>%
   ) %>%
   addPersonToPed(
     name = "Rogar Baratheon",
-    sex = "M", personID = 509, momID = NA, dadID = 508,
+    sex = "M", personID = 509, momID = 675, dadID = 508,
     url = "https://awoiaf.westeros.org/index.php/Rogar_Baratheon"
   ) %>%
   addPersonToPed(
@@ -1131,6 +1137,25 @@ df <- df %>%
   addPersonToPed(
     name = "Mother of Jonas Bracken", sex = "F", personID = 674,
     url = "https://awoiaf.westeros.org/index.php/Jonos_Bracken#Family"
+  ) %>%
+  addPersonToPed(
+    name = "Mother of Rogar Baratheon", sex = "F", personID = 675,
+    url = "https://awoiaf.westeros.org/index.php/Rogar_Baratheon#Family"
+  ) %>%
+  addPersonToPed(
+    name = "Garon Baratheon",
+    sex = "M", personID = 676, momID = 675, dadID = 508,
+    url = "https://awoiaf.westeros.org/index.php/Garon_Baratheon"
+  ) %>%
+  addPersonToPed(
+    name = "Ronnal Baratheon",
+    sex = "M", personID = 678, momID = 675, dadID = 508,
+    url = "https://awoiaf.westeros.org/index.php/Ronnal_Baratheon"
+  ) %>%
+  addPersonToPed(
+    name = "Orryn Baratheon",
+    sex = "M", personID = 679, momID = 675, dadID = 508,
+    url = "https://awoiaf.westeros.org/index.php/Orryn_Baratheon"
   )
 
 

@@ -16,7 +16,6 @@
 #' @param  personID Character. Column name for individual IDs.
 #' @param momID Character. Column name for maternal IDs.
 #' @param dadID Character. Column name for paternal IDs.
-
 #'
 #'
 #' @return Depending on the value of `repair`, either a list containing validation results or a repaired dataframe is returned.
