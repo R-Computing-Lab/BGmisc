@@ -1156,7 +1156,14 @@ df <- df %>%
     name = "Ronnal Baratheon",
     sex = "M", personID = 678, momID = 675, dadID = 508,
     url = "https://awoiaf.westeros.org/index.php/Ronnal_Baratheon"
+  ) %>%
+  addPersonToPed(
+    name = "Lord Darry (father of Raymun)",
+    sex = "M", personID = 679,
+    url = "https://awoiaf.westeros.org/index.php/Lord_Darry_(father_of_Raymun)"
   )
+
+
 
 
 
@@ -1221,6 +1228,7 @@ df <- df %>%
       personID == 1 ~ 566, # Walder Frey's mother
       personID == 284 ~ 600,
       personID == 294 ~ NA,
+
       TRUE ~ momID
     ),
     dadID = case_when(
@@ -1242,6 +1250,7 @@ df <- df %>%
       personID == 321 ~ 536, # Aegon III's father is Daemon Targaryen
       personID == 1 ~ 564, # Walder Frey's father is Lord Frey
       personID == 468 ~ 573, # Rodrik	Stark's is the Father of Lyarra Stark
+      personID == 33 ~ 679, # Jeyne  Darry's father is Lord Darry
       TRUE ~ dadID
     ),
     twinID = case_when(

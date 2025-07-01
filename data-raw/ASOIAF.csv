@@ -31,7 +31,7 @@ id,famID,momID,dadID,name,sex,url,twinID,zygosity
 30,1,28,4,Lyonel Frey,M,https://awoiaf.westeros.org/index.php/Lyonel_Frey,NA,NA
 31,1,28,4,Tion Frey,M,https://awoiaf.westeros.org/index.php/Tion_Frey,NA,NA
 32,1,28,4,Walder 'Red Walder' Frey,M,https://awoiaf.westeros.org/index.php/Walder_Frey_(son_of_Emmon),NA,NA
-33,1,NA,NA,Jeyne Darry,F,https://awoiaf.westeros.org/index.php/Jeyne_Darry,NA,NA
+33,1,NA,679,Jeyne Darry,F,https://awoiaf.westeros.org/index.php/Jeyne_Darry,NA,NA
 34,1,33,29,Tywin 'Ty' Frey,M,https://awoiaf.westeros.org/index.php/Tywin_Frey,NA,NA
 35,1,33,29,Willem Frey,M,https://awoiaf.westeros.org/index.php/Willem_Frey,NA,NA
 36,1,NA,NA,Tyana Wylde,F,https://awoiaf.westeros.org/index.php/Tyana_Wylde,NA,NA
@@ -677,3 +677,4 @@ id,famID,momID,dadID,name,sex,url,twinID,zygosity
 676,1,675,508,Garon Baratheon,M,https://awoiaf.westeros.org/index.php/Garon_Baratheon,NA,NA
 677,1,675,508,Orryn Baratheon,M,https://awoiaf.westeros.org/index.php/Orryn_Baratheon,NA,NA
 678,1,675,508,Ronnal Baratheon,M,https://awoiaf.westeros.org/index.php/Ronnal_Baratheon,NA,NA
+679,1,NA,NA,Lord Darry (father of Raymun),M,https://awoiaf.westeros.org/index.php/Lord_Darry_(father_of_Raymun),NA,NA
