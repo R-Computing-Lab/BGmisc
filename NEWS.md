@@ -1,3 +1,6 @@
+# BGmisc dev version
+* Updated ASOIAF pedigree to include Tarths, Brackens
+
 # BGmisc 1.4.4
 * Added sliceFamilies function with working tests
 * Better messaging for sliceFamilies

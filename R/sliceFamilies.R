@@ -61,6 +61,7 @@ sliceFamilies <- function(
 
   if (verbose == TRUE) {
     message("Output folder: ", data_directory)
+    message("Input file: ", input_file)
   }
 
 
@@ -99,6 +100,23 @@ sliceFamilies <- function(
     progress_data <- data.table::fread(progress_csv, header = TRUE)
     start_line <- progress_data$start_line
     total_lines <- progress_data$total_lines
+    chunk_size <- progress_data$chunk_size
+    writeLines <- base::paste0("Resuming from line ", start_line, " with total lines processed: ", total_lines)
+    base::cat(writeLines, "\n", file = progress_status, append = TRUE)
+  } else {
+    # If progress file does not exist, create it with initial values
+    progress_data <- data.frame(
+      start_line = start_line,
+      total_lines = total_lines,
+      end_line = end_line,
+      chunk_size = chunk_size
+    )
+    data.table::fwrite(progress_data, file = progress_csv, sep = ",", col.names = TRUE)
+    writeLines <- base::paste0(
+      "Starting from line ", start_line,
+      " with chunk size: ", chunk_size, "\nStart time: ", base::Sys.time()
+    )
+    base::cat(writeLines, "\n", file = progress_status, append = FALSE)
   }
 
   start_time <- base::Sys.time()
@@ -146,6 +164,7 @@ sliceFamilies <- function(
             return(NULL)
           }
         )
+        gc()
       }
       if (is.null(dataRelatedPair_merge)) {
         message("Trying even smaller chunk size due to error.")
@@ -251,7 +270,9 @@ sliceFamilies <- function(
 
     progress_data <- base::data.frame(
       start_line = start_line,
-      total_lines = total_lines
+      total_lines = total_lines,
+      end_line = end_line,
+      chunk_size = chunk_size
     )
     data.table::fwrite(progress_data,
       file = progress_csv,
@@ -272,7 +293,8 @@ sliceFamilies <- function(
     " \nFinal chunk size: ", chunk_size,
     " \nStart Line: ", start_line,
     " \nEnd Line: ", end_line,
-    " \nTime: ", elapsed
+    " \nTime: ", elapsed,
+    " \nCompleted at: ", base::Sys.time()
   )
 
   # Write the final status to the progress file
