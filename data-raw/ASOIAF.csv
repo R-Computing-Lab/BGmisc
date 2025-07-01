@@ -675,5 +675,5 @@ id,famID,momID,dadID,name,sex,url,twinID,zygosity
 674,27,NA,NA,Mother of Jonas Bracken,F,https://awoiaf.westeros.org/index.php/Jonos_Bracken#Family,NA,NA
 675,1,NA,NA,Mother of Rogar Baratheon,F,https://awoiaf.westeros.org/index.php/Rogar_Baratheon#Family,NA,NA
 676,1,675,508,Garon Baratheon,M,https://awoiaf.westeros.org/index.php/Garon_Baratheon,NA,NA
+677,1,675,508,Orryn Baratheon,M,https://awoiaf.westeros.org/index.php/Orryn_Baratheon,NA,NA
 678,1,675,508,Ronnal Baratheon,M,https://awoiaf.westeros.org/index.php/Ronnal_Baratheon,NA,NA
-679,1,675,508,Orryn Baratheon,M,https://awoiaf.westeros.org/index.php/Orryn_Baratheon,NA,NA

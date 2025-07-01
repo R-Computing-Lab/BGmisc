@@ -1148,14 +1148,14 @@ df <- df %>%
     url = "https://awoiaf.westeros.org/index.php/Garon_Baratheon"
   ) %>%
   addPersonToPed(
+    name = "Orryn Baratheon",
+    sex = "M", personID = 677, momID = 675, dadID = 508,
+    url = "https://awoiaf.westeros.org/index.php/Orryn_Baratheon"
+  ) %>%
+  addPersonToPed(
     name = "Ronnal Baratheon",
     sex = "M", personID = 678, momID = 675, dadID = 508,
     url = "https://awoiaf.westeros.org/index.php/Ronnal_Baratheon"
-  ) %>%
-  addPersonToPed(
-    name = "Orryn Baratheon",
-    sex = "M", personID = 679, momID = 675, dadID = 508,
-    url = "https://awoiaf.westeros.org/index.php/Orryn_Baratheon"
   )
 
 
