@@ -14,6 +14,7 @@ test_that("checkParentIDs identifies parent coding correctly in potter dataset",
 
 # Test Case 2: Validate sex coding without repair
 test_that("checksif single parents found correctly in ASOIAF dataset", {
+ library(ggpedigree)
   data(ASOIAF)
   df_asoiaf <- ASOIAF
   results <- checkParentIDs(df_asoiaf, verbose = FALSE, repair = FALSE, personID = "id")
@@ -27,6 +28,7 @@ test_that("checksif single parents found correctly in ASOIAF dataset", {
 })
 
 test_that("verbose checks", {
+  library(ggpedigree)
   data(ASOIAF)
   df_asoiaf <- ASOIAF
   expect_message(checkParentIDs(df_asoiaf, verbose = TRUE, repair = TRUE))

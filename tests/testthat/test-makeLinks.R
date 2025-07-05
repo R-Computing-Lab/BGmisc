@@ -25,6 +25,7 @@ test_that("com2links produces correct output with a single relationship matrix (
 })
 
 test_that("com2links produces correct output with cn_ped_matrix", {
+  library(ggpedigree)
   data(ASOIAF)
   cn_ped_matrix <- ped2cn(ASOIAF, sparse = TRUE)
 
