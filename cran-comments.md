@@ -1,9 +1,9 @@
 
 # Description
 
-This update includes minor enhancements, a major update to the ASOIAF dataset, and rewritten vignettes to use ggpedigree.
+This update includes minor enhancements..
 
-I am also moving the lone plotting function from BGmisc to ggpedigree package. I maintain both packages. As promised, now that the ggpedigree package update is on CRAN, I am uploading the new version of BGmisc that does not include the plotting function. 
+I am also moving the ASOIAF dataset from BGmisc to ggpedigree package. I maintain both packages. As promised, now that the ggpedigree package update is on CRAN, I am uploading the new version of BGmisc that does not include the dataset. 
 
 # Test Environments
 
@@ -20,8 +20,8 @@ I am also moving the lone plotting function from BGmisc to ggpedigree package. I
 ## R CMD check results
 
 
-── R CMD check results ─ BGmisc 1.4.3.1 ────
-Duration: 2m 10s
+── R CMD check results ────────────────────────────────── BGmisc 1.5.0 ────
+Duration: 1m 7.8s
 
 0 errors ✔ | 0 warnings ✔ | 0 notes ✔
 
