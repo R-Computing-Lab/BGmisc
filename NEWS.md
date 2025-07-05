@@ -1,7 +1,9 @@
-# BGmisc dev version
-* Updated ASOIAF pedigree to include Tarths, Brackens
+# BGmisc 1.5.0
+* Transferring ASOIAF data from BGmisc to ggpedigree
+* updated tests to handle the transition of ASOIAF data to ggpedigree
 
 # BGmisc 1.4.4
+* Updated ASOIAF pedigree to include Tarths, Brackens
 * Added sliceFamilies function with working tests
 * Better messaging for sliceFamilies
 * Now has some error handling for sliceFamilies
@@ -12,7 +14,6 @@
 * Updated ASOIAF pedigree to reduce missing parents.
 * Added tests to check if data are acyclic
 * reduce file size for royal92
-
 
 # BGmisc 1.4.3.1
 ## CRAN submission

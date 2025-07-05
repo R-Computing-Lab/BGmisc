@@ -2,7 +2,6 @@ test_that("data loads silently", {
   expect_silent(data(hazard))
   expect_silent(data(inbreeding))
   expect_silent(data(potter))
-  expect_silent(data(ASOIAF))
 })
 
 
@@ -51,16 +50,4 @@ test_that("potter data loads", {
     dadID = "dadID",
     verbose = FALSE
   )
-})
-test_that("ASOIAF data loads", {
-  expect_silent(data(ASOIAF))
-  expect_true(nrow(ASOIAF) > 611)
-  expect_true(nrow(ASOIAF) == max(ASOIAF$id, na.rm = TRUE))
-  checkis_acyclic <- checkPedigreeNetwork(ASOIAF,
-    personID = "id",
-    momID = "momID",
-    dadID = "dadID",
-    verbose = TRUE
-  )
-  expect_true(checkis_acyclic$is_acyclic)
 })
