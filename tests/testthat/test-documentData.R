@@ -2,7 +2,6 @@ test_that("data loads silently", {
   expect_silent(data(hazard))
   expect_silent(data(inbreeding))
   expect_silent(data(potter))
-  expect_silent(data(ASOIAF))
 })
 
 
