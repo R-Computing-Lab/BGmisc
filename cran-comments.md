@@ -1,7 +1,7 @@
 
 # Description
 
-This update includes minor enhancements..
+This update includes minor enhancements.
 
 I am also moving the ASOIAF dataset from BGmisc to ggpedigree package. I maintain both packages. As promised, now that the ggpedigree package update is on CRAN, I am uploading the new version of BGmisc that does not include the dataset. 
 
