@@ -22,7 +22,7 @@ We begin by loading the required libraries and examining the structure of the bu
 library(BGmisc)
 library(tidyverse)
 library(ggpedigree)
-data(ASOIAF)
+data(ASOIAF, package = "ggpedigree")
 ```
 
 The ASOIAF dataset includes character IDs, names, family identifiers, and  parent identifiers for a subset of characters drawn from the *A Song of Ice and Fire* canon.
