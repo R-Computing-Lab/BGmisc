@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">BGmisc</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -243,7 +243,10 @@ behavior under complete pedigree data.</p>
 <span>  dadID <span class="op">=</span> <span class="st">"dadID"</span>,</span>
 <span>  famID <span class="op">=</span> <span class="st">"famID"</span>,</span>
 <span>  code_male <span class="op">=</span> <span class="fl">0</span></span>
-<span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning in buildPlotConfig(default_config = default_config, config = config, :</span></span>
+<span><span class="co">#&gt; The following config values are not recognized by getDefaultPlotConfig():</span></span>
+<span><span class="co">#&gt; momID, dadID, famID</span></span></code></pre></div>
 <p><img src="v3_analyticrelatedness_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
 <p>We compute the additive genetic relationship matrix using both the
 classic and partial parent methods. Because the pedigree is complete, we
@@ -268,14 +271,18 @@ matrices should be identical.</p>
 <span><span class="fu"><a href="https://r-computing-lab.github.io/ggpedigree/reference/ggRelatednessMatrix.html" class="external-link">ggRelatednessMatrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">ped_add_classic_complete</span><span class="op">)</span>,</span>
 <span>  config <span class="op">=</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Additive component - Classic method"</span><span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning in buildPlotConfig(default_config = default_config, config = config, :</span></span>
+<span><span class="co">#&gt; The following config values are not recognized by getDefaultPlotConfig(): title</span></span></code></pre></div>
 <p><img src="v3_analyticrelatedness_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://r-computing-lab.github.io/ggpedigree/reference/ggRelatednessMatrix.html" class="external-link">ggRelatednessMatrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">ped_add_partial_complete</span><span class="op">)</span>,</span>
 <span>  config <span class="op">=</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Additive component - Partial parent method"</span><span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning in buildPlotConfig(default_config = default_config, config = config, :</span></span>
+<span><span class="co">#&gt; The following config values are not recognized by getDefaultPlotConfig(): title</span></span></code></pre></div>
 <p><img src="v3_analyticrelatedness_files/figure-html/unnamed-chunk-7-2.png" width="700"></p>
 <p>To verify this, we subtract one matrix from the other and calculate
 RMSE. The difference should be numerically zero. Indeed, it is 0.</p>

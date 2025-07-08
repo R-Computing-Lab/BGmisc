@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">BGmisc</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -80,10 +80,11 @@ relatedness of 0.25, assuming a simple pedigree and no inbreeding. But
 with tangled ancestries and potentially missing information, how
 confident can we be in that estimate?</p>
 <p>In this vignette, we use the <code>BGmisc</code> package to
-reconstruct the <em>ASOIAF</em> pedigree, handle incomplete parentage
-data, and compute additive genetic and common nuclear relatedness. We’ll
-focus on Jon and Daenerys as a case study, but the methods generalize to
-any characters in the provided dataset.</p>
+reconstruct the <em>ASOIAF</em> pedigree from the
+<code>ggpedigree</code> package, handle incomplete parentage data, and
+compute additive genetic and common nuclear relatedness. We’ll focus on
+Jon and Daenerys as a case study, but the methods generalize to any
+characters in the provided dataset.</p>
 </div>
 <div class="section level2">
 <h2 id="load-packages-and-data">Load Packages and Data<a class="anchor" aria-label="anchor" href="#load-packages-and-data"></a>
@@ -94,7 +95,7 @@ structure of the built-in <code>ASOIAF</code> pedigree.</p>
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/R-Computing-Lab/BGmisc/" class="external-link">BGmisc</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/R-Computing-Lab/ggpedigree/" class="external-link">ggpedigree</a></span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">ASOIAF</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">ASOIAF</span>, package <span class="op">=</span> <span class="st">"ggpedigree"</span><span class="op">)</span></span></code></pre></div>
 <p>The ASOIAF dataset includes character IDs, names, family identifiers,
 and parent identifiers for a subset of characters drawn from the <em>A
 Song of Ice and Fire</em> canon.</p>
