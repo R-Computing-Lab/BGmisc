@@ -11,7 +11,7 @@ A data frame (and ped object) with 36 rows and 8 variables
 data(potter)
 }
 \description{
-A dataset created  for educational and illustrative use, containing a fictional pedigree modeled after characters from the Harry Potter series.
+A dataset created for educational and illustrative use, containing a fictional pedigree modeled after characters from the Harry Potter series.
 This data is structured for use in software demonstrations involving pedigree diagrams, inheritance structures, and kinship modeling.
 This dataset is not intended to represent any real individuals or families.
 It includes no narrative content or protected expression from the original works and is provided solely for educational purposes.

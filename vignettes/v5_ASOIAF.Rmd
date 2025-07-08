@@ -11,7 +11,7 @@ vignette: >
 
 Just how closely related are Jon Snow and Daenerys Targaryen? According to the lore of *A Song of Ice and Fire*, Daenerys is Jon's paternal aunt. This would suggest a theoretical genetic relatedness of 0.25, assuming a simple pedigree and no inbreeding. But with tangled ancestries and potentially missing information, how confident can we be in that estimate?
 
-In this vignette, we use the `BGmisc` package to reconstruct the *ASOIAF* pedigree, handle incomplete parentage data, and compute additive genetic and common nuclear relatedness. We'll focus on Jon and Daenerys as a case study, but the methods generalize to any characters in the provided dataset.
+In this vignette, we use the `BGmisc` package to reconstruct the *ASOIAF* pedigree from the `ggpedigree` package, handle incomplete parentage data, and compute additive genetic and common nuclear relatedness. We'll focus on Jon and Daenerys as a case study, but the methods generalize to any characters in the provided dataset.
 
 ## Load Packages and Data
 
@@ -22,7 +22,7 @@ We begin by loading the required libraries and examining the structure of the bu
 library(BGmisc)
 library(tidyverse)
 library(ggpedigree)
-data(ASOIAF)
+data(ASOIAF, package = "ggpedigree")
 ```
 
 The ASOIAF dataset includes character IDs, names, family identifiers, and  parent identifiers for a subset of characters drawn from the *A Song of Ice and Fire* canon.
