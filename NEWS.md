@@ -1,6 +1,7 @@
 # BGmisc 1.5.0
 * Transferring ASOIAF data from BGmisc to ggpedigree
 * updated tests to handle the transition of ASOIAF data to ggpedigree
+* smarter aliases
 
 # BGmisc 1.4.4
 * Updated ASOIAF pedigree to include Tarths, Brackens

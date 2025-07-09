@@ -2,6 +2,7 @@
 % Please edit documentation in R/summarizePedigree.R
 \name{findOldest}
 \alias{findOldest}
+\alias{findoldest}
 \title{This function finds the oldest families in a pedigree. It is supposed to be used internally by the \code{summarize_pedigree} function.}
 \usage{
 findOldest(foo_summary_dt, byr, noldest, n_foo)

@@ -2,6 +2,8 @@
 % Please edit documentation in R/summarizePedigree.R
 \name{summarizeMatrilines}
 \alias{summarizeMatrilines}
+\alias{summarizematrilines}
+\alias{summarisematrilines}
 \alias{summariseMatrilines}
 \title{Summarize the maternal lines in a pedigree}
 \usage{

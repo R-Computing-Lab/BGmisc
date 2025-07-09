@@ -2,6 +2,8 @@
 % Please edit documentation in R/summarizePedigree.R
 \name{summarizeFamilies}
 \alias{summarizeFamilies}
+\alias{summarizefamilies}
+\alias{summarisefamilies}
 \alias{summariseFamilies}
 \title{Summarize the families in a pedigree}
 \usage{

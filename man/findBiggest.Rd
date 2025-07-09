@@ -2,6 +2,7 @@
 % Please edit documentation in R/summarizePedigree.R
 \name{findBiggest}
 \alias{findBiggest}
+\alias{findbiggest}
 \title{This function finds the biggest families in a pedigree. It is supposed to be
 used internally by the \code{summarize_pedigree} function.}
 \usage{

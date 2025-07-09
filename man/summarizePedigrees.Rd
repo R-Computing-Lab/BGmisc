@@ -3,6 +3,8 @@
 \name{summarizePedigrees}
 \alias{summarizePedigrees}
 \alias{summarisePedigrees}
+\alias{summarisepedigrees}
+\alias{summarizepedigrees}
 \title{Summarize Pedigree Data}
 \usage{
 summarizePedigrees(
