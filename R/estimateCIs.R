@@ -52,7 +52,6 @@ calculateCIs <- function(tbl,
     deparse(substitute(se_var))
   }
 
-
   # Construct new column names using paste0
   plusse_col_name <- paste0(rho_col_name, "_plusse")
   minusse_col_name <- paste0(rho_col_name, "_minusse")
@@ -71,16 +70,40 @@ calculateCIs <- function(tbl,
   tbl_out <- tbl
   n_rows <- nrow(tbl_out)
 
-
-  # Resolve design effect vector
-  if (!is.null(design_effect_m_col) && !is.null(design_effect_rho_col)) {
+  # Resolve m input
+  if (exists("design_effect_m_col") && length(design_effect_m_col) > 0) {
     m_vals <- tbl_out[[design_effect_m_col]]
+  } else if (exists("design_effect_m") && length(design_effect_m) > 0) {
+
+    if (length(design_effect_m) == 1) {
+      design_effect_m <- rep(as.numeric(design_effect_m), n_rows)
+    }
+    m_vals <- design_effect_m
+  } else {
+    m_vals <- NULL
+  }
+
+  # Resolve rho input
+  if (exists("design_effect_rho_col") && length(design_effect_rho_col) > 0) {
     rho_vals <- tbl_out[[design_effect_rho_col]]
-    design_effect <- sqrt(1 + (m_vals - 1) * rho_vals)
-  } else if (doubleentered == TRUE && is.null(design_effect_m) && is.null(design_effect_rho)) {
+  } else if (exists("design_effect_rho") && length(design_effect_rho) > 0 ) {
+
+    if (length(design_effect_rho) == 1) {
+      design_effect_rho <- rep(as.numeric(design_effect_rho), n_rows)
+    }
+    rho_vals <- design_effect_rho
+  } else {
+    rho_vals <- NULL
+  }
+  # Compute design_effect based on what is available
+  if (!is.null(m_vals) && !is.null(rho_vals)) {
+    design_effect <- sqrt(1 + (as.numeric(m_vals) - 1) * as.numeric(rho_vals))
+  } else if (
+    isTRUE(doubleentered) &&
+    is.null(m_vals) &&
+    is.null(rho_vals)
+  ) {
     design_effect <- rep(sqrt(1 + (2 - 1) * 1), n_rows)
-  } else if (!is.null(design_effect_m) && !is.null(design_effect_rho)) {
-    design_effect <- rep(sqrt(1 + (design_effect_m - 1) * design_effect_rho), n_rows)
   } else {
     design_effect <- rep(adjust_base, n_rows)
   }
