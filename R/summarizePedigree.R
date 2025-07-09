@@ -38,6 +38,7 @@ utils::globalVariables(c(".N", ".SD"))
 #' @param verbose Logical, if TRUE, print progress messages.
 #' @returns A data.frame (or list) containing summary statistics for family, maternal, and paternal lines, as well as the 5 oldest and biggest lines.
 #' @importFrom data.table as.data.table
+#' @aliases summarisePedigrees summarisepedigrees summarizepedigrees
 #' @export
 summarizePedigrees <- function(ped, famID = "famID", personID = "ID",
                                momID = "momID", dadID = "dadID",
@@ -334,7 +335,7 @@ findFounder <- function(data, group_var, sort_var) {
 #'
 #' @inheritParams summarizePedigrees
 #' @inheritParams findFounder
-#'
+#' @aliases summarizefounder summariseFounder
 #' @keywords internal
 
 summarizeFounder <- function(ped_dt, group_var, sort_var,
@@ -361,7 +362,7 @@ summarizeFounder <- function(ped_dt, group_var, sort_var,
 #' @inheritParams summarizePedigrees
 #' @seealso [summarizePedigrees ()]
 #' @export
-#'
+#' @aliases summarizematrilines summarisematrilines summariseMatrilines
 summarizeMatrilines <- function(ped, famID = "famID", personID = "ID",
                                 momID = "momID", dadID = "dadID",
                                 matID = "matID", patID = "patID",
@@ -392,7 +393,7 @@ summarizeMatrilines <- function(ped, famID = "famID", personID = "ID",
 #' @inheritParams summarizePedigrees
 #' @seealso [summarizePedigrees ()]
 #' @export
-#'
+#' @aliases summarizepatrilines summarisepatrilines summarisePatrilines
 summarizePatrilines <- function(ped, famID = "famID", personID = "ID",
                                 momID = "momID", dadID = "dadID",
                                 matID = "matID", patID = "patID",
@@ -419,8 +420,8 @@ summarizePatrilines <- function(ped, famID = "famID", personID = "ID",
 #' Summarize the families in a pedigree
 #' @inheritParams summarizePedigrees
 #' @seealso [summarizePedigrees ()]
+#' @aliases summarizefamilies summarisefamilies summariseFamilies
 #' @export
-
 summarizeFamilies <- function(ped, famID = "famID", personID = "ID",
                               momID = "momID", dadID = "dadID",
                               matID = "matID", patID = "patID",
@@ -456,7 +457,7 @@ summarizeFamilies <- function(ped, famID = "famID", personID = "ID",
 #' @param foo_summary_dt A data.table containing the summary statistics.
 #' @param n_foo An integer specifying the number of individuals in the summary.
 #' @returns a data.table containing the oldest families in the pedigree.
-
+#' @aliases findoldest
 findOldest <- function(foo_summary_dt, byr, noldest, n_foo) {
   oldest_foo <- try_na(foo_summary_dt[order(get(byr))][1:min(c(noldest, n_foo),
     na.rm = TRUE
@@ -471,7 +472,7 @@ findOldest <- function(foo_summary_dt, byr, noldest, n_foo) {
 #' @inheritParams findOldest
 #' @inheritParams summarizePedigrees
 #' @returns a data.table containing the biggest families in the pedigree.
-
+#' @aliases findbiggest
 
 findBiggest <- function(foo_summary_dt, nbiggest, n_foo) {
   biggest_foo <- try_na(
