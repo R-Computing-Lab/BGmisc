@@ -98,16 +98,15 @@ calculateCIs <- function(tbl,
   # Compute design_effect based on what is available
   if (!is.null(m_vals) && !is.null(rho_vals)) {
     design_effect <- sqrt(1 + (as.numeric(m_vals) - 1) * as.numeric(rho_vals))
-  } else if (
-    isTRUE(doubleentered) &&
-    is.null(m_vals) &&
-    is.null(rho_vals)
-  ) {
-    design_effect <- rep(sqrt(1 + (2 - 1) * 1), n_rows)
   } else {
     design_effect <- rep(adjust_base, n_rows)
   }
-
+  if (
+    isTRUE(doubleentered)
+  ) {
+    # Adjust standard errors for double entry
+    design_effect <- design_effect * sqrt(2)
+  }
   z_crit <- stats::qnorm((1 + conf_level) / 2)
 
   if (method == "raykov") {
