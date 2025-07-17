@@ -28,6 +28,8 @@ test_that("checkPedigreeNetwork detects individuals with excess parents in potte
     personID = "999",
     famID = 1,
     name = "New Parent",
+    first_name = "New",
+    surname = "Parent",
     gen = 1,
     momID = NA,
     dadID = NA,

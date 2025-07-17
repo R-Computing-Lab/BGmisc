@@ -82,6 +82,8 @@ NULL
 #'   \item \code{personID}:  Person identification variable
 #'   \item \code{famID}: Family identification variable
 #'   \item \code{name}:  Name of the person
+#'   \item \code{first_name}: First name of the person
+#'   \item \code{surname}: Last name of the person
 #'   \item \code{gen}: Generation of the person
 #'   \item \code{momID}:  ID of the mother
 #'   \item \code{dadID}:  ID of the father
@@ -98,7 +100,7 @@ NULL
 #' @keywords datasets
 #' @name potter
 #' @usage data(potter)
-#' @format A data frame (and ped object) with 36 rows and 8 variables
+#' @format A data frame (and ped object) with 36 rows and 10 variables
 NULL
 
 
