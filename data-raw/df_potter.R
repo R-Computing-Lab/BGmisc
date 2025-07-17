@@ -232,7 +232,6 @@ potter <- potter %>%
 #                                momID,dadID,spouseID,sex)
 
 
-
 checkis_acyclic <- checkPedigreeNetwork(potter,
   personID = "personID",
   momID = "momID",
