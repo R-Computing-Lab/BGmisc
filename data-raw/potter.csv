@@ -1,37 +1,37 @@
-personID,famID,name,gen,momID,dadID,spouseID,sex,twinID,zygosity
-1,1,Vernon Dursley,1,101,102,3,1,NA,NA
-2,1,Marjorie Dursley,1,101,102,NA,0,NA,NA
-3,1,Petunia Evans,1,103,104,1,0,NA,NA
-4,1,Lily Evans,1,103,104,5,0,NA,NA
-5,1,James Potter,1,NA,NA,4,1,NA,NA
-6,1,Dudley Dursley,2,3,1,NA,1,NA,NA
-7,1,Harry Potter,2,4,5,8,1,NA,NA
-8,1,Ginny Weasley,2,10,9,7,0,NA,NA
-9,1,Arthur Weasley,1,NA,NA,10,1,NA,NA
-10,1,Molly Prewett,1,NA,NA,9,0,NA,NA
-11,1,Ron Weasley,2,10,9,17,1,NA,NA
-12,1,Fred Weasley,2,10,9,NA,1,13,mz
-13,1,George Weasley,2,10,9,NA,1,12,mz
-14,1,Percy Weasley,2,10,9,20,1,NA,NA
-15,1,Charlie Weasley,2,10,9,NA,1,NA,NA
-16,1,Bill Weasley,2,10,9,18,1,NA,NA
-17,1,Hermione Granger,2,NA,NA,11,0,NA,NA
-18,1,Fleur Delacour,2,105,106,16,0,NA,NA
-19,1,Gabrielle Delacour,2,105,106,NA,0,NA,NA
-20,1,Audrey,2,NA,NA,14,0,NA,NA
-21,1,James Potter II,3,8,7,NA,1,NA,NA
-22,1,Albus Potter,3,8,7,NA,1,NA,NA
-23,1,Lily Potter,3,8,7,NA,0,NA,NA
-24,1,Rose Weasley,3,17,11,NA,0,NA,NA
-25,1,Hugo Weasley,3,17,11,NA,1,NA,NA
-26,1,Victoire Weasley,3,18,16,NA,0,NA,NA
-27,1,Dominique Weasley,3,18,16,NA,0,NA,NA
-28,1,Louis Weasley,3,18,16,NA,1,NA,NA
-29,1,Molly Weasley,3,20,14,NA,0,NA,NA
-30,1,Lucy Weasley,3,20,14,NA,0,NA,NA
-101,1,Mother Dursley,0,NA,NA,102,0,NA,NA
-102,1,Father Dursley,0,NA,NA,101,1,NA,NA
-104,1,Father Evans,0,NA,NA,103,1,NA,NA
-103,1,Mother Evans,0,NA,NA,104,0,NA,NA
-106,1,Father Delacour,0,NA,NA,105,1,NA,NA
-105,1,Mother Delacour,0,NA,NA,106,0,NA,NA
+personID,famID,name,first_name,surname,gen,momID,dadID,spouseID,sex,twinID,zygosity
+1,1,Vernon Dursley,Vernon,Dursley,1,101,102,3,1,NA,NA
+2,1,Marjorie Dursley,Marjorie,Dursley,1,101,102,NA,0,NA,NA
+3,1,Petunia Evans,Petunia,Evans,1,103,104,1,0,NA,NA
+4,1,Lily Evans,Lily,Evans,1,103,104,5,0,NA,NA
+5,1,James Potter,James,Potter,1,NA,NA,4,1,NA,NA
+6,1,Dudley Dursley,Dudley,Dursley,2,3,1,NA,1,NA,NA
+7,1,Harry Potter,Harry,Potter,2,4,5,8,1,NA,NA
+8,1,Ginny Weasley,Ginny,Weasley,2,10,9,7,0,NA,NA
+9,1,Arthur Weasley,Arthur,Weasley,1,NA,NA,10,1,NA,NA
+10,1,Molly Prewett,Molly,Prewett,1,NA,NA,9,0,NA,NA
+11,1,Ron Weasley,Ron,Weasley,2,10,9,17,1,NA,NA
+12,1,Fred Weasley,Fred,Weasley,2,10,9,NA,1,13,mz
+13,1,George Weasley,George,Weasley,2,10,9,NA,1,12,mz
+14,1,Percy Weasley,Percy,Weasley,2,10,9,20,1,NA,NA
+15,1,Charlie Weasley,Charlie,Weasley,2,10,9,NA,1,NA,NA
+16,1,Bill Weasley,Bill,Weasley,2,10,9,18,1,NA,NA
+17,1,Hermione Granger,Hermione,Granger,2,NA,NA,11,0,NA,NA
+18,1,Fleur Delacour,Fleur,Delacour,2,105,106,16,0,NA,NA
+19,1,Gabrielle Delacour,Gabrielle,Delacour,2,105,106,NA,0,NA,NA
+20,1,Audrey,Audrey,Unknown,2,NA,NA,14,0,NA,NA
+21,1,James Potter II,James,Potter,3,8,7,NA,1,NA,NA
+22,1,Albus Potter,Albus,Potter,3,8,7,NA,1,NA,NA
+23,1,Lily Potter,Lily,Potter,3,8,7,NA,0,NA,NA
+24,1,Rose Weasley,Rose,Weasley,3,17,11,NA,0,NA,NA
+25,1,Hugo Weasley,Hugo,Weasley,3,17,11,NA,1,NA,NA
+26,1,Victoire Weasley,Victoire,Weasley,3,18,16,NA,0,NA,NA
+27,1,Dominique Weasley,Dominique,Weasley,3,18,16,NA,0,NA,NA
+28,1,Louis Weasley,Louis,Weasley,3,18,16,NA,1,NA,NA
+29,1,Molly Weasley,Molly,Weasley,3,20,14,NA,0,NA,NA
+30,1,Lucy Weasley,Lucy,Weasley,3,20,14,NA,0,NA,NA
+101,1,Mother Dursley,Mother,Dursley,0,NA,NA,102,0,NA,NA
+102,1,Father Dursley,Father,Dursley,0,NA,NA,101,1,NA,NA
+104,1,Father Evans,Father,Evans,0,NA,NA,103,1,NA,NA
+103,1,Mother Evans,Mother,Evans,0,NA,NA,104,0,NA,NA
+106,1,Father Delacour,Father,Delacour,0,NA,NA,105,1,NA,NA
+105,1,Mother Delacour,Mother,Delacour,0,NA,NA,106,0,NA,NA

@@ -1,4 +1,5 @@
 # BGmisc 1.5.0
+* Enhancing potter family tree
 * Transferring ASOIAF data from BGmisc to ggpedigree
 * updated tests to handle the transition of ASOIAF data to ggpedigree
 * smarter aliases

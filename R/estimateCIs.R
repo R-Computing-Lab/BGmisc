@@ -139,7 +139,6 @@ calculateCIs <- function(tbl,
   tbl_out[[waldp1tail_col_name]] <- stats::pnorm(q = abs(tbl_out[[wald_col_name]]), lower.tail = FALSE)
   tbl_out[[waldp2tail_col_name]] <- 2 * tbl_out[[waldp1tail_col_name]]
 
-
   return(tbl_out)
 }
 #' Fisher's r to z transformation and back
