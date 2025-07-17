@@ -105,6 +105,9 @@ pedigree-related tasks. This function facilitates those tasks by finding
 all the extended families. People within the same extended family have
 at least some form of relation, however distant, while those in
 different extended families have no relations.</p>
+<pre><code><span><span class="co">#&gt; Warning in .addLabels(p = p, config = config): The 'ggrepel' package is</span></span>
+<span><span class="co">#&gt; required for label methods 'geom_text_repel', 'ggrepel', and</span></span>
+<span><span class="co">#&gt; 'geom_label_repel'. Please install it using install.packages('ggrepel').</span></span></code></pre>
 <div class="figure">
 <img src="v0_network_files/figure-html/unnamed-chunk-2-1.png" alt="Potter Family Pedigree" width="50%"><p class="caption">
 Potter Family Pedigree
@@ -113,7 +116,7 @@ Potter Family Pedigree
 <p>We will use the <code>potter</code> pedigree data as an example. For
 convenience, we’ve renamed the family ID variable to <code>oldfam</code>
 to avoid confusion with the new family ID variable we will create.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">df_potter</span> <span class="op">&lt;-</span> <span class="va">potter</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">df_potter</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">df_potter</span><span class="op">)</span> <span class="op">==</span> <span class="st">"famID"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"oldfam"</span></span>
 <span></span>
@@ -133,12 +136,12 @@ They match!</p>
 <p>Once you know which sets of people are related at all to one another,
 you’ll likely want to know how much. For additive genetic relatedness,
 you can use the <code><a href="../reference/ped2add.html">ped2add()</a></code> function.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">add</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ped2add.html">ped2add</a></span><span class="op">(</span><span class="va">potter</span>, sparse <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <p>This computes the additive genetic relatedness for everyone in the
 data. It returns a square, symmetric matrix that has as many rows and
 columns as there are IDs.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">add</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">7</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">7</span><span class="op">]</span></span>
 <span><span class="co">#&gt;     1    2    3    4   5     6     7</span></span>
 <span><span class="co">#&gt; 1 1.0 0.50 0.00 0.00 0.0 0.500 0.000</span></span>
@@ -152,7 +155,7 @@ columns as there are IDs.</p>
 between person i and person j. For example, person 1 (Vernon Dursley)
 shares 0.5 of their nuclear DNA with person 6 (Dudley Dursley), shares
 0.5 of their nuclear DNA with person 2 (Marjorie Dursley).</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">add</span><span class="op">)</span></span>
 <span><span class="co">#&gt; add</span></span>
 <span><span class="co">#&gt;      0 0.0625  0.125   0.25    0.5      1 </span></span>
@@ -161,7 +164,7 @@ shares 0.5 of their nuclear DNA with person 6 (Dudley Dursley), shares
 have fewer than 10,000 people. When the data get large, however, it’s
 much more efficient to compute this relatedness separately for each
 extended family.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">add_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">potter</span><span class="op">$</span><span class="va">famID</span><span class="op">)</span>,</span>
 <span>  <span class="kw">function</span><span class="op">(</span><span class="va">d</span><span class="op">)</span> <span class="op">{</span></span>
@@ -181,7 +184,7 @@ parents (<code>ped2cn</code>), and common extended family environment
 </h4>
 <p>Here we calculate the mitochondrial relatedness between all pairs of
 individuals in the <code>potter</code> dataset.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ped2mit.html">ped2mit</a></span><span class="op">(</span><span class="va">potter</span>, sparse <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="va">mit</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">7</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">7</span><span class="op">]</span></span>
 <span><span class="co">#&gt;   1 2 3 4 5 6 7</span></span>
@@ -205,7 +208,7 @@ not.</p>
 </h4>
 <p>Here we calculate the relatedness between all pairs of individuals in
 the <code>potter</code> dataset through sharing both parents.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">commonNuclear</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ped2cn.html">ped2cn</a></span><span class="op">(</span><span class="va">potter</span>, sparse <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="va">commonNuclear</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">7</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">7</span><span class="op">]</span></span>
 <span><span class="co">#&gt;   1 2 3 4 5 6 7</span></span>
@@ -228,7 +231,7 @@ environment<a class="anchor" aria-label="anchor" href="#computing-relatedness-th
 </h4>
 <p>Here we calculate the relatedness between all pairs of individuals in
 the <code>potter</code> dataset through sharing an extended family.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">extendedFamilyEnvironment</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ped2ce.html">ped2ce</a></span><span class="op">(</span><span class="va">potter</span>, sparse <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="va">extendedFamilyEnvironment</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">7</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">7</span><span class="op">]</span></span>
 <span><span class="co">#&gt;      [,1] [,2] [,3] [,4] [,5] [,6] [,7]</span></span>
@@ -258,6 +261,9 @@ subsetted pedigree may not contain all the individuals that connect two
 people together. For example if we were to remove Arthur Weasley (person
 9) and Molly Prewett (person 10) from the <code>potter</code> dataset,
 we would lose the connections amongst their children.</p>
+<pre><code><span><span class="co">#&gt; Warning in .addLabels(p = p, config = config): The 'ggrepel' package is</span></span>
+<span><span class="co">#&gt; required for label methods 'geom_text_repel', 'ggrepel', and</span></span>
+<span><span class="co">#&gt; 'geom_label_repel'. Please install it using install.packages('ggrepel').</span></span></code></pre>
 <div class="figure">
 <img src="v0_network_files/figure-html/unnamed-chunk-11-1.png" alt="Potter Subset Pedigree" width="50%"><p class="caption">
 Potter Subset Pedigree
@@ -272,9 +278,12 @@ the connections between the two individuals.</p>
 <p>However, this subset does not plot the relationship between spouses
 (such as the marriage between Vernon Dursley and Petunia Evans), as
 there are not children to connect the two individuals together yet.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">subset_rows</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">31</span><span class="op">:</span><span class="fl">36</span><span class="op">)</span></span>
 <span><span class="va">subset_potter</span> <span class="op">&lt;-</span> <span class="va">potter</span><span class="op">[</span><span class="va">subset_rows</span>, <span class="op">]</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; Warning in .addLabels(p = p, config = config): The 'ggrepel' package is</span></span>
+<span><span class="co">#&gt; required for label methods 'geom_text_repel', 'ggrepel', and</span></span>
+<span><span class="co">#&gt; 'geom_label_repel'. Please install it using install.packages('ggrepel').</span></span></code></pre>
 <p><img src="v0_network_files/figure-html/unnamed-chunk-13-1.png" width="50%"></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

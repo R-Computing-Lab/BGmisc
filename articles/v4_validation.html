@@ -267,16 +267,16 @@ dataset, specifically 2, 6. Let’s take a peek at the duplicates:</p>
 <span><span class="va">df_duplicates</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">personID</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">result</span><span class="op">$</span><span class="va">non_unique_ids</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">personID</span><span class="op">)</span></span>
-<span><span class="co">#&gt;    personID newFamID famID             name gen momID dadID spouseID sex twinID</span></span>
-<span><span class="co">#&gt; 1         2        1     1   Vernon Dursley   1   101   102        3   1     NA</span></span>
-<span><span class="co">#&gt; 2         2        1     1 Marjorie Dursley   1   101   102       NA   0     NA</span></span>
-<span><span class="co">#&gt; 6         6        1     1   Dudley Dursley   2     3     1       NA   1     NA</span></span>
-<span><span class="co">#&gt; 61        6        1     1   Dudley Dursley   2     3     1       NA   1     NA</span></span>
-<span><span class="co">#&gt;    zygosity</span></span>
-<span><span class="co">#&gt; 1      &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 2      &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 6      &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 61     &lt;NA&gt;</span></span></code></pre></div>
+<span><span class="co">#&gt;    personID newFamID famID             name first_name surname gen momID dadID</span></span>
+<span><span class="co">#&gt; 1         2        1     1   Vernon Dursley     Vernon Dursley   1   101   102</span></span>
+<span><span class="co">#&gt; 2         2        1     1 Marjorie Dursley   Marjorie Dursley   1   101   102</span></span>
+<span><span class="co">#&gt; 6         6        1     1   Dudley Dursley     Dudley Dursley   2     3     1</span></span>
+<span><span class="co">#&gt; 61        6        1     1   Dudley Dursley     Dudley Dursley   2     3     1</span></span>
+<span><span class="co">#&gt;    spouseID sex twinID zygosity</span></span>
+<span><span class="co">#&gt; 1         3   1     NA     &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 2        NA   0     NA     &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 6        NA   1     NA     &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 61       NA   1     NA     &lt;NA&gt;</span></span></code></pre></div>
 <p>Yep, these are definitely the duplicates.</p>
 <div class="section level4">
 <h4 id="repairing-between-row-duplicates">Repairing Between-Row Duplicates<a class="anchor" aria-label="anchor" href="#repairing-between-row-duplicates"></a>
@@ -289,9 +289,12 @@ option:</p>
 <span><span class="va">df_repair</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">ID</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">result</span><span class="op">$</span><span class="va">non_unique_ids</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">ID</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   ID newFamID famID             name gen momID dadID spID sex twinID zygosity</span></span>
-<span><span class="co">#&gt; 1  2        1     1 Marjorie Dursley   1   101   102   NA   0     NA     &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 2  6        1     1   Dudley Dursley   2     3     1   NA   1     NA     &lt;NA&gt;</span></span>
+<span><span class="co">#&gt;   ID newFamID famID             name first_name surname gen momID dadID spID</span></span>
+<span><span class="co">#&gt; 1  2        1     1 Marjorie Dursley   Marjorie Dursley   1   101   102   NA</span></span>
+<span><span class="co">#&gt; 2  6        1     1   Dudley Dursley     Dudley Dursley   2     3     1   NA</span></span>
+<span><span class="co">#&gt;   sex twinID zygosity</span></span>
+<span><span class="co">#&gt; 1   0     NA     &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 2   1     NA     &lt;NA&gt;</span></span>
 <span></span>
 <span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/checkIDs.html">checkIDs</a></span><span class="op">(</span><span class="va">df_repair</span><span class="op">)</span></span>
 <span></span>
@@ -399,10 +402,10 @@ these errors in your dataset.</p>
 <code class="sourceCode R"><span><span class="co"># Find the problematic entry</span></span>
 <span></span>
 <span><span class="va">df_within</span><span class="op">[</span><span class="va">df_within</span><span class="op">$</span><span class="va">momID</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">result</span><span class="op">$</span><span class="va">is_own_mother_ids</span>, <span class="op">]</span></span>
-<span><span class="co">#&gt;   personID newFamID famID           name gen momID dadID spouseID sex twinID</span></span>
-<span><span class="co">#&gt; 1        1        1     1 Vernon Dursley   1     1   102        3   1     NA</span></span>
-<span><span class="co">#&gt;   zygosity</span></span>
-<span><span class="co">#&gt; 1     &lt;NA&gt;</span></span></code></pre></div>
+<span><span class="co">#&gt;   personID newFamID famID           name first_name surname gen momID dadID</span></span>
+<span><span class="co">#&gt; 1        1        1     1 Vernon Dursley     Vernon Dursley   1     1   102</span></span>
+<span><span class="co">#&gt;   spouseID sex twinID zygosity</span></span>
+<span><span class="co">#&gt; 1        3   1     NA     &lt;NA&gt;</span></span></code></pre></div>
 <p>There are several ways to correct this issue, depending on the
 specifics of your dataset. In this case, you could correct the momID for
 Vernon Dursley to the correct value, resolving the within-row duplicate,
@@ -503,43 +506,80 @@ Inconsistent sex coding across the dataset</p>
 <span><span class="co">#&gt; Changes Made:</span></span>
 <span><span class="co">#&gt; Recode sex based on most frequent sex in dads: 1. Total sex changes made:  36</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">df_fix</span><span class="op">)</span></span>
-<span><span class="co">#&gt;     ID famID               name gen momID dadID spID sex twinID zygosity</span></span>
-<span><span class="co">#&gt; 1    1     1     Vernon Dursley   1   101   102    3   M     NA     &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 2    2     1   Marjorie Dursley   1   101   102   NA   F     NA     &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 3    3     1      Petunia Evans   1   103   104    1   F     NA     &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 4    4     1         Lily Evans   1   103   104    5   F     NA     &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 5    5     1       James Potter   1    NA    NA    4   M     NA     &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 6    6     1     Dudley Dursley   2     3     1   NA   M     NA     &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 7    7     1       Harry Potter   2     4     5    8   M     NA     &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 8    8     1      Ginny Weasley   2    10     9    7   F     NA     &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 9    9     1     Arthur Weasley   1    NA    NA   10   M     NA     &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 10  10     1      Molly Prewett   1    NA    NA    9   F     NA     &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 11  11     1        Ron Weasley   2    10     9   17   M     NA     &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 12  12     1       Fred Weasley   2    10     9   NA   M     13       mz</span></span>
-<span><span class="co">#&gt; 13  13     1     George Weasley   2    10     9   NA   M     12       mz</span></span>
-<span><span class="co">#&gt; 14  14     1      Percy Weasley   2    10     9   20   M     NA     &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 15  15     1    Charlie Weasley   2    10     9   NA   M     NA     &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 16  16     1       Bill Weasley   2    10     9   18   M     NA     &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 17  17     1   Hermione Granger   2    NA    NA   11   F     NA     &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 18  18     1     Fleur Delacour   2   105   106   16   F     NA     &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 19  19     1 Gabrielle Delacour   2   105   106   NA   F     NA     &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 20  20     1             Audrey   2    NA    NA   14   F     NA     &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 21  21     1    James Potter II   3     8     7   NA   M     NA     &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 22  22     1       Albus Potter   3     8     7   NA   M     NA     &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 23  23     1        Lily Potter   3     8     7   NA   F     NA     &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 24  24     1       Rose Weasley   3    17    11   NA   F     NA     &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 25  25     1       Hugo Weasley   3    17    11   NA   M     NA     &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 26  26     1   Victoire Weasley   3    18    16   NA   F     NA     &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 27  27     1  Dominique Weasley   3    18    16   NA   F     NA     &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 28  28     1      Louis Weasley   3    18    16   NA   M     NA     &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 29  29     1      Molly Weasley   3    20    14   NA   F     NA     &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 30  30     1       Lucy Weasley   3    20    14   NA   F     NA     &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 31 101     1     Mother Dursley   0    NA    NA  102   F     NA     &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 32 102     1     Father Dursley   0    NA    NA  101   M     NA     &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 33 104     1       Father Evans   0    NA    NA  103   M     NA     &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 34 103     1       Mother Evans   0    NA    NA  104   F     NA     &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 35 106     1    Father Delacour   0    NA    NA  105   M     NA     &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 36 105     1    Mother Delacour   0    NA    NA  106   F     NA     &lt;NA&gt;</span></span></code></pre></div>
+<span><span class="co">#&gt;     ID famID               name first_name  surname gen momID dadID spID sex</span></span>
+<span><span class="co">#&gt; 1    1     1     Vernon Dursley     Vernon  Dursley   1   101   102    3   M</span></span>
+<span><span class="co">#&gt; 2    2     1   Marjorie Dursley   Marjorie  Dursley   1   101   102   NA   F</span></span>
+<span><span class="co">#&gt; 3    3     1      Petunia Evans    Petunia    Evans   1   103   104    1   F</span></span>
+<span><span class="co">#&gt; 4    4     1         Lily Evans       Lily    Evans   1   103   104    5   F</span></span>
+<span><span class="co">#&gt; 5    5     1       James Potter      James   Potter   1    NA    NA    4   M</span></span>
+<span><span class="co">#&gt; 6    6     1     Dudley Dursley     Dudley  Dursley   2     3     1   NA   M</span></span>
+<span><span class="co">#&gt; 7    7     1       Harry Potter      Harry   Potter   2     4     5    8   M</span></span>
+<span><span class="co">#&gt; 8    8     1      Ginny Weasley      Ginny  Weasley   2    10     9    7   F</span></span>
+<span><span class="co">#&gt; 9    9     1     Arthur Weasley     Arthur  Weasley   1    NA    NA   10   M</span></span>
+<span><span class="co">#&gt; 10  10     1      Molly Prewett      Molly  Prewett   1    NA    NA    9   F</span></span>
+<span><span class="co">#&gt; 11  11     1        Ron Weasley        Ron  Weasley   2    10     9   17   M</span></span>
+<span><span class="co">#&gt; 12  12     1       Fred Weasley       Fred  Weasley   2    10     9   NA   M</span></span>
+<span><span class="co">#&gt; 13  13     1     George Weasley     George  Weasley   2    10     9   NA   M</span></span>
+<span><span class="co">#&gt; 14  14     1      Percy Weasley      Percy  Weasley   2    10     9   20   M</span></span>
+<span><span class="co">#&gt; 15  15     1    Charlie Weasley    Charlie  Weasley   2    10     9   NA   M</span></span>
+<span><span class="co">#&gt; 16  16     1       Bill Weasley       Bill  Weasley   2    10     9   18   M</span></span>
+<span><span class="co">#&gt; 17  17     1   Hermione Granger   Hermione  Granger   2    NA    NA   11   F</span></span>
+<span><span class="co">#&gt; 18  18     1     Fleur Delacour      Fleur Delacour   2   105   106   16   F</span></span>
+<span><span class="co">#&gt; 19  19     1 Gabrielle Delacour  Gabrielle Delacour   2   105   106   NA   F</span></span>
+<span><span class="co">#&gt; 20  20     1             Audrey     Audrey  Unknown   2    NA    NA   14   F</span></span>
+<span><span class="co">#&gt; 21  21     1    James Potter II      James   Potter   3     8     7   NA   M</span></span>
+<span><span class="co">#&gt; 22  22     1       Albus Potter      Albus   Potter   3     8     7   NA   M</span></span>
+<span><span class="co">#&gt; 23  23     1        Lily Potter       Lily   Potter   3     8     7   NA   F</span></span>
+<span><span class="co">#&gt; 24  24     1       Rose Weasley       Rose  Weasley   3    17    11   NA   F</span></span>
+<span><span class="co">#&gt; 25  25     1       Hugo Weasley       Hugo  Weasley   3    17    11   NA   M</span></span>
+<span><span class="co">#&gt; 26  26     1   Victoire Weasley   Victoire  Weasley   3    18    16   NA   F</span></span>
+<span><span class="co">#&gt; 27  27     1  Dominique Weasley  Dominique  Weasley   3    18    16   NA   F</span></span>
+<span><span class="co">#&gt; 28  28     1      Louis Weasley      Louis  Weasley   3    18    16   NA   M</span></span>
+<span><span class="co">#&gt; 29  29     1      Molly Weasley      Molly  Weasley   3    20    14   NA   F</span></span>
+<span><span class="co">#&gt; 30  30     1       Lucy Weasley       Lucy  Weasley   3    20    14   NA   F</span></span>
+<span><span class="co">#&gt; 31 101     1     Mother Dursley     Mother  Dursley   0    NA    NA  102   F</span></span>
+<span><span class="co">#&gt; 32 102     1     Father Dursley     Father  Dursley   0    NA    NA  101   M</span></span>
+<span><span class="co">#&gt; 33 104     1       Father Evans     Father    Evans   0    NA    NA  103   M</span></span>
+<span><span class="co">#&gt; 34 103     1       Mother Evans     Mother    Evans   0    NA    NA  104   F</span></span>
+<span><span class="co">#&gt; 35 106     1    Father Delacour     Father Delacour   0    NA    NA  105   M</span></span>
+<span><span class="co">#&gt; 36 105     1    Mother Delacour     Mother Delacour   0    NA    NA  106   F</span></span>
+<span><span class="co">#&gt;    twinID zygosity</span></span>
+<span><span class="co">#&gt; 1      NA     &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 2      NA     &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 3      NA     &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 4      NA     &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 5      NA     &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 6      NA     &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 7      NA     &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 8      NA     &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 9      NA     &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 10     NA     &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 11     NA     &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 12     13       mz</span></span>
+<span><span class="co">#&gt; 13     12       mz</span></span>
+<span><span class="co">#&gt; 14     NA     &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 15     NA     &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 16     NA     &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 17     NA     &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 18     NA     &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 19     NA     &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 20     NA     &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 21     NA     &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 22     NA     &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 23     NA     &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 24     NA     &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 25     NA     &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 26     NA     &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 27     NA     &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 28     NA     &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 29     NA     &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 30     NA     &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 31     NA     &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 32     NA     &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 33     NA     &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 34     NA     &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 35     NA     &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 36     NA     &lt;NA&gt;</span></span></code></pre></div>
 <p>When the repair argument is set to <code>TRUE</code>, repair process
 follows several rules: - Parents listed as mothers must be female -
 Parents listed as fathers must be male - Sex codes are standardized to
