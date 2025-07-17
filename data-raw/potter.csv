@@ -18,7 +18,7 @@ personID,famID,name,first_name,surname,gen,momID,dadID,spouseID,sex,twinID,zygos
 17,1,Hermione Granger,Hermione,Granger,2,NA,NA,11,0,NA,NA
 18,1,Fleur Delacour,Fleur,Delacour,2,105,106,16,0,NA,NA
 19,1,Gabrielle Delacour,Gabrielle,Delacour,2,105,106,NA,0,NA,NA
-20,1,Audrey,Audrey,Audrey,2,NA,NA,14,0,NA,NA
+20,1,Audrey,Audrey,Unknown,2,NA,NA,14,0,NA,NA
 21,1,James Potter II,James,Potter,3,8,7,NA,1,NA,NA
 22,1,Albus Potter,Albus,Potter,3,8,7,NA,1,NA,NA
 23,1,Lily Potter,Lily,Potter,3,8,7,NA,0,NA,NA

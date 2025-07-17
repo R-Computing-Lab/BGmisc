@@ -42,7 +42,7 @@ potter <- data.frame(
     "Louis Weasley",
     "Molly Weasley",
     "Lucy Weasley"
-  ),   first_name = c(
+  ), first_name = c(
     "Vernon",
     "Marjorie",
     "Petunia",
@@ -94,7 +94,7 @@ potter <- data.frame(
     "Granger",
     "Delacour",
     "Delacour",
-    "Audrey",
+    "Unknown",
     "Potter",
     "Potter",
     "Potter",
