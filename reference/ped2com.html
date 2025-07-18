@@ -51,12 +51,12 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ped2com</span><span class="op">(</span></span>
 <span>  <span class="va">ped</span>,</span>
 <span>  <span class="va">component</span>,</span>
-<span>  max.gen <span class="op">=</span> <span class="fl">25</span>,</span>
+<span>  max_gen <span class="op">=</span> <span class="fl">25</span>,</span>
 <span>  sparse <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  gc <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  flatten.diag <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  standardize.colnames <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  flatten_diag <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  standardize_colnames <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  transpose_method <span class="op">=</span> <span class="st">"tcrossprod"</span>,</span>
 <span>  adjacency_method <span class="op">=</span> <span class="st">"direct"</span>,</span>
 <span>  isChild_method <span class="op">=</span> <span class="st">"classic"</span>,</span>
@@ -84,7 +84,7 @@
 <dd><p>character.  Which component of the pedigree to return.  See Details.</p></dd>
 
 
-<dt id="arg-max-gen">max.gen<a class="anchor" aria-label="anchor" href="#arg-max-gen"></a></dt>
+<dt id="arg-max-gen">max_gen<a class="anchor" aria-label="anchor" href="#arg-max-gen"></a></dt>
 <dd><p>the maximum number of generations to compute
 (e.g., only up to 4th degree relatives).  The default is 25. However it can be set to infinity.
  `Inf` uses as many generations as there are in the data.</p></dd>
@@ -102,11 +102,11 @@
 <dd><p>logical. If TRUE, do frequent garbage collection via <code><a href="https://rdrr.io/r/base/gc.html" class="external-link">gc</a></code> to save memory</p></dd>
 
 
-<dt id="arg-flatten-diag">flatten.diag<a class="anchor" aria-label="anchor" href="#arg-flatten-diag"></a></dt>
+<dt id="arg-flatten-diag">flatten_diag<a class="anchor" aria-label="anchor" href="#arg-flatten-diag"></a></dt>
 <dd><p>logical. If TRUE, overwrite the diagonal of the final relatedness matrix with ones</p></dd>
 
 
-<dt id="arg-standardize-colnames">standardize.colnames<a class="anchor" aria-label="anchor" href="#arg-standardize-colnames"></a></dt>
+<dt id="arg-standardize-colnames">standardize_colnames<a class="anchor" aria-label="anchor" href="#arg-standardize-colnames"></a></dt>
 <dd><p>logical. If TRUE, standardize the column names of the pedigree dataset</p></dd>
 
 

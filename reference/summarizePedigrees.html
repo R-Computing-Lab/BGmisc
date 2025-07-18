@@ -66,8 +66,9 @@ for each family, maternal, and paternal lineage.</p>
 <span>  byr <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  include_founder <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  founder_sort_var <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  nbiggest <span class="op">=</span> <span class="fl">5</span>,</span>
-<span>  noldest <span class="op">=</span> <span class="va">nbiggest</span>,</span>
+<span>  n_keep <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>  n_biggest <span class="op">=</span> <span class="va">n_keep</span>,</span>
+<span>  n_oldest <span class="op">=</span> <span class="va">n_keep</span>,</span>
 <span>  skip_var <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  five_num_summary <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  network_checks <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -86,8 +87,9 @@ for each family, maternal, and paternal lineage.</p>
 <span>  byr <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  include_founder <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  founder_sort_var <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  nbiggest <span class="op">=</span> <span class="fl">5</span>,</span>
-<span>  noldest <span class="op">=</span> <span class="va">nbiggest</span>,</span>
+<span>  n_keep <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>  n_biggest <span class="op">=</span> <span class="va">n_keep</span>,</span>
+<span>  n_oldest <span class="op">=</span> <span class="va">n_keep</span>,</span>
 <span>  skip_var <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  five_num_summary <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  network_checks <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -145,11 +147,15 @@ Options: `"fathers"`, `"mothers"`, `"families"`. Default includes all three.</p>
 Defaults to `byr` (if available) or `personID` otherwise.</p></dd>
 
 
-<dt id="arg-nbiggest">nbiggest<a class="anchor" aria-label="anchor" href="#arg-nbiggest"></a></dt>
+<dt id="arg-n-keep">n_keep<a class="anchor" aria-label="anchor" href="#arg-n-keep"></a></dt>
+<dd><p>Integer. Number of lineages to keep in the output for each type of summary.</p></dd>
+
+
+<dt id="arg-n-biggest">n_biggest<a class="anchor" aria-label="anchor" href="#arg-n-biggest"></a></dt>
 <dd><p>Integer. Number of largest lineages to return (sorted by count).</p></dd>
 
 
-<dt id="arg-noldest">noldest<a class="anchor" aria-label="anchor" href="#arg-noldest"></a></dt>
+<dt id="arg-n-oldest">n_oldest<a class="anchor" aria-label="anchor" href="#arg-n-oldest"></a></dt>
 <dd><p>Integer. Number of oldest lineages to return (sorted by birth year).</p></dd>
 
 
@@ -186,8 +192,8 @@ summary. Users can also specify variables to exclude from the analysis via
 <p>Beyond summary statistics, the function identifies the founding member of
 each lineage based on the specified sorting variable (`founder_sort_var`),
 defaulting to birth year (`byr`) when available or `personID` otherwise.
-Users can retrieve the largest and oldest lineages by setting `nbiggest`
-and `noldest`, respectively.</p>
+Users can retrieve the largest and oldest lineages by setting `n_biggest`
+and `n_oldest`, respectively.</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
