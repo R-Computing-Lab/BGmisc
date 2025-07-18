@@ -11,7 +11,7 @@ ped2com(
   sparse = TRUE,
   verbose = FALSE,
   gc = FALSE,
-  flatten.diag = FALSE,
+  flatten_diag = FALSE,
   standardize.colnames = TRUE,
   transpose_method = "tcrossprod",
   adjacency_method = "direct",
@@ -42,7 +42,7 @@ ped2com(
 
 \item{gc}{logical. If TRUE, do frequent garbage collection via \code{\link{gc}} to save memory}
 
-\item{flatten.diag}{logical. If TRUE, overwrite the diagonal of the final relatedness matrix with ones}
+\item{flatten_diag}{logical. If TRUE, overwrite the diagonal of the final relatedness matrix with ones}
 
 \item{standardize.colnames}{logical. If TRUE, standardize the column names of the pedigree dataset}
 

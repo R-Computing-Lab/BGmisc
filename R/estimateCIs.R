@@ -74,7 +74,6 @@ calculateCIs <- function(tbl,
   if (exists("design_effect_m_col") && length(design_effect_m_col) > 0) {
     m_vals <- tbl_out[[design_effect_m_col]]
   } else if (exists("design_effect_m") && length(design_effect_m) > 0) {
-
     if (length(design_effect_m) == 1) {
       design_effect_m <- rep(as.numeric(design_effect_m), n_rows)
     }
@@ -86,8 +85,7 @@ calculateCIs <- function(tbl,
   # Resolve rho input
   if (exists("design_effect_rho_col") && length(design_effect_rho_col) > 0) {
     rho_vals <- tbl_out[[design_effect_rho_col]]
-  } else if (exists("design_effect_rho") && length(design_effect_rho) > 0 ) {
-
+  } else if (exists("design_effect_rho") && length(design_effect_rho) > 0) {
     if (length(design_effect_rho) == 1) {
       design_effect_rho <- rep(as.numeric(design_effect_rho), n_rows)
     }

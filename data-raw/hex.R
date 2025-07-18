@@ -35,10 +35,12 @@ color_replacements <- setNames(new_colors, nold_colors)
 modified_svg_string <- str_replace_all(svg_string, color_replacements)
 writeLines(modified_svg_string, "data-raw/recoloredcat.svg")
 
-rsvg::rsvg_png("data-raw/recoloredcat.svg", "data-raw/recoloredcat.png", width = 800)
+rsvg::rsvg_png("data-raw/recoloredcat.svg",
+               "data-raw/recoloredcat.png", width = 800)
 
 
 sticker("data-raw/recoloredcat.png",
   package = "BGmisc", p_size = 20, s_x = 1, s_y = .75, s_width = .6,
-  h_fill = "#0fa1e0", h_color = "#333333", p_color = "white", filename = "man/figures/hex.png"
+  h_fill = "#0fa1e0", h_color = "#333333", p_color = "white",
+  filename = "man/figures/hex.png"
 )

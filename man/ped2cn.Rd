@@ -2,7 +2,7 @@
 % Please edit documentation in R/buildComponent.R
 \name{ped2cn}
 \alias{ped2cn}
-\title{Take a pedigree and turn it into a common nuclear environmental relatedness matrix}
+\title{Take a pedigree and turn it into a common nuclear environmental  matrix}
 \usage{
 ped2cn(
   ped,
@@ -10,7 +10,7 @@ ped2cn(
   sparse = TRUE,
   verbose = FALSE,
   gc = FALSE,
-  flatten.diag = FALSE,
+  flatten_diag = FALSE,
   standardize.colnames = TRUE,
   transpose_method = "tcrossprod",
   saveable = FALSE,
@@ -36,7 +36,7 @@ ped2cn(
 
 \item{gc}{logical. If TRUE, do frequent garbage collection via \code{\link{gc}} to save memory}
 
-\item{flatten.diag}{logical. If TRUE, overwrite the diagonal of the final relatedness matrix with ones}
+\item{flatten_diag}{logical. If TRUE, overwrite the diagonal of the final relatedness matrix with ones}
 
 \item{standardize.colnames}{logical. If TRUE, standardize the column names of the pedigree dataset}
 
@@ -59,7 +59,7 @@ ped2cn(
 \item{...}{additional arguments to be passed to \code{\link{ped2com}}}
 }
 \description{
-Take a pedigree and turn it into a common nuclear environmental relatedness matrix
+Take a pedigree and turn it into a common nuclear environmental  matrix
 }
 \details{
 The algorithms and methodologies used in this function are further discussed and exemplified in the vignette titled "examplePedigreeFunctions". For more advanced scenarios and detailed explanations, consult this vignette.

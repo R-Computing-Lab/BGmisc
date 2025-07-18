@@ -18,8 +18,8 @@ summarizeFamilies(
   byr = NULL,
   founder_sort_var = NULL,
   include_founder = FALSE,
-  nbiggest = 5,
-  noldest = 5,
+  n_biggest = 5,
+  n_oldest = 5,
   skip_var = NULL,
   five_num_summary = FALSE,
   verbose = FALSE,
@@ -37,8 +37,8 @@ summariseFamilies(
   byr = NULL,
   founder_sort_var = NULL,
   include_founder = FALSE,
-  nbiggest = 5,
-  noldest = 5,
+  n_biggest = 5,
+  n_oldest = 5,
   skip_var = NULL,
   five_num_summary = FALSE,
   verbose = FALSE,
@@ -67,9 +67,9 @@ Defaults to `byr` (if available) or `personID` otherwise.}
 
 \item{include_founder}{Logical. If `TRUE`, includes the founder (originating member) of each lineage in the output.}
 
-\item{nbiggest}{Integer. Number of largest lineages to return (sorted by count).}
+\item{n_biggest}{Integer. Number of largest lineages to return (sorted by count).}
 
-\item{noldest}{Integer. Number of oldest lineages to return (sorted by birth year).}
+\item{n_oldest}{Integer. Number of oldest lineages to return (sorted by birth year).}
 
 \item{skip_var}{Character vector. Variables to exclude from summary calculations.}
 
