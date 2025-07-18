@@ -74,7 +74,7 @@ ped2com <- function(ped, component,
   # Checkpointing
   #------
   if (config$saveable || config$resume) { # prepare checkpointing
-    if (config$verbose) message("Preparing checkpointing...\n")
+    if (config$verbose == TRUE ) message("Preparing checkpointing...\n")
     # initialize checkpoint files
     checkpoint_files <- initializeCheckpoint(config)
   }

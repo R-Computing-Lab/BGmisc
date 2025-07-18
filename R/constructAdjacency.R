@@ -1,3 +1,7 @@
+#' Construct Adjacency Matrix for Parent-Child Relationships
+#' @inheritParams ped2com
+#' @inheritParams computeParentAdjacency
+
 .adjLoop <- function(ped, component, saveable, resume,
                      save_path, verbose, lastComputed,
                      checkpoint_files, update_rate,
@@ -58,6 +62,10 @@
   return(list_of_adjacency)
 }
 
+#' Construct Adjacency Matrix for Parent-Child Relationships Using Indexed Method
+#' @inheritParams ped2com
+#' @inheritParams .adjLoop
+
 .adjIndexed <- function(ped, component, saveable, resume,
                         save_path, verbose, lastComputed,
                         checkpoint_files, update_rate,
@@ -93,21 +101,21 @@
     } else {
       stop("Unknown relatedness component requested")
     }
-
+    # Storing the indices of the parent-child relationships
     val[is.na(val)] <- FALSE
     parList[[i]] <- which(val)
     lens[i] <- length(parList[[i]])
 
     # Print progress if verbose is TRUE
-    if (verbose && (i %% update_rate == 0)) {
+    if (verbose == TRUE && (i %% update_rate == 0)) {
       cat(paste0("Done with ", i, " of ", config$nr, "\n"))
     }
 
     # Checkpointing every save_rate iterations
-    if (saveable && (i %% save_rate_parlist == 0)) {
+    if (saveable == TRUE  && (i %% save_rate_parlist == 0)) {
       saveRDS(parList, file = checkpoint_files$parList)
       saveRDS(lens, file = checkpoint_files$lens)
-      if (verbose) cat("Checkpointed parlist saved at iteration", i, "\n")
+      if (verbose == TRUE ) cat("Checkpointed parlist saved at iteration", i, "\n")
     }
   }
   jss <- rep(1L:config$nr, times = lens)
@@ -115,6 +123,14 @@
   list_of_adjacency <- list(iss = iss, jss = jss)
   return(list_of_adjacency)
 }
+
+#' Construct Adjacency Matrix for Parent-Child Relationships Using Direct Method
+#'
+#' This function constructs an adjacency matrix for parent-child relationships
+#' using a direct method. It identifies parent-child pairs based on the
+#' specified component of relatedness.
+#' @inheritParams ped2com
+#' @inheritParams .adjLoop
 
 .adjDirect <- function(ped, component, saveable, resume,
                        save_path, verbose, lastComputed,
@@ -190,8 +206,12 @@
   return(list_of_adjacency)
 }
 
-
-
+#' Construct Adjacency Matrix for Parent-Child Relationships Using Beta Method
+#' This function constructs an adjacency matrix for parent-child relationships
+#' using a beta method. It identifies parent-child pairs based on the
+#' specified component of relatedness.
+#' @inheritParams ped2com
+#' @inheritParams .adjLoop
 .adjBeta <- function(ped, component,
                      adjBeta_method = 5,
                      parList = NULL,
@@ -502,7 +522,7 @@ computeParentAdjacency <- function(ped, component,
       }
     )
   }
-  if (saveable) {
+  if (saveable==TRUE) {
     saveRDS(parList, file = checkpoint_files$parList)
     saveRDS(lens, file = checkpoint_files$lens)
     if (verbose) {
