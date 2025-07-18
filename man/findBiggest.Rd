@@ -3,15 +3,16 @@
 \name{findBiggest}
 \alias{findBiggest}
 \alias{findbiggest}
-\title{This function finds the biggest families in a pedigree. It is supposed to be
+\title{Function to find the biggest families in a pedigree
+This function finds the biggest families in a pedigree. It is supposed to be
 used internally by the \code{summarize_pedigree} function.}
 \usage{
-findBiggest(foo_summary_dt, nbiggest, n_foo)
+findBiggest(foo_summary_dt, n_biggest, n_foo)
 }
 \arguments{
 \item{foo_summary_dt}{A data.table containing the summary statistics.}
 
-\item{nbiggest}{Integer. Number of largest lineages to return (sorted by count).}
+\item{n_biggest}{Integer. Number of largest lineages to return (sorted by count).}
 
 \item{n_foo}{An integer specifying the number of individuals in the summary.}
 }
@@ -19,6 +20,7 @@ findBiggest(foo_summary_dt, nbiggest, n_foo)
 a data.table containing the biggest families in the pedigree.
 }
 \description{
+Function to find the biggest families in a pedigree
 This function finds the biggest families in a pedigree. It is supposed to be
 used internally by the \code{summarize_pedigree} function.
 }

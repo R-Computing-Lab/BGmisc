@@ -18,8 +18,8 @@ summarizeMatrilines(
   byr = NULL,
   include_founder = FALSE,
   founder_sort_var = NULL,
-  nbiggest = 5,
-  noldest = 5,
+  n_biggest = 5,
+  n_oldest = 5,
   skip_var = NULL,
   five_num_summary = FALSE,
   verbose = FALSE,
@@ -37,8 +37,8 @@ summariseMatrilines(
   byr = NULL,
   include_founder = FALSE,
   founder_sort_var = NULL,
-  nbiggest = 5,
-  noldest = 5,
+  n_biggest = 5,
+  n_oldest = 5,
   skip_var = NULL,
   five_num_summary = FALSE,
   verbose = FALSE,
@@ -67,9 +67,9 @@ summariseMatrilines(
 \item{founder_sort_var}{Character. Column used to determine the founder of each lineage.
 Defaults to `byr` (if available) or `personID` otherwise.}
 
-\item{nbiggest}{Integer. Number of largest lineages to return (sorted by count).}
+\item{n_biggest}{Integer. Number of largest lineages to return (sorted by count).}
 
-\item{noldest}{Integer. Number of oldest lineages to return (sorted by birth year).}
+\item{n_oldest}{Integer. Number of oldest lineages to return (sorted by birth year).}
 
 \item{skip_var}{Character vector. Variables to exclude from summary calculations.}
 

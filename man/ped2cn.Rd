@@ -2,16 +2,16 @@
 % Please edit documentation in R/buildComponent.R
 \name{ped2cn}
 \alias{ped2cn}
-\title{Take a pedigree and turn it into a common nuclear environmental relatedness matrix}
+\title{Take a pedigree and turn it into a common nuclear environmental  matrix}
 \usage{
 ped2cn(
   ped,
-  max.gen = 25,
+  max_gen = 25,
   sparse = TRUE,
   verbose = FALSE,
   gc = FALSE,
-  flatten.diag = FALSE,
-  standardize.colnames = TRUE,
+  flatten_diag = FALSE,
+  standardize_colnames = TRUE,
   transpose_method = "tcrossprod",
   saveable = FALSE,
   resume = FALSE,
@@ -26,7 +26,7 @@ ped2cn(
 \arguments{
 \item{ped}{a pedigree dataset.  Needs ID, momID, and dadID columns}
 
-\item{max.gen}{the maximum number of generations to compute
+\item{max_gen}{the maximum number of generations to compute
 (e.g., only up to 4th degree relatives).  The default is 25. However it can be set to infinity.
  `Inf` uses as many generations as there are in the data.}
 
@@ -36,9 +36,9 @@ ped2cn(
 
 \item{gc}{logical. If TRUE, do frequent garbage collection via \code{\link{gc}} to save memory}
 
-\item{flatten.diag}{logical. If TRUE, overwrite the diagonal of the final relatedness matrix with ones}
+\item{flatten_diag}{logical. If TRUE, overwrite the diagonal of the final relatedness matrix with ones}
 
-\item{standardize.colnames}{logical. If TRUE, standardize the column names of the pedigree dataset}
+\item{standardize_colnames}{logical. If TRUE, standardize the column names of the pedigree dataset}
 
 \item{transpose_method}{character. The method to use for computing the transpose.  Options are "tcrossprod", "crossprod", or "star"}
 
@@ -59,7 +59,7 @@ ped2cn(
 \item{...}{additional arguments to be passed to \code{\link{ped2com}}}
 }
 \description{
-Take a pedigree and turn it into a common nuclear environmental relatedness matrix
+Take a pedigree and turn it into a common nuclear environmental  matrix
 }
 \details{
 The algorithms and methodologies used in this function are further discussed and exemplified in the vignette titled "examplePedigreeFunctions". For more advanced scenarios and detailed explanations, consult this vignette.

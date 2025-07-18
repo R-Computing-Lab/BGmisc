@@ -24,7 +24,8 @@
 \item{lens}{A vector of lengths for each parent-child relationship.}
 }
 \value{
-A list containing the parent-child adjacency data either loaded from a checkpoint or initialized.
+A list containing the parent-child adjacency data either
+        loaded from a checkpoint or initialized.
 }
 \description{
 parent-child adjacency data

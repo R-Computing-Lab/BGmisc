@@ -74,7 +74,7 @@ potter <- data.frame(
     "Molly",
     "Lucy"
   ),
-    surname = c(
+  surname = c(
     "Dursley",
     "Dursley",
     "Evans",

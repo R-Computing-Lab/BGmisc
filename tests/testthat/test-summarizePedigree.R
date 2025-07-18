@@ -17,8 +17,8 @@ test_that("SummarizeFamilies works like SummariseFamilies", {
 # Test Case 2: Multiple families
 test_that("summarizeFamilies() works with multiple families", {
   df <- ped2fam(inbreeding, famID = "newFamID", personID = "ID")
-  nbiggest <- 5
-  df_summarized <- summarizeFamilies(df, famID = "newFamID", personID = "ID", nbiggest = nbiggest)
+  n_biggest <- 5
+  df_summarized <- summarizeFamilies(df, famID = "newFamID", personID = "ID", n_biggest = n_biggest)
   # is the total count from the family summary the same as the raw data?
   result_observed <- sum(df_summarized$family_summary$count)
   result_expected <- nrow(inbreeding)
@@ -29,7 +29,7 @@ test_that("summarizeFamilies() works with multiple families", {
   expect_equal(result_observed, result_expected)
   # is the count of the biggest families equal to the number of unique families in the input data frame?
   result_observed <- nrow(df_summarized$biggest_families)
-  expect_equal(result_observed, nbiggest)
+  expect_equal(result_observed, n_biggest)
 })
 
 # Test Case 3: 5 number summary work on all the same variables?
@@ -56,13 +56,13 @@ test_that("summarizeFamilies() works with additional summary stats", {
 
 # Test Case 4: Does this function work for summarizeMatrilines
 test_that("summarizeMatrilines() works", {
-  nbiggest <- 2
+  n_biggest <- 2
   df <- ped2fam(potter, famID = "newFamID", personID = "personID") %>%
     ped2maternal(personID = "personID")
   df_summarized <- summarizeMatrilines(df,
     famID = "newFamID",
     personID = "personID",
-    nbiggest = nbiggest
+    n_biggest = n_biggest
   )
   # is the total count from the family summary the same as the raw data?
   result_observed <- sum(df_summarized$maternal_summary$count)
@@ -76,7 +76,7 @@ test_that("summarizeMatrilines() works", {
   # is the count of the biggest families equal to the number of
   # unique families in the input data frame?
   result_observed <- nrow(df_summarized$biggest_maternal)
-  expect_equal(result_observed, nbiggest)
+  expect_equal(result_observed, n_biggest)
 })
 # Test: SummarizeMatrilines is used when SummariseMatrilines
 test_that("SummarizeMatrilines works like SummariseMatrilines", {
@@ -94,13 +94,13 @@ test_that("SummarizeMatrilines works like SummariseMatrilines", {
 })
 # Test Case 5: Does this function work for summarizePatrilines
 test_that("summarizePatrilines() works", {
-  nbiggest <- 4
+  n_biggest <- 4
   df <- ped2fam(potter, famID = "newFamID", personID = "personID") %>%
     ped2paternal(personID = "personID")
   df_summarized <- summarizePatrilines(df,
     famID = "newFamID",
     personID = "personID",
-    nbiggest = nbiggest,
+    n_biggest = n_biggest,
     verbose = TRUE
   )
   # is the total count from the family summary the same as the raw data?
@@ -115,7 +115,7 @@ test_that("summarizePatrilines() works", {
   # is the count of the biggest families equal to the number of
   # unique families in the input data frame?
   result_observed <- nrow(df_summarized$biggest_paternal)
-  expect_equal(result_observed, nbiggest)
+  expect_equal(result_observed, n_biggest)
 })
 
 # Test: summarizePatrilines is used when SummarisePatrilines

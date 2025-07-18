@@ -5,14 +5,14 @@
 \alias{findoldest}
 \title{This function finds the oldest families in a pedigree. It is supposed to be used internally by the \code{summarize_pedigree} function.}
 \usage{
-findOldest(foo_summary_dt, byr, noldest, n_foo)
+findOldest(foo_summary_dt, byr, n_oldest, n_foo)
 }
 \arguments{
 \item{foo_summary_dt}{A data.table containing the summary statistics.}
 
 \item{byr}{Character. Optional column name for birth year. Used to determine the oldest lineages.}
 
-\item{noldest}{Integer. Number of oldest lineages to return (sorted by birth year).}
+\item{n_oldest}{Integer. Number of oldest lineages to return (sorted by birth year).}
 
 \item{n_foo}{An integer specifying the number of individuals in the summary.}
 }

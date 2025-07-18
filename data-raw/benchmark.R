@@ -65,7 +65,8 @@ ped <- rbind(ped, ped4)
 
 if (TRUE) {
   # Define parameters
-  component <- "common nuclear" # "additive" # Change this to test different components
+  component <- "common nuclear" # "additive"
+  # Change this to test different components
   saveable <- FALSE # Disable saving to avoid disk I/O slowing down benchmarking
   resume <- FALSE # Disable resume to ensure full fresh runs
   save_path <- "checkpoint/"
@@ -220,8 +221,10 @@ if (TRUE) {
 
   df_plot <- benchmark_results %>% mutate(
     size = case_when(
-      expr %in% c("loop", "indexed", "direct4", "direct2", "direct5") ~ "small",
-      expr %in% c("loop_big", "indexed_big", "direct4_big", "direct2_big", "direct5_big") ~ "big"
+      expr %in% c("loop", "indexed", "direct4",
+                  "direct2", "direct5") ~ "small",
+      expr %in% c("loop_big", "indexed_big", "direct4_big",
+                  "direct2_big", "direct5_big") ~ "big"
     ),
     method = case_when(
       expr %in% c("loop", "loop_big") ~ "loop",
@@ -233,7 +236,9 @@ if (TRUE) {
   ) # %>%
 
   # set indexed as reference level
-  df_plot$method <- factor(df_plot$method, levels = c("indexed", "loop", "direct2", "direct4", "direct5"))
+  df_plot$method <- factor(df_plot$method,
+                           levels = c("indexed", "loop", "direct2",
+                                      "direct4", "direct5"))
   df_plot$size <- factor(df_plot$size, levels = c("small", "big"))
 
 
@@ -266,9 +271,12 @@ if (TRUE) {
 
 if (FALSE) {
   verbose <- FALSE
-  ad_ped_matrix <- ped2com(ped, component = "additive", adjacency_method = "direct", sparse = TRUE)
-  mit_ped_matrix <- ped2com(ped, component = "mitochondrial", adjacency_method = "direct", sparse = TRUE)
-  cn_ped_matrix <- ped2com(ped, component = "common nuclear", adjacency_method = "indexed", sparse = TRUE)
+  ad_ped_matrix <- ped2com(ped, component = "additive",
+                           adjacency_method = "direct", sparse = TRUE)
+  mit_ped_matrix <- ped2com(ped, component = "mitochondrial",
+                            adjacency_method = "direct", sparse = TRUE)
+  cn_ped_matrix <- ped2com(ped, component = "common nuclear",
+                           adjacency_method = "indexed", sparse = TRUE)
   benchmark_results <- microbenchmark(
     beta = {
       com2links.beta(

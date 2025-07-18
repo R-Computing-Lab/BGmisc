@@ -19,8 +19,9 @@ summarizePedigrees(
   byr = NULL,
   include_founder = FALSE,
   founder_sort_var = NULL,
-  nbiggest = 5,
-  noldest = nbiggest,
+  n_keep = 5,
+  n_biggest = n_keep,
+  n_oldest = n_keep,
   skip_var = NULL,
   five_num_summary = FALSE,
   network_checks = FALSE,
@@ -39,8 +40,9 @@ summarisePedigrees(
   byr = NULL,
   include_founder = FALSE,
   founder_sort_var = NULL,
-  nbiggest = 5,
-  noldest = nbiggest,
+  n_keep = 5,
+  n_biggest = n_keep,
+  n_oldest = n_keep,
   skip_var = NULL,
   five_num_summary = FALSE,
   network_checks = FALSE,
@@ -72,9 +74,11 @@ Options: `"fathers"`, `"mothers"`, `"families"`. Default includes all three.}
 \item{founder_sort_var}{Character. Column used to determine the founder of each lineage.
 Defaults to `byr` (if available) or `personID` otherwise.}
 
-\item{nbiggest}{Integer. Number of largest lineages to return (sorted by count).}
+\item{n_keep}{Integer. Number of lineages to keep in the output for each type of summary.}
 
-\item{noldest}{Integer. Number of oldest lineages to return (sorted by birth year).}
+\item{n_biggest}{Integer. Number of largest lineages to return (sorted by count).}
+
+\item{n_oldest}{Integer. Number of oldest lineages to return (sorted by birth year).}
 
 \item{skip_var}{Character vector. Variables to exclude from summary calculations.}
 
@@ -105,6 +109,6 @@ summary. Users can also specify variables to exclude from the analysis via
 Beyond summary statistics, the function identifies the founding member of
 each lineage based on the specified sorting variable (`founder_sort_var`),
 defaulting to birth year (`byr`) when available or `personID` otherwise.
-Users can retrieve the largest and oldest lineages by setting `nbiggest`
-and `noldest`, respectively.
+Users can retrieve the largest and oldest lineages by setting `n_biggest`
+and `n_oldest`, respectively.
 }

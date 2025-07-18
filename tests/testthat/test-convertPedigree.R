@@ -101,7 +101,7 @@ test_that("ped2add produces correct matrix dims, values, and dimnames for inbree
 test_that("ped2add flattens diagonal for inbreeding data", {
   tolerance <- 1e-10
   data(inbreeding)
-  add <- ped2add(inbreeding, flatten.diag = TRUE, sparse = FALSE)
+  add <- ped2add(inbreeding, flatten_diag = TRUE, sparse = FALSE)
   # Check dimension
   expect_equal(dim(add), c(nrow(inbreeding), nrow(inbreeding)), tolerance = tolerance)
   # Check several values

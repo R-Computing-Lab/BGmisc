@@ -7,12 +7,12 @@
 ped2com(
   ped,
   component,
-  max.gen = 25,
+  max_gen = 25,
   sparse = TRUE,
   verbose = FALSE,
   gc = FALSE,
-  flatten.diag = FALSE,
-  standardize.colnames = TRUE,
+  flatten_diag = FALSE,
+  standardize_colnames = TRUE,
   transpose_method = "tcrossprod",
   adjacency_method = "direct",
   isChild_method = "classic",
@@ -32,7 +32,7 @@ ped2com(
 
 \item{component}{character.  Which component of the pedigree to return.  See Details.}
 
-\item{max.gen}{the maximum number of generations to compute
+\item{max_gen}{the maximum number of generations to compute
 (e.g., only up to 4th degree relatives).  The default is 25. However it can be set to infinity.
  `Inf` uses as many generations as there are in the data.}
 
@@ -42,9 +42,9 @@ ped2com(
 
 \item{gc}{logical. If TRUE, do frequent garbage collection via \code{\link{gc}} to save memory}
 
-\item{flatten.diag}{logical. If TRUE, overwrite the diagonal of the final relatedness matrix with ones}
+\item{flatten_diag}{logical. If TRUE, overwrite the diagonal of the final relatedness matrix with ones}
 
-\item{standardize.colnames}{logical. If TRUE, standardize the column names of the pedigree dataset}
+\item{standardize_colnames}{logical. If TRUE, standardize the column names of the pedigree dataset}
 
 \item{transpose_method}{character. The method to use for computing the transpose.  Options are "tcrossprod", "crossprod", or "star"}
 

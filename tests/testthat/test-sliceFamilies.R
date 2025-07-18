@@ -2,13 +2,16 @@ library(testthat)
 library(withr)
 
 test_that("sliceFamilies creates correct output files for both mitRel = 1 and 0", {
-  withr::local_tempdir() -> tmp
+  tmp <- withr::local_tempdir()
   withr::local_dir(tmp)
   # Create test input data
   data(hazard)
-  ad_ped_matrix <- ped2com(hazard, component = "additive", adjacency_method = "direct", sparse = TRUE)
-  mit_ped_matrix <- ped2com(hazard, component = "mitochondrial", adjacency_method = "direct", sparse = TRUE)
-  cn_ped_matrix <- ped2com(hazard, component = "common nuclear", adjacency_method = "indexed", sparse = TRUE)
+  ad_ped_matrix <- ped2com(hazard, component = "additive",
+                           adjacency_method = "direct", sparse = TRUE)
+  mit_ped_matrix <- ped2com(hazard, component = "mitochondrial",
+                            adjacency_method = "direct", sparse = TRUE)
+  cn_ped_matrix <- ped2com(hazard, component = "common nuclear",
+                           adjacency_method = "indexed", sparse = TRUE)
 
   result <- com2links(
     ad_ped_matrix = ad_ped_matrix,
@@ -43,7 +46,8 @@ test_that("sliceFamilies creates correct output files for both mitRel = 1 and 0"
 
   # Check contents of a file
   test_data <- data.table::fread("dataRelatedPairs.csv")
-  all_data <- data.table::rbindlist(lapply(files, data.table::fread), fill = TRUE)
+  all_data <- data.table::rbindlist(lapply(files, data.table::fread),
+                                    fill = TRUE)
   expect_true(all(all_data$ID1 %in% test_data$ID1))
   expect_true(all(all_data$mitRel %in% c(0, 1)))
 
