@@ -36,7 +36,9 @@ modified_svg_string <- str_replace_all(svg_string, color_replacements)
 writeLines(modified_svg_string, "data-raw/recoloredcat.svg")
 
 rsvg::rsvg_png("data-raw/recoloredcat.svg",
-               "data-raw/recoloredcat.png", width = 800)
+  "data-raw/recoloredcat.png",
+  width = 800
+)
 
 
 sticker("data-raw/recoloredcat.png",

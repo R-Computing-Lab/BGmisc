@@ -92,18 +92,20 @@ summarizePedigrees <- function(ped, famID = "famID", personID = "ID",
 
 
 
-ped <-  prepSummarizePedigrees(ped=ped,
-                               type = type,
-                               famID = famID,
-                               verbose = verbose,
-                               personID = personID,
-                               momID = momID,
-                               dadID = dadID,
-                               matID = matID,
-                               patID = patID)
+  ped <- prepSummarizePedigrees(
+    ped = ped,
+    type = type,
+    famID = famID,
+    verbose = verbose,
+    personID = personID,
+    momID = momID,
+    dadID = dadID,
+    matID = matID,
+    patID = patID
+  )
 
-    # Convert to data.table
-    ped_dt <- data.table::as.data.table(ped)
+  # Convert to data.table
+  ped_dt <- data.table::as.data.table(ped)
 
 
 
@@ -114,7 +116,7 @@ ped <-  prepSummarizePedigrees(ped=ped,
   n_fathers <- n_mothers <- n_families <- NULL
 
 
-  if (network_checks==TRUE ) {
+  if (network_checks == TRUE) {
     if (verbose == TRUE) message("Performing network validation checks...")
     output$network_validation <- checkPedigreeNetwork(
       ped,
@@ -129,7 +131,8 @@ ped <-  prepSummarizePedigrees(ped=ped,
 
   if ("families" %in% type) {
     if (verbose == TRUE) message("Summarizing families...")
-    family_summary_dt <- calculateSummaryDT(ped_dt, group_var=famID,
+    family_summary_dt <- calculateSummaryDT(ped_dt,
+      group_var = famID,
       skip_var = skip_var,
       five_num_summary = five_num_summary
     )
@@ -149,11 +152,12 @@ ped <-  prepSummarizePedigrees(ped=ped,
 
   if ("mothers" %in% type) {
     if (verbose == TRUE) message("Summarizing maternal lines...")
-    maternal_summary_dt <- calculateSummaryDT(ped_dt, group_var=matID,
+    maternal_summary_dt <- calculateSummaryDT(ped_dt,
+      group_var = matID,
       skip_var = skip_var,
       five_num_summary = five_num_summary
     )
-    if (include_founder==TRUE) {
+    if (include_founder == TRUE) {
       maternal_summary_dt <- summarizeFounder(
         verbose = verbose, ped_dt = ped_dt,
         group_var = matID,
@@ -169,17 +173,17 @@ ped <-  prepSummarizePedigrees(ped=ped,
   }
   if ("fathers" %in% type) {
     if (verbose == TRUE) message("Summarizing paternal lines...")
-    paternal_summary_dt <- calculateSummaryDT(ped_dt, group_var=patID,
+    paternal_summary_dt <- calculateSummaryDT(ped_dt,
+      group_var = patID,
       skip_var = skip_var,
       five_num_summary = five_num_summary
     )
-    if (include_founder==TRUE) {
+    if (include_founder == TRUE) {
       paternal_summary_dt <- summarizeFounder(
         verbose = verbose, ped_dt = ped_dt,
         group_var = patID,
         sort_var = founder_sort_var,
         foo_summary_dt = paternal_summary_dt
-
       )
     }
 
@@ -484,40 +488,37 @@ findBiggest <- function(foo_summary_dt, n_biggest, n_foo) {
 #' necessary IDs are present and that the pedigree is built correctly.
 #' @inheritParams summarizePedigrees
 
-  prepSummarizePedigrees <- function(ped,
-                                     type,
-                                     verbose=FALSE,
-                                     famID,
-                                     personID, momID, dadID, matID, patID) {
-
-    # Build the pedigree using the provided functions
-    if ("families" %in% type && !famID %in% names(ped)) {
-      if (verbose) message("Counting families...")
-      ped <- ped2fam(ped,
-        personID = personID,
-        momID = momID, dadID = dadID, famID = famID
-      )
-    }
-    if ("mothers" %in% type && !matID %in% names(ped)) {
-      if (verbose == TRUE) message("Counting mothers...")
-      ped <- ped2maternal(ped,
-        personID = personID,
-        momID = momID, dadID = dadID, matID = matID
-      )
-    }
-    if ("fathers" %in% type && !patID %in% names(ped)) {
-      if (verbose == TRUE) message("Counting fathers...")
-      ped <- ped2paternal(ped,
-        personID = personID,
-        momID = momID, dadID = dadID, patID = patID
-      )
-    }
-
-
- return(ped)
-
-
+prepSummarizePedigrees <- function(ped,
+                                   type,
+                                   verbose = FALSE,
+                                   famID,
+                                   personID, momID, dadID, matID, patID) {
+  # Build the pedigree using the provided functions
+  if ("families" %in% type && !famID %in% names(ped)) {
+    if (verbose) message("Counting families...")
+    ped <- ped2fam(ped,
+      personID = personID,
+      momID = momID, dadID = dadID, famID = famID
+    )
   }
+  if ("mothers" %in% type && !matID %in% names(ped)) {
+    if (verbose == TRUE) message("Counting mothers...")
+    ped <- ped2maternal(ped,
+      personID = personID,
+      momID = momID, dadID = dadID, matID = matID
+    )
+  }
+  if ("fathers" %in% type && !patID %in% names(ped)) {
+    if (verbose == TRUE) message("Counting fathers...")
+    ped <- ped2paternal(ped,
+      personID = personID,
+      momID = momID, dadID = dadID, patID = patID
+    )
+  }
+
+
+  return(ped)
+}
 
 
 
