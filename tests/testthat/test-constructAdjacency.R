@@ -1,4 +1,3 @@
-
 test_that("computeParentAdjacency matches across all methods for additive component", {
   data(hazard)
   tolerance <- 1e-10
@@ -65,7 +64,7 @@ test_that("adjBeta matches .adjDirect for common nuclear component", {
     save_path = NULL, verbose = FALSE, lastComputed = 0, checkpoint_files = NULL,
     update_rate = NULL, parList = NULL, lens = NULL, save_rate_parlist = NULL,
     config = config
-  )  %>%
+  ) %>%
     as.data.frame() %>% # sort by iss and jss to ensure consistent ordering
     dplyr::arrange(iss, jss)
 

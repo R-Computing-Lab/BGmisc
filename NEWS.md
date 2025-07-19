@@ -1,6 +1,7 @@
 # BGmisc 1.5.0
+## CRAN submission
+* Removed ASOIAF dataset from BGmisc, now in ggpedigree
 * Enhancing potter family tree
-* Transferring ASOIAF data from BGmisc to ggpedigree
 * updated tests to handle the transition of ASOIAF data to ggpedigree
 * smarter aliases
 * smarter CIs
@@ -20,7 +21,7 @@
 * reduce file size for royal92
 
 # BGmisc 1.4.3.1
-## CRAN submission
+
 * Updated ASOIAF pedigree to reduce missing parents.
 
 # BGmisc 1.4.3

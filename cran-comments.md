@@ -9,7 +9,7 @@ I am also moving the ASOIAF dataset from BGmisc to ggpedigree package. I maintai
 
 1. Local OS: Windows 11 x64 (build 26120), R 4.5.1 (2025-06-13 ucrt)
 2. **GitHub Actions**:  
-    - [Link](https://github.com/R-Computing-Lab/BGmisc/actions/runs/16383392062)
+    - [Link](https://github.com/R-Computing-Lab/BGmisc/actions/runs/16383602122/job/46299495095)
     - macOS (latest version) with the latest R release.
     - Windows (latest version) with the latest R release.
     - Ubuntu (latest version) with:
@@ -20,8 +20,8 @@ I am also moving the ASOIAF dataset from BGmisc to ggpedigree package. I maintai
 ## R CMD check results
 
 
-── R CMD check results ────────────────────────────────── BGmisc 1.5.0 ────
-Duration: 1m 7.8s
+── R CMD check results ──────────────────── BGmisc 1.5.0 ────
+Duration: 1m 36.6s
 
 0 errors ✔ | 0 warnings ✔ | 0 notes ✔
 
