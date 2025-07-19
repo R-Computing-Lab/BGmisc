@@ -195,7 +195,7 @@ summarizePedigrees <- function(ped, famID = "famID", personID = "ID",
 
   ## Check errors
   #  if (check_errors) {
-  #   if (verbose) message("Checking for errors...")
+  #   if (verbose == TRUE) message("Checking for errors...")
   #    output$checkIDs <- checkIDs(ped,
   #                                repair = FALSE, verbose = verbose)
   #  }
@@ -495,7 +495,7 @@ prepSummarizePedigrees <- function(ped,
                                    personID, momID, dadID, matID, patID) {
   # Build the pedigree using the provided functions
   if ("families" %in% type && !famID %in% names(ped)) {
-    if (verbose) message("Counting families...")
+    if (verbose == TRUE) message("Counting families...")
     ped <- ped2fam(ped,
       personID = personID,
       momID = momID, dadID = dadID, famID = famID

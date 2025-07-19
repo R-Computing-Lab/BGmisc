@@ -73,7 +73,7 @@ ped2com <- function(ped, component,
   #------
   # Checkpointing
   #------
-  if (config$saveable || config$resume) { # prepare checkpointing
+  if (config$saveable == TRUE || config$resume == TRUE ) { # prepare checkpointing
     if (config$verbose == TRUE ) message("Preparing checkpointing...\n")
     # initialize checkpoint files
     checkpoint_files <- initializeCheckpoint(config)
@@ -111,13 +111,13 @@ ped2com <- function(ped, component,
   }
 
   # standardize colnames
-  if (config$standardize_colnames) {
+  if (config$standardize_colnames == TRUE) {
     ped <- standardizeColnames(ped, verbose = config$verbose)
   }
 
   # Load final result if computation was completed
   if (config$resume == TRUE && file.exists(checkpoint_files$final_matrix)) {
-    if (config$verbose) cat("Loading final computed matrix...\n")
+    if (config$verbose == TRUE) cat("Loading final computed matrix...\n")
     return(readRDS(checkpoint_files$final_matrix))
   }
 
@@ -168,7 +168,7 @@ ped2com <- function(ped, component,
     checkpoint_files = checkpoint_files,
     config = config
   )
-  if (config$verbose) {
+  if (config$verbose == TRUE) {
     cat("Completed first degree relatives (adjacency)\n")
   }
 
@@ -275,7 +275,7 @@ ped2com <- function(ped, component,
       r2 = r2, transpose_method = transpose_method,
       verbose = config$verbose
     )
-    if (config$saveable) {
+    if (config$saveable == TRUE) {
       saveRDS(r, file = checkpoint_files$tcrossprod_checkpoint)
     }
   }
@@ -539,13 +539,13 @@ initializeCheckpoint <- function(config = list(
 loadOrComputeCheckpoint <- function(file, compute_fn,
                                     config, message_resume = NULL,
                                     message_compute = NULL) {
-  if (config$resume && file.exists(file)) {
-    if (config$verbose && !is.null(message_resume)) cat(message_resume)
+  if (config$resume == TRUE && file.exists(file)) {
+    if (config$verbose == TRUE && !is.null(message_resume)) cat(message_resume)
     return(readRDS(file))
   } else {
-    if (config$verbose && !is.null(message_compute)) cat(message_compute)
+    if (config$verbose == TRUE && !is.null(message_compute)) cat(message_compute)
     result <- compute_fn()
-    if (config$saveable) saveRDS(result, file = file)
+    if (config$saveable == TRUE) saveRDS(result, file = file)
     return(result)
   }
 }
@@ -646,7 +646,7 @@ loadOrComputeCheckpoint <- function(file, compute_fn,
   if (config$resume == TRUE &&
     file.exists(checkpoint_files$parList) &&
     file.exists(checkpoint_files$lens)) {
-    if (config$verbose) {
+    if (config$verbose == TRUE) {
       message("Resuming: Loading parent-child adjacency data...\n")
     }
     parList <- readRDS(checkpoint_files$parList)
@@ -663,7 +663,7 @@ loadOrComputeCheckpoint <- function(file, compute_fn,
     parList <- vector("list", config$nr)
     lens <- integer(config$nr)
     lastComputed <- 0
-    if (config$verbose) cat("Building parent adjacency matrix...\n")
+    if (config$verbose == TRUE) cat("Building parent adjacency matrix...\n")
   }
 
   if (config$resume == TRUE &&

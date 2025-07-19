@@ -103,7 +103,7 @@ com2links <- function(
     if (!is.null(cn_ped_matrix)) "cn" else NULL
   )), collapse = "-")
 
-  if (verbose) {
+  if (verbose == TRUE) {
     print(matrix_case)
   }
 

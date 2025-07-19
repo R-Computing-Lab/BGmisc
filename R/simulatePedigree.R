@@ -182,7 +182,7 @@ buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose = FALSE, mar
 
       # Start to connect children with mother and father
       #
-      if (verbose) {
+      if (verbose == TRUE) {
         message(
           "Step 2.1: mark a group of potential sons and daughters in the i th generation"
         )
@@ -212,7 +212,7 @@ buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose = FALSE, mar
         code_male = code_male,
         code_female = code_female
       )
-      if (verbose) {
+      if (verbose == TRUE) {
         message(
           "Step 2.2: mark a group of potential parents in the i-1 th generation"
         )
@@ -243,7 +243,7 @@ buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose = FALSE, mar
 
       df_Ngen <- df_Ngen[order(as.numeric(rownames(df_Ngen))), , drop = FALSE]
       df_Fam[df_Fam$gen == i - 1, ] <- df_Ngen
-      if (verbose) {
+      if (verbose == TRUE) {
         message(
           "Step 2.3: connect the i and i-1 th generation"
         )
@@ -302,7 +302,7 @@ buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose = FALSE, mar
         # the length of IdMa and IdPa can be longer than the vector of offspring, so truncated it
         ### making sure sampling out the single people instead of couples
         if (length(IdPa) - length(IdOfp) > 0) {
-          if (verbose) {
+          if (verbose == TRUE) {
             message("length of IdPa", length(IdPa), "\n")
           }
           IdRm <- sample.int(length(IdPa), size = length(IdPa) - length(IdOfp))
@@ -410,7 +410,7 @@ simulatePedigree <- function(kpc = 3,
   # Calculate the expected family size in each generations
   sizeGens <- allGens(kpc = kpc, Ngen = Ngen, marR = marR)
   #  famSizeIndex <- 1:sum(sizeGens)
-  if (verbose) {
+  if (verbose == TRUE) {
     message(
       "Step 1: Let's build the connection within each generation first"
     )
@@ -427,7 +427,7 @@ simulatePedigree <- function(kpc = 3,
     code_male = code_male,
     code_female = code_female
   )
-  if (verbose) {
+  if (verbose == TRUE) {
     message(
       "Step 2: Let's try to build connection between each two generations"
     )

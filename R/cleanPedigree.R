@@ -24,7 +24,7 @@ standardizeColnames <- function(df, verbose = FALSE) {
     "zygosity" = "^(?:zyg(o[sc]ity)?)$",
     "sex" = "^(?:sex|gender|females?|m(?:a(?:les?|n)|en)|wom[aey]n)$"
   )
-  if (verbose) {
+  if (verbose == TRUE) {
     message("Standardizing column names...")
   }
   lowered_colnames <- tolower(colnames(df))
@@ -61,7 +61,7 @@ standardizeColnames <- function(df, verbose = FALSE) {
 # check_parents = TRUE,
 # verbose = FALSE) {
 # corrected_ped <- ped <- standardizeColnames(ped, verbose = verbose)
-# if (verbose) {
+# if (verbose == TRUE) {
 # message("Repairing pedigree...")
 # }
 # # applies a list of repair functions sequentially to a pedigree.
@@ -119,7 +119,7 @@ standardizeColnames <- function(df, verbose = FALSE) {
 # # Validation checks
 
 # if (check_id) {
-# if (verbose) {
+# if (verbose == TRUE) {
 # message("Checking IDs...")
 # }
 # id_valid <- all(corrected_ped$ID == ped$ID)
@@ -127,7 +127,7 @@ standardizeColnames <- function(df, verbose = FALSE) {
 # id_valid <- TRUE
 # }
 # if (check_parents) {
-# if (verbose) {
+# if (verbose == TRUE) {
 # message("Checking parents...")
 # }
 # dadID_valid <- all(corrected_ped$dadID == ped$dadID)
@@ -137,7 +137,7 @@ standardizeColnames <- function(df, verbose = FALSE) {
 # momID_valid <- TRUE
 # }
 # if (check_sex) {
-# if (verbose) {
+# if (verbose == TRUE) {
 # message("Checking sex...")
 # }
 # sex_valid <- all(corrected_ped$sex == ped$sex)
@@ -166,7 +166,7 @@ standardizeColnames <- function(df, verbose = FALSE) {
 # }
 
 # # Return results
-# if (verbose) {
+# if (verbose == TRUE) {
 # return(list(is_valid = is_valid, corrected_ped = corrected_ped, warnings = warnings))
 # } else if (is_valid) {
 # return(corrected_ped)

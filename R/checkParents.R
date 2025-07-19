@@ -39,7 +39,7 @@ checkParentIDs <- function(ped, verbose = FALSE, repair = FALSE,
   # Initialize a list to store validation results
   validation_results <- list()
 
-  if (verbose) {
+  if (verbose == TRUE) {
     cat("Step 1: Checking for single parents...\n")
   }
 
@@ -72,18 +72,18 @@ checkParentIDs <- function(ped, verbose = FALSE, repair = FALSE,
 
   if (length(rowless_parents) > 0) {
     validation_results$rowless_parents <- rowless_parents
-    if (verbose) {
+    if (verbose == TRUE) {
       cat("Some parents are not listed in the pedigree:\n")
       message(rowless_parents)
     }
   } else {
-    if (verbose) {
+    if (verbose == TRUE) {
       cat("All parents are listed in the pedigree.\n")
     }
   }
   validation_results$missing_parents <- validation_results$single_parents & length(rowless_parents) > 0
 
-  if (verbose) {
+  if (verbose == TRUE) {
     cat("Step 2: Determining the if moms are the same sex and dads are same sex\n")
   }
   # Determine modal sex values for moms and dads
@@ -103,7 +103,7 @@ checkParentIDs <- function(ped, verbose = FALSE, repair = FALSE,
   momdad <- intersect(ped$dadID, ped$momID)
   if (length(momdad) > 0 && !is.na(momdad)) {
     validation_results$parents_in_both <- momdad
-    if (verbose) {
+    if (verbose == TRUE) {
       cat(paste(
         "Some individuals appear in both momID and dadID roles.\n",
         "These individuals are:\n"
@@ -114,13 +114,13 @@ checkParentIDs <- function(ped, verbose = FALSE, repair = FALSE,
 
 
   if (!repair) {
-    if (verbose) {
+    if (verbose == TRUE) {
       cat("Validation Results:\n")
       message(validation_results)
     }
     return(validation_results)
   } else {
-    if (verbose) {
+    if (verbose == TRUE) {
       cat("Validation Results:\n")
       message(validation_results)
       cat("Step 3: Attempting to repair missing parents...\n")
@@ -215,7 +215,7 @@ checkParentIDs <- function(ped, verbose = FALSE, repair = FALSE,
     # merge the new entries with the original ped
     ped <- merge(ped, new_entries, all = TRUE)
 
-    if (verbose) {
+    if (verbose == TRUE) {
       cat("Added", nrow(new_entries), "phantom parents.\n")
     }
     changes$phantom_dads_added <- new_entries$ID[which(new_entries$sex == validation_results$male_var)]
@@ -233,7 +233,7 @@ checkParentIDs <- function(ped, verbose = FALSE, repair = FALSE,
     ped <- addRowlessParents(ped = ped, verbose = verbose, validation_results = validation_results)
   }
 
-  if (verbose) {
+  if (verbose == TRUE) {
     cat("Changes Made:\n")
     message(changes)
   }
@@ -279,7 +279,7 @@ addRowlessParents <- function(ped, verbose, validation_results) {
   missing_parents <- setdiff(listed_parents, existing_ids)
 
   if (length(missing_parents) > 0) {
-    if (verbose) {
+    if (verbose == TRUE) {
       cat("Adding parents who were listed in momID/dadID but missing from ID:\n")
       message(missing_parents)
     }
@@ -306,7 +306,7 @@ addRowlessParents <- function(ped, verbose, validation_results) {
     }
 
     ped <- merge(ped, new_entries, all = TRUE)
-    if (verbose) {
+    if (verbose == TRUE) {
       cat("Added phantom parents for:", paste(new_entries$ID, collapse = ", "), "\n")
     }
   }
