@@ -112,10 +112,10 @@
     }
 
     # Checkpointing every save_rate iterations
-    if (saveable == TRUE  && (i %% save_rate_parlist == 0)) {
+    if (saveable == TRUE && (i %% save_rate_parlist == 0)) {
       saveRDS(parList, file = checkpoint_files$parList)
       saveRDS(lens, file = checkpoint_files$lens)
-      if (verbose == TRUE ) cat("Checkpointed parlist saved at iteration", i, "\n")
+      if (verbose == TRUE) cat("Checkpointed parlist saved at iteration", i, "\n")
     }
   }
   jss <- rep(1L:config$nr, times = lens)
@@ -522,7 +522,7 @@ computeParentAdjacency <- function(ped, component,
       }
     )
   }
-  if (saveable==TRUE) {
+  if (saveable == TRUE) {
     saveRDS(parList, file = checkpoint_files$parList)
     saveRDS(lens, file = checkpoint_files$lens)
     if (verbose == TRUE) {
