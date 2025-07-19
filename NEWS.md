@@ -1,3 +1,5 @@
+# BGmisc (development version)
+
 # BGmisc 1.5.0
 ## CRAN submission
 * Removed ASOIAF dataset from BGmisc, now in ggpedigree
