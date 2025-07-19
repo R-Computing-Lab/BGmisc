@@ -87,7 +87,7 @@ plotPedigree <- function(ped,
       affected = p$affected
     )
     p3 <- p2["1"]
-    if (verbose) {
+    if (verbose == TRUE) {
       message(p3)
       return(kinship2::plot.pedigree(p3,
         cex = cex,
@@ -110,7 +110,7 @@ plotPedigree <- function(ped,
 
       # Ensure the output is reverted back to console when function exits
       #     on.exit(if (sink.number() > 0) sink(), add = TRUE)
-      if (verbose) {
+      if (verbose == TRUE) {
         plot_picture <- kinship2::plot.pedigree(p3,
           cex = cex,
           col = col,

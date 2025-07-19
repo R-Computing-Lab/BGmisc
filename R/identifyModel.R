@@ -32,12 +32,12 @@ identifyComponentModel <- function(..., verbose = TRUE) {
   compm <- do.call(cbind, compl)
   rank <- qr(compm)$rank
   if (rank != length(dots)) {
-    if (verbose) cat("Component model is not identified.\n")
+    if (verbose == TRUE) cat("Component model is not identified.\n")
     jacOC <- Null(t(compm))
     nidp <- nam[apply(jacOC, 1, function(x) {
       sum(x^2)
     }) > 1e-17]
-    if (verbose) {
+    if (verbose == TRUE) {
       cat(
         "Non-identified parameters are ",
         paste(nidp, collapse = ", "), "\n"
@@ -45,7 +45,7 @@ identifyComponentModel <- function(..., verbose = TRUE) {
     }
     return(list(identified = FALSE, nidp = nidp))
   } else {
-    if (verbose) cat("Component model is identified.\n")
+    if (verbose == TRUE) cat("Component model is identified.\n")
     return(list(identified = TRUE, nidp = character(0)))
   }
 }

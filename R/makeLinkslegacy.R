@@ -93,7 +93,7 @@
       !is.null(cn_ped_matrix),
       na.rm = TRUE
     )
-    if (verbose) {
+    if (verbose == TRUE) {
       print(matrix_case)
     }
 
@@ -137,7 +137,7 @@
       if (gc == TRUE) {
         remove(ad_ped_p, ad_ped_i, ad_ped_x, mt_p, mt_i, mt_x, cn_p, cn_i, cn_x)
       }
-      if (verbose) {
+      if (verbose == TRUE) {
         message("All 3 matrix is present")
       }
 
@@ -366,7 +366,7 @@
       }
     } else if (sum_nulls == 1) {
       # --- Case: Only One Matrix Provided ---
-      if (verbose) {
+      if (verbose == TRUE) {
         message("Only one matrix is present")
       }
       if (!is.null(ad_ped_matrix)) {
@@ -518,7 +518,7 @@
     outcome_name = "data",
     ...) {
   # --- Legacy Mode ---
-  if (verbose) {
+  if (verbose == TRUE) {
     message("Using legacy mode")
   }
   # In legacy mode, convert matrices to the expected symmetric formats.

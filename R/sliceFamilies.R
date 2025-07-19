@@ -211,7 +211,7 @@ sliceFamilies <- function(
       if (base::nrow(range_data) > 0) {
         file_name <- base::paste0(data_directory, "df_mt1_r", range_min, "-r", range_max, ".csv")
 
-        if (verbose) {
+        if (verbose == TRUE) {
           message(file_name)
         }
         data.table::fwrite(range_data,
@@ -231,7 +231,7 @@ sliceFamilies <- function(
       file_name <- NULL
       if (base::nrow(range_data) > 0) {
         file_name <- base::paste0(data_directory, "df_mt0_r", range_min, "-r", range_max, ".csv")
-        if (verbose) {
+        if (verbose == TRUE) {
           message(file_name)
         }
         data.table::fwrite(range_data,
@@ -245,7 +245,7 @@ sliceFamilies <- function(
     }
     base::message(start_line)
     df_nrows <- base::nrow(dataRelatedPair_merge)
-    if (verbose) {
+    if (verbose == TRUE) {
       message("Processed ", df_nrows, " rows from lines ", start_line, " to ", end_line)
     }
     # update the line ranges for the next iteration

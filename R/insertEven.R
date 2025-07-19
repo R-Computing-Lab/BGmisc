@@ -23,11 +23,11 @@ insertEven <- function(m, n, verbose = FALSE) {
   for (i in seq_along(m)) {
     names(m)[i] <- ceiling(i * length(n) / length(m))
   }
-  if (verbose) {
+  if (verbose == TRUE) {
     message(m)
   }
   names(n) <- seq_along(n)
-  if (verbose) {
+  if (verbose == TRUE) {
     message(n)
   }
   vec <- c(m, n)

@@ -61,10 +61,10 @@ readGedcom <- function(file_path,
   if (!file.exists(file_path)) {
     stop("File does not exist: ", file_path)
   }
-  if (verbose) message("Reading file: ", file_path)
+  if (verbose == TRUE) message("Reading file: ", file_path)
   lines <- readLines(file_path)
   total_lines <- length(lines)
-  if (verbose) message("File is ", total_lines, " lines long")
+  if (verbose == TRUE) message("File is ", total_lines, " lines long")
 
   # Count pattern occurrences (pattern_rows remains used in subfunctions)
   pattern_rows <- countPatternRows(data.frame(X1 = lines))
@@ -110,11 +110,11 @@ readGedcom <- function(file_path,
     as.data.frame(rec, stringsAsFactors = FALSE)
   }))
 
-  if (verbose) message("File has ", nrow(df_temp), " people")
+  if (verbose == TRUE) message("File has ", nrow(df_temp), " people")
 
   # Run post-processing if requested.
   if (post_process) {
-    if (verbose) message("Post-processing data frame")
+    if (verbose == TRUE) message("Post-processing data frame")
     df_temp <- postProcessGedcom(
       df_temp = df_temp,
       remove_empty_cols = remove_empty_cols,
@@ -150,7 +150,7 @@ splitIndividuals <- function(lines, verbose = FALSE) {
     block <- lines[start:end]
     blocks[[length(blocks) + 1]] <- block
   }
-  if (verbose) message("Found ", length(blocks), " individual blocks")
+  if (verbose == TRUE) message("Found ", length(blocks), " individual blocks")
   return(blocks)
 }
 
@@ -468,18 +468,18 @@ postProcessGedcom <- function(df_temp,
                               skinny = TRUE,
                               verbose = FALSE) {
   if (add_parents) {
-    if (verbose) message("Processing parents")
+    if (verbose == TRUE) message("Processing parents")
     df_temp <- processParents(df_temp, datasource = "gedcom")
   }
   if (combine_cols) {
     df_temp <- collapseNames(verbose = verbose, df_temp = df_temp)
   }
   if (remove_empty_cols) {
-    if (verbose) message("Removing empty columns")
+    if (verbose == TRUE) message("Removing empty columns")
     df_temp <- df_temp[, colSums(is.na(df_temp)) < nrow(df_temp)]
   }
   if (skinny) {
-    if (verbose) message("Slimming down the data frame")
+    if (verbose == TRUE) message("Slimming down the data frame")
     df_temp <- df_temp[, colSums(is.na(df_temp)) < nrow(df_temp)]
     df_temp$FAMC <- NULL
     df_temp$FAMS <- NULL
@@ -590,7 +590,7 @@ mapFAMC2parents <- function(df_temp, family_to_parents) {
 #' @param df_temp A data frame containing the columns to be combined.
 #' @return A data frame with the combined columns.
 collapseNames <- function(verbose, df_temp) {
-  if (verbose) message("Combining Duplicate Columns")
+  if (verbose == TRUE) message("Combining Duplicate Columns")
 
   if (!all(is.na(df_temp$name_given_pieces)) | !all(is.na(df_temp$name_given))) {
     result <- combine_columns(df_temp$name_given, df_temp$name_given_pieces)

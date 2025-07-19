@@ -8,5 +8,5 @@ hazard <- raw
 ##
 # data processing
 
-write.csv(hazard, "data-raw/hazard.csv", row.names = FALSE)
+#write.csv(hazard, "data-raw/hazard.csv", row.names = FALSE)
 usethis::use_data(hazard, overwrite = TRUE, compress = "xz")

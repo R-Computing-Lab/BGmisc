@@ -49,14 +49,14 @@ checkSex <- function(ped, code_male = NULL, code_female = NULL, verbose = FALSE,
   validation_results <- list()
 
 
-  if (verbose) {
+  if (verbose == TRUE) {
     cat("Step 1: Checking how many sexes/genders...\n")
   }
 
   # Check unique values in 'sex'
   validation_results$sex_unique <- unique(ped$sex)
   validation_results$sex_length <- length(unique(ped$sex))
-  if (verbose) {
+  if (verbose == TRUE) {
     cat(validation_results$sex_length, " unique sex codes found: ", paste(validation_results$sex_unique, collapse = ", "), "\n")
   }
 
@@ -77,7 +77,7 @@ checkSex <- function(ped, code_male = NULL, code_female = NULL, verbose = FALSE,
   validation_results$ID_child_male_moms <- mom_results$inconsistent_children
 
   if (repair == FALSE) {
-    if (verbose) {
+    if (verbose == TRUE) {
       cat("Checks Made:\n")
       message(validation_results)
     }
@@ -103,7 +103,7 @@ checkSex <- function(ped, code_male = NULL, code_female = NULL, verbose = FALSE,
     }
     # Return the repaired pedigree dataframe
 
-    if (verbose) {
+    if (verbose == TRUE) {
       cat("Changes Made:\n")
       message(changes)
     }
@@ -178,7 +178,7 @@ recodeSex <- function(
     ped$sex <- ped$sex_recode
     ped$sex_recode <- NULL
   } else {
-    if (verbose) {
+    if (verbose == TRUE) {
       warning("Both code male and code female are empty. No recoding was done.")
     }
   }
@@ -203,7 +203,7 @@ checkParentSex <- function(ped, parent_col, sex_col = "sex", verbose = FALSE) {
   parent_rows <- ped[ped$ID %in% parent_ids, ]
 
   if (nrow(parent_rows) == 0) {
-    if (verbose) cat(paste0("No individuals found in role: ", parent_col, "\n"))
+    if (verbose == TRUE) cat(paste0("No individuals found in role: ", parent_col, "\n"))
     return(list(
       role = parent_col,
       unique_sexes = NULL,
@@ -237,7 +237,7 @@ checkParentSex <- function(ped, parent_col, sex_col = "sex", verbose = FALSE) {
   inconsistent_children <- ped$ID[ped[[child_col]] %in% inconsistent_parents]
 
 
-  if (verbose) {
+  if (verbose == TRUE) {
     cat(paste0("Role: ", parent_col, "\n"))
     cat(length(unique_sexes), " unique sex codes found: ", paste(unique_sexes, collapse = ", "), "\n")
     cat("Modal sex code: ", modal_sex, "\n")
