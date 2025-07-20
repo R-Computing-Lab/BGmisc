@@ -201,17 +201,19 @@ summarizePedigrees <- function(ped, famID = "famID", personID = "ID",
   #  }
 
 
-output <- summarizeOldest(byr = byr,
-                  n_oldest=n_oldest,
-                  n_families=n_families,
-                  type=type,
-                  verbose=verbose,
-                  output=output,
-                  family_summary_dt=family_summary_dt,
-                  n_mothers=n_mothers,
-                  maternal_summary_dt=maternal_summary_dt,
-                  n_fathers=n_fathers,
-                  paternal_summary_dt=paternal_summary_dt)
+  output <- summarizeOldest(
+    byr = byr,
+    n_oldest = n_oldest,
+    n_families = n_families,
+    type = type,
+    verbose = verbose,
+    output = output,
+    family_summary_dt = family_summary_dt,
+    n_mothers = n_mothers,
+    maternal_summary_dt = maternal_summary_dt,
+    n_fathers = n_fathers,
+    paternal_summary_dt = paternal_summary_dt
+  )
 
   # biggest lines
   if (!is.null(n_biggest) && n_biggest > 0) {
@@ -511,7 +513,7 @@ prepSummarizePedigrees <- function(ped,
 summarizeOldest <- function(byr = NULL,
                             n_oldest = 5,
                             n_families = NULL,
-                            type = NULL ,
+                            type = NULL,
                             verbose = FALSE,
                             output,
                             family_summary_dt = NULL,
@@ -519,39 +521,38 @@ summarizeOldest <- function(byr = NULL,
                             maternal_summary_dt = NULL,
                             n_fathers = NULL,
                             paternal_summary_dt = NULL) {
-
-    ## oldest
-    if (!is.null(byr) && n_oldest > 0) {
-      if (!is.null(n_families) && "families" %in% type) {
-        if (verbose == TRUE) message("Finding oldest families...")
-        output$oldest_families <- findOldest(
-          foo_summary_dt = family_summary_dt,
-          byr = byr,
-          n_oldest = n_oldest,
-          n_foo = n_families
-        )
-      }
-      if (!is.null(n_mothers) && "mothers" %in% type) {
-        if (verbose == TRUE) message("Finding oldest maternal lines...")
-        output$oldest_maternal <- findOldest(
-          foo_summary_dt = maternal_summary_dt,
-          byr = byr,
-          n_oldest = n_oldest,
-          n_foo = n_mothers
-        )
-      }
-      if (!is.null(n_fathers) && "fathers" %in% type) {
-        if (verbose == TRUE) message("Finding oldest paternal lines...")
-        output$oldest_paternal <- findOldest(
-          foo_summary_dt = paternal_summary_dt,
-          byr = byr,
-          n_oldest = n_oldest,
-          n_foo = n_fathers
-        )
-      }
+  ## oldest
+  if (!is.null(byr) && n_oldest > 0) {
+    if (!is.null(n_families) && "families" %in% type) {
+      if (verbose == TRUE) message("Finding oldest families...")
+      output$oldest_families <- findOldest(
+        foo_summary_dt = family_summary_dt,
+        byr = byr,
+        n_oldest = n_oldest,
+        n_foo = n_families
+      )
     }
-    return(output)
+    if (!is.null(n_mothers) && "mothers" %in% type) {
+      if (verbose == TRUE) message("Finding oldest maternal lines...")
+      output$oldest_maternal <- findOldest(
+        foo_summary_dt = maternal_summary_dt,
+        byr = byr,
+        n_oldest = n_oldest,
+        n_foo = n_mothers
+      )
+    }
+    if (!is.null(n_fathers) && "fathers" %in% type) {
+      if (verbose == TRUE) message("Finding oldest paternal lines...")
+      output$oldest_paternal <- findOldest(
+        foo_summary_dt = paternal_summary_dt,
+        byr = byr,
+        n_oldest = n_oldest,
+        n_foo = n_fathers
+      )
+    }
   }
+  return(output)
+}
 
 #' @rdname summarizePedigrees
 #' @export

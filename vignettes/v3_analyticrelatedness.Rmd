@@ -610,4 +610,4 @@ results |>
 
 
 
-This summary provides an overview of the RMSE values for each method across families, highlighting the consistent advantage of the partial parent method in reconstructing relatedness when parental data are missing.
+This summary provides an overview of the RMSE values for each method across families. The advantage of the partial parent method in reconstructing relatedness was consistent when parental data are missing.
