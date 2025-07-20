@@ -1,4 +1,5 @@
 # BGmisc (development version)
+* refactored summarizePedigree to be more modular
 
 # BGmisc 1.5.0
 ## CRAN submission
