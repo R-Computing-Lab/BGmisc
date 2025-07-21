@@ -110,6 +110,6 @@ summary. Users can also specify variables to exclude from the analysis via
 Beyond summary statistics, the function identifies the founding member of
 each lineage based on the specified sorting variable (`founder_sort_var`),
 defaulting to birth year (`byr`) when available or `personID` otherwise.
-Users can retrieve the largest and oldest lineages by setting `n_biggest`
+Users can retrieve the largest and oldest lineages by setting `n_fooest`
 and `n_oldest`, respectively.
 }

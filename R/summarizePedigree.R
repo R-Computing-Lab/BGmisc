@@ -78,7 +78,7 @@ summarizePedigrees <- function(ped,
     )
   }
   if (!is.null(founder_sort_var) &&
-      !founder_sort_var %in% names(ped)) {
+    !founder_sort_var %in% names(ped)) {
     stop(
       "If you set founder_sort_var, that variable must be a column in the pedigree data. If you want to sort by using the default, set founder_sort_var = NULL. The default is to sort by birth year if that's present and by personID otherwise."
     )
@@ -124,8 +124,9 @@ summarizePedigrees <- function(ped,
 
 
   if (network_checks == TRUE) {
-    if (verbose == TRUE)
+    if (verbose == TRUE) {
       message("Performing network validation checks...")
+    }
     output$network_validation <- checkPedigreeNetwork(
       ped,
       personID = personID,
@@ -138,8 +139,9 @@ summarizePedigrees <- function(ped,
   # Calculate summary statistics for families, maternal lines, and paternal lines
 
   if ("families" %in% type) {
-    if (verbose == TRUE)
+    if (verbose == TRUE) {
       message("Summarizing families...")
+    }
     family_summary_dt <- calculateSummaryDT(
       ped_dt,
       group_var = famID,
@@ -158,13 +160,15 @@ summarizePedigrees <- function(ped,
     }
     output$family_summary <- family_summary_dt
     n_families <- nrow(family_summary_dt)
-    if (verbose == TRUE)
+    if (verbose == TRUE) {
       message("Summarized ", n_families, " families.")
+    }
   }
 
   if ("mothers" %in% type) {
-    if (verbose == TRUE)
+    if (verbose == TRUE) {
       message("Summarizing maternal lines...")
+    }
     maternal_summary_dt <- calculateSummaryDT(
       ped_dt,
       group_var = matID,
@@ -184,12 +188,14 @@ summarizePedigrees <- function(ped,
 
     n_mothers <- nrow(maternal_summary_dt)
 
-    if (verbose == TRUE)
+    if (verbose == TRUE) {
       message("Summarized ", n_mothers, " maternal lines.")
+    }
   }
   if ("fathers" %in% type) {
-    if (verbose == TRUE)
+    if (verbose == TRUE) {
       message("Summarizing paternal lines...")
+    }
     paternal_summary_dt <- calculateSummaryDT(
       ped_dt,
       group_var = patID,
@@ -209,8 +215,9 @@ summarizePedigrees <- function(ped,
     output$paternal_summary <- paternal_summary_dt
 
     n_fathers <- nrow(paternal_summary_dt)
-    if (verbose == TRUE)
+    if (verbose == TRUE) {
       message("Summarized ", n_fathers, " paternal lines.")
+    }
   }
 
   ## Check errors
@@ -279,31 +286,35 @@ calculateSummaryDT <- function(data,
                                na_rm = TRUE) {
   # Identify numeric columns excluding the group_var and skip_var
   numeric_cols <- setdiff(names(data)[vapply(data, is.numeric, logical(1))], c(group_var, skip_var))
-  summary_stats <- data[, {
-    count <- .N # Calculate count once per group
-    stats_list <- lapply(numeric_cols, function(colname) {
-      x <- .SD[[colname]]
-      stats <- list(
-        #   count = .N,
-        mean = as.double(base::mean(x, na.rm = na_rm)),
-        median = as.double(stats::median(x, na.rm = na_rm)),
-        #  mode = as.double(stats::mode(x, na.rm = TRUE)),
-        min = ifelse(all(is.na(x)), as.double(NA), as.double(base::min(x, na.rm = na_rm))),
-        max = ifelse(all(is.na(x)), as.double(NA), as.double(base::max(x, na.rm = na_rm))),
-        sd = as.double(stats::sd(x, na.rm = na_rm))
-      )
-      if (five_num_summary) {
-        stats <- c(stats, list(
-          Q1 = as.double(stats::quantile(x, 0.25, na.rm = na_rm)),
-          Q3 = as.double(stats::quantile(x, 0.75, na.rm = na_rm))
-        ))
-      }
-      names(stats) <- paste0(colname, "_", names(stats))
-      stats
-    })
-    stats <- unlist(stats_list, recursive = FALSE)
-    c(list(count = count), stats)
-  }, by = group_var, .SDcols = numeric_cols]
+  summary_stats <- data[,
+    {
+      count <- .N # Calculate count once per group
+      stats_list <- lapply(numeric_cols, function(colname) {
+        x <- .SD[[colname]]
+        stats <- list(
+          #   count = .N,
+          mean = as.double(base::mean(x, na.rm = na_rm)),
+          median = as.double(stats::median(x, na.rm = na_rm)),
+          #  mode = as.double(stats::mode(x, na.rm = TRUE)),
+          min = ifelse(all(is.na(x)), as.double(NA), as.double(base::min(x, na.rm = na_rm))),
+          max = ifelse(all(is.na(x)), as.double(NA), as.double(base::max(x, na.rm = na_rm))),
+          sd = as.double(stats::sd(x, na.rm = na_rm))
+        )
+        if (five_num_summary) {
+          stats <- c(stats, list(
+            Q1 = as.double(stats::quantile(x, 0.25, na.rm = na_rm)),
+            Q3 = as.double(stats::quantile(x, 0.75, na.rm = na_rm))
+          ))
+        }
+        names(stats) <- paste0(colname, "_", names(stats))
+        stats
+      })
+      stats <- unlist(stats_list, recursive = FALSE)
+      c(list(count = count), stats)
+    },
+    by = group_var,
+    .SDcols = numeric_cols
+  ]
   # Flatten the nested lists
   summary_stats <- data.table::as.data.table(summary_stats[, lapply(.SD, unlist), by = group_var])
   return(summary_stats)
@@ -341,9 +352,11 @@ summarizeFounder <- function(ped_dt,
   if (verbose == TRUE) {
     message(paste0("Finding originating members for ", group_var))
   }
-  originating_member_foo <- findFounder(data = ped_dt,
-                                        group_var = group_var,
-                                        sort_var = sort_var)
+  originating_member_foo <- findFounder(
+    data = ped_dt,
+    group_var = group_var,
+    sort_var = sort_var
+  )
   # Merge summary statistics with originating members for additional information
   foo_summary_dt <- merge(
     foo_summary_dt,
@@ -358,25 +371,27 @@ summarizeFounder <- function(ped_dt,
 #' Function to find the most extreme individuals in a pedigree
 #' This function finds the most extreme individuals (oldest or youngest) in a pedigree. It is supposed to be used internally by the \code{summarize_pedigree} function.
 #' @inheritParams summarizePedigrees
-#' @param foo_summary_dt A data.table containing the summary statistics.
 #' @param n_foo_total  An integer specifying the total number of individuals in the summary.
 #' @param n_fooest An integer specifying the number of individuals to return in the summary.
-#' @param sort_col A character string specifying the column to sort by.
+#' @param sort_var A character string specifying the column to sort by.
 #' @param decreasing A logical indicating whether to sort in decreasing order.
 #' @returns A data.table with the top rows selected from \code{foo_summary_dt}.
 #' @keywords internal
 
 
 findFooest <- function(foo_summary_dt,
-                       sort_col,
+                       sort_var,
                        n_fooest,
                        n_foo_total = nrow(foo_summary_dt),
                        decreasing = FALSE) {
-  subset_foo <- try_na(tryCatch({
-    foo_summary_dt[order(get(sort_col), decreasing = decreasing)][1:min(c(n_fooest, n_foo_total), na.rm = TRUE), ]
-  }, # solves case when only one row is present
-  error = function(e)
-    foo_summary_dt[1, ]))
+  subset_foo <- try_na(tryCatch(
+    {
+      foo_summary_dt[order(get(sort_var), decreasing = decreasing)][1:min(c(n_fooest, n_foo_total), na.rm = TRUE), ]
+    }, # solves case when only one row is present
+    error = function(e) {
+      foo_summary_dt[1, ]
+    }
+  ))
 
   return(subset_foo)
 }
@@ -395,7 +410,7 @@ findOldest <- function(foo_summary_dt,
                        n_foo_total = nrow(foo_summary_dt)) {
   oldest_foo <- findFooest(
     foo_summary_dt = foo_summary_dt,
-    sort_col = byr,
+    sort_var = byr,
     n_foo_total = n_foo_total,
     n_fooest = n_fooest,
     decreasing = FALSE
@@ -417,7 +432,7 @@ findBiggest <- function(foo_summary_dt,
                         n_foo_total = nrow(foo_summary_dt)) {
   biggest_foo <- findFooest(
     foo_summary_dt = foo_summary_dt,
-    sort_col = "count",
+    sort_var = "count",
     n_foo_total = n_foo_total,
     n_fooest = n_fooest,
     decreasing = TRUE
@@ -441,8 +456,9 @@ prepSummarizePedigrees <- function(ped,
                                    patID) {
   # Build the pedigree using the provided functions
   if ("families" %in% type && !famID %in% names(ped)) {
-    if (verbose == TRUE)
+    if (verbose == TRUE) {
       message("Counting families...")
+    }
     ped <- ped2fam(
       ped,
       personID = personID,
@@ -452,8 +468,9 @@ prepSummarizePedigrees <- function(ped,
     )
   }
   if ("mothers" %in% type && !matID %in% names(ped)) {
-    if (verbose == TRUE)
+    if (verbose == TRUE) {
       message("Counting mothers...")
+    }
     ped <- ped2maternal(
       ped,
       personID = personID,
@@ -463,8 +480,9 @@ prepSummarizePedigrees <- function(ped,
     )
   }
   if ("fathers" %in% type && !patID %in% names(ped)) {
-    if (verbose == TRUE)
+    if (verbose == TRUE) {
       message("Counting fathers...")
+    }
     ped <- ped2paternal(
       ped,
       personID = personID,
@@ -498,8 +516,9 @@ summarizeOldest <- function(byr = NULL,
   ## oldest
   if (!is.null(byr) && n_oldest > 0) {
     if (!is.null(n_families) && "families" %in% type) {
-      if (verbose == TRUE)
+      if (verbose == TRUE) {
         message("Finding oldest families...")
+      }
       output$oldest_families <- findOldest(
         foo_summary_dt = family_summary_dt,
         byr = byr,
@@ -508,8 +527,9 @@ summarizeOldest <- function(byr = NULL,
       )
     }
     if (!is.null(n_mothers) && "mothers" %in% type) {
-      if (verbose == TRUE)
+      if (verbose == TRUE) {
         message("Finding oldest maternal lines...")
+      }
       output$oldest_maternal <- findOldest(
         foo_summary_dt = maternal_summary_dt,
         byr = byr,
@@ -518,8 +538,9 @@ summarizeOldest <- function(byr = NULL,
       )
     }
     if (!is.null(n_fathers) && "fathers" %in% type) {
-      if (verbose == TRUE)
+      if (verbose == TRUE) {
         message("Finding oldest paternal lines...")
+      }
       output$oldest_paternal <- findOldest(
         foo_summary_dt = paternal_summary_dt,
         byr = byr,

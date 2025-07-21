@@ -5,7 +5,13 @@
 \title{Function to calculate summary statistics for all numeric variables
 This function calculates summary statistics for all numeric variables in a data.table. It is supposed to be used internally by the \code{summarize_pedigree} function.}
 \usage{
-calculateSummaryDT(data, group_var, skip_var, five_num_summary = FALSE)
+calculateSummaryDT(
+  data,
+  group_var,
+  skip_var,
+  five_num_summary = FALSE,
+  na_rm = TRUE
+)
 }
 \arguments{
 \item{data}{A data.table containing the pedigree data.}
@@ -16,6 +22,8 @@ calculateSummaryDT(data, group_var, skip_var, five_num_summary = FALSE)
 
 \item{five_num_summary}{Logical. If `TRUE`, includes the first quartile (Q1) and third quartile (Q3) in addition to
 the minimum, median, and maximum values.}
+
+\item{na_rm}{Logical. If `TRUE`, removes `NA` values when calculating statistics.}
 }
 \value{
 A data.table containing the summary statistics for all numeric variables.
