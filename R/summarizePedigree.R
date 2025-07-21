@@ -90,8 +90,6 @@ summarizePedigrees <- function(ped, famID = "famID", personID = "ID",
     founder_sort_var <- byr
   }
 
-
-
   ped <- prepSummarizePedigrees(
     ped = ped,
     type = type,
@@ -221,21 +219,21 @@ summarizePedigrees <- function(ped, famID = "famID", personID = "ID",
       output$biggest_families <- findBiggest(
         foo_summary_dt = family_summary_dt,
         n_biggest = n_biggest,
-        n_foo = n_families
+        n_foo_total = n_families
       )
     }
     if (!is.null(n_mothers) && "mothers" %in% type) {
       output$biggest_maternal <- findBiggest(
         foo_summary_dt = maternal_summary_dt,
         n_biggest = n_biggest,
-        n_foo = n_mothers
+        n_foo_total = n_mothers
       )
     }
     if (!is.null(n_fathers) && "fathers" %in% type) {
       output$biggest_paternal <- findBiggest(
         foo_summary_dt = paternal_summary_dt,
         n_biggest = n_biggest,
-        n_foo = n_fathers
+        n_foo_total = n_fathers
       )
     }
   }
@@ -342,108 +340,78 @@ summarizeFounder <- function(ped_dt, group_var, sort_var,
   )
   return(foo_summary_dt)
 }
-#' Summarize the maternal lines in a pedigree
+
+
+#' Function to find the most extreme individuals in a pedigree
+#' This function finds the most extreme individuals (oldest or youngest) in a pedigree. It is supposed to be used internally by the \code{summarize_pedigree} function.
 #' @inheritParams summarizePedigrees
-#' @seealso [summarizePedigrees ()]
-#' @export
-#' @aliases summarizematrilines summarisematrilines summariseMatrilines
-summarizeMatrilines <- function(ped, famID = "famID", personID = "ID",
-                                momID = "momID", dadID = "dadID",
-                                matID = "matID", patID = "patID",
-                                byr = NULL, include_founder = FALSE,
-                                founder_sort_var = NULL,
-                                n_biggest = 5, n_oldest = 5, skip_var = NULL,
-                                five_num_summary = FALSE, verbose = FALSE,
-                                network_checks = FALSE) {
-  # Call to wrapper function
-  summarizePedigrees(
-    ped = ped,
-    personID = personID,
-    n_biggest = n_biggest,
-    n_oldest = n_oldest,
-    byr = byr,
-    include_founder = include_founder,
-    momID = momID, dadID = dadID,
-    famID = famID, matID = matID, patID = patID, skip_var = skip_var,
-    type = "mothers", verbose = verbose, five_num_summary = five_num_summary,
-    founder_sort_var = founder_sort_var, network_checks = network_checks
-  )
+#' @param foo_summary_dt A data.table containing the summary statistics.
+#' @param n_foo_total  An integer specifying the total number of individuals in the summary.
+#' @param n_fooest An integer specifying the number of individuals to return in the summary.
+#' @param sort_col A character string specifying the column to sort by.
+#' @param decreasing A logical indicating whether to sort in decreasing order.
+#' @returns a data.table containing the most extreme individuals in the pedigree.
+#' @aliases findextreme
+
+findExtreme <- function(
+    foo_summary_dt,
+    sort_col = "byr",
+    n_fooest = 5,
+    n_foo_total = nrow(foo_summary_dt),
+    decreasing = FALSE) {
+
+  sort_col <- as.character(sort_col)
+
+
+foo_max <-  min(c(n_fooest, n_foo_total),
+      na.rm = TRUE
+)
+  if(foo_max <= 0 || is.na(foo_max)) {
+    # If n_fooest is less than or equal to 0, or if n_foo_total is NA, set foo_max to 1
+    # This prevents errors when trying to subset the data.table
+   foo_max <- 1
+  }
+
+
+  if (decreasing == TRUE) {
+fooest_foo <-    try_na(foo_summary_dt[order(-get(sort_col))][
+    1:foo_max])
+  } else if (decreasing == FALSE) {
+    # sort in increasing order
+    # if decreasing is FALSE, sort in increasing order
+
+ fooest_foo <-  try_na(foo_summary_dt[order(get(sort_col))][1:foo_max])
+  } else {
+    stop("decreasing must be TRUE or FALSE.")
+  }
+    # drop rows that only have NAs in all columns
+ # fooest_foo <- fooest_foo[!Reduce(`|`, lapply(fooest_foo, is.na))]
+  # Ensure that the result is a data.table
+  if (!data.table::is.data.table(fooest_foo)) {
+    fooest_foo <- as.data.table(fooest_foo)
+  }
+  if (!data.table::is.data.table(fooest_foo)) {
+    fooest_foo <- foo_summary_dt[NA]
+  }
+return(fooest_foo)
 }
 
-
-
-
-#' Summarize the paternal lines in a pedigree
-#' @inheritParams summarizePedigrees
-#' @seealso [summarizePedigrees ()]
-#' @export
-#' @aliases summarizepatrilines summarisepatrilines summarisePatrilines
-summarizePatrilines <- function(ped, famID = "famID", personID = "ID",
-                                momID = "momID", dadID = "dadID",
-                                matID = "matID", patID = "patID",
-                                byr = NULL, founder_sort_var = NULL,
-                                include_founder = FALSE,
-                                n_biggest = 5, n_oldest = 5, skip_var = NULL,
-                                five_num_summary = FALSE, verbose = FALSE,
-                                network_checks = FALSE) {
-  # Call to wrapper function
-  summarizePedigrees(
-    ped = ped,
-    personID = personID,
-    n_biggest = n_biggest,
-    n_oldest = n_oldest,
-    byr = byr,
-    include_founder = include_founder,
-    momID = momID, dadID = dadID,
-    famID = famID, matID = matID, patID = patID, skip_var = skip_var,
-    type = "fathers", verbose = verbose, five_num_summary = five_num_summary,
-    founder_sort_var = founder_sort_var, network_checks = network_checks
-  )
-}
-
-#' Summarize the families in a pedigree
-#' @inheritParams summarizePedigrees
-#' @seealso [summarizePedigrees ()]
-#' @aliases summarizefamilies summarisefamilies summariseFamilies
-#' @export
-summarizeFamilies <- function(ped, famID = "famID", personID = "ID",
-                              momID = "momID", dadID = "dadID",
-                              matID = "matID", patID = "patID",
-                              byr = NULL, founder_sort_var = NULL,
-                              include_founder = FALSE,
-                              n_biggest = 5, n_oldest = 5, skip_var = NULL,
-                              five_num_summary = FALSE, verbose = FALSE,
-                              network_checks = FALSE) {
-  # Call to wrapper function
-  summarizePedigrees(
-    ped = ped,
-    personID = personID,
-    n_biggest = n_biggest,
-    n_oldest = n_oldest,
-    byr = byr,
-    include_founder = include_founder,
-    momID = momID,
-    dadID = dadID,
-    famID = famID,
-    matID = matID,
-    patID = patID,
-    skip_var = skip_var,
-    type = "families",
-    verbose = verbose,
-    five_num_summary = five_num_summary,
-    founder_sort_var = founder_sort_var,
-    network_checks = network_checks
-  )
-}
-# Function to find the oldest individuals in a pedigree
+#' Function to find the oldest individuals in a pedigree
 #' This function finds the oldest families in a pedigree. It is supposed to be used internally by the \code{summarize_pedigree} function.
 #' @inheritParams summarizePedigrees
 #' @param foo_summary_dt A data.table containing the summary statistics.
-#' @param n_foo An integer specifying the number of individuals in the summary.
+#' @param n_fooest An integer specifying the number of individuals in the summary.
+#' @param n_foo_total An integer specifying the total number of individuals in the summary.
 #' @returns a data.table containing the oldest families in the pedigree.
 #' @aliases findoldest
-findOldest <- function(foo_summary_dt, byr, n_oldest, n_foo) {
-  oldest_foo <- try_na(foo_summary_dt[order(get(byr))][1:min(c(n_oldest, n_foo),
+findOldest <- function(foo_summary_dt, byr = "byr", n_fooest = 5, n_foo_total = nrow(foo_summary_dt)) {
+ # oldest_foo <-  findExtreme(
+ #   foo_summary_dt = foo_summary_dt,
+ #   sort_col = byr, n_foo_total = n_foo_total,
+ #   n_fooest = n_fooest, decreasing = FALSE
+ # )
+
+  oldest_foo <- try_na(foo_summary_dt[order(get(byr))][1:min(c(n_fooest, n_foo_total),
     na.rm = TRUE
   )])
   return(oldest_foo)
@@ -458,9 +426,9 @@ findOldest <- function(foo_summary_dt, byr, n_oldest, n_foo) {
 #' @returns a data.table containing the biggest families in the pedigree.
 #' @aliases findbiggest
 
-findBiggest <- function(foo_summary_dt, n_biggest, n_foo) {
+findBiggest <- function(foo_summary_dt, n_biggest, n_foo_total) {
   biggest_foo <- try_na(
-    foo_summary_dt[order(-get("count"))][1:min(c(n_biggest, n_foo),
+    foo_summary_dt[order(-get("count"))][1:min(c(n_biggest, n_foo_total),
       na.rm = TRUE
     )]
   )
@@ -528,8 +496,8 @@ summarizeOldest <- function(byr = NULL,
       output$oldest_families <- findOldest(
         foo_summary_dt = family_summary_dt,
         byr = byr,
-        n_oldest = n_oldest,
-        n_foo = n_families
+        n_fooest = n_oldest,
+        n_foo_total = n_families
       )
     }
     if (!is.null(n_mothers) && "mothers" %in% type) {
@@ -537,8 +505,8 @@ summarizeOldest <- function(byr = NULL,
       output$oldest_maternal <- findOldest(
         foo_summary_dt = maternal_summary_dt,
         byr = byr,
-        n_oldest = n_oldest,
-        n_foo = n_mothers
+        n_fooest = n_oldest,
+        n_foo_total = n_mothers
       )
     }
     if (!is.null(n_fathers) && "fathers" %in% type) {
@@ -546,26 +514,10 @@ summarizeOldest <- function(byr = NULL,
       output$oldest_paternal <- findOldest(
         foo_summary_dt = paternal_summary_dt,
         byr = byr,
-        n_oldest = n_oldest,
-        n_foo = n_fathers
+        n_fooest = n_oldest,
+        n_foo_total = n_fathers
       )
     }
   }
   return(output)
 }
-
-#' @rdname summarizePedigrees
-#' @export
-summarisePedigrees <- summarizePedigrees
-
-#' @rdname summarizeFamilies
-#' @export
-summariseFamilies <- summarizeFamilies
-
-#' @rdname summarizeMatrilines
-#' @export
-summariseMatrilines <- summarizeMatrilines
-
-#' @rdname summarizePatrilines
-#' @export
-summarisePatrilines <- summarizePatrilines
