@@ -22,6 +22,7 @@ specified component of relatedness.}
   update_rate = NULL,
   checkpoint_files = NULL,
   config,
+  compress = config$compress,
   ...
 )
 }
@@ -53,6 +54,8 @@ specified component of relatedness.}
 \item{checkpoint_files}{a list of checkpoint files}
 
 \item{config}{a configuration list that passes parameters to the function}
+
+\item{compress}{logical. If TRUE, use compression when saving the checkpoint files.  Defaults to TRUE.}
 
 \item{...}{additional arguments to be passed to \code{\link{ped2com}}}
 }

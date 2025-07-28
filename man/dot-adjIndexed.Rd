@@ -17,7 +17,8 @@
   parList,
   lens,
   save_rate_parlist,
-  config
+  config,
+  compress = config$compress
 )
 }
 \arguments{
@@ -46,6 +47,8 @@
 \item{save_rate_parlist}{numeric. The rate at which to save the intermediate results by parent list. If NULL, defaults to save_rate*1000}
 
 \item{config}{a configuration list that passes parameters to the function}
+
+\item{compress}{logical. If TRUE, use compression when saving the checkpoint files.  Defaults to TRUE.}
 }
 \description{
 Construct Adjacency Matrix for Parent-Child Relationships Using Indexed Method

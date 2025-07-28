@@ -183,6 +183,8 @@ test_that("summarizePedigrees() works for single-entry pedigree", {
   df <- data.frame(ID = 1, momID = NA, dadID = NA, famID = 1, byr = 1920)
   df_summarized <- summarizePedigrees(df, byr = "byr", verbose = TRUE)
   expect_equal(nrow(df_summarized$family_summary), 1)
+
+
   expect_equal(df_summarized$oldest_families$byr_mean, 1920)
 })
 

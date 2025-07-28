@@ -9,7 +9,8 @@
   config,
   ped = NULL,
   parList = NULL,
-  lens = NULL
+  lens = NULL,
+  compress = TRUE
 )
 }
 \arguments{
@@ -22,6 +23,8 @@
 \item{parList}{A list of parent-child adjacency data.}
 
 \item{lens}{A vector of lengths for each parent-child relationship.}
+
+\item{compress}{a logical specifying whether saving to a named file is to use "gzip" compression, or one of "gzip", "bzip2", "xz" or "zstd" to indicate the type of compression to be used. Ignored if file is a connection.}
 }
 \value{
 A list containing the parent-child adjacency data either

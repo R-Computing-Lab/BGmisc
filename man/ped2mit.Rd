@@ -21,6 +21,7 @@ ped2mit(
   save_rate_gen = save_rate,
   save_rate_parlist = 1e+05 * save_rate,
   save_path = "checkpoint/",
+  compress = TRUE,
   ...
 )
 }
@@ -56,6 +57,8 @@ ped2mit(
 \item{save_rate_parlist}{numeric. The rate at which to save the intermediate results by parent list. If NULL, defaults to save_rate*1000}
 
 \item{save_path}{character. The path to save the checkpoint files}
+
+\item{compress}{logical. If TRUE, use compression when saving the checkpoint files.  Defaults to TRUE.}
 
 \item{...}{additional arguments to be passed to \code{\link{ped2com}}}
 }

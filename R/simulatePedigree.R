@@ -48,17 +48,17 @@ buildWithinGenerations <- function(sizeGens, marR, sexR, Ngen, verbose = FALSE,
     usedMaleIds <- numeric()
     # reserve the single persons
     if (i != 1 && i != Ngen) {
-      nMerriedFemale <- round(sum(df_Ngen$sex == code_female) * marR_crt)
-      nMerriedMale <- round(sum(df_Ngen$sex == code_male) * marR_crt)
+      nMarriedFemale <- round(sum(df_Ngen$sex == code_female) * marR_crt)
+      nMarriedMale <- round(sum(df_Ngen$sex == code_male) * marR_crt)
       # make sure there are same numbers of married males and females
-      if (nMerriedFemale >= nMerriedMale) {
-        nMerriedFemale <- nMerriedMale
+      if (nMarriedFemale >= nMarriedMale) {
+        nMarriedFemale <- nMarriedMale
       } else {
-        nMerriedMale <- nMerriedFemale
+        nMarriedMale <- nMarriedFemale
       }
       # get the number of single males and females
-      nSingleFemale <- sum(df_Ngen$sex == code_female) - nMerriedFemale
-      nSingleMale <- sum(df_Ngen$sex == code_male) - nMerriedMale
+      nSingleFemale <- sum(df_Ngen$sex == code_female) - nMarriedFemale
+      nSingleMale <- sum(df_Ngen$sex == code_male) - nMarriedMale
 
 
       # sample single ids from male ids and female ids
@@ -201,7 +201,7 @@ buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose = FALSE, mar
       SingleF <- sum(df_Ngen$sex == code_female & is.na(df_Ngen$spID))
       CoupleF <- N_LinkedFemale - SingleF
       SingleM <- sum(df_Ngen$sex == code_male & is.na(df_Ngen$spID))
-      CoupleM <- N_LinkedMale - SingleM
+      #     CoupleM <- N_LinkedMale - SingleM
 
       df_Fam[df_Fam$gen == i, ] <- markPotentialChildren(
         df_Ngen = df_Ngen,
@@ -231,7 +231,7 @@ buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose = FALSE, mar
           break
         } else {
           # check if the id is used and if the member has married
-          if (!(df_Ngen$id[k] %in% usedParentIds) & !is.na(df_Ngen$spID[k])) {
+          if (!(df_Ngen$id[k] %in% usedParentIds) && !is.na(df_Ngen$spID[k])) {
             df_Ngen$ifparent[k] <- TRUE
             df_Ngen$ifparent[df_Ngen$spID == df_Ngen$id[k]] <- TRUE
             usedParentIds <- c(usedParentIds, df_Ngen$id[k], df_Ngen$spID[k])
