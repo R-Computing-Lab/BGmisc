@@ -48,17 +48,17 @@ buildWithinGenerations <- function(sizeGens, marR, sexR, Ngen, verbose = FALSE,
     usedMaleIds <- numeric()
     # reserve the single persons
     if (i != 1 && i != Ngen) {
-      nMerriedFemale <- round(sum(df_Ngen$sex == code_female) * marR_crt)
-      nMerriedMale <- round(sum(df_Ngen$sex == code_male) * marR_crt)
+      nMarriedFemale <- round(sum(df_Ngen$sex == code_female) * marR_crt)
+      nMarriedMale <- round(sum(df_Ngen$sex == code_male) * marR_crt)
       # make sure there are same numbers of married males and females
-      if (nMerriedFemale >= nMerriedMale) {
-        nMerriedFemale <- nMerriedMale
+      if (nMarriedFemale >= nMarriedMale) {
+        nMarriedFemale <- nMarriedMale
       } else {
-        nMerriedMale <- nMerriedFemale
+        nMarriedMale <- nMarriedFemale
       }
       # get the number of single males and females
-      nSingleFemale <- sum(df_Ngen$sex == code_female) - nMerriedFemale
-      nSingleMale <- sum(df_Ngen$sex == code_male) - nMerriedMale
+      nSingleFemale <- sum(df_Ngen$sex == code_female) - nMarriedFemale
+      nSingleMale <- sum(df_Ngen$sex == code_male) - nMarriedMale
 
 
       # sample single ids from male ids and female ids
