@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">BGmisc</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -38,7 +38,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Take a pedigree and turn it into a common nuclear environmental matrix</h1>
-      <small class="dont-index">Source: <a href="https://github.com/R-Computing-Lab/BGmisc/blob/v1.5.0/R/buildComponent.R" class="external-link"><code>R/buildComponent.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/R-Computing-Lab/BGmisc/blob/main/R/buildComponent.R" class="external-link"><code>R/buildComponent.R</code></a></small>
       <div class="d-none name"><code>ped2cn.Rd</code></div>
     </div>
 
@@ -64,6 +64,7 @@
 <span>  save_rate_gen <span class="op">=</span> <span class="va">save_rate</span>,</span>
 <span>  save_rate_parlist <span class="op">=</span> <span class="fl">1000</span> <span class="op">*</span> <span class="va">save_rate</span>,</span>
 <span>  save_path <span class="op">=</span> <span class="st">"checkpoint/"</span>,</span>
+<span>  compress <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -132,6 +133,10 @@
 
 <dt id="arg-save-path">save_path<a class="anchor" aria-label="anchor" href="#arg-save-path"></a></dt>
 <dd><p>character. The path to save the checkpoint files</p></dd>
+
+
+<dt id="arg-compress">compress<a class="anchor" aria-label="anchor" href="#arg-compress"></a></dt>
+<dd><p>logical. If TRUE, use compression when saving the checkpoint files.  Defaults to TRUE.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>

@@ -9,7 +9,7 @@ This function calculates summary statistics for all numeric variables in a data.
 
     <a class="navbar-brand me-2" href="../index.html">BGmisc</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -40,7 +40,7 @@ This function calculates summary statistics for all numeric variables in a data.
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Function to calculate summary statistics for all numeric variables This function calculates summary statistics for all numeric variables in a data.table. It is supposed to be used internally by the <code>summarize_pedigree</code> function.</h1>
-      <small class="dont-index">Source: <a href="https://github.com/R-Computing-Lab/BGmisc/blob/v1.5.0/R/summarizePedigree.R" class="external-link"><code>R/summarizePedigree.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/R-Computing-Lab/BGmisc/blob/main/R/summarizePedigree.R" class="external-link"><code>R/summarizePedigree.R</code></a></small>
       <div class="d-none name"><code>calculateSummaryDT.Rd</code></div>
     </div>
 
@@ -51,7 +51,13 @@ This function calculates summary statistics for all numeric variables in a data.
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">calculateSummaryDT</span><span class="op">(</span><span class="va">data</span>, <span class="va">group_var</span>, <span class="va">skip_var</span>, five_num_summary <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">calculateSummaryDT</span><span class="op">(</span></span>
+<span>  <span class="va">data</span>,</span>
+<span>  <span class="va">group_var</span>,</span>
+<span>  <span class="va">skip_var</span>,</span>
+<span>  five_num_summary <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  na_rm <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -73,6 +79,10 @@ This function calculates summary statistics for all numeric variables in a data.
 <dt id="arg-five-num-summary">five_num_summary<a class="anchor" aria-label="anchor" href="#arg-five-num-summary"></a></dt>
 <dd><p>Logical. If `TRUE`, includes the first quartile (Q1) and third quartile (Q3) in addition to
 the minimum, median, and maximum values.</p></dd>
+
+
+<dt id="arg-na-rm">na_rm<a class="anchor" aria-label="anchor" href="#arg-na-rm"></a></dt>
+<dd><p>Logical. If `TRUE`, removes `NA` values when calculating statistics.</p></dd>
 
 </dl></div>
     <div class="section level2">

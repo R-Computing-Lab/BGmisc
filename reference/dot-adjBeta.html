@@ -13,7 +13,7 @@ specified component of relatedness."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">BGmisc</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,7 +44,7 @@ specified component of relatedness."></head><body>
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Construct Adjacency Matrix for Parent-Child Relationships Using Beta Method This function constructs an adjacency matrix for parent-child relationships using a beta method. It identifies parent-child pairs based on the specified component of relatedness.</h1>
-      <small class="dont-index">Source: <a href="https://github.com/R-Computing-Lab/BGmisc/blob/v1.5.0/R/constructAdjacency.R" class="external-link"><code>R/constructAdjacency.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/R-Computing-Lab/BGmisc/blob/main/R/constructAdjacency.R" class="external-link"><code>R/constructAdjacency.R</code></a></small>
       <div class="d-none name"><code>dot-adjBeta.Rd</code></div>
     </div>
 
@@ -72,6 +72,7 @@ specified component of relatedness.</p>
 <span>  update_rate <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  checkpoint_files <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">config</span>,</span>
+<span>  compress <span class="op">=</span> <span class="va">config</span><span class="op">$</span><span class="va">compress</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -134,6 +135,10 @@ specified component of relatedness.</p>
 
 <dt id="arg-config">config<a class="anchor" aria-label="anchor" href="#arg-config"></a></dt>
 <dd><p>a configuration list that passes parameters to the function</p></dd>
+
+
+<dt id="arg-compress">compress<a class="anchor" aria-label="anchor" href="#arg-compress"></a></dt>
+<dd><p>logical. If TRUE, use compression when saving the checkpoint files.  Defaults to TRUE.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>

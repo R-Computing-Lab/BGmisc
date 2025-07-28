@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">BGmisc</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -38,7 +38,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Load or compute the inverse diagonal matrix</h1>
-      <small class="dont-index">Source: <a href="https://github.com/R-Computing-Lab/BGmisc/blob/v1.5.0/R/buildComponent.R" class="external-link"><code>R/buildComponent.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/R-Computing-Lab/BGmisc/blob/main/R/buildComponent.R" class="external-link"><code>R/buildComponent.R</code></a></small>
       <div class="d-none name"><code>dot-loadOrComputeInverseDiagonal.Rd</code></div>
     </div>
 
@@ -48,7 +48,13 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">.loadOrComputeInverseDiagonal</span><span class="op">(</span><span class="va">r</span>, <span class="va">isChild</span>, <span class="va">checkpoint_files</span>, <span class="va">config</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">.loadOrComputeInverseDiagonal</span><span class="op">(</span></span>
+<span>  <span class="va">r</span>,</span>
+<span>  <span class="va">isChild</span>,</span>
+<span>  <span class="va">checkpoint_files</span>,</span>
+<span>  <span class="va">config</span>,</span>
+<span>  compress <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -61,6 +67,10 @@
 
 <dt id="arg-config">config<a class="anchor" aria-label="anchor" href="#arg-config"></a></dt>
 <dd><p>A list containing configuration parameters such as `resume`, `verbose`, and `saveable`.</p></dd>
+
+
+<dt id="arg-compress">compress<a class="anchor" aria-label="anchor" href="#arg-compress"></a></dt>
+<dd><p>a logical specifying whether saving to a named file is to use "gzip" compression, or one of "gzip", "bzip2", "xz" or "zstd" to indicate the type of compression to be used. Ignored if file is a connection.</p></dd>
 
 </dl></div>
     <div class="section level2">

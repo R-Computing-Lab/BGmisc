@@ -78,6 +78,7 @@
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/extractMemberTable.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/extract_info.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/findBiggest.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/findFooest.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/findFounder.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/findOldest.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/fitComponentModel.html</loc></url>
@@ -136,6 +137,7 @@
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/summarizeFamilies.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/summarizeFounder.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/summarizeMatrilines.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/summarizeOldest.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/summarizePatrilines.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/summarizePedigrees.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/traceTreePaths.html</loc></url>
