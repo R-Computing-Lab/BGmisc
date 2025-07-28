@@ -224,6 +224,53 @@ test_that("ped2maternal/paternal produces correct matrix dims", {
   expect_lt(cor(pat$patID, mat$matID), 1)
 })
 
+test_that("ped2com handles checkpoint uncompressed saving and resuming", {
+  save_path <- tempdir() # Use temporary directory for saving checkpoints
+  data(hazard)
+
+  ped_add_saved <- ped2com(hazard,
+    component = "additive", saveable = TRUE, save_path = save_path,
+    save_rate_gen = 1,
+    save_rate_parlist = 10,
+    adjacency_method = "direct",
+    compress = FALSE,
+    verbose = TRUE
+  )
+
+  checkpoint_files_v0 <- list(
+    parList = file.path(save_path, "parList.rds"),
+    lens = file.path(save_path, "lens.rds"),
+    isPar = file.path(save_path, "isPar.rds"),
+    iss = file.path(save_path, "iss.rds"),
+    jss = file.path(save_path, "jss.rds"),
+    isChild = file.path(save_path, "isChild.rds"),
+    r_checkpoint = file.path(save_path, "r_checkpoint.rds"),
+    gen_checkpoint = file.path(save_path, "gen_checkpoint.rds"),
+    newIsPar_checkpoint = file.path(save_path, "newIsPar_checkpoint.rds"),
+    mtSum_checkpoint = file.path(save_path, "mtSum_checkpoint.rds"),
+    ram_checkpoint = file.path(save_path, "ram_checkpoint.rds"),
+    r2_checkpoint = file.path(save_path, "r2_checkpoint.rds"),
+    tcrossprod_checkpoint = file.path(save_path, "tcrossprod_checkpoint.rds"),
+    count_checkpoint = file.path(save_path, "count_checkpoint.rds"),
+    final_matrix = file.path(save_path, "final_matrix.rds")
+  )
+
+  # Check if checkpoint files exist
+  checkpoint_files_v1 <- list.files(save_path, pattern = "\\.rds$", full.names = TRUE)
+
+  expect_equal(length(checkpoint_files_v1), length(checkpoint_files_v0))
+  # Resume from checkpoint
+  resumed_matrix <- ped2com(hazard,
+    component = "additive", resume = TRUE, save_path = save_path,
+    adjacency_method = "direct"
+  )
+
+  expect_equal(dim(resumed_matrix), c(nrow(hazard), nrow(hazard)))
+  expect_equal(dim(resumed_matrix), dim(ped_add_saved))
+  # Cleanup
+  unlink(save_path, recursive = TRUE)
+})
+
 test_that("ped2com handles checkpoint saving and resuming", {
   save_path <- tempdir() # Use temporary directory for saving checkpoints
   data(hazard)
@@ -232,7 +279,8 @@ test_that("ped2com handles checkpoint saving and resuming", {
     component = "additive", saveable = TRUE, save_path = save_path,
     save_rate_gen = 1,
     save_rate_parlist = 10,
-    adjacency_method = "direct"
+    adjacency_method = "direct",
+    compress = TRUE
   )
 
   checkpoint_files_v0 <- list(

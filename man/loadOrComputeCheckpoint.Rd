@@ -9,7 +9,8 @@ loadOrComputeCheckpoint(
   compute_fn,
   config,
   message_resume = NULL,
-  message_compute = NULL
+  message_compute = NULL,
+  compress = TRUE
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ loadOrComputeCheckpoint(
 \item{message_resume}{Optional message to display when resuming from a checkpoint.}
 
 \item{message_compute}{Optional message to display when computing the checkpoint.}
+
+\item{compress}{a logical specifying whether saving to a named file is to use "gzip" compression, or one of "gzip", "bzip2", "xz" or "zstd" to indicate the type of compression to be used. Ignored if file is a connection.}
 }
 \value{
 The loaded or computed checkpoint.

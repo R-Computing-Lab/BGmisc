@@ -20,6 +20,7 @@ computeParentAdjacency(
   save_rate_parlist,
   adjBeta_method = NULL,
   config,
+  compress = config$compress,
   ...
 )
 }
@@ -53,6 +54,8 @@ computeParentAdjacency(
 \item{adjBeta_method}{numeric The method to use for computing the building the adjacency_method matrix when using the "beta" build}
 
 \item{config}{a configuration list that passes parameters to the function}
+
+\item{compress}{logical. If TRUE, use compression when saving the checkpoint files.  Defaults to TRUE.}
 
 \item{...}{additional arguments to be passed to \code{\link{ped2com}}}
 }

@@ -18,6 +18,7 @@
   lens,
   save_rate_parlist,
   config,
+  compress = config$compress,
   ...
 )
 }
@@ -47,6 +48,8 @@
 \item{save_rate_parlist}{numeric. The rate at which to save the intermediate results by parent list. If NULL, defaults to save_rate*1000}
 
 \item{config}{a configuration list that passes parameters to the function}
+
+\item{compress}{logical. If TRUE, use compression when saving the checkpoint files.  Defaults to TRUE.}
 
 \item{...}{additional arguments to be passed to \code{\link{ped2com}}}
 }

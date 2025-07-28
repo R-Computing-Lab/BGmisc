@@ -24,6 +24,7 @@ ped2com(
   update_rate = 100,
   save_path = "checkpoint/",
   adjBeta_method = NULL,
+  compress = TRUE,
   ...
 )
 }
@@ -67,6 +68,8 @@ ped2com(
 \item{save_path}{character. The path to save the checkpoint files}
 
 \item{adjBeta_method}{numeric The method to use for computing the building the adjacency_method matrix when using the "beta" build}
+
+\item{compress}{logical. If TRUE, use compression when saving the checkpoint files.  Defaults to TRUE.}
 
 \item{...}{additional arguments to be passed to \code{\link{ped2com}}}
 }
