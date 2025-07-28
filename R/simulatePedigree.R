@@ -201,7 +201,7 @@ buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose = FALSE, mar
       SingleF <- sum(df_Ngen$sex == code_female & is.na(df_Ngen$spID))
       CoupleF <- N_LinkedFemale - SingleF
       SingleM <- sum(df_Ngen$sex == code_male & is.na(df_Ngen$spID))
-      CoupleM <- N_LinkedMale - SingleM
+      #     CoupleM <- N_LinkedMale - SingleM
 
       df_Fam[df_Fam$gen == i, ] <- markPotentialChildren(
         df_Ngen = df_Ngen,
@@ -231,7 +231,7 @@ buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose = FALSE, mar
           break
         } else {
           # check if the id is used and if the member has married
-          if (!(df_Ngen$id[k] %in% usedParentIds) & !is.na(df_Ngen$spID[k])) {
+          if (!(df_Ngen$id[k] %in% usedParentIds) && !is.na(df_Ngen$spID[k])) {
             df_Ngen$ifparent[k] <- TRUE
             df_Ngen$ifparent[df_Ngen$spID == df_Ngen$id[k]] <- TRUE
             usedParentIds <- c(usedParentIds, df_Ngen$id[k], df_Ngen$spID[k])
