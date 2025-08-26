@@ -171,6 +171,34 @@ current version.</p></dd>
 <li><p>sex: Biological sex of the individual. F - female; M - male.</p></li>
 </ul></div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">df_ped</span> <span class="op">&lt;-</span> <span class="fu">simulatePedigree</span><span class="op">(</span></span></span>
+<span class="r-in"><span> kpc <span class="op">=</span> <span class="fl">4</span>,</span></span>
+<span class="r-in"><span>Ngen <span class="op">=</span> <span class="fl">4</span>,</span></span>
+<span class="r-in"><span>sexR <span class="op">=</span> <span class="fl">.5</span>,</span></span>
+<span class="r-in"><span> marR <span class="op">=</span> <span class="fl">.7</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">df_ped</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      fam                  ID              gen            dadID       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Length:57          Min.   : 10011   Min.   :1.000   Min.   : 10012  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Class :character   1st Qu.: 10036   1st Qu.:3.000   1st Qu.: 10024  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Mode  :character   Median :100312   Median :3.000   Median : 10037  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                     Mean   : 59171   Mean   :3.298   Mean   : 42859  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                     3rd Qu.:100416   3rd Qu.:4.000   3rd Qu.:100311  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                     Max.   :100432   Max.   :4.000   Max.   :100320  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                      NA's   :13      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      momID             spID            sex           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Min.   : 10011   Min.   : 10011   Length:57         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1st Qu.: 10022   1st Qu.: 10025   Class :character  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Median : 10036   Median : 10036   Mode  :character  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Mean   : 42859   Mean   : 40124                     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  3rd Qu.:100316   3rd Qu.:100311                     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Max.   :100318   Max.   :100320                     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  NA's   :13       NA's   :33                         </span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 
