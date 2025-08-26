@@ -2,10 +2,7 @@
 % Please edit documentation in R/tweakPedigree.R
 \name{makeTwins}
 \alias{makeTwins}
-\title{makeTwins
-A function to impute twins in the simulated pedigree \code{data.frame}.
-Twins can be imputed by specifying their IDs or by specifying the generation the twin should be imputed.
-This is a supplementary function for \code{simulatePedigree}.}
+\title{makeTwins}
 \usage{
 makeTwins(
   ped,
@@ -33,7 +30,6 @@ makeTwins(
 Returns a \code{data.frame} with MZ twins information added as a new column.
 }
 \description{
-makeTwins
 A function to impute twins in the simulated pedigree \code{data.frame}.
 Twins can be imputed by specifying their IDs or by specifying the generation the twin should be imputed.
 This is a supplementary function for \code{simulatePedigree}.

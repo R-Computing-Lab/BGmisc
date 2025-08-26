@@ -93,3 +93,13 @@ This function simulates "balanced" pedigrees based on a group of parameters:
 3) p - Proportion of males in offspring;
 4) r - Mating rate.
 }
+\examples{
+set.seed(5)
+df_ped <- simulatePedigree(
+ kpc = 4,
+Ngen = 4,
+sexR = .5,
+ marR = .7
+)
+summary(df_ped)
+}

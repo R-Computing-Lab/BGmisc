@@ -381,7 +381,7 @@ buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose = FALSE, mar
 #' @return A \code{data.frame} with each row representing a simulated individual. The columns are as follows:
 #' \itemize{
 #'   \item{fam: The family id of each simulated individual. It is 'fam1' in a single simulated pedigree.}
-#'   \item{ID: The unique personal ID of each simulated individual. The first digit is the fam id; the fourth digit is the generation the individual is in; the following digits represent the order of the individual within his/her pedigree. For example, 100411 suggests this individual has a family id of 1, is in the 4th generation, and is the 11th individual in the 4th generation.}
+#'   \item{ID: The unique personal ID of each simulated individual. The first digit is the fam id; the fourth digit is the generation the individual is in; the following digits represent the order of the individual within their  pedigree. For example, 100411 suggests this individual has a family id of 1, is in the 4th generation, and is the 11th individual in the 4th generation.}
 #'   \item{gen: The generation the simulated individual is in.}
 #'   \item{dadID: Personal ID of the individual's father.}
 #'   \item{momID: Personal ID of the individual's mother.}
@@ -389,6 +389,15 @@ buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose = FALSE, mar
 #'   \item{sex: Biological sex of the individual. F - female; M - male.}
 #' }
 #' @export
+#' @examples
+#' set.seed(5)
+#' df_ped <- simulatePedigree(
+#'  kpc = 4,
+#' Ngen = 4,
+#' sexR = .5,
+#'  marR = .7
+#' )
+#' summary(df_ped)
 
 simulatePedigree <- function(kpc = 3,
                              Ngen = 4,
