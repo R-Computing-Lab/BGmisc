@@ -17,7 +17,7 @@ This function simulates "balanced" pedigrees based on a group of parameters:
 
     <a class="navbar-brand me-2" href="../index.html">BGmisc</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -163,7 +163,7 @@ current version.</p></dd>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>A <code>data.frame</code> with each row representing a simulated individual. The columns are as follows:</p><ul><li><p>fam: The family id of each simulated individual. It is 'fam1' in a single simulated pedigree.</p></li>
-<li><p>ID: The unique personal ID of each simulated individual. The first digit is the fam id; the fourth digit is the generation the individual is in; the following digits represent the order of the individual within his/her pedigree. For example, 100411 suggests this individual has a family id of 1, is in the 4th generation, and is the 11th individual in the 4th generation.</p></li>
+<li><p>ID: The unique personal ID of each simulated individual. The first digit is the fam id; the fourth digit is the generation the individual is in; the following digits represent the order of the individual within their  pedigree. For example, 100411 suggests this individual has a family id of 1, is in the 4th generation, and is the 11th individual in the 4th generation.</p></li>
 <li><p>gen: The generation the simulated individual is in.</p></li>
 <li><p>dadID: Personal ID of the individual's father.</p></li>
 <li><p>momID: Personal ID of the individual's mother.</p></li>
@@ -175,10 +175,10 @@ current version.</p></dd>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">df_ped</span> <span class="op">&lt;-</span> <span class="fu">simulatePedigree</span><span class="op">(</span></span></span>
-<span class="r-in"><span> kpc <span class="op">=</span> <span class="fl">4</span>,</span></span>
-<span class="r-in"><span>Ngen <span class="op">=</span> <span class="fl">4</span>,</span></span>
-<span class="r-in"><span>sexR <span class="op">=</span> <span class="fl">.5</span>,</span></span>
-<span class="r-in"><span> marR <span class="op">=</span> <span class="fl">.7</span></span></span>
+<span class="r-in"><span>  kpc <span class="op">=</span> <span class="fl">4</span>,</span></span>
+<span class="r-in"><span>  Ngen <span class="op">=</span> <span class="fl">4</span>,</span></span>
+<span class="r-in"><span>  sexR <span class="op">=</span> <span class="fl">.5</span>,</span></span>
+<span class="r-in"><span>  marR <span class="op">=</span> <span class="fl">.7</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">df_ped</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      fam                  ID              gen            dadID       </span>
