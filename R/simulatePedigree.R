@@ -392,13 +392,12 @@ buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose = FALSE, mar
 #' @examples
 #' set.seed(5)
 #' df_ped <- simulatePedigree(
-#'  kpc = 4,
-#' Ngen = 4,
-#' sexR = .5,
-#'  marR = .7
+#'   kpc = 4,
+#'   Ngen = 4,
+#'   sexR = .5,
+#'   marR = .7
 #' )
 #' summary(df_ped)
-
 simulatePedigree <- function(kpc = 3,
                              Ngen = 4,
                              sexR = .5,
