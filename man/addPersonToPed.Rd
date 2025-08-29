@@ -2,8 +2,7 @@
 % Please edit documentation in R/tweakPedigree.R
 \name{addPersonToPed}
 \alias{addPersonToPed}
-\title{addPersonToTree
-A function to add a new person to an existing pedigree \code{data.frame}.}
+\title{addPersonToPed}
 \usage{
 addPersonToPed(
   ped,
@@ -57,6 +56,5 @@ if a person with the same
 A \code{data.frame} with the new person added to the existing pedigree.
 }
 \description{
-addPersonToTree
 A function to add a new person to an existing pedigree \code{data.frame}.
 }

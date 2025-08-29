@@ -1,6 +1,7 @@
-# BGmisc (development version)
+# BGmisc 1.5.1
 * partially refactored summarizePedigree to be more modular
 * added compression control to ped2com
+
 
 # BGmisc 1.5.0
 ## CRAN submission

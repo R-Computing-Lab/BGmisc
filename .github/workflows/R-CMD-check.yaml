@@ -42,7 +42,15 @@ jobs:
           r-version: ${{ matrix.config.r }}
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
-
+      - name: Install gettext on macOS (for libintl)
+        if: runner.os == 'macOS'
+        run: |
+          brew update
+          brew install gettext pkg-config
+          echo "CPPFLAGS=-I$(brew --prefix gettext)/include" >> $GITHUB_ENV
+          echo "LDFLAGS=-L$(brew --prefix gettext)/lib" >> $GITHUB_ENV
+          echo "PKG_CONFIG_PATH=$(brew --prefix gettext)/lib/pkgconfig" >> $GITHUB_ENV
+          echo "$(brew --prefix gettext)/bin" >> $GITHUB_PATH
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: any::rcmdcheck

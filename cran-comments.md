@@ -1,9 +1,7 @@
 
 # Description
 
-This update includes minor enhancements.
-
-I am also moving the ASOIAF dataset from BGmisc to ggpedigree package. I maintain both packages. As promised, now that the ggpedigree package update is on CRAN, I am uploading the new version of BGmisc that does not include the dataset. 
+This update includes minor enhancements, including a few refactors, copy editing etc.
 
 # Test Environments
 
@@ -20,8 +18,8 @@ I am also moving the ASOIAF dataset from BGmisc to ggpedigree package. I maintai
 ## R CMD check results
 
 
-── R CMD check results ──────────────────── BGmisc 1.5.0 ────
-Duration: 1m 36.6s
+── R CMD check results ──────────────────────────────────────────── BGmisc 1.5.1─
+Duration: 1m 18.6s
 
 0 errors ✔ | 0 warnings ✔ | 0 notes ✔
 

@@ -1,5 +1,6 @@
-#' makeTwins
-#' A function to impute twins in the simulated pedigree \code{data.frame}.
+#' @title makeTwins
+#'
+#' @description A function to impute twins in the simulated pedigree \code{data.frame}.
 #' Twins can be imputed by specifying their IDs or by specifying the generation the twin should be imputed.
 #' This is a supplementary function for \code{simulatePedigree}.
 #' @param ped A \code{data.frame} in the same format as the output of \code{simulatePedigree}.
@@ -127,8 +128,8 @@ makeTwins <- function(ped, ID_twin1 = NA_integer_,
 }
 
 
-#' makeInbreeding
-#' A function to create inbred mates in the simulated pedigree \code{data.frame}.
+#' @title makeInbreeding
+#' @description A function to create inbred mates in the simulated pedigree \code{data.frame}.
 #' Inbred mates can be created by specifying their IDs or the generation the inbred mate should be created.
 #' When specifying the generation, inbreeding between siblings or 1st cousin needs to be specified.
 #' This is a supplementary function for \code{simulatePedigree}.
@@ -143,7 +144,6 @@ makeTwins <- function(ped, ID_twin1 = NA_integer_,
 #' This function creates inbred mates in the simulated pedigree \code{data.frame}. This function's purpose is to evaluate the effect of inbreeding on model fitting and parameter estimation. In case it needs to be said, we do not condone inbreeding in real life. But we recognize that it is a common practice in some fields to create inbred strains for research purposes.
 #' @export
 
-# A function to create inbred mates in the simulated pedigree.
 
 makeInbreeding <- function(ped,
                            ID_mate1 = NA_integer_,
@@ -161,7 +161,7 @@ makeInbreeding <- function(ped,
   )) {
     ped <- standardizeColnames(ped, verbose = verbose)
     if (verbose == TRUE) {
-      cat("The input pedigree is not in the same format as the output of simulatePedigree\n")
+      message("The input pedigree is not in the same format as the output of simulatePedigree\n")
     }
   }
   # check if the type of inbreeding is valid
@@ -255,8 +255,8 @@ makeInbreeding <- function(ped,
   return(ped)
 }
 
-#' dropLink
-#' A function to drop a person from his/her parents in the simulated pedigree \code{data.frame}.
+#' @title dropLink
+#' @description A function to drop a person from his/her parents in the simulated pedigree \code{data.frame}.
 #' The person can be dropped by specifying his/her ID or by specifying the generation which the randomly to-be-dropped person is in.
 #' The function can separate one pedigree into two pedigrees. Separating into small pieces should be done by running the function multiple times.
 #' This is a supplementary function for \code{simulatePedigree}.
@@ -291,8 +291,8 @@ dropLink <- function(ped,
   return(ped)
 }
 
-#' addPersonToTree
-#' A function to add a new person to an existing pedigree \code{data.frame}.
+#' @title addPersonToPed
+#' @description A function to add a new person to an existing pedigree \code{data.frame}.
 #' @param ped A \code{data.frame} representing the existing pedigree.
 #' @param name Optional. A character string representing the name of the new
 #' person. If not provided, the name will be set to \code{NA}.
@@ -319,6 +319,7 @@ dropLink <- function(ped,
 #' @return A \code{data.frame} with the new person added to the existing pedigree.
 #'
 #' @export
+#'
 addPersonToPed <- function(ped, name = NULL,
                            sex = NULL, momID = NA,
                            dadID = NA, twinID = NULL,
