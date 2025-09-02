@@ -17,8 +17,8 @@
 #'
 #' @details This function uses the terms 'male' and 'female' in a biological context, referring to chromosomal and other biologically-based characteristics necessary for constructing genetic pedigrees. The biological aspect of sex used in genetic analysis (genotype) is distinct from the broader, richer concept of gender identity (phenotype).
 #'
-#' We recognize the importance of using language and methodologies that affirm and respect the full spectrum of gender identities.  The developers of this
-#' package express unequivocal support for folx in the transgender
+#' We recognize the importance of using language and methodologies that affirm and respect the full spectrum of gender identities.  
+#' The developers of this package express unequivocal support for folx in the transgender
 #' and LGBTQ+ communities.
 #'
 #' @param ped A dataframe representing the pedigree data with a 'sex' column.
@@ -50,14 +50,14 @@ checkSex <- function(ped, code_male = NULL, code_female = NULL, verbose = FALSE,
 
 
   if (verbose == TRUE) {
-    cat("Step 1: Checking how many sexes/genders...\n")
+    message("Step 1: Checking how many sexes/genders...\n")
   }
 
   # Check unique values in 'sex'
   validation_results$sex_unique <- unique(ped$sex)
   validation_results$sex_length <- length(unique(ped$sex))
   if (verbose == TRUE) {
-    cat(validation_results$sex_length, " unique sex codes found: ", paste(validation_results$sex_unique, collapse = ", "), "\n")
+    message(validation_results$sex_length, " unique sex codes found: ", paste(validation_results$sex_unique, collapse = ", "), "\n")
   }
 
 
@@ -84,7 +84,7 @@ checkSex <- function(ped, code_male = NULL, code_female = NULL, verbose = FALSE,
     return(validation_results)
   } else {
     if (verbose == TRUE) {
-      cat("Step 2: Attempting to repair sex coding...\n")
+      message("Step 2: Attempting to repair sex coding...\n")
     }
     # Initialize a list to track changes made during repair
     changes <- list()

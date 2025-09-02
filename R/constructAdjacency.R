@@ -1,6 +1,7 @@
 #' Construct Adjacency Matrix for Parent-Child Relationships
 #' @inheritParams ped2com
 #' @inheritParams computeParentAdjacency
+#' @keywords internal
 
 .adjLoop <- function(ped, component, saveable, resume,
                      save_path, verbose, lastComputed,
@@ -208,10 +209,11 @@
 
 #' Construct Adjacency Matrix for Parent-Child Relationships Using Beta Method
 #' This function constructs an adjacency matrix for parent-child relationships
-#' using a beta method. It identifies parent-child pairs based on the
+#' using a method in beta testing. It identifies parent-child pairs based on the
 #' specified component of relatedness.
 #' @inheritParams ped2com
 #' @inheritParams .adjLoop
+#'
 .adjBeta <- function(ped, component,
                      adjBeta_method = 5,
                      parList = NULL,
@@ -280,7 +282,7 @@
       }
     }
     # iss <- unlist(iss_list, use.names = FALSE)
-    #  jss <- unlist(jss_list, use.names = FALSE)
+    # jss <- unlist(jss_list, use.names = FALSE)
 
     list_of_adjacency <- list(
       iss = unlist(iss_list, use.names = FALSE),
@@ -426,6 +428,7 @@
 #' @param update_rate the rate at which to update the progress
 #'
 #' @export
+
 computeParentAdjacency <- function(ped, component,
                                    adjacency_method = "direct",
                                    saveable, resume,
@@ -506,7 +509,7 @@ computeParentAdjacency <- function(ped, component,
           compress = compress,
           ...
         )
-      },
+      }, # beta testing versions
       "beta" = {
         .adjBeta(
           ped = ped,
@@ -539,12 +542,11 @@ computeParentAdjacency <- function(ped, component,
   return(list_of_adjacency)
 }
 
-
 #' Determine isChild Status, isChild is the 'S' matrix from RAM
 #' @param isChild_method method to determine isChild status
 #' @param ped pedigree data frame
 #' @return isChild 'S' matrix
-#'
+#' @keywords internal
 
 isChild <- function(isChild_method, ped) {
   if (isChild_method == "partialparent") {

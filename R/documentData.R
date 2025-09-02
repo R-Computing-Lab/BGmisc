@@ -1,6 +1,6 @@
 #' Artificial pedigree data on eight families with inbreeding
 #'
-#' A dataset created purely from imagination that includes several types of inbreeding.
+#' @description A dataset created purely from imagination that includes several types of inbreeding.
 #' Different kinds of inbreeding occur in each extended family.
 #'
 #' The types of inbreeding are as follows:
@@ -103,13 +103,11 @@ NULL
 #' @format A data frame (and ped object) with 36 rows and 10 variables
 NULL
 
-
 #' Royal pedigree data from 1992
 #'
 #' A dataset created by Denis Reid from the Royal Families of Europe.
 #'
 #' The variables are as follows:
-#' id,momID,dadID,name,sex,birth_date,death_date,attribute_title
 #' \itemize{
 #'   \item \code{id}:  Person identification variable
 #'   \item \code{momID}:  ID of the mother

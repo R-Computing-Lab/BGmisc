@@ -9,6 +9,7 @@
 #' @param verbose A logical indicating whether to print progress messages.
 #' @return A dataframe with standardized column names.
 #'
+#' @keywords internal
 standardizeColnames <- function(df, verbose = FALSE) {
   # Internal mapping of standardized names to possible variants
   mapping <- list(
