@@ -17,3 +17,4 @@ isChild 'S' matrix
 \description{
 Determine isChild Status, isChild is the 'S' matrix from RAM
 }
+\keyword{internal}

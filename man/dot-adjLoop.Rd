@@ -56,3 +56,4 @@
 \description{
 Construct Adjacency Matrix for Parent-Child Relationships
 }
+\keyword{internal}

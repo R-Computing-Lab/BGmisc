@@ -4,7 +4,7 @@
 \alias{.adjBeta}
 \title{Construct Adjacency Matrix for Parent-Child Relationships Using Beta Method
 This function constructs an adjacency matrix for parent-child relationships
-using a beta method. It identifies parent-child pairs based on the
+using a method in beta testing. It identifies parent-child pairs based on the
 specified component of relatedness.}
 \usage{
 .adjBeta(
@@ -62,6 +62,6 @@ specified component of relatedness.}
 \description{
 Construct Adjacency Matrix for Parent-Child Relationships Using Beta Method
 This function constructs an adjacency matrix for parent-child relationships
-using a beta method. It identifies parent-child pairs based on the
+using a method in beta testing. It identifies parent-child pairs based on the
 specified component of relatedness.
 }
