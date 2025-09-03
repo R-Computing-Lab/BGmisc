@@ -1,18 +1,55 @@
 #' Read a GEDCOM File
 #'
-#' This function reads a GEDCOM file and parses it into a structured data frame of individuals.
+#' This function ingests a GEDCOM genealogy file, identifies each individual described
+#' in the file, and parses their information into a structured data frame. It supports
+#' optional post-processing to enrich the raw data, such as inferring parental IDs,
+#' merging redundant name fields, and dropping uninformative columns.
 #'
-#' @param file_path The path to the GEDCOM file.
-#' @param add_parents A logical value indicating whether to add parents to the data frame.
-#' @param remove_empty_cols A logical value indicating whether to remove columns with all missing values.
-#' @param combine_cols A logical value indicating whether to combine columns with duplicate values.
-#' @param verbose A logical value indicating whether to print messages.
-#' @param skinny A logical value indicating whether to return a skinny data frame.
-#' @param update_rate numeric. The rate at which to print progress
-#' @param post_process A logical value indicating whether to post-process the data frame.
+#' @details
+#' The parser operates line-by-line and is tuned to the common GEDCOM 5.5/5.5.1 structure:
+#' This parser is line-oriented. Individuals are defined by blocks that start with a line
+#' containing "@ INDI". Within each block, tags are parsed using simple pattern matches:
+#' - Relationship tags FAMC (as child) and FAMS (as spouse) are collected and later
+#' mapped to parent IDs if add_parents = TRUE.
+#' - Individuals are defined in blocks beginning with lines containing @ INDI.
+#' Each block is passed to an internal parser that extracts identifiers, names, life events,
+#' attributes, and family relationships.
+#'
+#' - Names are parsed from the GEDCOM NAME tag, which usually encodes the given name
+#' and surname with slashes (e.g., "NAME John /Smith/"). The parser extracts the
+#' given name, surname, and constructs a cleaned full name. Additional name components
+#' (prefix, suffix, nickname, married surname) are parsed if present.
+#'
+#' - Life events are recognized by BIRT and DEAT tags. Event details are assumed
+#' to occur at fixed offsets in the block (for example, a BIRT tag is followed by a
+#' DATE, then a PLAC, and optionally geographic coordinates). Missing elements
+#' leave the corresponding field as NA.
+#' for birth, expected lines are DATE (i+1), PLAC (i+2), LATI (i+4), LONG (i+5);
+#' for death, expected lines are DATE (i+1), PLAC (i+2), CAUS (i+3), LATI (i+4), LONG (i+5).
+#'
+#' - Attributes such as occupation, education, and religion are parsed directly
+#' from GEDCOM tags (OCCU, EDUC, RELI, etc.). Each attribute is stored in a
+#' dedicated column prefixed with attribute_.
+#'
+#' - Relationships are parsed from FAMC (family as child) and FAMS (family as spouse).
+#' These identifiers are preserved in the raw output and can optionally be mapped to
+#' explicit parent IDs via processParents().
+#'
+#' - Post-processing can be applied by setting post_process = TRUE. This applies
+#' several clean-up steps: adding inferred parents, merging duplicate name fields,
+#' and slimming the data frame by removing all-empty columns or relationship tags.
+#'
+#' @param file_path Character. Path to the GEDCOM file.
+#' @param verbose Logical. If TRUE, print progress messages.
+#' @param add_parents Logical. If TRUE, add momID and dadID via FAMC/FAMS mapping.
+#' @param remove_empty_cols Logical. If TRUE, drop columns that are entirely NA.
+#' @param combine_cols Logical. If TRUE, merge duplicate name columns (e.g., given/surn pieces).
+#' @param skinny Logical. If TRUE, return a slimmer data frame (drops FAMC, FAMS and all-empty cols).
+#' @param update_rate Numeric. Intended rate at which to print progress
+#' @param post_process Logical. If TRUE, apply post-processing (parents, combine, drop empty, skinny).
 #' @param ... Additional arguments to be passed to the function.
 #' @return A data frame containing information about individuals, with the following potential columns:
-#' - `id`: ID of the individual
+#' - `personID`: ID of the individual parsed from the @ INDI line
 #' - `momID`: ID of the individual's mother
 #' - `dadID`: ID of the individual's father
 #' - `sex`: Sex of the individual
@@ -48,6 +85,7 @@
 #' - `FAMC`: ID(s) of the family where the individual is a child
 #' - `FAMS`: ID(s) of the family where the individual is a spouse
 #' @export
+#'
 readGedcom <- function(file_path,
                        verbose = FALSE,
                        add_parents = TRUE,
@@ -131,12 +169,17 @@ readGedcom <- function(file_path,
 # --- SUBFUNCTIONS ---
 #' Split GEDCOM Lines into Individual Blocks
 #'
+#' @description
 #' This function partitions the GEDCOM file (as a vector of lines) into a list of blocks,
 #' where each block corresponds to a single individual starting with an "@ INDI" line.
+
+#' @details Each block runs until the next "@ INDI" line or end-of-file.
+#' Blocks are raw subsets of the file; no parsing occurs here.
 #'
 #' @param lines A character vector of lines from the GEDCOM file.
 #' @param verbose Logical indicating whether to output progress messages.
 #' @return A list of character vectors, each representing one individual.
+#' @keywords internal
 splitIndividuals <- function(lines, verbose = FALSE) {
   indi_idx <- grep("@ INDI", lines)
   if (length(indi_idx) == 0) {
@@ -156,7 +199,7 @@ splitIndividuals <- function(lines, verbose = FALSE) {
 
 #' Initialize an Empty Individual Record
 #'
-#' Creates a named list with all GEDCOM fields set to NA.
+#' @description Creates a named list with all GEDCOM initialized to NA_character_.
 #'
 #' @param all_var_names A character vector of variable names.
 #' @return A named list representing an empty individual record.

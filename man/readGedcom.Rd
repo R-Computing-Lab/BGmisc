@@ -43,27 +43,27 @@ readgedcom(
 )
 }
 \arguments{
-\item{file_path}{The path to the GEDCOM file.}
+\item{file_path}{Character. Path to the GEDCOM file.}
 
-\item{verbose}{A logical value indicating whether to print messages.}
+\item{verbose}{Logical. If TRUE, print progress messages.}
 
-\item{add_parents}{A logical value indicating whether to add parents to the data frame.}
+\item{add_parents}{Logical. If TRUE, add momID and dadID via FAMC/FAMS mapping.}
 
-\item{remove_empty_cols}{A logical value indicating whether to remove columns with all missing values.}
+\item{remove_empty_cols}{Logical. If TRUE, drop columns that are entirely NA.}
 
-\item{combine_cols}{A logical value indicating whether to combine columns with duplicate values.}
+\item{combine_cols}{Logical. If TRUE, merge duplicate name columns (e.g., given/surn pieces).}
 
-\item{skinny}{A logical value indicating whether to return a skinny data frame.}
+\item{skinny}{Logical. If TRUE, return a slimmer data frame (drops FAMC, FAMS and all-empty cols).}
 
-\item{update_rate}{numeric. The rate at which to print progress}
+\item{update_rate}{Numeric. Intended rate at which to print progress}
 
-\item{post_process}{A logical value indicating whether to post-process the data frame.}
+\item{post_process}{Logical. If TRUE, apply post-processing (parents, combine, drop empty, skinny).}
 
 \item{...}{Additional arguments to be passed to the function.}
 }
 \value{
 A data frame containing information about individuals, with the following potential columns:
-- `id`: ID of the individual
+- `personID`: ID of the individual parsed from the @ INDI line
 - `momID`: ID of the individual's mother
 - `dadID`: ID of the individual's father
 - `sex`: Sex of the individual
@@ -100,5 +100,42 @@ A data frame containing information about individuals, with the following potent
 - `FAMS`: ID(s) of the family where the individual is a spouse
 }
 \description{
-This function reads a GEDCOM file and parses it into a structured data frame of individuals.
+This function ingests a GEDCOM genealogy file, identifies each individual described
+in the file, and parses their information into a structured data frame. It supports
+optional post-processing to enrich the raw data, such as inferring parental IDs,
+merging redundant name fields, and dropping uninformative columns.
+}
+\details{
+The parser operates line-by-line and is tuned to the common GEDCOM 5.5/5.5.1 structure:
+This parser is line-oriented. Individuals are defined by blocks that start with a line
+containing "@ INDI". Within each block, tags are parsed using simple pattern matches:
+- Relationship tags FAMC (as child) and FAMS (as spouse) are collected and later
+mapped to parent IDs if add_parents = TRUE.
+- Individuals are defined in blocks beginning with lines containing @ INDI.
+Each block is passed to an internal parser that extracts identifiers, names, life events,
+attributes, and family relationships.
+
+- Names are parsed from the GEDCOM NAME tag, which usually encodes the given name
+and surname with slashes (e.g., "NAME John /Smith/"). The parser extracts the
+given name, surname, and constructs a cleaned full name. Additional name components
+(prefix, suffix, nickname, married surname) are parsed if present.
+
+- Life events are recognized by BIRT and DEAT tags. Event details are assumed
+to occur at fixed offsets in the block (for example, a BIRT tag is followed by a
+DATE, then a PLAC, and optionally geographic coordinates). Missing elements
+leave the corresponding field as NA.
+for birth, expected lines are DATE (i+1), PLAC (i+2), LATI (i+4), LONG (i+5);
+for death, expected lines are DATE (i+1), PLAC (i+2), CAUS (i+3), LATI (i+4), LONG (i+5).
+
+- Attributes such as occupation, education, and religion are parsed directly
+from GEDCOM tags (OCCU, EDUC, RELI, etc.). Each attribute is stored in a
+dedicated column prefixed with attribute_.
+
+- Relationships are parsed from FAMC (family as child) and FAMS (family as spouse).
+These identifiers are preserved in the raw output and can optionally be mapped to
+explicit parent IDs via processParents().
+
+- Post-processing can be applied by setting post_process = TRUE. This applies
+several clean-up steps: adding inferred parents, merging duplicate name fields,
+and slimming the data frame by removing all-empty columns or relationship tags.
 }

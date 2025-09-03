@@ -7,7 +7,7 @@
 collapseNames(verbose, df_temp)
 }
 \arguments{
-\item{verbose}{A logical value indicating whether to print messages.}
+\item{verbose}{Logical. If TRUE, print progress messages.}
 
 \item{df_temp}{A data frame containing the columns to be combined.}
 }
