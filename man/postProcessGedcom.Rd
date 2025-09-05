@@ -31,5 +31,5 @@ The post-processed data frame.
 }
 \description{
 This function optionally adds parent information, combines duplicate columns,
-and removes empty columns from the GEDCOM data frame.
+and removes empty columns from the GEDCOM data frame. It is called by \code{readGedcom()} if \code{post_process = TRUE}.
 }
