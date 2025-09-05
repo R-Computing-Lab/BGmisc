@@ -24,4 +24,5 @@ A list with the updated record (\code{record}) and a logical flag (\code{matched
 }
 \description{
 Iterates over a list of tag mappings and, if a tag matches the line, updates the record.
+Stops after the first match.
 }

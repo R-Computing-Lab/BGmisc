@@ -15,5 +15,5 @@ collapseNames(verbose, df_temp)
 A data frame with the combined columns.
 }
 \description{
-This function combines the `name_given` and `name_given_pieces` columns in a data frame.
+This function combines the `name_given` and `name_given_pieces` columns in a data frame. If both columns have non-missing values that differ, a warning is issued and the original `name_given` is retained. If one column is missing, the other is used. The same logic applies to the `name_surn` and `name_surn_pieces` columns.
 }
