@@ -1,13 +1,13 @@
 #' Standardize Column Names in a Dataframe (Internal)
 #'
 #' This internal function standardizes the column names of a given dataframe.
-#' It utilizes regular expressions and the `tolower()` function to match column names
+#' It uses regular expressions and the `tolower()` function to match column names
 #' against a list of predefined standard names. The approach is case-insensitive and
 #' allows for flexible matching of column names.
 #'
 #' @param df A dataframe whose column names need to be standardized.
 #' @param verbose A logical indicating whether to print progress messages.
-#' @return A dataframe with standardized column names.
+#' @return A dataframe with standardized column names. 
 #'
 #' @keywords internal
 standardizeColnames <- function(df, verbose = FALSE) {
