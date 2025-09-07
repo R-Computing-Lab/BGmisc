@@ -16,6 +16,6 @@ A data frame with added momID and dad_ID columns.
 }
 \description{
 This function assigns mother and father IDs to individuals in the data frame
-based on the mapping of family IDs to parent IDs.
+based on the mapping of family IDs to parent IDs. It updates the data frame in place.
 }
 \keyword{internal}

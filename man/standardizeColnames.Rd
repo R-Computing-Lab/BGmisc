@@ -16,7 +16,7 @@ A dataframe with standardized column names.
 }
 \description{
 This internal function standardizes the column names of a given dataframe.
-It utilizes regular expressions and the `tolower()` function to match column names
+It uses regular expressions and the `tolower()` function to match column names
 against a list of predefined standard names. The approach is case-insensitive and
 allows for flexible matching of column names.
 }

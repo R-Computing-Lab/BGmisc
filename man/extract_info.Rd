@@ -15,6 +15,7 @@ extract_info(line, type)
 A character string with the extracted information.
 }
 \description{
-This function extracts information from a line based on a specified type.
+Extracts the relevant information from a GEDCOM line based on the specified type.
+The function uses regular expressions to locate and return the desired data.
 }
 \keyword{internal}
