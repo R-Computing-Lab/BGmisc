@@ -42,7 +42,7 @@ test_that("Raykov method with known inputs matches expected values", {
 test_that("basic CI calculation without method", {
   tbl <- data.frame(rho = c(0.5, 0.7, 0.3), se = c(0.1, 0.2, 0.05))
   expect_warning(calculateCIs(tbl, rho_var = "rho", se_var = "se", method = "other"))
-  result <- calculateCIs(tbl, rho_var = "rho", se_var = "se", method = "other")
+  result <- suppressWarnings(calculateCIs(tbl, rho_var = "rho", se_var = "se", method = "other"))
   expect_true(all(c("rho_plusse", "rho_minusse") %in% colnames(result)))
   expect_false(any(c("rho_z", "rho_ztest", "rho_zp2tail") %in% colnames(result)))
   expect_equal(nrow(result), 3)
