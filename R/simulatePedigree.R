@@ -10,9 +10,18 @@ buildWithinGenerations <- function(sizeGens, marR, sexR, Ngen, verbose = FALSE,
                                    personID = "ID",
                                    momID = "momID",
                                    dadID = "dadID",
-                                   code_male = "M", code_female = "F") {
+                                   code_male = "M",
+                                   code_female = "F",
+                                   fam_shift = 1L
+                                   ) {
+
+    idx_width <- nchar(max(sizeGens))
+    gen_width <- max(2L, nchar(Ngen))
+    fam_shift <- 1L
+
   for (i in 1:Ngen) {
-    idGen <- as.numeric(paste(100, i, 1:sizeGens[i], sep = ""))
+   # idGen <- as.numeric(paste(100, i, 1:sizeGens[i], sep = ""))
+   idGen <- fam_shift * 10^(gen_width + idx_width) + i * 10^(idx_width) + (1:sizeGens[i])
     # idGen <- ifelse(i==1,
     #                 paste(i,"-",1:sizeGens[i]),
     #                 paste(i,"-",sizeGens[i-1]:sizeGens[i]))
@@ -375,6 +384,8 @@ buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose = FALSE, mar
 #' @param verbose logical  If TRUE, message progress through stages of algorithm
 #' @param code_male The value to use for males. Default is "M"
 #' @param code_female The value to use for females. Default is "F"
+#' @param fam_shift An integer to shift the person ID. Default is 1L.
+#'
 #' @param ... Additional arguments to be passed to other functions.
 #' @inheritParams ped2fam
 #' @param spouseID The name of the column that will contain the spouse ID in the output data frame. Default is "spID".
@@ -411,7 +422,8 @@ simulatePedigree <- function(kpc = 3,
                              dadID = "dadID",
                              spouseID = "spouseID",
                              code_male = "M",
-                             code_female = "F") {
+                             code_female = "F",
+                             fam_shift = 1L) {
   # SexRatio: ratio of male over female in the offspring setting; used in the between generation combinations
   # SexRatio <- sexR / (1 - sexR)
 
@@ -433,7 +445,8 @@ simulatePedigree <- function(kpc = 3,
     momID = momID,
     dadID = dadID,
     code_male = code_male,
-    code_female = code_female
+    code_female = code_female,
+    fam_shift = fam_shift
   )
   if (verbose == TRUE) {
     message(

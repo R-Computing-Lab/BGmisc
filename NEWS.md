@@ -1,4 +1,8 @@
+# BGmisc beta 1.5.2
+* More flexible ID generation for simulatePedigree
+
 # BGmisc 1.5.1
+## CRAN submission
 * partially refactored summarizePedigree to be more modular
 * added compression control to ped2com
 * Minor copy editing

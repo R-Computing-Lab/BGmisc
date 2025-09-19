@@ -14,7 +14,8 @@ buildWithinGenerations(
   momID = "momID",
   dadID = "dadID",
   code_male = "M",
-  code_female = "F"
+  code_female = "F",
+  fam_shift = 1L
 )
 }
 \arguments{
@@ -44,6 +45,8 @@ a fertilized couple. The last generation has no mated individuals.}
 \item{code_male}{The value to use for males. Default is "M"}
 
 \item{code_female}{The value to use for females. Default is "F"}
+
+\item{fam_shift}{An integer to shift the person ID. Default is 1L.}
 }
 \value{
 A data frame representing the simulated pedigree, including columns for family ID (`fam`),
