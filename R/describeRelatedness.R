@@ -1,89 +1,99 @@
 #' Describe Genetic Relatedness with Textual Labels
 #'
 #' @description
-#' This function takes a flat/vectorized relatedness matrix and generates textual
-#' descriptions of the genetic relationships based on additive relatedness coefficients
-#' and generation differences.
+#' This function takes a flat/vectorized relatedness matrix (as produced by
+#' \code{\link{com2links}}) and generates textual descriptions of the genetic
+#' relationships based on additive relatedness coefficients and generation differences.
 #'
 #' @param rel_df A data.frame with columns for pairwise relatedness information.
-#'   Required columns: ID1, ID2, addRel (additive relatedness coefficient).
-#'   Optional columns: gen1, gen2 (generation numbers), sex1, sex2 (biological sex).
+#'   Required columns: ID1, ID2 (or custom names via \code{ID1_col}/\code{ID2_col}).
+#'   Typically produced by \code{\link{com2links}}.
+#' @param ped Optional data.frame containing pedigree information. If provided, sex
+#'   and generation information will be automatically joined. Should contain columns
+#'   specified by \code{personID}, \code{sex_col}, and optionally \code{gen_col}.
+#' @param personID Character. Name of the column in \code{ped} containing person IDs.
+#'   Default is "personID".
+#' @param sex_col Character. Name of the column in \code{ped} containing sex information.
+#'   Default is "sex".
+#' @param gen_col Character. Name of the column in \code{ped} containing generation numbers.
+#'   If NULL (default), relationships will be described without generation information.
+#' @param ID1_col Character. Name of the column in \code{rel_df} for person 1 ID.
+#'   Default is "ID1".
+#' @param ID2_col Character. Name of the column in \code{rel_df} for person 2 ID.
+#'   Default is "ID2".
 #' @param add_col Character. Name of the column containing additive relatedness coefficients.
 #'   Default is "addRel".
-#' @param gen1_col Character. Name of the column containing generation for person 1.
-#'   Default is "gen1".
-#' @param gen2_col Character. Name of the column containing generation for person 2.
-#'   Default is "gen2".
-#' @param sex1_col Character. Name of the column containing sex for person 1.
-#'   Default is "sex1".
-#' @param sex2_col Character. Name of the column containing sex for person 2.
-#'   Default is "sex2".
-#' @param code_male The value used to denote males. Default is 1.
-#' @param code_female The value used to denote females. Default is 0.
-#' @param use_sex Logical. If TRUE and sex columns are available, generate sex-specific
+#' @param code_male The value used to denote males in the sex column. Default is 1.
+#' @param code_female The value used to denote females in the sex column. Default is 0.
+#' @param use_sex Logical. If TRUE and sex information is available, generate sex-specific
 #'   relationship labels (e.g., "mother-child" vs "father-child"). Default is FALSE.
 #' @param return_list Logical. If TRUE, return a list with both the original data and
 #'   the relationship descriptions. If FALSE, return a data.frame with an added
 #'   "relationship" column. Default is FALSE.
 #'
 #' @details
-#' The function uses the additive relatedness coefficient (`addRel`) and generation
+#' The function uses the additive relatedness coefficient (\code{addRel}) and generation
 #' difference to infer relationship types. Common relationships and their expected
 #' values are:
 #' \itemize{
-#'   \item addRel = 1.0, gen1 == gen2: "self" (same individual)
-#'   \item addRel = 0.5, gen1 == gen2: "full siblings"
-#'   \item addRel = 0.5, |gen1 - gen2| == 1: "parent-child"
-#'   \item addRel = 0.25, gen1 == gen2: "half siblings"
-#'   \item addRel = 0.25, |gen1 - gen2| == 1: "aunt/uncle-niece/nephew"
-#'   \item addRel = 0.25, |gen1 - gen2| == 2: "grandparent-grandchild"
-#'   \item addRel = 0.125, gen1 == gen2: "first cousins"
-#'   \item addRel = 0.0625, gen1 == gen2: "second cousins"
+#'   \item addRel = 1.0, same generation: "self" (same individual)
+#'   \item addRel = 0.5, same generation: "full siblings"
+#'   \item addRel = 0.5, 1 generation apart: "parent-child"
+#'   \item addRel = 0.25, same generation: "half siblings"
+#'   \item addRel = 0.25, 1 generation apart: "aunt/uncle-niece/nephew"
+#'   \item addRel = 0.25, 2 generations apart: "grandparent-grandchild"
+#'   \item addRel = 0.125, same generation: "first cousins"
+#'   \item addRel = 0.0625, same generation: "second cousins"
 #'   \item And relationships with various degrees of removal for cousins
 #' }
 #'
-#' When `use_sex = TRUE` and sex information is available, parent-child relationships
-#' can be further specified as "mother-child", "father-child", "mother-son",
-#' "mother-daughter", "father-son", or "father-daughter".
+#' When \code{use_sex = TRUE} and sex information is available (either from \code{ped}
+#' or already present in \code{rel_df}), parent-child relationships can be further
+#' specified as "mother-child", "father-child", "mother-son", "mother-daughter",
+#' "father-son", or "father-daughter". Similar sex-specific labels are provided for
+#' grandparent and avuncular relationships.
 #'
 #' @return
-#' If `return_list = FALSE` (default), returns a data.frame identical to `rel_df`
+#' If \code{return_list = FALSE} (default), returns a data.frame identical to \code{rel_df}
 #' with an additional "relationship" column containing textual descriptions.
-#' If `return_list = TRUE`, returns a list with two elements:
+#' If \code{return_list = TRUE}, returns a list with two elements:
 #' \itemize{
-#'   \item `data`: The original data.frame with the relationship column added
-#'   \item `relationships`: A character vector of relationship descriptions
+#'   \item \code{data}: The original data.frame with the relationship column added
+#'   \item \code{relationships}: A character vector of relationship descriptions
 #' }
 #'
 #' @examples
 #' \dontrun{
-#' # Create example relatedness data
-#' rel_data <- data.frame(
-#'   ID1 = c(1, 1, 1, 2),
-#'   ID2 = c(2, 3, 4, 3),
-#'   addRel = c(0.5, 0.25, 0.125, 0.5),
-#'   gen1 = c(1, 1, 1, 2),
-#'   gen2 = c(2, 3, 1, 2)
-#' )
-#'
-#' # Get relationship descriptions
-#' described <- describeRelatedness(rel_data)
-#' print(described)
-#'
-#' # With sex-specific labels
-#' rel_data$sex1 <- c(0, 0, 1, 1)
-#' rel_data$sex2 <- c(1, 0, 0, 1)
-#' described_sex <- describeRelatedness(rel_data, use_sex = TRUE)
-#' print(described_sex)
+#' # Basic usage with com2links output
+#' library(BGmisc)
+#' data(potter)
+#' 
+#' # Compute additive relatedness matrix
+#' add_matrix <- ped2add(potter, sparse = FALSE)
+#' 
+#' # Convert to pairwise format
+#' rel_pairs <- com2links(ad_ped_matrix = add_matrix, writetodisk = FALSE)
+#' 
+#' # Describe relationships (without generation info)
+#' described <- describeRelatedness(rel_pairs)
+#' head(described)
+#' 
+#' # With pedigree for sex-specific labels
+#' # (assumes potter has a 'gen' column for generation)
+#' described_sex <- describeRelatedness(rel_pairs, ped = potter, 
+#'                                      use_sex = TRUE, gen_col = "gen")
+#' head(described_sex)
 #' }
 #'
 #' @export
 describeRelatedness <- function(rel_df,
+                                ped = NULL,
+                                personID = "personID",
+                                sex_col = "sex",
+                                gen_col = NULL,
+                                ID1_col = "ID1",
+                                ID2_col = "ID2",
                                 add_col = "addRel",
-                                gen1_col = "gen1",
-                                gen2_col = "gen2",
-                                sex1_col = "sex1",
-                                sex2_col = "sex2",
                                 code_male = 1,
                                 code_female = 0,
                                 use_sex = FALSE,
@@ -93,19 +103,76 @@ describeRelatedness <- function(rel_df,
     stop("rel_df must be a data.frame")
   }
 
-  if (!"ID1" %in% names(rel_df) || !"ID2" %in% names(rel_df)) {
-    stop("rel_df must contain 'ID1' and 'ID2' columns")
+  if (!ID1_col %in% names(rel_df) || !ID2_col %in% names(rel_df)) {
+    stop(paste0("rel_df must contain '", ID1_col, "' and '", ID2_col, "' columns"))
   }
 
   if (!add_col %in% names(rel_df)) {
     stop(paste0("Column '", add_col, "' not found in rel_df"))
   }
 
-  # Check for generation columns
-  has_gen <- gen1_col %in% names(rel_df) && gen2_col %in% names(rel_df)
+  # If pedigree is provided, join sex and generation information
+  if (!is.null(ped)) {
+    if (!is.data.frame(ped)) {
+      stop("ped must be a data.frame")
+    }
+    
+    if (!personID %in% names(ped)) {
+      stop(paste0("Column '", personID, "' not found in ped"))
+    }
+    
+    # Prepare pedigree data for joining
+    ped_for_join <- ped[, personID, drop = FALSE]
+    
+    # Add sex if available and requested
+    if (use_sex && sex_col %in% names(ped)) {
+      ped_for_join[[sex_col]] <- ped[[sex_col]]
+    } else if (use_sex && !sex_col %in% names(ped)) {
+      warning(paste0("use_sex is TRUE but '", sex_col, "' column not found in ped. Proceeding without sex-specific labels."))
+      use_sex <- FALSE
+    }
+    
+    # Add generation if available
+    if (!is.null(gen_col) && gen_col %in% names(ped)) {
+      ped_for_join[[gen_col]] <- ped[[gen_col]]
+    }
+    
+    # Join sex and generation info for ID1
+    names(ped_for_join)[1] <- ID1_col
+    if (use_sex && sex_col %in% names(ped_for_join)) {
+      names(ped_for_join)[names(ped_for_join) == sex_col] <- "sex1"
+    }
+    if (!is.null(gen_col) && gen_col %in% names(ped_for_join)) {
+      names(ped_for_join)[names(ped_for_join) == gen_col] <- "gen1"
+    }
+    
+    rel_df <- merge(rel_df, ped_for_join, by = ID1_col, all.x = TRUE, sort = FALSE)
+    
+    # Join sex and generation info for ID2
+    ped_for_join2 <- ped[, personID, drop = FALSE]
+    if (use_sex && sex_col %in% names(ped)) {
+      ped_for_join2[[sex_col]] <- ped[[sex_col]]
+    }
+    if (!is.null(gen_col) && gen_col %in% names(ped)) {
+      ped_for_join2[[gen_col]] <- ped[[gen_col]]
+    }
+    
+    names(ped_for_join2)[1] <- ID2_col
+    if (use_sex && sex_col %in% names(ped_for_join2)) {
+      names(ped_for_join2)[names(ped_for_join2) == sex_col] <- "sex2"
+    }
+    if (!is.null(gen_col) && gen_col %in% names(ped_for_join2)) {
+      names(ped_for_join2)[names(ped_for_join2) == gen_col] <- "gen2"
+    }
+    
+    rel_df <- merge(rel_df, ped_for_join2, by = ID2_col, all.x = TRUE, sort = FALSE)
+  }
 
-  # Check for sex columns
-  has_sex <- sex1_col %in% names(rel_df) && sex2_col %in% names(rel_df)
+  # Check for generation columns (either from ped join or already in rel_df)
+  has_gen <- "gen1" %in% names(rel_df) && "gen2" %in% names(rel_df)
+
+  # Check for sex columns (either from ped join or already in rel_df)
+  has_sex <- "sex1" %in% names(rel_df) && "sex2" %in% names(rel_df)
 
   if (use_sex && !has_sex) {
     warning("use_sex is TRUE but sex columns are not available. Proceeding without sex-specific labels.")
@@ -117,8 +184,8 @@ describeRelatedness <- function(rel_df,
 
   # Extract generation differences if available
   if (has_gen) {
-    gen1 <- rel_df[[gen1_col]]
-    gen2 <- rel_df[[gen2_col]]
+    gen1 <- rel_df[["gen1"]]
+    gen2 <- rel_df[["gen2"]]
     gen_diff <- gen2 - gen1  # Positive means person 2 is in a younger generation
     gen_abs_diff <- abs(gen_diff)
   } else {
@@ -130,8 +197,8 @@ describeRelatedness <- function(rel_df,
 
   # Extract sex if needed
   if (use_sex && has_sex) {
-    sex1 <- rel_df[[sex1_col]]
-    sex2 <- rel_df[[sex2_col]]
+    sex1 <- rel_df[["sex1"]]
+    sex2 <- rel_df[["sex2"]]
   } else {
     sex1 <- NULL
     sex2 <- NULL

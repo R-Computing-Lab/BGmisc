@@ -6,11 +6,13 @@
 \usage{
 describeRelatedness(
   rel_df,
+  ped = NULL,
+  personID = "personID",
+  sex_col = "sex",
+  gen_col = NULL,
+  ID1_col = "ID1",
+  ID2_col = "ID2",
   add_col = "addRel",
-  gen1_col = "gen1",
-  gen2_col = "gen2",
-  sex1_col = "sex1",
-  sex2_col = "sex2",
   code_male = 1,
   code_female = 0,
   use_sex = FALSE,
@@ -19,29 +21,36 @@ describeRelatedness(
 }
 \arguments{
 \item{rel_df}{A data.frame with columns for pairwise relatedness information.
-Required columns: ID1, ID2, addRel (additive relatedness coefficient).
-Optional columns: gen1, gen2 (generation numbers), sex1, sex2 (biological sex).}
+Required columns: ID1, ID2 (or custom names via \code{ID1_col}/\code{ID2_col}).
+Typically produced by \code{\link{com2links}}.}
+
+\item{ped}{Optional data.frame containing pedigree information. If provided, sex
+and generation information will be automatically joined. Should contain columns
+specified by \code{personID}, \code{sex_col}, and optionally \code{gen_col}.}
+
+\item{personID}{Character. Name of the column in \code{ped} containing person IDs.
+Default is "personID".}
+
+\item{sex_col}{Character. Name of the column in \code{ped} containing sex information.
+Default is "sex".}
+
+\item{gen_col}{Character. Name of the column in \code{ped} containing generation numbers.
+If NULL (default), relationships will be described without generation information.}
+
+\item{ID1_col}{Character. Name of the column in \code{rel_df} for person 1 ID.
+Default is "ID1".}
+
+\item{ID2_col}{Character. Name of the column in \code{rel_df} for person 2 ID.
+Default is "ID2".}
 
 \item{add_col}{Character. Name of the column containing additive relatedness coefficients.
 Default is "addRel".}
 
-\item{gen1_col}{Character. Name of the column containing generation for person 1.
-Default is "gen1".}
+\item{code_male}{The value used to denote males in the sex column. Default is 1.}
 
-\item{gen2_col}{Character. Name of the column containing generation for person 2.
-Default is "gen2".}
+\item{code_female}{The value used to denote females in the sex column. Default is 0.}
 
-\item{sex1_col}{Character. Name of the column containing sex for person 1.
-Default is "sex1".}
-
-\item{sex2_col}{Character. Name of the column containing sex for person 2.
-Default is "sex2".}
-
-\item{code_male}{The value used to denote males. Default is 1.}
-
-\item{code_female}{The value used to denote females. Default is 0.}
-
-\item{use_sex}{Logical. If TRUE and sex columns are available, generate sex-specific
+\item{use_sex}{Logical. If TRUE and sex information is available, generate sex-specific
 relationship labels (e.g., "mother-child" vs "father-child"). Default is FALSE.}
 
 \item{return_list}{Logical. If TRUE, return a list with both the original data and
@@ -58,50 +67,53 @@ If \code{return_list = TRUE}, returns a list with two elements:
 }
 }
 \description{
-This function takes a flat/vectorized relatedness matrix and generates textual
-descriptions of the genetic relationships based on additive relatedness coefficients
-and generation differences.
+This function takes a flat/vectorized relatedness matrix (as produced by
+\code{\link{com2links}}) and generates textual descriptions of the genetic
+relationships based on additive relatedness coefficients and generation differences.
 }
 \details{
 The function uses the additive relatedness coefficient (\code{addRel}) and generation
 difference to infer relationship types. Common relationships and their expected
 values are:
 \itemize{
-\item addRel = 1.0, gen1 == gen2: "self" (same individual)
-\item addRel = 0.5, gen1 == gen2: "full siblings"
-\item addRel = 0.5, |gen1 - gen2| == 1: "parent-child"
-\item addRel = 0.25, gen1 == gen2: "half siblings"
-\item addRel = 0.25, |gen1 - gen2| == 1: "aunt/uncle-niece/nephew"
-\item addRel = 0.25, |gen1 - gen2| == 2: "grandparent-grandchild"
-\item addRel = 0.125, gen1 == gen2: "first cousins"
-\item addRel = 0.0625, gen1 == gen2: "second cousins"
+\item addRel = 1.0, same generation: "self" (same individual)
+\item addRel = 0.5, same generation: "full siblings"
+\item addRel = 0.5, 1 generation apart: "parent-child"
+\item addRel = 0.25, same generation: "half siblings"
+\item addRel = 0.25, 1 generation apart: "aunt/uncle-niece/nephew"
+\item addRel = 0.25, 2 generations apart: "grandparent-grandchild"
+\item addRel = 0.125, same generation: "first cousins"
+\item addRel = 0.0625, same generation: "second cousins"
 \item And relationships with various degrees of removal for cousins
 }
 
-When \code{use_sex = TRUE} and sex information is available, parent-child relationships
-can be further specified as "mother-child", "father-child", "mother-son",
-"mother-daughter", "father-son", or "father-daughter".
+When \code{use_sex = TRUE} and sex information is available (either from \code{ped}
+or already present in \code{rel_df}), parent-child relationships can be further
+specified as "mother-child", "father-child", "mother-son", "mother-daughter",
+"father-son", or "father-daughter". Similar sex-specific labels are provided for
+grandparent and avuncular relationships.
 }
 \examples{
 \dontrun{
-# Create example relatedness data
-rel_data <- data.frame(
-  ID1 = c(1, 1, 1, 2),
-  ID2 = c(2, 3, 4, 3),
-  addRel = c(0.5, 0.25, 0.125, 0.5),
-  gen1 = c(1, 1, 1, 2),
-  gen2 = c(2, 3, 1, 2)
-)
+# Basic usage with com2links output
+library(BGmisc)
+data(potter)
 
-# Get relationship descriptions
-described <- describeRelatedness(rel_data)
-print(described)
+# Compute additive relatedness matrix
+add_matrix <- ped2add(potter, sparse = FALSE)
 
-# With sex-specific labels
-rel_data$sex1 <- c(0, 0, 1, 1)
-rel_data$sex2 <- c(1, 0, 0, 1)
-described_sex <- describeRelatedness(rel_data, use_sex = TRUE)
-print(described_sex)
+# Convert to pairwise format
+rel_pairs <- com2links(ad_ped_matrix = add_matrix, writetodisk = FALSE)
+
+# Describe relationships (without generation info)
+described <- describeRelatedness(rel_pairs)
+head(described)
+
+# With pedigree for sex-specific labels
+# (assumes potter has a 'gen' column for generation)
+described_sex <- describeRelatedness(rel_pairs, ped = potter, 
+                                     use_sex = TRUE, gen_col = "gen")
+head(described_sex)
 }
 
 }
