@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">BGmisc</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.1.009</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -107,28 +107,28 @@ running the following code:</p>
 <span>  marR <span class="op">=</span> <span class="fl">.7</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">df_ped</span><span class="op">)</span></span>
-<span><span class="co">#&gt;      fam                  ID              gen            dadID       </span></span>
-<span><span class="co">#&gt;  Length:57          Min.   : 10011   Min.   :1.000   Min.   : 10012  </span></span>
-<span><span class="co">#&gt;  Class :character   1st Qu.: 10036   1st Qu.:3.000   1st Qu.: 10024  </span></span>
-<span><span class="co">#&gt;  Mode  :character   Median :100312   Median :3.000   Median : 10037  </span></span>
-<span><span class="co">#&gt;                     Mean   : 59171   Mean   :3.298   Mean   : 42859  </span></span>
-<span><span class="co">#&gt;                     3rd Qu.:100416   3rd Qu.:4.000   3rd Qu.:100311  </span></span>
-<span><span class="co">#&gt;                     Max.   :100432   Max.   :4.000   Max.   :100320  </span></span>
-<span><span class="co">#&gt;                                                      NA's   :13      </span></span>
-<span><span class="co">#&gt;      momID             spID            sex           </span></span>
-<span><span class="co">#&gt;  Min.   : 10011   Min.   : 10011   Length:57         </span></span>
-<span><span class="co">#&gt;  1st Qu.: 10022   1st Qu.: 10025   Class :character  </span></span>
-<span><span class="co">#&gt;  Median : 10036   Median : 10036   Mode  :character  </span></span>
-<span><span class="co">#&gt;  Mean   : 42859   Mean   : 40124                     </span></span>
-<span><span class="co">#&gt;  3rd Qu.:100316   3rd Qu.:100311                     </span></span>
-<span><span class="co">#&gt;  Max.   :100318   Max.   :100320                     </span></span>
-<span><span class="co">#&gt;  NA's   :13       NA's   :33</span></span></code></pre></div>
+<span><span class="co">#&gt;      fam                  ID             gen            dadID      </span></span>
+<span><span class="co">#&gt;  Length:57          Min.   :10101   Min.   :1.000   Min.   :10102  </span></span>
+<span><span class="co">#&gt;  Class :character   1st Qu.:10306   1st Qu.:3.000   1st Qu.:10204  </span></span>
+<span><span class="co">#&gt;  Mode  :character   Median :10320   Median :3.000   Median :10307  </span></span>
+<span><span class="co">#&gt;                     Mean   :10342   Mean   :3.298   Mean   :10263  </span></span>
+<span><span class="co">#&gt;                     3rd Qu.:10416   3rd Qu.:4.000   3rd Qu.:10311  </span></span>
+<span><span class="co">#&gt;                     Max.   :10432   Max.   :4.000   Max.   :10320  </span></span>
+<span><span class="co">#&gt;                                                     NA's   :13     </span></span>
+<span><span class="co">#&gt;      momID            spID           sex           </span></span>
+<span><span class="co">#&gt;  Min.   :10101   Min.   :10101   Length:57         </span></span>
+<span><span class="co">#&gt;  1st Qu.:10202   1st Qu.:10205   Class :character  </span></span>
+<span><span class="co">#&gt;  Median :10306   Median :10306   Mode  :character  </span></span>
+<span><span class="co">#&gt;  Mean   :10263   Mean   :10266                     </span></span>
+<span><span class="co">#&gt;  3rd Qu.:10316   3rd Qu.:10311                     </span></span>
+<span><span class="co">#&gt;  Max.   :10318   Max.   :10320                     </span></span>
+<span><span class="co">#&gt;  NA's   :13      NA's   :33</span></span></code></pre></div>
 <p>The simulation output is a <code>data.frame</code> with 57 rows and 7
 columns. Each row corresponds to a simulated individual.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">df_ped</span><span class="op">[</span><span class="fl">21</span>, <span class="op">]</span></span>
-<span><span class="co">#&gt;      fam     ID gen dadID momID   spID sex</span></span>
-<span><span class="co">#&gt; 21 fam 1 100312   3 10024 10022 100317   M</span></span></code></pre></div>
+<span><span class="co">#&gt;      fam    ID gen dadID momID  spID sex</span></span>
+<span><span class="co">#&gt; 21 fam 1 10312   3 10204 10202 10317   M</span></span></code></pre></div>
 <p>The columns represents the individual’s family ID, the individual’s
 personal ID, the generation the individual is in, the IDs of their
 father and mother, the ID of their spouse, and the biological sex of the
@@ -140,10 +140,10 @@ individual, respectively.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/summarizeFamilies.html">summarizeFamilies</a></span><span class="op">(</span><span class="va">df_ped</span>, famID <span class="op">=</span> <span class="st">"fam"</span><span class="op">)</span><span class="op">$</span><span class="va">family_summary</span></span>
 <span><span class="co">#&gt;       fam count gen_mean gen_median gen_min gen_max    gen_sd spID_mean</span></span>
 <span><span class="co">#&gt;    &lt;char&gt; &lt;int&gt;    &lt;num&gt;      &lt;num&gt;   &lt;num&gt;   &lt;num&gt;     &lt;num&gt;     &lt;num&gt;</span></span>
-<span><span class="co">#&gt; 1:  fam 1    57 3.298246          3       1       4 0.8229935   40123.5</span></span>
+<span><span class="co">#&gt; 1:  fam 1    57 3.298246          3       1       4 0.8229935     10266</span></span>
 <span><span class="co">#&gt;    spID_median spID_min spID_max  spID_sd</span></span>
 <span><span class="co">#&gt;          &lt;num&gt;    &lt;num&gt;    &lt;num&gt;    &lt;num&gt;</span></span>
-<span><span class="co">#&gt; 1:     10035.5    10011   100320 43476.96</span></span></code></pre></div>
+<span><span class="co">#&gt; 1:     10305.5    10101    10320 68.79206</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="plotting-pedigree">Plotting Pedigree<a class="anchor" aria-label="anchor" href="#plotting-pedigree"></a>

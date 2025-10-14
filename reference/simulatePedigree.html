@@ -17,7 +17,7 @@ This function simulates "balanced" pedigrees based on a group of parameters:
 
     <a class="navbar-brand me-2" href="../index.html">BGmisc</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.1.009</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -77,7 +77,8 @@ This function simulates "balanced" pedigrees based on a group of parameters:
 <span>  dadID <span class="op">=</span> <span class="st">"dadID"</span>,</span>
 <span>  spouseID <span class="op">=</span> <span class="st">"spouseID"</span>,</span>
 <span>  code_male <span class="op">=</span> <span class="st">"M"</span>,</span>
-<span>  code_female <span class="op">=</span> <span class="st">"F"</span></span>
+<span>  code_female <span class="op">=</span> <span class="st">"F"</span>,</span>
+<span>  fam_shift <span class="op">=</span> <span class="fl">1L</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">SimPed</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></span></code></pre></div>
@@ -156,6 +157,10 @@ current version.</p></dd>
 <dd><p>The value to use for females. Default is "F"</p></dd>
 
 
+<dt id="arg-fam-shift">fam_shift<a class="anchor" aria-label="anchor" href="#arg-fam-shift"></a></dt>
+<dd><p>An integer to shift the person ID. Default is 1L.</p></dd>
+
+
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Additional arguments to be passed to other functions.</p></dd>
 
@@ -181,22 +186,22 @@ current version.</p></dd>
 <span class="r-in"><span>  marR <span class="op">=</span> <span class="fl">.7</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">df_ped</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      fam                  ID              gen            dadID       </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Length:57          Min.   : 10011   Min.   :1.000   Min.   : 10012  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Class :character   1st Qu.: 10036   1st Qu.:3.000   1st Qu.: 10024  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Mode  :character   Median :100312   Median :3.000   Median : 10037  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     Mean   : 59171   Mean   :3.298   Mean   : 42859  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     3rd Qu.:100416   3rd Qu.:4.000   3rd Qu.:100311  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     Max.   :100432   Max.   :4.000   Max.   :100320  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                                      NA's   :13      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      momID             spID            sex           </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Min.   : 10011   Min.   : 10011   Length:57         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1st Qu.: 10022   1st Qu.: 10025   Class :character  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Median : 10036   Median : 10036   Mode  :character  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Mean   : 42859   Mean   : 40124                     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3rd Qu.:100316   3rd Qu.:100311                     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Max.   :100318   Max.   :100320                     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  NA's   :13       NA's   :33                         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      fam                  ID             gen            dadID      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Length:57          Min.   :10101   Min.   :1.000   Min.   :10102  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Class :character   1st Qu.:10306   1st Qu.:3.000   1st Qu.:10204  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Mode  :character   Median :10320   Median :3.000   Median :10307  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                     Mean   :10342   Mean   :3.298   Mean   :10263  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                     3rd Qu.:10416   3rd Qu.:4.000   3rd Qu.:10311  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                     Max.   :10432   Max.   :4.000   Max.   :10320  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                     NA's   :13     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      momID            spID           sex           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Min.   :10101   Min.   :10101   Length:57         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1st Qu.:10202   1st Qu.:10205   Class :character  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Median :10306   Median :10306   Mode  :character  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Mean   :10263   Mean   :10266                     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  3rd Qu.:10316   3rd Qu.:10311                     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Max.   :10318   Max.   :10320                     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  NA's   :13      NA's   :33                        </span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
