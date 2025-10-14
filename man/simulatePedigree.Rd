@@ -24,7 +24,8 @@ simulatePedigree(
   dadID = "dadID",
   spouseID = "spouseID",
   code_male = "M",
-  code_female = "F"
+  code_female = "F",
+  fam_shift = 1L
 )
 
 SimPed(...)
@@ -70,6 +71,8 @@ current version.}
 \item{code_male}{The value to use for males. Default is "M"}
 
 \item{code_female}{The value to use for females. Default is "F"}
+
+\item{fam_shift}{An integer to shift the person ID. Default is 1L.}
 
 \item{...}{Additional arguments to be passed to other functions.}
 }

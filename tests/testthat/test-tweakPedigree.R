@@ -214,7 +214,7 @@ test_that("dropLink - Drop specified by ID", {
   kpc <- 4
   sexR <- .50
   marR <- .7
-  ID_drop <- 10021
+  ID_drop <- 10201
 
   ped <- simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR)
   result <- dropLink(ped, ID_drop = ID_drop)
@@ -237,7 +237,7 @@ test_that("dropLink - Drop specified by ID", {
   kpc <- 4
   sexR <- .50
   marR <- .7
-  ID_drop <- 10021
+  ID_drop <- 10201
 
   ped <- simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR)
   result <- dropLink(ped, ID_drop = ID_drop)
