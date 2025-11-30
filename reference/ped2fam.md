@@ -1,0 +1,64 @@
+# Segment Pedigree into Extended Families
+
+This function adds an extended family ID variable to a pedigree by
+segmenting that dataset into independent extended families using the
+weakly connected components algorithm.
+
+## Usage
+
+``` r
+ped2fam(
+  ped,
+  personID = "ID",
+  momID = "momID",
+  dadID = "dadID",
+  famID = "famID",
+  ...
+)
+```
+
+## Arguments
+
+- ped:
+
+  a pedigree dataset. Needs ID, momID, and dadID columns
+
+- personID:
+
+  character. Name of the column in ped for the person ID variable
+
+- momID:
+
+  character. Name of the column in ped for the mother ID variable
+
+- dadID:
+
+  character. Name of the column in ped for the father ID variable
+
+- famID:
+
+  character. Name of the column to be created in ped for the family ID
+  variable
+
+- ...:
+
+  additional arguments to be passed to
+  [`ped2com`](https://r-computing-lab.github.io/BGmisc/reference/ped2com.md)
+
+## Value
+
+A pedigree dataset with one additional column for the newly created
+extended family ID
+
+## Details
+
+The general idea of this function is to use person ID, mother ID, and
+father ID to create an extended family ID such that everyone with the
+same family ID is in the same (perhaps very extended) pedigree. That is,
+a pair of people with the same family ID have at least one traceable
+relation of any length to one another.
+
+This function works by turning the pedigree into a mathematical graph
+using the igraph package. Once in graph form, the function uses weakly
+connected components to search for all possible relationship paths that
+could connect anyone in the data to anyone else in the data.

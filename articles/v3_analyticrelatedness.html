@@ -247,7 +247,7 @@ behavior under complete pedigree data.</p>
 <span><span class="co">#&gt; Warning in buildPlotConfig(default_config = default_config, config = config, :</span></span>
 <span><span class="co">#&gt; The following config values are not recognized by getDefaultPlotConfig():</span></span>
 <span><span class="co">#&gt; momID, dadID, famID</span></span></code></pre></div>
-<p><img src="v3_analyticrelatedness_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
+<p><img src="v3_analyticrelatedness_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" width="700"></p>
 <p>We compute the additive genetic relationship matrix using both the
 classic and partial parent methods. Because the pedigree is complete, we
 expect no differences in the resulting matrices.</p>
@@ -274,7 +274,7 @@ matrices should be identical.</p>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning in buildPlotConfig(default_config = default_config, config = config, :</span></span>
 <span><span class="co">#&gt; The following config values are not recognized by getDefaultPlotConfig(): title</span></span></code></pre></div>
-<p><img src="v3_analyticrelatedness_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
+<p><img src="v3_analyticrelatedness_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" width="700"></p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://r-computing-lab.github.io/ggpedigree/reference/ggRelatednessMatrix.html" class="external-link">ggRelatednessMatrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">ped_add_partial_complete</span><span class="op">)</span>,</span>
@@ -283,7 +283,7 @@ matrices should be identical.</p>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning in buildPlotConfig(default_config = default_config, config = config, :</span></span>
 <span><span class="co">#&gt; The following config values are not recognized by getDefaultPlotConfig(): title</span></span></code></pre></div>
-<p><img src="v3_analyticrelatedness_files/figure-html/unnamed-chunk-7-2.png" width="700"></p>
+<p><img src="v3_analyticrelatedness_files/figure-html/unnamed-chunk-7-2.png" class="r-plt" width="700"></p>
 <p>To verify this, we subtract one matrix from the other and calculate
 RMSE. The difference should be numerically zero. Indeed, it is 0.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
@@ -295,7 +295,7 @@ RMSE. The difference should be numerically zero. Indeed, it is 0.</p>
 <span>  tl.pos <span class="op">=</span> <span class="st">"l"</span>, tl.col <span class="op">=</span> <span class="st">"black"</span>, tl.srt <span class="op">=</span> <span class="fl">5</span>, tl.cex <span class="op">=</span> <span class="fl">0.2</span>,</span>
 <span>  col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/corrplot/man/COL1.html" class="external-link">COL1</a></span><span class="op">(</span><span class="st">"Reds"</span>, <span class="fl">100</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">0</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="v3_analyticrelatedness_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
+<p><img src="v3_analyticrelatedness_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" width="700"></p>
 </div>
 <div class="section level3">
 <h3 id="introducing-missingness-remove-a-parent">Introducing Missingness: Remove a Parent<a class="anchor" aria-label="anchor" href="#introducing-missingness-remove-a-parent"></a>
@@ -332,7 +332,7 @@ between the two matrices is 0.</p>
 <span>  tl.pos <span class="op">=</span> <span class="st">"l"</span>, tl.col <span class="op">=</span> <span class="st">"black"</span>, tl.srt <span class="op">=</span> <span class="fl">5</span>, tl.cex <span class="op">=</span> <span class="fl">0.2</span>,</span>
 <span>  col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/corrplot/man/COL1.html" class="external-link">COL1</a></span><span class="op">(</span><span class="st">"Reds"</span>, <span class="fl">100</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">0</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="v3_analyticrelatedness_files/figure-html/unnamed-chunk-11-1.png" width="700"></p>
+<p><img src="v3_analyticrelatedness_files/figure-html/unnamed-chunk-11-1.png" class="r-plt" width="700"></p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/corrplot/man/corrplot.html" class="external-link">corrplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">ped_add_partial</span><span class="op">)</span>,</span>
 <span>  method <span class="op">=</span> <span class="st">"color"</span>, type <span class="op">=</span> <span class="st">"lower"</span>, col.lim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,</span>
@@ -341,7 +341,7 @@ between the two matrices is 0.</p>
 <span>  tl.pos <span class="op">=</span> <span class="st">"l"</span>, tl.col <span class="op">=</span> <span class="st">"black"</span>, tl.srt <span class="op">=</span> <span class="fl">5</span>, tl.cex <span class="op">=</span> <span class="fl">0.2</span>,</span>
 <span>  col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/corrplot/man/COL1.html" class="external-link">COL1</a></span><span class="op">(</span><span class="st">"Reds"</span>, <span class="fl">100</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">0</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="v3_analyticrelatedness_files/figure-html/unnamed-chunk-11-2.png" width="700"></p>
+<p><img src="v3_analyticrelatedness_files/figure-html/unnamed-chunk-11-2.png" class="r-plt" width="700"></p>
 <p>We quantify the overall matrix difference:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">ped_add_classic</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">ped_add_partial</span><span class="op">)</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
@@ -360,7 +360,7 @@ additive structure.</p>
 <span><span class="co">#&gt; Warning in corrplot(as.matrix(ped_add_classic_complete) -</span></span>
 <span><span class="co">#&gt; as.matrix(ped_add_classic), : col.lim interval too wide, please set a suitable</span></span>
 <span><span class="co">#&gt; value</span></span></code></pre></div>
-<p><img src="v3_analyticrelatedness_files/figure-html/unnamed-chunk-13-1.png" width="700"></p>
+<p><img src="v3_analyticrelatedness_files/figure-html/unnamed-chunk-13-1.png" class="r-plt" width="700"></p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="op">(</span><span class="va">ped_add_classic_complete</span> <span class="op">-</span> <span class="va">ped_add_classic</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
@@ -377,7 +377,7 @@ is 0.</p>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning in corrplot(as.matrix(ped_add_classic_complete - ped_add_partial), :</span></span>
 <span><span class="co">#&gt; col.lim interval too wide, please set a suitable value</span></span></code></pre></div>
-<p><img src="v3_analyticrelatedness_files/figure-html/unnamed-chunk-14-1.png" width="700"></p>
+<p><img src="v3_analyticrelatedness_files/figure-html/unnamed-chunk-14-1.png" class="r-plt" width="700"></p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="op">(</span><span class="va">ped_add_classic_complete</span> <span class="op">-</span> <span class="va">ped_add_partial</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
@@ -422,7 +422,7 @@ two matrices is 0.009811.</p>
 <span>  tl.pos <span class="op">=</span> <span class="st">"l"</span>, tl.col <span class="op">=</span> <span class="st">"black"</span>, tl.srt <span class="op">=</span> <span class="fl">5</span>, tl.cex <span class="op">=</span> <span class="fl">0.2</span>,</span>
 <span>  col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/corrplot/man/COL1.html" class="external-link">COL1</a></span><span class="op">(</span><span class="st">"Reds"</span>, <span class="fl">100</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">0</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="v3_analyticrelatedness_files/figure-html/unnamed-chunk-16-1.png" width="700"></p>
+<p><img src="v3_analyticrelatedness_files/figure-html/unnamed-chunk-16-1.png" class="r-plt" width="700"></p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/corrplot/man/corrplot.html" class="external-link">corrplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">ped_add_partial_dad</span><span class="op">)</span>,</span>
@@ -432,7 +432,7 @@ two matrices is 0.009811.</p>
 <span>  tl.pos <span class="op">=</span> <span class="st">"l"</span>, tl.col <span class="op">=</span> <span class="st">"black"</span>, tl.srt <span class="op">=</span> <span class="fl">5</span>, tl.cex <span class="op">=</span> <span class="fl">0.2</span>,</span>
 <span>  col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/corrplot/man/COL1.html" class="external-link">COL1</a></span><span class="op">(</span><span class="st">"Reds"</span>, <span class="fl">100</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">0</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="v3_analyticrelatedness_files/figure-html/unnamed-chunk-16-2.png" width="700"></p>
+<p><img src="v3_analyticrelatedness_files/figure-html/unnamed-chunk-16-2.png" class="r-plt" width="700"></p>
 <p>Again, we compare to the true matrix from the complete pedigree:</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/corrplot/man/corrplot.html" class="external-link">corrplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">ped_add_classic_complete</span> <span class="op">-</span> <span class="va">ped_add_classic</span><span class="op">)</span>,</span>
@@ -442,7 +442,7 @@ two matrices is 0.009811.</p>
 <span>  tl.pos <span class="op">=</span> <span class="st">"l"</span>, tl.col <span class="op">=</span> <span class="st">"black"</span>, tl.srt <span class="op">=</span> <span class="fl">5</span>, tl.cex <span class="op">=</span> <span class="fl">0.2</span>,</span>
 <span>  col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/corrplot/man/COL1.html" class="external-link">COL1</a></span><span class="op">(</span><span class="st">"Reds"</span>, <span class="fl">100</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">0</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="v3_analyticrelatedness_files/figure-html/unnamed-chunk-17-1.png" width="700"></p>
+<p><img src="v3_analyticrelatedness_files/figure-html/unnamed-chunk-17-1.png" class="r-plt" width="700"></p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="op">(</span><span class="va">ped_add_classic_complete</span> <span class="op">-</span> <span class="va">ped_add_classic</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
@@ -455,7 +455,7 @@ two matrices is 0.009811.</p>
 <span>  tl.pos <span class="op">=</span> <span class="st">"l"</span>, tl.col <span class="op">=</span> <span class="st">"black"</span>, tl.srt <span class="op">=</span> <span class="fl">5</span>, tl.cex <span class="op">=</span> <span class="fl">0.2</span>,</span>
 <span>  col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/corrplot/man/COL1.html" class="external-link">COL1</a></span><span class="op">(</span><span class="st">"Reds"</span>, <span class="fl">100</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">0</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="v3_analyticrelatedness_files/figure-html/unnamed-chunk-18-1.png" width="700"></p>
+<p><img src="v3_analyticrelatedness_files/figure-html/unnamed-chunk-18-1.png" class="r-plt" width="700"></p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="op">(</span><span class="va">ped_add_classic_complete</span> <span class="op">-</span> <span class="va">ped_add_partial</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
@@ -591,7 +591,7 @@ values.</p>
 <p>To understand what these matrices look like, we visualize them for
 one representative family. For this example, we select the first family
 in the dataset.</p>
-<p><img src="v3_analyticrelatedness_files/figure-html/unnamed-chunk-22-1.png" width="700"></p>
+<p><img src="v3_analyticrelatedness_files/figure-html/unnamed-chunk-22-1.png" class="r-plt" width="700"></p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># pull the first family from the list</span></span>
 <span><span class="va">fam1</span> <span class="op">&lt;-</span> <span class="va">inbreeding_list</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
@@ -603,7 +603,7 @@ in the dataset.</p>
 <span>  tl.pos <span class="op">=</span> <span class="st">"l"</span>, tl.col <span class="op">=</span> <span class="st">"black"</span>, tl.srt <span class="op">=</span> <span class="fl">5</span>, tl.cex <span class="op">=</span> <span class="fl">0.2</span>,</span>
 <span>  col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/corrplot/man/COL1.html" class="external-link">COL1</a></span><span class="op">(</span><span class="st">"Reds"</span>, <span class="fl">100</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">0</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="v3_analyticrelatedness_files/figure-html/unnamed-chunk-23-1.png" width="700"></p>
+<p><img src="v3_analyticrelatedness_files/figure-html/unnamed-chunk-23-1.png" class="r-plt" width="700"></p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/corrplot/man/corrplot.html" class="external-link">corrplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">fam1</span><span class="op">$</span><span class="va">ped_add_classic_mom</span><span class="op">)</span>,</span>
@@ -613,7 +613,7 @@ in the dataset.</p>
 <span>  tl.pos <span class="op">=</span> <span class="st">"l"</span>, tl.col <span class="op">=</span> <span class="st">"black"</span>, tl.srt <span class="op">=</span> <span class="fl">5</span>, tl.cex <span class="op">=</span> <span class="fl">0.2</span>,</span>
 <span>  col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/corrplot/man/COL1.html" class="external-link">COL1</a></span><span class="op">(</span><span class="st">"Reds"</span>, <span class="fl">100</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">0</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="v3_analyticrelatedness_files/figure-html/unnamed-chunk-23-2.png" width="700"></p>
+<p><img src="v3_analyticrelatedness_files/figure-html/unnamed-chunk-23-2.png" class="r-plt" width="700"></p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/corrplot/man/corrplot.html" class="external-link">corrplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">fam1</span><span class="op">$</span><span class="va">ped_add_partial_mom</span><span class="op">)</span>,</span>
@@ -623,7 +623,7 @@ in the dataset.</p>
 <span>  tl.pos <span class="op">=</span> <span class="st">"l"</span>, tl.col <span class="op">=</span> <span class="st">"black"</span>, tl.srt <span class="op">=</span> <span class="fl">5</span>, tl.cex <span class="op">=</span> <span class="fl">0.2</span>,</span>
 <span>  col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/corrplot/man/COL1.html" class="external-link">COL1</a></span><span class="op">(</span><span class="st">"Reds"</span>, <span class="fl">100</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">0</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="v3_analyticrelatedness_files/figure-html/unnamed-chunk-23-3.png" width="700"></p>
+<p><img src="v3_analyticrelatedness_files/figure-html/unnamed-chunk-23-3.png" class="r-plt" width="700"></p>
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/corrplot/man/corrplot.html" class="external-link">corrplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">fam1</span><span class="op">$</span><span class="va">ped_add_classic_dad</span><span class="op">)</span>,</span>
@@ -633,7 +633,7 @@ in the dataset.</p>
 <span>  tl.pos <span class="op">=</span> <span class="st">"l"</span>, tl.col <span class="op">=</span> <span class="st">"black"</span>, tl.srt <span class="op">=</span> <span class="fl">5</span>, tl.cex <span class="op">=</span> <span class="fl">0.2</span>,</span>
 <span>  col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/corrplot/man/COL1.html" class="external-link">COL1</a></span><span class="op">(</span><span class="st">"Reds"</span>, <span class="fl">100</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">0</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="v3_analyticrelatedness_files/figure-html/unnamed-chunk-23-4.png" width="700"></p>
+<p><img src="v3_analyticrelatedness_files/figure-html/unnamed-chunk-23-4.png" class="r-plt" width="700"></p>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/corrplot/man/corrplot.html" class="external-link">corrplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">fam1</span><span class="op">$</span><span class="va">ped_add_partial_dad</span><span class="op">)</span>,</span>
@@ -643,7 +643,7 @@ in the dataset.</p>
 <span>  tl.pos <span class="op">=</span> <span class="st">"l"</span>, tl.col <span class="op">=</span> <span class="st">"black"</span>, tl.srt <span class="op">=</span> <span class="fl">5</span>, tl.cex <span class="op">=</span> <span class="fl">0.2</span>,</span>
 <span>  col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/corrplot/man/COL1.html" class="external-link">COL1</a></span><span class="op">(</span><span class="st">"Reds"</span>, <span class="fl">100</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">0</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="v3_analyticrelatedness_files/figure-html/unnamed-chunk-23-5.png" width="700"></p>
+<p><img src="v3_analyticrelatedness_files/figure-html/unnamed-chunk-23-5.png" class="r-plt" width="700"></p>
 <p>To visualize the differences from the true matrix:</p>
 <div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/corrplot/man/corrplot.html" class="external-link">corrplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">fam1</span><span class="op">$</span><span class="va">ped_add_classic_complete</span> <span class="op">-</span> <span class="va">fam1</span><span class="op">$</span><span class="va">ped_add_classic_mom</span><span class="op">)</span>,</span>
@@ -653,7 +653,7 @@ in the dataset.</p>
 <span>  tl.pos <span class="op">=</span> <span class="st">"l"</span>, tl.col <span class="op">=</span> <span class="st">"black"</span>, tl.srt <span class="op">=</span> <span class="fl">5</span>, tl.cex <span class="op">=</span> <span class="fl">0.2</span>,</span>
 <span>  col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/corrplot/man/COL1.html" class="external-link">COL1</a></span><span class="op">(</span><span class="st">"Reds"</span>, <span class="fl">100</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">0</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="v3_analyticrelatedness_files/figure-html/unnamed-chunk-24-1.png" width="700"></p>
+<p><img src="v3_analyticrelatedness_files/figure-html/unnamed-chunk-24-1.png" class="r-plt" width="700"></p>
 <div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/corrplot/man/corrplot.html" class="external-link">corrplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">fam1</span><span class="op">$</span><span class="va">ped_add_classic_complete</span> <span class="op">-</span> <span class="va">fam1</span><span class="op">$</span><span class="va">ped_add_partial_mom</span><span class="op">)</span>,</span>
@@ -663,7 +663,7 @@ in the dataset.</p>
 <span>  tl.pos <span class="op">=</span> <span class="st">"l"</span>, tl.col <span class="op">=</span> <span class="st">"black"</span>, tl.srt <span class="op">=</span> <span class="fl">5</span>, tl.cex <span class="op">=</span> <span class="fl">0.2</span>,</span>
 <span>  col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/corrplot/man/COL1.html" class="external-link">COL1</a></span><span class="op">(</span><span class="st">"Reds"</span>, <span class="fl">100</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">0</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="v3_analyticrelatedness_files/figure-html/unnamed-chunk-24-2.png" width="700"></p>
+<p><img src="v3_analyticrelatedness_files/figure-html/unnamed-chunk-24-2.png" class="r-plt" width="700"></p>
 <div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/corrplot/man/corrplot.html" class="external-link">corrplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">fam1</span><span class="op">$</span><span class="va">ped_add_classic_complete</span> <span class="op">-</span> <span class="va">fam1</span><span class="op">$</span><span class="va">ped_add_classic_dad</span><span class="op">)</span>,</span>
@@ -673,7 +673,7 @@ in the dataset.</p>
 <span>  tl.pos <span class="op">=</span> <span class="st">"l"</span>, tl.col <span class="op">=</span> <span class="st">"black"</span>, tl.srt <span class="op">=</span> <span class="fl">5</span>, tl.cex <span class="op">=</span> <span class="fl">0.2</span>,</span>
 <span>  col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/corrplot/man/COL1.html" class="external-link">COL1</a></span><span class="op">(</span><span class="st">"Reds"</span>, <span class="fl">100</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">0</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="v3_analyticrelatedness_files/figure-html/unnamed-chunk-24-3.png" width="700"></p>
+<p><img src="v3_analyticrelatedness_files/figure-html/unnamed-chunk-24-3.png" class="r-plt" width="700"></p>
 <div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/corrplot/man/corrplot.html" class="external-link">corrplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">fam1</span><span class="op">$</span><span class="va">ped_add_classic_complete</span> <span class="op">-</span> <span class="va">fam1</span><span class="op">$</span><span class="va">ped_add_partial_dad</span><span class="op">)</span>,</span>
@@ -683,7 +683,7 @@ in the dataset.</p>
 <span>  tl.pos <span class="op">=</span> <span class="st">"l"</span>, tl.col <span class="op">=</span> <span class="st">"black"</span>, tl.srt <span class="op">=</span> <span class="fl">5</span>, tl.cex <span class="op">=</span> <span class="fl">0.2</span>,</span>
 <span>  col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/corrplot/man/COL1.html" class="external-link">COL1</a></span><span class="op">(</span><span class="st">"Reds"</span>, <span class="fl">100</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">0</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="v3_analyticrelatedness_files/figure-html/unnamed-chunk-24-4.png" width="700"></p>
+<p><img src="v3_analyticrelatedness_files/figure-html/unnamed-chunk-24-4.png" class="r-plt" width="700"></p>
 <p>These plots show how each method responds to missing data, and
 whether it maintains consistency with the complete pedigree. We observe
 that the partial parent method typically introduces smaller deviations.
@@ -765,7 +765,7 @@ missing.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>

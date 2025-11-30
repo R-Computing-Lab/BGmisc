@@ -1,5 +1,5 @@
 pandoc: 3.1.11
-pkgdown: 2.1.3
+pkgdown: 2.2.0
 pkgdown_sha: ~
 articles:
   v0_network: v0_network.html
@@ -8,7 +8,7 @@ articles:
   v3_analyticrelatedness: v3_analyticrelatedness.html
   v4_validation: v4_validation.html
   v5_ASOIAF: v5_ASOIAF.html
-last_built: 2025-10-18T23:13Z
+last_built: 2025-11-30T16:56Z
 urls:
   reference: https://r-computing-lab.github.io/BGmisc/reference
   article: https://r-computing-lab.github.io/BGmisc/articles

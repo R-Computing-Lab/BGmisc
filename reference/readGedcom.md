@@ -1,0 +1,159 @@
+# Read a GEDCOM File
+
+This function ingests a GEDCOM genealogy file, identifies each
+individual described in the file, and parses their information into a
+structured data frame. It supports optional post-processing to enrich
+the raw data, such as inferring parental IDs, merging redundant name
+fields, and dropping uninformative columns.
+
+## Usage
+
+``` r
+readGedcom(
+  file_path,
+  verbose = FALSE,
+  add_parents = TRUE,
+  remove_empty_cols = TRUE,
+  combine_cols = TRUE,
+  skinny = FALSE,
+  update_rate = 1000,
+  post_process = TRUE,
+  ...
+)
+
+readGed(
+  file_path,
+  verbose = FALSE,
+  add_parents = TRUE,
+  remove_empty_cols = TRUE,
+  combine_cols = TRUE,
+  skinny = FALSE,
+  update_rate = 1000,
+  post_process = TRUE,
+  ...
+)
+
+readgedcom(
+  file_path,
+  verbose = FALSE,
+  add_parents = TRUE,
+  remove_empty_cols = TRUE,
+  combine_cols = TRUE,
+  skinny = FALSE,
+  update_rate = 1000,
+  post_process = TRUE,
+  ...
+)
+```
+
+## Arguments
+
+- file_path:
+
+  Character. Path to the GEDCOM file.
+
+- verbose:
+
+  Logical. If TRUE, print progress messages.
+
+- add_parents:
+
+  Logical. If TRUE, add momID and dadID via FAMC/FAMS mapping.
+
+- remove_empty_cols:
+
+  Logical. If TRUE, drop columns that are entirely NA.
+
+- combine_cols:
+
+  Logical. If TRUE, merge duplicate name columns (e.g., given/surn
+  pieces).
+
+- skinny:
+
+  Logical. If TRUE, return a slimmer data frame (drops FAMC, FAMS and
+  all-empty cols).
+
+- update_rate:
+
+  Numeric. Intended rate at which to print progress
+
+- post_process:
+
+  Logical. If TRUE, apply post-processing (parents, combine, drop empty,
+  skinny).
+
+- ...:
+
+  Additional arguments to be passed to the function.
+
+## Value
+
+A data frame containing information about individuals, with the
+following potential columns: - \`personID\`: ID of the individual parsed
+from the @ INDI line - \`momID\`: ID of the individual's mother -
+\`dadID\`: ID of the individual's father - \`sex\`: Sex of the
+individual - \`name\`: Full name of the individual - \`name_given\`:
+First name of the individual - \`name_surn\`: Last name of the
+individual - \`name_marriedsurn\`: Married name of the individual -
+\`name_nick\`: Nickname of the individual - \`name_npfx\`: Name prefix -
+\`name_nsfx\`: Name suffix - \`birth_date\`: Birth date of the
+individual - \`birth_lat\`: Latitude of the birthplace - \`birth_long\`:
+Longitude of the birthplace - \`birth_place\`: Birthplace of the
+individual - \`death_caus\`: Cause of death - \`death_date\`: Death date
+of the individual - \`death_lat\`: Latitude of the place of death -
+\`death_long\`: Longitude of the place of death - \`death_place\`: Place
+of death of the individual - \`attribute_caste\`: Caste of the
+individual - \`attribute_children\`: Number of children of the
+individual - \`attribute_description\`: Description of the individual -
+\`attribute_education\`: Education of the individual -
+\`attribute_idnumber\`: Identification number of the individual -
+\`attribute_marriages\`: Number of marriages of the individual -
+\`attribute_nationality\`: Nationality of the individual -
+\`attribute_occupation\`: Occupation of the individual -
+\`attribute_property\`: Property owned by the individual -
+\`attribute_religion\`: Religion of the individual -
+\`attribute_residence\`: Residence of the individual -
+\`attribute_ssn\`: Social security number of the individual -
+\`attribute_title\`: Title of the individual - \`FAMC\`: ID(s) of the
+family where the individual is a child - \`FAMS\`: ID(s) of the family
+where the individual is a spouse
+
+## Details
+
+The parser operates line-by-line and is tuned to the common GEDCOM
+5.5/5.5.1 structure: This parser is line-oriented. Individuals are
+defined by blocks that start with a line containing "@ INDI". Within
+each block, tags are parsed using simple pattern matches: - Relationship
+tags FAMC (as child) and FAMS (as spouse) are collected and later mapped
+to parent IDs if add_parents = TRUE. - Individuals are defined in blocks
+beginning with lines containing @ INDI. Each block is passed to an
+internal parser that extracts identifiers, names, life events,
+attributes, and family relationships.
+
+\- Names are parsed from the GEDCOM NAME tag, which usually encodes the
+given name and surname with slashes (e.g., "NAME John /Smith/"). The
+parser extracts the given name, surname, and constructs a cleaned full
+name. Additional name components (prefix, suffix, nickname, married
+surname) are parsed if present.
+
+\- Life events are recognized by BIRT and DEAT tags. Event details are
+assumed to occur at fixed offsets in the block (for example, a BIRT tag
+is followed by a DATE, then a PLAC, and optionally geographic
+coordinates). Missing elements leave the corresponding field as NA. for
+birth, expected lines are DATE (i+1), PLAC (i+2), LATI (i+4), LONG
+(i+5); for death, expected lines are DATE (i+1), PLAC (i+2), CAUS (i+3),
+LATI (i+4), LONG (i+5).
+
+\- Attributes such as occupation, education, and religion are parsed
+directly from GEDCOM tags (OCCU, EDUC, RELI, etc.). Each attribute is
+stored in a dedicated column prefixed with attribute\_.
+
+\- Relationships are parsed from FAMC (family as child) and FAMS (family
+as spouse). These identifiers are preserved in the raw output and can
+optionally be mapped to explicit parent IDs via processParents().
+
+\- Post-processing can be applied by setting post_process = TRUE. This
+applies several clean-up steps: adding inferred parents, merging
+duplicate name fields, and slimming the data frame by removing all-empty
+columns or relationship tags.

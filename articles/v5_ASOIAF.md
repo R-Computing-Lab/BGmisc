@@ -1,0 +1,386 @@
+# ASOIAF: How related are Jon and Danny?
+
+## Introduction
+
+Just how closely related are Jon Snow and Daenerys Targaryen? According
+to the lore of *A Song of Ice and Fire*, Daenerys is Jon’s paternal
+aunt. This would suggest a theoretical genetic relatedness of 0.25,
+assuming a simple pedigree and no inbreeding. But with tangled
+ancestries and potentially missing information, how confident can we be
+in that estimate?
+
+In this vignette, we use the `BGmisc` package to reconstruct the
+*ASOIAF* pedigree from the `ggpedigree` package, handle incomplete
+parentage data, and compute additive genetic and common nuclear
+relatedness. We’ll focus on Jon and Daenerys as a case study, but the
+methods generalize to any characters in the provided dataset.
+
+## Load Packages and Data
+
+We begin by loading the required libraries and examining the structure
+of the built-in `ASOIAF` pedigree.
+
+``` r
+library(BGmisc)
+library(tidyverse)
+library(ggpedigree)
+data(ASOIAF, package = "ggpedigree")
+```
+
+The ASOIAF dataset includes character IDs, names, family identifiers,
+and parent identifiers for a subset of characters drawn from the *A Song
+of Ice and Fire* canon.
+
+``` r
+head(ASOIAF)
+```
+
+    ##   id famID momID dadID          name sex
+    ## 1  1     1   566   564   Walder Frey   M
+    ## 2  2     1    NA    NA   Perra Royce   F
+    ## 3  3     1     2     1  Stevron Frey   M
+    ## 4  4     1     2     1    Emmon Frey   M
+    ## 5  5     1     2     1    Aenys Frey   M
+    ## 6  6     1    NA    NA Corenna Swann   F
+    ##                                                   url twinID zygosity
+    ## 1   https://awoiaf.westeros.org/index.php/Walder_Frey     NA     <NA>
+    ## 2   https://awoiaf.westeros.org/index.php/Perra_Royce     NA     <NA>
+    ## 3  https://awoiaf.westeros.org/index.php/Stevron_Frey     NA     <NA>
+    ## 4    https://awoiaf.westeros.org/index.php/Emmon_Frey     NA     <NA>
+    ## 5    https://awoiaf.westeros.org/index.php/Aenys_Frey     NA     <NA>
+    ## 6 https://awoiaf.westeros.org/index.php/Corenna_Swann     NA     <NA>
+
+## Prepare and Validate Sex Codes
+
+Many pedigree-based algorithms rely on biological sex for downstream
+calculationss and visualization. We use
+[`checkSex()`](https://r-computing-lab.github.io/BGmisc/reference/checkSex.md)
+to inspect the sex variable, repairing inconsistencies programmatically.
+
+``` r
+df_got <- checkSex(ASOIAF,
+  code_male = 1,
+  code_female = 0,
+  verbose = FALSE, repair = TRUE
+)
+```
+
+## Compute Relatedness Matrices
+
+With validated pedigree data, we can now compute two distinct
+relationship matrices:
+
+- Additive genetic relatedness (add): Proportion of shared additive
+  genetic variance between individuals.
+
+- Common nuclear relatedness (cn): Indicates shared full-sibling
+  (nuclear family) environments.
+
+These are derived using `ped2add`() and `ped2cn`(), respectively. Both
+functions rely on internal graph traversal and adjacency structures. In
+this case:
+
+- We specify isChild_method = “partialparent” to allow inclusion of
+  dyads where one parent is unknown.
+
+- We choose adjacency_method = “direct” for the additive matrix to
+  optimize for computational speed.
+
+- For the common nuclear matrix, we use adjacency_method = “indexed”,
+  which is slower but necessary for resolving sibling-group structures.
+
+- We set `sparse = TRUE` to return compressed sparse matrices rather
+  than full (dense) formats.
+
+``` r
+add <- ped2com(df_got,
+  isChild_method = "partialparent",
+  component = "additive",
+  adjacency_method = "direct",
+  sparse = TRUE
+)
+
+mt <- ped2com(df_got,
+  isChild_method = "partialparent",
+  component = "mitochondrial",
+  adjacency_method = "direct",
+  sparse = TRUE
+)
+
+cn <- ped2cn(df_got,
+  isChild_method = "partialparent",
+  adjacency_method = "indexed",
+  sparse = TRUE
+)
+```
+
+## Convert to Pairwise Format
+
+For interpretability, we convert these square matrices into long-format
+tables using
+[`com2links()`](https://r-computing-lab.github.io/BGmisc/reference/com2links.md).
+This function returns a dataframe where each row represents a unique
+pair of individuals, including their additive and common nuclear
+coefficients.
+
+``` r
+df_links <- com2links(
+  writetodisk = FALSE,
+  ad_ped_matrix = add, cn_ped_matrix = cn, mit_ped_matrix = mt,
+  drop_upper_triangular = TRUE
+) # %>%
+#  filter(ID1 != ID2)
+```
+
+The function can return the entire matrix or just the lower triangular
+part, which is often sufficient for our purposes. Setting
+`drop_upper_triangular = TRUE` ensures we only retain one entry per
+dyad, since the matrices are symmetric. We also keep the data in memory
+by setting `writetodisk = FALSE`.
+
+## Locate Jon and Daenerys
+
+We next identify the rows in the pairwise relatedness table that
+correspond to Jon Snow and Daenerys Targaryen. First, we retrieve their
+individual IDs:
+
+``` r
+# Find the IDs of Jon Snow and Daenerys Targaryen
+
+jon_id <- df_got %>%
+  filter(name == "Jon Snow") %>%
+  pull(ID)
+
+dany_id <- df_got %>%
+  filter(name == "Daenerys Targaryen") %>%
+  pull(ID)
+```
+
+We can then filter the pairwise relatedness table to isolate the dyad of
+interest:
+
+``` r
+jon_dany_row <- df_links %>%
+  filter(ID1 == jon_id | ID2 == jon_id) %>%
+  filter(ID1 %in% dany_id | ID2 %in% dany_id) %>% # round to nearest 4th decimal
+  mutate(across(c(addRel, mitRel, cnuRel), ~ round(.x, 4)))
+
+jon_dany_row
+```
+
+    ##   ID1 ID2 addRel mitRel cnuRel
+    ## 1 206 211 0.5031      0      0
+    ## 2 211 304 0.0562      0      0
+
+This table contains the additive nuclear relatedness estimates for Jon
+and Daenerys. If the pedigree reflects their canonical aunt-nephew
+relationship and is free from… complications, we’d expect to see an
+additive coefficient close to 0.25. However, the value is 0.5031,
+indicating a more complex relationship and in line with how related we
+would expect full siblings to be.
+
+Likewise, when we examine the relatedness for a different pair, such as
+Rhaenyra Targaryen and Damemon Targaryen, we can see how the relatedness
+coefficients vary across different characters in the dataset.
+
+``` r
+rhaenyra_id <- df_got %>%
+  filter(name == "Rhaenyra Targaryen") %>%
+  pull(ID)
+daemon_id <- df_got %>%
+  filter(name == "Daemon Targaryen") %>%
+  pull(ID)
+
+rhaenyra_daemon_row <- df_links %>%
+  filter(ID1 == rhaenyra_id | ID2 == rhaenyra_id) %>%
+  filter(ID1 %in% daemon_id | ID2 %in% daemon_id) %>% # round to 4th decimal
+  mutate(across(c(addRel, mitRel, cnuRel), ~ round(.x, 4)))
+
+rhaenyra_daemon_row
+```
+
+    ##   ID1 ID2 addRel mitRel cnuRel
+    ## 1 339 536 0.7355      1      0
+
+Similarly, we can see that Rhaenyra and Daemon have an additive
+relatedness coefficient of 0.7355, which is also slightly higher than
+the expected 0.25 for a full uncle-neice relationship. In terms of
+mitochondrial relatedness, both pairs have a coefficient of 1,
+indicating that they share the same mitochondrial lineage.
+
+## Plotting the Pedigree with Incomplete Parental Information
+
+Many real-world and fictional pedigrees contain individuals with unknown
+or partially known parentage. In such cases, plotting tools typically
+fail unless these gaps are handled. We use
+[`checkParentIDs()`](https://r-computing-lab.github.io/BGmisc/reference/checkParentIDs.md)
+to:
+
+- Identify individuals with one known parent and one missing
+
+- Create “phantom” placeholders for the missing parent
+
+- Optionally repair and harmonize parent fields
+
+To facilitate plotting, we check for individuals with one known parent
+but a missing other. For those cases, we assign a placeholder ID to the
+missing parent.
+
+``` r
+df_repaired <- checkParentIDs(df_got, # %>% filter(famID == 1),
+  addphantoms = TRUE,
+  repair = TRUE,
+  parentswithoutrow = FALSE,
+  repairsex = FALSE
+) %>% mutate(
+  # famID = 1,
+  affected = case_when(
+    ID %in% c(jon_id, dany_id, 339) ~ TRUE,
+    TRUE ~ FALSE
+  )
+)
+```
+
+    ## REPAIR IN EARLY ALPHA
+
+This code creates new IDs for individuals with one known parent and a
+missing other. It checks if either `momID` or `dadID` is missing, and if
+so, it assigns a new ID based on the row number. This allows us to
+visualize the pedigree even when some parental information is
+incomplete. Now we can check the repaired pedigree for unique IDs and
+parent-child relationships.
+
+``` r
+checkIDs <- checkIDs(df_repaired, verbose = TRUE)
+```
+
+    ## Standardizing column names...
+
+    ## Checking IDs...
+    ## Step 1: Checking for unique IDs...
+    ## All IDs are unique.
+    ## Step 2: Checking for within row duplicats...
+    ## No within row duplicates found.
+    ## Validation Results:
+
+    ## TRUE0NULL0000FALSENULLNULLNULL
+
+``` r
+# checkIDs
+```
+
+``` r
+# Check for unique IDs and parent-child relationships
+checkPedigreeNetwork <- checkPedigreeNetwork(df_repaired,
+  personID = "ID",
+  momID = "momID",
+  dadID = "dadID",
+  verbose = TRUE
+)
+```
+
+    ## No individuals with more than two parents detected.
+
+    ## No duplicate edges detected.
+
+    ## No cyclic relationships detected.
+
+``` r
+checkPedigreeNetwork
+```
+
+    ## $individuals_with_excess_parents
+    ## character(0)
+    ## 
+    ## $duplicate_edges
+    ##      [,1] [,2]
+    ## 
+    ## $is_acyclic
+    ## [1] TRUE
+
+As we can see, the repaired pedigree now has unique IDs for all
+individuals, and the parent-child relationships are intact. The function
+[`checkIDs()`](https://r-computing-lab.github.io/BGmisc/reference/checkIDs.md)
+confirms that all IDs are unique, while
+[`checkPedigreeNetwork()`](https://r-computing-lab.github.io/BGmisc/reference/checkPedigreeNetwork.md)
+verifies that there are no structural issues like individuals with more
+than two parents or cyclic relationships.
+
+## Visualize the Pedigree
+
+We can now visualize the repaired pedigree using the
+[`ggPedigree()`](https://r-computing-lab.github.io/ggpedigree/reference/ggPedigree.html)
+function from {ggpedigree}. This function generates a plot of the
+pedigree, with individuals colored based on their affected status. In
+this case, we highlight Jon and Daenerys as “affected” individuals.
+Otherwise they would be difficult to distinguish from the rest of the
+pedigree. To make the plot more informative, we also fill every member
+of the tree by how related they are to Rhaenyra Targaryen, who is the
+focal individual in this case.
+
+This function provides a more flexible and customizable way to visualize
+pedigrees, allowing for easy integration with other `ggplot2` functions
+relative to kinship2’s pedigree plotting functions.
+
+``` r
+library(ggpedigree)
+
+df_repaired_renamed <- df_repaired %>% rename(
+  personID = ID
+)
+plt <- ggpedigree(df_repaired_renamed,
+  overlay_column = "affected",
+  personID = "personID",
+  interactive = FALSE,
+  config = list(
+    overlay_include = TRUE,
+    point_size = .75,
+    code_male = "M",
+    ped_width = 17,
+    label_nudge_y = -.25,
+    include_labels = TRUE,
+    label_method = "geom_text",
+    # segment_self_color = "purple",
+    sex_color_include = FALSE,
+    focal_fill_personID = 353, # 339, # 353,
+    focal_fill_include = TRUE,
+    tooltip_columns = c("personID", "name", "focal_fill"),
+    focal_fill_force_zero = TRUE,
+    focal_fill_mid_color = "orange",
+    focal_fill_low_color = "#9F2A63FF",
+    focal_fill_legend_title = "Relatedness to \nAegon Targaryen",
+    focal_fill_na_value = "black",
+    value_rounding_digits = 4
+  )
+)
+
+plt
+```
+
+![](v5_ASOIAF_files/figure-html/unnamed-chunk-13-1.png)
+
+``` r
+# reduce file size for CRAN
+# if (interactive()) {
+# If running interactively, use plotly::partial_bundle
+# to reduce file size for CRAN
+#  plotly::partial_bundle(plt)
+# } else {
+#  plotly::partial_bundle(plt, local = TRUE)
+# }
+```
+
+This plot can provide an interactive visualization of the ASOIAF
+pedigree (if interactive is set to TRUE), allowing users to explore
+relationships and affected status. The focal individual is highlighted,
+and tooltips provide additional information about each character.
+
+## Conclusion
+
+In this vignette, we demonstrated how to reconstruct and analyze the *A
+Song of Ice and Fire* pedigree using the `BGmisc` package. We computed
+additive and common nuclear relatedness coefficients for key characters,
+revealing the complexities of their relationships. By handling
+incomplete parentage data and visualizing the pedigree, we provided a
+comprehensive overview of how related Jon Snow and Daenerys Targaryen
+truly are.
