@@ -67,7 +67,7 @@ Contributions to the BGmisc project are welcome. For guidelines on how to contri
 
 
 ### Branching and Versioning System
-The development of BGmisc follows a [GitFlow branching strategy](https://tilburgsciencehub.com/topics/automation/version-control/advanced-git/git-branching-strategies/):
+The development of BGmisc follows a [GitFlow branching strategy](https://docs.gitlab.com/user/project/repository/branches/strategies/):
 
 - **Feature Branches**: All major changes and new features should be developed on separate branches created from the dev_main branch. Name these branches according to the feature or change they are meant to address.
 - **Development Branches**: Our approach includes two development branches, each serving distinct roles:
