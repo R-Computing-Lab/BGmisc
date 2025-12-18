@@ -44,10 +44,19 @@ ped2fam <- function(ped, personID = "ID",
   # Find weakly connected components of graph
   wcc <- igraph::components(pg)
 
+if(suppressWarnings(is.numeric(as.numeric(names(wcc$membership))))) {
   fam <- data.frame(
     V1 = as.numeric(names(wcc$membership)),
     V2 = wcc$membership
   )
+} else {
+  fam <- data.frame(
+    V1 = names(wcc$membership),
+    V2 = wcc$membership
+  )
+  }
+
+
   names(fam) <- c(personID, famID)
   ped2 <- merge(fam, ped,
     by = personID, all.x = FALSE, all.y = TRUE
