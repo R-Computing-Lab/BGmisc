@@ -5,7 +5,7 @@ Create a properly formatted parent row for the pedigree
 ## Usage
 
 ``` r
-addParentRow(template_row, newID, sex, momID = NA, dadID = NA)
+addParentRow(template_row, newID, sex, momID = NA, dadID = NA, famID = NA)
 ```
 
 ## Arguments
@@ -30,6 +30,10 @@ addParentRow(template_row, newID, sex, momID = NA, dadID = NA)
 - dadID:
 
   The new parent's father ID (default is NA)
+
+- famID:
+
+  The new parent's family ID (default is NA)
 
 ## Value
 
