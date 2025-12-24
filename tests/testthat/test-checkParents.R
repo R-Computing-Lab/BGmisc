@@ -24,6 +24,15 @@ test_that("checksif single parents found correctly in ASOIAF dataset", {
   expect_equal(single_dads, length(results$missing_mothers))
   repaired_df <- checkParentIDs(df_asoiaf, verbose = FALSE, repair = TRUE, parentswithoutrow = TRUE)
   expect_equal(nrow(repaired_df), nrow(df_asoiaf) + single_moms + single_dads)
+
+
+  repaired_phantoms <- checkParentIDs(df_asoiaf, verbose = FALSE, repair = TRUE, addphantoms =  TRUE)
+  expect_equal(nrow(repaired_phantoms), nrow(df_asoiaf) + single_moms + single_dads)
+  # did it add more famIDs?
+  expect_true(length(repaired_phantoms$famID[!is.na(repaired_phantoms$famID)]) > length(df_asoiaf$famID[!is.na(df_asoiaf$famID)]))
+  # do the original famIDs remain unique?
+  expect_true(length(unique(repaired_phantoms$famID[!is.na(repaired_phantoms$famID)])) == length(unique(df_asoiaf$famID[!is.na(df_asoiaf$famID)])))
+
 })
 
 test_that("verbose checks", {

@@ -44,10 +44,24 @@ ped2fam <- function(ped, personID = "ID",
   # Find weakly connected components of graph
   wcc <- igraph::components(pg)
 
-  fam <- data.frame(
-    V1 = as.numeric(names(wcc$membership)),
-    V2 = wcc$membership
-  )
+  # Create famID data.frame
+  # Convert IDs to numeric, with warning if coercion collapses IDs
+  uniques <- suppressWarnings(unique(as.numeric(names(wcc$membership))))
+
+  if (length(uniques) == 1L && is.na(uniques)) {
+    warning("After converting IDs to numeric, all IDs became NA. This indicates ID coercion collapsed IDs. Please ensure IDs aren't character or factor variables.")
+
+    fam <- data.frame(
+      V1 = names(wcc$membership),
+      V2 = wcc$membership
+    )
+  } else {
+    fam <- data.frame(
+      V1 = as.numeric(names(wcc$membership)),
+      V2 = wcc$membership
+    )
+  }
+
   names(fam) <- c(personID, famID)
   ped2 <- merge(fam, ped,
     by = personID, all.x = FALSE, all.y = TRUE
