@@ -51,7 +51,7 @@ If `repair = TRUE`, the function standardizes sex coding by:
 
 This function uses the terms 'male' and 'female' in a biological context, referring to chromosomal and other biologically-based characteristics necessary for constructing genetic pedigrees. The biological aspect of sex used in genetic analysis (genotype) is distinct from the broader, richer concept of gender identity (phenotype).
 
-We recognize the importance of using language and methodologies that affirm and respect the full spectrum of gender identities.  
+We recognize the importance of using language and methodologies that affirm and respect the full spectrum of gender identities.
 The developers of this package express unequivocal support for folx in the transgender
 and LGBTQ+ communities.
 }

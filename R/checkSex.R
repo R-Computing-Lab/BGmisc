@@ -17,7 +17,7 @@
 #'
 #' @details This function uses the terms 'male' and 'female' in a biological context, referring to chromosomal and other biologically-based characteristics necessary for constructing genetic pedigrees. The biological aspect of sex used in genetic analysis (genotype) is distinct from the broader, richer concept of gender identity (phenotype).
 #'
-#' We recognize the importance of using language and methodologies that affirm and respect the full spectrum of gender identities.  
+#' We recognize the importance of using language and methodologies that affirm and respect the full spectrum of gender identities.
 #' The developers of this package express unequivocal support for folx in the transgender
 #' and LGBTQ+ communities.
 #'
@@ -225,9 +225,15 @@ checkParentSex <- function(ped, parent_col, sex_col = "sex", verbose = FALSE) {
   # Store the most frequent sex for moms and dads
   modal_sex <- names(sort(table(parent_sexes), decreasing = TRUE))[1]
 
+  if(all(is.na(modal_sex)) && verbose == TRUE) {
+    cat(paste0("All parents in role ", parent_col, " have missing sex values.\n"))
+}
+
   # Type coercion based on ped$sex type
   if (is.numeric(ped[[sex_col]])) {
     modal_sex <- as.numeric(modal_sex)
+  } else if (is.character(ped[[sex_col]])) {
+    modal_sex <- as.character(modal_sex)
   }
 
   # List ids for dads that are female, moms that are male

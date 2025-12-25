@@ -4,6 +4,7 @@
 * Added tests for ped2gen
 * Fixed handling of character ID variables leading to a warning in ped2fam
 * Added famIDs to phantom parents
+* Tweaked how sex coding is handled
 
 # BGmisc 1.5.1
 ## CRAN submission
