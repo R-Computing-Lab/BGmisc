@@ -6,7 +6,13 @@ handle the repair of the sex coding in a pedigree dataframe.
 ## Usage
 
 ``` r
-repairSex(ped, verbose = FALSE, code_male = NULL, code_female = NULL)
+repairSex(
+  ped,
+  verbose = FALSE,
+  code_male = NULL,
+  code_female = NULL,
+  code_unknown = NULL
+)
 ```
 
 ## Arguments
@@ -28,6 +34,13 @@ repairSex(ped, verbose = FALSE, code_male = NULL, code_female = NULL)
 
   The current code used to represent females in the 'sex' column. If
   both are NULL, no recoding is performed.
+
+- code_unknown:
+
+  The current code used to represent unknown or ambiguous sex in the
+  'sex' column. Can be NA to indicate that missing values should be
+  treated as unknown. If NULL and both code_male and code_female are
+  provided, values not matching either will be inferred as unknown.
 
 ## Value
 

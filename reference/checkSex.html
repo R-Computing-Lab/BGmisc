@@ -61,6 +61,7 @@ It serves two primary purposes:
 <span>  <span class="va">ped</span>,</span>
 <span>  code_male <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  code_female <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  code_unknown <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  repair <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  momID <span class="op">=</span> <span class="st">"momID"</span>,</span>
@@ -82,6 +83,10 @@ It serves two primary purposes:
 
 <dt id="arg-code-female">code_female<a class="anchor" aria-label="anchor" href="#arg-code-female"></a></dt>
 <dd><p>The current code used to represent females in the 'sex' column. If both are NULL, no recoding is performed.</p></dd>
+
+
+<dt id="arg-code-unknown">code_unknown<a class="anchor" aria-label="anchor" href="#arg-code-unknown"></a></dt>
+<dd><p>The current code used to represent unknown or ambiguous sex in the 'sex' column. Can be NA to indicate that missing values should be treated as unknown. If NULL and both code_male and code_female are provided, values not matching either will be inferred as unknown.</p></dd>
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>

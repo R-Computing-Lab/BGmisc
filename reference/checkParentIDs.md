@@ -18,7 +18,9 @@ checkParentIDs(
   famID = "famID",
   personID = "ID",
   momID = "momID",
-  dadID = "dadID"
+  dadID = "dadID",
+  code_male = NULL,
+  code_female = NULL
 )
 ```
 
@@ -69,6 +71,16 @@ checkParentIDs(
 - dadID:
 
   Character. Column name for paternal IDs.
+
+- code_male:
+
+  The code value used to represent male sex in the 'sex' column of
+  `ped`.
+
+- code_female:
+
+  The code value used to represent female sex in the 'sex' column of
+  `ped`.
 
 ## Value
 

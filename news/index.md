@@ -1,5 +1,16 @@
 # Changelog
 
+## BGmisc 1.5.2
+
+- More flexible ID generation for simulatePedigree
+- Created ped2gen function to extract generation information from
+  pedigree data.frames
+- Added tests for ped2gen
+- Fixed handling of character ID variables leading to a warning in
+  ped2fam
+- Added famIDs to phantom parents
+- Tweaked how sex coding is handled to allow for unknown sex
+
 ## BGmisc 1.5.1
 
 ### CRAN submission

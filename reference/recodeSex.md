@@ -13,8 +13,10 @@ recodeSex(
   code_male = NULL,
   code_na = NULL,
   code_female = NULL,
+  code_unknown = NULL,
   recode_male = "M",
   recode_female = "F",
+  recode_unknown = "U",
   recode_na = NA_character_
 )
 ```
@@ -43,6 +45,13 @@ recodeSex(
   The current code used to represent females in the 'sex' column. If
   both are NULL, no recoding is performed.
 
+- code_unknown:
+
+  The current code used to represent unknown or ambiguous sex in the
+  'sex' column. Can be NA to indicate that missing values should be
+  treated as unknown. If NULL and both code_male and code_female are
+  provided, values not matching either will be inferred as unknown.
+
 - recode_male:
 
   The value to use for males. Default is "M"
@@ -50,6 +59,10 @@ recodeSex(
 - recode_female:
 
   The value to use for females. Default is "F"
+
+- recode_unknown:
+
+  The value to use for unknown values. Default is "U"
 
 - recode_na:
 
