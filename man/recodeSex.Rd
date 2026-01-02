@@ -10,8 +10,10 @@ recodeSex(
   code_male = NULL,
   code_na = NULL,
   code_female = NULL,
+  code_unknown = NULL,
   recode_male = "M",
   recode_female = "F",
+  recode_unknown = "U",
   recode_na = NA_character_
 )
 }
@@ -26,9 +28,13 @@ recodeSex(
 
 \item{code_female}{The current code used to represent females in the 'sex' column. If both are NULL, no recoding is performed.}
 
+\item{code_unknown}{The current code used to represent unknown or ambiguous sex in the 'sex' column. Can be NA to indicate that missing values should be treated as unknown. If NULL and both code_male and code_female are provided, values not matching either will be inferred as unknown.}
+
 \item{recode_male}{The value to use for males. Default is "M"}
 
 \item{recode_female}{The value to use for females. Default is "F"}
+
+\item{recode_unknown}{The value to use for unknown values. Default is "U"}
 
 \item{recode_na}{The value to use for missing values. Default is NA_character_}
 }
@@ -51,7 +57,7 @@ If `repair = TRUE`, the function standardizes sex coding by:
 
 This function uses the terms 'male' and 'female' in a biological context, referring to chromosomal and other biologically-based characteristics necessary for constructing genetic pedigrees. The biological aspect of sex used in genetic analysis (genotype) is distinct from the broader, richer concept of gender identity (phenotype).
 
-We recognize the importance of using language and methodologies that affirm and respect the full spectrum of gender identities.  
+We recognize the importance of using language and methodologies that affirm and respect the full spectrum of gender identities.
 The developers of this package express unequivocal support for folx in the transgender
 and LGBTQ+ communities.
 }

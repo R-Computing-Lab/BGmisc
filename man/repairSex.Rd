@@ -4,7 +4,13 @@
 \alias{repairSex}
 \title{Repairs Sex Coding in a Pedigree Dataframe}
 \usage{
-repairSex(ped, verbose = FALSE, code_male = NULL, code_female = NULL)
+repairSex(
+  ped,
+  verbose = FALSE,
+  code_male = NULL,
+  code_female = NULL,
+  code_unknown = NULL
+)
 }
 \arguments{
 \item{ped}{A dataframe representing the pedigree data with a 'sex' column.}
@@ -14,6 +20,8 @@ repairSex(ped, verbose = FALSE, code_male = NULL, code_female = NULL)
 \item{code_male}{The current code used to represent males in the 'sex' column.}
 
 \item{code_female}{The current code used to represent females in the 'sex' column. If both are NULL, no recoding is performed.}
+
+\item{code_unknown}{The current code used to represent unknown or ambiguous sex in the 'sex' column. Can be NA to indicate that missing values should be treated as unknown. If NULL and both code_male and code_female are provided, values not matching either will be inferred as unknown.}
 }
 \value{
 A modified version of the input data.frame \code{ped}, containing an additional or modified 'sex_recode' column where the 'sex' values are recoded according to \code{code_male}. NA values in the 'sex' column are preserved.
@@ -34,7 +42,7 @@ If `repair = TRUE`, the function standardizes sex coding by:
 
 This function uses the terms 'male' and 'female' in a biological context, referring to chromosomal and other biologically-based characteristics necessary for constructing genetic pedigrees. The biological aspect of sex used in genetic analysis (genotype) is distinct from the broader, richer concept of gender identity (phenotype).
 
-We recognize the importance of using language and methodologies that affirm and respect the full spectrum of gender identities.  
+We recognize the importance of using language and methodologies that affirm and respect the full spectrum of gender identities.
 The developers of this package express unequivocal support for folx in the transgender
 and LGBTQ+ communities.
 }

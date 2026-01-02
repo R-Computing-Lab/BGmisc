@@ -14,7 +14,9 @@ checkParentIDs(
   famID = "famID",
   personID = "ID",
   momID = "momID",
-  dadID = "dadID"
+  dadID = "dadID",
+  code_male = NULL,
+  code_female = NULL
 )
 }
 \arguments{
@@ -37,6 +39,10 @@ checkParentIDs(
 \item{momID}{Character. Column name for maternal IDs.}
 
 \item{dadID}{Character. Column name for paternal IDs.}
+
+\item{code_male}{The code value used to represent male sex in the 'sex' column of \code{ped}.}
+
+\item{code_female}{The code value used to represent female sex in the 'sex' column of \code{ped}.}
 }
 \value{
 Depending on the value of `repair`, either a list containing validation results or a repaired dataframe is returned.

@@ -12,11 +12,12 @@
 #' @param repairsex A logical flag indicating whether to attempt repairs on sex of the parents
 #' @param addphantoms A logical flag indicating whether to add phantom parents for missing parent IDs.
 #' @param parentswithoutrow A logical flag indicating whether to add parents without a row in the pedigree.
-#' @param  famID Character. Column name for family IDs.
-#' @param  personID Character. Column name for individual IDs.
+#' @param famID Character. Column name for family IDs.
+#' @param personID Character. Column name for individual IDs.
 #' @param momID Character. Column name for maternal IDs.
 #' @param dadID Character. Column name for paternal IDs.
-#'
+#' @param code_male The code value used to represent male sex in the 'sex' column of \code{ped}.
+#' @param code_female The code value used to represent female sex in the 'sex' column of \code{ped}.
 #'
 #' @return Depending on the value of `repair`, either a list containing validation results or a repaired dataframe is returned.
 #' @examples
@@ -32,7 +33,10 @@ checkParentIDs <- function(ped, verbose = FALSE, repair = FALSE,
                            famID = "famID",
                            personID = "ID",
                            momID = "momID",
-                           dadID = "dadID") {
+                           dadID = "dadID",
+                           code_male = NULL,
+                           code_female = NULL
+                           ) {
   # Standardize column names in the input dataframe
   ped <- standardizeColnames(ped, verbose = verbose)
 
@@ -87,18 +91,28 @@ checkParentIDs <- function(ped, verbose = FALSE, repair = FALSE,
     cat("Step 2: Determining the if moms are the same sex and dads are same sex\n")
   }
   # Determine modal sex values for moms and dads
+
+
+
   mom_results <- checkParentSex(ped, parent_col = "momID", verbose = verbose)
   dad_results <- checkParentSex(ped, parent_col = "dadID", verbose = verbose)
 
   validation_results$mom_sex <- mom_results$unique_sexes
   validation_results$dad_sex <- dad_results$unique_sexes
-  validation_results$female_var <- mom_results$modal_sex
-  validation_results$male_var <- dad_results$modal_sex
+
   validation_results$wrong_sex_moms <- mom_results$inconsistent_parents
   validation_results$wrong_sex_dads <- dad_results$inconsistent_parents
   validation_results$female_moms <- mom_results$all_same_sex
   validation_results$male_dads <- dad_results$all_same_sex
-
+  if (!is.null(code_male) && !is.null(code_female)) {
+    validation_results$male_var <- code_male
+    validation_results$female_var <- code_female
+    validation_results$sex_code_source <- "user_provided_codes"
+  } else {
+    validation_results$female_var <- mom_results$modal_sex
+    validation_results$male_var <- dad_results$modal_sex
+    validation_results$sex_code_source <- "modal_parent_sex"
+  }
   # Are any parents in both momID and dadID?
   momdad <- intersect(ped$dadID, ped$momID)
   if (length(momdad) > 0 && !is.na(momdad)) {
