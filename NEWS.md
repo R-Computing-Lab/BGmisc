@@ -1,4 +1,4 @@
-# BGmisc beta 1.5.2
+# BGmisc 1.5.2
 * More flexible ID generation for simulatePedigree
 * Created ped2gen function to extract generation information from pedigree data.frames
 * Added tests for ped2gen
