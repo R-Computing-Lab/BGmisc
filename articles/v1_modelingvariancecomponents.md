@@ -158,8 +158,8 @@ summary(run1)
 #> AIC:      -5917.148              -3685.148                -3685.078
 #> BIC:     -10747.543              -3667.773                -3680.471
 #> To get additional fit indices, see help(mxRefModels)
-#> timestamp: 2026-01-02 21:18:50 
-#> Wall clock time: 0.06685114 secs 
+#> timestamp: 2026-01-02 21:26:18 
+#> Wall clock time: 0.06612492 secs 
 #> optimizer:  SLSQP 
 #> OpenMx version number: 2.22.10 
 #> Need help?  See help(mxSummary)
@@ -201,8 +201,8 @@ summary(run2)
 #> AIC:      -9113.092              -5499.092                -5499.048
 #> BIC:     -17811.437              -5479.794                -5492.498
 #> To get additional fit indices, see help(mxRefModels)
-#> timestamp: 2026-01-02 21:18:50 
-#> Wall clock time: 0.0482893 secs 
+#> timestamp: 2026-01-02 21:26:19 
+#> Wall clock time: 0.04855537 secs 
 #> optimizer:  SLSQP 
 #> OpenMx version number: 2.22.10 
 #> Need help?  See help(mxSummary)
