@@ -183,6 +183,8 @@ recodeSex <- function(
 
   # Initialize sex_recode as NA, preserving the length of the 'sex' column
   ped$sex_recode <- recode_na
+
+
   if (!is.null(code_male)) {
     ped$sex_recode[ped$sex == code_male] <- recode_male
   }
@@ -191,8 +193,10 @@ recodeSex <- function(
   }
 
   # handle unknown codes
-  if (!is.null(code_unknown)) {
+  if (!is.null(code_unknown) && !is.na(code_unknown)) {
     ped$sex_recode[ped$sex == code_unknown] <- recode_unknown
+  } else if (!is.null(code_unknown) && is.na(code_unknown)) {
+    ped$sex_recode[is.na(ped$sex)] <- recode_unknown
   } else if (!is.null(code_male) && !is.null(code_female)) {
     ped$sex_recode[!ped$sex %in% c(code_male, code_female) & !is.na(ped$sex)] <- recode_unknown
   }
