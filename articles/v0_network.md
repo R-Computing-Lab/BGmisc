@@ -197,9 +197,9 @@ useful for data validation as well as simplifying complex pedigrees for
 visualization. However, subsetting a pedigree can result in the
 underestimation of relatedness between individuals. This is because the
 subsetted pedigree may not contain all the individuals that connect two
-people together. For example if we were to remove Arthur Weasley (person
-9) and Molly Prewett (person 10) from the `potter` dataset, we would
-lose the connections amongst their children.
+people together. For example, if we were to remove Arthur Weasley
+(person 9) and Molly Prewett (person 10) from the `potter` dataset, we
+would lose the connections amongst their children.
 
 ![Potter Subset
 Pedigree](v0_network_files/figure-html/unnamed-chunk-11-1.png)
