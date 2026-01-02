@@ -22,7 +22,7 @@ checkSex(
 
 \item{code_female}{The current code used to represent females in the 'sex' column. If both are NULL, no recoding is performed.}
 
-\item{code_unknown}{The current code used to represent unknown sex values in the 'sex' column.}
+\item{code_unknown}{The current code used to represent unknown or ambiguous sex in the 'sex' column. Can be NA to indicate that missing values should be treated as unknown. If NULL and both code_male and code_female are provided, values not matching either will be inferred as unknown.}
 
 \item{verbose}{A logical flag indicating whether to print progress and validation messages to the console.}
 
