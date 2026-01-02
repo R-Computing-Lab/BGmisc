@@ -474,7 +474,7 @@ library(ggpedigree)
 df <- inbreeding_list[[1]]$df_fam
 
 ggpedigree(df,
-  verbose = FALSE, personID = "ID",
+  personID = "ID",
   config = list(
     code_male = 0
   )

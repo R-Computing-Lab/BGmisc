@@ -53,7 +53,7 @@ different extended families have no relations.
 
 ```{r, echo=FALSE, results='hide', out.width='50%', fig.cap="Potter Family Pedigree"}
 library(ggpedigree)
-ggpedigree(potter, code_male = 1, verbose = TRUE)
+ggpedigree(potter, config = list(code_male = 1))
 ```
 
 We will use the `potter` pedigree data as an example. For convenience, we've renamed the family ID variable to `oldfam` to avoid confusion with the new family ID variable we will create.
@@ -158,7 +158,7 @@ table(extendedFamilyEnvironment)
 
 # Subsetting Pedigrees
 
-Subsetting a pedigree allows researchers to focus on specific family lines or individuals within a larger dataset. This can be particularly useful for data validation as well as simplifying complex pedigrees for visualization. However, subsetting a pedigree can result in the underestimation of relatedness between individuals. This is because the subsetted pedigree may not contain all the individuals that connect two people together. For example if we were to remove Arthur Weasley (person 9) and Molly Prewett (person 10) from the `potter` dataset, we would lose the connections amongst their children. 
+Subsetting a pedigree allows researchers to focus on specific family lines or individuals within a larger dataset. This can be particularly useful for data validation as well as simplifying complex pedigrees for visualization. However, subsetting a pedigree can result in the underestimation of relatedness between individuals. This is because the subsetted pedigree may not contain all the individuals that connect two people together. For example, if we were to remove Arthur Weasley (person 9) and Molly Prewett (person 10) from the `potter` dataset, we would lose the connections amongst their children. 
 
 
 ```{r, echo=FALSE, results='hide', out.width='50%', fig.cap="Potter Subset Pedigree"}
@@ -171,7 +171,7 @@ subset_potter <- potter[subset_rows, ]
 subset_potter$dadID[subset_potter$dadID %in% c(9, 10)] <- NA
 subset_potter$momID[subset_potter$momID %in% c(9, 10)] <- NA
 
-ggpedigree(subset_potter, code_male = 1, verbose = TRUE)
+ggpedigree(subset_potter, config = list(code_male = 1))
 ```
 
 In the plot above, we have removed Arthur Weasley (person 9) and Molly Prewett (person 10) from the `potter` dataset. As a result, the connections between their children are lost. 
@@ -185,5 +185,5 @@ subset_rows <- c(1:5, 31:36)
 subset_potter <- potter[subset_rows, ]
 ```
 ```{r, echo=FALSE, results='hide', out.width='50%'}
-ggpedigree(subset_potter, code_male = 1, verbose = TRUE)
+ggpedigree(subset_potter, config =list(code_male = 1))
 ```
