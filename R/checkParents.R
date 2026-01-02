@@ -16,8 +16,8 @@
 #' @param personID Character. Column name for individual IDs.
 #' @param momID Character. Column name for maternal IDs.
 #' @param dadID Character. Column name for paternal IDs.
-#' @param code_male Value representing male sex
-#' @param code_female Value representing female sex
+#' @param code_male The code value used to represent male sex in the 'sex' column of \code{ped}.
+#' @param code_female The code value used to represent female sex in the 'sex' column of \code{ped}.
 #'
 #' @return Depending on the value of `repair`, either a list containing validation results or a repaired dataframe is returned.
 #' @examples
@@ -107,9 +107,11 @@ checkParentIDs <- function(ped, verbose = FALSE, repair = FALSE,
   if (!is.null(code_male) && !is.null(code_female)) {
     validation_results$male_var <- code_male
     validation_results$female_var <- code_female
+    validation_results$sex_code_source <- "user_provided_codes"
   } else {
-  validation_results$female_var <- mom_results$modal_sex
-  validation_results$male_var <- dad_results$modal_sex
+    validation_results$female_var <- mom_results$modal_sex
+    validation_results$male_var <- dad_results$modal_sex
+    validation_results$sex_code_source <- "modal_parent_sex"
   }
   # Are any parents in both momID and dadID?
   momdad <- intersect(ped$dadID, ped$momID)

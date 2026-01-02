@@ -40,9 +40,9 @@ checkParentIDs(
 
 \item{dadID}{Character. Column name for paternal IDs.}
 
-\item{code_male}{Value representing male sex}
+\item{code_male}{The code value used to represent male sex in the 'sex' column of \code{ped}.}
 
-\item{code_female}{Value representing female sex}
+\item{code_female}{The code value used to represent female sex in the 'sex' column of \code{ped}.}
 }
 \value{
 Depending on the value of `repair`, either a list containing validation results or a repaired dataframe is returned.

@@ -28,7 +28,7 @@ recodeSex(
 
 \item{code_female}{The current code used to represent females in the 'sex' column. If both are NULL, no recoding is performed.}
 
-\item{code_unknown}{The current code used to represent unknown}
+\item{code_unknown}{The current code used to represent unknown sex values in the 'sex' column.}
 
 \item{recode_male}{The value to use for males. Default is "M"}
 

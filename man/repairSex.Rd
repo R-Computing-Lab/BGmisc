@@ -21,7 +21,7 @@ repairSex(
 
 \item{code_female}{The current code used to represent females in the 'sex' column. If both are NULL, no recoding is performed.}
 
-\item{code_unknown}{The current code used to represent unknown}
+\item{code_unknown}{The current code used to represent unknown sex values in the 'sex' column.}
 }
 \value{
 A modified version of the input data.frame \code{ped}, containing an additional or modified 'sex_recode' column where the 'sex' values are recoded according to \code{code_male}. NA values in the 'sex' column are preserved.
