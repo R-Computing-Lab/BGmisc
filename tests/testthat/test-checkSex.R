@@ -213,7 +213,7 @@ test_that("recodeSex handles code_unknown with only code_male", {
     recode_unknown = "Unknown"
   )
 
-  # Male should be recoded, unknown should be recoded, F should be inferred as female
+  # Check recoding: M->Male, F->Female (inferred), U->Unknown
   expect_equal(recoded_ped$sex[1], "Male")
   expect_equal(recoded_ped$sex[2], "Female")
   expect_equal(recoded_ped$sex[4], "Unknown")
@@ -238,7 +238,7 @@ test_that("recodeSex handles code_unknown with only code_female", {
     recode_unknown = "Unknown"
   )
 
-  # Female should be recoded, unknown should be recoded, M should be inferred as male
+  # Check recoding: F->Female, M->Male (inferred), U->Unknown
   expect_equal(recoded_ped$sex[1], "Male")
   expect_equal(recoded_ped$sex[2], "Female")
   expect_equal(recoded_ped$sex[4], "Unknown")

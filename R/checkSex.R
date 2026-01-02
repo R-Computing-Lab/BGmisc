@@ -24,7 +24,7 @@
 #' @param ped A dataframe representing the pedigree data with a 'sex' column.
 #' @param code_male The current code used to represent males in the 'sex' column.
 #' @param code_female The current code used to represent females in the 'sex' column. If both are NULL, no recoding is performed.
-#' @param code_unknown The current code used to represent unknown
+#' @param code_unknown The current code used to represent unknown or ambiguous sex in the 'sex' column. Can be NA to indicate that missing values should be treated as unknown. If NULL and both code_male and code_female are provided, values not matching either will be inferred as unknown.
 #' @param verbose A logical flag indicating whether to print progress and validation messages to the console.
 #' @param repair A logical flag indicating whether to attempt repairs on the sex coding.
 #' @param momID The column name for maternal IDs. Default is "momID".
