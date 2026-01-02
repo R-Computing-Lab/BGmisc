@@ -116,7 +116,7 @@ test_that("recodeSex handles code_unknown parameter when explicitly provided", {
 })
 
 
-# Test Case 6: Handle code_unknown when it's NA (lines 198-199)
+# Test Case 6: Handle code_unknown when it's NA
 test_that("recodeSex handles code_unknown = NA correctly", {
   # Create pedigree where NA represents unknown sex
   ped <- data.frame(
@@ -143,7 +143,7 @@ test_that("recodeSex handles code_unknown = NA correctly", {
 })
 
 
-# Test Case 7: Infer unknown values from data (lines 200-201)
+# Test Case 7: Infer unknown values from data when code_unknown not provided
 test_that("recodeSex infers unknown values when code_unknown is not provided", {
   # Create pedigree with values that are neither male nor female
   ped <- data.frame(
