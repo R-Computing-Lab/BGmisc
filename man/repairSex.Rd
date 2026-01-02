@@ -4,7 +4,13 @@
 \alias{repairSex}
 \title{Repairs Sex Coding in a Pedigree Dataframe}
 \usage{
-repairSex(ped, verbose = FALSE, code_male = NULL, code_female = NULL)
+repairSex(
+  ped,
+  verbose = FALSE,
+  code_male = NULL,
+  code_female = NULL,
+  code_unknown = NULL
+)
 }
 \arguments{
 \item{ped}{A dataframe representing the pedigree data with a 'sex' column.}
@@ -14,6 +20,8 @@ repairSex(ped, verbose = FALSE, code_male = NULL, code_female = NULL)
 \item{code_male}{The current code used to represent males in the 'sex' column.}
 
 \item{code_female}{The current code used to represent females in the 'sex' column. If both are NULL, no recoding is performed.}
+
+\item{code_unknown}{The current code used to represent unknown}
 }
 \value{
 A modified version of the input data.frame \code{ped}, containing an additional or modified 'sex_recode' column where the 'sex' values are recoded according to \code{code_male}. NA values in the 'sex' column are preserved.

@@ -8,6 +8,7 @@ checkSex(
   ped,
   code_male = NULL,
   code_female = NULL,
+  code_unknown = NULL,
   verbose = FALSE,
   repair = FALSE,
   momID = "momID",
@@ -20,6 +21,8 @@ checkSex(
 \item{code_male}{The current code used to represent males in the 'sex' column.}
 
 \item{code_female}{The current code used to represent females in the 'sex' column. If both are NULL, no recoding is performed.}
+
+\item{code_unknown}{The current code used to represent unknown}
 
 \item{verbose}{A logical flag indicating whether to print progress and validation messages to the console.}
 
