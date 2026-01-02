@@ -107,9 +107,11 @@ checkParentIDs <- function(ped, verbose = FALSE, repair = FALSE,
   if (!is.null(code_male) && !is.null(code_female)) {
     validation_results$male_var <- code_male
     validation_results$female_var <- code_female
+    validation_results$sex_code_source <- "user_provided_codes"
   } else {
-  validation_results$female_var <- mom_results$modal_sex
-  validation_results$male_var <- dad_results$modal_sex
+    validation_results$female_var <- mom_results$modal_sex
+    validation_results$male_var <- dad_results$modal_sex
+    validation_results$sex_code_source <- "modal_parent_sex"
   }
   # Are any parents in both momID and dadID?
   momdad <- intersect(ped$dadID, ped$momID)
