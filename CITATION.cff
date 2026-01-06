@@ -1,24 +1,31 @@
-cff-version: "1.2.0"
+cff-version: 1.1.0
+authors:
+- family-names: Joe
+  given-names: Johnson
+orcid: https://orcid.org/0000-0000-0000-0000
+title:
+version: v1.5.2
+date-released: 2026-01-02
 authors:
 - family-names: Garrison
   given-names: S. Mason
-  orcid: "https://orcid.org/0000-0002-4804-6003"
+orcid: https://orcid.org/0000-0002-4804-6003
 - family-names: Hunter
   given-names: Michael D.
-  orcid: "https://orcid.org/0000-0002-3651-6709"
+orcid: https://orcid.org/0000-0002-3651-6709
 - family-names: Lyu
   given-names: Xuanyu
-  orcid: "https://orcid.org/0000-0002-2841-5529"
+orcid: https://orcid.org/0000-0002-2841-5529
 - family-names: Trattner
   given-names: Jonathan D.
-  orcid: "https://orcid.org/0000-0002-1097-7603"
+orcid: https://orcid.org/0000-0002-1097-7603
 - family-names: Burt
   given-names: S. Alexandra
-  orcid: "https://orcid.org/0000-0001-5538-7431"
+orcid: https://orcid.org/0000-0001-5538-7431
 contact:
 - family-names: Garrison
   given-names: S. Mason
-  orcid: "https://orcid.org/0000-0002-4804-6003"
+orcid: https://orcid.org/0000-0002-4804-6003
 doi: 10.6084/m9.figshare.25238536
 message: If you use this software, please cite our article in the
   Journal of Open Source Software.
