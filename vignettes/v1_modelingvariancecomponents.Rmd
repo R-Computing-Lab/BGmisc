@@ -25,7 +25,7 @@ This vignette provides a detailed guide to specific functions within the `BGmisc
 ```{r setup, include=FALSE}
 library(BGmisc)
 if (!requireNamespace("EasyMx", quietly = TRUE)) {
- message("Please install OpenMx to run the model fitting examples.")
+ message("Please install EasyMx to run the model fitting examples.")
 } else {
   require(EasyMx)
 }
