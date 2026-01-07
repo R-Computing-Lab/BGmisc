@@ -1,13 +1,13 @@
 
 # Description
 
-This update includes minor enhancements and bug fixes related to how string ids are handled in various functions.
+This update includes minor enhancements and bug fixes related to how string ids are handled in various functions. It also now allows certain vignettes to not throw an error if openmx is not installed for older R versions. This should resolve r-oldrel-windows-x86_64	1.5.0	22.00	246.00	268.00	ERROR seen in the last CRAN check.	
 
 # Test Environments
 
 1. Local OS: Windows 11 x64 (build 26220), R 4.5.2 (2025-10-31 ucrt)
 2. **GitHub Actions**:  
-    - [Link](https://github.com/R-Computing-Lab/BGmisc/actions/runs/20666823859)
+    - [Link](https://github.com/R-Computing-Lab/BGmisc/actions/runs/20786177599)
     - macOS (latest version) with the latest R release.
     - Windows (latest version) with the latest R release.
     - Ubuntu (latest version) with:
