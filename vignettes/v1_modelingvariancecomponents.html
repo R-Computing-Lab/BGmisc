@@ -422,20 +422,28 @@ rest of the classical twin model, in this case DZ twins.</p>
 <p>As you can see the model is identified, now that we’ve added another
 group. Let us confirm by fitting a model. First we prepare the data.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">require</span>(dplyr)</span>
-<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a></span>
-<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="fu">data</span>(twinData, <span class="at">package =</span> <span class="st">&quot;OpenMx&quot;</span>)</span>
-<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a></span>
-<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>selVars <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;ht1&quot;</span>, <span class="st">&quot;ht2&quot;</span>)</span>
-<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a></span>
-<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>mzdzData <span class="ot">&lt;-</span> <span class="fu">subset</span>(</span>
-<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>  twinData, zyg <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>),</span>
-<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>  <span class="fu">c</span>(selVars, <span class="st">&quot;zyg&quot;</span>)</span>
-<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a>)</span>
-<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a></span>
-<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a>mzdzData<span class="sc">$</span>RCoef <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="cn">NA</span>, .<span class="dv">5</span>)[mzdzData<span class="sc">$</span>zyg]</span>
-<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="co">#&gt; Loading required package: dplyr</span></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co">#&gt; Attaching package: &#39;dplyr&#39;</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="co">#&gt; The following objects are masked from &#39;package:stats&#39;:</span></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="co">#&gt;     filter, lag</span></span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a><span class="co">#&gt; The following objects are masked from &#39;package:base&#39;:</span></span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="co">#&gt;     intersect, setdiff, setequal, union</span></span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="co"># require(purrr)</span></span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a>selVars <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;ht1&quot;</span>, <span class="st">&quot;ht2&quot;</span>)</span>
 <span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a></span>
-<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a>mzData <span class="ot">&lt;-</span> mzdzData <span class="sc">%&gt;%</span> <span class="fu">filter</span>(zyg <span class="sc">==</span> <span class="dv">1</span>)</span></code></pre></div>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a>mzdzData <span class="ot">&lt;-</span> <span class="fu">subset</span>(</span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a>  twinData, zyg <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>),</span>
+<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a>  <span class="fu">c</span>(selVars, <span class="st">&quot;zyg&quot;</span>)</span>
+<span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a>)</span>
+<span id="cb5-19"><a href="#cb5-19" tabindex="-1"></a></span>
+<span id="cb5-20"><a href="#cb5-20" tabindex="-1"></a>mzdzData<span class="sc">$</span>RCoef <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="cn">NA</span>, .<span class="dv">5</span>)[mzdzData<span class="sc">$</span>zyg]</span>
+<span id="cb5-21"><a href="#cb5-21" tabindex="-1"></a></span>
+<span id="cb5-22"><a href="#cb5-22" tabindex="-1"></a></span>
+<span id="cb5-23"><a href="#cb5-23" tabindex="-1"></a>mzData <span class="ot">&lt;-</span> mzdzData <span class="sc">%&gt;%</span> <span class="fu">filter</span>(zyg <span class="sc">==</span> <span class="dv">1</span>)</span></code></pre></div>
 <p>Let us fit the data with MZ twins by themselves.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">requireNamespace</span>(<span class="st">&quot;EasyMx&quot;</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>)) {</span>
 <span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a> <span class="fu">print</span>(<span class="st">&quot;Please install EasyMx to run the model fitting examples.&quot;</span>)</span>
@@ -472,8 +480,8 @@ group. Let us confirm by fitting a model. First we prepare the data.</p>
 <span id="cb6-33"><a href="#cb6-33" tabindex="-1"></a><span class="co">#&gt; AIC:      -5917.148              -3685.148                -3685.078</span></span>
 <span id="cb6-34"><a href="#cb6-34" tabindex="-1"></a><span class="co">#&gt; BIC:     -10747.543              -3667.773                -3680.471</span></span>
 <span id="cb6-35"><a href="#cb6-35" tabindex="-1"></a><span class="co">#&gt; To get additional fit indices, see help(mxRefModels)</span></span>
-<span id="cb6-36"><a href="#cb6-36" tabindex="-1"></a><span class="co">#&gt; timestamp: 2026-01-07 10:10:05 </span></span>
-<span id="cb6-37"><a href="#cb6-37" tabindex="-1"></a><span class="co">#&gt; Wall clock time: 0.05492997 secs </span></span>
+<span id="cb6-36"><a href="#cb6-36" tabindex="-1"></a><span class="co">#&gt; timestamp: 2026-01-07 10:29:53 </span></span>
+<span id="cb6-37"><a href="#cb6-37" tabindex="-1"></a><span class="co">#&gt; Wall clock time: 0.05330706 secs </span></span>
 <span id="cb6-38"><a href="#cb6-38" tabindex="-1"></a><span class="co">#&gt; optimizer:  SLSQP </span></span>
 <span id="cb6-39"><a href="#cb6-39" tabindex="-1"></a><span class="co">#&gt; OpenMx version number: 2.22.10 </span></span>
 <span id="cb6-40"><a href="#cb6-40" tabindex="-1"></a><span class="co">#&gt; Need help?  See help(mxSummary)</span></span></code></pre></div>
@@ -515,8 +523,8 @@ identified, the model now fits.</p>
 <span id="cb7-33"><a href="#cb7-33" tabindex="-1"></a><span class="co">#&gt; AIC:      -9113.092              -5499.092                -5499.048</span></span>
 <span id="cb7-34"><a href="#cb7-34" tabindex="-1"></a><span class="co">#&gt; BIC:     -17811.437              -5479.794                -5492.498</span></span>
 <span id="cb7-35"><a href="#cb7-35" tabindex="-1"></a><span class="co">#&gt; To get additional fit indices, see help(mxRefModels)</span></span>
-<span id="cb7-36"><a href="#cb7-36" tabindex="-1"></a><span class="co">#&gt; timestamp: 2026-01-07 10:10:05 </span></span>
-<span id="cb7-37"><a href="#cb7-37" tabindex="-1"></a><span class="co">#&gt; Wall clock time: 0.04846501 secs </span></span>
+<span id="cb7-36"><a href="#cb7-36" tabindex="-1"></a><span class="co">#&gt; timestamp: 2026-01-07 10:29:53 </span></span>
+<span id="cb7-37"><a href="#cb7-37" tabindex="-1"></a><span class="co">#&gt; Wall clock time: 0.05561519 secs </span></span>
 <span id="cb7-38"><a href="#cb7-38" tabindex="-1"></a><span class="co">#&gt; optimizer:  SLSQP </span></span>
 <span id="cb7-39"><a href="#cb7-39" tabindex="-1"></a><span class="co">#&gt; OpenMx version number: 2.22.10 </span></span>
 <span id="cb7-40"><a href="#cb7-40" tabindex="-1"></a><span class="co">#&gt; Need help?  See help(mxSummary)</span></span></code></pre></div>
