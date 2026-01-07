@@ -108,9 +108,8 @@ require(dplyr)
 #> The following objects are masked from 'package:base':
 #> 
 #>     intersect, setdiff, setequal, union
-# require(purrr)
 
-data(twinData, package = "OpenMx")
+
 selVars <- c("ht1", "ht2")
 
 mzdzData <- subset(
@@ -127,6 +126,9 @@ mzData <- mzdzData %>% filter(zyg == 1)
 Let us fit the data with MZ twins by themselves.
 
 ``` r
+if (!requireNamespace("EasyMx", quietly = TRUE)) {
+ print("Please install EasyMx to run the model fitting examples.")
+} else {
 run1 <- emxTwinModel(
   model = "Cholesky",
   relatedness = "RCoef",
@@ -134,9 +136,10 @@ run1 <- emxTwinModel(
   use = selVars,
   run = TRUE, name = "TwCh"
 )
-#> Running TwCh with 4 parameters
 
 summary(run1)
+}
+#> Running TwCh with 4 parameters
 #> Summary of TwCh 
 #>  
 #> free parameters:
@@ -158,8 +161,8 @@ summary(run1)
 #> AIC:      -5917.148              -3685.148                -3685.078
 #> BIC:     -10747.543              -3667.773                -3680.471
 #> To get additional fit indices, see help(mxRefModels)
-#> timestamp: 2026-01-06 20:05:23 
-#> Wall clock time: 0.06796718 secs 
+#> timestamp: 2026-01-07 15:36:19 
+#> Wall clock time: 0.06817079 secs 
 #> optimizer:  SLSQP 
 #> OpenMx version number: 2.22.10 
 #> Need help?  See help(mxSummary)
@@ -170,6 +173,9 @@ But when we add another group, so that the model is identified, the
 model now fits.
 
 ``` r
+if (!requireNamespace("EasyMx", quietly = TRUE)) {
+ print("Please install EasyMx to run the model fitting examples.")
+} else {
 run2 <- emxTwinModel(
   model = "Cholesky",
   relatedness = "RCoef",
@@ -177,9 +183,10 @@ run2 <- emxTwinModel(
   use = selVars,
   run = TRUE, name = "TwCh"
 )
-#> Running TwCh with 4 parameters
 
 summary(run2)
+}
+#> Running TwCh with 4 parameters
 #> Summary of TwCh 
 #>  
 #> free parameters:
@@ -201,8 +208,8 @@ summary(run2)
 #> AIC:      -9113.092              -5499.092                -5499.048
 #> BIC:     -17811.437              -5479.794                -5492.498
 #> To get additional fit indices, see help(mxRefModels)
-#> timestamp: 2026-01-06 20:05:24 
-#> Wall clock time: 0.04919791 secs 
+#> timestamp: 2026-01-07 15:36:19 
+#> Wall clock time: 0.04922152 secs 
 #> optimizer:  SLSQP 
 #> OpenMx version number: 2.22.10 
 #> Need help?  See help(mxSummary)
