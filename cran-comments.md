@@ -1,7 +1,7 @@
 
 # Description
 
-This update includes minor enhancements and bug fixes related to how string ids are handled in various functions.
+This update includes minor enhancements and bug fixes related to how string ids are handled in various functions. It also now allows certain vignettes to not throw an error if openmx is not installed for older R versions.
 
 # Test Environments
 

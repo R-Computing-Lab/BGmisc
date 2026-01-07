@@ -24,8 +24,18 @@ This vignette provides a detailed guide to specific functions within the `BGmisc
 
 ```{r setup, include=FALSE}
 library(BGmisc)
-require(EasyMx)
-require(OpenMx)
+if (!requireNamespace("EasyMx", quietly = TRUE)) {
+ message("Please install OpenMx to run the model fitting examples.")
+} else {
+  require(EasyMx)
+}
+if (!requireNamespace("OpenMx", quietly = TRUE)) {
+message("Please install OpenMx to run the model fitting examples.")
+} else {
+  require(OpenMx)
+}
+
+
 ```
 
 Ensure that the `BGmisc` package is installed and loaded.
@@ -37,7 +47,7 @@ Ensure that the following dependencies are installed before proceeding as they p
 - `OpenMx`
 
 
-```{r}
+```r
 library(BGmisc)
 library(EasyMx)
 library(OpenMx)
@@ -88,11 +98,54 @@ identifyComponentModel(
 
 As you can see the model is identified, now that we've added another group. Let us confirm by fitting a model. First we prepare the data.
 
-```{r}
+```{r, include=FALSE}
+if (!requireNamespace("OpenMx", quietly = TRUE)) {
+  # if OpenMx isn't available
+  n_subjects <- 500
+
+  df_summary_data <- data.frame(
+    age_mean = 34.45,
+    age_sd = 10.12345,
+    ht1_mean = 1.662,
+    ht1_sd = 0.0896277,
+    ht2_mean = 1.694,
+    ht2_sd = 0.09903498
+  )
+  set.seed(12345)
+  twinData <- data.frame(
+    ht1 = rnorm(n_subjects, mean = df_summary_data$ht1_mean, sd = df_summary_data$ht1_sd),
+    zyg = rep(c(1, 3), each = n_subjects / 2)
+  )
+  twinData$ht2 <- twinData$ht1 * ifelse(twinData$zyg == 1, 1, 0.5) +
+    rnorm(n_subjects, mean = 0, sd = df_summary_data$ht2_sd) + .1*rnorm(n_subjects, mean = df_summary_data$ht2_mean, sd = df_summary_data$ht2_sd)
+twinData$ht2[twinData$zyg == 3] <- twinData$ht2[twinData$zyg == 3] + .5*rnorm(sum(twinData$zyg == 3), mean = df_summary_data$ht2_mean, sd = df_summary_data$ht2_sd)
+
+} else {
+data(twinData, package = "OpenMx")
+
 require(dplyr)
 # require(purrr)
 
+selVars <- c("ht1", "ht2")
+
+mzdzData <- subset(
+  twinData, zyg %in% c(1, 3),
+  c(selVars, "zyg")
+)
+
+mzdzData$RCoef <- c(1, NA, .5)[mzdzData$zyg]
+
+
+mzData <- mzdzData %>% filter(zyg == 1)
+}
+```
+
+
+```r
+require(dplyr)
+
 data(twinData, package = "OpenMx")
+
 selVars <- c("ht1", "ht2")
 
 mzdzData <- subset(
@@ -109,6 +162,9 @@ mzData <- mzdzData %>% filter(zyg == 1)
 Let us fit the data with MZ twins by themselves. 
 
 ```{r}
+if (!requireNamespace("EasyMx", quietly = TRUE)) {
+ print("Please install EasyMx to run the model fitting examples.")
+} else {
 run1 <- emxTwinModel(
   model = "Cholesky",
   relatedness = "RCoef",
@@ -118,11 +174,15 @@ run1 <- emxTwinModel(
 )
 
 summary(run1)
+}
 ```
 
 As you can see the model was unsuccessful because it was not identified. But when we add another group, so that the model is identified, the model now fits.
 
 ```{r}
+if (!requireNamespace("EasyMx", quietly = TRUE)) {
+ print("Please install EasyMx to run the model fitting examples.")
+} else {
 run2 <- emxTwinModel(
   model = "Cholesky",
   relatedness = "RCoef",
@@ -132,4 +192,5 @@ run2 <- emxTwinModel(
 )
 
 summary(run2)
+}
 ```
