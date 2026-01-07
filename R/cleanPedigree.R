@@ -7,7 +7,7 @@
 #'
 #' @param df A dataframe whose column names need to be standardized.
 #' @param verbose A logical indicating whether to print progress messages.
-#' @return A dataframe with standardized column names. 
+#' @return A dataframe with standardized column names.
 #'
 #' @keywords internal
 standardizeColnames <- function(df, verbose = FALSE) {

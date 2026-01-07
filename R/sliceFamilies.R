@@ -23,21 +23,22 @@
 #' @export
 #'
 sliceFamilies <- function(
-    outcome_name = "AD_demo",
-    biggest = TRUE,
-    bin_width = 0.10,
-    degreerelatedness = 12,
-    chunk_size = 2e7,
-    max_lines = 1e13,
-    addRel_ceiling = 1.5,
-    input_file = NULL,
-    folder_prefix = "data",
-    progress_csv = "progress.csv",
-    progress_status = "progress.txt",
-    data_directory = NULL,
-    verbose = FALSE,
-    error_handling = FALSE,
-    file_column_names = c("ID1", "ID2", "addRel", "mitRel", "cnuRel")) {
+  outcome_name = "AD_demo",
+  biggest = TRUE,
+  bin_width = 0.10,
+  degreerelatedness = 12,
+  chunk_size = 2e7,
+  max_lines = 1e13,
+  addRel_ceiling = 1.5,
+  input_file = NULL,
+  folder_prefix = "data",
+  progress_csv = "progress.csv",
+  progress_status = "progress.txt",
+  data_directory = NULL,
+  verbose = FALSE,
+  error_handling = FALSE,
+  file_column_names = c("ID1", "ID2", "addRel", "mitRel", "cnuRel")
+) {
   bin_width_string <- as.character(bin_width * 100)
 
   if (is.null(data_directory)) {
@@ -260,7 +261,6 @@ sliceFamilies <- function(
     end_time <- base::Sys.time()
     elapsed <- end_time - start_time
     total_lines <- total_lines + df_nrows
-
 
 
     # update start line for next iteration

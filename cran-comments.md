@@ -18,7 +18,7 @@ This update includes minor enhancements and bug fixes related to how string ids 
 ## R CMD check results
 
 ── R CMD check results ───────────────────────────────────────────────────────────────────────── BGmisc 1.5.2 ────
-Duration: 1m 26.1s
+Duration: 1m 35.9s
 
 0 errors ✔ | 0 warnings ✔ | 0 notes ✔
 
@@ -26,10 +26,12 @@ R CMD check succeeded
 
 ## revdepcheck results
 
-We checked 2 reverse dependencies, comparing R CMD check results across CRAN and dev versions of this package.
+We checked 2 reverse dependencies, comparing R CMD check results across CRAN and dev versions of this package. 
 
  * We saw 0 new problems
  * We failed to check 0 packages
+ 
+The development version of ggpedigree resolves "E: 1" seen in the CRAN version. I maintain both packages, so once the latest version of BGmisc is on CRAN, I will submit the updated ggpedigree version.
 
 > revdepcheck::revdep_check(num_workers = 4)
 ── INSTALL ────────────────────────────────────────────────────────── 2 versions ──
@@ -39,4 +41,4 @@ We checked 2 reverse dependencies, comparing R CMD check results across CRAN and
 OK: 2                                                                            
 
 BROKEN: 0
-Total time: 4 min
+Total time: 3 min

@@ -211,7 +211,6 @@ test_that("ped2add verbose prints updates", {
 })
 
 
-
 test_that("ped2maternal/paternal produces correct matrix dims", {
   data(hazard)
   tolerance <- 1e-10
@@ -491,7 +490,6 @@ test_that("isChild_method product the same results for add matrix for hazard", {
 
   expect_gt(sum(abs(difference)), 0)
 })
-
 
 
 test_that("isChild_method product the same results for add matrix with inbreeding", {

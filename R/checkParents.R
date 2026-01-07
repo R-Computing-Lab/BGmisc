@@ -35,8 +35,7 @@ checkParentIDs <- function(ped, verbose = FALSE, repair = FALSE,
                            momID = "momID",
                            dadID = "dadID",
                            code_male = NULL,
-                           code_female = NULL
-                           ) {
+                           code_female = NULL) {
   # Standardize column names in the input dataframe
   ped <- standardizeColnames(ped, verbose = verbose)
 
@@ -91,7 +90,6 @@ checkParentIDs <- function(ped, verbose = FALSE, repair = FALSE,
     cat("Step 2: Determining the if moms are the same sex and dads are same sex\n")
   }
   # Determine modal sex values for moms and dads
-
 
 
   mom_results <- checkParentSex(ped, parent_col = "momID", verbose = verbose)
@@ -187,7 +185,7 @@ checkParentIDs <- function(ped, verbose = FALSE, repair = FALSE,
       }
     }
   }
-  if (addphantoms==TRUE) {
+  if (addphantoms == TRUE) {
     # Generate new IDs
     newIDbase <- if (is.numeric(ped$ID)) max(ped$ID, na.rm = TRUE) + 1 else paste0("phantom-", seq_len(nrow(ped)))
     # Initialize a dataframe to store new entries
@@ -210,37 +208,36 @@ checkParentIDs <- function(ped, verbose = FALSE, repair = FALSE,
       newID <- if (is.numeric(ped$ID)) newIDbase + added_counter else paste0("phantom-dad-", ped$ID[idx])
       added_counter <- added_counter + 1
       ped$dadID[idx] <- newID
-      if ("famID" %in% names(ped)){
-        newFAMID  <-  unique(ped$famID[idx])
+      if ("famID" %in% names(ped)) {
+        newFAMID <- unique(ped$famID[idx])
         newFAMID <- newFAMID[!is.na(newFAMID)]
 
-      new_entry <- addParentRow(new_entry_base, newID = newID, dadID = NA, momID = NA, sex = inferred_sex, famID = newFAMID)
+        new_entry <- addParentRow(new_entry_base, newID = newID, dadID = NA, momID = NA, sex = inferred_sex, famID = newFAMID)
       } else {
-      new_entry <- addParentRow(new_entry_base, newID = newID, dadID = NA, momID = NA, sex = inferred_sex)
+        new_entry <- addParentRow(new_entry_base, newID = newID, dadID = NA, momID = NA, sex = inferred_sex)
       }
       new_entries <- rbind(new_entries, new_entry)
     }
 
     # Add moms when missing
-    inferred_sex <- if (length(validation_results$female_var) > 0 && !is.na(validation_results$female_var)){
+    inferred_sex <- if (length(validation_results$female_var) > 0 && !is.na(validation_results$female_var)) {
       validation_results$female_var
     } else {
-        0
-      }
+      0
+    }
 
     for (idx in which(!is.na(ped$dadID) & is.na(ped$momID))) {
       newID <- if (is.numeric(ped$ID)) newIDbase + added_counter else paste0("phantom-mom-", ped$ID[idx])
       added_counter <- added_counter + 1
       ped$momID[idx] <- newID
 
-      if ("famID" %in% names(ped)){
-        newFAMID  <-  unique(ped$famID[idx])
+      if ("famID" %in% names(ped)) {
+        newFAMID <- unique(ped$famID[idx])
         newFAMID <- newFAMID[!is.na(newFAMID)]
 
         new_entry <- addParentRow(new_entry_base, newID = newID, dadID = NA, momID = NA, sex = inferred_sex, famID = newFAMID)
       } else {
-
-      new_entry <- addParentRow(new_entry_base, newID = newID, dadID = NA, momID = NA, sex = inferred_sex)
+        new_entry <- addParentRow(new_entry_base, newID = newID, dadID = NA, momID = NA, sex = inferred_sex)
       }
       new_entries <- rbind(new_entries, new_entry)
     }
@@ -333,16 +330,16 @@ addRowlessParents <- function(ped, verbose, validation_results) {
       )
       inferred_sex <- if ("mom" %in% role) validation_results$female_var else validation_results$male_var
 
-      if("famID" %in% names(ped)){
-      newFAMID  <-  unique(ped$famID[which(ped$momID == pid | ped$dadID == pid)])
-      newFAMID <- newFAMID[!is.na(newFAMID)]
+      if ("famID" %in% names(ped)) {
+        newFAMID <- unique(ped$famID[which(ped$momID == pid | ped$dadID == pid)])
+        newFAMID <- newFAMID[!is.na(newFAMID)]
 
 
-      if(length(newFAMID) >1){
-        newFAMID <- NA
-      }
+        if (length(newFAMID) > 1) {
+          newFAMID <- NA
+        }
 
-      new_entry <- addParentRow(new_entry_base, newID = pid, dadID = NA, momID = NA, sex = inferred_sex, famID = newFAMID)
+        new_entry <- addParentRow(new_entry_base, newID = pid, dadID = NA, momID = NA, sex = inferred_sex, famID = newFAMID)
       } else {
         new_entry <- addParentRow(new_entry_base, newID = pid, dadID = NA, momID = NA, sex = inferred_sex)
       }
@@ -355,7 +352,6 @@ addRowlessParents <- function(ped, verbose, validation_results) {
       cat("Added phantom parents for:", paste(new_entries$ID, collapse = ", "), "\n")
     }
   }
-
 
 
   return(ped)
@@ -374,8 +370,7 @@ addRowlessParents <- function(ped, verbose, validation_results) {
 addParentRow <- function(template_row, newID, sex,
                          momID = NA,
                          dadID = NA,
-                         famID = NA
-                         ) {
+                         famID = NA) {
   new_row <- template_row
   new_row[] <- NA # set all columns to NA
   new_row$ID <- newID

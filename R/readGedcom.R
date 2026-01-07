@@ -519,18 +519,18 @@ postProcessGedcom <- function(df_temp,
                               add_parents = TRUE,
                               skinny = TRUE,
                               verbose = FALSE) {
-  if (add_parents  == TRUE) {
+  if (add_parents == TRUE) {
     if (verbose == TRUE) message("Processing parents")
     df_temp <- processParents(df_temp, datasource = "gedcom")
   }
   if (combine_cols) {
     df_temp <- collapseNames(verbose = verbose, df_temp = df_temp)
   }
-  if (remove_empty_cols  == TRUE) {
+  if (remove_empty_cols == TRUE) {
     if (verbose == TRUE) message("Removing empty columns")
     df_temp <- df_temp[, colSums(is.na(df_temp)) < nrow(df_temp)]
   }
-  if (skinny  == TRUE) {
+  if (skinny == TRUE) {
     if (verbose == TRUE) message("Slimming down the data frame")
     df_temp <- df_temp[, colSums(is.na(df_temp)) < nrow(df_temp)]
     df_temp$FAMC <- NULL

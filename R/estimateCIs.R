@@ -61,23 +61,23 @@ calculateCIs <- function(tbl,
   mc <- match.call()
   user_set_doubleentered <- "doubleentered" %in% names(mc)
 
-  method_in <- tolower(method %||% "raykov")  # `%||%` if you have it; else just tolower(method)
-  method_effective <- switch(
-    method_in,
+  method_in <- tolower(method %||% "raykov") # `%||%` if you have it; else just tolower(method)
+  method_effective <- switch(method_in,
     "raykov" = "raykov",
-    "fisherz" = "raykov",          # alias
+    "fisherz" = "raykov", # alias
     "wald" = "wald",
     "doubleentered" = {
       if (!user_set_doubleentered) doubleentered <- TRUE
-      "raykov"                      # double-entry + Fisher z
+      "raykov" # double-entry + Fisher z
     },
     "doubleenteredconserv" = {
       if (!user_set_doubleentered) doubleentered <- TRUE
-      "wald"                        # double-entry + Wald (more conservative)
+      "wald" # double-entry + Wald (more conservative)
     },
     {
       warning(sprintf("Unrecognized method '%s'; defaulting to 'wald'.", method),
-              call. = FALSE)
+        call. = FALSE
+      )
       "wald"
     }
   )

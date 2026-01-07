@@ -123,7 +123,6 @@ checkIDuniqueness <- function(ped, verbose = FALSE) {
 }
 
 
-
 #' Check for within-row duplicates (self-parents, same mom/dad)
 #'
 #' This function checks for within-row duplicates in a pedigree.
