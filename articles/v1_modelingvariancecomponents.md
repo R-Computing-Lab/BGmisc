@@ -127,17 +127,17 @@ Let us fit the data with MZ twins by themselves.
 
 ``` r
 if (!requireNamespace("EasyMx", quietly = TRUE)) {
- print("Please install EasyMx to run the model fitting examples.")
+  print("Please install EasyMx to run the model fitting examples.")
 } else {
-run1 <- emxTwinModel(
-  model = "Cholesky",
-  relatedness = "RCoef",
-  data = mzData,
-  use = selVars,
-  run = TRUE, name = "TwCh"
-)
+  run1 <- emxTwinModel(
+    model = "Cholesky",
+    relatedness = "RCoef",
+    data = mzData,
+    use = selVars,
+    run = TRUE, name = "TwCh"
+  )
 
-summary(run1)
+  summary(run1)
 }
 #> Running TwCh with 4 parameters
 #> Summary of TwCh 
@@ -161,8 +161,8 @@ summary(run1)
 #> AIC:      -5917.148              -3685.148                -3685.078
 #> BIC:     -10747.543              -3667.773                -3680.471
 #> To get additional fit indices, see help(mxRefModels)
-#> timestamp: 2026-01-08 16:34:43 
-#> Wall clock time: 0.06375623 secs 
+#> timestamp: 2026-01-08 18:00:49 
+#> Wall clock time: 0.06723213 secs 
 #> optimizer:  SLSQP 
 #> OpenMx version number: 2.22.10 
 #> Need help?  See help(mxSummary)
@@ -174,17 +174,17 @@ model now fits.
 
 ``` r
 if (!requireNamespace("EasyMx", quietly = TRUE)) {
- print("Please install EasyMx to run the model fitting examples.")
+  print("Please install EasyMx to run the model fitting examples.")
 } else {
-run2 <- emxTwinModel(
-  model = "Cholesky",
-  relatedness = "RCoef",
-  data = mzdzData,
-  use = selVars,
-  run = TRUE, name = "TwCh"
-)
+  run2 <- emxTwinModel(
+    model = "Cholesky",
+    relatedness = "RCoef",
+    data = mzdzData,
+    use = selVars,
+    run = TRUE, name = "TwCh"
+  )
 
-summary(run2)
+  summary(run2)
 }
 #> Running TwCh with 4 parameters
 #> Summary of TwCh 
@@ -208,8 +208,8 @@ summary(run2)
 #> AIC:      -9113.092              -5499.092                -5499.048
 #> BIC:     -17811.437              -5479.794                -5492.498
 #> To get additional fit indices, see help(mxRefModels)
-#> timestamp: 2026-01-08 16:34:43 
-#> Wall clock time: 0.04549384 secs 
+#> timestamp: 2026-01-08 18:00:49 
+#> Wall clock time: 0.04876399 secs 
 #> optimizer:  SLSQP 
 #> OpenMx version number: 2.22.10 
 #> Need help?  See help(mxSummary)
