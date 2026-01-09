@@ -129,6 +129,7 @@ Let us fit the data with MZ twins by themselves.
 if (!requireNamespace("EasyMx", quietly = TRUE)) {
   print("Please install EasyMx to run the model fitting examples.")
 } else {
+  library(EasyMx)
   run1 <- emxTwinModel(
     model = "Cholesky",
     relatedness = "RCoef",
@@ -161,8 +162,8 @@ if (!requireNamespace("EasyMx", quietly = TRUE)) {
 #> AIC:      -5917.148              -3685.148                -3685.078
 #> BIC:     -10747.543              -3667.773                -3680.471
 #> To get additional fit indices, see help(mxRefModels)
-#> timestamp: 2026-01-08 18:00:49 
-#> Wall clock time: 0.06723213 secs 
+#> timestamp: 2026-01-09 19:57:36 
+#> Wall clock time: 0.07066059 secs 
 #> optimizer:  SLSQP 
 #> OpenMx version number: 2.22.10 
 #> Need help?  See help(mxSummary)
@@ -176,6 +177,7 @@ model now fits.
 if (!requireNamespace("EasyMx", quietly = TRUE)) {
   print("Please install EasyMx to run the model fitting examples.")
 } else {
+  library(EasyMx)
   run2 <- emxTwinModel(
     model = "Cholesky",
     relatedness = "RCoef",
@@ -208,8 +210,8 @@ if (!requireNamespace("EasyMx", quietly = TRUE)) {
 #> AIC:      -9113.092              -5499.092                -5499.048
 #> BIC:     -17811.437              -5479.794                -5492.498
 #> To get additional fit indices, see help(mxRefModels)
-#> timestamp: 2026-01-08 18:00:49 
-#> Wall clock time: 0.04876399 secs 
+#> timestamp: 2026-01-09 19:57:37 
+#> Wall clock time: 0.05075598 secs 
 #> optimizer:  SLSQP 
 #> OpenMx version number: 2.22.10 
 #> Need help?  See help(mxSummary)

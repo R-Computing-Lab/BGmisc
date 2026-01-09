@@ -188,6 +188,7 @@ group. Let us confirm by fitting a model. First we prepare the data.</p>
 <code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"EasyMx"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="st">"Please install EasyMx to run the model fitting examples."</span><span class="op">)</span></span>
 <span><span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://bitbucket.org/mhunter/easymx" class="external-link">EasyMx</a></span><span class="op">)</span></span>
 <span>  <span class="va">run1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/EasyMx/man/emxTwinModel.html" class="external-link">emxTwinModel</a></span><span class="op">(</span></span>
 <span>    model <span class="op">=</span> <span class="st">"Cholesky"</span>,</span>
 <span>    relatedness <span class="op">=</span> <span class="st">"RCoef"</span>,</span>
@@ -220,8 +221,8 @@ group. Let us confirm by fitting a model. First we prepare the data.</p>
 <span><span class="co">#&gt; AIC:      -5917.148              -3685.148                -3685.078</span></span>
 <span><span class="co">#&gt; BIC:     -10747.543              -3667.773                -3680.471</span></span>
 <span><span class="co">#&gt; To get additional fit indices, see help(mxRefModels)</span></span>
-<span><span class="co">#&gt; timestamp: 2026-01-08 18:00:49 </span></span>
-<span><span class="co">#&gt; Wall clock time: 0.06723213 secs </span></span>
+<span><span class="co">#&gt; timestamp: 2026-01-09 19:57:36 </span></span>
+<span><span class="co">#&gt; Wall clock time: 0.07066059 secs </span></span>
 <span><span class="co">#&gt; optimizer:  SLSQP </span></span>
 <span><span class="co">#&gt; OpenMx version number: 2.22.10 </span></span>
 <span><span class="co">#&gt; Need help?  See help(mxSummary)</span></span></code></pre></div>
@@ -232,6 +233,7 @@ identified, the model now fits.</p>
 <code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"EasyMx"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="st">"Please install EasyMx to run the model fitting examples."</span><span class="op">)</span></span>
 <span><span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://bitbucket.org/mhunter/easymx" class="external-link">EasyMx</a></span><span class="op">)</span></span>
 <span>  <span class="va">run2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/EasyMx/man/emxTwinModel.html" class="external-link">emxTwinModel</a></span><span class="op">(</span></span>
 <span>    model <span class="op">=</span> <span class="st">"Cholesky"</span>,</span>
 <span>    relatedness <span class="op">=</span> <span class="st">"RCoef"</span>,</span>
@@ -264,8 +266,8 @@ identified, the model now fits.</p>
 <span><span class="co">#&gt; AIC:      -9113.092              -5499.092                -5499.048</span></span>
 <span><span class="co">#&gt; BIC:     -17811.437              -5479.794                -5492.498</span></span>
 <span><span class="co">#&gt; To get additional fit indices, see help(mxRefModels)</span></span>
-<span><span class="co">#&gt; timestamp: 2026-01-08 18:00:49 </span></span>
-<span><span class="co">#&gt; Wall clock time: 0.04876399 secs </span></span>
+<span><span class="co">#&gt; timestamp: 2026-01-09 19:57:37 </span></span>
+<span><span class="co">#&gt; Wall clock time: 0.05075598 secs </span></span>
 <span><span class="co">#&gt; optimizer:  SLSQP </span></span>
 <span><span class="co">#&gt; OpenMx version number: 2.22.10 </span></span>
 <span><span class="co">#&gt; Need help?  See help(mxSummary)</span></span></code></pre></div>
