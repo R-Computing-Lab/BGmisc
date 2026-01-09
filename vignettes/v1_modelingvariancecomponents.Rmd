@@ -24,15 +24,16 @@ This vignette provides a detailed guide to specific functions within the `BGmisc
 
 ```{r setup, include=FALSE}
 library(BGmisc)
-if (!requireNamespace("EasyMx", quietly = TRUE)) {
-  message("Please install EasyMx to run the model fitting examples.")
-} else {
-  require(EasyMx)
-}
+
 if (!requireNamespace("OpenMx", quietly = TRUE)) {
   message("Please install OpenMx to run the model fitting examples.")
 } else {
-  require(OpenMx)
+  library(OpenMx)
+}
+if (!requireNamespace("EasyMx", quietly = TRUE)) {
+  message("Please install EasyMx to run the model fitting examples.")
+} else {
+  library(EasyMx)
 }
 ```
 
@@ -116,7 +117,12 @@ if (!requireNamespace("OpenMx", quietly = TRUE)) {
     zyg = rep(c(1, 3), each = n_subjects / 2)
   )
   twinData$ht2 <- twinData$ht1 * ifelse(twinData$zyg == 1, 1, 0.5) +
-    rnorm(n_subjects, mean = 0, sd = df_summary_data$ht2_sd) + .1 * rnorm(n_subjects, mean = df_summary_data$ht2_mean, sd = df_summary_data$ht2_sd)
+    rnorm(n_subjects, 
+          mean = 0, sd = df_summary_data$ht2_sd) + 
+    .1 * rnorm(n_subjects, 
+               mean = df_summary_data$ht2_mean,
+               sd = df_summary_data$ht2_sd)
+  
   twinData$ht2[twinData$zyg == 3] <- twinData$ht2[twinData$zyg == 3] + .5 * rnorm(sum(twinData$zyg == 3), mean = df_summary_data$ht2_mean, sd = df_summary_data$ht2_sd)
 } else {
   data(twinData, package = "OpenMx")
@@ -147,6 +153,7 @@ Let us fit the data with MZ twins by themselves.
 if (!requireNamespace("EasyMx", quietly = TRUE)) {
   print("Please install EasyMx to run the model fitting examples.")
 } else {
+  library(EasyMx)
   run1 <- emxTwinModel(
     model = "Cholesky",
     relatedness = "RCoef",
@@ -165,6 +172,7 @@ As you can see the model was unsuccessful because it was not identified. But whe
 if (!requireNamespace("EasyMx", quietly = TRUE)) {
   print("Please install EasyMx to run the model fitting examples.")
 } else {
+  library(EasyMx)
   run2 <- emxTwinModel(
     model = "Cholesky",
     relatedness = "RCoef",
