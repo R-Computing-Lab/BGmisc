@@ -687,7 +687,6 @@ loadOrComputeCheckpoint <- function(file, compute_fn,
 }
 
 
-
 #' parent-child adjacency data
 #' @inheritParams loadOrComputeCheckpoint
 #' @inheritParams ped2com

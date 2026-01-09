@@ -30,8 +30,6 @@ summarizeMatrilines <- function(ped, famID = "famID", personID = "ID",
 }
 
 
-
-
 #' Summarize the paternal lines in a pedigree
 #' @inheritParams summarizePedigrees
 #' @seealso [summarizePedigrees ()]

@@ -185,5 +185,5 @@ subset_rows <- c(1:5, 31:36)
 subset_potter <- potter[subset_rows, ]
 ```
 ```{r, echo=FALSE, results='hide', out.width='50%'}
-ggpedigree(subset_potter, config =list(code_male = 1))
+ggpedigree(subset_potter, config = list(code_male = 1))
 ```

@@ -165,8 +165,6 @@ test_that("summarizePedigrees() throws error on invalid column names", {
 })
 
 
-
-
 # Test Case 9: Handling empty dataset
 # test_that("summarizePedigrees() handles empty dataset gracefully", {
 #  df <- data.frame(ID = integer(), momID = integer(), dadID = integer(), famID = integer())

@@ -12,16 +12,14 @@ buildWithinGenerations <- function(sizeGens, marR, sexR, Ngen, verbose = FALSE,
                                    dadID = "dadID",
                                    code_male = "M",
                                    code_female = "F",
-                                   fam_shift = 1L
-                                   ) {
-
-    idx_width <- nchar(max(sizeGens))
-    gen_width <- max(2L, nchar(Ngen))
-    fam_shift <- 1L
+                                   fam_shift = 1L) {
+  idx_width <- nchar(max(sizeGens))
+  gen_width <- max(2L, nchar(Ngen))
+  fam_shift <- 1L
 
   for (i in 1:Ngen) {
-   # idGen <- as.numeric(paste(100, i, 1:sizeGens[i], sep = ""))
-   idGen <- fam_shift * 10^(gen_width + idx_width) + i * 10^(idx_width) + (1:sizeGens[i])
+    # idGen <- as.numeric(paste(100, i, 1:sizeGens[i], sep = ""))
+    idGen <- fam_shift * 10^(gen_width + idx_width) + i * 10^(idx_width) + (1:sizeGens[i])
     # idGen <- ifelse(i==1,
     #                 paste(i,"-",1:sizeGens[i]),
     #                 paste(i,"-",sizeGens[i-1]:sizeGens[i]))

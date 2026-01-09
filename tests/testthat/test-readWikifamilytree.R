@@ -51,12 +51,6 @@ test_that("traceTreePaths works correctly for vertical tree", {
 })
 
 
-
-
-
-
-
-
 test_that("readWikifamilytree reads a string correctly", {
   # Create a temporary WikiFamilyTree file for testing
   # Example usage

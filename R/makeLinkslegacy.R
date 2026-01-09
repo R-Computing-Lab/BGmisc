@@ -4,23 +4,24 @@
 
 
 .com2links.legacy <- function(
-    rel_pairs_file = "dataRelatedPairs.csv",
-    ad_ped_matrix = NULL,
-    mit_ped_matrix = mt_ped_matrix,
-    mt_ped_matrix = NULL,
-    cn_ped_matrix = NULL,
-    #  pat_ped_matrix = NULL,
-    #  mat_ped_matrix = NULL,
-    #  mapa_id_file = "data_mapaID.csv",
-    write_buffer_size = 1000,
-    update_rate = 1000,
-    gc = TRUE,
-    writetodisk = TRUE,
-    verbose = FALSE,
-    legacy = FALSE,
-    outcome_name = "data",
-    drop_upper_triangular = TRUE,
-    ...) {
+  rel_pairs_file = "dataRelatedPairs.csv",
+  ad_ped_matrix = NULL,
+  mit_ped_matrix = mt_ped_matrix,
+  mt_ped_matrix = NULL,
+  cn_ped_matrix = NULL,
+  #  pat_ped_matrix = NULL,
+  #  mat_ped_matrix = NULL,
+  #  mapa_id_file = "data_mapaID.csv",
+  write_buffer_size = 1000,
+  update_rate = 1000,
+  gc = TRUE,
+  writetodisk = TRUE,
+  verbose = FALSE,
+  legacy = FALSE,
+  outcome_name = "data",
+  drop_upper_triangular = TRUE,
+  ...
+) {
   # Non-legacy mode processing
 
   if (!legacy) {
@@ -60,7 +61,6 @@
 
     # Extract individual IDs from the first available matrix.
     ids <- NULL
-
 
 
     if (!is.null(cn_ped_matrix)) {
@@ -508,15 +508,16 @@
 
 
 .com2links.og <- function(
-    rel_pairs_file = "dataRelatedPairs.csv",
-    ad_ped_matrix = NULL,
-    mit_ped_matrix = mt_ped_matrix,
-    mt_ped_matrix = NULL,
-    cn_ped_matrix = NULL,
-    update_rate = 500,
-    verbose = FALSE,
-    outcome_name = "data",
-    ...) {
+  rel_pairs_file = "dataRelatedPairs.csv",
+  ad_ped_matrix = NULL,
+  mit_ped_matrix = mt_ped_matrix,
+  mt_ped_matrix = NULL,
+  cn_ped_matrix = NULL,
+  update_rate = 500,
+  verbose = FALSE,
+  outcome_name = "data",
+  ...
+) {
   # --- Legacy Mode ---
   if (verbose == TRUE) {
     message("Using legacy mode")

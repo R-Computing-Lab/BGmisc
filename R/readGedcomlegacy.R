@@ -463,7 +463,6 @@
 }
 
 
-
 #' Extract Information from Line
 #'
 #' This function extracts information from a line based on a specified type.

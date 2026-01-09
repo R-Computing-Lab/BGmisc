@@ -115,7 +115,6 @@ summarizePedigrees <- function(ped,
   ped_dt <- data.table::as.data.table(ped)
 
 
-
   # Initialize...
   ## Output list
   output <- list()
