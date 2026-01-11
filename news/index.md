@@ -2,6 +2,8 @@
 
 ## BGmisc 1.5.2
 
+CRAN release: 2026-01-11
+
 - More flexible ID generation for simulatePedigree
 - Created ped2gen function to extract generation information from
   pedigree data.frames

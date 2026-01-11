@@ -21,7 +21,7 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/R-Computing-Lab/BGmisc/blob/main/inst/CITATION)
+[`inst/CITATION`](https://github.com/R-Computing-Lab/BGmisc/blob/v1.5.2/inst/CITATION)
 
 Garrison, S. Mason, Hunter, Michael D., Lyu, Xuanyu, Trattner, Jonathan
 D., Burt, S. Alexandra (2024). “BGmisc: An R Package for Extended
