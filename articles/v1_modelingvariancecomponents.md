@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This vignette provides a detailed guide to specific functions within the
+This vignette provides a detailed guide to specific functions in the
 `BGmisc` package that aid in the identification and fitting of variance
 component models common in behavior genetics. We will explore key
 functions such as `identifyComponentModel`, providing practical examples
@@ -162,8 +162,8 @@ if (!requireNamespace("EasyMx", quietly = TRUE)) {
 #> AIC:      -5917.148              -3685.148                -3685.078
 #> BIC:     -10747.543              -3667.773                -3680.471
 #> To get additional fit indices, see help(mxRefModels)
-#> timestamp: 2026-01-11 14:53:21 
-#> Wall clock time: 0.06564856 secs 
+#> timestamp: 2026-01-12 21:05:14 
+#> Wall clock time: 0.07105374 secs 
 #> optimizer:  SLSQP 
 #> OpenMx version number: 2.22.10 
 #> Need help?  See help(mxSummary)
@@ -210,8 +210,8 @@ if (!requireNamespace("EasyMx", quietly = TRUE)) {
 #> AIC:      -9113.092              -5499.092                -5499.048
 #> BIC:     -17811.437              -5479.794                -5492.498
 #> To get additional fit indices, see help(mxRefModels)
-#> timestamp: 2026-01-11 14:53:22 
-#> Wall clock time: 0.04786372 secs 
+#> timestamp: 2026-01-12 21:05:14 
+#> Wall clock time: 0.04958081 secs 
 #> optimizer:  SLSQP 
 #> OpenMx version number: 2.22.10 
 #> Need help?  See help(mxSummary)
