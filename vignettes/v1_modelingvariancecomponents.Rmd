@@ -18,7 +18,7 @@ options(rmarkdown.html_vignette.check_title = FALSE)
 
 # Introduction
 
-This vignette provides a detailed guide to specific functions within the `BGmisc` package that aid in the identification and fitting of variance component models common in behavior genetics. We will explore key functions such as `identifyComponentModel`, providing practical examples and theoretical background. Identification ensures a unique set of parameters that define the model-implied covariance matrix, preventing free parameters from trading off one another.
+This vignette provides a detailed guide to specific functions in the `BGmisc` package that aid in the identification and fitting of variance component models common in behavior genetics. We will explore key functions such as `identifyComponentModel`, providing practical examples and theoretical background. Identification ensures a unique set of parameters that define the model-implied covariance matrix, preventing free parameters from trading off one another.
 
 ## Loading Required Libraries
 
