@@ -14,6 +14,12 @@ buildPedigreeModelCovariance <- function(vars = c(ad2 = 0.5,
                                          Vam = FALSE,
                                          Ver = TRUE
 ) {
+  if (require(OpenMx) == FALSE) {
+    stop("OpenMx package is required for buildPedigreeModelCovariance function. Please install it.")
+  } else {
+    library(OpenMx)
+  }
+
   mxModel(
     "ModelOne",
     if (Vad) {
@@ -59,6 +65,12 @@ buildOneFamilyGroup <- function(
   full_df_row,
   ytemp
 ) {
+  if (require(OpenMx) == FALSE) {
+    stop("OpenMx package is required for buildPedigreeModelCovariance function. Please install it.")
+  } else {
+    library(OpenMx)
+  }
+
   fsize <- nrow(Addmat)
 
   mxModel(
@@ -91,7 +103,7 @@ buildOneFamilyGroup <- function(
 }
 
 
-build_family_groups <- function(
+buildFamilyGroups <- function(
   dat, ytemp,
   Addmat, Nucmat, Extmat, Mtdmat, Amimat, Dmgmat,
   prefix = "fam"
@@ -101,7 +113,7 @@ build_family_groups <- function(
 
   for (afam in seq_len(numfam)) {
     full_df_row <- matrix(dat[afam, ], nrow = 1, dimnames = list(NULL, ytemp))
-    groups[[afam]] <- build_one_family_group(
+    groups[[afam]] <- buildOneFamilyGroup(
       group_name  = paste0(prefix, afam),
       Addmat      = Addmat,
       Nucmat      = Nucmat,
@@ -121,7 +133,7 @@ buildPedigreeMx <- function(model_name, vars, group_models) {
   group_names <- vapply(group_models, function(m) m$name, character(1))
   mxModel(
     model_name,
-    build_variance_components(vars),
+    buildPedigreeModelCovariance(vars),
     group_models,
     mxFitFunctionMultigroup(group_names)
   )
