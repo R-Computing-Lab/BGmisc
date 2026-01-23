@@ -28,9 +28,7 @@ ped2mit(
 \arguments{
 \item{ped}{a pedigree dataset.  Needs ID, momID, and dadID columns}
 
-\item{max_gen}{the maximum number of generations to compute
-(e.g., only up to 4th degree relatives).  The default is 25. However it can be set to infinity.
- `Inf` uses as many generations as there are in the data.}
+\item{max_gen}{the maximum number of iterations that the adjacency matrix is multiplied to get the relatedness matrix. `Inf` uses as many iterations as there are in the data. Defaults to 25.}
 
 \item{sparse}{logical.  If TRUE, use and return sparse matrices from Matrix package}
 

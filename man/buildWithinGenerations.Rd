@@ -5,6 +5,7 @@
 \title{Process Generations for Pedigree Simulation}
 \usage{
 buildWithinGenerations(
+  beta = FALSE,
   sizeGens,
   marR,
   sexR,

@@ -17,7 +17,8 @@ buildBetweenGenerations(
   momID = "momID",
   dadID = "dadID",
   code_male = "M",
-  code_female = "F"
+  code_female = "F",
+  beta = FALSE
 )
 }
 \arguments{
