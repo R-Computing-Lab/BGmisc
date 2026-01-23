@@ -98,6 +98,7 @@ identifyComponentModel(
 As you can see the model is identified, now that we've added another group. Let us confirm by fitting a model. First we prepare the data.
 
 ```{r, include=FALSE}
+library(dplyr)
 if (!requireNamespace("OpenMx", quietly = TRUE)) {
   # if OpenMx isn't available
   n_subjects <- 500
@@ -130,7 +131,7 @@ if (!requireNamespace("OpenMx", quietly = TRUE)) {
 ```
 
 ```{r}
-require(dplyr)
+library(dplyr)
 
 
 selVars <- c("ht1", "ht2")
