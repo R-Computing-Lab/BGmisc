@@ -6,13 +6,55 @@
 #' @inheritParams simulatePedigree
 #' @inheritParams createGenDataFrame
 #' @return A data frame representing the simulated pedigree, including columns for family ID (`fam`),
-buildWithinGenerations <- function(sizeGens, marR, sexR, Ngen, verbose = FALSE,
-                                   personID = "ID",
-                                   momID = "momID",
-                                   dadID = "dadID",
-                                   code_male = "M",
-                                   code_female = "F",
-                                   fam_shift = 1L) {
+
+buildWithinGenerations <- function(beta = FALSE,
+  sizeGens, marR, sexR, Ngen, verbose = FALSE,
+  personID = "ID",
+  momID = "momID",
+  dadID = "dadID",
+  code_male = "M",
+  code_female = "F",
+  fam_shift = 1L) {
+  if (beta) {
+    df_Fam <- buildWithinGenerations_optimized(
+      sizeGens = sizeGens,
+      marR = marR,
+      sexR = sexR,
+      Ngen = Ngen,
+      verbose = verbose,
+      personID = personID,
+      momID = momID,
+      dadID = dadID,
+      code_male = code_male,
+      code_female = code_female,
+      fam_shift = fam_shift
+    )
+  } else {
+    df_Fam <- buildWithinGenerations_old(
+      sizeGens = sizeGens,
+      marR = marR,
+      sexR = sexR,
+      Ngen = Ngen,
+      verbose = verbose,
+      personID = personID,
+      momID = momID,
+      dadID = dadID,
+      code_male = code_male,
+      code_female = code_female,
+      fam_shift = fam_shift
+    )
+  }
+  return(df_Fam)
+}
+
+
+buildWithinGenerations_old <- function(sizeGens, marR, sexR, Ngen, verbose = FALSE,
+                                       personID = "ID",
+                                       momID = "momID",
+                                       dadID = "dadID",
+                                       code_male = "M",
+                                       code_female = "F",
+                                       fam_shift = 1L) {
   idx_width <- nchar(max(sizeGens))
   gen_width <- max(2L, nchar(Ngen))
   fam_shift <- 1L
@@ -111,6 +153,137 @@ buildWithinGenerations <- function(sizeGens, marR, sexR, Ngen, verbose = FALSE,
               }
             }
           }
+        }
+        # message(usedIds)
+      }
+    }
+    if (i == 1) {
+      df_Fam <- df_Ngen
+    } else {
+      df_Fam <- rbind(df_Fam, df_Ngen)
+    }
+  }
+  return(df_Fam)
+}
+
+
+buildWithinGenerations_optimized <- function(sizeGens, marR, sexR, Ngen, verbose = FALSE,
+                                             personID = "ID",
+                                             momID = "momID",
+                                             dadID = "dadID",
+                                             code_male = "M",
+                                             code_female = "F",
+                                             fam_shift = 1L) {
+  idx_width <- nchar(max(sizeGens))
+  gen_width <- max(2L, nchar(Ngen))
+
+
+  # Precompute powers once
+  pow_idx <- 10^idx_width
+  pow_gen <- 10^(gen_width + idx_width)
+
+  ## Connect male and female into couples in each generations
+  marR_crt <- (1 + marR) / 2
+
+  for (i in seq_len(Ngen)) {
+    # idGen <- as.numeric(paste(100, i, 1:sizeGens[i], sep = ""))
+
+    idGen <- fam_shift * pow_gen + i * pow_idx + seq_len(sizeGens[i])
+
+
+    ### For each generation, create a separate dataframe
+    df_Ngen <- createGenDataFrame(
+      sizeGens = sizeGens,
+      genIndex = i,
+      idGen = idGen
+    )
+
+    ### Let's deal with the sex in each generation first
+
+    df_Ngen$sex <- determineSex(
+      idGen = idGen, sexR = sexR,
+      code_male = code_male,
+      code_female = code_female
+    )
+
+    # message(paste("tiger",i))
+    # The first generation
+    if (i == 1) {
+      df_Ngen$spID[1] <- df_Ngen$id[2]
+      df_Ngen$spID[2] <- df_Ngen$id[1]
+
+      df_Ngen$sex[1] <- code_female
+      df_Ngen$sex[2] <- code_male
+    }
+
+
+    usedFemaleIds <- numeric()
+    usedMaleIds <- numeric()
+
+    # reserve the single persons
+    if (i != 1 && i != Ngen) {
+      totalFemale <- sum(df_Ngen$sex == code_female)
+      totalMale <- sum(df_Ngen$sex == code_male)
+      nMarriedFemale <- round(totalFemale * marR_crt)
+      nMarriedMale <- round(totalMale * marR_crt)
+      # make sure there are same numbers of married males and females
+      if (nMarriedFemale >= nMarriedMale) {
+        nMarriedFemale <- nMarriedMale
+      } else {
+        nMarriedMale <- nMarriedFemale
+      }
+      # get the number of single males and females
+      nSingleFemale <- totalFemale - nMarriedFemale
+      nSingleMale <- totalMale - nMarriedMale
+
+
+      # sample single ids from male ids and female ids
+      if (nSingleFemale < 0) {
+        nSingleFemale <- 0
+        message("Warning: Negative number of single women available; setting to 0")
+        usedFemaleIds <- numeric()
+      } else {
+        usedFemaleIds <- sample(df_Ngen$id[df_Ngen$sex == code_female], nSingleFemale)
+      }
+      ## message(c("Used F", usedFemaleIds))
+      if (nSingleMale < 0) {
+        nSingleMale <- 0
+        message("Warning: Negative number of single men available; setting to 0")
+        usedMaleIds <- numeric()
+      } else {
+        usedMaleIds <- sample(df_Ngen$id[df_Ngen$sex == code_male], nSingleMale)
+      }
+      ## message(c("Used M", usedMaleIds))
+      #   usedIds <- c(usedFemaleIds, usedMaleIds)
+      isUsed <- df_Ngen$id %in% c(usedFemaleIds, usedMaleIds)
+
+      # Create spouses
+      for (j in seq_len(nrow(df_Ngen))) {
+        if (isUsed[j]) {
+          next
+        } else {
+
+          if (df_Ngen$sex[j] == code_female) {
+            spouse_sex_code <- code_male
+          } else {
+            spouse_sex_code <- code_female
+          }
+          for (k in seq_len(nrow(df_Ngen))) {
+
+            tgt <- (!isUsed[k]) & df_Ngen$sex[k] == spouse_sex_code
+
+            if (tgt) {
+              df_Ngen$spID[j] <- df_Ngen$id[k]
+              df_Ngen$spID[k] <- df_Ngen$id[j]
+
+              isUsed[j] <- TRUE
+              isUsed[k] <- TRUE
+              break
+            } else {
+              next
+            }
+          }
+
         }
         # message(usedIds)
       }
@@ -421,7 +594,9 @@ simulatePedigree <- function(kpc = 3,
                              spouseID = "spouseID",
                              code_male = "M",
                              code_female = "F",
-                             fam_shift = 1L) {
+                             fam_shift = 1L,
+                             beta = FALSE
+) {
   # SexRatio: ratio of male over female in the offspring setting; used in the between generation combinations
   # SexRatio <- sexR / (1 - sexR)
 
@@ -444,7 +619,8 @@ simulatePedigree <- function(kpc = 3,
     dadID = dadID,
     code_male = code_male,
     code_female = code_female,
-    fam_shift = fam_shift
+    fam_shift = fam_shift,
+    beta = beta
   )
   if (verbose == TRUE) {
     message(
