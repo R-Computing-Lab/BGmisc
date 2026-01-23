@@ -25,7 +25,8 @@ simulatePedigree(
   spouseID = "spouseID",
   code_male = "M",
   code_female = "F",
-  fam_shift = 1L
+  fam_shift = 1L,
+  beta = FALSE
 )
 
 SimPed(...)
