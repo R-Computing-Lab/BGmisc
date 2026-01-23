@@ -1,3 +1,9 @@
+# BGmisc NEWS
+
+# BGmisc Dev
+* Optimize Within Generation Pedigree simulatePedigree
+* Fix error when not enough single people available
+
 # BGmisc 1.5.2
 * More flexible ID generation for simulatePedigree
 * Created ped2gen function to extract generation information from pedigree data.frames
