@@ -1,9 +1,7 @@
 #' Take a pedigree and turn it into a relatedness matrix
 #' @param ped a pedigree dataset.  Needs ID, momID, and dadID columns
 #' @param component character.  Which component of the pedigree to return.  See Details.
-#' @param max_gen the maximum number of generations to compute
-#'  (e.g., only up to 4th degree relatives).  The default is 25. However it can be set to infinity.
-#'   `Inf` uses as many generations as there are in the data.
+#' @param max_gen the maximum number of iterations that the adjacency matrix is multiplied to get the relatedness matrix. `Inf` uses as many iterations as there are in the data. Defaults to 25.
 #' @param sparse logical.  If TRUE, use and return sparse matrices from Matrix package
 #' @param verbose logical.  If TRUE, print progress through stages of algorithm
 #' @param update_rate numeric. The rate at which to print progress
@@ -100,6 +98,7 @@ ped2com <- function(ped, component,
     "tcrossprod", "crossprod", "star",
     "tcross.alt.crossprod", "tcross.alt.star"
   )
+
   if (!config$transpose_method %in% transpose_method_options) {
     stop(paste0(
       "Invalid method specified. Choose from ",
@@ -107,10 +106,12 @@ ped2com <- function(ped, component,
     ))
   }
 
-
-  if (!config$adjacency_method %in%
-    c("indexed", "loop", "direct", "beta")) {
-    stop("Invalid method specified. Choose from 'indexed', 'loop', 'direct', or 'beta'.")
+  # Validate the 'adjacency_method' argument
+  adjacency_method_options <-  c("indexed", "loop", "direct", "beta")
+  if (!config$adjacency_method %in% adjacency_method_options
+  ) {
+    stop(paste0("Invalid method specified. Choose from ",
+      paste(adjacency_method_options, collapse = ", "), "."))
   }
 
   # standardize colnames
@@ -215,12 +216,21 @@ ped2com <- function(ped, component,
     count <- 0
   }
   maxCount <- config$max_gen + 1
+
   if (config$verbose == TRUE) {
     cat("About to do RAM path tracing\n")
   }
 
   # r is I + A + A^2 + ... = (I-A)^-1 from RAM
   # could trim, here
+  ## it keeps going until it explains all of the relatedness with themselves (i.e., mtSum == 0)
+  # some of this precision is articifuial because we literally get to the point that the condon is eaither there or not. probabiliticy
+
+  # how much percision do we need to get unbiased estimates
+
+  # big matrix still happens here because the network is built. just less percise on inbreeding
+
+  # bias-precision tradeoff. how much percision do we need to get unbiased estimates? not a lot
   while (mtSum != 0 && count < maxCount) {
     r <- r + newIsPar
     gen <- gen + (Matrix::rowSums(newIsPar) > 0)
