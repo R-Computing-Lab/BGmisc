@@ -73,7 +73,10 @@ current version.}
 
 \item{code_female}{The value to use for females. Default is "F"}
 
-\item{fam_shift}{An integer to shift the person ID. Default is 1L.}
+\item{fam_shift}{An integer to shift the person ID. Default is 1L.
+This is useful when simulating multiple pedigrees to avoid ID conflicts.}
+
+\item{beta}{logical. If TRUE, use the optimized version of the algorithm.}
 
 \item{...}{Additional arguments to be passed to other functions.}
 }

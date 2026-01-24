@@ -30,7 +30,7 @@ buildWithinGenerations <- function(beta = FALSE,
       fam_shift = fam_shift
     )
   } else {
-    df_Fam <- buildWithinGenerations_old(
+    df_Fam <- buildWithinGenerations_base(
       sizeGens = sizeGens,
       marR = marR,
       sexR = sexR,
@@ -48,16 +48,16 @@ buildWithinGenerations <- function(beta = FALSE,
 }
 
 
-buildWithinGenerations_old <- function(sizeGens, marR, sexR, Ngen, verbose = FALSE,
-                                       personID = "ID",
-                                       momID = "momID",
-                                       dadID = "dadID",
-                                       code_male = "M",
-                                       code_female = "F",
-                                       fam_shift = 1L) {
+buildWithinGenerations_base <- function(sizeGens, marR, sexR, Ngen, verbose = FALSE,
+                                        personID = "ID",
+                                        momID = "momID",
+                                        dadID = "dadID",
+                                        code_male = "M",
+                                        code_female = "F",
+                                        fam_shift = 1L) {
   idx_width <- nchar(max(sizeGens))
   gen_width <- max(2L, nchar(Ngen))
-  fam_shift <- 1L
+  #  fam_shift <- 1L
 
   for (i in 1:Ngen) {
     # idGen <- as.numeric(paste(100, i, 1:sizeGens[i], sep = ""))
@@ -99,6 +99,7 @@ buildWithinGenerations_old <- function(sizeGens, marR, sexR, Ngen, verbose = FAL
     if (i != 1 && i != Ngen) {
       nMarriedFemale <- round(sum(df_Ngen$sex == code_female) * marR_crt)
       nMarriedMale <- round(sum(df_Ngen$sex == code_male) * marR_crt)
+
       # make sure there are same numbers of married males and females
       if (nMarriedFemale >= nMarriedMale) {
         nMarriedFemale <- nMarriedMale
@@ -107,14 +108,23 @@ buildWithinGenerations_old <- function(sizeGens, marR, sexR, Ngen, verbose = FAL
       }
       # get the number of single males and females
       nSingleFemale <- sum(df_Ngen$sex == code_female) - nMarriedFemale
+
+      if (nSingleFemale < 0) {
+        nSingleFemale <- 0
+        usedFemaleIds <- numeric()
+      } else {
+        usedFemaleIds <- sample(df_Ngen$id[df_Ngen$sex == code_female], nSingleFemale)
+      }
+
       nSingleMale <- sum(df_Ngen$sex == code_male) - nMarriedMale
+      if (nSingleMale < 0) {
+        nSingleMale <- 0
+        usedMaleIds <- numeric()
+      } else {
 
-
+        usedMaleIds <- sample(df_Ngen$id[df_Ngen$sex == code_male], nSingleMale)
+      }
       # sample single ids from male ids and female ids
-      usedFemaleIds <- sample(df_Ngen$id[df_Ngen$sex == code_female], nSingleFemale)
-      ## message(c("Used F", usedFemaleIds))
-      usedMaleIds <- sample(df_Ngen$id[df_Ngen$sex == code_male], nSingleMale)
-      ## message(c("Used M", usedMaleIds))
 
       usedIds <- c(usedFemaleIds, usedMaleIds)
 
@@ -167,6 +177,8 @@ buildWithinGenerations_old <- function(sizeGens, marR, sexR, Ngen, verbose = FAL
 }
 
 
+
+
 buildWithinGenerations_optimized <- function(sizeGens, marR, sexR, Ngen, verbose = FALSE,
                                              personID = "ID",
                                              momID = "momID",
@@ -184,6 +196,10 @@ buildWithinGenerations_optimized <- function(sizeGens, marR, sexR, Ngen, verbose
 
   ## Connect male and female into couples in each generations
   marR_crt <- (1 + marR) / 2
+
+  # Initialize a list to store data frames for each generation
+  df_list <- vector("list", Ngen)
+
 
   for (i in seq_len(Ngen)) {
     # idGen <- as.numeric(paste(100, i, 1:sizeGens[i], sep = ""))
@@ -222,8 +238,13 @@ buildWithinGenerations_optimized <- function(sizeGens, marR, sexR, Ngen, verbose
 
     # reserve the single persons
     if (i != 1 && i != Ngen) {
-      totalFemale <- sum(df_Ngen$sex == code_female)
-      totalMale <- sum(df_Ngen$sex == code_male)
+      # is faster
+      isFemale <- df_Ngen$sex == code_female
+      isMale <- df_Ngen$sex == code_male
+
+
+      totalFemale <- sum(isFemale)
+      totalMale <- sum(isMale)
       nMarriedFemale <- round(totalFemale * marR_crt)
       nMarriedMale <- round(totalMale * marR_crt)
       # make sure there are same numbers of married males and females
@@ -232,6 +253,14 @@ buildWithinGenerations_optimized <- function(sizeGens, marR, sexR, Ngen, verbose
       } else {
         nMarriedMale <- nMarriedFemale
       }
+      if (nMarriedFemale > totalFemale) {
+        nMarriedFemale <- totalFemale
+      }
+      if (nMarriedMale > totalMale) {
+        nMarriedMale <- totalMale
+      }
+
+
       # get the number of single males and females
       nSingleFemale <- totalFemale - nMarriedFemale
       nSingleMale <- totalMale - nMarriedMale
@@ -243,57 +272,76 @@ buildWithinGenerations_optimized <- function(sizeGens, marR, sexR, Ngen, verbose
         message("Warning: Negative number of single women available; setting to 0")
         usedFemaleIds <- numeric()
       } else {
-        usedFemaleIds <- sample(df_Ngen$id[df_Ngen$sex == code_female], nSingleFemale)
+        usedFemaleIds <- sample(df_Ngen$id[isFemale], nSingleFemale)
       }
-      ## message(c("Used F", usedFemaleIds))
+
       if (nSingleMale < 0) {
         nSingleMale <- 0
         message("Warning: Negative number of single men available; setting to 0")
         usedMaleIds <- numeric()
       } else {
-        usedMaleIds <- sample(df_Ngen$id[df_Ngen$sex == code_male], nSingleMale)
+        usedMaleIds <- sample(df_Ngen$id[isMale], nSingleMale)
       }
-      ## message(c("Used M", usedMaleIds))
+
       #   usedIds <- c(usedFemaleIds, usedMaleIds)
       isUsed <- df_Ngen$id %in% c(usedFemaleIds, usedMaleIds)
 
       # Create spouses
-      for (j in seq_len(nrow(df_Ngen))) {
+      nrows_df_Ngen <- nrow(df_Ngen)
+      availFemale <- which(isFemale & !isUsed)
+      availMale <- which(isMale & !isUsed)
+
+      # next unused pointer
+      ptrFemale <- 1L
+      ptrMale <- 1L
+
+
+      for (j in seq_len(nrows_df_Ngen)) {
         if (isUsed[j]) {
           next
+        }
+
+        if (df_Ngen$sex[j] == code_female) {
+          # only runs when the person is not used
+          while (ptrMale <= length(availMale) && isUsed[availMale[ptrMale]]) {
+            ptrMale <- ptrMale + 1L
+          }
+          # if all used males, skip
+          if (ptrMale > length(availMale)) {
+            next
+          }
+          k <- availMale[ptrMale]
+          ptrMale <- ptrMale + 1L
+
+          #  spouse_sex_code <- code_male
         } else {
 
-          if (df_Ngen$sex[j] == code_female) {
-            spouse_sex_code <- code_male
-          } else {
-            spouse_sex_code <- code_female
+          while (ptrFemale <= length(availFemale) && isUsed[availFemale[ptrFemale]]) {
+            ptrFemale <- ptrFemale + 1L
           }
-          for (k in seq_len(nrow(df_Ngen))) {
-
-            tgt <- (!isUsed[k]) & df_Ngen$sex[k] == spouse_sex_code
-
-            if (tgt) {
-              df_Ngen$spID[j] <- df_Ngen$id[k]
-              df_Ngen$spID[k] <- df_Ngen$id[j]
-
-              isUsed[j] <- TRUE
-              isUsed[k] <- TRUE
-              break
-            } else {
-              next
-            }
+          if (ptrFemale > length(availFemale)) {
+            next
           }
+          k <- availFemale[ptrFemale]
+          ptrFemale <- ptrFemale + 1L
 
+          # spouse_sex_code <- code_female
         }
-        # message(usedIds)
+
+
+        df_Ngen$spID[j] <- df_Ngen$id[k]
+        df_Ngen$spID[k] <- df_Ngen$id[j]
+
+        isUsed[j] <- TRUE
+        isUsed[k] <- TRUE
       }
     }
-    if (i == 1) {
-      df_Fam <- df_Ngen
-    } else {
-      df_Fam <- rbind(df_Fam, df_Ngen)
-    }
+
+    df_list[[i]] <- df_Ngen
+
   }
+  df_Fam <- do.call(rbind, df_list)
+  rownames(df_Fam) <- NULL
   return(df_Fam)
 }
 
@@ -344,7 +392,7 @@ buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose = FALSE, mar
       code_female = code_female
     )
   } else {
-    df_Fam <- buildBetweenGenerations_old(
+    df_Fam <- buildBetweenGenerations_base(
       df_Fam = df_Fam,
       Ngen = Ngen,
       sizeGens = sizeGens,
@@ -377,6 +425,7 @@ buildBetweenGenerations_optimized <- function(df_Fam,
   df_Fam$ifparent <- FALSE
   df_Fam$ifson <- FALSE
   df_Fam$ifdau <- FALSE
+
   for (i in seq_len(Ngen)) {
     # generation 1 doesn't need any mother and father
     if (i == 1) {
@@ -385,14 +434,14 @@ buildBetweenGenerations_optimized <- function(df_Fam,
       df_Ngen$ifson <- FALSE
       df_Ngen$ifdau <- FALSE
       df_Fam[df_Fam$gen == i, ] <- df_Ngen
-    } 
-    
-          # Create a pool for used male children and female children respectively
-      usedFemaleIds <- numeric()
-      usedMaleIds <- numeric()
-      usedIds <- c(usedFemaleIds, usedMaleIds)
+    }
 
-   if (i != 1){
+    # Create a pool for used male children and female children respectively
+    usedFemaleIds <- numeric()
+    usedMaleIds <- numeric()
+    usedIds <- c(usedFemaleIds, usedMaleIds)
+
+    if (i != 1) {
       # calculate the number of couples in the i-1 th generation
       N_couples <- (sizeGens[i - 1] - sum(is.na(df_Fam$spID[df_Fam$gen == i - 1]))) * 0.5
       # calculate the number of members in the i th generation that have a link to the couples in the i-1 th generation
@@ -455,10 +504,13 @@ buildBetweenGenerations_optimized <- function(df_Fam,
       df_Ngen <- df_Ngen[sample(nrow(df_Ngen)), ]
       # Create a pool for the used parents
       usedParentIds <- numeric()
-
-      for (k in 1:sizeGens[i - 1]) {
+      #   IsUsedParent <- df_Ngen$id %in% usedParentIds
+      nrow_df_Ngen <- nrow(df_Ngen)
+      # assign parents until reaching the marriage rate, or finishing the list
+      # good place to optimize
+      for (k in seq_len(sizeGens[i - 1])) {
         # first check if the number of married couples surpass the marriage rate
-        if (sum(df_Ngen$ifparent) / nrow(df_Ngen) >= marR) {
+        if (sum(df_Ngen$ifparent) / nrow_df_Ngen >= marR) {
           break
         } else {
           # check if the id is used and if the member has married
@@ -574,11 +626,11 @@ buildBetweenGenerations_optimized <- function(df_Fam,
   return(df_Fam)
 }
 
-buildBetweenGenerations_old <- function(df_Fam, Ngen, sizeGens, verbose = FALSE, marR, sexR, kpc,
-                                        rd_kpc, personID = "ID",
-                                        momID = "momID",
-                                        dadID = "dadID",
-                                        code_male = "M", code_female = "F") {
+buildBetweenGenerations_base <- function(df_Fam, Ngen, sizeGens, verbose = FALSE, marR, sexR, kpc,
+                                         rd_kpc, personID = "ID",
+                                         momID = "momID",
+                                         dadID = "dadID",
+                                         code_male = "M", code_female = "F") {
   df_Fam$ifparent <- FALSE
   df_Fam$ifson <- FALSE
   df_Fam$ifdau <- FALSE
@@ -808,7 +860,8 @@ buildBetweenGenerations_old <- function(df_Fam, Ngen, sizeGens, verbose = FALSE,
 #' @param code_male The value to use for males. Default is "M"
 #' @param code_female The value to use for females. Default is "F"
 #' @param fam_shift An integer to shift the person ID. Default is 1L.
-#'
+#' This is useful when simulating multiple pedigrees to avoid ID conflicts.
+#' @param beta logical. If TRUE, use the optimized version of the algorithm.
 #' @param ... Additional arguments to be passed to other functions.
 #' @inheritParams ped2fam
 #' @param spouseID The name of the column that will contain the spouse ID in the output data frame. Default is "spID".
