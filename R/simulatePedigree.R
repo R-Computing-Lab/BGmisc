@@ -385,7 +385,14 @@ buildBetweenGenerations_optimized <- function(df_Fam,
       df_Ngen$ifson <- FALSE
       df_Ngen$ifdau <- FALSE
       df_Fam[df_Fam$gen == i, ] <- df_Ngen
-    } else {
+    } 
+    
+          # Create a pool for used male children and female children respectively
+      usedFemaleIds <- numeric()
+      usedMaleIds <- numeric()
+      usedIds <- c(usedFemaleIds, usedMaleIds)
+
+   if (i != 1){
       # calculate the number of couples in the i-1 th generation
       N_couples <- (sizeGens[i - 1] - sum(is.na(df_Fam$spID[df_Fam$gen == i - 1]))) * 0.5
       # calculate the number of members in the i th generation that have a link to the couples in the i-1 th generation
@@ -394,10 +401,7 @@ buildBetweenGenerations_optimized <- function(df_Fam,
       N_LinkedFemale <- round(N_LinkedMem * (1 - sexR))
       N_LinkedMale <- N_LinkedMem - N_LinkedFemale
 
-      # Create a pool for used male children and female children respectively
-      usedFemaleIds <- numeric()
-      usedMaleIds <- numeric()
-      usedIds <- c(usedFemaleIds, usedMaleIds)
+
 
       # get the df for the i the generation
       df_Ngen <- df_Fam[df_Fam$gen == i, ]
