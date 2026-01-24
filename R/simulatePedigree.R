@@ -48,7 +48,10 @@ buildWithinGenerations <- function(beta = FALSE,
 }
 
 
-buildWithinGenerations_base <- function(sizeGens, marR, sexR, Ngen, verbose = FALSE,
+buildWithinGenerations_base <- function(sizeGens,
+                                        marR,
+                                        sexR,
+                                        Ngen, verbose = FALSE,
                                         personID = "ID",
                                         momID = "momID",
                                         dadID = "dadID",
@@ -207,6 +210,7 @@ buildWithinGenerations_optimized <- function(sizeGens, marR, sexR, Ngen, verbose
     idGen <- fam_shift * pow_gen + i * pow_idx + seq_len(sizeGens[i])
 
 
+
     ### For each generation, create a separate dataframe
     df_Ngen <- createGenDataFrame(
       sizeGens = sizeGens,
@@ -242,14 +246,17 @@ buildWithinGenerations_optimized <- function(sizeGens, marR, sexR, Ngen, verbose
       isFemale <- df_Ngen$sex == code_female
       isMale <- df_Ngen$sex == code_male
 
-
+      # get the number
       totalFemale <- sum(isFemale)
       totalMale <- sum(isMale)
+
       nMarriedFemale <- round(totalFemale * marR_crt)
       nMarriedMale <- round(totalMale * marR_crt)
+
+
       # make sure there are same numbers of married males and females
       if (nMarriedFemale >= nMarriedMale) {
-        nMarriedFemale <- nMarriedMale
+        nMarriedFemale <- min(nMarriedMale, totalFemale)
       } else {
         nMarriedMale <- nMarriedFemale
       }
@@ -262,28 +269,14 @@ buildWithinGenerations_optimized <- function(sizeGens, marR, sexR, Ngen, verbose
 
 
       # get the number of single males and females
-      nSingleFemale <- totalFemale - nMarriedFemale
-      nSingleMale <- totalMale - nMarriedMale
+      nSingleFemale <- max(totalFemale - nMarriedFemale, 0)
+      nSingleMale <- max(totalMale - nMarriedMale, 0)
 
 
       # sample single ids from male ids and female ids
-      if (nSingleFemale < 0) {
-        nSingleFemale <- 0
-        message("Warning: Negative number of single women available; setting to 0")
-        usedFemaleIds <- numeric()
-      } else {
-        usedFemaleIds <- sample(df_Ngen$id[isFemale], nSingleFemale)
-      }
+      usedFemaleIds <- sample(df_Ngen$id[isFemale], nSingleFemale)
+      usedMaleIds <- sample(df_Ngen$id[isMale], nSingleMale)
 
-      if (nSingleMale < 0) {
-        nSingleMale <- 0
-        message("Warning: Negative number of single men available; setting to 0")
-        usedMaleIds <- numeric()
-      } else {
-        usedMaleIds <- sample(df_Ngen$id[isMale], nSingleMale)
-      }
-
-      #   usedIds <- c(usedFemaleIds, usedMaleIds)
       isUsed <- df_Ngen$id %in% c(usedFemaleIds, usedMaleIds)
 
       # Create spouses
@@ -340,6 +333,7 @@ buildWithinGenerations_optimized <- function(sizeGens, marR, sexR, Ngen, verbose
     df_list[[i]] <- df_Ngen
 
   }
+
   df_Fam <- do.call(rbind, df_list)
   rownames(df_Fam) <- NULL
   return(df_Fam)
@@ -444,6 +438,8 @@ buildBetweenGenerations_optimized <- function(df_Fam,
     if (i != 1) {
       # calculate the number of couples in the i-1 th generation
       N_couples <- (sizeGens[i - 1] - sum(is.na(df_Fam$spID[df_Fam$gen == i - 1]))) * 0.5
+
+
       # calculate the number of members in the i th generation that have a link to the couples in the i-1 th generation
       N_LinkedMem <- N_couples * kpc
       # decompose the linked members into females and males respectively
