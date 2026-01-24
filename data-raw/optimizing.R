@@ -3,9 +3,9 @@ library(microbenchmark)
 library(tidyverse)
 set.seed(6)
 Ngen <- 3
-kpc <- 3
-sexR <- .55
-marR <- .8
+kpc <- 4
+sexR <- .50
+marR <- .7
 reps <- 40
 if (FALSE) {
   profvis({

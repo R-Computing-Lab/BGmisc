@@ -20,6 +20,8 @@ buildWithinGenerations(
 )
 }
 \arguments{
+\item{beta}{logical. If TRUE, use the optimized version of the algorithm.}
+
 \item{sizeGens}{A numeric vector containing the sizes of each generation within the pedigree.}
 
 \item{marR}{Mating rate. A numeric value ranging from 0 to 1 which determines
@@ -47,7 +49,8 @@ a fertilized couple. The last generation has no mated individuals.}
 
 \item{code_female}{The value to use for females. Default is "F"}
 
-\item{fam_shift}{An integer to shift the person ID. Default is 1L.}
+\item{fam_shift}{An integer to shift the person ID. Default is 1L.
+This is useful when simulating multiple pedigrees to avoid ID conflicts.}
 }
 \value{
 A data frame representing the simulated pedigree, including columns for family ID (`fam`),
