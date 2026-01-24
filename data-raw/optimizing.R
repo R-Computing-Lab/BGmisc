@@ -2,11 +2,11 @@ library(profvis)
 library(microbenchmark)
 library(tidyverse)
 set.seed(6)
-Ngen <- 3
-kpc <- 4
-sexR <- .50
+Ngen <- 2
+kpc <- 5
+sexR <- .55
 marR <- .7
-reps <- 40
+reps <- 25
 if (FALSE) {
   profvis({
     simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR, beta = FALSE)
@@ -19,6 +19,14 @@ if (FALSE) {
 
 
 benchmark_results <- microbenchmark(
+  beta_false_1gen = {
+    simulatePedigree(kpc = kpc, Ngen = 1, sexR = sexR, marR = marR, beta = FALSE)
+  },
+  beta_true_1gen = {
+    simulatePedigree(kpc = kpc, Ngen = 1, sexR = sexR, marR = marR, beta = TRUE)
+  },
+
+
   beta_false_lowgen = {
     simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR, beta = FALSE)
   },
@@ -46,6 +54,7 @@ benchmark_results <- benchmark_results %>%
   mutate(
     beta = factor(ifelse(grepl("beta_true", expr), TRUE, FALSE)),
     gen = factor(case_when(
+      grepl("1gen", expr) ~ 1,
       grepl("lowgen", expr) ~ Ngen,
       grepl("midgen", expr) ~ Ngen * 2,
       grepl("highgen", expr) ~ Ngen * 3
