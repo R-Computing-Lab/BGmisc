@@ -265,12 +265,18 @@ buildBetweenGenerations_optimized <- function(df_Fam,
           IdPa <- IdPa[-IdRm]
           IdMa <- IdMa[-IdRm]
         } else if (length(IdPa) - length(IdOfp) < 0) {
-          # cat("length of IdOfp", length(IdOfp), "\n")
-          # cat("length of IdPa", length(IdPa), "\n")
-          # cat("length of IdSingle", length(IdMa), "\n")
+          if (verbose == TRUE) {
+            message("length of IdOfp", length(IdOfp), "\n")
+            message("length of IdPa", length(IdPa), "\n")
+            message("length of IdSingle", length(IdMa), "\n")
+          }
           IdRm <- resample(IdSingle, size = length(IdOfp) - length(IdPa))
 
           IdOfp <- IdOfp[!(IdOfp %in% IdRm)]
+        } else {
+          # IdRm <- NULL
+
+
         }
         # if (length(IdMa)- length(IdOfp) > 0){
         #       IdRm <- sample.int(length(IdMa),size =length(IdMa)-length(IdOfp))
@@ -475,6 +481,8 @@ buildBetweenGenerations_base <- function(df_Fam,
           IdRm <- resample(IdSingle, size = length(IdOfp) - length(IdPa))
 
           IdOfp <- IdOfp[!(IdOfp %in% IdRm)]
+        } else {
+          #  IdRm <- NULL
         }
         # if (length(IdMa)- length(IdOfp) > 0){
         #       IdRm <- sample.int(length(IdMa),size =length(IdMa)-length(IdOfp))
