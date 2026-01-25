@@ -1,10 +1,10 @@
 library(profvis)
 library(microbenchmark)
 library(tidyverse)
-set.seed(16)
+set.seed(166)
 Ngen <- 3
 kpc <- 3
-sexR <- .50
+sexR <- .50  # sometimes fails above .5
 marR <- .7
 reps <- 20
 if (FALSE) {
@@ -25,17 +25,11 @@ benchmark_results <- microbenchmark(
   beta_true_1gen = {
     simulatePedigree(kpc = kpc, Ngen = 1, sexR = sexR, marR = marR, beta = TRUE)
   },
-  beta_indexed_1gen = {
-    simulatePedigree(kpc = kpc, Ngen = 1, sexR = sexR, marR = marR, beta = "indexed")
-  },
   beta_false_lowgen = {
     simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR, beta = FALSE)
   },
   beta_true_lowgen = {
     simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR, beta = TRUE)
-  },
-  beta_indexed_lowgen = {
-    simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR, beta = "indexed")
   },
   beta_false_midgen = {
     simulatePedigree(kpc = kpc, Ngen = Ngen * 2, sexR = sexR, marR = marR, beta = FALSE)
@@ -43,17 +37,11 @@ benchmark_results <- microbenchmark(
   beta_true_midgen = {
     simulatePedigree(kpc = kpc, Ngen = Ngen * 2, sexR = sexR, marR = marR, beta = TRUE)
   },
-  beta_indexed_midgen = {
-    simulatePedigree(kpc = kpc, Ngen = Ngen * 2, sexR = sexR, marR = marR, beta = "indexed")
-  },
   beta_false_highgen = {
     simulatePedigree(kpc = kpc, Ngen = Ngen * 3, sexR = sexR, marR = marR, beta = FALSE)
   },
   beta_true_highgen = {
     simulatePedigree(kpc = kpc, Ngen = Ngen * 3, sexR = sexR, marR = marR, beta = TRUE)
-  },
-  beta_indexed_highgen = {
-    simulatePedigree(kpc = kpc, Ngen = Ngen * 3, sexR = sexR, marR = marR, beta = "indexed")
   },
   times = reps # Run each method 10 times
 )

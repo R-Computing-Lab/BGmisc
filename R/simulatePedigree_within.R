@@ -32,20 +32,7 @@ buildWithinGenerations <- function(
       fam_shift = fam_shift
     )
   } else if (beta %in% c("index", "indexed")) {
-    df_Fam <- buildWithinGenerations_index(
-      # buildWithinGenerations_base(
-      sizeGens = sizeGens,
-      marR = marR,
-      sexR = sexR,
-      Ngen = Ngen,
-      verbose = verbose,
-      personID = personID,
-      momID = momID,
-      dadID = dadID,
-      code_male = code_male,
-      code_female = code_female,
-      fam_shift = fam_shift
-    )
+    stop("The 'index' or 'indexed' option for parameter 'beta' is not yet implemented.")
   } else if (beta == FALSE || is.null(beta)) {
     df_Fam <- buildWithinGenerations_base(
       sizeGens = sizeGens,
@@ -252,8 +239,7 @@ buildWithinGenerations_optimized <- function(sizeGens, marR, sexR, Ngen, verbose
     }
 
 
-    usedFemaleIds <- numeric()
-    usedMaleIds <- numeric()
+
 
     # reserve the single persons
     if (i != 1 && i != Ngen) {
@@ -268,21 +254,20 @@ buildWithinGenerations_optimized <- function(sizeGens, marR, sexR, Ngen, verbose
       nMarriedFemale <- round(totalFemale * marR_crt)
       nMarriedMale <- round(totalMale * marR_crt)
 
-
       # make sure there are same numbers of married males and females
       if (nMarriedFemale >= nMarriedMale) {
-        nMarriedFemale <- min(nMarriedMale, totalFemale)
+        nMarriedFemale <- nMarriedMale
       } else {
         nMarriedMale <- nMarriedFemale
       }
+
+      #
       if (nMarriedFemale > totalFemale) {
         nMarriedFemale <- totalFemale
       }
       if (nMarriedMale > totalMale) {
         nMarriedMale <- totalMale
       }
-
-
       # get the number of single males and females
       nSingleFemale <- max(totalFemale - nMarriedFemale, 0)
       nSingleMale <- max(totalMale - nMarriedMale, 0)
@@ -299,6 +284,9 @@ buildWithinGenerations_optimized <- function(sizeGens, marR, sexR, Ngen, verbose
       availFemale <- which(isFemale & !isUsed)
       availMale <- which(isMale & !isUsed)
 
+      length_availMale <- length(availMale)
+      length_availFemale <- length(availFemale)
+
       # next unused pointer
       ptrFemale <- 1L
       ptrMale <- 1L
@@ -311,28 +299,26 @@ buildWithinGenerations_optimized <- function(sizeGens, marR, sexR, Ngen, verbose
 
         if (df_Ngen$sex[j] == code_female) {
           # only runs when the person is not used
-          while (ptrMale <= length(availMale) && isUsed[availMale[ptrMale]]) {
+          while (ptrMale <= length_availMale && isUsed[availMale[ptrMale]]) {
             ptrMale <- ptrMale + 1L
           }
           # if all used males, skip
-          if (ptrMale > length(availMale)) {
+          if (ptrMale > length_availMale) {
             next
           }
           k <- availMale[ptrMale]
           ptrMale <- ptrMale + 1L
 
-          #  spouse_sex_code <- code_male
+
         } else {
-          while (ptrFemale <= length(availFemale) && isUsed[availFemale[ptrFemale]]) {
+          while (ptrFemale <= length_availFemale && isUsed[availFemale[ptrFemale]]) {
             ptrFemale <- ptrFemale + 1L
           }
-          if (ptrFemale > length(availFemale)) {
+          if (ptrFemale > length_availFemale) {
             next
           }
           k <- availFemale[ptrFemale]
           ptrFemale <- ptrFemale + 1L
-
-          # spouse_sex_code <- code_female
         }
 
 
@@ -349,133 +335,5 @@ buildWithinGenerations_optimized <- function(sizeGens, marR, sexR, Ngen, verbose
 
   df_Fam <- do.call(rbind, df_list)
   rownames(df_Fam) <- NULL
-  return(df_Fam)
-}
-
-
-buildWithinGenerations_index <- function(sizeGens, marR, sexR, Ngen, verbose = FALSE,
-                                         personID = "ID",
-                                         momID = "momID",
-                                         dadID = "dadID",
-                                         code_male = "M",
-                                         code_female = "F",
-                                         fam_shift = 1L) {
-  idx_width <- nchar(max(sizeGens))
-  gen_width <- max(2L, nchar(Ngen))
-
-
-  # Precompute powers once
-  pow_idx <- 10^idx_width
-  pow_gen <- 10^(gen_width + idx_width)
-
-  ## Connect male and female into couples in each generations
-  marR_crt <- (1 + marR) / 2
-
-  for (i in seq_len(Ngen)) {
-    # idGen <- as.numeric(paste(100, i, 1:sizeGens[i], sep = ""))
-
-    idGen <- fam_shift * pow_gen + i * pow_idx + seq_len(sizeGens[i])
-
-
-    ### For each generation, create a separate dataframe
-    df_Ngen <- createGenDataFrame(
-      sizeGens = sizeGens,
-      genIndex = i,
-      idGen = idGen
-    )
-
-    ### Let's deal with the sex in each generation first
-
-    df_Ngen$sex <- determineSex(
-      idGen = idGen, sexR = sexR,
-      code_male = code_male,
-      code_female = code_female
-    )
-
-    # message(paste("tiger",i))
-    # The first generation
-    if (i == 1) {
-      df_Ngen$spID[1] <- df_Ngen$id[2]
-      df_Ngen$spID[2] <- df_Ngen$id[1]
-
-      df_Ngen$sex[1] <- code_female
-      df_Ngen$sex[2] <- code_male
-    }
-
-
-    usedFemaleIds <- numeric()
-    usedMaleIds <- numeric()
-
-    # reserve the single persons
-    if (i != 1 && i != Ngen) {
-      totalFemale <- sum(df_Ngen$sex == code_female)
-      totalMale <- sum(df_Ngen$sex == code_male)
-      nMarriedFemale <- round(totalFemale * marR_crt)
-      nMarriedMale <- round(totalMale * marR_crt)
-      # make sure there are same numbers of married males and females
-      if (nMarriedFemale >= nMarriedMale) {
-        nMarriedFemale <- nMarriedMale
-      } else {
-        nMarriedMale <- nMarriedFemale
-      }
-      # get the number of single males and females
-      nSingleFemale <- totalFemale - nMarriedFemale
-      nSingleMale <- totalMale - nMarriedMale
-
-
-      # sample single ids from male ids and female ids
-      if (nSingleFemale < 0) {
-        nSingleFemale <- 0
-        message("Warning: Negative number of single women available; setting to 0")
-        usedFemaleIds <- numeric()
-      } else {
-        usedFemaleIds <- sample(df_Ngen$id[df_Ngen$sex == code_female], nSingleFemale)
-      }
-      ## message(c("Used F", usedFemaleIds))
-      if (nSingleMale < 0) {
-        nSingleMale <- 0
-        message("Warning: Negative number of single men available; setting to 0")
-        usedMaleIds <- numeric()
-      } else {
-        usedMaleIds <- sample(df_Ngen$id[df_Ngen$sex == code_male], nSingleMale)
-      }
-      ## message(c("Used M", usedMaleIds))
-      #   usedIds <- c(usedFemaleIds, usedMaleIds)
-      isUsed <- df_Ngen$id %in% c(usedFemaleIds, usedMaleIds)
-
-      # Create spouses
-      for (j in seq_len(nrow(df_Ngen))) {
-        if (isUsed[j]) {
-          next
-        } else {
-          if (df_Ngen$sex[j] == code_female) {
-            spouse_sex_code <- code_male
-          } else {
-            spouse_sex_code <- code_female
-          }
-          for (k in seq_len(nrow(df_Ngen))) {
-            tgt <- (!isUsed[k]) & df_Ngen$sex[k] == spouse_sex_code
-
-            if (tgt) {
-              df_Ngen$spID[j] <- df_Ngen$id[k]
-              df_Ngen$spID[k] <- df_Ngen$id[j]
-
-              isUsed[j] <- TRUE
-              isUsed[k] <- TRUE
-              break
-            } else {
-              next
-            }
-          }
-        }
-        # message(usedIds)
-      }
-    }
-    if (i == 1) {
-      df_Fam <- df_Ngen
-    } else {
-      df_Fam <- rbind(df_Fam, df_Ngen)
-    }
-  }
   return(df_Fam)
 }
