@@ -1,7 +1,7 @@
 library(profvis)
 library(microbenchmark)
 library(tidyverse)
-set.seed(166)
+set.seed(1667)
 Ngen <- 3
 kpc <- 3
 sexR <- .54  # sometimes fails above .5

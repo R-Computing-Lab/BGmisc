@@ -79,28 +79,30 @@ buildBetweenGenerations_optimized <- function(df_Fam,
   df_Fam$ifparent <- FALSE
   df_Fam$ifson <- FALSE
   df_Fam$ifdau <- FALSE
+  gen_rows <- split(seq_len(nrow(df_Fam)), df_Fam$gen)
 
   for (i in seq_len(Ngen)) {
     # generation 1 doesn't need any mother and father
     if (i == 1) {
-      df_Ngen <- df_Fam[df_Fam$gen == i, ]
+      rows_i <- gen_rows[[as.character(i)]]
+      df_Ngen <- df_Fam[rows_i, ]
       df_Ngen$ifparent <- TRUE
       df_Ngen$ifson <- FALSE
       df_Ngen$ifdau <- FALSE
-      df_Fam[df_Fam$gen == i, ] <- df_Ngen
+      df_Fam[rows_i, ] <- df_Ngen
     }
 
     # Create a pool for used male children and female children respectively
 
 
     if (i != 1) {
-      # reset the used ids
-      #  usedFemaleIds <- numeric()
-      #  usedMaleIds <- numeric()
-      #  usedIds <- c(usedFemaleIds, usedMaleIds)
+
+      rows_i <- gen_rows[[as.character(i)]]
+      rows_prev <- gen_rows[[as.character(i - 1)]]
 
       # calculate the number of couples in the i-1 th generation
-      N_couples <- (sizeGens[i - 1] - sum(is.na(df_Fam$spID[df_Fam$gen == i - 1]))) * 0.5
+      N_couples <- (sizeGens[i - 1] - sum(is.na(df_Fam$spID[rows_prev]))) * 0.5
+
 
 
       # calculate the number of members in the i th generation that have a link to the couples in the i-1 th generation
@@ -111,7 +113,7 @@ buildBetweenGenerations_optimized <- function(df_Fam,
 
 
       # get the df for the i the generation
-      df_Ngen <- df_Fam[df_Fam$gen == i, ]
+      df_Ngen <- df_Fam[rows_i, ]
       df_Ngen$ifparent <- FALSE
       df_Ngen$ifson <- FALSE
       df_Ngen$ifdau <- FALSE
@@ -141,7 +143,7 @@ buildBetweenGenerations_optimized <- function(df_Fam,
       SingleM <- sum(df_Ngen$sex == code_male & is.na(df_Ngen$spID))
       #     CoupleM <- N_LinkedMale - SingleM
 
-      df_Fam[df_Fam$gen == i, ] <- markPotentialChildren(
+      df_Fam[rows_i, ] <- markPotentialChildren(
         df_Ngen = df_Ngen,
         i = i,
         Ngen = Ngen,
@@ -155,7 +157,7 @@ buildBetweenGenerations_optimized <- function(df_Fam,
           "Step 2.2: mark a group of potential parents in the i-1 th generation"
         )
       }
-      df_Ngen <- df_Fam[df_Fam$gen == i - 1, ]
+      df_Ngen <- df_Fam[rows_prev, ]
 
       df_Ngen$ifparent <- FALSE
       df_Ngen$ifson <- FALSE
@@ -195,7 +197,7 @@ buildBetweenGenerations_optimized <- function(df_Fam,
       df_Ngen$ifparent <- isUsedParent
       df_Ngen <- df_Ngen[order(as.numeric(rownames(df_Ngen))), , drop = FALSE]
 
-      df_Fam[df_Fam$gen == i - 1, ] <- df_Ngen
+      df_Fam[rows_prev, ] <- df_Ngen
 
       if (verbose == TRUE) {
         message(
@@ -221,8 +223,8 @@ buildBetweenGenerations_optimized <- function(df_Fam,
 
         # If no mates or no offspring to link, skip linkage for this generation
         if (nMates <= 0 || length(IdOfp) == 0) {
-          df_Fam[df_Fam$gen == i, ] <- df_Ngen[df_Ngen$gen == i, ]
-          df_Fam[df_Fam$gen == i - 1, ] <- df_Ngen[df_Ngen$gen == i - 1, ]
+          df_Fam[rows_i, ] <- df_Ngen[df_Ngen$gen == i, ]
+          df_Fam[rows_prev, ] <- df_Ngen[df_Ngen$gen == i - 1, ]
           next
         }
 
@@ -234,8 +236,8 @@ buildBetweenGenerations_optimized <- function(df_Fam,
 
         # Guard: adjustKidsPerCouple returned nothing usable
         if (length(random_numbers) == 0 || all(is.na(random_numbers))) {
-          df_Fam[df_Fam$gen == i, ] <- df_Ngen[df_Ngen$gen == i, ]
-          df_Fam[df_Fam$gen == i - 1, ] <- df_Ngen[df_Ngen$gen == i - 1, ]
+          df_Fam[rows_i, ] <- df_Ngen[df_Ngen$gen == i, ]
+          df_Fam[rows_prev, ] <- df_Ngen[df_Ngen$gen == i - 1, ]
           next
         }
 
@@ -319,8 +321,8 @@ buildBetweenGenerations_optimized <- function(df_Fam,
           df_Ngen[df_Ngen$id == IdOfp[m], "mat"] <- IdMa[m]
         }
         # message(df_Ngen)
-        df_Fam[df_Fam$gen == i, ] <- df_Ngen[df_Ngen$gen == i, ]
-        df_Fam[df_Fam$gen == i - 1, ] <- df_Ngen[df_Ngen$gen == i - 1, ]
+        df_Fam[rows_i, ] <- df_Ngen[df_Ngen$gen == i, ]
+        df_Fam[rows_prev, ] <- df_Ngen[df_Ngen$gen == i - 1, ]
       }
     }
   }
