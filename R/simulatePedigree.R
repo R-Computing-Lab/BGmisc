@@ -192,7 +192,7 @@ buildBetweenGenerations_optimized <- function(df_Fam,
           }
         }
       }
-
+      df_Ngen$ifparent <- isUsedParent
       df_Ngen <- df_Ngen[order(as.numeric(rownames(df_Ngen))), , drop = FALSE]
 
       df_Fam[df_Fam$gen == i - 1, ] <- df_Ngen
@@ -217,15 +217,28 @@ buildBetweenGenerations_optimized <- function(df_Fam,
         # message(IdDau)
         IdOfp <- evenInsert(IdSon, IdDau)
 
+        nMates <- sum(df_Ngen$ifparent) / 2
+
+        # If no mates or no offspring to link, skip linkage for this generation
+        if (nMates <= 0 || length(IdOfp) == 0) {
+          df_Fam[df_Fam$gen == i, ] <- df_Ngen[df_Ngen$gen == i, ]
+          df_Fam[df_Fam$gen == i - 1, ] <- df_Ngen[df_Ngen$gen == i - 1, ]
+          next
+        }
+
         # generate link kids to the couples
         random_numbers <- adjustKidsPerCouple(
           nMates = sum(df_Ngen$ifparent) / 2, kpc = kpc,
           rd_kpc = rd_kpc
         )
 
-        # cat("final random numbers",random_numbers, "\n")
-        # cat("mean",sum(random_numbers)/length(random_numbers), "\n")
-        # create two vectors for maId and paId; replicate the ids to match the same length as IdOfp
+        # Guard: adjustKidsPerCouple returned nothing usable
+        if (length(random_numbers) == 0 || all(is.na(random_numbers))) {
+          df_Fam[df_Fam$gen == i, ] <- df_Ngen[df_Ngen$gen == i, ]
+          df_Fam[df_Fam$gen == i - 1, ] <- df_Ngen[df_Ngen$gen == i - 1, ]
+          next
+        }
+
         IdMa <- numeric()
         IdPa <- numeric()
         usedIds <- numeric()
@@ -238,11 +251,21 @@ buildBetweenGenerations_optimized <- function(df_Fam,
           if (!df_Ngen$id[l] %in% usedIds) {
             # check if the member can be a parent
             if (df_Ngen$ifparent[l] == TRUE && df_Ngen$sex[l] == code_female) {
+
+              if (idx > length(random_numbers) || is.na(random_numbers[idx]) || random_numbers[idx] < 0) {
+                break
+              }
+
               usedIds <- c(usedIds, df_Ngen$id[l], df_Ngen$spID[l])
               IdMa <- c(IdMa, rep(df_Ngen$id[l], random_numbers[idx]))
               IdPa <- c(IdPa, rep(df_Ngen$spID[l], random_numbers[idx]))
               idx <- idx + 1
             } else if (df_Ngen$ifparent[l] == TRUE && df_Ngen$sex[l] == code_male) {
+
+              if (idx > length(random_numbers) || is.na(random_numbers[idx]) || random_numbers[idx] < 0) {
+                break
+              }
+
               usedIds <- c(usedIds, df_Ngen$id[l], df_Ngen$spID[l])
               IdPa <- c(IdPa, rep(df_Ngen$id[l], random_numbers[idx]))
               IdMa <- c(IdMa, rep(df_Ngen$spID[l], random_numbers[idx]))
@@ -261,37 +284,36 @@ buildBetweenGenerations_optimized <- function(df_Fam,
           if (verbose == TRUE) {
             message("length of IdPa", length(IdPa), "\n")
           }
-          IdRm <- sample.int(length(IdPa), size = length(IdPa) - length(IdOfp))
-          IdPa <- IdPa[-IdRm]
-          IdMa <- IdMa[-IdRm]
+
+          excess <- length(IdPa) - length(IdOfp)
+          if (length(IdPa) > 0 && excess > 0) {
+            IdRm <- sample.int(length(IdPa), size = excess)
+            IdPa <- IdPa[-IdRm]
+            IdMa <- IdMa[-IdRm]
+          }
         } else if (length(IdPa) - length(IdOfp) < 0) {
           if (verbose == TRUE) {
             message("length of IdOfp", length(IdOfp), "\n")
             message("length of IdPa", length(IdPa), "\n")
             message("length of IdSingle", length(IdMa), "\n")
           }
-          IdRm <- resample(IdSingle, size = length(IdOfp) - length(IdPa))
-
-          IdOfp <- IdOfp[!(IdOfp %in% IdRm)]
-        } else {
-          # IdRm <- NULL
 
 
+          # harden the resample call when IdSingle is empty:
+          need_drop <- length(IdOfp) - length(IdPa)
+
+          if (need_drop > 0) {
+            if (length(IdSingle) > 0) {
+              IdRm <- resample(IdSingle, size = need_drop)
+              IdOfp <- IdOfp[!(IdOfp %in% IdRm)]
+            } else {
+              # no singles available to drop; drop offspring indices directly
+              drop_idx <- sample.int(length(IdOfp), size = need_drop)
+              IdOfp <- IdOfp[-drop_idx]
+            }
+          }
         }
-        # if (length(IdMa)- length(IdOfp) > 0){
-        #       IdRm <- sample.int(length(IdMa),size =length(IdMa)-length(IdOfp))
-        #       IdPa <- IdPa[-IdRm]
-        #       IdMa <- IdMa[-IdRm]
-        # }else if (length(IdMa)-length(IdOfp) < 0) {
-        #       IdRm <- sample.int(length(IdOfp),size =length(IdOfp)-length(IdMa))
-        #       IdOfp <- IdOfp[-IdRm]
-        # }
-        # message(matrix(c(IdPa, IdMa), ncol = 2))
 
-        # message(IdPa)
-        # message(IdOfp)
-
-        # put the IdMa and IdPa into the dfFam with correspondent OfpId
         for (m in seq_along(IdOfp)) {
           df_Ngen[df_Ngen$id == IdOfp[m], "pat"] <- IdPa[m]
           df_Ngen[df_Ngen$id == IdOfp[m], "mat"] <- IdMa[m]

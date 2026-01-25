@@ -273,9 +273,15 @@ buildWithinGenerations_optimized <- function(sizeGens, marR, sexR, Ngen, verbose
       nSingleMale <- max(totalMale - nMarriedMale, 0)
 
 
-      # sample single ids from male ids and female ids
-      usedFemaleIds <- sample(df_Ngen$id[isFemale], nSingleFemale)
-      usedMaleIds <- sample(df_Ngen$id[isMale], nSingleMale)
+      # sample single ids from male ids and female ids (guard against size > available)
+      femaleIds <- df_Ngen$id[isFemale]
+      maleIds <- df_Ngen$id[isMale]
+
+      nSingleFemale <- min(nSingleFemale, length(femaleIds))
+      nSingleMale <- min(nSingleMale, length(maleIds))
+
+      usedFemaleIds <- if (nSingleFemale > 0) sample(femaleIds, nSingleFemale) else numeric()
+      usedMaleIds <- if (nSingleMale > 0) sample(maleIds, nSingleMale) else numeric()
 
       isUsed <- df_Ngen$id %in% c(usedFemaleIds, usedMaleIds)
 
