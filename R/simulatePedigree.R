@@ -1,4 +1,3 @@
-
 #' Process Generation Connections
 #'
 #' This function processes connections between each two generations in a pedigree simulation.
@@ -44,7 +43,7 @@ buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose = FALSE, mar
       code_male = code_male,
       code_female = code_female
     )
-  } else if (beta == FALSE || beta  %in% c("base", "original") || is.null(beta)) {
+  } else if (beta == FALSE || beta %in% c("base", "original") || is.null(beta)) {
     df_Fam <- buildBetweenGenerations_base(
       df_Fam = df_Fam,
       Ngen = Ngen,
@@ -111,7 +110,6 @@ buildBetweenGenerations_optimized <- function(df_Fam,
       N_LinkedMale <- N_LinkedMem - N_LinkedFemale
 
 
-
       # get the df for the i the generation
       df_Ngen <- df_Fam[df_Fam$gen == i, ]
       df_Ngen$ifparent <- FALSE
@@ -166,7 +164,7 @@ buildBetweenGenerations_optimized <- function(df_Fam,
       df_Ngen <- df_Ngen[sample(nrow(df_Ngen)), ]
       # Create a pool for the used parents
       usedParentIds <- numeric()
-      #   IsUsedParent <- df_Ngen$id %in% usedParentIds
+
       nrow_df_Ngen <- nrow(df_Ngen)
       # assign parents until reaching the marriage rate, or finishing the list
       # good place to optimize
@@ -196,7 +194,9 @@ buildBetweenGenerations_optimized <- function(df_Fam,
       }
 
       df_Ngen <- df_Ngen[order(as.numeric(rownames(df_Ngen))), , drop = FALSE]
+
       df_Fam[df_Fam$gen == i - 1, ] <- df_Ngen
+
       if (verbose == TRUE) {
         message(
           "Step 2.3: connect the i and i-1 th generation"
@@ -231,7 +231,9 @@ buildBetweenGenerations_optimized <- function(df_Fam,
         usedIds <- numeric()
         idx <- 1
 
-        for (l in 1:sizeI) {
+        isUsedParent <- df_Ngen$id %in% usedIds
+
+        for (l in seq_len(sizeI)) {
           # check if the id is used
           if (!df_Ngen$id[l] %in% usedIds) {
             # check if the member can be a parent
@@ -297,7 +299,10 @@ buildBetweenGenerations_optimized <- function(df_Fam,
   return(df_Fam)
 }
 
-buildBetweenGenerations_base <- function(df_Fam, Ngen, sizeGens, verbose = FALSE, marR, sexR, kpc,
+buildBetweenGenerations_base <- function(df_Fam,
+                                         Ngen, sizeGens,
+                                         verbose = FALSE, marR,
+                                         sexR, kpc,
                                          rd_kpc, personID = "ID",
                                          momID = "momID",
                                          dadID = "dadID",
@@ -571,8 +576,7 @@ simulatePedigree <- function(kpc = 3,
                              code_male = "M",
                              code_female = "F",
                              fam_shift = 1L,
-                             beta = FALSE
-) {
+                             beta = FALSE) {
   # SexRatio: ratio of male over female in the offspring setting; used in the between generation combinations
   # SexRatio <- sexR / (1 - sexR)
 

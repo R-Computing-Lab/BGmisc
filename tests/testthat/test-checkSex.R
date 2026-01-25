@@ -54,7 +54,6 @@ test_that("checkSex identifies potentially problematic sex coding of non-female 
 })
 
 
-
 # Test Case 3: Recode sex variable
 test_that("recodeSex correctly recodes sex in potter dataset", {
   recoded_potter <- recodeSex(potter, code_male = 1, code_female = 0, recode_male = "M", recode_female = "F")
@@ -68,7 +67,6 @@ test_that("recodeSex correctly recodes sex in potter dataset", {
   recoded_potter <- recodeSex(potter, recode_male = "M", recode_female = "F")
   expect_false(all(recoded_potter$sex %in% c("M", "F")))
 })
-
 
 
 # Test Case 4: Handle missing values
