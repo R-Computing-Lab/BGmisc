@@ -4,7 +4,7 @@ library(tidyverse)
 set.seed(166)
 Ngen <- 3
 kpc <- 3
-sexR <- .50  # sometimes fails above .5
+sexR <- .54  # sometimes fails above .5
 marR <- .7
 reps <- 20
 if (FALSE) {
