@@ -107,11 +107,13 @@ ped2com <- function(ped, component,
   }
 
   # Validate the 'adjacency_method' argument
-  adjacency_method_options <-  c("indexed", "loop", "direct", "beta")
+  adjacency_method_options <- c("indexed", "loop", "direct", "beta")
   if (!config$adjacency_method %in% adjacency_method_options
   ) {
-    stop(paste0("Invalid method specified. Choose from ",
-      paste(adjacency_method_options, collapse = ", "), "."))
+    stop(paste0(
+      "Invalid method specified. Choose from ",
+      paste(adjacency_method_options, collapse = ", "), "."
+    ))
   }
 
   # standardize colnames

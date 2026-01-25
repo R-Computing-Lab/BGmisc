@@ -7,14 +7,16 @@
 #' @inheritParams createGenDataFrame
 #' @return A data frame representing the simulated pedigree, including columns for family ID (`fam`),
 
-buildWithinGenerations <- function(beta = FALSE,
+buildWithinGenerations <- function(
+  beta = FALSE,
   sizeGens, marR, sexR, Ngen, verbose = FALSE,
   personID = "ID",
   momID = "momID",
   dadID = "dadID",
   code_male = "M",
   code_female = "F",
-  fam_shift = 1L) {
+  fam_shift = 1L
+) {
   if (beta == TRUE || beta == "optimized") {
     df_Fam <- buildWithinGenerations_optimized(
       sizeGens = sizeGens,
@@ -141,7 +143,6 @@ buildWithinGenerations_base <- function(sizeGens,
         nSingleMale <- 0
         usedMaleIds <- numeric()
       } else {
-
         usedMaleIds <- sample(df_Ngen$id[df_Ngen$sex == code_male], nSingleMale)
       }
       # sample single ids from male ids and female ids
@@ -197,8 +198,6 @@ buildWithinGenerations_base <- function(sizeGens,
 }
 
 
-
-
 buildWithinGenerations_optimized <- function(sizeGens, marR, sexR, Ngen, verbose = FALSE,
                                              personID = "ID",
                                              momID = "momID",
@@ -225,7 +224,6 @@ buildWithinGenerations_optimized <- function(sizeGens, marR, sexR, Ngen, verbose
     # idGen <- as.numeric(paste(100, i, 1:sizeGens[i], sep = ""))
 
     idGen <- fam_shift * pow_gen + i * pow_idx + seq_len(sizeGens[i])
-
 
 
     ### For each generation, create a separate dataframe
@@ -325,7 +323,6 @@ buildWithinGenerations_optimized <- function(sizeGens, marR, sexR, Ngen, verbose
 
           #  spouse_sex_code <- code_male
         } else {
-
           while (ptrFemale <= length(availFemale) && isUsed[availFemale[ptrFemale]]) {
             ptrFemale <- ptrFemale + 1L
           }
@@ -348,7 +345,6 @@ buildWithinGenerations_optimized <- function(sizeGens, marR, sexR, Ngen, verbose
     }
 
     df_list[[i]] <- df_Ngen
-
   }
 
   df_Fam <- do.call(rbind, df_list)
@@ -452,14 +448,12 @@ buildWithinGenerations_index <- function(sizeGens, marR, sexR, Ngen, verbose = F
         if (isUsed[j]) {
           next
         } else {
-
           if (df_Ngen$sex[j] == code_female) {
             spouse_sex_code <- code_male
           } else {
             spouse_sex_code <- code_female
           }
           for (k in seq_len(nrow(df_Ngen))) {
-
             tgt <- (!isUsed[k]) & df_Ngen$sex[k] == spouse_sex_code
 
             if (tgt) {
@@ -473,7 +467,6 @@ buildWithinGenerations_index <- function(sizeGens, marR, sexR, Ngen, verbose = F
               next
             }
           }
-
         }
         # message(usedIds)
       }
