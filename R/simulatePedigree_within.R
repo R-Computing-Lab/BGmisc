@@ -228,7 +228,6 @@ buildWithinGenerations_optimized <- function(sizeGens, marR, sexR, Ngen, verbose
       code_female = code_female
     )
 
-    # message(paste("tiger",i))
     # The first generation
     if (i == 1) {
       df_Ngen$spID[1] <- df_Ngen$id[2]
@@ -237,8 +236,6 @@ buildWithinGenerations_optimized <- function(sizeGens, marR, sexR, Ngen, verbose
       df_Ngen$sex[1] <- code_female
       df_Ngen$sex[2] <- code_male
     }
-
-
 
 
     # reserve the single persons
@@ -255,11 +252,8 @@ buildWithinGenerations_optimized <- function(sizeGens, marR, sexR, Ngen, verbose
       nMarriedMale <- round(totalMale * marR_crt)
 
       # make sure there are same numbers of married males and females
-      if (nMarriedFemale >= nMarriedMale) {
-        nMarriedFemale <- nMarriedMale
-      } else {
-        nMarriedMale <- nMarriedFemale
-      }
+      nMarriedMale <- nMarriedFemale <- min(nMarriedFemale, nMarriedMale)
+
 
       #
       if (nMarriedFemale > totalFemale) {
@@ -314,8 +308,6 @@ buildWithinGenerations_optimized <- function(sizeGens, marR, sexR, Ngen, verbose
           }
           k <- availMale[ptrMale]
           ptrMale <- ptrMale + 1L
-
-
         } else {
           while (ptrFemale <= length_availFemale && isUsed[availFemale[ptrFemale]]) {
             ptrFemale <- ptrFemale + 1L
