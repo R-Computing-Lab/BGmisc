@@ -76,6 +76,7 @@ buildBetweenGenerations_optimized <- function(df_Fam,
                                               dadID = "dadID",
                                               code_male = "M",
                                               code_female = "F") {
+  # create an index for each generation to speed up the process
   df_Fam$ifparent <- FALSE
   df_Fam$ifson <- FALSE
   df_Fam$ifdau <- FALSE
@@ -90,20 +91,13 @@ buildBetweenGenerations_optimized <- function(df_Fam,
       df_Ngen$ifson <- FALSE
       df_Ngen$ifdau <- FALSE
       df_Fam[rows_i, ] <- df_Ngen
-    }
-
-    # Create a pool for used male children and female children respectively
-
-
-    if (i != 1) {
-
+    } else {
+      # calculate the number of couples in the i-1 th generation
       rows_i <- gen_rows[[as.character(i)]]
       rows_prev <- gen_rows[[as.character(i - 1)]]
 
       # calculate the number of couples in the i-1 th generation
       N_couples <- (sizeGens[i - 1] - sum(is.na(df_Fam$spID[rows_prev]))) * 0.5
-
-
 
       # calculate the number of members in the i th generation that have a link to the couples in the i-1 th generation
       N_LinkedMem <- N_couples * kpc
@@ -118,6 +112,7 @@ buildBetweenGenerations_optimized <- function(df_Fam,
       df_Ngen$ifson <- FALSE
       df_Ngen$ifdau <- FALSE
       df_Ngen$coupleId <- NA_character_
+
       df_Ngen <- df_Ngen[sample(nrow(df_Ngen)), ]
 
       # Start to connect children with mother and father
@@ -127,6 +122,7 @@ buildBetweenGenerations_optimized <- function(df_Fam,
           "Step 2.1: mark a group of potential sons and daughters in the i th generation"
         )
       }
+
 
       # try to rewrite the code
       # count the number of couples in the i th gen
@@ -141,7 +137,7 @@ buildBetweenGenerations_optimized <- function(df_Fam,
       SingleF <- sum(df_Ngen$sex == code_female & is.na(df_Ngen$spID))
       CoupleF <- N_LinkedFemale - SingleF
       SingleM <- sum(df_Ngen$sex == code_male & is.na(df_Ngen$spID))
-      #     CoupleM <- N_LinkedMale - SingleM
+
 
       df_Fam[rows_i, ] <- markPotentialChildren(
         df_Ngen = df_Ngen,
@@ -184,11 +180,8 @@ buildBetweenGenerations_optimized <- function(df_Fam,
           # check if the id is used and if the member has married
 
           if (!(isUsedParent[k]) && !is.na(df_Ngen$spID[k])) {
-            #   df_Ngen$ifparent[k] <- TRUE
             isUsedParent[k] <- TRUE
             isUsedParent[df_Ngen$spID == df_Ngen$id[k]] <- TRUE
-            #   df_Ngen$ifparent[df_Ngen$spID == df_Ngen$id[k]] <- TRUE
-            # usedParentIds <- c(usedParentIds, df_Ngen$id[k], df_Ngen$spID[k])
           } else {
             next
           }
@@ -248,12 +241,12 @@ buildBetweenGenerations_optimized <- function(df_Fam,
 
         isUsedParent <- df_Ngen$id %in% usedIds
 
+        # can be optimized further
         for (l in seq_len(sizeI)) {
           # check if the id is used
           if (!df_Ngen$id[l] %in% usedIds) {
             # check if the member can be a parent
             if (df_Ngen$ifparent[l] == TRUE && df_Ngen$sex[l] == code_female) {
-
               if (idx > length(random_numbers) || is.na(random_numbers[idx]) || random_numbers[idx] < 0) {
                 break
               }
@@ -263,7 +256,6 @@ buildBetweenGenerations_optimized <- function(df_Fam,
               IdPa <- c(IdPa, rep(df_Ngen$spID[l], random_numbers[idx]))
               idx <- idx + 1
             } else if (df_Ngen$ifparent[l] == TRUE && df_Ngen$sex[l] == code_male) {
-
               if (idx > length(random_numbers) || is.na(random_numbers[idx]) || random_numbers[idx] < 0) {
                 break
               }
