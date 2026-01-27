@@ -1,7 +1,9 @@
 # BGmisc NEWS
 
-# BGmisc Dev
-* Optimize Within Generation Pedigree simulatePedigree
+# BGmisc 1.6
+* Optimize  simulatePedigree and helpers for speed and memory usage
+* Major gains in speed for deeper pedigrees
+* Added more tests for simulatePedigree
 * Fix error when not enough single people available
 
 # BGmisc 1.5.2
