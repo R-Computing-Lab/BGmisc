@@ -3,10 +3,10 @@ library(microbenchmark)
 library(tidyverse)
 set.seed(1667)
 Ngen <- 3
-kpc <- 3
+kpc <- 4
 sexR <- .54  # sometimes fails above .5
 marR <- .7
-reps <- 20
+reps <- 5
 if (FALSE) {
   profvis({
     simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR, beta = FALSE)
