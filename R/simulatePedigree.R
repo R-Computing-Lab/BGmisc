@@ -577,14 +577,7 @@ simulatePedigree <- function(kpc = 3,
 
   # connect the detached members
   df_Fam[is.na(df_Fam[[momID]]) & is.na(df_Fam[[dadID]]) & df_Fam$gen > 1, ]
-  # if the sex rate is .5, make there is a 50% chance to change male to female and female to male
-  # doesn't seem to produce the expected results, sometimes leads to moms being classified as dads
-  #  if (sexR == .5 & runif(1) > .5) {
-  #   df_Fam$sex[df_Fam$sex == "M"] <- "F1"
-  #    df_Fam$sex[df_Fam$sex == "F"] <- "M"
-  #    df_Fam$sex[df_Fam$sex == "F1"] <- "F"
-  #  }
-  # message(df_Fam)
+
   return(df_Fam)
 }
 
