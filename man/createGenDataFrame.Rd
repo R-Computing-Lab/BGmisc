@@ -4,7 +4,13 @@
 \alias{createGenDataFrame}
 \title{Create Data Frame for Generation}
 \usage{
-createGenDataFrame(sizeGens, genIndex, idGen, beta = FALSE)
+createGenDataFrame(
+  sizeGens,
+  genIndex,
+  idGen,
+  family_id_prefix = "fam",
+  beta = FALSE
+)
 }
 \arguments{
 \item{sizeGens}{A numeric vector containing the sizes of each generation within the pedigree.}
@@ -12,6 +18,8 @@ createGenDataFrame(sizeGens, genIndex, idGen, beta = FALSE)
 \item{genIndex}{An integer representing the current generation index for which the data frame is being created.}
 
 \item{idGen}{A numeric vector containing the ID numbers to be assigned to individuals in the current generation.}
+
+\item{family_id_prefix}{A character string to prefix the family ID. Default is "fam".}
 
 \item{beta}{logical. If TRUE, use the optimized version of the algorithm.}
 }
