@@ -188,8 +188,10 @@ adjustKidsPerCouple <- function(nMates, kpc, rd_kpc = TRUE, beta = FALSE) {
 #' @param i Integer, the index of the current generation being processed.
 #' @param Ngen Integer, the total number of generations in the simulation.
 #' @param sizeGens Numeric vector, containing the size (number of individuals) of each generation.
-#' @param CoupleF Integer, IT MIGHT BE the number of couples in the current generation.
-#'
+#' @param CoupleF Integer scalar giving the number of distinct mating couples in the current
+#'        generation `i`. This is typically computed upstream from the spouse assignments
+#'        (e.g., as the number of unique non-missing spouse pairs in `df_Ngen`) and must satisfy
+#'        `0 <= CoupleF <= floor(sizeGens[i] / 2)`.
 #'
 #' @return Modifies `df_Ngen` in place by updating or adding columns related to individual roles
 #'         (`ifparent`, `ifson`, `ifdau`) and couple IDs (`coupleId`). The updated data frame is
@@ -244,7 +246,7 @@ markPotentialChildren <- function(df_Ngen, i, Ngen, sizeGens, CoupleF, code_male
     df_Ngen$ifdau[mated_dau] <- TRUE
 
     df_Ngen <- df_Ngen[order(as.numeric(rownames(df_Ngen))), , drop = FALSE]
-    df_Ngen <- df_Ngen[, -ncol(df_Ngen)]
+    df_Ngen$coupleId <- NULL
 
     return(df_Ngen)
   }
