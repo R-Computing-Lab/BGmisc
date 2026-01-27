@@ -13,28 +13,41 @@
 #' @seealso \code{\link{SimPed}} for the main function that uses this supporting function.
 
 insertEven <- function(m, n, verbose = FALSE) {
-  if (length(m) > length(n)) {
+  lm <- length(m)
+  ln <- length(n)
+  if (lm > ln) {
     temp <- m
     m <- n
     n <- temp
+
+    temp <- lm
+    lm <- ln
+    ln <- temp
+    temp <- NULL
+
+    if (isTRUE(verbose)) {
+      message("Swapped m and n because length(m) > length(n)")
+    }
   }
 
-  # idx <- numeric()
-  for (i in seq_along(m)) {
-    names(m)[i] <- ceiling(i * length(n) / length(m))
+
+  if (lm == 0L) return(unname(n))
+  if (ln == 0L) return(unname(m))
+
+  pos_m <- ceiling(seq_len(lm) * ln / lm)
+
+  if (isTRUE(verbose)) {
+    message("m insertion targets: ", paste(pos_m, collapse = ", "))
+    message("n indices: ", paste(seq_len(ln), collapse = ", "))
   }
-  if (verbose == TRUE) {
-    message(m)
-  }
-  names(n) <- seq_along(n)
-  if (verbose == TRUE) {
-    message(n)
-  }
+
+
   vec <- c(m, n)
-  vec <- vec[order(as.numeric(names(vec)))]
-  vec <- unname(vec)
+  primary <- c(pos_m, seq_len(ln))
+  secondary <- c(rep.int(0L, lm), rep.int(1L, ln))
+  vec <- vec[order(primary, secondary)]
 
-  return(vec)
+  unname(vec)
 }
 
 #' @rdname insertEven
