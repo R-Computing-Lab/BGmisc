@@ -41,7 +41,8 @@ buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose = FALSE, mar
       momID = momID,
       dadID = dadID,
       code_male = code_male,
-      code_female = code_female
+      code_female = code_female,
+      beta = beta
     )
   } else if (beta == FALSE || beta %in% c("base", "original") || is.null(beta)) {
     df_Fam <- buildBetweenGenerations_base(
@@ -57,7 +58,8 @@ buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose = FALSE, mar
       momID = momID,
       dadID = dadID,
       code_male = code_male,
-      code_female = code_female
+      code_female = code_female,
+      beta = beta
     )
   } else {
     stop("Invalid value for beta parameter. Use TRUE/'optimized' or FALSE/'base'.")
@@ -75,7 +77,8 @@ buildBetweenGenerations_base <- function(df_Fam,
                                          momID = "momID",
                                          dadID = "dadID",
                                          code_male = "M",
-                                         code_female = "F") {
+                                         code_female = "F",
+                                         beta = FALSE) {
   # Initialize flags for the full pedigree data frame.
   # These are used throughout linkage and get overwritten per-generation as needed.
 
@@ -162,7 +165,7 @@ buildBetweenGenerations_base <- function(df_Fam,
       countCouple <- (nrow(df_Ngen) - sum(is.na(df_Ngen$spID))) * .5
 
       # Assign couple IDs within generation i.
-      df_Ngen <- assignCoupleIds(df_Ngen)
+      df_Ngen <- assignCoupleIds(df_Ngen, beta = beta)
 
       # Identify singles in generation i (no spouse).
 
@@ -186,7 +189,8 @@ buildBetweenGenerations_base <- function(df_Fam,
         sizeGens = sizeGens,
         CoupleF = CoupleF,
         code_male = code_male,
-        code_female = code_female
+        code_female = code_female,
+        beta = beta
       )
 
       # -------------------------------------------------------------------------
@@ -233,7 +237,7 @@ buildBetweenGenerations_base <- function(df_Fam,
           # 2) they have a spouse (spID not NA), because singles cannot form a parent couple.
 
 
-          if (!(isUsedParent[k]) && !is.na(df_Ngen$spID[k])) {        # Mark this individual as parent.
+          if (!(isUsedParent[k]) && !is.na(df_Ngen$spID[k])) { # Mark this individual as parent.
 
             isUsedParent[k] <- TRUE
             # Mark their spouse row as parent too.
@@ -289,7 +293,8 @@ buildBetweenGenerations_base <- function(df_Fam,
         # generate link kids to the couples
         random_numbers <- adjustKidsPerCouple(
           nMates = sum(df_Ngen$ifparent) / 2, kpc = kpc,
-          rd_kpc = rd_kpc
+          rd_kpc = rd_kpc,
+          beta = beta
         )
 
         # Guard: adjustKidsPerCouple returned nothing usable
@@ -370,7 +375,6 @@ buildBetweenGenerations_base <- function(df_Fam,
         # -------------------------------------------------------------------------
 
 
-
         if (length(IdPa) - length(IdOfp) > 0) {
           if (verbose == TRUE) {
             message("length of IdPa", length(IdPa), "\n")
@@ -442,7 +446,7 @@ buildBetweenGenerations_base <- function(df_Fam,
   return(df_Fam)
 }
 
-buildBetweenGenerations_optimized <-  buildBetweenGenerations_base # Placeholder for optimized version
+buildBetweenGenerations_optimized <- buildBetweenGenerations_base # Placeholder for optimized version
 
 
 #' Simulate Pedigrees
