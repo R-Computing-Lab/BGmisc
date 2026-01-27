@@ -4,7 +4,7 @@ library(tidyverse)
 set.seed(1667)
 Ngen <- 3
 kpc <- 4
-sexR <- .50  # sometimes fails above .5
+sexR <- .50 # sometimes fails above .5
 marR <- .7
 reps <- 10
 if (FALSE) {
@@ -67,7 +67,8 @@ summary(benchmark_results)
 lm(benchmark_results$time ~ benchmark_results$beta * benchmark_results$gen_num) %>%
   summary()
 
-
+lm(benchmark_results$time ~ benchmark_results$beta) %>%
+  summary()
 # log transform time for better visualization
 
 ggplot(benchmark_results, aes(x = gen_factor, y = time / 1e6, color = beta_factor)) +

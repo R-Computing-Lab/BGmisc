@@ -29,7 +29,8 @@ buildWithinGenerations <- function(
       dadID = dadID,
       code_male = code_male,
       code_female = code_female,
-      fam_shift = fam_shift
+      fam_shift = fam_shift,
+      beta = beta
     )
   } else if (beta %in% c("index", "indexed")) {
     stop("The 'index' or 'indexed' option for parameter 'beta' is not yet implemented.")
@@ -45,7 +46,8 @@ buildWithinGenerations <- function(
       dadID = dadID,
       code_male = code_male,
       code_female = code_female,
-      fam_shift = fam_shift
+      fam_shift = fam_shift,
+      beta = beta
     )
   } else {
     stop("Invalid value for parameter 'beta'. Accepted values are TRUE, FALSE, 'optimized', or 'index'.")
@@ -60,7 +62,8 @@ buildWithinGenerations_base <- function(sizeGens, marR, sexR, Ngen, verbose = FA
                                         dadID = "dadID",
                                         code_male = "M",
                                         code_female = "F",
-                                        fam_shift = 1L) {
+                                        fam_shift = 1L,
+                                        beta = FALSE) {
   idx_width <- nchar(max(sizeGens))
   gen_width <- max(2L, nchar(Ngen))
 
@@ -86,7 +89,8 @@ buildWithinGenerations_base <- function(sizeGens, marR, sexR, Ngen, verbose = FA
     df_Ngen <- createGenDataFrame(
       sizeGens = sizeGens,
       genIndex = i,
-      idGen = idGen
+      idGen = idGen,
+      beta = beta
     )
 
     ### Let's deal with the sex in each generation first
@@ -94,7 +98,8 @@ buildWithinGenerations_base <- function(sizeGens, marR, sexR, Ngen, verbose = FA
     df_Ngen$sex <- determineSex(
       idGen = idGen, sexR = sexR,
       code_male = code_male,
-      code_female = code_female
+      code_female = code_female,
+      beta = beta
     )
 
     # The first generation
