@@ -19,7 +19,6 @@
 #' idGen <- 101:105 # Example IDs for the 2nd generation
 #' df_Ngen <- createGenDataFrame(sizeGens, genIndex, idGen)
 #' print(df_Ngen)
-#' @export
 createGenDataFrame_beta <- function(sizeGens, genIndex, idGen,
                                     family_id_prefix = "fam") {
   n <- sizeGens[genIndex]
@@ -47,7 +46,7 @@ createGenDataFrame_beta <- function(sizeGens, genIndex, idGen,
 #' @param code_female The value to use for females. Default is "F"
 #' @return Vector of sexes ("M" for male, "F" for female) for the offspring.
 #' @importFrom stats runif
-#' @export
+
 determineSex_beta <- function(idGen, sexR, code_male = "M", code_female = "F") {
   length_idGen <- length(idGen)
   if (runif(1) > .5) {
