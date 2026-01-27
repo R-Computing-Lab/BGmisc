@@ -26,7 +26,10 @@ and any previously assigned roles (`ifparent`, `ifson`, `ifdau`).}
 
 \item{sizeGens}{Numeric vector, containing the size (number of individuals) of each generation.}
 
-\item{CoupleF}{Integer, IT MIGHT BE the number of couples in the current generation.}
+\item{CoupleF}{Integer scalar giving the number of distinct mating couples in the current
+generation `i`. This is typically computed upstream from the spouse assignments
+(e.g., as the number of unique non-missing spouse pairs in `df_Ngen`) and must satisfy
+`0 <= CoupleF <= floor(sizeGens[i] / 2)`.}
 
 \item{code_male}{The value to use for males. Default is "M"}
 
