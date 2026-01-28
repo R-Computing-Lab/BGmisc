@@ -165,3 +165,48 @@ test_that("simulatePedigree verbose prints updates", {
     message("Beta option Ending: ", beta)
   }
 })
+
+test_that("simulatePedigree accepts string aliases for beta parameter", {
+  seed <- 5
+  Ngen <- 4
+  kpc <- 4
+  sexR <- .50
+  marR <- .7
+  strict_tolerance <- 1e-8
+  
+  # Test that "optimized" string alias works
+  set.seed(seed)
+  result_true <- simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR, beta = TRUE)
+  
+  set.seed(seed)
+  result_optimized <- simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR, beta = "optimized")
+  
+  # Results should be identical when using TRUE vs "optimized"
+  expect_equal(nrow(result_true), nrow(result_optimized))
+  expect_equal(ncol(result_true), ncol(result_optimized))
+  expect_equal(result_true$ID, result_optimized$ID)
+  
+  # Test that "base" string alias works
+  set.seed(seed)
+  result_false <- simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR, beta = FALSE)
+  
+  set.seed(seed)
+  result_base <- simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR, beta = "base")
+  
+  # Results should be identical when using FALSE vs "base"
+  expect_equal(nrow(result_false), nrow(result_base))
+  expect_equal(ncol(result_false), ncol(result_base))
+  expect_equal(result_false$ID, result_base$ID)
+  
+  # Test that invalid beta values throw errors
+  expect_error(
+    simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR, beta = "invalid"),
+    "Invalid value for beta parameter"
+  )
+  
+  # Test that "indexed" throws appropriate error
+  expect_error(
+    simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR, beta = "indexed"),
+    "not yet implemented"
+  )
+})
