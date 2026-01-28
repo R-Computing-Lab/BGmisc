@@ -17,7 +17,20 @@ buildWithinGenerations <- function(
   code_female = "F",
   fam_shift = 1L
 ) {
-  if (beta == TRUE || beta == "optimized") {
+  # Normalize string aliases to logical values for downstream functions
+  use_optimized <- FALSE
+  
+  if (beta %in% c("index", "indexed")) {
+    stop("The 'index' or 'indexed' option for parameter 'beta' is not yet implemented.")
+  } else if (isTRUE(beta) || identical(beta, "optimized")) {
+    use_optimized <- TRUE
+  } else if (isFALSE(beta) || beta %in% c("base", "original") || is.null(beta)) {
+    use_optimized <- FALSE
+  } else {
+    stop("Invalid value for parameter 'beta'. Accepted values are TRUE, FALSE, 'optimized', 'base', 'original', or 'index'/'indexed'.")
+  }
+  
+  if (use_optimized) {
     df_Fam <- buildWithinGenerations_optimized(
       sizeGens = sizeGens,
       marR = marR,
@@ -30,11 +43,9 @@ buildWithinGenerations <- function(
       code_male = code_male,
       code_female = code_female,
       fam_shift = fam_shift,
-      beta = beta
+      beta = TRUE
     )
-  } else if (beta %in% c("index", "indexed")) {
-    stop("The 'index' or 'indexed' option for parameter 'beta' is not yet implemented.")
-  } else if (beta == FALSE || is.null(beta)) {
+  } else {
     df_Fam <- buildWithinGenerations_base(
       sizeGens = sizeGens,
       marR = marR,
@@ -47,10 +58,8 @@ buildWithinGenerations <- function(
       code_male = code_male,
       code_female = code_female,
       fam_shift = fam_shift,
-      beta = beta
+      beta = FALSE
     )
-  } else {
-    stop("Invalid value for parameter 'beta'. Accepted values are TRUE, FALSE, 'optimized', or 'index'.")
   }
   return(df_Fam)
 }
