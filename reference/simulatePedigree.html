@@ -17,7 +17,7 @@ This function simulates "balanced" pedigrees based on a group of parameters:
 
     <a class="navbar-brand me-2" href="../index.html">BGmisc</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.6.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -78,7 +78,8 @@ This function simulates "balanced" pedigrees based on a group of parameters:
 <span>  spouseID <span class="op">=</span> <span class="st">"spouseID"</span>,</span>
 <span>  code_male <span class="op">=</span> <span class="st">"M"</span>,</span>
 <span>  code_female <span class="op">=</span> <span class="st">"F"</span>,</span>
-<span>  fam_shift <span class="op">=</span> <span class="fl">1L</span></span>
+<span>  fam_shift <span class="op">=</span> <span class="fl">1L</span>,</span>
+<span>  beta <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">SimPed</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></span></code></pre></div>
@@ -158,7 +159,12 @@ current version.</p></dd>
 
 
 <dt id="arg-fam-shift">fam_shift<a class="anchor" aria-label="anchor" href="#arg-fam-shift"></a></dt>
-<dd><p>An integer to shift the person ID. Default is 1L.</p></dd>
+<dd><p>An integer to shift the person ID. Default is 1L.
+This is useful when simulating multiple pedigrees to avoid ID conflicts.</p></dd>
+
+
+<dt id="arg-beta">beta<a class="anchor" aria-label="anchor" href="#arg-beta"></a></dt>
+<dd><p>logical. If TRUE, use the optimized version of the algorithm.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>

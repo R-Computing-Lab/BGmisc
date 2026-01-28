@@ -9,7 +9,15 @@ paternal, maternal, spouse IDs, and sex, awaiting further assignment.
 ## Usage
 
 ``` r
-createGenDataFrame(sizeGens, genIndex, idGen)
+createGenDataFrame(
+  sizeGens,
+  genIndex,
+  idGen,
+  family_id_prefix = "fam",
+  beta = FALSE
+)
+
+createGenDataFrame_beta(sizeGens, genIndex, idGen, family_id_prefix = "fam")
 ```
 
 ## Arguments
@@ -28,6 +36,14 @@ createGenDataFrame(sizeGens, genIndex, idGen)
 
   A numeric vector containing the ID numbers to be assigned to
   individuals in the current generation.
+
+- family_id_prefix:
+
+  A character string to prefix the family ID. Default is "fam".
+
+- beta:
+
+  logical. If TRUE, use the optimized version of the algorithm.
 
 ## Value
 

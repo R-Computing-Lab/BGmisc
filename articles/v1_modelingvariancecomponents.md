@@ -98,16 +98,7 @@ As you can see the model is identified, now that we’ve added another
 group. Let us confirm by fitting a model. First we prepare the data.
 
 ``` r
-require(dplyr)
-#> Loading required package: dplyr
-#> 
-#> Attaching package: 'dplyr'
-#> The following objects are masked from 'package:stats':
-#> 
-#>     filter, lag
-#> The following objects are masked from 'package:base':
-#> 
-#>     intersect, setdiff, setequal, union
+library(dplyr)
 
 
 selVars <- c("ht1", "ht2")
@@ -162,8 +153,8 @@ if (!requireNamespace("EasyMx", quietly = TRUE)) {
 #> AIC:      -5917.148              -3685.148                -3685.078
 #> BIC:     -10747.543              -3667.773                -3680.471
 #> To get additional fit indices, see help(mxRefModels)
-#> timestamp: 2026-01-12 21:05:14 
-#> Wall clock time: 0.07105374 secs 
+#> timestamp: 2026-01-28 13:12:07 
+#> Wall clock time: 0.127744 secs 
 #> optimizer:  SLSQP 
 #> OpenMx version number: 2.22.10 
 #> Need help?  See help(mxSummary)
@@ -210,8 +201,8 @@ if (!requireNamespace("EasyMx", quietly = TRUE)) {
 #> AIC:      -9113.092              -5499.092                -5499.048
 #> BIC:     -17811.437              -5479.794                -5492.498
 #> To get additional fit indices, see help(mxRefModels)
-#> timestamp: 2026-01-12 21:05:14 
-#> Wall clock time: 0.04958081 secs 
+#> timestamp: 2026-01-28 13:12:07 
+#> Wall clock time: 0.0524919 secs 
 #> optimizer:  SLSQP 
 #> OpenMx version number: 2.22.10 
 #> Need help?  See help(mxSummary)

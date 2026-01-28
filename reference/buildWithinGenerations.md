@@ -8,6 +8,7 @@ pairing within each generation.
 
 ``` r
 buildWithinGenerations(
+  beta = FALSE,
   sizeGens,
   marR,
   sexR,
@@ -23,6 +24,10 @@ buildWithinGenerations(
 ```
 
 ## Arguments
+
+- beta:
+
+  logical. If TRUE, use the optimized version of the algorithm.
 
 - sizeGens:
 
@@ -76,7 +81,8 @@ buildWithinGenerations(
 
 - fam_shift:
 
-  An integer to shift the person ID. Default is 1L.
+  An integer to shift the person ID. Default is 1L. This is useful when
+  simulating multiple pedigrees to avoid ID conflicts.
 
 ## Value
 

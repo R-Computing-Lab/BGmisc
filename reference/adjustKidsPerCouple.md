@@ -7,7 +7,9 @@ be randomly determined.
 ## Usage
 
 ``` r
-adjustKidsPerCouple(nMates, kpc, rd_kpc = TRUE)
+adjustKidsPerCouple(nMates, kpc, rd_kpc = TRUE, beta = FALSE)
+
+adjustKidsPerCouple_beta(nMates, kpc, rd_kpc = TRUE)
 ```
 
 ## Arguments
@@ -27,6 +29,10 @@ adjustKidsPerCouple(nMates, kpc, rd_kpc = TRUE)
   logical. If TRUE, the number of kids per mate will be randomly
   generated from a poisson distribution with mean kpc. If FALSE, the
   number of kids per mate will be fixed at kpc.
+
+- beta:
+
+  logical. If TRUE, use the optimized version of the algorithm.
 
 ## Value
 

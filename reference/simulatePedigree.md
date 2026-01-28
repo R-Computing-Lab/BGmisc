@@ -23,7 +23,8 @@ simulatePedigree(
   spouseID = "spouseID",
   code_male = "M",
   code_female = "F",
-  fam_shift = 1L
+  fam_shift = 1L,
+  beta = FALSE
 )
 
 SimPed(...)
@@ -103,7 +104,12 @@ SimPed(...)
 
 - fam_shift:
 
-  An integer to shift the person ID. Default is 1L.
+  An integer to shift the person ID. Default is 1L. This is useful when
+  simulating multiple pedigrees to avoid ID conflicts.
+
+- beta:
+
+  logical. If TRUE, use the optimized version of the algorithm.
 
 - ...:
 

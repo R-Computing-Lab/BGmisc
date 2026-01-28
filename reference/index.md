@@ -91,9 +91,11 @@
   : Count GEDCOM Pattern Rows
 
 - [`createGenDataFrame()`](https://r-computing-lab.github.io/BGmisc/reference/createGenDataFrame.md)
+  [`createGenDataFrame_beta()`](https://r-computing-lab.github.io/BGmisc/reference/createGenDataFrame.md)
   : Create Data Frame for Generation
 
 - [`determineSex()`](https://r-computing-lab.github.io/BGmisc/reference/determineSex.md)
+  [`determineSex_beta()`](https://r-computing-lab.github.io/BGmisc/reference/determineSex.md)
   : Determine Sex of Offspring
 
 - [`.adjBeta()`](https://r-computing-lab.github.io/BGmisc/reference/dot-adjBeta.md)
@@ -172,6 +174,7 @@
   : Create a Mapping from Family IDs to Parent IDs
 
 - [`markPotentialChildren()`](https://r-computing-lab.github.io/BGmisc/reference/markPotentialChildren.md)
+  [`markPotentialChildren_beta()`](https://r-computing-lab.github.io/BGmisc/reference/markPotentialChildren.md)
   : Mark and Assign children
 
 - [`parseNameLine()`](https://r-computing-lab.github.io/BGmisc/reference/parseNameLine.md)

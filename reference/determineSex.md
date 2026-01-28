@@ -6,7 +6,9 @@ based on the specified sex ratio.
 ## Usage
 
 ``` r
-determineSex(idGen, sexR, code_male = "M", code_female = "F")
+determineSex(idGen, sexR, code_male = "M", code_female = "F", beta = FALSE)
+
+determineSex_beta(idGen, sexR, code_male = "M", code_female = "F")
 ```
 
 ## Arguments
@@ -26,6 +28,10 @@ determineSex(idGen, sexR, code_male = "M", code_female = "F")
 - code_female:
 
   The value to use for females. Default is "F"
+
+- beta:
+
+  logical. If TRUE, use the optimized version of the algorithm.
 
 ## Value
 

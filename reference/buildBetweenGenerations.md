@@ -22,7 +22,8 @@ buildBetweenGenerations(
   momID = "momID",
   dadID = "dadID",
   code_male = "M",
-  code_female = "F"
+  code_female = "F",
+  beta = FALSE
 )
 ```
 
@@ -97,6 +98,10 @@ buildBetweenGenerations(
 - code_female:
 
   The value to use for females. Default is "F"
+
+- beta:
+
+  logical. If TRUE, use the optimized version of the algorithm.
 
 ## Value
 
