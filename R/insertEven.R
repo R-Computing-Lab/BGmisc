@@ -31,8 +31,12 @@ insertEven <- function(m, n, verbose = FALSE) {
   }
 
 
-  if (lm == 0L) return(unname(n))
-  if (ln == 0L) return(unname(m))
+  if (lm == 0L) {
+    return(unname(n))
+  }
+  if (ln == 0L) {
+    return(unname(m))
+  }
 
   pos_m <- ceiling(seq_len(lm) * ln / lm)
 
