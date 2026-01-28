@@ -212,7 +212,12 @@ test_that("simulatePedigree accepts string aliases for beta parameter", {
     "Invalid value for parameter"
   )
   
-  # Test that "indexed" throws appropriate error
+  # Test that "index" and "indexed" both throw appropriate error
+  expect_error(
+    simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR, beta = "index"),
+    "not yet implemented"
+  )
+  
   expect_error(
     simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR, beta = "indexed"),
     "not yet implemented"
