@@ -9,7 +9,6 @@
 #' The function takes two vectors, m and n, and inserts the elements of m evenly into n.
 #' If the length of m is greater than the length of n, the vectors are swapped, and the insertion proceeds.
 #' The resulting vector is a combination of m and n, with the elements of m evenly distributed within n.
-#' @export
 #' @seealso \code{\link{SimPed}} for the main function that uses this supporting function.
 
 insertEven <- function(m, n, verbose = FALSE) {
@@ -55,5 +54,4 @@ insertEven <- function(m, n, verbose = FALSE) {
 }
 
 #' @rdname insertEven
-#' @export
 evenInsert <- insertEven

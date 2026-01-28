@@ -41,7 +41,7 @@ checkIDs <- function(ped, verbose = FALSE, repair = FALSE) {
     cat("Validation Results:\n")
     message(validation_results)
   }
-  if (repair) {
+  if (repair == TRUE) {
     if (verbose == TRUE) {
       cat("Attempting to repair:\n")
       cat("Step 1: Attempting to repair non-unique IDs...\n")
