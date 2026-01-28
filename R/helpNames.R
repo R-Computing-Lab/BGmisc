@@ -71,20 +71,49 @@ restorePedColnames <- function(ped,
                                spID = "spID",
                                twinID = "twinID",
                                zygosity = "zygosity",
-                               sex = "sex"
+                               sex = "sex",
+                               verbose = FALSE
 ) {
+  if (verbose == TRUE) {
+    message("Restoring original column names...")
+  }
+  if (!inherits(ped, "data.frame")) {
+    stop("ped should be a data.frame or inherit to a data.frame")
+  }
+  if (!is.null(personID) && !is.null(ped$ID)) {
+    names(ped)[names(ped) == "ID"] <- personID
+  }
+  if (!is.null(momID) && !is.null(ped$momID)) {
+    names(ped)[names(ped) == "momID"] <- momID
+  }
+  if (!is.null(dadID) && !is.null(ped$dadID)) {
+    names(ped)[names(ped) == "dadID"] <- dadID
+  }
 
-  names(ped)[names(ped) == "ID"] <- personID
-  names(ped)[names(ped) == "momID"] <- momID
-  names(ped)[names(ped) == "dadID"] <- dadID
-  names(ped)[names(ped) == "famID"] <- famID
-  names(ped)[names(ped) == "gen"] <- gen
-  names(ped)[names(ped) == "patID"] <- patID
-  names(ped)[names(ped) == "matID"] <- matID
-  names(ped)[names(ped) == "spID"] <- spID
-  names(ped)[names(ped) == "twinID"] <- twinID
-  names(ped)[names(ped) == "zygosity"] <- zygosity
-  names(ped)[names(ped) == "sex"] <- sex
+  if (!is.null(famID) && !is.null(ped$famID)) {
+    names(ped)[names(ped) == "famID"] <- famID
+  }
+  if (!is.null(gen) && !is.null(ped$gen)) {
+    names(ped)[names(ped) == "gen"] <- gen
+  }
+  if (!is.null(patID) && !is.null(ped$patID)) {
+    names(ped)[names(ped) == "patID"] <- patID
+  }
+  if (!is.null(matID) && !is.null(ped$matID)) {
+    names(ped)[names(ped) == "matID"] <- matID
+  }
+  if (!is.null(spID) && !is.null(ped$spID)) {
+    names(ped)[names(ped) == "spID"] <- spID
+  }
+  if (!is.null(twinID) && !is.null(ped$twinID)) {
+    names(ped)[names(ped) == "twinID"] <- twinID
+  }
+  if (!is.null(zygosity) && !is.null(ped$zygosity)) {
+    names(ped)[names(ped) == "zygosity"] <- zygosity
+  }
+  if (!is.null(sex) && !is.null(ped$sex)) {
+    names(ped)[names(ped) == "sex"] <- sex
+  }
   ped
 }
 

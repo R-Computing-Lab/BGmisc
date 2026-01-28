@@ -56,19 +56,12 @@ checkIDs <- function(ped, verbose = FALSE, repair = FALSE) {
     # if there are non-unique IDs
     if (length(validation_results$non_unique_ids) > 0) {
       # loop through each non-unique ID
-      for (id in validation_results$non_unique_ids) {
-        rows_with_id <- repaired_ped[repaired_ped$ID == id, ]
-        # If all rows with the same ID are truly identical, keep only the first occurrence
-        if (nrow(unique(rows_with_id)) == 1) {
-          # Mark as removed in the changes list
-          changes[[paste0("ID", id)]] <- "Removed duplicates"
-          # Keep only the first row, remove the rest
-          repaired_ped <- repaired_ped[-which(repaired_ped$ID == id)[-1], ] # Remove all but the first occurrence
-        } else {
-          # Mark as kept in the changes list
-          changes[[paste0("ID", id)]] <- "Kept duplicates"
-        }
-      }
+
+      processed <- dropIdenticalDuplicateIDs(ped = repaired_ped,
+        ids = validation_results$non_unique_ids,
+        changes = changes)
+      repaired_ped <- processed$ped
+      changes <- processed$changes
     }
     if (verbose == TRUE) {
       cat("Step 2: No repair for parents who are their children at this time\n")

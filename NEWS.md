@@ -1,4 +1,7 @@
 # BGmisc NEWS
+# Development version: 1.6.0.9000
+
+* Add helper functions for checkParents etc
 
 # BGmisc 1.6
 * Optimize  simulatePedigree and helpers for speed and memory usage

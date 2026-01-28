@@ -52,14 +52,14 @@ checkParentIDs <- function(ped, verbose = FALSE, repair = FALSE,
   missing_mothers <- ped$ID[which(!is.na(ped$dadID) & is.na(ped$momID))]
 
   # Update the validation_results list
-  if (length(missing_fathers) > 0) {
-    validation_results$missing_fathers <- missing_fathers
-  }
-  if (length(missing_mothers) > 0) {
-    validation_results$missing_mothers <- missing_mothers
-  }
 
-  validation_results$single_parents <- length(validation_results) > 0
+  validation_results <- addIfAny(validation_results, "missing_fathers", missing_fathers)
+  validation_results <- addIfAny(validation_results, "missing_mothers", missing_mothers)
+
+  validation_results$single_parents <- (length(missing_fathers) + length(missing_mothers)) > 0
+
+
+
 
 
   if (verbose && validation_results$single_parents) cat("Missing single parents found.\n")
@@ -269,11 +269,12 @@ checkParentIDs <- function(ped, verbose = FALSE, repair = FALSE,
   }
 
   # restore orginal names that the user orginally provided
-  names(ped)[names(ped) == "ID"] <- personID
-  names(ped)[names(ped) == "momID"] <- momID
-  names(ped)[names(ped) == "dadID"] <- dadID
-  names(ped)[names(ped) == "famID"] <- famID
-  return(ped)
+  ped <-  restorePedColnames(ped,
+    famID = famID,
+    personID = personID,
+    momID = momID,
+    dadID = dadID)
+
 }
 #' Repair Parent IDs
 #'
