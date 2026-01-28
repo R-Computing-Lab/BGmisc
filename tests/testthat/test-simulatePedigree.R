@@ -172,7 +172,6 @@ test_that("simulatePedigree accepts string aliases for beta parameter", {
   kpc <- 4
   sexR <- .50
   marR <- .7
-  strict_tolerance <- 1e-8
   
   # Test that "optimized" string alias works
   set.seed(seed)
@@ -198,10 +197,19 @@ test_that("simulatePedigree accepts string aliases for beta parameter", {
   expect_equal(ncol(result_false), ncol(result_base))
   expect_equal(result_false$ID, result_base$ID)
   
+  # Test that "original" string alias works
+  set.seed(seed)
+  result_original <- simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR, beta = "original")
+  
+  # Results should be identical when using FALSE vs "original"
+  expect_equal(nrow(result_false), nrow(result_original))
+  expect_equal(ncol(result_false), ncol(result_original))
+  expect_equal(result_false$ID, result_original$ID)
+  
   # Test that invalid beta values throw errors
   expect_error(
     simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR, beta = "invalid"),
-    "Invalid value for beta parameter"
+    "Invalid value for parameter"
   )
   
   # Test that "indexed" throws appropriate error

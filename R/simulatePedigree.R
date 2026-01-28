@@ -30,12 +30,14 @@ buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose = FALSE, mar
   # Normalize string aliases to logical values for downstream functions
   use_optimized <- FALSE
   
-  if (isTRUE(beta) || beta %in% c("optimized", "index", "indexed")) {
+  if (beta %in% c("index", "indexed")) {
+    stop("The 'index' or 'indexed' option for parameter 'beta' is not yet implemented.")
+  } else if (isTRUE(beta) || identical(beta, "optimized")) {
     use_optimized <- TRUE
   } else if (isFALSE(beta) || beta %in% c("base", "original") || is.null(beta)) {
     use_optimized <- FALSE
   } else {
-    stop("Invalid value for beta parameter. Use TRUE/'optimized' or FALSE/'base'.")
+    stop("Invalid value for parameter 'beta'. Accepted values are TRUE, FALSE, 'optimized', 'base', 'original', or 'index'/'indexed'.")
   }
   
   if (use_optimized) {
