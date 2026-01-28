@@ -27,7 +27,20 @@ buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose = FALSE, mar
                                     momID = "momID",
                                     dadID = "dadID",
                                     code_male = "M", code_female = "F", beta = FALSE) {
-  if (beta == TRUE || beta %in% c("optimized", "index", "indexed")) {
+  # Normalize string aliases to logical values for downstream functions
+  use_optimized <- FALSE
+  
+  if (beta %in% c("index", "indexed")) {
+    stop("The 'index' or 'indexed' option for parameter 'beta' is not yet implemented.")
+  } else if (isTRUE(beta) || identical(beta, "optimized")) {
+    use_optimized <- TRUE
+  } else if (isFALSE(beta) || beta %in% c("base", "original") || is.null(beta)) {
+    use_optimized <- FALSE
+  } else {
+    stop("Invalid value for parameter 'beta'. Accepted values are TRUE, FALSE, 'optimized', 'base', 'original', or 'index'/'indexed'.")
+  }
+  
+  if (use_optimized) {
     df_Fam <- buildBetweenGenerations_optimized(
       df_Fam = df_Fam,
       Ngen = Ngen,
@@ -42,9 +55,9 @@ buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose = FALSE, mar
       dadID = dadID,
       code_male = code_male,
       code_female = code_female,
-      beta = beta
+      beta = TRUE
     )
-  } else if (beta == FALSE || beta %in% c("base", "original") || is.null(beta)) {
+  } else {
     df_Fam <- buildBetweenGenerations_base(
       df_Fam = df_Fam,
       Ngen = Ngen,
@@ -59,10 +72,8 @@ buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose = FALSE, mar
       dadID = dadID,
       code_male = code_male,
       code_female = code_female,
-      beta = beta
+      beta = FALSE
     )
-  } else {
-    stop("Invalid value for beta parameter. Use TRUE/'optimized' or FALSE/'base'.")
   }
   return(df_Fam)
 }
