@@ -1,24 +1,5 @@
 #' Create Data Frame for Generation
-#'
-#' This function creates a data frame for a specific generation within the simulated pedigree.
-#' It initializes the data frame with default values for family ID, individual ID, generation number,
-#' paternal ID, maternal ID, spouse ID, and sex. All individuals are initially set with NA for paternal,
-#' maternal, spouse IDs, and sex, awaiting further assignment.
-#'
-#' @param sizeGens A numeric vector containing the sizes of each generation within the pedigree.
-#' @param genIndex An integer representing the current generation index for which the data frame is being created.
-#' @param idGen A numeric vector containing the ID numbers to be assigned to individuals in the current generation.
-#' @param family_id_prefix A character string to prefix the family ID. Default is "fam".
-#' @return A data frame representing the initial structure for the individuals in the specified generation
-#'         before any relationships (parental, spousal) are defined. The columns include family ID (`fam`),
-#'         individual ID (`id`), generation number (`gen`), father's ID (`pat`), mother's ID (`mat`),
-#'         spouse's ID (`spID`), and sex (`sex`), with NA values for paternal, maternal, and spouse IDs, and sex.
-#' @examples
-#' sizeGens <- c(3, 5, 4) # Example sizes for 3 generations
-#' genIndex <- 2 # Creating data frame for the 2nd generation
-#' idGen <- 101:105 # Example IDs for the 2nd generation
-#' df_Ngen <- createGenDataFrame(sizeGens, genIndex, idGen)
-#' print(df_Ngen)
+#' @rdname createGenDataFrame
 createGenDataFrame_beta <- function(sizeGens, genIndex, idGen,
                                     family_id_prefix = "fam") {
   n <- sizeGens[genIndex]
@@ -37,16 +18,7 @@ createGenDataFrame_beta <- function(sizeGens, genIndex, idGen,
 
 
 #' Determine Sex of Offspring
-#'
-#' This internal function assigns sexes to the offspring in a generation based on the specified sex ratio.
-#'
-#' @param idGen Vector of IDs for the generation.
-#' @param sexR Numeric value indicating the sex ratio (proportion of males).
-#' @param code_male The value to use for males. Default is "M"
-#' @param code_female The value to use for females. Default is "F"
-#' @return Vector of sexes ("M" for male, "F" for female) for the offspring.
-#' @importFrom stats runif
-
+#' @rdname determineSex
 determineSex_beta <- function(idGen, sexR, code_male = "M", code_female = "F") {
   length_idGen <- length(idGen)
   if (runif(1) > .5) {
@@ -61,14 +33,7 @@ determineSex_beta <- function(idGen, sexR, code_male = "M", code_female = "F") {
 }
 
 #' Assign Couple IDs
-#'
-#' This subfunction assigns a unique couple ID to each mated pair in the generation.
-#' Unmated individuals are assigned NA for their couple ID.
-#'
-#' @param df_Ngen The dataframe for the current generation, including columns for individual IDs and spouse IDs.
-#' @return The input dataframe augmented with a 'coupleId' column, where each mated pair has a unique identifier.
-#' @keywords internal
-#'
+#' @rdname assignCoupleIDs
 assignCoupleIDs_beta <- function(df_Ngen) {
   df_Ngen$coupleId <- NA_character_ # Initialize the coupleId column with NAs
 
@@ -90,15 +55,7 @@ assignCoupleIDs_beta <- function(df_Ngen) {
 
 
 #' Generate or Adjust Number of Kids per Couple Based on Mating Rate
-#'
-#' This function generates or adjusts the number of kids per couple in a generation
-#' based on the specified average and whether the count should be randomly determined.
-#'
-#' @param nMates Integer, the number of mated pairs in the generation.
-#' @inheritParams simulatePedigree
-#'
-#' @return A numeric vector with the generated or adjusted number of kids per couple.
-#' @keywords internal
+#' @rdname adjustKidsPerCouple
 adjustKidsPerCouple_beta <- function(nMates, kpc, rd_kpc = TRUE) {
   if (rd_kpc == TRUE) {
     target <- nMates * kpc
@@ -135,26 +92,8 @@ adjustKidsPerCouple_beta <- function(nMates, kpc, rd_kpc = TRUE) {
   return(random_numbers)
 }
 
-#' Mark and Assign children
-#'
-#' This subfunction marks individuals in a generation as potential sons, daughters,
-#' or parents based on their relationships and assigns unique couple IDs. It processes
-#' the assignment of roles and relationships within and between generations in a pedigree simulation.
-#' @inheritParams determineSex
-#' @param df_Ngen A data frame for the current generation being processed.
-#'        It must include columns for individual IDs (`id`), spouse IDs (`spID`), sex (`sex`),
-#'        and any previously assigned roles (`ifparent`, `ifson`, `ifdau`).
-#' @param i Integer, the index of the current generation being processed.
-#' @param Ngen Integer, the total number of generations in the simulation.
-#' @param sizeGens Numeric vector, containing the size (number of individuals) of each generation.
-#' @param CoupleF Integer, IT MIGHT BE the number of couples in the current generation.
-#'
-#'
-#' @return Modifies `df_Ngen` in place by updating or adding columns related to individual roles
-#'         (`ifparent`, `ifson`, `ifdau`) and couple IDs (`coupleId`). The updated data frame is
-#'         also returned for integration into the larger pedigree data frame (`df_Fam`).
-#'
-
+#' Mark Potential Children in a Generation
+#' @rdname markPotentialChildren
 markPotentialChildren_beta <- function(df_Ngen, i, Ngen, sizeGens, CoupleF, code_male = "M", code_female = "F") {
   # Step 2.1: mark a group of potential sons and daughters in the i th generation
 
