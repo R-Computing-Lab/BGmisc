@@ -45,6 +45,8 @@ ID".}
 \item{zygosity}{The original name for the zygosity column. Default is "zygosity".}
 
 \item{sex}{The original name for the sex column. Default is "sex".}
+
+\item{verbose}{A logical indicating whether to print progress messages.}
 }
 \value{
 A pedigree dataframe with restored original column names.

@@ -59,6 +59,7 @@ standardizeColnames <- function(df, verbose = FALSE) {
 #' @param twinID The original name for the twin ID column. Default is "twinID".
 #' @param zygosity The original name for the zygosity column. Default is "zygosity".
 #' @param sex The original name for the sex column. Default is "sex".
+#' @param verbose A logical indicating whether to print progress messages.
 #' @return A pedigree dataframe with restored original column names.
 restorePedColnames <- function(ped,
                                famID = "famID",
@@ -72,8 +73,7 @@ restorePedColnames <- function(ped,
                                twinID = "twinID",
                                zygosity = "zygosity",
                                sex = "sex",
-                               verbose = FALSE
-) {
+                               verbose = FALSE) {
   if (verbose == TRUE) {
     message("Restoring original column names...")
   }
@@ -116,7 +116,6 @@ restorePedColnames <- function(ped,
   }
   ped
 }
-
 
 
 # Repair Pedigree
