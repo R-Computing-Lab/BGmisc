@@ -139,12 +139,13 @@ ped2graph <- function(ped,
     )
     edges <- rbind(
       as.matrix(data.frame(
-        personID = as.character(ped[[personID]]),
-        momID = as.character(ped[[momID]])
+        # need to be parent to child for igraph
+        momID = as.character(ped[[momID]]),
+        personID = as.character(ped[[personID]])
       )),
       as.matrix(data.frame(
-        personID = as.character(ped[[personID]]),
-        dadID = as.character(ped[[dadID]])
+        dadID = as.character(ped[[dadID]]),
+        personID = as.character(ped[[personID]])
       ))
     )
   } else if (adjacent == "mothers") {
@@ -154,8 +155,8 @@ ped2graph <- function(ped,
       )
     )
     edges <- as.matrix(data.frame(
-      personID = as.character(ped[[personID]]),
-      momID = as.character(ped[[momID]])
+      momID = as.character(ped[[momID]]),
+      personID = as.character(ped[[personID]])
     ))
   } else if (adjacent == "fathers") {
     nodes <- unique(
@@ -164,8 +165,8 @@ ped2graph <- function(ped,
       )
     )
     edges <- as.matrix(data.frame(
-      personID = as.character(ped[[personID]]),
-      dadID = as.character(ped[[dadID]])
+      dadID = as.character(ped[[dadID]]),
+      personID = as.character(ped[[personID]])
     ))
   }
   edges <- edges[stats::complete.cases(edges), ]

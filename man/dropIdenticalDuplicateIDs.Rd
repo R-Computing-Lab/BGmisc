@@ -10,6 +10,8 @@ dropIdenticalDuplicateIDs(ped, ids, changes = NULL)
 \item{ped}{A data frame representing the pedigree.}
 
 \item{ids}{A vector of IDs to check for duplicates in the pedigree.}
+
+\item{changes}{An optional list to log changes made during the process.}
 }
 \description{
 #' This function identifies and removes duplicate entries in a pedigree data frame

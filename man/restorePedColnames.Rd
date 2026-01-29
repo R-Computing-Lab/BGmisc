@@ -16,7 +16,8 @@ restorePedColnames(
   spID = "spID",
   twinID = "twinID",
   zygosity = "zygosity",
-  sex = "sex"
+  sex = "sex",
+  verbose = FALSE
 )
 }
 \arguments{
