@@ -2,6 +2,7 @@
 # Development version: 1.6.0.9000
 
 * Add helper functions for checkParents etc
+* fixed incorrect direction so that parents are pointing to children in the graphs
 
 # BGmisc 1.6
 * Optimize  simulatePedigree and helpers for speed and memory usage
