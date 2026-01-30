@@ -46,6 +46,8 @@ test_that("ped2graph produces a graph for hazard data with mothers", {
   expect_true(inherits(g, "igraph"))
 })
 
+
+
 test_that("ped2graph produces a graph for hazard data with fathers", {
   expect_silent(data(hazard))
   g <- ped2graph(hazard, adjacent = "fathers")
@@ -56,4 +58,26 @@ test_that("ped2graph produces a graph for inbreeding data", {
   expect_silent(data(inbreeding))
   g <- ped2graph(inbreeding)
   expect_true(inherits(g, "igraph"))
+})
+
+# are parents pointing to children?
+test_that("ped2graph produces correct edges for potter data", {
+  expect_silent(data(potter))
+  potter_df <- potter
+  potter_df$ID <- potter$personID
+  g <- ped2graph(potter_df)
+  expect_true(inherits(g, "igraph"))
+  vertices_df <- igraph::V(g)
+  expect_all_true(igraph::as_ids(vertices_df) %in% as.character(potter_df$personID))
+  edges_df <- igraph::E(g)
+  # are all edges from parent to child?
+  expect_all_true(
+    igraph::as_ids(edges_df) %in% paste0(potter_df$dadID, "|", potter_df$personID) |
+      igraph::as_ids(edges_df) %in% paste0(potter_df$momID, "|", potter_df$personID)
+  )
+  # are there any edges from child to parent?
+  expect_all_false(
+    igraph::as_ids(edges_df) %in% paste0(potter_df$personID, "|", potter_df$dadID) |
+      igraph::as_ids(edges_df) %in% paste0(potter_df$personID, "|", potter_df$momID)
+  )
 })

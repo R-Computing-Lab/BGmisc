@@ -1,6 +1,9 @@
 # BGmisc NEWS
+# Development version: 1.6.0.9000
 
-# BGmisc 1.6
+# BGmisc 1.6.0.1
+* Add helper functions for checkParents etc
+* fixed incorrect direction so that parents are pointing to children in the graphs
 * Optimize  simulatePedigree and helpers for speed and memory usage
 * Major gains in speed for deeper pedigrees
 * Added more tests for simulatePedigree
