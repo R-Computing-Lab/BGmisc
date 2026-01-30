@@ -124,6 +124,9 @@
 - [`.postProcessGedcom.legacy()`](https://r-computing-lab.github.io/BGmisc/reference/dot-postProcessGedcom.legacy.md)
   : Post-process GEDCOM Data Frame
 
+- [`dropIdenticalDuplicateIDs()`](https://r-computing-lab.github.io/BGmisc/reference/dropIdenticalDuplicateIDs.md)
+  : Drop Identical Duplicate IDs from Pedigree Data Frame
+
 - [`dropLink()`](https://r-computing-lab.github.io/BGmisc/reference/dropLink.md)
   : dropLink
 
@@ -249,6 +252,9 @@
 
 - [`repairSex()`](https://r-computing-lab.github.io/BGmisc/reference/repairSex.md)
   : Repairs Sex Coding in a Pedigree Dataframe
+
+- [`restorePedColnames()`](https://r-computing-lab.github.io/BGmisc/reference/restorePedColnames.md)
+  : Restore Original Column Names in a Pedigree Dataframe
 
 - [`royal92`](https://r-computing-lab.github.io/BGmisc/reference/royal92.md)
   : Royal pedigree data from 1992

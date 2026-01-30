@@ -16,6 +16,7 @@
 <url><loc>https://r-computing-lab.github.io/BGmisc/news/index.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/BGmisc-package.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/Null.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/addIfAny.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/addParentRow.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/addPersonToPed.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/addRowlessParents.html</loc></url>
@@ -74,6 +75,7 @@
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/dot-processParents.legacy.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/dot-process_tag.legacy.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/dot-readGedcom.legacy.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/dropIdenticalDuplicateIDs.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/dropLink.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/efunc.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/extractMemberTable.html</loc></url>
@@ -130,6 +132,7 @@
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/repairParentIDs.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/repairSex.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/resample.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/restorePedColnames.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/rmvn.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/royal92.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/simulatePedigree.html</loc></url>

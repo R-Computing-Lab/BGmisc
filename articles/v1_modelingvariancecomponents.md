@@ -153,8 +153,8 @@ if (!requireNamespace("EasyMx", quietly = TRUE)) {
 #> AIC:      -5917.148              -3685.148                -3685.078
 #> BIC:     -10747.543              -3667.773                -3680.471
 #> To get additional fit indices, see help(mxRefModels)
-#> timestamp: 2026-01-28 13:12:07 
-#> Wall clock time: 0.127744 secs 
+#> timestamp: 2026-01-30 02:01:00 
+#> Wall clock time: 0.1256938 secs 
 #> optimizer:  SLSQP 
 #> OpenMx version number: 2.22.10 
 #> Need help?  See help(mxSummary)
@@ -201,8 +201,8 @@ if (!requireNamespace("EasyMx", quietly = TRUE)) {
 #> AIC:      -9113.092              -5499.092                -5499.048
 #> BIC:     -17811.437              -5479.794                -5492.498
 #> To get additional fit indices, see help(mxRefModels)
-#> timestamp: 2026-01-28 13:12:07 
-#> Wall clock time: 0.0524919 secs 
+#> timestamp: 2026-01-30 02:01:01 
+#> Wall clock time: 0.05105686 secs 
 #> optimizer:  SLSQP 
 #> OpenMx version number: 2.22.10 
 #> Need help?  See help(mxSummary)
