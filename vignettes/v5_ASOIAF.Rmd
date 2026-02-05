@@ -7,7 +7,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-## Introduction
+# Introduction
 
 Just how closely related are Jon Snow and Daenerys Targaryen? According to the lore of *A Song of Ice and Fire*, Daenerys is Jon's paternal aunt. This would suggest a theoretical genetic relatedness of 0.25, assuming a simple pedigree and no inbreeding. But with tangled ancestries and potentially missing information, how confident can we be in that estimate?
 
@@ -84,6 +84,50 @@ cn <- ped2cn(df_got,
   adjacency_method = "indexed",
   sparse = TRUE
 )
+```
+
+
+Each of these matrices is square, with dimensions equal to the number of individuals in the pedigree. The entries represent pairwise relatedness coefficients.
+
+To verify the matrices, we can plot their sparsity patterns:
+
+```{r fig.width=10, fig.height=4, message=FALSE, warning=FALSE}
+par(mfrow = c(1, 3))
+ggRelatednessMatrix(as.matrix(add),
+  config = list(
+    matrix_color_palette = c("white", "gold", "red"),
+    color_scale_midpoint = 0.5,
+    matrix_cluster = TRUE,
+    plot_title = "Relatedness Matrix",
+    axis_x_label = "Individuals",
+    axis_y_label = "Individuals",
+    label_include = FALSE
+  )
+)
+ggRelatednessMatrix(as.matrix(cn),
+  config = list(
+    matrix_color_palette = c("white", "lightblue", "blue"),
+    color_scale_midpoint = 0.5,
+    matrix_cluster = TRUE,
+    plot_title = "Common Nuclear Relatedness Matrix",
+    axis_x_label = "Individuals",
+    axis_y_label = "Individuals",
+    axis_text_size = 8
+  )
+)
+ggRelatednessMatrix(as.matrix(mt),
+  config = list(
+    matrix_color_palette = c("white", "lightgreen", "darkgreen"),
+    color_scale_midpoint = 0.5,
+    matrix_cluster = TRUE,
+    plot_title = "Mitochondrial Relatedness Matrix",
+    axis_x_label = "Individuals",
+    axis_y_label = "Individuals",
+    axis_text_size = 8
+  )
+)
+
+par(mfrow = c(1, 1))
 ```
 
 ## Convert to Pairwise Format
