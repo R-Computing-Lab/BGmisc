@@ -173,9 +173,9 @@ buildBetweenGenerations_base <- function(df_Fam,
 
 
       # count the number of couples in the i th gen
-      if(verbose == TRUE){
-      countCouple <- (nrow(df_Ngen) - sum(is.na(df_Ngen$spID))) * .5
-}
+      if (verbose == TRUE) {
+        countCouple <- (nrow(df_Ngen) - sum(is.na(df_Ngen$spID))) * .5
+      }
       # Assign couple IDs within generation i.
       df_Ngen <- assignCoupleIds(df_Ngen, beta = beta)
 
@@ -459,16 +459,16 @@ buildBetweenGenerations_base <- function(df_Fam,
 }
 
 buildBetweenGenerations_optimized <- function(df_Fam,
-                                         Ngen,
-                                         sizeGens,
-                                         verbose = FALSE,
-                                         marR, sexR, kpc,
-                                         rd_kpc, personID = "ID",
-                                         momID = "momID",
-                                         dadID = "dadID",
-                                         code_male = "M",
-                                         code_female = "F",
-                                         beta = TRUE) {
+                                              Ngen,
+                                              sizeGens,
+                                              verbose = FALSE,
+                                              marR, sexR, kpc,
+                                              rd_kpc, personID = "ID",
+                                              momID = "momID",
+                                              dadID = "dadID",
+                                              code_male = "M",
+                                              code_female = "F",
+                                              beta = TRUE) {
   # Initialize flags for the full pedigree data frame.
   # These are used throughout linkage and get overwritten per-generation as needed.
 

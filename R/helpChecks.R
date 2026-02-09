@@ -7,8 +7,7 @@
 #' @param ped A data frame representing the pedigree.
 #' @param ids A vector of IDs to check for duplicates in the pedigree.
 #' @param changes An optional list to log changes made during the process.
-dropIdenticalDuplicateIDs <- function(ped, ids, changes = NULL
-) {
+dropIdenticalDuplicateIDs <- function(ped, ids, changes = NULL) {
   if (!is.data.frame(ped)) {
     stop("ped must be a data frame")
   }

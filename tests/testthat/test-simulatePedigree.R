@@ -18,7 +18,8 @@ test_that("simulated pedigree generates expected data structure", {
       expect_equal(length(results$ID), 57, tolerance = strict_tolerance)
     } else {
       expect_true(length(results$ID) >= 45 && length(results$ID) <= 70,
-        info = paste0("Beta=TRUE: Expected 45-70 individuals, got ", length(results$ID)))
+        info = paste0("Beta=TRUE: Expected 45-70 individuals, got ", length(results$ID))
+      )
     }
     expect_equal(length(results), 7, tolerance = strict_tolerance)
 
@@ -61,7 +62,8 @@ test_that("simulated pedigree generates expected data structure when sexR is imb
       expect_equal(length(results$ID), base_length, tolerance = strict_tolerance)
     } else {
       expect_true(length(results$ID) >= base_length - base_length_tol && length(results$ID) <= base_length + base_length_tol,
-        info = paste0("Beta=TRUE: Expected 123-185 individuals, got ", length(results$ID)))
+        info = paste0("Beta=TRUE: Expected 123-185 individuals, got ", length(results$ID))
+      )
     }
     expect_equal(length(results), 7, tolerance = strict_tolerance)
 
@@ -110,7 +112,8 @@ test_that("simulated pedigree generates expected data structure when sexR is imb
       expect_equal(length(results$ID), base_length, tolerance = strict_tolerance)
     } else {
       expect_true(length(results$ID) >= base_length - base_length_tol && length(results$ID) <= base_length + base_length_tol,
-        info = paste0("Beta=TRUE: Expected 340-510 individuals, got ", length(results$ID)))
+        info = paste0("Beta=TRUE: Expected 340-510 individuals, got ", length(results$ID))
+      )
     }
     expect_equal(length(results), 7, tolerance = strict_tolerance)
 
@@ -165,7 +168,8 @@ test_that("simulated pedigree generates expected data structure but supply var n
       expect_equal(length(results$Id), base_length, tolerance = strict_tolerance)
     } else {
       expect_true(length(results$Id) >= base_length - base_length_tol && length(results$Id) <= base_length + base_length_tol,
-        info = paste0("Beta=TRUE: Expected 45-70 individuals, got ", length(results$Id)))
+        info = paste0("Beta=TRUE: Expected 45-70 individuals, got ", length(results$Id))
+      )
     }
     expect_equal(length(results), 7, tolerance = strict_tolerance)
 

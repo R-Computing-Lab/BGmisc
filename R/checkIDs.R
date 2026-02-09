@@ -57,9 +57,11 @@ checkIDs <- function(ped, verbose = FALSE, repair = FALSE) {
     if (length(validation_results$non_unique_ids) > 0) {
       # loop through each non-unique ID
 
-      processed <- dropIdenticalDuplicateIDs(ped = repaired_ped,
+      processed <- dropIdenticalDuplicateIDs(
+        ped = repaired_ped,
         ids = validation_results$non_unique_ids,
-        changes = changes)
+        changes = changes
+      )
       repaired_ped <- processed$ped
       changes <- processed$changes
     }
