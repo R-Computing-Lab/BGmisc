@@ -470,6 +470,8 @@ buildBetweenGenerations_optimized <- function(df_Fam,
                                          code_female = "F",
                                          beta = TRUE) {
   # Initialize flags for the full pedigree data frame.
+  # These are used throughout linkage and get overwritten per-generation as needed.
+
   df_Fam$ifparent <- FALSE
   df_Fam$ifson <- FALSE
   df_Fam$ifdau <- FALSE
@@ -537,9 +539,10 @@ buildBetweenGenerations_optimized <- function(df_Fam,
       df_Ngen$ifdau <- FALSE
       df_Ngen$coupleId <- NA_character_
 
-      # Randomly permute once
-      perm_order <- sample(nrow(df_Ngen))
-      df_Ngen <- df_Ngen[perm_order, , drop = FALSE]
+      # Randomly permute generation i rows so selection is not tied to row order.
+      df_Ngen <- df_Ngen[sample(nrow(df_Ngen)), , drop = FALSE]
+
+      # Start to connect children with mother and father
 
       if (verbose == TRUE) {
         message(
@@ -583,9 +586,12 @@ buildBetweenGenerations_optimized <- function(df_Fam,
       # -------------------------------------------------------------------------
       # Step C: Mark a subset of generation i-1 couples as parents (ifparent)
       #
+      # OPTIMIZATION: Instead of looping through individuals and doing linear
+      # spouse lookups (O(n²)), we pre-identify all couples using vectorized
+      # operations, sample the needed number of couples directly, and mark both
+      # spouses in one vectorized operation (O(n)).
+      #
       # Goal: choose enough married couples (based on marR) to be parents.
-      # We walk through a randomized order of generation i-1, and whenever we select
-      # an individual who has a spouse, we mark both spouses as ifparent.
       # -------------------------------------------------------------------------
 
       if (verbose == TRUE) {
@@ -600,21 +606,28 @@ buildBetweenGenerations_optimized <- function(df_Fam,
       df_Ngen$ifson <- FALSE
       df_Ngen$ifdau <- FALSE
 
-      # Identify all couples in generation i-1
+      # OPTIMIZED: Vectorized parent couple selection
+      # Instead of looping and searching for spouses, create couple keys and sample couples
+
+      # Identify all individuals with spouses in generation i-1
       has_spouse <- !is.na(df_Ngen$spID)
+
       if (any(has_spouse)) {
-        # Create symmetric couple keys
+        # Create symmetric couple keys so each couple has a unique identifier
+        # regardless of which spouse appears first in the data frame.
+        # pmin/pmax ensure the key is the same for both members of a couple.
         couple_keys <- paste(
           pmin(df_Ngen$id[has_spouse], df_Ngen$spID[has_spouse]),
           pmax(df_Ngen$id[has_spouse], df_Ngen$spID[has_spouse]),
           sep = "_"
         )
 
-        # Get unique couples and their first occurrence indices
+        # Get unique couples (each couple appears once in this list)
         unique_couples <- unique(couple_keys)
         n_couples_available <- length(unique_couples)
 
         # Determine how many couples should be parents based on marR
+        # marR is proportion of individuals, so divide by 2 for couples
         n_parent_couples <- min(
           floor(sizeGens[i - 1] * marR / 2),
           n_couples_available
@@ -624,8 +637,9 @@ buildBetweenGenerations_optimized <- function(df_Fam,
           # Randomly select which couples become parents
           selected_couple_keys <- sample(unique_couples, n_parent_couples)
 
-          # Mark all individuals in selected couples as parents (vectorized)
-          is_parent <- has_spouse & (couple_keys %in% selected_couple_keys)
+          # Mark all individuals in selected couples as parents (vectorized operation)
+          # This replaces the O(n²) loop with linear search
+          is_parent <- couple_keys %in% selected_couple_keys
           df_Ngen$ifparent[has_spouse] <- is_parent
         }
       }
@@ -638,31 +652,37 @@ buildBetweenGenerations_optimized <- function(df_Fam,
         )
       }
 
+
       if (i == 1) {
         next
       } else {
-        # Use pre-computed indices instead of subsetting
+        # Pull the two generations together.
+        # OPTIMIZATION: Use pre-computed row indices instead of df_Fam$gen %in% c(i, i-1)
         df_Ngen <- df_Fam[c(rows_prev, rows_i), , drop = FALSE]
 
-        # Collect IDs of marked sons and daughters
+        sizeI <- sizeGens[i - 1]
+        sizeII <- sizeGens[i]
+
+        # Collect IDs of marked sons and daughters in generation i.
         IdSon <- df_Ngen$id[df_Ngen$ifson == TRUE & df_Ngen$gen == i]
         IdDau <- df_Ngen$id[df_Ngen$ifdau == TRUE & df_Ngen$gen == i]
 
-        # Interleave sons and daughters
+        # Interleave sons and daughters to get an offspring list.
         IdOfp <- evenInsert(IdSon, IdDau)
 
+        # nMates is number of parent couples selected (ifparent rows are individuals).
         nMates <- sum(df_Ngen$ifparent) / 2
 
+        # If no mates or no offspring were selected for linkage, skip linkage.
         if (nMates <= 0 || length(IdOfp) == 0) {
           df_Fam[rows_i, ] <- df_Ngen[df_Ngen$gen == i, ]
           df_Fam[rows_prev, ] <- df_Ngen[df_Ngen$gen == i - 1, ]
           next
         }
 
-        # Generate kids per couple distribution
+        # generate link kids to the couples
         random_numbers <- adjustKidsPerCouple(
-          nMates = nMates,
-          kpc = kpc,
+          nMates = sum(df_Ngen$ifparent) / 2, kpc = kpc,
           rd_kpc = rd_kpc,
           beta = beta
         )
@@ -698,20 +718,29 @@ buildBetweenGenerations_optimized <- function(df_Fam,
           df_Fam[rows_prev, ] <- df_Ngen[df_Ngen$gen == i - 1, ]
           next
         }
-
-        # Create couple key and deduplicate
+        # Create a symmetric couple key so we can keep only one row per couple.
         a <- pmin(prev$id, prev$spID)
         b <- pmax(prev$id, prev$spID)
         couple_key <- paste(a, b, sep = "_")
+
+        # Keep only the first row for each couple among the parent rows.
         parent_rows <- parent_rows[!duplicated(couple_key[parent_rows])]
 
-        # Determine mother and father IDs
+        # Determine whether each kept row corresponds to the female member of the couple.
+        # If the kept row is female: mother = id, father = spID
+        # If the kept row is male:   father = id, mother = spID
         is_female_row <- prev$sex[parent_rows] == code_female
+        # One mother ID per couple.
         ma_ids <- ifelse(is_female_row, prev$id[parent_rows], prev$spID[parent_rows])
+
+        # One father ID per couple.
         pa_ids <- ifelse(is_female_row, prev$spID[parent_rows], prev$id[parent_rows])
 
-        # Align lengths
+        # Align lengths between couples and random_numbers.
+        # If random_numbers is longer than couples, truncate random_numbers.
+        # If random_numbers is shorter than couples, drop extra couples.
         nCouples <- length(parent_rows)
+
         if (length(random_numbers) > nCouples) {
           random_numbers <- random_numbers[seq_len(nCouples)]
         } else if (length(random_numbers) < nCouples) {
@@ -720,41 +749,85 @@ buildBetweenGenerations_optimized <- function(df_Fam,
           pa_ids <- pa_ids[keep]
         }
 
-        # Expand to per-child vectors
+        # Expand from "one mother/father per couple" to "one mother/father per child".
+        # rep.int is used to avoid extra overhead.
         IdMa <- rep.int(ma_ids, times = random_numbers)
         IdPa <- rep.int(pa_ids, times = random_numbers)
 
-        # Balance parent slots and offspring
-        if (length(IdPa) > length(IdOfp)) {
+        # -------------------------------------------------------------------------
+        # Step F: Ensure IdMa/IdPa length matches the number of offspring IdOfp
+        #
+        # Two mismatch cases:
+        # 1) Too many parent slots relative to offspring: drop excess parent slots.
+        # 2) Too many offspring relative to parent slots: drop some offspring.
+        #
+        # drop singles first (IdSingle) when reducing offspring.
+        # -------------------------------------------------------------------------
+
+
+        if (length(IdPa) - length(IdOfp) > 0) {
+          if (verbose == TRUE) {
+            message("length of IdPa", length(IdPa), "\n")
+          }
+          # Excess parent slots: randomly remove that many entries from IdPa and IdMa.
+
           excess <- length(IdPa) - length(IdOfp)
-          if (excess > 0) {
+          if (length(IdPa) > 0 && excess > 0) {
             IdRm <- sample.int(length(IdPa), size = excess)
             IdPa <- IdPa[-IdRm]
             IdMa <- IdMa[-IdRm]
           }
-        } else if (length(IdPa) < length(IdOfp)) {
+        } else if (length(IdPa) - length(IdOfp) < 0) {
+          if (verbose == TRUE) {
+            message("length of IdOfp", length(IdOfp), "\n")
+            message("length of IdPa", length(IdPa), "\n")
+            message("length of IdSingle", length(IdMa), "\n")
+          }
+
+
+          # harden the resample call when IdSingle is empty:
+          # Need to drop some offspring because we do not have enough parent slots.
           need_drop <- length(IdOfp) - length(IdPa)
+
           if (need_drop > 0) {
             if (length(IdSingle) > 0) {
+              # Preferentially remove offspring IDs that correspond to singles.
+              # resample is expected to return a vector of IDs to remove.
+
               IdRm <- resample(IdSingle, size = need_drop)
               IdOfp <- IdOfp[!(IdOfp %in% IdRm)]
             } else {
+              # If there are no singles to target, drop arbitrary offspring indices.
               drop_idx <- sample.int(length(IdOfp), size = need_drop)
               IdOfp <- IdOfp[-drop_idx]
             }
           }
         }
 
-        # Assign parents using match (vectorized)
+        # -------------------------------------------------------------------------
+        # Step G: Assign pat/mat into df_Ngen for the selected offspring.
+        #
+        # Replaces the old loop:
+        #   for (m in seq_along(IdOfp)) df_Ngen[df_Ngen$id == IdOfp[m], "pat"] <- ...
+        # Using match avoids repeated scanning over df_Ngen$id.
+        # -------------------------------------------------------------------------
+
+        # Find row positions in df_Ngen corresponding to offspring IDs.
         child_rows <- match(IdOfp, df_Ngen$id)
+        # Only keep rows that matched successfully.
+
         ok <- !is.na(child_rows)
 
         if (any(ok)) {
+          # Assign father IDs and mother IDs to offspring rows.
+
           df_Ngen$pat[child_rows[ok]] <- IdPa[ok]
           df_Ngen$mat[child_rows[ok]] <- IdMa[ok]
         }
+        # -------------------------------------------------------------------------
+        # Step H: Write the two generations back into df_Fam using the precomputed indices.
+        # -------------------------------------------------------------------------
 
-        # Write back
         df_Fam[rows_i, ] <- df_Ngen[df_Ngen$gen == i, ]
         df_Fam[rows_prev, ] <- df_Ngen[df_Ngen$gen == i - 1, ]
       }
