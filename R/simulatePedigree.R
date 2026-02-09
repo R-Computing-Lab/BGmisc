@@ -173,8 +173,9 @@ buildBetweenGenerations_base <- function(df_Fam,
 
 
       # count the number of couples in the i th gen
+      if(verbose == TRUE){
       countCouple <- (nrow(df_Ngen) - sum(is.na(df_Ngen$spID))) * .5
-
+}
       # Assign couple IDs within generation i.
       df_Ngen <- assignCoupleIds(df_Ngen, beta = beta)
 
@@ -474,28 +475,63 @@ buildBetweenGenerations_optimized <- function(df_Fam,
   df_Fam$ifdau <- FALSE
 
   # Precompute row indices per generation once.
+  # This avoids repeated df_Fam$gen == i scans inside loops.
   gen_rows <- split(seq_len(nrow(df_Fam)), df_Fam$gen)
 
+  # Loop across generations 1..Ngen.
+
   for (i in seq_len(Ngen)) {
+    # -------------------------------------------------------------------------
+    # Generation 1: base case
+    # Generation 1 individuals are founders and are treated as "parents" by design.
+    # They do not have assigned mother/father, so we just set flags and continue.
+    # -------------------------------------------------------------------------
+
     if (i == 1) {
       rows_i <- gen_rows[[as.character(i)]]
       df_Ngen <- df_Fam[rows_i, , drop = FALSE]
+
+      # Mark everyone in generation 1 as parents (founder couple logic occurs earlier).
       df_Ngen$ifparent <- TRUE
       df_Ngen$ifson <- FALSE
       df_Ngen$ifdau <- FALSE
       df_Fam[rows_i, ] <- df_Ngen
+      # Write back into the main df_Fam.
     } else {
+      # calculate the number of couples in the i-1 th generation
       rows_i <- gen_rows[[as.character(i)]]
       rows_prev <- gen_rows[[as.character(i - 1)]]
 
-      # Number of couples in generation i-1
+      # -------------------------------------------------------------------------
+      # Step A: Determine how many couples exist in generation i-1
+      #
+      # In your representation, each coupled individual has a non-NA spID, and each couple
+      # appears twice (one row per spouse). Therefore:
+      #   number_of_couples = (number_of_non_single_individuals) / 2
+      # where number_of_non_single_individuals = sizeGens[i-1] - count(NA spID)
+      # -------------------------------------------------------------------------
+
       N_couples <- (sizeGens[i - 1] - sum(is.na(df_Fam$spID[rows_prev]))) * 0.5
+
+      # Expected number of offspring linked to those couples (before sex split).
+
       N_LinkedMem <- N_couples * kpc
+      # Split linked offspring into female and male counts using sexR,
+      # where sexR is the proportion male, so (1 - sexR) is the proportion female.
+
       N_LinkedFemale <- round(N_LinkedMem * (1 - sexR))
       N_LinkedMale <- N_LinkedMem - N_LinkedFemale
 
-      # Prepare generation i data
+
+      # -------------------------------------------------------------------------
+      # Step B: Prepare generation i data, assign couple IDs, and mark potential children
+      # -------------------------------------------------------------------------
+
+      # get the df for the i the generation
       df_Ngen <- df_Fam[rows_i, , drop = FALSE]
+
+
+      # Reset per-generation fields that will be recomputed.
       df_Ngen$ifparent <- FALSE
       df_Ngen$ifson <- FALSE
       df_Ngen$ifdau <- FALSE
@@ -511,16 +547,28 @@ buildBetweenGenerations_optimized <- function(df_Fam,
         )
       }
 
-      # Assign couple IDs
+
+      # count the number of couples in the i th gen
+      countCouple <- (nrow(df_Ngen) - sum(is.na(df_Ngen$spID))) * .5
+
+      # Assign couple IDs within generation i.
       df_Ngen <- assignCoupleIds(df_Ngen, beta = beta)
 
-      # Identify singles
+      # Identify singles in generation i (no spouse).
+
       IdSingle <- df_Ngen$id[is.na(df_Ngen$spID)]
+
+      # Count singles by sex; these affect how many "linked" children can come from couples.
       SingleF <- sum(df_Ngen$sex == code_female & is.na(df_Ngen$spID))
       SingleM <- sum(df_Ngen$sex == code_male & is.na(df_Ngen$spID))
+
+      # Number of linked females that must come from couples after excluding single females.
+      # This value is passed into markPotentialChildren, which decides who becomes ifson/ifdau.
+
       CoupleF <- N_LinkedFemale - SingleF
 
-      # Mark potential sons and daughters
+      # Mark potential sons and daughters within generation i.
+      # This writes ifson/ifdau into the returned data frame
       df_Fam[rows_i, ] <- markPotentialChildren(
         df_Ngen = df_Ngen,
         i = i,
@@ -532,14 +580,22 @@ buildBetweenGenerations_optimized <- function(df_Fam,
         beta = beta
       )
 
-      # OPTIMIZED: Parent selection using vectorized operations
+      # -------------------------------------------------------------------------
+      # Step C: Mark a subset of generation i-1 couples as parents (ifparent)
+      #
+      # Goal: choose enough married couples (based on marR) to be parents.
+      # We walk through a randomized order of generation i-1, and whenever we select
+      # an individual who has a spouse, we mark both spouses as ifparent.
+      # -------------------------------------------------------------------------
+
       if (verbose == TRUE) {
         message(
           "Step 2.2: mark a group of potential parents in the i-1 th generation"
         )
       }
-
       df_Ngen <- df_Fam[rows_prev, , drop = FALSE]
+
+      # Reset flags within i-1 before reselecting parent couples.
       df_Ngen$ifparent <- FALSE
       df_Ngen$ifson <- FALSE
       df_Ngen$ifdau <- FALSE
@@ -611,17 +667,32 @@ buildBetweenGenerations_optimized <- function(df_Fam,
           beta = beta
         )
 
+        # Guard: adjustKidsPerCouple returned nothing usable
         if (length(random_numbers) == 0 || all(is.na(random_numbers))) {
           df_Fam[rows_i, ] <- df_Ngen[df_Ngen$gen == i, ]
           df_Fam[rows_prev, ] <- df_Ngen[df_Ngen$gen == i - 1, ]
           next
         }
 
-        # Build parent assignment vectors
+        # -------------------------------------------------------------------------
+        # Step E: Build parent assignment vectors IdMa and IdPa
+        #
+        # The goal is to expand couples into per-child vectors of mother IDs and father IDs,
+        # where each couple contributes random_numbers[couple_index] children.
+        #
+        # Important: df_Ngen contains both generations. We only want parent generation rows.
+        # -------------------------------------------------------------------------
+
+        # Identify rows in df_Ngen that belong to generation i-1 (parent generation).
         rows_prev_in_pair <- which(df_Ngen$gen == (i - 1))
+
+        # Extract parent generation into a smaller frame to make operations faster and clearer.
         prev <- df_Ngen[rows_prev_in_pair, , drop = FALSE]
+
+        # Keep only those rows that are marked ifparent and are actually paired (non-NA spID).
         parent_rows <- which(prev$ifparent == TRUE & !is.na(prev$spID))
 
+        # If no usable parent couples remain, skip linkage.
         if (length(parent_rows) == 0) {
           df_Fam[rows_i, ] <- df_Ngen[df_Ngen$gen == i, ]
           df_Fam[rows_prev, ] <- df_Ngen[df_Ngen$gen == i - 1, ]
@@ -692,6 +763,108 @@ buildBetweenGenerations_optimized <- function(df_Fam,
   return(df_Fam)
 }
 
+        # One father ID per couple.
+        pa_ids <- ifelse(is_female_row, prev$spID[parent_rows], prev$id[parent_rows])
+
+        # Align lengths between couples and random_numbers.
+        # If random_numbers is longer than couples, truncate random_numbers.
+        # If random_numbers is shorter than couples, drop extra couples.
+        nCouples <- length(parent_rows)
+
+        if (length(random_numbers) > nCouples) {
+          random_numbers <- random_numbers[seq_len(nCouples)]
+        } else if (length(random_numbers) < nCouples) {
+          keep <- seq_len(length(random_numbers))
+          ma_ids <- ma_ids[keep]
+          pa_ids <- pa_ids[keep]
+        }
+
+        # Expand from "one mother/father per couple" to "one mother/father per child".
+        # rep.int is used to avoid extra overhead.
+        IdMa <- rep.int(ma_ids, times = random_numbers)
+        IdPa <- rep.int(pa_ids, times = random_numbers)
+
+        # -------------------------------------------------------------------------
+        # Step F: Ensure IdMa/IdPa length matches the number of offspring IdOfp
+        #
+        # Two mismatch cases:
+        # 1) Too many parent slots relative to offspring: drop excess parent slots.
+        # 2) Too many offspring relative to parent slots: drop some offspring.
+        #
+        # drop singles first (IdSingle) when reducing offspring.
+        # -------------------------------------------------------------------------
+
+
+        if (length(IdPa) - length(IdOfp) > 0) {
+          if (verbose == TRUE) {
+            message("length of IdPa", length(IdPa), "\n")
+          }
+          # Excess parent slots: randomly remove that many entries from IdPa and IdMa.
+
+          excess <- length(IdPa) - length(IdOfp)
+          if (length(IdPa) > 0 && excess > 0) {
+            IdRm <- sample.int(length(IdPa), size = excess)
+            IdPa <- IdPa[-IdRm]
+            IdMa <- IdMa[-IdRm]
+          }
+        } else if (length(IdPa) - length(IdOfp) < 0) {
+          if (verbose == TRUE) {
+            message("length of IdOfp", length(IdOfp), "\n")
+            message("length of IdPa", length(IdPa), "\n")
+            message("length of IdSingle", length(IdMa), "\n")
+          }
+
+
+          # harden the resample call when IdSingle is empty:
+          # Need to drop some offspring because we do not have enough parent slots.
+          need_drop <- length(IdOfp) - length(IdPa)
+
+          if (need_drop > 0) {
+            if (length(IdSingle) > 0) {
+              # Preferentially remove offspring IDs that correspond to singles.
+              # resample is expected to return a vector of IDs to remove.
+
+              IdRm <- resample(IdSingle, size = need_drop)
+              IdOfp <- IdOfp[!(IdOfp %in% IdRm)]
+            } else {
+              # If there are no singles to target, drop arbitrary offspring indices.
+              drop_idx <- sample.int(length(IdOfp), size = need_drop)
+              IdOfp <- IdOfp[-drop_idx]
+            }
+          }
+        }
+
+        # -------------------------------------------------------------------------
+        # Step G: Assign pat/mat into df_Ngen for the selected offspring.
+        #
+        # Replaces the old loop:
+        #   for (m in seq_along(IdOfp)) df_Ngen[df_Ngen$id == IdOfp[m], "pat"] <- ...
+        # Using match avoids repeated scanning over df_Ngen$id.
+        # -------------------------------------------------------------------------
+
+        # Find row positions in df_Ngen corresponding to offspring IDs.
+        child_rows <- match(IdOfp, df_Ngen$id)
+        # Only keep rows that matched successfully.
+
+        ok <- !is.na(child_rows)
+
+        if (any(ok)) {
+          # Assign father IDs and mother IDs to offspring rows.
+
+          df_Ngen$pat[child_rows[ok]] <- IdPa[ok]
+          df_Ngen$mat[child_rows[ok]] <- IdMa[ok]
+        }
+        # -------------------------------------------------------------------------
+        # Step H: Write the two generations back into df_Fam using the precomputed indices.
+        # -------------------------------------------------------------------------
+
+        df_Fam[rows_i, ] <- df_Ngen[df_Ngen$gen == i, ]
+        df_Fam[rows_prev, ] <- df_Ngen[df_Ngen$gen == i - 1, ]
+      }
+    }
+  }
+  return(df_Fam)
+}
 
 #' Simulate Pedigrees
 #' This function simulates "balanced" pedigrees based on a group of parameters:
