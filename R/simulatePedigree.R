@@ -457,7 +457,240 @@ buildBetweenGenerations_base <- function(df_Fam,
   return(df_Fam)
 }
 
-buildBetweenGenerations_optimized <- buildBetweenGenerations_base # Placeholder for optimized version
+buildBetweenGenerations_optimized <- function(df_Fam,
+                                         Ngen,
+                                         sizeGens,
+                                         verbose = FALSE,
+                                         marR, sexR, kpc,
+                                         rd_kpc, personID = "ID",
+                                         momID = "momID",
+                                         dadID = "dadID",
+                                         code_male = "M",
+                                         code_female = "F",
+                                         beta = TRUE) {
+  # Initialize flags for the full pedigree data frame.
+  df_Fam$ifparent <- FALSE
+  df_Fam$ifson <- FALSE
+  df_Fam$ifdau <- FALSE
+
+  # Precompute row indices per generation once.
+  gen_rows <- split(seq_len(nrow(df_Fam)), df_Fam$gen)
+
+  for (i in seq_len(Ngen)) {
+    if (i == 1) {
+      rows_i <- gen_rows[[as.character(i)]]
+      df_Ngen <- df_Fam[rows_i, , drop = FALSE]
+      df_Ngen$ifparent <- TRUE
+      df_Ngen$ifson <- FALSE
+      df_Ngen$ifdau <- FALSE
+      df_Fam[rows_i, ] <- df_Ngen
+    } else {
+      rows_i <- gen_rows[[as.character(i)]]
+      rows_prev <- gen_rows[[as.character(i - 1)]]
+
+      # Number of couples in generation i-1
+      N_couples <- (sizeGens[i - 1] - sum(is.na(df_Fam$spID[rows_prev]))) * 0.5
+      N_LinkedMem <- N_couples * kpc
+      N_LinkedFemale <- round(N_LinkedMem * (1 - sexR))
+      N_LinkedMale <- N_LinkedMem - N_LinkedFemale
+
+      # Prepare generation i data
+      df_Ngen <- df_Fam[rows_i, , drop = FALSE]
+      df_Ngen$ifparent <- FALSE
+      df_Ngen$ifson <- FALSE
+      df_Ngen$ifdau <- FALSE
+      df_Ngen$coupleId <- NA_character_
+
+      # Randomly permute once
+      perm_order <- sample(nrow(df_Ngen))
+      df_Ngen <- df_Ngen[perm_order, , drop = FALSE]
+
+      if (verbose == TRUE) {
+        message(
+          "Step 2.1: mark a group of potential sons and daughters in the i th generation"
+        )
+      }
+
+      # Assign couple IDs
+      df_Ngen <- assignCoupleIds(df_Ngen, beta = beta)
+
+      # Identify singles
+      IdSingle <- df_Ngen$id[is.na(df_Ngen$spID)]
+      SingleF <- sum(df_Ngen$sex == code_female & is.na(df_Ngen$spID))
+      SingleM <- sum(df_Ngen$sex == code_male & is.na(df_Ngen$spID))
+      CoupleF <- N_LinkedFemale - SingleF
+
+      # Mark potential sons and daughters
+      df_Fam[rows_i, ] <- markPotentialChildren(
+        df_Ngen = df_Ngen,
+        i = i,
+        Ngen = Ngen,
+        sizeGens = sizeGens,
+        CoupleF = CoupleF,
+        code_male = code_male,
+        code_female = code_female,
+        beta = beta
+      )
+
+      # OPTIMIZED: Parent selection using vectorized operations
+      if (verbose == TRUE) {
+        message(
+          "Step 2.2: mark a group of potential parents in the i-1 th generation"
+        )
+      }
+
+      df_Ngen <- df_Fam[rows_prev, , drop = FALSE]
+      df_Ngen$ifparent <- FALSE
+      df_Ngen$ifson <- FALSE
+      df_Ngen$ifdau <- FALSE
+
+      # Identify all couples in generation i-1
+      has_spouse <- !is.na(df_Ngen$spID)
+      if (any(has_spouse)) {
+        # Create symmetric couple keys
+        couple_keys <- paste(
+          pmin(df_Ngen$id[has_spouse], df_Ngen$spID[has_spouse]),
+          pmax(df_Ngen$id[has_spouse], df_Ngen$spID[has_spouse]),
+          sep = "_"
+        )
+
+        # Get unique couples and their first occurrence indices
+        unique_couples <- unique(couple_keys)
+        n_couples_available <- length(unique_couples)
+
+        # Determine how many couples should be parents based on marR
+        n_parent_couples <- min(
+          floor(sizeGens[i - 1] * marR / 2),
+          n_couples_available
+        )
+
+        if (n_parent_couples > 0) {
+          # Randomly select which couples become parents
+          selected_couple_keys <- sample(unique_couples, n_parent_couples)
+
+          # Mark all individuals in selected couples as parents (vectorized)
+          is_parent <- has_spouse & (couple_keys %in% selected_couple_keys)
+          df_Ngen$ifparent[has_spouse] <- is_parent
+        }
+      }
+
+      df_Fam[rows_prev, ] <- df_Ngen
+
+      if (verbose == TRUE) {
+        message(
+          "Step 2.3: connect the i and i-1 th generation"
+        )
+      }
+
+      if (i == 1) {
+        next
+      } else {
+        # Use pre-computed indices instead of subsetting
+        df_Ngen <- df_Fam[c(rows_prev, rows_i), , drop = FALSE]
+
+        # Collect IDs of marked sons and daughters
+        IdSon <- df_Ngen$id[df_Ngen$ifson == TRUE & df_Ngen$gen == i]
+        IdDau <- df_Ngen$id[df_Ngen$ifdau == TRUE & df_Ngen$gen == i]
+
+        # Interleave sons and daughters
+        IdOfp <- evenInsert(IdSon, IdDau)
+
+        nMates <- sum(df_Ngen$ifparent) / 2
+
+        if (nMates <= 0 || length(IdOfp) == 0) {
+          df_Fam[rows_i, ] <- df_Ngen[df_Ngen$gen == i, ]
+          df_Fam[rows_prev, ] <- df_Ngen[df_Ngen$gen == i - 1, ]
+          next
+        }
+
+        # Generate kids per couple distribution
+        random_numbers <- adjustKidsPerCouple(
+          nMates = nMates,
+          kpc = kpc,
+          rd_kpc = rd_kpc,
+          beta = beta
+        )
+
+        if (length(random_numbers) == 0 || all(is.na(random_numbers))) {
+          df_Fam[rows_i, ] <- df_Ngen[df_Ngen$gen == i, ]
+          df_Fam[rows_prev, ] <- df_Ngen[df_Ngen$gen == i - 1, ]
+          next
+        }
+
+        # Build parent assignment vectors
+        rows_prev_in_pair <- which(df_Ngen$gen == (i - 1))
+        prev <- df_Ngen[rows_prev_in_pair, , drop = FALSE]
+        parent_rows <- which(prev$ifparent == TRUE & !is.na(prev$spID))
+
+        if (length(parent_rows) == 0) {
+          df_Fam[rows_i, ] <- df_Ngen[df_Ngen$gen == i, ]
+          df_Fam[rows_prev, ] <- df_Ngen[df_Ngen$gen == i - 1, ]
+          next
+        }
+
+        # Create couple key and deduplicate
+        a <- pmin(prev$id, prev$spID)
+        b <- pmax(prev$id, prev$spID)
+        couple_key <- paste(a, b, sep = "_")
+        parent_rows <- parent_rows[!duplicated(couple_key[parent_rows])]
+
+        # Determine mother and father IDs
+        is_female_row <- prev$sex[parent_rows] == code_female
+        ma_ids <- ifelse(is_female_row, prev$id[parent_rows], prev$spID[parent_rows])
+        pa_ids <- ifelse(is_female_row, prev$spID[parent_rows], prev$id[parent_rows])
+
+        # Align lengths
+        nCouples <- length(parent_rows)
+        if (length(random_numbers) > nCouples) {
+          random_numbers <- random_numbers[seq_len(nCouples)]
+        } else if (length(random_numbers) < nCouples) {
+          keep <- seq_len(length(random_numbers))
+          ma_ids <- ma_ids[keep]
+          pa_ids <- pa_ids[keep]
+        }
+
+        # Expand to per-child vectors
+        IdMa <- rep.int(ma_ids, times = random_numbers)
+        IdPa <- rep.int(pa_ids, times = random_numbers)
+
+        # Balance parent slots and offspring
+        if (length(IdPa) > length(IdOfp)) {
+          excess <- length(IdPa) - length(IdOfp)
+          if (excess > 0) {
+            IdRm <- sample.int(length(IdPa), size = excess)
+            IdPa <- IdPa[-IdRm]
+            IdMa <- IdMa[-IdRm]
+          }
+        } else if (length(IdPa) < length(IdOfp)) {
+          need_drop <- length(IdOfp) - length(IdPa)
+          if (need_drop > 0) {
+            if (length(IdSingle) > 0) {
+              IdRm <- resample(IdSingle, size = need_drop)
+              IdOfp <- IdOfp[!(IdOfp %in% IdRm)]
+            } else {
+              drop_idx <- sample.int(length(IdOfp), size = need_drop)
+              IdOfp <- IdOfp[-drop_idx]
+            }
+          }
+        }
+
+        # Assign parents using match (vectorized)
+        child_rows <- match(IdOfp, df_Ngen$id)
+        ok <- !is.na(child_rows)
+
+        if (any(ok)) {
+          df_Ngen$pat[child_rows[ok]] <- IdPa[ok]
+          df_Ngen$mat[child_rows[ok]] <- IdMa[ok]
+        }
+
+        # Write back
+        df_Fam[rows_i, ] <- df_Ngen[df_Ngen$gen == i, ]
+        df_Fam[rows_prev, ] <- df_Ngen[df_Ngen$gen == i - 1, ]
+      }
+    }
+  }
+  return(df_Fam)
+}
 
 
 #' Simulate Pedigrees
