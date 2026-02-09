@@ -606,43 +606,51 @@ buildBetweenGenerations_optimized <- function(df_Fam,
       df_Ngen$ifson <- FALSE
       df_Ngen$ifdau <- FALSE
 
-      # OPTIMIZED: Vectorized parent couple selection
-      # Instead of looping and searching for spouses, create couple keys and sample couples
+      # Randomize order so parent selection is not tied to row ordering.
+      # This matches the base version and ensures similar random behavior.
+      df_Ngen <- df_Ngen[sample(nrow(df_Ngen)), , drop = FALSE]
 
-      # Identify all individuals with spouses in generation i-1
-      has_spouse <- !is.na(df_Ngen$spID)
+      # OPTIMIZED: Use match() for O(1) spouse lookup instead of O(n) linear search
+      # This matches base version's behavior while being much faster
 
-      if (any(has_spouse)) {
-        # Create symmetric couple keys so each couple has a unique identifier
-        # regardless of which spouse appears first in the data frame.
-        # pmin/pmax ensure the key is the same for both members of a couple.
-        couple_keys <- paste(
-          pmin(df_Ngen$id[has_spouse], df_Ngen$spID[has_spouse]),
-          pmax(df_Ngen$id[has_spouse], df_Ngen$spID[has_spouse]),
-          sep = "_"
-        )
+      # Build a lookup vector: for each ID, store its row position
+      # This allows O(1) lookup of spouse position by ID
+      id_to_row <- match(df_Ngen$id, df_Ngen$id)  # Creates 1:n
+      names(id_to_row) <- as.character(df_Ngen$id)
 
-        # Get unique couples (each couple appears once in this list)
-        unique_couples <- unique(couple_keys)
-        n_couples_available <- length(unique_couples)
+      # Track which individuals are marked as parents
+      isUsedParent <- rep(FALSE, nrow(df_Ngen))
 
-        # Determine how many couples should be parents based on marR
-        # marR is proportion of individuals, so divide by 2 for couples
-        n_parent_couples <- min(
-          floor(sizeGens[i - 1] * marR / 2),
-          n_couples_available
-        )
+      # Target proportion (matching base version logic)
+      nrow_df_Ngen <- nrow(df_Ngen)
 
-        if (n_parent_couples > 0) {
-          # Randomly select which couples become parents
-          selected_couple_keys <- sample(unique_couples, n_parent_couples)
+      # Loop through in randomized order (matching base version exactly)
+      # but use O(1) lookup instead of O(n) linear search for spouse
+      for (k in seq_len(sizeGens[i - 1])) {
+        # Check if we've reached the target proportion
+        if (sum(isUsedParent) / nrow_df_Ngen >= marR) {
+          break
+        }
 
-          # Mark all individuals in selected couples as parents (vectorized operation)
-          # This replaces the O(n²) loop with linear search
-          is_parent <- couple_keys %in% selected_couple_keys
-          df_Ngen$ifparent[has_spouse] <- is_parent
+        # Skip if already used or is single
+        if (isUsedParent[k] || is.na(df_Ngen$spID[k])) {
+          next
+        }
+
+        # Mark this individual as parent
+        isUsedParent[k] <- TRUE
+
+        # Find spouse position using O(1) lookup instead of O(n) search
+        spouse_id <- as.character(df_Ngen$spID[k])
+        spouse_row <- id_to_row[spouse_id]
+
+        # Mark spouse as parent too
+        if (!is.na(spouse_row)) {
+          isUsedParent[spouse_row] <- TRUE
         }
       }
+
+      df_Ngen$ifparent <- isUsedParent
 
       df_Fam[rows_prev, ] <- df_Ngen
 
