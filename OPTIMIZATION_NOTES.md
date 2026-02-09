@@ -120,9 +120,54 @@ devtools::test(filter = "simulatePedigree")
 3. **Memory efficiency**: Consider using matrices instead of data frames for intermediate calculations
 4. **Parallel generation building**: Generations could potentially be built in parallel for very large pedigrees
 
+## Important Trade-off: Speed vs Exact Reproducibility
+
+### The Situation
+
+Both the base and optimized versions are **mathematically correct** and produce valid pedigrees, but they produce **different random outcomes** even with the same seed.
+
+**Why?**
+- **Base version**: Loops through individuals and stops when proportion threshold is crossed
+- **Optimized version**: Pre-calculates exact number of couples and selects them vectorially
+
+Both approaches are valid, but they consume random numbers in different orders.
+
+### Results with Same Seed
+
+| Aspect | Base Version | Optimized Version |
+|--------|-------------|-------------------|
+| **Statistical Properties** | ✅ Correct | ✅ Correct |
+| **Sex Ratios** | ✅ Match target | ✅ Match target |
+| **Mating Rates** | ✅ Match target | ✅ Match target |
+| **Performance** | Baseline | **4-5x faster** |
+| **Exact Individuals** | Reproducible | Different (but equivalent) |
+| **Pedigree Size** | e.g., 57 | e.g., 52 (within expected variation) |
+
+### When to Use Each Version
+
+**Use `beta = FALSE` (base) when:**
+- You need exact reproducibility for published results
+- Comparing with previous simulations using the same seed
+- Writing unit tests that expect specific outcomes
+- Speed is not a concern
+
+**Use `beta = TRUE` (optimized) when:**
+- Running large simulations (Ngen ≥ 6)
+- Speed matters more than exact reproducibility
+- You only care about statistical properties, not specific individuals
+- Generating many pedigrees for Monte Carlo studies
+
+### Testing Implications
+
+Tests that check exact counts or specific individuals with `beta = TRUE` will fail. Instead, tests should verify:
+- Statistical properties are within acceptable ranges
+- Pedigree structure is valid (no orphans, correct generation links, etc.)
+- Sex ratios are approximately correct (±5%)
+- Mating rates are approximately correct (±5%)
+
 ## Backward Compatibility
 
-- The optimized version produces equivalent results to the base version (same statistical properties)
-- Due to random sampling differences in the implementation, the exact individuals selected may differ even with the same seed, but the statistical properties (sex ratios, mating rates, family structure) remain identical
 - All function signatures and parameters remain unchanged
 - Default behavior (`beta = FALSE`) remains the same for backward compatibility
+- Existing code will continue to work exactly as before
+- The optimized version is opt-in via `beta = TRUE`
