@@ -47,7 +47,6 @@ test_that("ped2graph produces a graph for hazard data with mothers", {
 })
 
 
-
 test_that("ped2graph produces a graph for hazard data with fathers", {
   expect_silent(data(hazard))
   g <- ped2graph(hazard, adjacent = "fathers")
