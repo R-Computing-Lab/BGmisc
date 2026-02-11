@@ -289,19 +289,16 @@ ped2com <- function(ped, component,
     compress = config$compress
   )
 
-  # --- Step 3b: Merge MZ twin columns in r2 ---
-  # MZ twins are genetically identical, so they represent the same genetic
-  # source.  Both columns are set to the same normalized values so that
-  # each twin contributes equally and the total genetic variance is preserved.
-  # The sqrt(2) normalization ensures two identical columns contribute the
-  # same total as two independent columns did before merging.
+  # --- Step 3b: Temporarily merge MZ twin columns in r2 ---
+  # MZ twins share the same genetic source.  We absorb twin2's column into
+  # twin1's before tcrossprod so all path-traced relatedness flows through a
+  # single source.  After tcrossprod we copy twin1's row/col back to twin2.
   if (!is.null(mz_pairs) && length(mz_pairs) > 0) {
     for (pair in mz_pairs) {
       idx1 <- pair[1]
       idx2 <- pair[2]
-      merged <- (r2[, idx1] + r2[, idx2]) / sqrt(2)
-      r2[, idx1] <- merged
-      r2[, idx2] <- merged
+      r2[, idx1] <- r2[, idx1] + r2[, idx2]
+      r2[, idx2] <- 0
     }
     if (config$verbose == TRUE) {
       message("Merged ", length(mz_pairs), " MZ twin pair column(s) in r2")
@@ -324,6 +321,20 @@ ped2com <- function(ped, component,
         file = checkpoint_files$tcrossprod_checkpoint,
         compress = config$compress
       )
+    }
+  }
+
+  # --- Step 4b: Restore MZ twins ---
+  # Copy twin1's row/col to twin2 so both twins appear in the final matrix.
+  if (!is.null(mz_pairs) && length(mz_pairs) > 0) {
+    for (pair in mz_pairs) {
+      idx1 <- pair[1]
+      idx2 <- pair[2]
+      r[idx2, ] <- r[idx1, ]
+      r[, idx2] <- r[, idx1]
+    }
+    if (config$verbose == TRUE) {
+      message("Restored ", length(mz_pairs), " MZ twin pair(s) in relatedness matrix")
     }
   }
 
