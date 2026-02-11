@@ -19,7 +19,7 @@
 #' @param isChild_method character. The method to use for computing the isChild matrix.  Options are "classic" or "partialparent"
 #' @param adjBeta_method numeric The method to use for computing the building the adjacency_method matrix when using the "beta" build
 #' @param compress logical. If TRUE, use compression when saving the checkpoint files.  Defaults to TRUE.
-#' @param mz_twins logical. If TRUE, treat MZ twins as having an additional parent-child relationship for the purposes of computing the relatedness matrix. Defaults to FALSE.
+#' @param mz_twins logical. If TRUE, redirect MZ twin parent links in the adjacency matrix so that MZ co-twins are coded with relatedness 1 instead of 0.5. Twin pairs are identified from the \code{twinID} column. When a \code{zygosity} column is also present, only pairs where both members have \code{zygosity == "MZ"} are modified; otherwise all \code{twinID} pairs are assumed to be MZ. Defaults to FALSE.
 #' @param ... additional arguments to be passed to \code{\link{ped2com}}
 #' @details The algorithms and methodologies used in this function are further discussed and exemplified in the vignette titled "examplePedigreeFunctions". For more advanced scenarios and detailed explanations, consult this vignette.
 #' @export
@@ -123,9 +123,11 @@ ped2com <- function(ped, component,
     ped <- standardizeColnames(ped, verbose = config$verbose)
   }
 
+  mz_modified <- NULL
   if (mz_twins == TRUE && "twinID" %in% colnames(ped)) {
-    # TODO
-    # ped <- addMZtwins(ped, verbose = config$verbose)
+    mz_result <- addMZtwins(ped, verbose = config$verbose)
+    ped <- mz_result$ped
+    mz_modified <- mz_result$modified
   }
 
 
@@ -313,6 +315,19 @@ ped2com <- function(ped, component,
     # Assign 1 to all nonzero elements for mitochondrial component
   }
 
+  # Fix diagonal for MZ twins whose parents were redirected
+  if (!is.null(mz_modified) && length(mz_modified) > 0) {
+    for (pair in mz_modified) {
+      idx1 <- which(ped$ID == pair[1])
+      idx2 <- which(ped$ID == pair[2])
+      if (length(idx1) == 1 && length(idx2) == 1) {
+        # twin2 (pair[2]) gets inflated diagonal from redirection;
+        # set it equal to twin1's diagonal (they are genetically identical)
+        r[idx2, idx2] <- r[idx1, idx1]
+      }
+    }
+  }
+
   if (config$sparse == FALSE) {
     r <- as.matrix(r)
   }
@@ -343,6 +358,7 @@ ped2add <- function(ped, max_gen = 25, sparse = TRUE, verbose = FALSE,
                     save_rate_parlist = 100000 * save_rate,
                     save_path = "checkpoint/",
                     compress = TRUE,
+                    mz_twins = FALSE,
                     ...) {
   ped2com(
     ped = ped,
@@ -361,6 +377,7 @@ ped2add <- function(ped, max_gen = 25, sparse = TRUE, verbose = FALSE,
     save_rate_parlist = save_rate_parlist,
     save_path = save_path,
     compress = compress,
+    mz_twins = mz_twins,
     ...
   )
 }
