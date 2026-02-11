@@ -561,26 +561,23 @@ isChild <- function(isChild_method, ped) {
 }
 
 
-#' Modify pedigree to model MZ twins in the adjacency matrix
+#' Find MZ twin pairs in a pedigree
 #'
-#' For each MZ twin pair identified by the \code{twinID} column, this function
-#' redirects one twin's parental links to point to the other twin. This causes
-#' the adjacency matrix to assign a relatedness of 1 between MZ co-twins
-#' (because both momID and dadID entries point to the same individual, producing
-#' two 0.5 entries that sum to 1.0 in the sparse matrix).
+#' Identifies MZ twin pairs from the \code{twinID} column and returns their
+#' row indices.  These indices are used later to merge the twins' columns in
+#' the \code{r2} matrix before \code{tcrossprod}, which correctly produces
+#' relatedness 1 between MZ co-twins with no diagonal or downstream artifacts.
 #'
-#' @param ped A pedigree data.frame with columns \code{ID}, \code{momID},
-#'   \code{dadID}, and \code{twinID}. Optionally a \code{zygosity} column;
-#'   when present only pairs where both members have \code{zygosity == "MZ"}
-#'   are modified.
+#' @param ped A pedigree data.frame with columns \code{ID} and \code{twinID}.
+#'   Optionally a \code{zygosity} column; when present only pairs where both
+#'   members have \code{zygosity == "MZ"} are used.
 #' @param verbose logical. If TRUE, print progress messages.
-#' @return A list with two elements: \code{ped} (the modified pedigree) and
-#'   \code{modified} (a list of length-2 vectors giving each pair as
-#'   \code{c(twin1, twin2)} where twin2 is the redirected twin).
+#' @return A list of length-2 integer vectors \code{c(idx1, idx2)} giving the
+#'   row indices of each MZ pair in the pedigree, or \code{NULL} if none found.
 #' @keywords internal
-addMZtwins <- function(ped, verbose = FALSE) {
+findMZtwins <- function(ped, verbose = FALSE) {
   if (!"twinID" %in% colnames(ped)) {
-    return(list(ped = ped, modified = NULL))
+    return(NULL)
   }
 
   twin_rows <- which(!is.na(ped$twinID))
@@ -592,11 +589,11 @@ addMZtwins <- function(ped, verbose = FALSE) {
   }
 
   if (length(twin_rows) == 0) {
-    return(list(ped = ped, modified = NULL))
+    return(NULL)
   }
 
   processed <- c()
-  modified <- list()
+  pairs <- list()
 
   for (idx in twin_rows) {
     twin_id <- ped$ID[idx]
@@ -605,33 +602,27 @@ addMZtwins <- function(ped, verbose = FALSE) {
     # Skip if already processed this pair
     if (twin_id %in% processed || co_twin_id %in% processed) next
 
-    # Determine which twin keeps its parents (twin1) and which gets
-    # redirected (twin2). Use the smaller ID as twin1 for consistency.
-    if (twin_id <= co_twin_id) {
-      twin1 <- twin_id
-      twin2 <- co_twin_id
-    } else {
-      twin1 <- co_twin_id
-      twin2 <- twin_id
+    idx1 <- which(ped$ID == twin_id)
+    idx2 <- which(ped$ID == co_twin_id)
+
+    if (length(idx1) != 1 || length(idx2) != 1) next
+
+    # Always put the lower index first for consistency
+    if (idx1 > idx2) {
+      tmp <- idx1
+      idx1 <- idx2
+      idx2 <- tmp
     }
 
-    twin2_idx <- which(ped$ID == twin2)
-
-    if (length(twin2_idx) != 1) next
-
-    # Redirect twin2's parents to twin1. In the adjacency matrix this
-    # produces isPar[twin2, twin1] = 0.5 + 0.5 = 1.0, so path tracing
-    # gives relatedness(twin1, twin2) = 1.
-    ped$momID[twin2_idx] <- twin1
-    ped$dadID[twin2_idx] <- twin1
-
-    processed <- c(processed, twin1, twin2)
-    modified[[length(modified) + 1]] <- c(twin1, twin2)
+    processed <- c(processed, twin_id, co_twin_id)
+    pairs[[length(pairs) + 1]] <- c(idx1, idx2)
 
     if (verbose) {
-      message("MZ twin pair: redirected ", twin2, "'s parents to ", twin1)
+      message("MZ twin pair found: ", twin_id, " (row ", idx1,
+              ") and ", co_twin_id, " (row ", idx2, ")")
     }
   }
 
-  return(list(ped = ped, modified = modified))
+  if (length(pairs) == 0) return(NULL)
+  return(pairs)
 }

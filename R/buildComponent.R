@@ -19,7 +19,7 @@
 #' @param isChild_method character. The method to use for computing the isChild matrix.  Options are "classic" or "partialparent"
 #' @param adjBeta_method numeric The method to use for computing the building the adjacency_method matrix when using the "beta" build
 #' @param compress logical. If TRUE, use compression when saving the checkpoint files.  Defaults to TRUE.
-#' @param mz_twins logical. If TRUE, redirect MZ twin parent links in the adjacency matrix so that MZ co-twins are coded with relatedness 1 instead of 0.5. Twin pairs are identified from the \code{twinID} column. When a \code{zygosity} column is also present, only pairs where both members have \code{zygosity == "MZ"} are modified; otherwise all \code{twinID} pairs are assumed to be MZ. Defaults to FALSE.
+#' @param mz_twins logical. If TRUE, merge MZ co-twin columns in the r2 matrix before tcrossprod so that MZ twins are coded with relatedness 1 instead of 0.5. Twin pairs are identified from the \code{twinID} column. When a \code{zygosity} column is also present, only pairs where both members have \code{zygosity == "MZ"} are used; otherwise all \code{twinID} pairs are assumed to be MZ. Defaults to FALSE.
 #' @param ... additional arguments to be passed to \code{\link{ped2com}}
 #' @details The algorithms and methodologies used in this function are further discussed and exemplified in the vignette titled "examplePedigreeFunctions". For more advanced scenarios and detailed explanations, consult this vignette.
 #' @export
@@ -123,11 +123,9 @@ ped2com <- function(ped, component,
     ped <- standardizeColnames(ped, verbose = config$verbose)
   }
 
-  mz_modified <- NULL
+  mz_pairs <- NULL
   if (mz_twins == TRUE && "twinID" %in% colnames(ped)) {
-    mz_result <- addMZtwins(ped, verbose = config$verbose)
-    ped <- mz_result$ped
-    mz_modified <- mz_result$modified
+    mz_pairs <- findMZtwins(ped, verbose = config$verbose)
   }
 
 
@@ -291,6 +289,23 @@ ped2com <- function(ped, component,
     compress = config$compress
   )
 
+  # --- Step 3b: Merge MZ twin columns in r2 ---
+  # MZ twins are genetically identical, so they represent the same genetic
+  # source.  Merging twin2's column into twin1's column before tcrossprod
+  # makes every downstream relatedness value correct (diagonal, off-diagonal,
+  # and descendants) without any post-hoc patching.
+  if (!is.null(mz_pairs) && length(mz_pairs) > 0) {
+    for (pair in mz_pairs) {
+      idx1 <- pair[1]
+      idx2 <- pair[2]
+      r2[, idx1] <- r2[, idx1] + r2[, idx2]
+      r2[, idx2] <- 0
+    }
+    if (config$verbose == TRUE) {
+      message("Merged ", length(mz_pairs), " MZ twin pair column(s) in r2")
+    }
+  }
+
   # --- Step 4: T crossproduct  ---
 
   if (config$resume == TRUE && file.exists(checkpoint_files$tcrossprod_checkpoint) &&
@@ -313,19 +328,6 @@ ped2com <- function(ped, component,
   if (config$component %in% c("mitochondrial", "mtdna", "mitochondria")) {
     r@x <- rep(1, length(r@x))
     # Assign 1 to all nonzero elements for mitochondrial component
-  }
-
-  # Fix diagonal for MZ twins whose parents were redirected
-  if (!is.null(mz_modified) && length(mz_modified) > 0) {
-    for (pair in mz_modified) {
-      idx1 <- which(ped$ID == pair[1])
-      idx2 <- which(ped$ID == pair[2])
-      if (length(idx1) == 1 && length(idx2) == 1) {
-        # twin2 (pair[2]) gets inflated diagonal from redirection;
-        # set it equal to twin1's diagonal (they are genetically identical)
-        r[idx2, idx2] <- r[idx1, idx1]
-      }
-    }
   }
 
   if (config$sparse == FALSE) {

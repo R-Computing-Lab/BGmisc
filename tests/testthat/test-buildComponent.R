@@ -60,6 +60,33 @@ test_that("DZ twins with zygosity column are NOT modified", {
   expect_equal(r_mz["4", "3"], 0.5)
 })
 
+test_that("MZ twins: downstream child relatedness is correct", {
+  # 3-generation pedigree: parents -> MZ twins -> twin2 has a child
+  ped <- data.frame(
+    ID = c(1, 2, 3, 4, 5, 6),
+    momID = c(NA, NA, 2, 2, NA, 4),
+    dadID = c(NA, NA, 1, 1, NA, 5),
+    sex = c("M", "F", "M", "M", "F", "M"),
+    twinID = c(NA, NA, 4, 3, NA, NA),
+    zygosity = c(NA, NA, "MZ", "MZ", NA, NA)
+  )
+
+  r_mz <- ped2add(ped, mz_twins = TRUE, sparse = FALSE)
+
+  # MZ twins at 1.0
+  expect_equal(r_mz["3", "4"], 1.0)
+
+  # Child of twin2 (ID=4) should be 0.5 to twin2 (parent)
+  expect_equal(r_mz["6", "4"], 0.5)
+
+  # Child of twin2 should ALSO be 0.5 to twin1 (genetically identical to parent)
+  expect_equal(r_mz["6", "3"], 0.5)
+
+  # Diagonal for both twins should be clean (no inflation)
+  expect_equal(r_mz["3", "3"], 1.0)
+  expect_equal(r_mz["4", "4"], 1.0)
+})
+
 test_that(".assignParentValue works", {
   expect_equal(.assignParentValue("generation"), .5)
   expect_equal(.assignParentValue("additive"), .5)
