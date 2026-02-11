@@ -291,15 +291,17 @@ ped2com <- function(ped, component,
 
   # --- Step 3b: Merge MZ twin columns in r2 ---
   # MZ twins are genetically identical, so they represent the same genetic
-  # source.  Merging twin2's column into twin1's column before tcrossprod
-  # makes every downstream relatedness value correct (diagonal, off-diagonal,
-  # and descendants) without any post-hoc patching.
+  # source.  Both columns are set to the same normalized values so that
+  # each twin contributes equally and the total genetic variance is preserved.
+  # The sqrt(2) normalization ensures two identical columns contribute the
+  # same total as two independent columns did before merging.
   if (!is.null(mz_pairs) && length(mz_pairs) > 0) {
     for (pair in mz_pairs) {
       idx1 <- pair[1]
       idx2 <- pair[2]
-      r2[, idx1] <- r2[, idx1] + r2[, idx2]
-      r2[, idx2] <- 0
+      merged <- (r2[, idx1] + r2[, idx2]) / sqrt(2)
+      r2[, idx1] <- merged
+      r2[, idx2] <- merged
     }
     if (config$verbose == TRUE) {
       message("Merged ", length(mz_pairs), " MZ twin pair column(s) in r2")
