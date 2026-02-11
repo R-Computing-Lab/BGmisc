@@ -19,7 +19,7 @@
 #' @param isChild_method character. The method to use for computing the isChild matrix.  Options are "classic" or "partialparent"
 #' @param adjBeta_method numeric The method to use for computing the building the adjacency_method matrix when using the "beta" build
 #' @param compress logical. If TRUE, use compression when saving the checkpoint files.  Defaults to TRUE.
-#' @param mz_twins logical. If TRUE, treat MZ twins as having an additional parent-child relationship for the purposes of computing the relatedness matrix. Defaults to FALSE.
+#' @param mz_twins logical. If TRUE, merge MZ co-twin columns in the r2 matrix before tcrossprod so that MZ twins are coded with relatedness 1 instead of 0.5. Twin pairs are identified from the \code{twinID} column. When a \code{zygosity} column is also present, only pairs where both members have \code{zygosity == "MZ"} are used; otherwise all \code{twinID} pairs are assumed to be MZ. Defaults to FALSE.
 #' @param ... additional arguments to be passed to \code{\link{ped2com}}
 #' @details The algorithms and methodologies used in this function are further discussed and exemplified in the vignette titled "examplePedigreeFunctions". For more advanced scenarios and detailed explanations, consult this vignette.
 #' @export
@@ -123,9 +123,9 @@ ped2com <- function(ped, component,
     ped <- standardizeColnames(ped, verbose = config$verbose)
   }
 
+  mz_pairs <- NULL
   if (mz_twins == TRUE && "twinID" %in% colnames(ped)) {
-    # TODO
-    # ped <- addMZtwins(ped, verbose = config$verbose)
+    mz_pairs <- findMZtwins(ped, verbose = config$verbose)
   }
 
 
@@ -289,6 +289,22 @@ ped2com <- function(ped, component,
     compress = config$compress
   )
 
+  # --- Step 3b: Temporarily merge MZ twin columns in r2 ---
+  # MZ twins share the same genetic source.  We absorb twin2's column into
+  # twin1's before tcrossprod so all path-traced relatedness flows through a
+  # single source.  After tcrossprod we copy twin1's row/col back to twin2.
+  if (!is.null(mz_pairs) && length(mz_pairs) > 0) {
+    for (pair in mz_pairs) {
+      idx1 <- pair[1]
+      idx2 <- pair[2]
+      r2[, idx1] <- r2[, idx1] + r2[, idx2]
+      r2[, idx2] <- 0
+    }
+    if (config$verbose == TRUE) {
+      message("Merged ", length(mz_pairs), " MZ twin pair column(s) in r2")
+    }
+  }
+
   # --- Step 4: T crossproduct  ---
 
   if (config$resume == TRUE && file.exists(checkpoint_files$tcrossprod_checkpoint) &&
@@ -305,6 +321,20 @@ ped2com <- function(ped, component,
         file = checkpoint_files$tcrossprod_checkpoint,
         compress = config$compress
       )
+    }
+  }
+
+  # --- Step 4b: Restore MZ twins ---
+  # Copy twin1's row/col to twin2 so both twins appear in the final matrix.
+  if (!is.null(mz_pairs) && length(mz_pairs) > 0) {
+    for (pair in mz_pairs) {
+      idx1 <- pair[1]
+      idx2 <- pair[2]
+      r[idx2, ] <- r[idx1, ]
+      r[, idx2] <- r[, idx1]
+    }
+    if (config$verbose == TRUE) {
+      message("Restored ", length(mz_pairs), " MZ twin pair(s) in relatedness matrix")
     }
   }
 
@@ -343,6 +373,7 @@ ped2add <- function(ped, max_gen = 25, sparse = TRUE, verbose = FALSE,
                     save_rate_parlist = 100000 * save_rate,
                     save_path = "checkpoint/",
                     compress = TRUE,
+                    mz_twins = FALSE,
                     ...) {
   ped2com(
     ped = ped,
@@ -361,6 +392,7 @@ ped2add <- function(ped, max_gen = 25, sparse = TRUE, verbose = FALSE,
     save_rate_parlist = save_rate_parlist,
     save_path = save_path,
     compress = compress,
+    mz_twins = mz_twins,
     ...
   )
 }
