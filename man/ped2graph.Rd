@@ -9,6 +9,7 @@ ped2graph(
   personID = "ID",
   momID = "momID",
   dadID = "dadID",
+  twinID = "twinID",
   directed = TRUE,
   adjacent = c("parents", "mothers", "fathers"),
   ...
@@ -22,6 +23,8 @@ ped2graph(
 \item{momID}{character.  Name of the column in ped for the mother ID variable}
 
 \item{dadID}{character.  Name of the column in ped for the father ID variable}
+
+\item{twinID}{character.  Name of the column in ped for the twin ID variable, if applicable}
 
 \item{directed}{Logical scalar. Default is TRUE. Indicates whether or not to create a directed graph.}
 

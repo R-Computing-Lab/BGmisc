@@ -21,6 +21,7 @@ ped2add(
   save_rate_parlist = 1e+05 * save_rate,
   save_path = "checkpoint/",
   compress = TRUE,
+  mz_twins = FALSE,
   ...
 )
 }
@@ -56,6 +57,8 @@ ped2add(
 \item{save_path}{character. The path to save the checkpoint files}
 
 \item{compress}{logical. If TRUE, use compression when saving the checkpoint files.  Defaults to TRUE.}
+
+\item{mz_twins}{logical. If TRUE, merge MZ co-twin columns in the r2 matrix before tcrossprod so that MZ twins are coded with relatedness 1 instead of 0.5. Twin pairs are identified from the \code{twinID} column. When a \code{zygosity} column is also present, only pairs where both members have \code{zygosity == "MZ"} are used; otherwise all \code{twinID} pairs are assumed to be MZ. Defaults to FALSE.}
 
 \item{...}{additional arguments to be passed to \code{\link{ped2com}}}
 }
