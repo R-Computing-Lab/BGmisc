@@ -19,6 +19,7 @@
 #' @param isChild_method character. The method to use for computing the isChild matrix.  Options are "classic" or "partialparent"
 #' @param adjBeta_method numeric The method to use for computing the building the adjacency_method matrix when using the "beta" build
 #' @param compress logical. If TRUE, use compression when saving the checkpoint files.  Defaults to TRUE.
+#' @param mz_twins logical. If TRUE, treat MZ twins as having an additional parent-child relationship for the purposes of computing the relatedness matrix. Defaults to FALSE.
 #' @param ... additional arguments to be passed to \code{\link{ped2com}}
 #' @details The algorithms and methodologies used in this function are further discussed and exemplified in the vignette titled "examplePedigreeFunctions". For more advanced scenarios and detailed explanations, consult this vignette.
 #' @export
@@ -42,6 +43,7 @@ ped2com <- function(ped, component,
                     save_path = "checkpoint/",
                     adjBeta_method = NULL,
                     compress = TRUE,
+                    mz_twins = FALSE,
                     ...) {
   #------
   # Check inputs
@@ -120,6 +122,12 @@ ped2com <- function(ped, component,
   if (config$standardize_colnames == TRUE) {
     ped <- standardizeColnames(ped, verbose = config$verbose)
   }
+
+  if (mz_twins == TRUE && "twinID" %in% colnames(ped)) {
+    # TODO
+    # ped <- addMZtwins(ped, verbose = config$verbose)
+  }
+
 
   # Load final result if computation was completed
   if (config$resume == TRUE && file.exists(checkpoint_files$final_matrix)) {
@@ -226,7 +234,7 @@ ped2com <- function(ped, component,
   # r is I + A + A^2 + ... = (I-A)^-1 from RAM
   # could trim, here
   ## it keeps going until it explains all of the relatedness with themselves (i.e., mtSum == 0)
-  # some of this precision is articifuial because we literally get to the point that the condon is eaither there or not. probabiliticy
+  # some of this precision is artificial because we literally get to the point that the condon is eaither there or not. probabiliticy
 
   # how much percision do we need to get unbiased estimates
 
