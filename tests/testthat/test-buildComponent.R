@@ -1,5 +1,33 @@
 test_that("MZ twins coded at relatedness 1 via twinID column", {
   # Simple pedigree: two parents and two MZ twin children
+  ped <- potter
+
+  # Without mz_twins: siblings get 0.5
+  r_no_mz <- ped2add(ped, mz_twins = FALSE, sparse = FALSE)
+  expect_equal(r_no_mz["12", "13"], 0.5)
+  expect_equal(r_no_mz["13", "12"], 0.5)
+
+  # With mz_twins: MZ twins get 1.0
+  r_mz <- ped2add(ped, mz_twins = TRUE, sparse = FALSE)
+  expect_equal(r_mz["12", "13"], 1.0)
+  expect_equal(r_mz["13", "12"], 1.0)
+
+  # Self-relatedness should still be 1
+  expect_equal(r_mz["12", "12"], 1.0)
+  expect_equal(r_mz["13", "13"], 1.0)
+
+  # Parent-child relatedness unchanged
+  expect_equal(r_mz["3", "1"], 0.5)
+  expect_equal(r_mz["4", "1"], 0.5)
+  expect_equal(r_mz["3", "2"], 0.5)
+  expect_equal(r_mz["4", "2"], 0.5)
+})
+
+
+
+
+test_that("MZ twins coded at relatedness 1 via twinID column", {
+  # Simple pedigree: two parents and two MZ twin children
   ped <- data.frame(
     ID = c(1, 2, 3, 4),
     momID = c(NA, NA, 2, 2),

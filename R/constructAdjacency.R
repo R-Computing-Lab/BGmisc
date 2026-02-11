@@ -585,7 +585,7 @@ findMZtwins <- function(ped, verbose = FALSE) {
   # If zygosity column exists, restrict to MZ pairs
   if ("zygosity" %in% colnames(ped)) {
     twin_rows <- twin_rows[!is.na(ped$zygosity[twin_rows]) &
-      ped$zygosity[twin_rows] == "MZ"]
+      ped$zygosity[twin_rows] %in% c("mz", "MZ")]
   }
 
   if (length(twin_rows) == 0) {
@@ -619,7 +619,7 @@ findMZtwins <- function(ped, verbose = FALSE) {
 
     if (verbose) {
       message("MZ twin pair found: ", twin_id, " (row ", idx1,
-              ") and ", co_twin_id, " (row ", idx2, ")")
+        ") and ", co_twin_id, " (row ", idx2, ")")
     }
   }
 
