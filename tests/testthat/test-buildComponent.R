@@ -2,48 +2,57 @@ test_that("MZ twins coded at relatedness 1 via twinID column", {
   # Simple pedigree: two parents and two MZ twin children
   ped <- potter
 
-  # Without mz_twins: siblings get 0.5
-  r_no_mz <- ped2add(ped, mz_twins = FALSE, sparse = FALSE)
-  expect_equal(r_no_mz["12", "13"], 0.5)
-  expect_equal(r_no_mz["13", "12"], 0.5)
+  mz_method_opts <- c("addtwins", "merging")
 
-  # With mz_twins: MZ twins get 1.0
-  r_mz <- ped2add(ped, mz_twins = TRUE, sparse = FALSE, mz_method = "merging")
-  expect_equal(r_mz["12", "13"], 1.0)
-  expect_equal(r_mz["13", "12"], 1.0)
+  for (mz_method in mz_method_opts) {
+    #  mz_method <- "merging" # "addtwins"
+    # Without mz_twins: siblings get 0.5
+    r_no_mz <- ped2add(ped, mz_twins = FALSE, sparse = FALSE, mz_method = mz_method)
+    expect_equal(r_no_mz["12", "13"], 0.5)
+    expect_equal(r_no_mz["13", "12"], 0.5)
 
-  # Self-relatedness should still be 1
-  expect_equal(r_mz["12", "12"], 1.0)
-  expect_equal(r_mz["13", "13"], 1.0)
+    # With mz_twins: MZ twins get 1.0
+    r_mz <- ped2add(ped, mz_twins = TRUE, sparse = FALSE, mz_method = mz_method)
+    expect_equal(r_mz["12", "13"], 1.0)
+    expect_equal(r_mz["13", "12"], 1.0)
 
-  # Parent-child relatedness unchanged
-  expect_equal(r_mz["12", "9"], 0.5)
-  expect_equal(r_mz["13", "9"], 0.5)
-  expect_equal(r_mz["12", "10"], 0.5)
-  expect_equal(r_mz["13", "10"], 0.5)
+    # Self-relatedness should still be 1
+    expect_equal(r_mz["12", "12"], 1.0)
+    expect_equal(r_mz["13", "13"], 1.0)
 
-  ped_kids <- potter
+    # Parent-child relatedness unchanged
+    expect_equal(r_mz["12", "9"], 0.5)
+    expect_equal(r_mz["13", "9"], 0.5)
+    expect_equal(r_mz["12", "10"], 0.5)
+    expect_equal(r_mz["13", "10"], 0.5)
 
-  # Add a child to one of the MZ twins
-  ped_kids <- addPersonToPed(ped_kids, sex = 0, momID = NA, dadID = NA, personID = 31)
-  ped_kids <- addPersonToPed(ped_kids, sex = 0, momID = NA, dadID = NA, personID = 32)
-  ped_kids <- addPersonToPed(ped_kids, sex = 0, momID = 31, dadID = 12, personID = 33)
-  ped_kids <- addPersonToPed(ped_kids, sex = 0, momID = 32, dadID = 13, personID = 34)
-  ped_kids <- addPersonToPed(ped_kids, sex = 0, momID = 31, dadID = 13, personID = 35)
+    ped_kids <- potter
 
-  r_kids <- ped2add(ped_kids, mz_twins = TRUE, sparse = FALSE, mz_method = "merging")
-  # Child of twin1 (ID=31) should be 0.5 to twin1 (parent)
-  expect_equal(r_kids["33", "12"], 0.5)
-  # Child of twin1 should ALSO be 0.5 to twin2 (genetically identical to parent)
-  expect_equal(r_kids["33", "13"], 0.5)
-  # Child of twin2 (ID=32) should be 0.5 to twin
-  expect_equal(r_kids["34", "13"], 0.5)
-  # Child of twin2 should ALSO be 0.5 to twin1 (genetically identical to parent)
-  expect_equal(r_kids["34", "12"], 0.5)
-  # Child of twin1 and child of twin2 should be 0.5 to each other (half-siblings)
-  expect_equal(r_kids["34", "33"], 0.5)
-  expect_equal(r_kids["34", "35"], 0.5)
+    # Add a child to one of the MZ twins
+    ped_kids <- addPersonToPed(ped_kids, sex = 0, momID = NA, dadID = NA, personID = 31)
+    ped_kids <- addPersonToPed(ped_kids, sex = 0, momID = NA, dadID = NA, personID = 32)
+    ped_kids <- addPersonToPed(ped_kids, sex = 0, momID = 31, dadID = 12, personID = 33)
+    ped_kids <- addPersonToPed(ped_kids, sex = 0, momID = 32, dadID = 13, personID = 34)
+    ped_kids <- addPersonToPed(ped_kids, sex = 0, momID = 31, dadID = 13, personID = 35)
 
+
+    r_kids <- ped2add(ped_kids, mz_twins = TRUE, sparse = FALSE, mz_method = mz_method)
+    # Child of twin1 (ID=31) should be 0.5 to twin1 (parent)
+    expect_equal(r_kids["33", "12"], 0.5)
+    # Child of twin1 should ALSO be 0.5 to twin2 (genetically identical to parent)
+    expect_equal(r_kids["33", "13"], 0.5)
+    # Child of twin2 (ID=32) should be 0.5 to twin
+    expect_equal(r_kids["34", "13"], 0.5)
+    # Child of twin2 should ALSO be 0.5 to twin1 (genetically identical to parent)
+    expect_equal(r_kids["34", "12"], 0.5)
+
+    # different moms should be 0.25 with different mz twin dads
+    expect_equal(r_kids["34", "33"], 0.25)
+    expect_equal(r_kids["34", "35"], 0.25)
+
+    # same mom, different mz twin dads should be 0.5
+    expect_equal(r_kids["33", "35"], 0.5)
+  }
 })
 
 
