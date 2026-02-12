@@ -130,13 +130,32 @@ ped2com <- function(ped, component,
   }
 
 
+
   # Load final result if computation was completed
   if (config$resume == TRUE && file.exists(checkpoint_files$final_matrix)) {
     if (config$verbose == TRUE) cat("Loading final computed matrix...\n")
     return(readRDS(checkpoint_files$final_matrix))
   }
 
+  if (mz_method == "merging") {
+    # replace all MZ twin IDs with the first twin's ID in each pair so they are merged for the path tracing and all subsequent steps.  We will copy the values back to the second twin at the end.
+    affected_rows <- data.frame(ID = c(), mz_pair = mz_pairs, momID = c(), dadID = c())
+    if (!is.null(mz_pairs) && length(mz_pairs) > 0) {
+      for (pair in mz_pairs) {
+        twin1_id <- ped$ID[pair[1]]
+        twin2_id <- ped$ID[pair[2]]
 
+        ped$momID[ped$momID == twin2_id] <- twin1
+        ped$dadID[ped$dadID == twin2_id] <- twin1
+
+      }
+      if (config$verbose == TRUE) {
+        message("Merged ", length(mz_pairs), " MZ twin pair(s) in pedigree dataset for path tracing")
+      }
+    }
+
+
+  }
   #------
   # Algorithm
   #------
@@ -207,6 +226,8 @@ ped2com <- function(ped, component,
     config = config,
     compress = config$compress
   )
+
+  # TODO merge twin columns in isChild if mz_method == "merge_before_tcrossprod" so that the path tracing flows through a single source for MZ twins.  This way you don't have to worry about the fact that they are merged for the path tracing but not for the rest of the algorithm.
   # --- Step 2: Compute Relatedness Matrix ---
 
 
@@ -293,7 +314,7 @@ ped2com <- function(ped, component,
     compress = config$compress
   )
 
-  if (mz_method == "merge_before_tcrossprod") {
+  if (mz_method == "addtwins") {
     if (config$verbose == TRUE) {
       message("MZ twin merging enabled: Will merge MZ twin columns in r2 before tcrossprod")
     }
@@ -332,7 +353,7 @@ ped2com <- function(ped, component,
       )
     }
   }
-  if (mz_method == "merge_before_tcrossprod") {
+  if (mz_method == "addtwins") {
     # --- Step 4b: Restore MZ twins ---
     # Copy twin1's row/col to twin2 so both twins appear in the final matrix.
     if (!is.null(mz_pairs) && length(mz_pairs) > 0 && config$component %in% c("additive")) {
