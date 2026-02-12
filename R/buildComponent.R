@@ -137,7 +137,7 @@ ped2com <- function(ped, component,
     return(readRDS(checkpoint_files$final_matrix))
   }
 
-  if (mz_method == "merging") {
+  if (mz_method == "merging" && mz_twins == TRUE) {
     # replace all MZ twin IDs with the first twin's ID in each pair so they are merged for the path tracing and all subsequent steps.  We will copy the values back to the second twin at the end.
     affected_rows <- data.frame(ID = c(), mz_pair = mz_pairs, momID = c(), dadID = c())
     if (!is.null(mz_pairs) && length(mz_pairs) > 0) {
@@ -314,7 +314,7 @@ ped2com <- function(ped, component,
     compress = config$compress
   )
 
-  if (mz_method == "addtwins") {
+  if (mz_method == "addtwins" && mz_twins == TRUE) {
     if (config$verbose == TRUE) {
       message("MZ twin merging enabled: Will merge MZ twin columns in r2 before tcrossprod")
     }
@@ -353,7 +353,7 @@ ped2com <- function(ped, component,
       )
     }
   }
-  if (mz_method == "addtwins") {
+  if (mz_method == "addtwins" && mz_twins == TRUE) {
     # --- Step 4b: Restore MZ twins ---
     # Copy twin1's row/col to twin2 so both twins appear in the final matrix.
     if (!is.null(mz_pairs) && length(mz_pairs) > 0 && config$component %in% c("additive")) {
