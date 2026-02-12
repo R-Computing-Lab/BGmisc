@@ -44,6 +44,7 @@ ped2com <- function(ped, component,
                     adjBeta_method = NULL,
                     compress = TRUE,
                     mz_twins = FALSE,
+                    mz_method = "merge_before_tcrossprod",
                     ...) {
   #------
   # Check inputs
@@ -148,6 +149,9 @@ ped2com <- function(ped, component,
   if (config$verbose == TRUE) {
     cat(paste0("Family Size = ", config$nr, "\n"))
   }
+
+  #
+  # TODO mz method would be to assign all relatedness through one twin and then copy the row/col to the other twin at the end.  This way you don't have to worry about the fact that they are merged for the path tracing but not for the rest of the algorithm.
 
   # Step 1: Construct parent-child adjacency matrix
 
@@ -289,22 +293,27 @@ ped2com <- function(ped, component,
     compress = config$compress
   )
 
-  # --- Step 3b: Temporarily merge MZ twin columns in r2 ---
-  # MZ twins share the same genetic source.  We absorb twin2's column into
-  # twin1's before tcrossprod so all path-traced relatedness flows through a
-  # single source.  After tcrossprod we copy twin1's row/col back to twin2.
-  if (!is.null(mz_pairs) && length(mz_pairs) > 0) {
-    for (pair in mz_pairs) {
-      idx1 <- pair[1]
-      idx2 <- pair[2]
-      r2[, idx1] <- r2[, idx1] + r2[, idx2]
-      r2[, idx2] <- 0
-    }
+  if (mz_method == "merge_before_tcrossprod") {
     if (config$verbose == TRUE) {
-      message("Merged ", length(mz_pairs), " MZ twin pair column(s) in r2")
+      message("MZ twin merging enabled: Will merge MZ twin columns in r2 before tcrossprod")
+    }
+
+    # --- Step 3b: Temporarily merge MZ twin columns in r2 ---
+    # MZ twins share the same genetic source.  We absorb twin2's column into
+    # twin1's before tcrossprod so all path-traced relatedness flows through a
+    # single source.  After tcrossprod we copy twin1's row/col back to twin2.
+    if (!is.null(mz_pairs) && length(mz_pairs) > 0 && config$component %in% c("additive")) {
+      for (pair in mz_pairs) {
+        idx1 <- pair[1]
+        idx2 <- pair[2]
+        r2[, idx1] <- r2[, idx1] + r2[, idx2]
+        r2[, idx2] <- 0
+      }
+      if (config$verbose == TRUE) {
+        message("Merged ", length(mz_pairs), " MZ twin pair column(s) in r2")
+      }
     }
   }
-
   # --- Step 4: T crossproduct  ---
 
   if (config$resume == TRUE && file.exists(checkpoint_files$tcrossprod_checkpoint) &&
@@ -323,21 +332,21 @@ ped2com <- function(ped, component,
       )
     }
   }
-
-  # --- Step 4b: Restore MZ twins ---
-  # Copy twin1's row/col to twin2 so both twins appear in the final matrix.
-  if (!is.null(mz_pairs) && length(mz_pairs) > 0) {
-    for (pair in mz_pairs) {
-      idx1 <- pair[1]
-      idx2 <- pair[2]
-      r[idx2, ] <- r[idx1, ]
-      r[, idx2] <- r[, idx1]
-    }
-    if (config$verbose == TRUE) {
-      message("Restored ", length(mz_pairs), " MZ twin pair(s) in relatedness matrix")
+  if (mz_method == "merge_before_tcrossprod") {
+    # --- Step 4b: Restore MZ twins ---
+    # Copy twin1's row/col to twin2 so both twins appear in the final matrix.
+    if (!is.null(mz_pairs) && length(mz_pairs) > 0 && config$component %in% c("additive")) {
+      for (pair in mz_pairs) {
+        idx1 <- pair[1]
+        idx2 <- pair[2]
+        r[idx2, ] <- r[idx1, ]
+        r[, idx2] <- r[, idx1]
+      }
+      if (config$verbose == TRUE) {
+        message("Restored ", length(mz_pairs), " MZ twin pair(s) in relatedness matrix")
+      }
     }
   }
-
   if (config$component %in% c("mitochondrial", "mtdna", "mitochondria")) {
     r@x <- rep(1, length(r@x))
     # Assign 1 to all nonzero elements for mitochondrial component

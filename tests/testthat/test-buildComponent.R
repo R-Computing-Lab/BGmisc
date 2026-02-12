@@ -17,6 +17,32 @@ test_that("MZ twins coded at relatedness 1 via twinID column", {
   expect_equal(r_mz["13", "13"], 1.0)
 
   # Parent-child relatedness unchanged
+  expect_equal(r_mz["12", "9"], 0.5)
+  expect_equal(r_mz["13", "9"], 0.5)
+  expect_equal(r_mz["12", "10"], 0.5)
+  expect_equal(r_mz["13", "10"], 0.5)
+
+  ped_kids <- potter
+
+  # Add a child to one of the MZ twins
+  ped_kids <- addPersonToPed(ped_kids, sex = 0, momID = NA, dadID = NA, personID = 31)
+  ped_kids <- addPersonToPed(ped_kids, sex = 0, momID = NA, dadID = NA, personID = 32)
+  ped_kids <- addPersonToPed(ped_kids, sex = 0, momID = 31, dadID = 12, personID = 33)
+  ped_kids <- addPersonToPed(ped_kids, sex = 0, momID = 32, dadID = 13, personID = 34)
+  ped_kids <- addPersonToPed(ped_kids, sex = 0, momID = 31, dadID = 13, personID = 35)
+
+  r_kids <- ped2add(ped_kids, mz_twins = TRUE, sparse = FALSE)
+  # Child of twin1 (ID=31) should be 0.5 to twin1 (parent)
+  expect_equal(r_kids["33", "12"], 0.5)
+  # Child of twin1 should ALSO be 0.5 to twin2 (genetically identical to parent)
+  expect_equal(r_kids["33", "13"], 0.5)
+  # Child of twin2 (ID=32) should be 0.5 to twin
+  expect_equal(r_kids["34", "13"], 0.5)
+  # Child of twin2 should ALSO be 0.5 to twin1 (genetically identical to parent)
+  expect_equal(r_kids["34", "12"], 0.5)
+  # Child of twin1 and child of twin2 should be 0.5 to each other (half-siblings)
+  expect_equal(r_kids["34", "33"], 0.5)
+  expect_equal(r_kids["34", "35"], 0.5)
 
 })
 
