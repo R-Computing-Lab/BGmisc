@@ -404,6 +404,7 @@ ped2add <- function(ped, max_gen = 25, sparse = TRUE, verbose = FALSE,
                     save_path = "checkpoint/",
                     compress = TRUE,
                     mz_twins = FALSE,
+                    mz_method = "addtwins",
                     ...) {
   ped2com(
     ped = ped,
@@ -423,6 +424,7 @@ ped2add <- function(ped, max_gen = 25, sparse = TRUE, verbose = FALSE,
     save_path = save_path,
     compress = compress,
     mz_twins = mz_twins,
+    mz_method = mz_method,
     ...
   )
 }

@@ -8,7 +8,7 @@ test_that("MZ twins coded at relatedness 1 via twinID column", {
   expect_equal(r_no_mz["13", "12"], 0.5)
 
   # With mz_twins: MZ twins get 1.0
-  r_mz <- ped2add(ped, mz_twins = TRUE, sparse = FALSE)
+  r_mz <- ped2add(ped, mz_twins = TRUE, sparse = FALSE, mz_method = "merging")
   expect_equal(r_mz["12", "13"], 1.0)
   expect_equal(r_mz["13", "12"], 1.0)
 
@@ -31,7 +31,7 @@ test_that("MZ twins coded at relatedness 1 via twinID column", {
   ped_kids <- addPersonToPed(ped_kids, sex = 0, momID = 32, dadID = 13, personID = 34)
   ped_kids <- addPersonToPed(ped_kids, sex = 0, momID = 31, dadID = 13, personID = 35)
 
-  r_kids <- ped2add(ped_kids, mz_twins = TRUE, sparse = FALSE)
+  r_kids <- ped2add(ped_kids, mz_twins = TRUE, sparse = FALSE, mz_method = "merging")
   # Child of twin1 (ID=31) should be 0.5 to twin1 (parent)
   expect_equal(r_kids["33", "12"], 0.5)
   # Child of twin1 should ALSO be 0.5 to twin2 (genetically identical to parent)
