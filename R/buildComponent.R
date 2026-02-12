@@ -365,7 +365,7 @@ ped2com <- function(ped, component,
     # row/col to twin2 so both twins appear in the final relatedness matrix.
     n_full <- length(original_ids)
     r_full <- Matrix::sparseMatrix(
-      i = integer(0), j = integer(0),
+      i = integer(0), j = integer(0), x = numeric(0),
       dims = c(n_full, n_full),
       dimnames = list(original_ids, original_ids)
     )
