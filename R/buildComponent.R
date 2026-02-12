@@ -124,8 +124,37 @@ ped2com <- function(ped, component,
   }
 
   mz_pairs <- NULL
+  mz_id_pairs <- NULL
+  original_ids <- ped$ID
   if (mz_twins == TRUE && "twinID" %in% colnames(ped)) {
     mz_pairs <- findMZtwins(ped, verbose = config$verbose)
+  }
+
+  # --- Step 2b: Replace MZ twin2 IDs with twin1 in pedigree ---
+  # MZ twins are genetically identical.  We replace twin2 with twin1
+  # everywhere (parent columns + remove the duplicate row) so the
+  # entire computation treats them as one individual.  After the
+  # relatedness matrix is computed we expand it back to full size.
+  if (!is.null(mz_pairs) && length(mz_pairs) > 0) {
+    mz_id_pairs <- lapply(mz_pairs, function(pair) {
+      c(ped$ID[pair[1]], ped$ID[pair[2]])
+    })
+
+    for (id_pair in mz_id_pairs) {
+      id1 <- id_pair[1]
+      id2 <- id_pair[2]
+      ped$momID[ped$momID == id2] <- id1
+      ped$dadID[ped$dadID == id2] <- id1
+    }
+
+    # Remove twin2 rows (all at once so indices don't shift)
+    twin2_rows <- sapply(mz_pairs, `[`, 2)
+    ped <- ped[-twin2_rows, , drop = FALSE]
+    config$nr <- nrow(ped)
+
+    if (config$verbose == TRUE) {
+      message("Replaced ", length(mz_id_pairs), " MZ twin2(s) with twin1 in pedigree")
+    }
   }
 
 
@@ -289,22 +318,6 @@ ped2com <- function(ped, component,
     compress = config$compress
   )
 
-  # --- Step 3b: Temporarily merge MZ twin columns in r2 ---
-  # MZ twins share the same genetic source.  We absorb twin2's column into
-  # twin1's before tcrossprod so all path-traced relatedness flows through a
-  # single source.  After tcrossprod we copy twin1's row/col back to twin2.
-  if (!is.null(mz_pairs) && length(mz_pairs) > 0) {
-    for (pair in mz_pairs) {
-      idx1 <- pair[1]
-      idx2 <- pair[2]
-      r2[, idx1] <- r2[, idx1] + r2[, idx2]
-      r2[, idx2] <- 0
-    }
-    if (config$verbose == TRUE) {
-      message("Merged ", length(mz_pairs), " MZ twin pair column(s) in r2")
-    }
-  }
-
   # --- Step 4: T crossproduct  ---
 
   if (config$resume == TRUE && file.exists(checkpoint_files$tcrossprod_checkpoint) &&
@@ -325,16 +338,28 @@ ped2com <- function(ped, component,
   }
 
   # --- Step 4b: Restore MZ twins ---
-  # Copy twin1's row/col to twin2 so both twins appear in the final matrix.
-  if (!is.null(mz_pairs) && length(mz_pairs) > 0) {
-    for (pair in mz_pairs) {
-      idx1 <- pair[1]
-      idx2 <- pair[2]
-      r[idx2, ] <- r[idx1, ]
-      r[, idx2] <- r[, idx1]
+  # Expand the (n-k) x (n-k) matrix back to n x n and copy twin1's
+  # row/col to twin2 so both twins appear in the final relatedness matrix.
+  if (!is.null(mz_id_pairs) && length(mz_id_pairs) > 0) {
+    n_full <- length(original_ids)
+    r_full <- Matrix::sparseMatrix(
+      i = integer(0), j = integer(0),
+      dims = c(n_full, n_full),
+      dimnames = list(original_ids, original_ids)
+    )
+    reduced_idx <- match(rownames(r), original_ids)
+    r_full[reduced_idx, reduced_idx] <- r
+
+    for (id_pair in mz_id_pairs) {
+      idx1 <- match(id_pair[1], original_ids)
+      idx2 <- match(id_pair[2], original_ids)
+      r_full[idx2, ] <- r_full[idx1, ]
+      r_full[, idx2] <- r_full[, idx1]
     }
+
+    r <- r_full
     if (config$verbose == TRUE) {
-      message("Restored ", length(mz_pairs), " MZ twin pair(s) in relatedness matrix")
+      message("Restored ", length(mz_id_pairs), " MZ twin pair(s) in relatedness matrix")
     }
   }
 
