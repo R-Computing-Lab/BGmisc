@@ -143,11 +143,12 @@ ped2com <- function(ped, component,
     for (id_pair in mz_id_pairs) {
       id1 <- id_pair[1]
       id2 <- id_pair[2]
+      ped$ID[ped$ID == id2] <- id1
       ped$momID[ped$momID == id2] <- id1
       ped$dadID[ped$dadID == id2] <- id1
     }
 
-    # Remove twin2 rows (all at once so indices don't shift)
+    # Remove duplicate rows (twin2 is now a duplicate of twin1)
     twin2_rows <- sapply(mz_pairs, `[`, 2)
     ped <- ped[-twin2_rows, , drop = FALSE]
     config$nr <- nrow(ped)
