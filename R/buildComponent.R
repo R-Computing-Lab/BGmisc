@@ -44,7 +44,7 @@ ped2com <- function(ped, component,
                     adjBeta_method = NULL,
                     compress = TRUE,
                     mz_twins = FALSE,
-                    mz_method = "merging",
+                    mz_method = "addtwins",
                     ...) {
   #------
   # Check inputs
