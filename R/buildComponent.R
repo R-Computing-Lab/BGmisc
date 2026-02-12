@@ -124,6 +124,7 @@ ped2com <- function(ped, component,
   }
 
   mz_pairs <- NULL
+  mz_id_pairs <- NULL
   if (mz_twins == TRUE && "twinID" %in% colnames(ped)) {
     mz_pairs <- findMZtwins(ped, verbose = config$verbose)
   }
@@ -135,22 +136,25 @@ ped2com <- function(ped, component,
   # instead.  Twin2 becomes an inert row in the matrix.  After the
   # relatedness matrix is computed we copy twin1's row/col to twin2.
   if (!is.null(mz_pairs) && length(mz_pairs) > 0 && config$component %in% c("additive")) {
-    for (pair in mz_pairs) {
-      idx1 <- pair[1]
-      idx2 <- pair[2]
-      twin1_id <- ped$ID[idx1]
-      twin2_id <- ped$ID[idx2]
+    mz_id_pairs <- lapply(mz_pairs, function(pair) {
+      as.character(c(ped$ID[pair[1]], ped$ID[pair[2]]))
+    })
+
+    for (pair in mz_id_pairs) {
+      twin1_id <- pair[1]
+      twin2_id <- pair[2]
+      twin2_row <- which(ped$ID == twin2_id)
 
       # Make twin2 a founder
-      ped$momID[idx2] <- NA
-      ped$dadID[idx2] <- NA
+      ped$momID[twin2_row] <- NA
+      ped$dadID[twin2_row] <- NA
 
       # Redirect twin2's children to twin1
       ped$momID[ped$momID == twin2_id] <- twin1_id
       ped$dadID[ped$dadID == twin2_id] <- twin1_id
     }
     if (config$verbose == TRUE) {
-      message("Founder-ized ", length(mz_pairs), " MZ twin2(s) and redirected their children to twin1")
+      message("Founder-ized ", length(mz_id_pairs), " MZ twin2(s) and redirected their children to twin1")
     }
   }
 
@@ -334,15 +338,16 @@ ped2com <- function(ped, component,
     }
   }
   # --- Step 4b: Restore MZ twin2 from twin1 ---
-  if (!is.null(mz_pairs) && length(mz_pairs) > 0 && config$component %in% c("additive")) {
-    for (pair in mz_pairs) {
-      idx1 <- pair[1]
-      idx2 <- pair[2]
+  if (!is.null(mz_id_pairs) && length(mz_id_pairs) > 0) {
+    rnames <- rownames(r)
+    for (pair in mz_id_pairs) {
+      idx1 <- match(pair[1], rnames)
+      idx2 <- match(pair[2], rnames)
       r[idx2, ] <- r[idx1, ]
       r[, idx2] <- r[, idx1]
     }
     if (config$verbose == TRUE) {
-      message("Restored ", length(mz_pairs), " MZ twin pair(s) in relatedness matrix")
+      message("Restored ", length(mz_id_pairs), " MZ twin pair(s) in relatedness matrix")
     }
   }
   if (config$component %in% c("mitochondrial", "mtdna", "mitochondria")) {
