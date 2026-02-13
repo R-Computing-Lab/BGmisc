@@ -90,14 +90,12 @@ test_that("MZ twins coded at relatedness 1 via twinID column (sparse matrix)", {
     ped2add(mz_method = "addtwins", mz_twins = TRUE)
 
   r_mz3 <- df_midgen |>
-    ped2add(mz_method = "addtwins", mz_twins = FALSE)
-  r_mz4 <- df_midgen |>
-    ped2add(mz_method = "merging", mz_twins = FALSE)
+    ped2add(mz_twins = FALSE)
 
-  object.size(r_mz3)
-  object.size(r_mz4)
-  object.size(r_mz2)
-  object.size(r_mz1)
+
+  # object.size(r_mz3)
+  # object.size(r_mz2)
+  # object.size(r_mz1)
 
   # which rows are the twins
   twin_rows <- which(!is.na(df_midgen$twinID))
@@ -105,7 +103,8 @@ test_that("MZ twins coded at relatedness 1 via twinID column (sparse matrix)", {
 
   family_rows <- unique(c(twin_rows, child_rows))
 
-  expect_equal(sum(r_mz1[family_rows, family_rows] - r_mz2[family_rows, family_rows]), 0)
+  expect_equal(sum(as.matrix(r_mz1[family_rows, family_rows]) - as.matrix(r_mz2[family_rows, family_rows])), 0)
+
 
   r_mz1_ordered <- r_mz1[order(rownames(r_mz1)), order(colnames(r_mz1))]
   r_mz2_ordered <- r_mz2[order(rownames(r_mz2)), order(colnames(r_mz2))]
