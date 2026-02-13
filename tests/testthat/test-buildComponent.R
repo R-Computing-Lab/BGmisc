@@ -94,8 +94,10 @@ test_that("MZ twins coded at relatedness 1 via twinID column (sparse matrix)", {
   r_mz4 <- df_midgen |>
     ped2add(mz_method = "merging", mz_twins = FALSE)
 
-  df_midgen %>% dplyr::filter(!is.na(twinID))
-
+  object.size(r_mz3)
+  object.size(r_mz4)
+  object.size(r_mz2)
+  object.size(r_mz1)
 
   # which rows are the twins
   twin_rows <- which(!is.na(df_midgen$twinID))
