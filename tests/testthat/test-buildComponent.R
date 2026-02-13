@@ -62,7 +62,66 @@ test_that("MZ twins coded at relatedness 1 via twinID column", {
 })
 
 
-test_that("MZ twins coded at relatedness 1 via twinID column", {
+
+test_that("MZ twins coded at relatedness 1 via twinID column (sparse matrix)", {
+
+  set.seed(1667)
+  Ngen <- 4
+  kpc <- 5
+  sexR <- .50 # sometimes fails above .5
+  marR <- .6
+  reps <- 10
+
+  # mz_method_opts <- c("addtwins", "merging")
+  beta_method_opts <- c(TRUE, FALSE)
+  beta_F <- T
+  beta_T <- T
+  gen_twin <- Ngen - 1
+
+
+
+  df_midgen <- simulatePedigree(kpc = kpc, Ngen = Ngen * 2, sexR = sexR, marR = marR, beta = TRUE) |>
+    makeTwins(gen_twin = gen_twin)
+
+
+  r_mz1 <- df_midgen |>
+    ped2add(mz_method = "merging", mz_twins = TRUE)
+  r_mz2 <- df_midgen |>
+    ped2add(mz_method = "addtwins", mz_twins = TRUE)
+
+  r_mz3 <- df_midgen |>
+    ped2add(mz_method = "addtwins", mz_twins = FALSE)
+  r_mz4 <- df_midgen |>
+    ped2add(mz_method = "merging", mz_twins = FALSE)
+
+  object.size(r_mz3)
+  object.size(r_mz4)
+  object.size(r_mz2)
+  object.size(r_mz1)
+
+  # which rows are the twins
+  twin_rows <- which(!is.na(df_midgen$twinID))
+  child_rows <- which(df_midgen$momID %in% df_midgen$ID[twin_rows] | df_midgen$dadID %in% df_midgen$ID[twin_rows])
+
+  family_rows <- unique(c(twin_rows, child_rows))
+
+  expect_equal(sum(r_mz1[family_rows, family_rows], r_mz2[family_rows, family_rows]), 0)
+
+  r_mz1[family_rows, family_rows] - r_mz2[family_rows, family_rows]
+
+  r_mz1_ordered <- r_mz1[order(rownames(r_mz1)), order(colnames(r_mz1))]
+  r_mz2_ordered <- r_mz2[order(rownames(r_mz2)), order(colnames(r_mz2))]
+
+  expect_equal(sum(r_mz1_ordered - r_mz2_ordered), 0)
+
+  expect_equal(length(r_mz1@i), length(r_mz2@i))
+  expect_equal(length(r_mz1@x), length(r_mz2@x))
+  expect_equal(length(r_mz1@p), length(r_mz2@p))
+
+})
+
+
+test_that("MZ twins coded at relatedness 1 via twinID column (minimal data.frame)", {
   # Simple pedigree: two parents and two MZ twin children
   ped <- data.frame(
     ID = c(1, 2, 3, 4),

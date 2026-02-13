@@ -20,7 +20,7 @@ test_that("simulated pedigree generates expected data structure", {
     if (isFALSE(beta) || (isTRUE(beta) && beta_match_base)) {
       expect_equal(length(results$ID), base_length, tolerance = strict_tolerance)
     } else {
-      expect_true(length(results$ID) >= base_length - base_length_tol * base_length && length(results$ID) <= base_length_tol * base_length + base_length,
+      expect_true(length(results$ID) >= base_length - base_length_tol && length(results$ID) <= base_length + base_length_tol,
         info = paste0("Beta=TRUE: Expected 45-70 individuals, got ", length(results$ID))
       )
     }
