@@ -147,7 +147,7 @@ ped2com <- function(ped, component,
   if (mz_method %in% c("merging")  && mz_twins == TRUE && !is.null(mz_pairs) && length(mz_pairs) > 0) {
     # replace all MZ twin IDs with the first twin's ID in each pair so they are merged for the path tracing and all subsequent steps.  We will copy the values back to the second twin at the end.
 
-    for (id_pair in mz_pairs) {
+    for (id_pair in mz_id_pairs) {
       twin1_id <- id_pair[1]
       twin2_id <- id_pair[2]
       twin2_row <- which(ped$ID == twin2_id)
@@ -387,7 +387,11 @@ ped2com <- function(ped, component,
     # Assign 1 to all nonzero elements for mitochondrial component
   }
 
-  if (config$sparse == FALSE) {
+  # Remove explicit zeros so that both mz_method paths produce
+  # structurally identical sparse matrices
+  if (config$sparse == TRUE) {
+    r <- Matrix::drop0(r)
+  } else {
     r <- as.matrix(r)
   }
   # flattens diagonal if you don't want to deal with inbreeding
