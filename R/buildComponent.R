@@ -144,7 +144,7 @@ ped2com <- function(ped, component,
       c(ped$ID[pair[1]], ped$ID[pair[2]])
     })
 
-    for (id_pair in mz_pairs) {
+    for (id_pair in mz_id_pairs) {
       twin1_id <- id_pair[1]
       twin2_id <- id_pair[2]
       twin2_row <- which(ped$ID == twin2_id)
@@ -383,7 +383,11 @@ ped2com <- function(ped, component,
     # Assign 1 to all nonzero elements for mitochondrial component
   }
 
-  if (config$sparse == FALSE) {
+  # Remove explicit zeros so that both mz_method paths produce
+  # structurally identical sparse matrices
+  if (config$sparse == TRUE) {
+    r <- Matrix::drop0(r)
+  } else {
     r <- as.matrix(r)
   }
   # flattens diagonal if you don't want to deal with inbreeding
