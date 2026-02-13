@@ -342,7 +342,7 @@ ped2com <- function(ped, component,
         r2[, idx2] <- 0
       }
       if (config$verbose == TRUE) {
-        message("Merged ", length(mz_pairs), " MZ twin pair column(s) in r2")
+        message("Added ", length(mz_pairs), " MZ twin pair column(s) in r2")
       }
     }
   }
