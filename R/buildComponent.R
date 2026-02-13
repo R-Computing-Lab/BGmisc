@@ -365,7 +365,7 @@ ped2com <- function(ped, component,
     }
   }
 
-  if (mz_method %in% c("merging", "addtwins") && mz_twins == TRUE) {
+  if (mz_method %in% c("merging", "addtwins") && mz_twins == TRUE && config$component %in% c("additive")) {
     # --- Step 4b: Restore MZ twins ---
     # Copy twin1's row/col to twin2 so both twins appear in the final matrix.
     if (!is.null(mz_pairs) && length(mz_pairs)) {
