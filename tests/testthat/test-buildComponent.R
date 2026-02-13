@@ -105,9 +105,7 @@ test_that("MZ twins coded at relatedness 1 via twinID column (sparse matrix)", {
 
   family_rows <- unique(c(twin_rows, child_rows))
 
-  expect_equal(sum(r_mz1[family_rows, family_rows], r_mz2[family_rows, family_rows]), 0)
-
-  r_mz1[family_rows, family_rows] - r_mz2[family_rows, family_rows]
+  expect_equal(sum(r_mz1[family_rows, family_rows] - r_mz2[family_rows, family_rows]), 0)
 
   r_mz1_ordered <- r_mz1[order(rownames(r_mz1)), order(colnames(r_mz1))]
   r_mz2_ordered <- r_mz2[order(rownames(r_mz2)), order(colnames(r_mz2))]
