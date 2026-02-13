@@ -144,7 +144,8 @@ ped2com <- function(ped, component,
     return(readRDS(checkpoint_files$final_matrix))
   }
 
-  if (mz_method %in% c("merging")  && mz_twins == TRUE && !is.null(mz_pairs) && length(mz_pairs) > 0) {
+  if (mz_method %in% c("merging") && mz_twins == TRUE && !is.null(mz_pairs) && length(mz_pairs) > 0 &&
+    config$component %in% c("additive")) {
     # replace all MZ twin IDs with the first twin's ID in each pair so they are merged for the path tracing and all subsequent steps.  We will copy the values back to the second twin at the end.
 
     for (id_pair in mz_id_pairs) {
@@ -160,7 +161,6 @@ ped2com <- function(ped, component,
       ped$momID[ped$momID == twin2_id] <- twin1_id
       ped$dadID[ped$dadID == twin2_id] <- twin1_id
     }
-
     if (config$verbose == TRUE) {
       message("Merged ", length(mz_pairs), " MZ twin pair(s) in pedigree dataset for path tracing")
     }
@@ -375,6 +375,12 @@ ped2com <- function(ped, component,
         idx2 <- match(pair[2], rnames)
         r[idx2, ] <- r[idx1, ]
         r[, idx2] <- r[, idx1]
+      }
+      # Row/column replacement on a dsCMatrix (symmetric) causes Matrix to
+      # coerce to dgCMatrix (general), doubling stored entries.  Convert back
+      # so both mz_method paths return the same sparse class.
+      if (methods::is(r, "CsparseMatrix") && !methods::is(r, "symmetricMatrix")) {
+        r <- Matrix::forceSymmetric(r)
       }
       if (config$verbose == TRUE) {
         message("Restored ", length(mz_pairs), " MZ twin pair(s) in relatedness matrix")
