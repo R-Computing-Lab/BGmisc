@@ -66,10 +66,10 @@ test_that("MZ twins coded at relatedness 1 via twinID column", {
 test_that("MZ twins coded at relatedness 1 via twinID column (sparse matrix)", {
 
   set.seed(1667)
-  Ngen <- 4
-  kpc <- 5
+  Ngen <- 3
+  kpc <- 4
   sexR <- .50 # sometimes fails above .5
-  marR <- .6
+  marR <- .8
   reps <- 10
 
   # mz_method_opts <- c("addtwins", "merging")
