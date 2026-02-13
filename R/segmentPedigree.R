@@ -33,8 +33,10 @@ ped2fam <- function(ped, personID = "ID",
                     twinID = "twinID",
                     ...) {
   # Call to wrapper function
-  .ped2id(ped = ped, personID = personID, momID = momID, dadID = dadID, famID = famID, twinID = twinID,
-    type = "parents")
+  .ped2id(
+    ped = ped, personID = personID, momID = momID, dadID = dadID, famID = famID, twinID = twinID,
+    type = "parents"
+  )
 }
 
 .ped2id <- function(ped,
@@ -43,8 +45,10 @@ ped2fam <- function(ped, personID = "ID",
                     type,
                     ...) {
   # Turn pedigree into family
-  pg <- ped2graph(ped = ped, personID = personID, momID = momID, dadID = dadID, twinID = twinID,
-    adjacent = type)
+  pg <- ped2graph(
+    ped = ped, personID = personID, momID = momID, dadID = dadID, twinID = twinID,
+    adjacent = type
+  )
 
   # Find weakly connected components of graph
   wcc <- igraph::components(pg)

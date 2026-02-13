@@ -26,6 +26,7 @@ ped2com(
   adjBeta_method = NULL,
   compress = TRUE,
   mz_twins = FALSE,
+  mz_method = "merge_before_tcrossprod",
   ...
 )
 }

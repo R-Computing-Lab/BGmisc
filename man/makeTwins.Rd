@@ -10,7 +10,8 @@ makeTwins(
   ID_twin2 = NA_integer_,
   gen_twin = 2,
   verbose = FALSE,
-  zygosity = "MZ"
+  zygosity = "MZ",
+  twin_sex = "R"
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ makeTwins(
 \item{verbose}{logical.  If TRUE, print progress through stages of algorithm}
 
 \item{zygosity}{A character string indicating the zygosity of the twins. Default is "MZ" for monozygotic twins.}
+
+\item{twin_sex}{A character string indicating the sex of the twins. Default is randomly assigned. If specified, it should be either "M" or "F"}
 }
 \value{
 Returns a \code{data.frame} with MZ twins information added as a new column.

@@ -9,6 +9,7 @@
 #' @param verbose logical.  If TRUE, print progress through stages of algorithm
 #' @param gen_twin A vector of \code{generation} of the twin to be imputed.
 #' @param zygosity A character string indicating the zygosity of the twins. Default is "MZ" for monozygotic twins.
+#' @param twin_sex A character string indicating the sex of the twins. Default is randomly assigned ("R"). If specified, it should be either "M" or "F"
 #' @return Returns a \code{data.frame} with MZ twins information added as a new column.
 #' @export
 
@@ -18,7 +19,8 @@ makeTwins <- function(ped, ID_twin1 = NA_integer_,
                       ID_twin2 = NA_integer_,
                       gen_twin = 2,
                       verbose = FALSE,
-                      zygosity = "MZ") {
+                      zygosity = "MZ",
+                      twin_sex = "R") {
   # Check if the ped is the same format as the output of simulatePedigree
   if (paste0(colnames(ped), collapse = "") != paste0(c(
     "famID", "ID", "gen",
@@ -40,7 +42,11 @@ makeTwins <- function(ped, ID_twin1 = NA_integer_,
     } else {
       # Check if the generation is valid
       if (gen_twin < 2 || gen_twin > max(ped$gen)) {
-        stop("The generation of the twins should be an integer between 2 and the maximum generation in the pedigree")
+        warning("The generation of the twins should be an integer between 2 and the maximum generation in the pedigree")
+        # remove the MZtwin and zygosity columns
+        ped$zygosity <- NULL
+        ped$MZtwin <- NULL
+        return(ped)
       } else {
         idx <- nrow(ped[ped$gen == gen_twin & !is.na(ped$dadID), ])
         usedID <- c()
@@ -55,7 +61,7 @@ makeTwins <- function(ped, ID_twin1 = NA_integer_,
             ID_twin1 <- resample(ped$ID[ped$gen == gen_twin & !(ped$ID %in% usedID) & !is.na(ped$dadID)], 1)
             # cat("twin1", ID_twin1, "\n")
             # find one same sex sibling who has the same dadID and momID as the selected individual
-            if (zygosity %in% c("MZ", "SS")) {
+            if (zygosity %in% c("mz", "MZ", "SS")) {
               twin2_Pool <- ped$ID[ped$ID != ID_twin1 & ped$gen == gen_twin & ped$sex == ped$sex[ped$ID == ID_twin1] & ped$dadID == ped$dadID[ped$ID == ID_twin1] & ped$momID == ped$momID[ped$ID == ID_twin1]]
             } else if (zygosity == "DZ") {
               twin2_Pool <- ped$ID[ped$ID != ID_twin1 & ped$gen == gen_twin & ped$dadID == ped$dadID[ped$ID == ID_twin1] & ped$momID == ped$momID[ped$ID == ID_twin1]]
@@ -81,7 +87,14 @@ makeTwins <- function(ped, ID_twin1 = NA_integer_,
           } else {
             # randomly select all males or females in the generation and put them in a vector
             if (zygosity %in% c("MZ", "SS")) {
-              selectGender <- ped$ID[ped$gen == gen_twin & ped$sex == resample(c("M", "F"), 1) & !is.na(ped$dadID) & !is.na(ped$momID)]
+              if (twin_sex == "R") {
+                twin_sex_select <- resample(c("M", "F"), 1)
+              } else {
+                twin_sex_select <- twin_sex
+              }
+
+              selectGender <- ped$ID[ped$gen == gen_twin & ped$sex == twin_sex_select & !is.na(ped$dadID) & !is.na(ped$momID)]
+              notselectGender <- ped$ID[ped$gen == gen_twin & ped$sex != twin_sex_select & !is.na(ped$dadID) & !is.na(ped$momID)]
             } else if (zygosity %in% c("DZ")) {
               selectGender <- ped$ID[ped$gen == gen_twin & !is.na(ped$dadID) & !is.na(ped$momID)]
             } else if (zygosity %in% c("OS")) {
@@ -91,9 +104,13 @@ makeTwins <- function(ped, ID_twin1 = NA_integer_,
             }
 
             # message(selectGender)
-            if (length(selectGender) < 2) {
+            if (length(selectGender) < 2 && length(notselectGender) < 2) {
               stop("There are no available same-sex people in the generation to make twins")
+            } else if (twin_sex == "R" && length(selectGender) < 2 && length(notselectGender) >= 2) {
+              selectGender <- notselectGender
             }
+
+
             # randomly select two individuals from the vector
             ID_DoubleTwin <- resample(selectGender, 2)
             # message(ID_DoubleTwin)

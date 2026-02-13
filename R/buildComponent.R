@@ -124,12 +124,10 @@ ped2com <- function(ped, component,
     ped <- standardizeColnames(ped, verbose = config$verbose)
   }
 
-
+  mz_pairs <- NULL
   if (mz_twins == TRUE && "twinID" %in% colnames(ped)) {
-    mz_pairs <- NULL
     mz_pairs <- findMZtwins(ped, verbose = config$verbose)
   }
-
 
 
   # Load final result if computation was completed
@@ -145,11 +143,9 @@ ped2com <- function(ped, component,
       c(ped$ID[pair[1]], ped$ID[pair[2]])
     })
 
-    for (id_pair  in mz_pairs) {
-
-
+    for (id_pair in mz_pairs) {
       twin1_id <- id_pair[1]
-      twin2_id <-  id_pair[2]
+      twin2_id <- id_pair[2]
       twin2_row <- which(ped$ID == twin2_id)
 
       # Make twin2 a founder
@@ -159,14 +155,11 @@ ped2com <- function(ped, component,
       # Redirect twin2's children to twin1
       ped$momID[ped$momID == twin2_id] <- twin1_id
       ped$dadID[ped$dadID == twin2_id] <- twin1_id
-
     }
   }
   if (config$verbose == TRUE) {
     message("Merged ", length(mz_pairs), " MZ twin pair(s) in pedigree dataset for path tracing")
   }
-
-
 
 
   #------

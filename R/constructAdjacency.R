@@ -618,11 +618,15 @@ findMZtwins <- function(ped, verbose = FALSE) {
     pairs[[length(pairs) + 1]] <- c(idx1, idx2)
 
     if (verbose) {
-      message("MZ twin pair found: ", twin_id, " (row ", idx1,
-        ") and ", co_twin_id, " (row ", idx2, ")")
+      message(
+        "MZ twin pair found: ", twin_id, " (row ", idx1,
+        ") and ", co_twin_id, " (row ", idx2, ")"
+      )
     }
   }
 
-  if (length(pairs) == 0) return(NULL)
+  if (length(pairs) == 0) {
+    return(NULL)
+  }
   return(pairs)
 }

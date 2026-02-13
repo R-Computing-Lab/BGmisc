@@ -22,6 +22,7 @@ ped2add(
   save_path = "checkpoint/",
   compress = TRUE,
   mz_twins = FALSE,
+  mz_method = "addtwins",
   ...
 )
 }
