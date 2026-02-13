@@ -27,7 +27,7 @@ makeTwins(
 
 \item{zygosity}{A character string indicating the zygosity of the twins. Default is "MZ" for monozygotic twins.}
 
-\item{twin_sex}{A character string indicating the sex of the twins. Default is randomly assigned. If specified, it should be either "M" or "F"}
+\item{twin_sex}{A character string indicating the sex of the twins. Default is randomly assigned ("R"). If specified, it should be either "M" or "F"}
 }
 \value{
 Returns a \code{data.frame} with MZ twins information added as a new column.
