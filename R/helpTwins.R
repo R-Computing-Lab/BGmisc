@@ -128,15 +128,30 @@ findMZtwins <- function(ped, verbose = FALSE, returnRows = TRUE,
 fuseTwins <- function(ped,
                       mz_id_pairs = NULL,
                       mz_row_pairs = NULL,
-                      config = list(verbose = FALSE)) {
+                      config = list(verbose = FALSE),
+                      test_df_twins = FALSE
+) {
+  df_twins <- NULL
   if (is.null(mz_id_pairs) && is.null(mz_row_pairs)) {
     df_twins <- findMZtwins(ped, verbose = config$verbose,
       returnRows = TRUE, returnIDs = TRUE, returnAsList = FALSE)
+    if (test_df_twins == TRUE) {
+      return(df_twins)
+    }
   }
 
-  if (!is.null(mz_id_pairs) && length(mz_id_pairs) > 0 ||
-    !is.null(mz_row_pairs) && nrow(mz_row_pairs) > 0 || !is.null(df_twins)
-  ) {
+
+  fuseattemptable <- !is.null(df_twins) || !is.null(mz_id_pairs) && length(mz_id_pairs) > 0 || !is.null(mz_row_pairs) && length(mz_row_pairs) > 0
+
+  # if (config$verbose == TRUE) {
+  if (fuseattemptable == TRUE) {
+    message("MZ twin pairs identified for fusion")
+  } else {
+    message("No MZ twin pairs identified for fusion.")
+  }
+  #  }
+
+  if (fuseattemptable == TRUE) {
     if (is.null(mz_id_pairs) && !is.null(mz_row_pairs)) {
       df_twins <- apply(mz_row_pairs, 1, function(row) {
         twin1_id <- ped$ID[row[1]]
@@ -145,6 +160,9 @@ fuseTwins <- function(ped,
           twin1_row = row[1], twin2_row = row[2])
         df_twins
       })
+      if (test_df_twins == TRUE) {
+        return(df_twins)
+      }
     } else if (!is.null(mz_id_pairs) && is.null(mz_row_pairs)) {
       df_twins <- apply(mz_id_pairs, 2, function(pair) {
         twin1_row <- which(ped$ID == pair[1])
@@ -153,6 +171,13 @@ fuseTwins <- function(ped,
           twin1_row = twin1_row, twin2_row = twin2_row)
         df_twins
       })
+      if (test_df_twins == TRUE) {
+        return(df_twins)
+      }
+    } else if (!is.null(df_twins)) {
+      # df_twins is already in the correct format
+    } else {
+      stop("Invalid input: must provide either mz_id_pairs, mz_row_pairs, or df_twins")
     }
     twin1s_id <- df_twins$twin1_id
     twin2s_id <- df_twins$twin2_id
