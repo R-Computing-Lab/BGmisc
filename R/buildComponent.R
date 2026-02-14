@@ -369,6 +369,10 @@ ped2com <- function(ped, component,
         message("Restored ", length(mz_row_pairs), " MZ twin pair(s) in relatedness matrix")
       }
     }
+
+      if (config$sparse == TRUE) {
+    r <- Matrix::drop0(r)
+  }
   }
 
   if (config$component %in% c("mitochondrial", "mtdna", "mitochondria")) {
@@ -378,9 +382,9 @@ ped2com <- function(ped, component,
 
   # Remove explicit zeros so that both mz_method paths produce
   # structurally identical sparse matrices
-  if (config$sparse == TRUE) {
-    r <- Matrix::drop0(r)
-  } else {
+
+  
+   if (config$sparse == FALSE) {
     r <- as.matrix(r)
   }
   # flattens diagonal if you don't want to deal with inbreeding
