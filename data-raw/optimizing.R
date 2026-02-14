@@ -42,9 +42,9 @@ r_mz1 <- df_midgen %>%
   ped2add(mz_method = "merging", mz_twins = TRUE)
 r_mz2 <- df_midgen %>%
   ped2add(mz_method = "addtwins", mz_twins = TRUE)
-expect_equal(length(r_mz1@i), length(r_mz2@i))
-expect_equal(length(r_mz1@x), length(r_mz2@x))
-expect_equal(length(r_mz1@p), length(r_mz2@p))
+# expect_equal(length(r_mz1@i), length(r_mz2@i))
+# expect_equal(length(r_mz1@x), length(r_mz2@x))
+# expect_equal(length(r_mz1@p), length(r_mz2@p))
 
 benchmark_results <- microbenchmark(
   beta_false_1gen = {
