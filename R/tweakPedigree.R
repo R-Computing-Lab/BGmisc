@@ -51,22 +51,32 @@ makeTwins <- function(ped, ID_twin1 = NA_integer_,
         idx <- nrow(ped[ped$gen == gen_twin & !is.na(ped$dadID), ])
         usedID <- c()
         # randomly loop through all the individuals in the generation until find an individual who is the same sex and shares the same dadID and momID with another individual
+        # Pre-compute generation mask once to avoid repeated subsetting
+        gen_mask <- ped$gen == gen_twin & !is.na(ped$dadID)
+        gen_ids <- ped$ID[gen_mask]
+        # Build ID-to-row index for O(1) attribute lookups
+        id_row_map <- seq_len(nrow(ped))
+        names(id_row_map) <- as.character(ped$ID)
+
         for (i in 1:idx) {
-          # cat("loop", i, "\n")
           # check if i is equal to the number of individuals in the generation
           usedID <- c(usedID, ID_twin1)
-          # message(usedID)
           if (i < idx) {
             # randomly select one individual from the generation
-            ID_twin1 <- resample(ped$ID[ped$gen == gen_twin & !(ped$ID %in% usedID) & !is.na(ped$dadID)], 1)
-            # cat("twin1", ID_twin1, "\n")
+            ID_twin1 <- resample(ped$ID[gen_mask & !(ped$ID %in% usedID)], 1)
+            # Cache twin1 attributes via O(1) row lookup
+            twin1_row <- id_row_map[as.character(ID_twin1)]
+            twin1_sex <- ped$sex[twin1_row]
+            twin1_dad <- ped$dadID[twin1_row]
+            twin1_mom <- ped$momID[twin1_row]
             # find one same sex sibling who has the same dadID and momID as the selected individual
+            sib_mask <- ped$ID != ID_twin1 & gen_mask & ped$dadID == twin1_dad & ped$momID == twin1_mom
             if (zygosity %in% c("mz", "MZ", "SS")) {
-              twin2_Pool <- ped$ID[ped$ID != ID_twin1 & ped$gen == gen_twin & ped$sex == ped$sex[ped$ID == ID_twin1] & ped$dadID == ped$dadID[ped$ID == ID_twin1] & ped$momID == ped$momID[ped$ID == ID_twin1]]
+              twin2_Pool <- ped$ID[sib_mask & ped$sex == twin1_sex]
             } else if (zygosity == "DZ") {
-              twin2_Pool <- ped$ID[ped$ID != ID_twin1 & ped$gen == gen_twin & ped$dadID == ped$dadID[ped$ID == ID_twin1] & ped$momID == ped$momID[ped$ID == ID_twin1]]
+              twin2_Pool <- ped$ID[sib_mask]
             } else if (zygosity == "OS") {
-              twin2_Pool <- ped$ID[ped$ID != ID_twin1 & ped$gen == gen_twin & ped$sex != ped$sex[ped$ID == ID_twin1] & ped$dadID == ped$dadID[ped$ID == ID_twin1] & ped$momID == ped$momID[ped$ID == ID_twin1]]
+              twin2_Pool <- ped$ID[sib_mask & ped$sex != twin1_sex]
             } else {
               stop("The zygosity should be either 'MZ', 'DZ', or 'OS'")
             }
@@ -254,20 +264,18 @@ makeInbreeding <- function(ped,
   # change the spouseID of ID_mate1 and ID_mate2 to each other
   ped$spID[ped$ID == ID_mate1] <- ID_mate2
   ped$spID[ped$ID == ID_mate2] <- ID_mate1
-  # change the individuals in next generation whose dadID and momID are ID_mate1 and ID_mate2's former mates to ID_mate1 and ID_mate2
-  for (j in seq_len(nrow(ped))) {
-    if (!is.na(ped$dadID[j]) & !is.na(ID_mate1_former_mate) & ped$dadID[j] == ID_mate1_former_mate) {
-      ped$dadID[j] <- ID_mate2
-    }
-    if (!is.na(ped$momID[j]) & !is.na(ID_mate1_former_mate) & ped$momID[j] == ID_mate1_former_mate) {
-      ped$momID[j] <- ID_mate2
-    }
-    if (!is.na(ped$dadID[j]) & !is.na(ID_mate2_former_mate) & ped$dadID[j] == ID_mate2_former_mate) {
-      ped$dadID[j] <- ID_mate1
-    }
-    if (!is.na(ped$momID[j]) & !is.na(ID_mate2_former_mate) & ped$momID[j] == ID_mate2_former_mate) {
-      ped$momID[j] <- ID_mate1
-    }
+  # Vectorized replacement of former mates' IDs in children's parent columns
+  if (!is.na(ID_mate1_former_mate)) {
+    dad_match1 <- which(!is.na(ped$dadID) & ped$dadID == ID_mate1_former_mate)
+    if (length(dad_match1) > 0) ped$dadID[dad_match1] <- ID_mate2
+    mom_match1 <- which(!is.na(ped$momID) & ped$momID == ID_mate1_former_mate)
+    if (length(mom_match1) > 0) ped$momID[mom_match1] <- ID_mate2
+  }
+  if (!is.na(ID_mate2_former_mate)) {
+    dad_match2 <- which(!is.na(ped$dadID) & ped$dadID == ID_mate2_former_mate)
+    if (length(dad_match2) > 0) ped$dadID[dad_match2] <- ID_mate1
+    mom_match2 <- which(!is.na(ped$momID) & ped$momID == ID_mate2_former_mate)
+    if (length(mom_match2) > 0) ped$momID[mom_match2] <- ID_mate1
   }
   return(ped)
 }
