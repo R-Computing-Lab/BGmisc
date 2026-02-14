@@ -46,6 +46,7 @@ ped2com <- function(ped, component,
                     compress = TRUE,
                     mz_twins = FALSE,
                     mz_method = "addtwins",
+                    beta = FALSE,
                     ...) {
   #------
   # Check inputs
@@ -132,7 +133,8 @@ ped2com <- function(ped, component,
     df_mz <- findMZtwins(ped, verbose = config$verbose,
       returnIDs = TRUE,
       returnRows = TRUE,
-      returnAsList = TRUE)
+      returnAsList = TRUE,
+      beta = beta)
     mz_row_pairs <- df_mz$pair_rows
     mz_id_pairs <- df_mz$pair_ids
   }
@@ -322,11 +324,21 @@ ped2com <- function(ped, component,
     # twin1's before tcrossprod so all path-traced relatedness flows through a
     # single source.  After tcrossprod we copy twin1's row/col back to twin2.
     if (!is.null(mz_row_pairs) && length(mz_row_pairs) > 0 && config$component %in% c("additive")) {
-      for (pair in mz_row_pairs) {
-        idx1 <- pair[1]
-        idx2 <- pair[2]
-        r2[, idx1] <- r2[, idx1] + r2[, idx2]
-        r2[, idx2] <- 0
+      if (beta == TRUE) {
+        # Extract all indices at once for batch operations
+        pairs_mat <- do.call(rbind, mz_row_pairs)
+        idx1_all <- pairs_mat[, 1]
+        idx2_all <- pairs_mat[, 2]
+        # Batch: absorb all twin2 columns into twin1 columns, then zero twin2
+        r2[, idx1_all] <- r2[, idx1_all] + r2[, idx2_all]
+        r2[, idx2_all] <- 0
+      } else {
+        for (pair in mz_row_pairs) {
+          idx1 <- pair[1]
+          idx2 <- pair[2]
+          r2[, idx1] <- r2[, idx1] + r2[, idx2]
+          r2[, idx2] <- 0
+        }
       }
       if (config$verbose == TRUE) {
         message("Added ", length(mz_row_pairs), " MZ twin pair column(s) in r2")
@@ -357,11 +369,20 @@ ped2com <- function(ped, component,
     # Copy twin1's row/col to twin2 so both twins appear in the final matrix.
     if (!is.null(mz_row_pairs) && length(mz_row_pairs)) {
       rnames <- rownames(r)
-      for (pair in mz_id_pairs) {
-        idx1 <- match(pair[1], rnames)
-        idx2 <- match(pair[2], rnames)
-        r[idx2, ] <- r[idx1, ]
-        r[, idx2] <- r[, idx1]
+      if (beta == TRUE) {
+        ids_mat <- do.call(rbind, mz_id_pairs)
+        idx1_all <- match(ids_mat[, 1], rnames)
+        idx2_all <- match(ids_mat[, 2], rnames)
+        # Batch copy: twin1 rows/cols -> twin2 rows/cols
+        r[idx2_all, ] <- r[idx1_all, ]
+        r[, idx2_all] <- r[, idx1_all]
+      } else {
+        for (pair in mz_id_pairs) {
+          idx1 <- match(pair[1], rnames)
+          idx2 <- match(pair[2], rnames)
+          r[idx2, ] <- r[idx1, ]
+          r[, idx2] <- r[, idx1]
+        }
       }
       # Row/column replacement on a dsCMatrix (symmetric) causes Matrix to
       # coerce to dgCMatrix (general), doubling stored entries.  Convert back

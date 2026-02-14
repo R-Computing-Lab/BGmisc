@@ -6,16 +6,8 @@ Ngen <- 3
 kpc <- 4
 sexR <- .50 # sometimes fails above .5
 marR <- .8
-reps <- 10
-if (FALSE) {
-  profvis({
-    simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR, beta = beta_F)
-  })
+reps <- 15
 
-  profvis({
-    simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR, beta = beta_T)
-  })
-}
 # mz_method_opts <- c("addtwins", "merging")
 beta_method_opts <- c(TRUE, FALSE)
 beta_F <- T
@@ -39,9 +31,9 @@ df_highgen <- simulatePedigree(kpc = kpc, Ngen = Ngen * 3, sexR = sexR, marR = m
   makeTwins(gen_twin = gen_twin)
 
 # r_mz1 <- df_midgen %>%
-# ped2add(mz_method = "merging", mz_twins = TRUE)
+# ped2com(mz_method = "merging", mz_twins = TRUE)
 # r_mz2 <- df_midgen %>%
-#  ped2add(mz_method = "addtwins", mz_twins = TRUE)
+#  ped2com(mz_method = "addtwins", mz_twins = TRUE)
 # expect_equal(length(r_mz1@i), length(r_mz2@i))
 # expect_equal(length(r_mz1@x), length(r_mz2@x))
 # expect_equal(length(r_mz1@p), length(r_mz2@p))
@@ -52,71 +44,120 @@ df_gen1 <- simulatePedigree(
 ) %>%
   makeTwins(gen_twin = 1)
 
-df_lowgen <- simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR, beta = F) %>%
+df_lowgen <- simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR, beta = T) %>%
   makeTwins(gen_twin = gen_twin)
 
-df_midgen <- simulatePedigree(kpc = kpc, Ngen = Ngen * 2, sexR = sexR, marR = marR, beta = F) %>%
+df_midgen <- simulatePedigree(kpc = kpc, Ngen = Ngen * 2, sexR = sexR, marR = marR, beta = T) %>%
   makeTwins(gen_twin = gen_twin)
 
-df_highgen <- simulatePedigree(kpc = kpc, Ngen = Ngen * 2 + 1, sexR = sexR, marR = marR, beta = F) %>%
+df_highgen <- simulatePedigree(kpc = kpc, Ngen = Ngen * 3, sexR = sexR, marR = marR, beta = T) %>%
   makeTwins(gen_twin = gen_twin)
 
 #r_mz1 <- df_midgen %>%
-#  ped2add(mz_method = "merging", mz_twins = TRUE)
+#  ped2com(mz_method = "merging", mz_twins = TRUE)
 #r_mz2 <- df_midgen %>%
-#  ped2add(mz_method = "addtwins", mz_twins = TRUE)
+#  ped2com(mz_method = "addtwins", mz_twins = TRUE)
 # expect_equal(length(r_mz1@i), length(r_mz2@i))
 # expect_equal(length(r_mz1@x), length(r_mz2@x))
 # expect_equal(length(r_mz1@p), length(r_mz2@p))
 
 benchmark_results <- microbenchmark(
-  beta_null_1gen = {
+  null_1gen = {
     df_gen1 %>%
-      ped2add(mz_twins = F)
+      ped2com(mz_twins = F,component = "additive")
   },
-  beta_false_1gen = {
+
+  addtwins_1gen = {
     df_gen1 %>%
-      ped2add(mz_method = "addtwins", mz_twins = TRUE)
+      ped2com(mz_method = "addtwins", mz_twins = TRUE,component = "additive")
   },
-  beta_true_1gen = {
+  merging_1gen = {
     df_gen1 %>%
-      ped2add(mz_method = "merging", mz_twins = TRUE)
+      ped2com(mz_method = "merging", mz_twins = TRUE,component = "additive")
   },
-  beta_null_lowgen = {
+  null_beta_1gen = {
+    df_gen1 %>%
+      ped2com(mz_twins = F,component = "additive", beta = TRUE)
+  },
+  addtwins_beta_1gen = {
+    df_gen1 %>%
+      ped2com(mz_method = "addtwins", mz_twins = TRUE,component = "additive",beta=TRUE)
+  },
+  merging_beta_1gen = {
+    df_gen1 %>%
+      ped2com(mz_method = "merging", mz_twins = TRUE,component = "additive",beta=TRUE)
+  },
+  null_lowgen = {
     df_lowgen %>%
-      ped2add(mz_twins = F)
+      ped2com(mz_twins = F,component = "additive")
   },
-  beta_false_lowgen = {
+  addtwins_lowgen = {
     df_lowgen %>%
-      ped2add(mz_method = "addtwins", mz_twins = TRUE)
+      ped2com(mz_method = "addtwins", mz_twins = TRUE,component = "additive")
   },
-  beta_true_lowgen = {
+  merging_lowgen = {
     df_lowgen %>%
-      ped2add(mz_method = "merging", mz_twins = TRUE)
+      ped2com(mz_method = "merging", mz_twins = TRUE,component = "additive")
   },
-  beta_null_midgen = {
+  null_beta_lowgen = {
+    df_lowgen %>%
+      ped2com(mz_twins = F,component = "additive", beta=TRUE)
+  },
+  addtwins_beta_lowgen = {
+    df_lowgen %>%
+      ped2com(mz_method = "addtwins", mz_twins = TRUE,component = "additive", beta=TRUE)
+  },
+  merging_beta_lowgen = {
+    df_lowgen %>%
+      ped2com(mz_method = "merging", mz_twins = TRUE,component = "additive", beta=TRUE)
+  },
+  null_midgen = {
     df_midgen %>%
-      ped2add(mz_twins = F)
+      ped2com(mz_twins = F,component = "additive")
   },
-  beta_false_midgen = {
+  addtwins_midgen = {
     df_midgen %>%
-      ped2add(mz_method = "addtwins", mz_twins = TRUE)
+      ped2com(mz_method = "addtwins", mz_twins = TRUE,component = "additive")
   },
-  beta_true_midgen = {
+  merging_midgen = {
     df_midgen %>%
-      ped2add(mz_method = "merging", mz_twins = TRUE)
+      ped2com(mz_method = "merging", mz_twins = TRUE,component = "additive")
   },
-  beta_null_highgen = {
-    df_highgen %>%
-      ped2add(mz_twins = F)
+  null_beta_midgen = {
+    df_midgen %>%
+      ped2com(mz_twins = F,component = "additive", beta=TRUE)
   },
-  beta_false_highgen = {
-    df_highgen %>%
-      ped2add(mz_method = "addtwins", mz_twins = TRUE)
+  addtwins_beta_midgen = {
+    df_midgen %>%
+      ped2com(mz_method = "addtwins", mz_twins = TRUE,component = "additive", beta=TRUE)
   },
-  beta_true_highgen = {
+  merging_beta_midgen = {
+    df_midgen %>%
+      ped2com(mz_method = "merging", mz_twins = TRUE,component = "additive", beta=TRUE)
+  },
+  null_highgen = {
     df_highgen %>%
-      ped2add(mz_method = "merging", mz_twins = TRUE)
+      ped2com(mz_twins = F,component = "additive")
+  },
+  addtwins_highgen = {
+    df_highgen %>%
+      ped2com(mz_method = "addtwins", mz_twins = TRUE,component = "additive")
+  },
+  merging_highgen = {
+    df_highgen %>%
+      ped2com(mz_method = "merging", mz_twins = TRUE,component = "additive")
+  },
+  null_beta_highgen = {
+    df_highgen %>%
+      ped2com(mz_twins = F,component = "additive", beta=TRUE)
+  },
+  addtwins_beta_highgen = {
+    df_highgen %>%
+      ped2com(mz_method = "addtwins", mz_twins = TRUE,component = "additive", beta=TRUE)
+  },
+  merging_beta_highgen = {
+    df_highgen %>%
+      ped2com(mz_method = "merging", mz_twins = TRUE,component = "additive", beta=TRUE)
   },
   times = reps # Run each method 10 times
 )
@@ -126,41 +167,42 @@ benchmark_results <- microbenchmark(
 
 benchmark_results <- benchmark_results %>%
   mutate(
-    beta_factor = factor(case_when(
-      grepl("beta_true", expr) ~ "merging",
-      grepl("beta_false", expr) ~ "addtwins",
-      grepl("beta_null", expr) ~ "NULL",
-      grepl("beta_indexed", expr) ~ "indexed"
+    twin_factor = factor(case_when(
+      grepl("merging", expr) ~ "merging",
+      grepl("addtwins", expr) ~ "addtwins",
+      grepl("null", expr) ~ "NULL"
     )),
-    beta_factor = factor(beta_factor, levels = c("NULL", "addtwins", "merging")),
-    beta = ifelse(grepl("beta_false", expr), FALSE, TRUE),
+    twin_factor = factor(twin_factor, levels = c("NULL", "addtwins", "merging")),
+    beta = ifelse(grepl("beta_", expr), TRUE,FALSE),
     gen_num = case_when(
       grepl("1gen", expr) ~ 1,
       grepl("lowgen", expr) ~ Ngen,
       grepl("midgen", expr) ~ Ngen * 2,
-      grepl("highgen", expr) ~ Ngen * 2 + 1
+      grepl("highgen", expr) ~ Ngen * 3
     ),
     gen_factor = factor(gen_num, levels = c(1, Ngen, Ngen * 2, Ngen * 2 + 1))
   )
 
 summary(benchmark_results)
-lm(benchmark_results$time ~ benchmark_results$beta_factor * benchmark_results$gen_num) %>%
+lm(benchmark_results$time ~ benchmark_results$twin_factor * benchmark_results$gen_num) %>%
+  summary()
+lm(benchmark_results$time ~ benchmark_results$beta * benchmark_results$gen_num) %>%
   summary()
 
-lm(benchmark_results$time ~ benchmark_results$beta_factor) %>%
+lm(benchmark_results$time ~ benchmark_results$twin_factor * benchmark_results$beta) %>%
   summary()
 # log transform time for better visualization
 
-ggplot(benchmark_results, aes(x = gen_factor, y = time / 1e6, color = beta_factor)) +
-  geom_boxplot() +
+ggplot(benchmark_results, aes(x = gen_factor, y = time / 1e6, color = twin_factor, fill = beta)) +
+  geom_violin() +
   labs(
     title = "Benchmarking simulatePedigree() with and without beta parameter",
     x = "Generation Size",
     y = "Execution Time (ms)",
-    color = "Beta Parameter"
+    color = "Twin Method"
   ) +
   theme_minimal() +
-  scale_y_log10()
+  scale_y_log10() + face_wrap(~ twin_factor)
 
 
 
