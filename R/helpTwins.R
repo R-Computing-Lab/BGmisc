@@ -1,0 +1,187 @@
+
+#' Determine isTwin Status
+#' @param ped pedigree data frame
+#' @return isTwin 'S' matrix
+#' @keywords internal
+
+
+isTwin <- function(ped) {
+  isTwin <- apply(ped[, c("twinID")], 1, function(x) {
+    !is.na(x)
+  })
+}
+
+
+#' Find MZ twin pair_rows in a pedigree
+#'
+#' Identifies MZ twin pair_rows from the \code{twinID} column and returns their
+#' row indices.  These indices are used later to merge the twins' columns in
+#' the \code{r2} matrix before \code{tcrossprod}, which correctly produces
+#' relatedness 1 between MZ co-twins with no diagonal or downstream artifacts.
+#'
+#' @param ped A pedigree data.frame with columns \code{ID} and \code{twinID}.
+#'   Optionally a \code{zygosity} column; when present only pair_rows where both
+#'   members have \code{zygosity == "MZ"} are used.
+#' @param verbose logical. If TRUE, print progress messages.
+#' @param returnIDs logical. If TRUE, return the IDs of the twin pair_rows instead of row indices.
+#' @param returnRows logical. If TRUE, return the row indices of the twin pair_rows instead of IDs.
+#' @param returnAsList logical. If TRUE, return results as a list of vectors
+#' @return A list of length-2 integer vectors \code{c(idx1, idx2)} giving the
+#'   row indices of each MZ pair in the pedigree, or \code{NULL} if none found.
+#' @keywords internal
+findMZtwins <- function(ped, verbose = FALSE, returnRows = TRUE,
+                        returnIDs = FALSE, returnAsList = TRUE) {
+  if (!"twinID" %in% colnames(ped)) {
+    return(NULL)
+  }
+
+  twin_rows <- which(!is.na(ped$twinID))
+
+  # If zygosity column exists, restrict to MZ pair_rows
+  if ("zygosity" %in% colnames(ped)) {
+    twin_rows <- twin_rows[!is.na(ped$zygosity[twin_rows]) &
+      ped$zygosity[twin_rows] %in% c("mz", "MZ")]
+  }
+
+  if (length(twin_rows) == 0) {
+    return(NULL)
+  }
+
+  processed <- c()
+  pair_rows <- list()
+
+  if (returnIDs) {
+    pair_ids <- list()
+  }
+  for (idx in twin_rows) {
+    twin_id <- ped$ID[idx]
+    co_twin_id <- ped$twinID[idx]
+
+    # Skip if already processed this pair
+    if (twin_id %in% processed || co_twin_id %in% processed) next
+
+    idx1 <- which(ped$ID == twin_id)
+    idx2 <- which(ped$ID == co_twin_id)
+
+    if (length(idx1) != 1 || length(idx2) != 1) next
+
+    # Always put the lower index first for consistency
+    if (idx1 > idx2) {
+      tmp <- idx1
+      idx1 <- idx2
+      idx2 <- tmp
+    }
+
+    processed <- c(processed, twin_id, co_twin_id)
+    pair_rows[[length(pair_rows) + 1]] <- c(idx1, idx2)
+    if (returnIDs) {
+      pair_ids[[length(pair_ids) + 1]] <- c(twin_id, co_twin_id)
+    }
+    if (verbose) {
+      message(
+        "MZ twin pair found: ", twin_id, " (row ", idx1,
+        ") and ", co_twin_id, " (row ", idx2, ")"
+      )
+    }
+  }
+
+  if (length(pair_rows) == 0) {
+    return(NULL)
+  }
+
+  if (returnIDs == TRUE && returnRows == FALSE) {
+    if (returnAsList == TRUE) {
+      return(pair_ids)
+    } else {
+      data.frame(
+        twin1_id = sapply(pair_ids, function(x) x[1]),
+        twin2_id = sapply(pair_ids, function(x) x[2])
+      )
+    }
+  } else if (returnRows == TRUE && returnIDs == FALSE) {
+    if (returnAsList == TRUE) {
+      return(pair_rows)
+    } else {
+      data.frame(
+        twin1_row = sapply(pair_rows, function(x) x[1]),
+        twin2_row = sapply(pair_rows, function(x) x[2])
+      )
+    }
+  } else if (returnIDs == TRUE && returnRows == TRUE) {
+    if (returnAsList == TRUE) {
+      return(list(pair_rows = pair_rows, pair_ids = pair_ids))
+    } else {
+      return(data.frame(
+        twin1_id = sapply(pair_ids, function(x) x[1]),
+        twin2_id = sapply(pair_ids, function(x) x[2]),
+        twin1_row = sapply(pair_rows, function(x) x[1]),
+        twin2_row = sapply(pair_rows, function(x) x[2])
+      ))
+    }
+  } else {
+    stop("Invalid combination of returnRows and returnIDs parameters")
+  }
+}
+
+# replace all MZ twin IDs with the first twin's ID in each pair so they are merged for the path tracing and all subsequent steps.  We will copy the values back to the second twin at the end.
+
+fuseTwins <- function(ped,
+                      mz_id_pairs = NULL,
+                      mz_row_pairs = NULL,
+                      config = list(verbose = FALSE)) {
+  if (is.null(mz_id_pairs) && is.null(mz_row_pairs)) {
+    df_twins <- findMZtwins(ped, verbose = config$verbose,
+      returnRows = TRUE, returnIDs = TRUE, returnAsList = FALSE)
+  }
+
+  if (!is.null(mz_id_pairs) && length(mz_id_pairs) > 0 ||
+    !is.null(mz_row_pairs) && nrow(mz_row_pairs) > 0 || !is.null(df_twins)
+  ) {
+    if (is.null(mz_id_pairs) && !is.null(mz_row_pairs)) {
+      df_twins <- apply(mz_row_pairs, 1, function(row) {
+        twin1_id <- ped$ID[row[1]]
+        twin2_id <- ped$ID[row[2]]
+        df_twins <- data.frame(twin1_id = twin1_id, twin2_id = twin2_id,
+          twin1_row = row[1], twin2_row = row[2])
+        df_twins
+      })
+    } else if (!is.null(mz_id_pairs) && is.null(mz_row_pairs)) {
+      df_twins <- apply(mz_id_pairs, 2, function(pair) {
+        twin1_row <- which(ped$ID == pair[1])
+        twin2_row <- which(ped$ID == pair[2])
+        df_twins <- data.frame(twin1_id = pair[1], twin2_id = pair[2],
+          twin1_row = twin1_row, twin2_row = twin2_row)
+        df_twins
+      })
+    }
+    twin1s_id <- df_twins$twin1_id
+    twin2s_id <- df_twins$twin2_id
+    twin2s_row <- df_twins$twin2_row
+
+
+    # Make twin2s founders
+    ped$momID[twin2s_row] <- NA
+    ped$dadID[twin2s_row] <- NA
+
+    # Now redirect all children of twin2 to twin1
+    ped$momID[ped$momID %in% twin2s_id] <- twin1s_id[match(ped$momID[ped$momID %in% twin2s_id], twin2s_id)]
+    ped$dadID[ped$dadID %in% twin2s_id] <- twin1s_id[match(ped$dadID[ped$dadID %in% twin2s_id], twin2s_id)]
+
+    if ("spouseID" %in% colnames(ped)) {
+      ped$spouseID[ped$spouseID %in% twin2s_id] <- twin1s_id[match(ped$spouseID[ped$spouseID %in% twin2s_id], twin2s_id)]
+    }
+    if ("spID" %in% colnames(ped)) {
+      ped$spID[ped$spID %in% twin2s_id] <- twin1s_id[match(ped$spID[ped$spID %in% twin2s_id], twin2s_id)]
+    }
+
+    if (config$verbose == TRUE) {
+      message("Merged ", length(mz_pair_rows), " MZ twin pair(s) in pedigree dataset for path tracing")
+    }
+  } else {
+    if (config$verbose == TRUE) {
+      message("No MZ twin pair_rows found in pedigree dataset")
+    }
+  }
+
+  return(ped)
+}

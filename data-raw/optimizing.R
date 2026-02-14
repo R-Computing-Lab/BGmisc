@@ -3,10 +3,10 @@ library(microbenchmark)
 library(tidyverse)
 set.seed(116427)
 Ngen <- 3
-kpc <- 6
+kpc <- 4
 sexR <- .50 # sometimes fails above .5
-marR <- .9
-reps <- 15
+marR <- .8
+reps <- 10
 if (FALSE) {
   profvis({
     simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR, beta = beta_F)
@@ -35,13 +35,13 @@ df_lowgen <- simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR, 
 df_midgen <- simulatePedigree(kpc = kpc, Ngen = Ngen * 2, sexR = sexR, marR = marR, beta = TRUE) %>%
   makeTwins(gen_twin = gen_twin)
 
-df_highgen <- simulatePedigree(kpc = kpc, Ngen = Ngen * 2 + 1, sexR = sexR, marR = marR, beta = TRUE) %>%
+df_highgen <- simulatePedigree(kpc = kpc, Ngen = Ngen * 3, sexR = sexR, marR = marR, beta = TRUE) %>%
   makeTwins(gen_twin = gen_twin)
 
-r_mz1 <- df_midgen %>%
-  ped2add(mz_method = "merging", mz_twins = TRUE)
-r_mz2 <- df_midgen %>%
-  ped2add(mz_method = "addtwins", mz_twins = TRUE)
+# r_mz1 <- df_midgen %>%
+# ped2add(mz_method = "merging", mz_twins = TRUE)
+# r_mz2 <- df_midgen %>%
+#  ped2add(mz_method = "addtwins", mz_twins = TRUE)
 # expect_equal(length(r_mz1@i), length(r_mz2@i))
 # expect_equal(length(r_mz1@x), length(r_mz2@x))
 # expect_equal(length(r_mz1@p), length(r_mz2@p))
@@ -104,8 +104,8 @@ benchmark_results <- microbenchmark(
 benchmark_results <- benchmark_results %>%
   mutate(
     beta_factor = factor(case_when(
-      grepl("beta_true", expr) ~ "TRUE",
-      grepl("beta_false", expr) ~ "FALSE",
+      grepl("beta_true", expr) ~ "merging",
+      grepl("beta_false", expr) ~ "addtwins",
       grepl("beta_null", expr) ~ "NULL",
       grepl("beta_indexed", expr) ~ "indexed"
     )),
@@ -186,93 +186,93 @@ if (FALSE) {
     },
     times = reps # Run each method 10 times
   )
-if (FALSE) {
-  benchmark_results <- microbenchmark(
-    beta_false_1gen = {
-      simulatePedigree(kpc = kpc, Ngen = 1, sexR = sexR, marR = marR, beta = FALSE)
-    },
-    beta_true_1gen = {
-      simulatePedigree(kpc = kpc, Ngen = 1, sexR = sexR, marR = marR, beta = TRUE)
-    },
-    beta_false_lowgen = {
-      simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR, beta = FALSE)
-    },
-    beta_true_lowgen = {
-      simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR, beta = TRUE)
-    },
-    beta_false_midgen = {
-      simulatePedigree(kpc = kpc, Ngen = Ngen * 2, sexR = sexR, marR = marR, beta = FALSE)
-    },
-    beta_true_midgen = {
-      simulatePedigree(kpc = kpc, Ngen = Ngen * 2, sexR = sexR, marR = marR, beta = TRUE)
-    },
-    beta_false_highgen = {
-      simulatePedigree(kpc = kpc, Ngen = Ngen * 3, sexR = sexR, marR = marR, beta = FALSE)
-    },
-    beta_true_highgen = {
-      simulatePedigree(kpc = kpc, Ngen = Ngen * 3, sexR = sexR, marR = marR, beta = TRUE)
-    },
-    times = reps # Run each method 10 times
-  )
-
-  benchmark_results <- benchmark_results %>%
-    mutate(
-      beta_factor = factor(case_when(
-        grepl("beta_true", expr) ~ "TRUE",
-        grepl("beta_false", expr) ~ "FALSE",
-        grepl("beta_indexed", expr) ~ "indexed"
-      )),
-      beta = ifelse(grepl("beta_false", expr), FALSE, TRUE),
-      gen_num = case_when(
-        grepl("1gen", expr) ~ 1,
-        grepl("lowgen", expr) ~ Ngen,
-        grepl("midgen", expr) ~ Ngen * 2,
-        grepl("highgen", expr) ~ Ngen * 3
-      ),
-      gen_factor = factor(gen_num, levels = c(1, Ngen, Ngen * 2, Ngen * 3))
-    )
-  benchmark_results <- benchmark_results %>%
-    mutate(
-      beta_factor = factor(case_when(
-        grepl("beta_true", expr) ~ "TRUE",
-        grepl("beta_false", expr) ~ "FALSE",
-        grepl("beta_indexed", expr) ~ "indexed"
-      )),
-      beta = ifelse(grepl("beta_false", expr), FALSE, TRUE),
-      gen_num = case_when(
-        grepl("1gen", expr) ~ 1,
-        grepl("lowgen", expr) ~ Ngen,
-        grepl("midgen", expr) ~ Ngen * 2,
-        grepl("highgen", expr) ~ Ngen * 3
-      ),
-      gen_factor = factor(gen_num, levels = c(1, Ngen, Ngen * 2, Ngen * 3))
+  if (FALSE) {
+    benchmark_results <- microbenchmark(
+      beta_false_1gen = {
+        simulatePedigree(kpc = kpc, Ngen = 1, sexR = sexR, marR = marR, beta = FALSE)
+      },
+      beta_true_1gen = {
+        simulatePedigree(kpc = kpc, Ngen = 1, sexR = sexR, marR = marR, beta = TRUE)
+      },
+      beta_false_lowgen = {
+        simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR, beta = FALSE)
+      },
+      beta_true_lowgen = {
+        simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR, beta = TRUE)
+      },
+      beta_false_midgen = {
+        simulatePedigree(kpc = kpc, Ngen = Ngen * 2, sexR = sexR, marR = marR, beta = FALSE)
+      },
+      beta_true_midgen = {
+        simulatePedigree(kpc = kpc, Ngen = Ngen * 2, sexR = sexR, marR = marR, beta = TRUE)
+      },
+      beta_false_highgen = {
+        simulatePedigree(kpc = kpc, Ngen = Ngen * 3, sexR = sexR, marR = marR, beta = FALSE)
+      },
+      beta_true_highgen = {
+        simulatePedigree(kpc = kpc, Ngen = Ngen * 3, sexR = sexR, marR = marR, beta = TRUE)
+      },
+      times = reps # Run each method 10 times
     )
 
-  summary(benchmark_results)
-  lm(benchmark_results$time ~ benchmark_results$beta * benchmark_results$gen_num) %>%
-    summary()
-  summary(benchmark_results)
-  lm(benchmark_results$time ~ benchmark_results$beta * benchmark_results$gen_num) %>%
-    summary()
+    benchmark_results <- benchmark_results %>%
+      mutate(
+        beta_factor = factor(case_when(
+          grepl("beta_true", expr) ~ "TRUE",
+          grepl("beta_false", expr) ~ "FALSE",
+          grepl("beta_indexed", expr) ~ "indexed"
+        )),
+        beta = ifelse(grepl("beta_false", expr), FALSE, TRUE),
+        gen_num = case_when(
+          grepl("1gen", expr) ~ 1,
+          grepl("lowgen", expr) ~ Ngen,
+          grepl("midgen", expr) ~ Ngen * 2,
+          grepl("highgen", expr) ~ Ngen * 3
+        ),
+        gen_factor = factor(gen_num, levels = c(1, Ngen, Ngen * 2, Ngen * 3))
+      )
+    benchmark_results <- benchmark_results %>%
+      mutate(
+        beta_factor = factor(case_when(
+          grepl("beta_true", expr) ~ "TRUE",
+          grepl("beta_false", expr) ~ "FALSE",
+          grepl("beta_indexed", expr) ~ "indexed"
+        )),
+        beta = ifelse(grepl("beta_false", expr), FALSE, TRUE),
+        gen_num = case_when(
+          grepl("1gen", expr) ~ 1,
+          grepl("lowgen", expr) ~ Ngen,
+          grepl("midgen", expr) ~ Ngen * 2,
+          grepl("highgen", expr) ~ Ngen * 3
+        ),
+        gen_factor = factor(gen_num, levels = c(1, Ngen, Ngen * 2, Ngen * 3))
+      )
 
-  lm(benchmark_results$time ~ benchmark_results$beta) %>%
-    summary()
-  # log transform time for better visualization
-  lm(benchmark_results$time ~ benchmark_results$beta) %>%
-    summary()
-  # log transform time for better visualization
+    summary(benchmark_results)
+    lm(benchmark_results$time ~ benchmark_results$beta * benchmark_results$gen_num) %>%
+      summary()
+    summary(benchmark_results)
+    lm(benchmark_results$time ~ benchmark_results$beta * benchmark_results$gen_num) %>%
+      summary()
 
-  ggplot(benchmark_results, aes(x = gen_factor, y = time / 1e6, color = beta_factor)) +
-    geom_boxplot() +
-    labs(
-      title = "Benchmarking simulatePedigree() with and without beta parameter",
-      x = "Generation Size",
-      y = "Execution Time (ms)",
-      color = "Beta Parameter"
-    ) +
-    theme_minimal() +
-    scale_y_log10()
-}
+    lm(benchmark_results$time ~ benchmark_results$beta) %>%
+      summary()
+    # log transform time for better visualization
+    lm(benchmark_results$time ~ benchmark_results$beta) %>%
+      summary()
+    # log transform time for better visualization
+
+    ggplot(benchmark_results, aes(x = gen_factor, y = time / 1e6, color = beta_factor)) +
+      geom_boxplot() +
+      labs(
+        title = "Benchmarking simulatePedigree() with and without beta parameter",
+        x = "Generation Size",
+        y = "Execution Time (ms)",
+        color = "Beta Parameter"
+      ) +
+      theme_minimal() +
+      scale_y_log10()
+  }
   ggplot(benchmark_results, aes(x = gen_factor, y = time / 1e6, color = beta_factor)) +
     geom_boxplot() +
     labs(

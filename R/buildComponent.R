@@ -125,16 +125,13 @@ ped2com <- function(ped, component,
     ped <- standardizeColnames(ped, verbose = config$verbose)
   }
 
-  mz_pairs <- NULL
+  mz_row_pairs <- NULL
+  mz_id_pairs <- NULL
   if (mz_twins == TRUE && "twinID" %in% colnames(ped)) {
-    mz_pairs <- findMZtwins(ped, verbose = config$verbose)
-
-    if (length(mz_pairs) > 0) {
-      mz_id_pairs <- lapply(mz_pairs, function(pair) {
-        c(ped$ID[pair[1]], ped$ID[pair[2]])
-      })
-    }
-
+    df_mz <- findMZtwins(ped, verbose = config$verbose, returnIDs = TRUE, returnRows = TRUE,
+      returnAsList = TRUE)
+    mz_row_pairs <- df_mz$pair_rows
+    mz_id_pairs <- df_mz$pair_ids
   }
 
 
@@ -144,25 +141,12 @@ ped2com <- function(ped, component,
     return(readRDS(checkpoint_files$final_matrix))
   }
 
-  if (mz_method %in% c("merging") && mz_twins == TRUE && !is.null(mz_pairs) && length(mz_pairs) > 0 &&
+  if (mz_method %in% c("merging") && mz_twins == TRUE && !is.null(mz_row_pairs) && length(mz_row_pairs) > 0 &&
     config$component %in% c("additive")) {
     # replace all MZ twin IDs with the first twin's ID in each pair so they are merged for the path tracing and all subsequent steps.  We will copy the values back to the second twin at the end.
-
-    for (id_pair in mz_id_pairs) {
-      twin1_id <- id_pair[1]
-      twin2_id <- id_pair[2]
-      twin2_row <- which(ped$ID == twin2_id)
-
-      # Make twin2 a founder
-      ped$momID[twin2_row] <- NA
-      ped$dadID[twin2_row] <- NA
-
-      # Redirect twin2's children to twin1
-      ped$momID[ped$momID == twin2_id] <- twin1_id
-      ped$dadID[ped$dadID == twin2_id] <- twin1_id
-    }
+    ped <-   fuseTwins(ped = ped, mz_row_pairs = NULL, mz_id_pairs = NULL, config = config)
     if (config$verbose == TRUE) {
-      message("Merged ", length(mz_pairs), " MZ twin pair(s) in pedigree dataset for path tracing")
+      message("Merged ", length(mz_row_pairs), " MZ twin pair(s) in pedigree dataset for path tracing")
     }
   }
 
@@ -334,15 +318,15 @@ ped2com <- function(ped, component,
     # MZ twins share the same genetic source.  We absorb twin2's column into
     # twin1's before tcrossprod so all path-traced relatedness flows through a
     # single source.  After tcrossprod we copy twin1's row/col back to twin2.
-    if (!is.null(mz_pairs) && length(mz_pairs) > 0 && config$component %in% c("additive")) {
-      for (pair in mz_pairs) {
+    if (!is.null(mz_row_pairs) && length(mz_row_pairs) > 0 && config$component %in% c("additive")) {
+      for (pair in mz_row_pairs) {
         idx1 <- pair[1]
         idx2 <- pair[2]
         r2[, idx1] <- r2[, idx1] + r2[, idx2]
         r2[, idx2] <- 0
       }
       if (config$verbose == TRUE) {
-        message("Added ", length(mz_pairs), " MZ twin pair column(s) in r2")
+        message("Added ", length(mz_row_pairs), " MZ twin pair column(s) in r2")
       }
     }
   }
@@ -368,7 +352,7 @@ ped2com <- function(ped, component,
   if (mz_method %in% c("merging", "addtwins") && mz_twins == TRUE && config$component %in% c("additive")) {
     # --- Step 4b: Restore MZ twins ---
     # Copy twin1's row/col to twin2 so both twins appear in the final matrix.
-    if (!is.null(mz_pairs) && length(mz_pairs)) {
+    if (!is.null(mz_row_pairs) && length(mz_row_pairs)) {
       rnames <- rownames(r)
       for (pair in mz_id_pairs) {
         idx1 <- match(pair[1], rnames)
@@ -383,7 +367,7 @@ ped2com <- function(ped, component,
         r <- Matrix::forceSymmetric(r)
       }
       if (config$verbose == TRUE) {
-        message("Restored ", length(mz_pairs), " MZ twin pair(s) in relatedness matrix")
+        message("Restored ", length(mz_row_pairs), " MZ twin pair(s) in relatedness matrix")
       }
     }
   }
