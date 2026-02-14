@@ -1,12 +1,12 @@
 library(profvis)
 library(microbenchmark)
 library(tidyverse)
-set.seed(1667)
-Ngen <- 4
-kpc <- 5
+set.seed(116427)
+Ngen <- 3
+kpc <- 6
 sexR <- .50 # sometimes fails above .5
-marR <- .7
-reps <- 10
+marR <- .9
+reps <- 15
 if (FALSE) {
   profvis({
     simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR, beta = beta_F)
@@ -47,6 +47,10 @@ r_mz2 <- df_midgen %>%
 # expect_equal(length(r_mz1@p), length(r_mz2@p))
 
 benchmark_results <- microbenchmark(
+  beta_null_1gen = {
+    df_gen1 %>%
+      ped2add(mz_twins = F)
+  },
   beta_false_1gen = {
     df_gen1 %>%
       ped2add(mz_method = "addtwins", mz_twins = TRUE)
@@ -54,6 +58,10 @@ benchmark_results <- microbenchmark(
   beta_true_1gen = {
     df_gen1 %>%
       ped2add(mz_method = "merging", mz_twins = TRUE)
+  },
+  beta_null_lowgen = {
+    df_lowgen %>%
+      ped2add(mz_twins = F)
   },
   beta_false_lowgen = {
     df_lowgen %>%
@@ -63,6 +71,10 @@ benchmark_results <- microbenchmark(
     df_lowgen %>%
       ped2add(mz_method = "merging", mz_twins = TRUE)
   },
+  beta_null_midgen = {
+    df_midgen %>%
+      ped2add(mz_twins = F)
+  },
   beta_false_midgen = {
     df_midgen %>%
       ped2add(mz_method = "addtwins", mz_twins = TRUE)
@@ -71,14 +83,18 @@ benchmark_results <- microbenchmark(
     df_midgen %>%
       ped2add(mz_method = "merging", mz_twins = TRUE)
   },
-  #  beta_false_highgen = {
-  #    df_highgen %>%
-  #      ped2add(mz_method = "addtwins", mz_twins = TRUE)
-  #  },
-  #  beta_true_highgen = {
-  #    df_highgen %>%
-  #      ped2add(mz_method = "merging", mz_twins = TRUE)
-  #  },
+  beta_null_highgen = {
+    df_highgen %>%
+      ped2add(mz_twins = F)
+  },
+  beta_false_highgen = {
+    df_highgen %>%
+      ped2add(mz_method = "addtwins", mz_twins = TRUE)
+  },
+  beta_true_highgen = {
+    df_highgen %>%
+      ped2add(mz_method = "merging", mz_twins = TRUE)
+  },
   times = reps # Run each method 10 times
 )
 
@@ -90,6 +106,7 @@ benchmark_results <- benchmark_results %>%
     beta_factor = factor(case_when(
       grepl("beta_true", expr) ~ "TRUE",
       grepl("beta_false", expr) ~ "FALSE",
+      grepl("beta_null", expr) ~ "NULL",
       grepl("beta_indexed", expr) ~ "indexed"
     )),
     beta = ifelse(grepl("beta_false", expr), FALSE, TRUE),
@@ -103,10 +120,10 @@ benchmark_results <- benchmark_results %>%
   )
 
 summary(benchmark_results)
-lm(benchmark_results$time ~ benchmark_results$beta * benchmark_results$gen_num) %>%
+lm(benchmark_results$time ~ benchmark_results$beta_factor * benchmark_results$gen_num) %>%
   summary()
 
-lm(benchmark_results$time ~ benchmark_results$beta) %>%
+lm(benchmark_results$time ~ benchmark_results$beta_factor) %>%
   summary()
 # log transform time for better visualization
 
