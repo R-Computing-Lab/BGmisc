@@ -3,7 +3,7 @@ library(microbenchmark)
 library(tidyverse)
 set.seed(1164127)
 Ngen <- 3
-kpc <- 6
+kpc <- 4
 sexR <- .50 # sometimes fails above .5
 marR <- .8
 reps <- 10
@@ -61,10 +61,10 @@ df_midgen <- simulatePedigree(kpc = kpc, Ngen = Ngen * 2, sexR = sexR, marR = ma
 df_highgen <- simulatePedigree(kpc = kpc, Ngen = Ngen * 2 + 1, sexR = sexR, marR = marR, beta = F) %>%
   makeTwins(gen_twin = gen_twin)
 
-r_mz1 <- df_midgen %>%
-  ped2add(mz_method = "merging", mz_twins = TRUE)
-r_mz2 <- df_midgen %>%
-  ped2add(mz_method = "addtwins", mz_twins = TRUE)
+#r_mz1 <- df_midgen %>%
+#  ped2add(mz_method = "merging", mz_twins = TRUE)
+#r_mz2 <- df_midgen %>%
+#  ped2add(mz_method = "addtwins", mz_twins = TRUE)
 # expect_equal(length(r_mz1@i), length(r_mz2@i))
 # expect_equal(length(r_mz1@x), length(r_mz2@x))
 # expect_equal(length(r_mz1@p), length(r_mz2@p))
@@ -172,6 +172,7 @@ kpc <- 4
 sexR <- .50 # sometimes fails above .5
 marR <- .7
 reps <- 10
+
 if (FALSE) {
   profvis({
     simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR, beta = FALSE)
@@ -181,34 +182,6 @@ if (FALSE) {
     simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR, beta = TRUE)
   })
 }
-if (FALSE) {
-  benchmark_results <- microbenchmark(
-    beta_false_1gen = {
-      simulatePedigree(kpc = kpc, Ngen = 1, sexR = sexR, marR = marR, beta = FALSE)
-    },
-    beta_true_1gen = {
-      simulatePedigree(kpc = kpc, Ngen = 1, sexR = sexR, marR = marR, beta = TRUE)
-    },
-    beta_false_lowgen = {
-      simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR, beta = FALSE)
-    },
-    beta_true_lowgen = {
-      simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR, beta = TRUE)
-    },
-    beta_false_midgen = {
-      simulatePedigree(kpc = kpc, Ngen = Ngen * 2, sexR = sexR, marR = marR, beta = FALSE)
-    },
-    beta_true_midgen = {
-      simulatePedigree(kpc = kpc, Ngen = Ngen * 2, sexR = sexR, marR = marR, beta = TRUE)
-    },
-    beta_false_highgen = {
-      simulatePedigree(kpc = kpc, Ngen = Ngen * 3, sexR = sexR, marR = marR, beta = FALSE)
-    },
-    beta_true_highgen = {
-      simulatePedigree(kpc = kpc, Ngen = Ngen * 3, sexR = sexR, marR = marR, beta = TRUE)
-    },
-    times = reps # Run each method 10 times
-  )
   if (FALSE) {
     benchmark_results <- microbenchmark(
       beta_false_1gen = {

@@ -1,11 +1,18 @@
 test_that("fuse twins behaves", {
   # Simple pedigree: two parents and two MZ twin children
-  ped <- potter
-  ped$ID <- ped$personID + 10
-  ped$momID <- ped$momID + 10
-  ped$dadID <- ped$dadID + 10
-  ped$twinID <-  ped$twinID + 10
+  ped1 <- potter
+  ped1$ID <- ped1$personID
+  ped2 <- ped1
+  ped2$famID <- 2
 
+  ped2$ID <- ped2$personID + 100
+  ped2$momID <- ped2$momID + 100
+  ped2$dadID <- ped2$dadID + 100
+  ped2$twinID <-  ped2$twinID + 100
+
+  ped <- rbind(ped1, ped2)
+  remove(ped2)
+  remove(ped1)
   #  returnRows = TRUE,
   # returnIDs = FALSE,
   # returnAsList = TRUE
@@ -65,8 +72,6 @@ test_that("fuse twins behaves", {
   error = function(e) e)
 
 
-
-
   df_returnedBoth   <-  tryCatch(fuseTwins(ped,
     test_df_twins = TRUE,
     mz_id_pairs = returnedBothList$pair_ids,
@@ -78,5 +83,5 @@ test_that("fuse twins behaves", {
   expect_equal(df_returnedRows, df_returnIDs)
   expect_equal(df_returnedRows, df_returnedBoth)
   expect_equal(df_returnedRows, df_null)
-  expect_equal(nrow(df_returnedRows), 1) # One pair of twins should returned
+  expect_equal(nrow(df_returnedRows), 2) # One pair of twins should returned
 })

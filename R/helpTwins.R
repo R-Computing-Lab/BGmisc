@@ -152,25 +152,42 @@ fuseTwins <- function(ped,
   #  }
 
   if (fuseattemptable == TRUE) {
+    # If df_twins is not already provided, construct it from the provided mz_id_pairs or mz_row_pairs
     if (is.null(mz_id_pairs) && !is.null(mz_row_pairs)) {
-      df_twins <- apply(mz_row_pairs, 1, function(row) {
+      df_twins <- lapply(mz_row_pairs, function(row) {
         twin1_id <- ped$ID[row[1]]
         twin2_id <- ped$ID[row[2]]
-        df_twins <- data.frame(twin1_id = twin1_id, twin2_id = twin2_id,
-          twin1_row = row[1], twin2_row = row[2])
-        df_twins
+        data.frame(twin1_id = twin1_id,
+          twin2_id = twin2_id,
+          twin1_row = row[1],
+          twin2_row = row[2])
       })
+      df_twins <-  do.call(rbind, df_twins)
       if (test_df_twins == TRUE) {
         return(df_twins)
       }
     } else if (!is.null(mz_id_pairs) && is.null(mz_row_pairs)) {
-      df_twins <- apply(mz_id_pairs, 2, function(pair) {
+      df_twins <- lapply(mz_id_pairs, function(pair) {
         twin1_row <- which(ped$ID == pair[1])
         twin2_row <- which(ped$ID == pair[2])
-        df_twins <- data.frame(twin1_id = pair[1], twin2_id = pair[2],
+        data.frame(twin1_id = pair[1], twin2_id = pair[2],
           twin1_row = twin1_row, twin2_row = twin2_row)
-        df_twins
       })
+      df_twins <-  do.call(rbind, df_twins)
+      if (test_df_twins == TRUE) {
+        return(df_twins)
+      }
+    } else if (!is.null(mz_id_pairs) && !is.null(mz_row_pairs)) {
+
+      df_twins <- lapply(1:length(mz_id_pairs), function(i) {
+        twin1_id <- mz_id_pairs[[i]][1]
+        twin2_id <- mz_id_pairs[[i]][2]
+        twin1_row <- mz_row_pairs[[i]][1]
+        twin2_row <- mz_row_pairs[[i]][2]
+        data.frame(twin1_id = twin1_id, twin2_id = twin2_id,
+          twin1_row = twin1_row, twin2_row = twin2_row)
+      })
+      df_twins <-  do.call(rbind, df_twins)
       if (test_df_twins == TRUE) {
         return(df_twins)
       }
