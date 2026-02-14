@@ -132,6 +132,7 @@ benchmark_results <- benchmark_results %>%
       grepl("beta_null", expr) ~ "NULL",
       grepl("beta_indexed", expr) ~ "indexed"
     )),
+    beta_factor = factor(beta_factor, levels = c("NULL", "addtwins", "merging")),
     beta = ifelse(grepl("beta_false", expr), FALSE, TRUE),
     gen_num = case_when(
       grepl("1gen", expr) ~ 1,
