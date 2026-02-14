@@ -20,7 +20,7 @@ test_that("simulated pedigree generates expected data structure", {
     if (isFALSE(beta) || (isTRUE(beta) && beta_match_base)) {
       expect_equal(length(results$ID), base_length, tolerance = strict_tolerance)
     } else {
-      expect_true(length(results$ID) >= base_length-base_length_tol*base_length && length(results$ID) <= base_length_tol*base_length+base_length,
+      expect_true(length(results$ID) >= base_length - base_length_tol * base_length && length(results$ID) <= base_length_tol * base_length + base_length,
         info = paste0("Beta=TRUE: Expected 45-70 individuals, got ", length(results$ID))
       )
     }
@@ -125,6 +125,14 @@ test_that("simulated pedigree generates expected data structure when sexR is imb
     # check number of generations
     expect_equal(max(results$gen), Ngen, tolerance = strict_tolerance)
 
+    # expect there to be parents in each for all generations except the first one
+    filter_parents <- results %>%
+      group_by(gen) %>%
+      summarize(num_parents = sum(!is.na(dadID), na.rm = TRUE) + sum(!is.na(momID), na.rm = TRUE))
+
+    expect_true(all(filter_parents$num_parents[filter_parents$gen > 1] > 0), info = paste0("Beta option: ", beta))
+    expect_true(all(filter_parents$num_parents[filter_parents$gen == 1] == 0), info = paste0("Beta option: ", beta))
+
 
     # check number of sex ratio
     sex_mean_male <- mean(results$sex == "M")
@@ -157,7 +165,7 @@ test_that("simulated pedigree generates expected data structure but supply var n
   # beta_options <- T
   base_length <- 57
   base_length_tol <- 0.2 * base_length
-    beta_match_base <- FALSE
+  beta_match_base <- FALSE
 
   for (beta in beta_options) {
     set.seed(seed)
@@ -189,6 +197,15 @@ test_that("simulated pedigree generates expected data structure but supply var n
     sex_mean_female <- mean(results$sex == code_female)
 
     expect_lt(sex_mean_male, sex_mean_female)
+
+    # expect there to be parents in each for all generations except the first one
+    filter_parents <- results %>%
+      group_by(gen) %>%
+      summarize(num_parents = sum(!is.na(dadID), na.rm = TRUE) + sum(!is.na(momID), na.rm = TRUE))
+
+    expect_true(all(filter_parents$num_parents[filter_parents$gen > 1] > 0), info = paste0("Beta option: ", beta))
+    expect_true(all(filter_parents$num_parents[filter_parents$gen == 1] == 0), info = paste0("Beta option: ", beta))
+
 
     # Use wider tolerance for optimized version
     tol <- if (isFALSE(beta)) sex_tolerance else sex_tolerance_opt
