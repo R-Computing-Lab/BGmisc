@@ -1,9 +1,9 @@
 library(profvis)
 library(microbenchmark)
 library(tidyverse)
-set.seed(116427)
+set.seed(1164127)
 Ngen <- 3
-kpc <- 4
+kpc <- 6
 sexR <- .50 # sometimes fails above .5
 marR <- .8
 reps <- 10
@@ -42,6 +42,29 @@ df_highgen <- simulatePedigree(kpc = kpc, Ngen = Ngen * 3, sexR = sexR, marR = m
 # ped2add(mz_method = "merging", mz_twins = TRUE)
 # r_mz2 <- df_midgen %>%
 #  ped2add(mz_method = "addtwins", mz_twins = TRUE)
+# expect_equal(length(r_mz1@i), length(r_mz2@i))
+# expect_equal(length(r_mz1@x), length(r_mz2@x))
+# expect_equal(length(r_mz1@p), length(r_mz2@p))
+
+df_gen1 <- simulatePedigree(
+  kpc = kpc, Ngen = 1, sexR = sexR, marR = marR,
+  beta = TRUE
+) %>%
+  makeTwins(gen_twin = 1)
+
+df_lowgen <- simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR, beta = F) %>%
+  makeTwins(gen_twin = gen_twin)
+
+df_midgen <- simulatePedigree(kpc = kpc, Ngen = Ngen * 2, sexR = sexR, marR = marR, beta = F) %>%
+  makeTwins(gen_twin = gen_twin)
+
+df_highgen <- simulatePedigree(kpc = kpc, Ngen = Ngen * 2 + 1, sexR = sexR, marR = marR, beta = F) %>%
+  makeTwins(gen_twin = gen_twin)
+
+r_mz1 <- df_midgen %>%
+  ped2add(mz_method = "merging", mz_twins = TRUE)
+r_mz2 <- df_midgen %>%
+  ped2add(mz_method = "addtwins", mz_twins = TRUE)
 # expect_equal(length(r_mz1@i), length(r_mz2@i))
 # expect_equal(length(r_mz1@x), length(r_mz2@x))
 # expect_equal(length(r_mz1@p), length(r_mz2@p))
