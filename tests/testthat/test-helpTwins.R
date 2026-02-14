@@ -1,7 +1,10 @@
 test_that("fuse twins behaves", {
   # Simple pedigree: two parents and two MZ twin children
   ped <- potter
-  ped$ID <- ped$personID
+  ped$ID <- ped$personID + 10
+  ped$momID <- ped$momID + 10
+  ped$dadID <- ped$dadID + 10
+  ped$twinID <-  ped$twinID + 10
 
   #  returnRows = TRUE,
   # returnIDs = FALSE,
