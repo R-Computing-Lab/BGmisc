@@ -370,16 +370,43 @@ ped2com <- function(ped, component,
         idx2_all <- match(ids_mat[, 2], rnames)
         # Batch copy: twin1 rows/cols -> twin2 rows/cols
         r[idx2_all, ] <- r[idx1_all, ]
+
         r[, idx2_all] <- r[, idx1_all]
       } else {
         # TODO this is really slow.  Can we do it without coercing to dense?  Maybe by doing row/col replacement on the sparse matrix directly?  Or by constructing a sparse matrix with the twin2 values and adding it to r?
-        rnames <- rownames(r)
-        ids_mat <- do.call(rbind, mz_id_pairs)
-        idx1_all <- match(ids_mat[, 1], rnames)
-        idx2_all <- match(ids_mat[, 2], rnames)
+        #  r <- df_add
+        if (beta == TRUE) {
+          rnames <- r@Dimnames[[1]]
+
+          ids_mat <- do.call(rbind, mz_id_pairs)
+          # needs to use sparse indexing to avoid coercion to dense
+          idx1_all <- match(ids_mat[, 1], rnames)
+          idx2_all <- match(ids_mat[, 2], rnames)
+
+          twin1_rows <- r[idx1_all, , drop = FALSE]
+          twin1_cols <- r[, idx1_all, drop = FALSE]
+          twin1_rows@Dimnames[[1]] <- rnames[idx2_all]
+          twin1_cols@Dimnames[[2]] <- rnames[idx2_all]
+          twin1_self <- r[idx1_all, idx1_all, drop = FALSE]
+          twin1_self@Dimnames[[1]] <- rnames[idx2_all]
+
+          r[idx2_all, ] <- twin1_rows
+          r[, idx2_all] <- twin1_cols
+          r[idx2_all, idx2_all] <- twin1_self
+        } else {
+          rnames <- rownames(r)
+
+
+          ids_mat <- do.call(rbind, mz_id_pairs)
+
+          idx1_all <- match(ids_mat[, 1], rnames)
+          idx2_all <- match(ids_mat[, 2], rnames)
+
+          # Batch copy: twin1 rows/cols -> twin2 rows/cols
+          r[idx2_all, ] <- r[idx1_all, ]
+          r[, idx2_all] <- r[, idx1_all]
+        }
         # Batch copy: twin1 rows/cols -> twin2 rows/cols
-        r[idx2_all, ] <- r[idx1_all, ]
-        r[, idx2_all] <- r[, idx1_all]
 
         # Row/column replacement on a dsCMatrix (symmetric) causes Matrix to
         # coerce to dgCMatrix (general), doubling stored entries.  Convert back

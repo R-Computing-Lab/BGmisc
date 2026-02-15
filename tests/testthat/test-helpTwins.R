@@ -73,7 +73,7 @@ test_that("fuse twins behaves", {
   )
 
 
-  df_returnIDs <- tryCatch(
+  df_returnedIDs <- tryCatch(
     fuseTwins(ped,
       test_df_twins = TRUE,
       mz_id_pairs = returnIDsList,
@@ -93,7 +93,7 @@ test_that("fuse twins behaves", {
   )
 
 
-  expect_equal(df_returnedRows, df_returnIDs)
+  expect_equal(df_returnedRows, df_returnedIDs)
   expect_equal(df_returnedRows, df_returnedBoth)
   expect_equal(df_returnedRows, df_null)
   expect_equal(nrow(df_returnedRows), 2) # One pair of twins should returned

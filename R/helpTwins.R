@@ -200,6 +200,8 @@ fuseTwins <- function(ped,
         )
       })
       df_twins <- do.call(rbind, df_twins)
+      # remove row names
+      rownames(df_twins) <- NULL
       if (test_df_twins == TRUE) {
         return(df_twins)
       }
@@ -213,6 +215,7 @@ fuseTwins <- function(ped,
         )
       })
       df_twins <- do.call(rbind, df_twins)
+      rownames(df_twins) <- NULL
       if (test_df_twins == TRUE) {
         return(df_twins)
       }
@@ -228,6 +231,7 @@ fuseTwins <- function(ped,
         )
       })
       df_twins <- do.call(rbind, df_twins)
+      rownames(df_twins) <- NULL
       if (test_df_twins == TRUE) {
         return(df_twins)
       }

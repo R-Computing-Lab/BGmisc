@@ -12,7 +12,9 @@ cfg <- list(
   Ngen_base = 3,
   reps = 10,
   all_scenarios = FALSE, # set to TRUE to run all scenarios defined below
-  include_highgen = TRUE
+  include_highgen = TRUE,
+  include_1gen = FALSE,
+  include_lowgen = FALSE
 )
 cfg$gen_twin <- ceiling(cfg$Ngen_base - 1)
 
@@ -23,9 +25,24 @@ set.seed(cfg$seed)
 # ---------------------------
 levels <- list(
   ped = tibble(
-    ped_label  = c("1gen", "lowgen", "midgen", if (cfg$include_highgen) "highgen"),
-    Ngen_total = c(1, cfg$Ngen_base, cfg$Ngen_base * 2, if (cfg$include_highgen) cfg$Ngen_base * 3),
-    gen_twin   = c(1, cfg$gen_twin, cfg$gen_twin, if (cfg$include_highgen) cfg$gen_twin)
+    ped_label = c(
+      if (cfg$include_1gen) "1gen",
+      if (cfg$include_lowgen) "lowgen",
+      "midgen",
+      if (cfg$include_highgen) "highgen"
+    ),
+    Ngen_total = c(
+      if (cfg$include_1gen) 1,
+      if (cfg$include_lowgen) cfg$Ngen_base,
+      cfg$Ngen_base * 2,
+      if (cfg$include_highgen) cfg$Ngen_base * 3
+    ),
+    gen_twin = c(
+      if (cfg$include_1gen) 1,
+      if (cfg$include_lowgen) cfg$gen_twin,
+      cfg$gen_twin,
+      if (cfg$include_highgen) cfg$gen_twin
+    )
     # Add highgen row whenever you want
   ),
 
@@ -298,3 +315,6 @@ results %>%
 #    "beta=TRUE, sparse=TRUE" = "red2"
 #  )) +
 #  scale_color_manual(values = c("NULL" = "gray", "addtwins" = "skyblue3", "merging" = "tomato2"))
+# df <- sim_tbl$ped[[2]]
+
+# df_add <- df %>% ped2add()
