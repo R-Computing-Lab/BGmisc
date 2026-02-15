@@ -7,10 +7,12 @@ This function identifies MZ twin pairs in the pedigree dataset and merges their 
 \usage{
 fuseTwins(
   ped,
+  df_twins = NULL,
   mz_id_pairs = NULL,
   mz_row_pairs = NULL,
   config = list(verbose = FALSE),
-  test_df_twins = FALSE
+  test_df_twins = FALSE,
+  beta = FALSE
 )
 }
 \arguments{
@@ -23,6 +25,8 @@ fuseTwins(
 \item{config}{A list of configuration options.}
 
 \item{test_df_twins}{logical. If TRUE, return the data frame of twin pairs instead of the modified pedigree. Default is FALSE.}
+
+\item{beta}{logical. If TRUE, use an optimized approach with O(1) lookups for large pedigrees when identifying MZ twins. Default is FALSE.}
 }
 \value{
 A modified version of the input pedigree data.frame with MZ twin pairs fused for path tracing. If \code{test_df_twins} is TRUE, returns the data frame of identified twin pairs instead.

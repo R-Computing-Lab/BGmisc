@@ -155,6 +155,7 @@ findMZtwins <- function(ped, verbose = FALSE, returnRows = TRUE,
 #' @param mz_id_pairs Optional list of length-2 character vectors specifying the IDs of MZ twin pairs to fuse. If provided, this will be used instead of automatically identifying MZ twins from the \code{twinID} column. Each element should be a character vector of length 2, e.g. \code{list(c("ID1", "ID2"), c("ID3", "ID4"))}.
 #' @param mz_row_pairs Optional list of length-2 integer vectors specifying the row indices of MZ twin pairs to fuse. If provided, this will be used instead of automatically identifying MZ twins from the \code{twinID} column. Each element should be an integer vector of length 2, e.g. \code{list(c(1, 2), c(3, 4))}.
 #' @param test_df_twins logical. If TRUE, return the data frame of twin pairs instead of the modified pedigree. Default is FALSE.
+#' @param beta logical. If TRUE, use an optimized approach with O(1) lookups for large pedigrees when identifying MZ twins. Default is FALSE.
 #' @param config A list of configuration options.
 #' @return A modified version of the input pedigree data.frame with MZ twin pairs fused for path tracing. If \code{test_df_twins} is TRUE, returns the data frame of identified twin pairs instead.
 
@@ -264,7 +265,7 @@ fuseTwins <- function(ped,
     }
 
     if (config$verbose == TRUE) {
-      message("Merged ", length(mz_pair_rows), " MZ twin pair(s) in pedigree dataset for path tracing")
+      message("Merged ", length(twin1s_id), " MZ twin pair(s) in pedigree dataset for path tracing")
     }
   } else {
     if (config$verbose == TRUE) {

@@ -257,7 +257,7 @@ results <- as_tibble(benchmark_results) %>%
     design %>% select(-ped),
     by = "label"
   )
-
+# notes: sparse with addtwins is slow (878 vs 250), but sparse with merging is way times slower (14257 vs 241). This is a huge difference, and suggests that the merging method is not compatible with sparse matrices in its current form. The addtwins method is slower than NULL in both cases, but the difference is much more pronounced when using sparse matrices. The means of adding or substituting twins in the pedigree may interact with the way sparse matrices are constructed or handled in ped2com, leading to increased computational overhead. The NULL method is the fastest in both cases, which is expected since it does not involve any additional processing for twins. Overall, these results suggest that while the addtwins method can be used with sparse matrices, it may not be the most efficient choice, and the merging method may not be suitable for use with sparse matrices at all.
 # ---------------------------
 # 7) Analysis/plot
 # ---------------------------
@@ -270,6 +270,20 @@ results <- results %>%
 write_csv(results, "ped2com_benchmark_results.csv")
 
 summary(results)
+results %>%
+  group_by(ped_label, twin_method, sparse_matrix) %>%
+  summarise(median_time_ms = median(time) / 1e6, .groups = "drop_last") %>%
+  arrange(ped_label, twin_method, sparse_matrix) %>%
+  print(n = Inf)
+
+# ped_label twin_method sparse_matrix median_time_ms
+#<fct>     <fct>       <lgl>                  <dbl>
+# 7 highgen   NULL        FALSE                 222.
+# 8 highgen   NULL        TRUE                  198.
+# 9 highgen   addtwins    FALSE                 250.
+# 10 highgen   addtwins    TRUE                  878.
+# 11 highgen   merging     FALSE                 241.
+# 12 highgen   merging     TRUE                14257.
 
 if (cfg$reps > 8) {
   notch <- FALSE
@@ -278,7 +292,7 @@ if (cfg$reps > 8) {
 }
 
 results %>%
-  dplyr::filter(!ped_label %in% c("1gen", "lowgen")) %>%
+  dplyr::filter(!ped_label %in% c("1gen", "lowgen", "midgen")) %>%
   mutate(
     beta_sparse = paste0("beta=", beta, ", sparse=", sparse_matrix),
     beta_sparse = factor(beta_sparse, levels = c(
