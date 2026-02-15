@@ -9,7 +9,8 @@ findMZtwins(
   verbose = FALSE,
   returnRows = TRUE,
   returnIDs = FALSE,
-  returnAsList = TRUE
+  returnAsList = TRUE,
+  beta = FALSE
 )
 }
 \arguments{
@@ -23,7 +24,9 @@ members have \code{zygosity == "MZ"} are used.}
 
 \item{returnIDs}{logical. If TRUE, return the IDs of the twin pair_rows instead of row indices.}
 
-\item{returnAsList}{logical. If TRUE, return results as a list of vectors}
+\item{returnAsList}{logical. If TRUE, return results as a list of vectors
+(default). If FALSE, return results as a data.frame with separate columns for each twin's ID and row index.
+@param beta logical. If TRUE, use an optimized approach with O(1) lookups for large pedigrees. If FALSE (default), use a simpler approach that may be less efficient for large pedigrees.}
 }
 \value{
 A list of length-2 integer vectors \code{c(idx1, idx2)} giving the

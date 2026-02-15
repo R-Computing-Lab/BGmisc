@@ -26,6 +26,8 @@ isTwin <- function(ped) {
 #' @param returnIDs logical. If TRUE, return the IDs of the twin pair_rows instead of row indices.
 #' @param returnRows logical. If TRUE, return the row indices of the twin pair_rows instead of IDs.
 #' @param returnAsList logical. If TRUE, return results as a list of vectors
+#'  (default). If FALSE, return results as a data.frame with separate columns for each twin's ID and row index.
+#'  @param beta logical. If TRUE, use an optimized approach with O(1) lookups for large pedigrees. If FALSE (default), use a simpler approach that may be less efficient for large pedigrees.
 #' @return A list of length-2 integer vectors \code{c(idx1, idx2)} giving the
 #'   row indices of each MZ pair in the pedigree, or \code{NULL} if none found.
 #' @keywords internal
@@ -243,6 +245,15 @@ findMZtwins <- function(ped, verbose = FALSE, returnRows = TRUE,
 }
 # replace all MZ twin IDs with the first twin's ID in each pair so they are merged for the path tracing and all subsequent steps.  We will copy the values back to the second twin at the end.
 
+#' Fuse MZ twin pairs in a pedigree dataset for path tracing
+#' This function identifies MZ twin pairs in the pedigree dataset and merges their IDs for path tracing purposes. The second twin in each pair is made a founder (with NA parents), and all children of the second twin are redirected to the first twin. This allows for correct relatedness calculations without diagonal or downstream artifacts.
+#' @param ped A pedigree data.frame with columns \code{ID}, \code{momID}, \code{dadID}, and optionally \code{twinID} and \code{zygosity}. The function will look for MZ twin pairs based on the \code{twinID} column and optionally restrict to MZ pairs if a \code{zygosity} column is present.
+#' @param mz_id_pairs Optional list of length-2 character vectors specifying the IDs of MZ twin pairs to fuse. If provided, this will be used instead of automatically identifying MZ twins from the \code{twinID} column. Each element should be a character vector of length 2, e.g. \code{list(c("ID1", "ID2"), c("ID3", "ID4"))}.
+#' @param mz_row_pairs Optional list of length-2 integer vectors specifying the row indices of MZ twin pairs to fuse. If provided, this will be used instead of automatically identifying MZ twins from the \code{twinID} column. Each element should be an integer vector of length 2, e.g. \code{list(c(1, 2), c(3, 4))}.
+#' @param test_df_twins logical. If TRUE, return the data frame of twin pairs instead of the modified pedigree. Default is FALSE.
+#' @param config A list of configuration options.
+#' @return A modified version of the input pedigree data.frame with MZ twin pairs fused for path tracing. If \code{test_df_twins} is TRUE, returns the data frame of identified twin pairs instead.
+
 fuseTwins <- function(ped,
                       mz_id_pairs = NULL,
                       mz_row_pairs = NULL,
@@ -250,6 +261,7 @@ fuseTwins <- function(ped,
                       test_df_twins = FALSE
 ) {
   df_twins <- NULL
+
   if (is.null(mz_id_pairs) && is.null(mz_row_pairs)) {
     df_twins <- findMZtwins(ped, verbose = config$verbose,
       returnRows = TRUE, returnIDs = TRUE, returnAsList = FALSE)

@@ -135,34 +135,32 @@ benchmark_results <- microbenchmark(
     df_midgen %>%
       ped2com(mz_method = "merging", mz_twins = TRUE,component = "additive", beta=TRUE)
   },
-  null_highgen = {
-    df_highgen %>%
-      ped2com(mz_twins = F,component = "additive")
-  },
-  addtwins_highgen = {
-    df_highgen %>%
-      ped2com(mz_method = "addtwins", mz_twins = TRUE,component = "additive")
-  },
-  merging_highgen = {
-    df_highgen %>%
-      ped2com(mz_method = "merging", mz_twins = TRUE,component = "additive")
-  },
-  null_beta_highgen = {
-    df_highgen %>%
-      ped2com(mz_twins = F,component = "additive", beta=TRUE)
-  },
-  addtwins_beta_highgen = {
-    df_highgen %>%
-      ped2com(mz_method = "addtwins", mz_twins = TRUE,component = "additive", beta=TRUE)
-  },
-  merging_beta_highgen = {
-    df_highgen %>%
-      ped2com(mz_method = "merging", mz_twins = TRUE,component = "additive", beta=TRUE)
-  },
+  # null_highgen = {
+  #   df_highgen %>%
+  #     ped2com(mz_twins = F,component = "additive")
+  # },
+  # addtwins_highgen = {
+  #   df_highgen %>%
+  #     ped2com(mz_method = "addtwins", mz_twins = TRUE,component = "additive")
+  # },
+  # merging_highgen = {
+  #   df_highgen %>%
+  #     ped2com(mz_method = "merging", mz_twins = TRUE,component = "additive")
+  # },
+  # null_beta_highgen = {
+  #   df_highgen %>%
+  #     ped2com(mz_twins = F,component = "additive", beta=TRUE)
+  # },
+  # addtwins_beta_highgen = {
+  #   df_highgen %>%
+  #     ped2com(mz_method = "addtwins", mz_twins = TRUE,component = "additive", beta=TRUE)
+  # },
+  # merging_beta_highgen = {
+  #   df_highgen %>%
+  #     ped2com(mz_method = "merging", mz_twins = TRUE,component = "additive", beta=TRUE)
+  # },
   times = reps # Run each method 10 times
 )
-
-
 
 
 benchmark_results <- benchmark_results %>%
@@ -184,7 +182,7 @@ benchmark_results <- benchmark_results %>%
   )
 
 summary(benchmark_results)
-lm(benchmark_results$time ~ benchmark_results$twin_factor * benchmark_results$gen_num) %>%
+lm(benchmark_results$time ~ benchmark_results$beta * benchmark_results$twin_factor * benchmark_results$gen_num) %>%
   summary()
 lm(benchmark_results$time ~ benchmark_results$beta * benchmark_results$gen_num) %>%
   summary()
@@ -194,7 +192,7 @@ lm(benchmark_results$time ~ benchmark_results$twin_factor * benchmark_results$be
 # log transform time for better visualization
 
 ggplot(benchmark_results, aes(x = gen_factor, y = time / 1e6, color = twin_factor, fill = beta)) +
-  geom_violin() +
+  geom_boxplot(notch = TRUE, position = position_dodge(width = 0.8)) +
   labs(
     title = "Benchmarking simulatePedigree() with and without beta parameter",
     x = "Generation Size",
@@ -202,7 +200,10 @@ ggplot(benchmark_results, aes(x = gen_factor, y = time / 1e6, color = twin_facto
     color = "Twin Method"
   ) +
   theme_minimal() +
-  scale_y_log10() + face_wrap(~ twin_factor)
+  scale_y_log10() +
+  scale_fill_manual(values = c("TRUE" = "black", "FALSE" = "white"), name = "Beta Parameter") +
+  scale_color_manual(values = c("NULL" = "gray", "addtwins" = "skyblue3",
+  "merging" = "tomato2"), name = "Twin Method")
 
 
 
