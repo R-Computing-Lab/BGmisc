@@ -239,9 +239,9 @@ bench_exprs <- lapply(names(peds_by_label), function(lbl) {
 })
 names(bench_exprs) <- names(peds_by_label)
 
-write_csv(design, "ped2com_benchmark_design.csv")
+write_csv(design, "data-raw/ped2com_benchmark_design.csv")
 # write start time
-write.table(Sys.time(), "ped2com_benchmark_start_time.txt", row.names = FALSE, col.names = FALSE)
+write.table(Sys.time(), "data-raw/ped2com_benchmark_start_time.txt", row.names = FALSE, col.names = FALSE)
 
 
 benchmark_results <- do.call(
@@ -249,7 +249,7 @@ benchmark_results <- do.call(
   c(bench_exprs, list(times = cfg$reps))
 )
 
-write.table(Sys.time(), "ped2com_benchmark_end_time.txt", row.names = FALSE, col.names = FALSE)
+write.table(Sys.time(), "data-raw/ped2com_benchmark_end_time.txt", row.names = FALSE, col.names = FALSE)
 
 results <- as_tibble(benchmark_results) %>%
   mutate(label = as.character(expr)) %>%
@@ -267,7 +267,7 @@ results <- results %>%
     ped_label = factor(ped_label, levels = levels$ped$ped_label),
     gen_factor = factor(ped_label, levels = levels$ped$ped_label, labels = paste0(levels$ped$Ngen_total, " gen"))
   )
-write_csv(results, "ped2com_benchmark_results.csv")
+write_csv(results, "data-raw/ped2com_benchmark_results.csv")
 
 summary(results)
 results %>%
