@@ -159,13 +159,38 @@ findMZtwins <- function(ped, verbose = FALSE, returnRows = TRUE,
 #' @return A modified version of the input pedigree data.frame with MZ twin pairs fused for path tracing. If \code{test_df_twins} is TRUE, returns the data frame of identified twin pairs instead.
 
 fuseTwins <- function(ped,
+                      df_twins = NULL,
                       mz_id_pairs = NULL,
                       mz_row_pairs = NULL,
                       config = list(verbose = FALSE),
-                      test_df_twins = FALSE) {
-  df_twins <- NULL
+                      test_df_twins = FALSE,
+                      beta = FALSE) {
+  # make df_twins if not already made, and test it if requested, before proceeding with the fusion.  This allows users to provide their own mz_id_pairs or mz_row_pairs and have them converted to df_twins for testing before the fusion is attempted.
 
-  if (is.null(mz_id_pairs) && is.null(mz_row_pairs)) {
+  if (!is.null(df_twins)) {
+    if (!all(c("twin1_id", "twin2_id", "twin1_row", "twin2_row") %in% colnames(df_twins))) {
+      stop("df_twins must have columns twin1_id, twin2_id, twin1_row, and twin2_row")
+    }
+    if (test_df_twins == TRUE) {
+      return(df_twins)
+    }
+  } else if (!is.null(mz_id_pairs) && !is.null(mz_row_pairs) && length(mz_id_pairs) == length(mz_row_pairs)) {
+    df_twins <- lapply(1:length(mz_id_pairs), function(i) {
+      twin1_id <- mz_id_pairs[[i]][1]
+      twin2_id <- mz_id_pairs[[i]][2]
+      twin1_row <- mz_row_pairs[[i]][1]
+      twin2_row <- mz_row_pairs[[i]][2]
+      data.frame(
+        twin1_id = twin1_id, twin2_id = twin2_id,
+        twin1_row = twin1_row, twin2_row = twin2_row
+      )
+    })
+    df_twins <- do.call(rbind, df_twins)
+    rownames(df_twins) <- NULL
+    if (test_df_twins == TRUE) {
+      return(df_twins)
+    }
+  } else if (is.null(mz_id_pairs) && is.null(mz_row_pairs)) {
     df_twins <- findMZtwins(ped,
       verbose = config$verbose,
       returnRows = TRUE, returnIDs = TRUE, returnAsList = FALSE
@@ -173,91 +198,69 @@ fuseTwins <- function(ped,
     if (test_df_twins == TRUE) {
       return(df_twins)
     }
-  }
-
-
-  fuseattemptable <- !is.null(df_twins) || !is.null(mz_id_pairs) && length(mz_id_pairs) > 0 || !is.null(mz_row_pairs) && length(mz_row_pairs) > 0
-
-  if (config$verbose == TRUE) {
-    if (fuseattemptable == TRUE) {
-      message("MZ twin pairs identified for fusion")
-    } else {
-      message("No MZ twin pairs identified for fusion.")
+  } else if (!is.null(mz_id_pairs) && is.null(mz_row_pairs)) {
+    df_twins <- lapply(mz_id_pairs, function(pair) {
+      twin1_row <- which(ped$ID == pair[1])
+      twin2_row <- which(ped$ID == pair[2])
+      data.frame(
+        twin1_id = pair[1], twin2_id = pair[2],
+        twin1_row = twin1_row, twin2_row = twin2_row
+      )
+    })
+    df_twins <- do.call(rbind, df_twins)
+    rownames(df_twins) <- NULL
+    if (test_df_twins == TRUE) {
+      return(df_twins)
     }
+  } else if (is.null(mz_id_pairs) && !is.null(mz_row_pairs)) {
+    df_twins <- lapply(mz_row_pairs, function(row) {
+      twin1_id <- ped$ID[row[1]]
+      twin2_id <- ped$ID[row[2]]
+      data.frame(
+        twin1_id = twin1_id,
+        twin2_id = twin2_id,
+        twin1_row = row[1],
+        twin2_row = row[2]
+      )
+    })
+    df_twins <- do.call(rbind, df_twins)
+    # remove row names
+    rownames(df_twins) <- NULL
+    if (test_df_twins == TRUE) {
+      return(df_twins)
+    }
+  } else {
+    stop("Invalid input: must provide either mz_id_pairs, mz_row_pairs, or df_twins")
   }
 
+
+  fuseattemptable <- !is.null(df_twins) || (!is.null(mz_id_pairs) && length(mz_id_pairs) > 0) || (!is.null(mz_row_pairs) && length(mz_row_pairs) > 0)
   if (fuseattemptable == TRUE) {
-    # If df_twins is not already provided, construct it from the provided mz_id_pairs or mz_row_pairs
-    if (is.null(mz_id_pairs) && !is.null(mz_row_pairs)) {
-      df_twins <- lapply(mz_row_pairs, function(row) {
-        twin1_id <- ped$ID[row[1]]
-        twin2_id <- ped$ID[row[2]]
-        data.frame(
-          twin1_id = twin1_id,
-          twin2_id = twin2_id,
-          twin1_row = row[1],
-          twin2_row = row[2]
-        )
-      })
-      df_twins <- do.call(rbind, df_twins)
-      # remove row names
-      rownames(df_twins) <- NULL
-      if (test_df_twins == TRUE) {
-        return(df_twins)
-      }
-    } else if (!is.null(mz_id_pairs) && is.null(mz_row_pairs)) {
-      df_twins <- lapply(mz_id_pairs, function(pair) {
-        twin1_row <- which(ped$ID == pair[1])
-        twin2_row <- which(ped$ID == pair[2])
-        data.frame(
-          twin1_id = pair[1], twin2_id = pair[2],
-          twin1_row = twin1_row, twin2_row = twin2_row
-        )
-      })
-      df_twins <- do.call(rbind, df_twins)
-      rownames(df_twins) <- NULL
-      if (test_df_twins == TRUE) {
-        return(df_twins)
-      }
-    } else if (!is.null(mz_id_pairs) && !is.null(mz_row_pairs) && length(mz_id_pairs) == length(mz_row_pairs)) {
-      df_twins <- lapply(1:length(mz_id_pairs), function(i) {
-        twin1_id <- mz_id_pairs[[i]][1]
-        twin2_id <- mz_id_pairs[[i]][2]
-        twin1_row <- mz_row_pairs[[i]][1]
-        twin2_row <- mz_row_pairs[[i]][2]
-        data.frame(
-          twin1_id = twin1_id, twin2_id = twin2_id,
-          twin1_row = twin1_row, twin2_row = twin2_row
-        )
-      })
-      df_twins <- do.call(rbind, df_twins)
-      rownames(df_twins) <- NULL
-      if (test_df_twins == TRUE) {
-        return(df_twins)
-      }
-    } else if (!is.null(df_twins)) {
-      # df_twins is already in the correct format
-    } else {
-      stop("Invalid input: must provide either mz_id_pairs, mz_row_pairs, or df_twins")
+    if (config$verbose == TRUE) {
+      message("MZ twin pairs identified for fusion")
     }
+
     twin1s_id <- df_twins$twin1_id
     twin2s_id <- df_twins$twin2_id
     twin2s_row <- df_twins$twin2_row
-
 
     # Make twin2s founders
     ped$momID[twin2s_row] <- NA
     ped$dadID[twin2s_row] <- NA
 
+    twin2s_as_mom <- which(ped$momID %in% twin2s_id)
+    twin2s_as_dad <- which(ped$dadID %in% twin2s_id)
     # Now redirect all children of twin2 to twin1
-    ped$momID[ped$momID %in% twin2s_id] <- twin1s_id[match(ped$momID[ped$momID %in% twin2s_id], twin2s_id)]
-    ped$dadID[ped$dadID %in% twin2s_id] <- twin1s_id[match(ped$dadID[ped$dadID %in% twin2s_id], twin2s_id)]
+    ped$momID[twin2s_as_mom] <- twin1s_id[match(ped$momID[twin2s_as_mom], twin2s_id)]
+    ped$dadID[twin2s_as_dad] <- twin1s_id[match(ped$dadID[twin2s_as_dad], twin2s_id)]
 
     if ("spouseID" %in% colnames(ped)) {
-      ped$spouseID[ped$spouseID %in% twin2s_id] <- twin1s_id[match(ped$spouseID[ped$spouseID %in% twin2s_id], twin2s_id)]
+      twin2s_as_spouse <- which(ped$spouseID %in% twin2s_id)
+      ped$spouseID[twin2s_as_spouse] <- twin1s_id[match(ped$spouseID[twin2s_as_spouse], twin2s_id)]
     }
     if ("spID" %in% colnames(ped)) {
-      ped$spID[ped$spID %in% twin2s_id] <- twin1s_id[match(ped$spID[ped$spID %in% twin2s_id], twin2s_id)]
+      twin2s_as_spID <- which(ped$spID %in% twin2s_id)
+      ped$spID[twin2s_as_spID] <- twin1s_id[match(ped$spID[twin2s_as_spID], twin2s_id)]
     }
 
     if (config$verbose == TRUE) {
