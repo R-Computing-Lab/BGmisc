@@ -272,9 +272,15 @@ write_csv(results, "data-raw/ped2com_benchmark_results.csv")
 summary(results)
 results %>%
   group_by(ped_label, twin_method, sparse_matrix) %>%
-  summarise(median_time_ms = median(time) / 1e6, .groups = "drop_last") %>%
+  summarise(median_time_ms = median(time/1e6),
+            mean_time_ms = mean(time/1e6)
+            var_time_ms = var(time/1e6),
+            sd_time_ms = sd(time/1e6),
+            se_time_ms = sd(time/1e6) / sqrt(n()),
+            n_time = n(),
+            .groups = "drop_last") %>%
   arrange(ped_label, twin_method, sparse_matrix) %>%
-  print(n = Inf)
+  write_csv("data-raw/ped2com_benchmark_summary.csv")
 
 # ped_label twin_method sparse_matrix median_time_ms
 #<fct>     <fct>       <lgl>                  <dbl>

@@ -376,9 +376,7 @@ ped2com <- function(ped, component,
       } else {
         # TODO this is really slow.  Can we do it without coercing to dense?  Maybe by doing row/col replacement on the sparse matrix directly?  Or by constructing a sparse matrix with the twin2 values and adding it to r?
         #  r <- df_add
-        if (config$sparse == TRUE) {
-          r <- Matrix::drop0(r)
-        }
+
         rnames <- r@Dimnames[[1]]
 
         ids_mat <- do.call(rbind, mz_id_pairs)
@@ -401,6 +399,9 @@ ped2com <- function(ped, component,
 
         # Row/column replacement on a dsCMatrix (symmetric) causes Matrix to
         # coerce to dgCMatrix (general), doubling stored entries.  Convert back
+
+        r <- Matrix::drop0(r)
+
         # so both mz_method paths return the same sparse class.
         if (methods::is(r, "CsparseMatrix") && !methods::is(r, "symmetricMatrix")) {
           r <- Matrix::forceSymmetric(r)

@@ -18,6 +18,8 @@ fuseTwins(
 \arguments{
 \item{ped}{A pedigree data.frame with columns \code{ID}, \code{momID}, \code{dadID}, and optionally \code{twinID} and \code{zygosity}. The function will look for MZ twin pairs based on the \code{twinID} column and optionally restrict to MZ pairs if a \code{zygosity} column is present.}
 
+\item{df_twins}{Optional data frame with columns \code{twin1_id}, \code{twin2_id}, \code{twin1_row}, and \code{twin2_row} specifying the IDs and row indices of MZ twin pairs to fuse. If provided, this will be used instead of automatically identifying MZ twins from the \code{twinID} column. If this parameter is provided, it takes precedence over \code{mz_id_pairs} and \code{mz_row_pairs}. If \code{test_df_twins} is TRUE, this data frame will be returned for testing purposes instead of performing the fusion.}
+
 \item{mz_id_pairs}{Optional list of length-2 character vectors specifying the IDs of MZ twin pairs to fuse. If provided, this will be used instead of automatically identifying MZ twins from the \code{twinID} column. Each element should be a character vector of length 2, e.g. \code{list(c("ID1", "ID2"), c("ID3", "ID4"))}.}
 
 \item{mz_row_pairs}{Optional list of length-2 integer vectors specifying the row indices of MZ twin pairs to fuse. If provided, this will be used instead of automatically identifying MZ twins from the \code{twinID} column. Each element should be an integer vector of length 2, e.g. \code{list(c(1, 2), c(3, 4))}.}
