@@ -362,6 +362,9 @@ ped2com <- function(ped, component,
     # --- Step 4b: Restore MZ twins ---
     # Copy twin1's row/col to twin2 so both twins appear in the final matrix.
     if (!is.null(mz_row_pairs) && length(mz_row_pairs)) {
+     if ( config$sparse == FALSE) {
+     
+      r <- as.matrix(r)
       rnames <- rownames(r)
       ids_mat <- do.call(rbind, mz_id_pairs)
       idx1_all <- match(ids_mat[, 1], rnames)
@@ -369,20 +372,29 @@ ped2com <- function(ped, component,
       # Batch copy: twin1 rows/cols -> twin2 rows/cols
       r[idx2_all, ] <- r[idx1_all, ]
       r[, idx2_all] <- r[, idx1_all]
+     } else {
+      #TODO this is really slow.  Can we do it without coercing to dense?  Maybe by doing row/col replacement on the sparse matrix directly?  Or by constructing a sparse matrix with the twin2 values and adding it to r?
+      rnames <- rownames(r)
+      ids_mat <- do.call(rbind, mz_id_pairs)
+      idx1_all <- match(ids_mat[, 1], rnames)
+      idx2_all <- match(ids_mat[, 2], rnames)
+      # Batch copy: twin1 rows/cols -> twin2 rows/cols
+      r[idx2_all, ] <- r[idx1_all, ]
+      r[, idx2_all] <- r[, idx1_all]
+
       # Row/column replacement on a dsCMatrix (symmetric) causes Matrix to
       # coerce to dgCMatrix (general), doubling stored entries.  Convert back
       # so both mz_method paths return the same sparse class.
       if (methods::is(r, "CsparseMatrix") && !methods::is(r, "symmetricMatrix")) {
         r <- Matrix::forceSymmetric(r)
       }
+       if (config$sparse == TRUE) {
+      r <- Matrix::drop0(r)
+    }
+     }
       if (config$verbose == TRUE) {
         message("Restored ", length(mz_row_pairs), " MZ twin pair(s) in relatedness matrix")
       }
-   
-
-    if (config$sparse == TRUE) {
-      r <- Matrix::drop0(r)
-    }
      }
   }
 
@@ -394,8 +406,7 @@ ped2com <- function(ped, component,
   # Remove explicit zeros so that both mz_method paths produce
   # structurally identical sparse matrices
 
-
-  if (config$sparse == FALSE) {
+  if (config$sparse == FALSE && !methods::is(r, "matrix")) {
     r <- as.matrix(r)
   }
   # flattens diagonal if you don't want to deal with inbreeding
