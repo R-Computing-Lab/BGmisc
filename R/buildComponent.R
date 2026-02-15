@@ -230,7 +230,7 @@ ped2com <- function(ped, component,
     compress = config$compress
   )
 
-  # TODO merge twin columns in isChild if mz_method == "merge_before_tcrossprod" so that the path tracing flows through a single source for MZ twins.  This way you don't have to worry about the fact that they are merged for the path tracing but not for the rest of the algorithm.
+  # TODO merge twin columns
   # --- Step 2: Compute Relatedness Matrix ---
 
 
@@ -332,8 +332,9 @@ ped2com <- function(ped, component,
       idx1_all <- pairs_mat[, 1]
       idx2_all <- pairs_mat[, 2]
       # Batch: absorb all twin2 columns into twin1 columns, then zero twin2
-      r2[, idx1_all] <- r2[, idx1_all] + r2[, idx2_all]
+      r2[, idx1_all] <- r2[, idx1_all, drop = FALSE] + r2[, idx2_all, drop = FALSE]
       r2[, idx2_all] <- 0
+
       if (config$verbose == TRUE) {
         message("Added ", length(mz_row_pairs), " MZ twin pair column(s) in r2")
       }
@@ -375,37 +376,27 @@ ped2com <- function(ped, component,
       } else {
         # TODO this is really slow.  Can we do it without coercing to dense?  Maybe by doing row/col replacement on the sparse matrix directly?  Or by constructing a sparse matrix with the twin2 values and adding it to r?
         #  r <- df_add
-        if (beta == TRUE) {
-          rnames <- r@Dimnames[[1]]
-
-          ids_mat <- do.call(rbind, mz_id_pairs)
-          # needs to use sparse indexing to avoid coercion to dense
-          idx1_all <- match(ids_mat[, 1], rnames)
-          idx2_all <- match(ids_mat[, 2], rnames)
-
-          twin1_rows <- r[idx1_all, , drop = FALSE]
-          twin1_cols <- r[, idx1_all, drop = FALSE]
-          twin1_rows@Dimnames[[1]] <- rnames[idx2_all]
-          twin1_cols@Dimnames[[2]] <- rnames[idx2_all]
-          twin1_self <- r[idx1_all, idx1_all, drop = FALSE]
-          twin1_self@Dimnames[[1]] <- rnames[idx2_all]
-
-          r[idx2_all, ] <- twin1_rows
-          r[, idx2_all] <- twin1_cols
-          r[idx2_all, idx2_all] <- twin1_self
-        } else {
-          rnames <- rownames(r)
-
-
-          ids_mat <- do.call(rbind, mz_id_pairs)
-
-          idx1_all <- match(ids_mat[, 1], rnames)
-          idx2_all <- match(ids_mat[, 2], rnames)
-
-          # Batch copy: twin1 rows/cols -> twin2 rows/cols
-          r[idx2_all, ] <- r[idx1_all, ]
-          r[, idx2_all] <- r[, idx1_all]
+        if (config$sparse == TRUE) {
+          r <- Matrix::drop0(r)
         }
+        rnames <- r@Dimnames[[1]]
+
+        ids_mat <- do.call(rbind, mz_id_pairs)
+        # needs to use sparse indexing to avoid coercion to dense
+        idx1_all <- match(ids_mat[, 1], rnames)
+        idx2_all <- match(ids_mat[, 2], rnames)
+
+        twin1_rows <- r[idx1_all, , drop = FALSE]
+        twin1_cols <- r[, idx1_all, drop = FALSE]
+        twin1_rows@Dimnames[[1]] <- rnames[idx2_all]
+        twin1_cols@Dimnames[[2]] <- rnames[idx2_all]
+        twin1_self <- r[idx1_all, idx1_all, drop = FALSE]
+        twin1_self@Dimnames[[1]] <- rnames[idx2_all]
+
+        r[idx2_all, ] <- twin1_rows
+        r[, idx2_all] <- twin1_cols
+        r[idx2_all, idx2_all] <- twin1_self
+
         # Batch copy: twin1 rows/cols -> twin2 rows/cols
 
         # Row/column replacement on a dsCMatrix (symmetric) causes Matrix to
@@ -413,9 +404,6 @@ ped2com <- function(ped, component,
         # so both mz_method paths return the same sparse class.
         if (methods::is(r, "CsparseMatrix") && !methods::is(r, "symmetricMatrix")) {
           r <- Matrix::forceSymmetric(r)
-        }
-        if (config$sparse == TRUE) {
-          r <- Matrix::drop0(r)
         }
       }
       if (config$verbose == TRUE) {
