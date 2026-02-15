@@ -1,4 +1,3 @@
-
 #' Determine isTwin Status
 #' @param ped pedigree data frame
 #' @return isTwin 'S' matrix
@@ -33,13 +32,11 @@ isTwin <- function(ped) {
 #' @keywords internal
 findMZtwins <- function(ped, verbose = FALSE, returnRows = TRUE,
                         returnIDs = FALSE, returnAsList = TRUE,
-                        beta = FALSE
-) {
+                        beta = FALSE) {
   if (!"twinID" %in% colnames(ped)) {
     return(NULL)
   }
   if (beta == TRUE) {
-
     twin_rows <- which(!is.na(ped$twinID))
 
     # If zygosity column exists, restrict to MZ pair_rows
@@ -74,7 +71,9 @@ findMZtwins <- function(ped, verbose = FALSE, returnRows = TRUE,
 
       # Skip if already processed this pair (O(1) lookup)
       if (exists(twin_id_chr, envir = processed, inherits = FALSE) ||
-        exists(co_twin_id_chr, envir = processed, inherits = FALSE)) next
+        exists(co_twin_id_chr, envir = processed, inherits = FALSE)) {
+        next
+      }
 
       # O(1) row lookup via named vector
       idx1 <- id_to_row[twin_id_chr]
@@ -206,19 +205,15 @@ findMZtwins <- function(ped, verbose = FALSE, returnRows = TRUE,
 
 
     if (returnIDs == TRUE && returnRows == FALSE) {
-
       if (returnAsList == TRUE) {
         return(pair_ids)
       } else {
-
         data.frame(
           twin1_id = sapply(pair_ids, function(x) x[1]),
           twin2_id = sapply(pair_ids, function(x) x[2])
         )
-
       }
     } else if (returnRows == TRUE && returnIDs == FALSE) {
-
       if (returnAsList == TRUE) {
         return(pair_rows)
       } else {
@@ -258,13 +253,14 @@ fuseTwins <- function(ped,
                       mz_id_pairs = NULL,
                       mz_row_pairs = NULL,
                       config = list(verbose = FALSE),
-                      test_df_twins = FALSE
-) {
+                      test_df_twins = FALSE) {
   df_twins <- NULL
 
   if (is.null(mz_id_pairs) && is.null(mz_row_pairs)) {
-    df_twins <- findMZtwins(ped, verbose = config$verbose,
-      returnRows = TRUE, returnIDs = TRUE, returnAsList = FALSE)
+    df_twins <- findMZtwins(ped,
+      verbose = config$verbose,
+      returnRows = TRUE, returnIDs = TRUE, returnAsList = FALSE
+    )
     if (test_df_twins == TRUE) {
       return(df_twins)
     }
@@ -287,12 +283,14 @@ fuseTwins <- function(ped,
       df_twins <- lapply(mz_row_pairs, function(row) {
         twin1_id <- ped$ID[row[1]]
         twin2_id <- ped$ID[row[2]]
-        data.frame(twin1_id = twin1_id,
+        data.frame(
+          twin1_id = twin1_id,
           twin2_id = twin2_id,
           twin1_row = row[1],
-          twin2_row = row[2])
+          twin2_row = row[2]
+        )
       })
-      df_twins <-  do.call(rbind, df_twins)
+      df_twins <- do.call(rbind, df_twins)
       if (test_df_twins == TRUE) {
         return(df_twins)
       }
@@ -300,24 +298,27 @@ fuseTwins <- function(ped,
       df_twins <- lapply(mz_id_pairs, function(pair) {
         twin1_row <- which(ped$ID == pair[1])
         twin2_row <- which(ped$ID == pair[2])
-        data.frame(twin1_id = pair[1], twin2_id = pair[2],
-          twin1_row = twin1_row, twin2_row = twin2_row)
+        data.frame(
+          twin1_id = pair[1], twin2_id = pair[2],
+          twin1_row = twin1_row, twin2_row = twin2_row
+        )
       })
-      df_twins <-  do.call(rbind, df_twins)
+      df_twins <- do.call(rbind, df_twins)
       if (test_df_twins == TRUE) {
         return(df_twins)
       }
     } else if (!is.null(mz_id_pairs) && !is.null(mz_row_pairs) && length(mz_id_pairs) == length(mz_row_pairs)) {
-
       df_twins <- lapply(1:length(mz_id_pairs), function(i) {
         twin1_id <- mz_id_pairs[[i]][1]
         twin2_id <- mz_id_pairs[[i]][2]
         twin1_row <- mz_row_pairs[[i]][1]
         twin2_row <- mz_row_pairs[[i]][2]
-        data.frame(twin1_id = twin1_id, twin2_id = twin2_id,
-          twin1_row = twin1_row, twin2_row = twin2_row)
+        data.frame(
+          twin1_id = twin1_id, twin2_id = twin2_id,
+          twin1_row = twin1_row, twin2_row = twin2_row
+        )
       })
-      df_twins <-  do.call(rbind, df_twins)
+      df_twins <- do.call(rbind, df_twins)
       if (test_df_twins == TRUE) {
         return(df_twins)
       }

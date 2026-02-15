@@ -131,11 +131,13 @@ ped2com <- function(ped, component,
   mz_id_pairs <- NULL
 
   if (mz_twins == TRUE && "twinID" %in% colnames(ped)) {
-    df_mz <- findMZtwins(ped, verbose = config$verbose,
+    df_mz <- findMZtwins(ped,
+      verbose = config$verbose,
       returnIDs = TRUE,
       returnRows = TRUE,
       returnAsList = TRUE,
-      beta = beta)
+      beta = beta
+    )
     mz_row_pairs <- df_mz$pair_rows
     mz_id_pairs <- df_mz$pair_ids
   }
@@ -150,7 +152,7 @@ ped2com <- function(ped, component,
   if (mz_method %in% c("merging") && mz_twins == TRUE && !is.null(mz_row_pairs) && length(mz_row_pairs) > 0 &&
     config$component %in% c("additive")) {
     # replace all MZ twin IDs with the first twin's ID in each pair so they are merged for the path tracing and all subsequent steps.  We will copy the values back to the second twin at the end.
-    ped <-   fuseTwins(ped = ped, mz_row_pairs = mz_row_pairs, mz_id_pairs = mz_id_pairs, config = config)
+    ped <- fuseTwins(ped = ped, mz_row_pairs = mz_row_pairs, mz_id_pairs = mz_id_pairs, config = config)
     if (config$verbose == TRUE) {
       message("Merged ", length(mz_row_pairs), " MZ twin pair(s) in pedigree dataset for path tracing")
     }

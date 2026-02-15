@@ -62,9 +62,7 @@ test_that("MZ twins coded at relatedness 1 via twinID column", {
 })
 
 
-
 test_that("MZ twins coded at relatedness 1 via twinID column (sparse matrix)", {
-
   set.seed(1667)
   Ngen <- 3
   kpc <- 4
@@ -77,7 +75,6 @@ test_that("MZ twins coded at relatedness 1 via twinID column (sparse matrix)", {
   beta_F <- T
   beta_T <- T
   gen_twin <- Ngen - 1
-
 
 
   df_midgen <- simulatePedigree(kpc = kpc, Ngen = Ngen * 2, sexR = sexR, marR = marR, beta = TRUE) |>
@@ -114,7 +111,6 @@ test_that("MZ twins coded at relatedness 1 via twinID column (sparse matrix)", {
   expect_equal(length(r_mz1@i), length(r_mz2@i))
   expect_equal(length(r_mz1@x), length(r_mz2@x))
   expect_equal(length(r_mz1@p), length(r_mz2@p))
-
 })
 
 
