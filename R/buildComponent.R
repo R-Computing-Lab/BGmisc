@@ -378,11 +378,12 @@ ped2com <- function(ped, component,
       if (config$verbose == TRUE) {
         message("Restored ", length(mz_row_pairs), " MZ twin pair(s) in relatedness matrix")
       }
-    }
+   
 
     if (config$sparse == TRUE) {
       r <- Matrix::drop0(r)
     }
+     }
   }
 
   if (config$component %in% c("mitochondrial", "mtdna", "mitochondria")) {
