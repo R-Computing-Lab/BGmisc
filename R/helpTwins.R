@@ -36,206 +36,115 @@ findMZtwins <- function(ped, verbose = FALSE, returnRows = TRUE,
   if (!"twinID" %in% colnames(ped)) {
     return(NULL)
   }
-  if (beta == TRUE) {
-    twin_rows <- which(!is.na(ped$twinID))
 
-    # If zygosity column exists, restrict to MZ pair_rows
-    if ("zygosity" %in% colnames(ped)) {
-      twin_rows <- twin_rows[!is.na(ped$zygosity[twin_rows]) &
-        ped$zygosity[twin_rows] %in% c("mz", "MZ")]
+  twin_rows <- which(!is.na(ped$twinID))
+
+  # If zygosity column exists, restrict to MZ pair_rows
+  if ("zygosity" %in% colnames(ped)) {
+    twin_rows <- twin_rows[!is.na(ped$zygosity[twin_rows]) &
+      ped$zygosity[twin_rows] %in% c("mz", "MZ")]
+  }
+
+  if (length(twin_rows) == 0) {
+    return(NULL)
+  }
+
+  # Build ID-to-row lookup for O(1) resolution instead of which() per pair
+  id_to_row <- seq_len(nrow(ped))
+  names(id_to_row) <- as.character(ped$ID)
+
+  # Use environment as hash set for O(1) membership checks
+  processed <- new.env(hash = TRUE, parent = emptyenv())
+
+  pair_rows <- vector("list", length(twin_rows))
+  if (returnIDs) {
+    pair_ids <- vector("list", length(twin_rows))
+  }
+  n_pairs <- 0L
+
+  for (idx in twin_rows) {
+    twin_id <- ped$ID[idx]
+    co_twin_id <- ped$twinID[idx]
+
+    twin_id_chr <- as.character(twin_id)
+    co_twin_id_chr <- as.character(co_twin_id)
+
+    # Skip if already processed this pair (O(1) lookup)
+    if (exists(twin_id_chr, envir = processed, inherits = FALSE) ||
+      exists(co_twin_id_chr, envir = processed, inherits = FALSE)) {
+      next
     }
 
-    if (length(twin_rows) == 0) {
-      return(NULL)
+    # O(1) row lookup via named vector
+    idx1 <- id_to_row[twin_id_chr]
+    idx2 <- id_to_row[co_twin_id_chr]
+
+    if (is.na(idx1) || is.na(idx2)) next
+
+    # Always put the lower index first for consistency
+    if (idx1 > idx2) {
+      tmp <- idx1
+      idx1 <- idx2
+      idx2 <- tmp
     }
 
-    # Build ID-to-row lookup for O(1) resolution instead of which() per pair
-    id_to_row <- seq_len(nrow(ped))
-    names(id_to_row) <- as.character(ped$ID)
+    # O(1) insert into hash set
+    assign(twin_id_chr, TRUE, envir = processed)
+    assign(co_twin_id_chr, TRUE, envir = processed)
 
-    # Use environment as hash set for O(1) membership checks
-    processed <- new.env(hash = TRUE, parent = emptyenv())
-
-    pair_rows <- vector("list", length(twin_rows))
+    n_pairs <- n_pairs + 1L
+    pair_rows[[n_pairs]] <- c(idx1, idx2)
     if (returnIDs) {
-      pair_ids <- vector("list", length(twin_rows))
+      pair_ids[[n_pairs]] <- c(twin_id, co_twin_id)
     }
-    n_pairs <- 0L
-
-    for (idx in twin_rows) {
-      twin_id <- ped$ID[idx]
-      co_twin_id <- ped$twinID[idx]
-
-      twin_id_chr <- as.character(twin_id)
-      co_twin_id_chr <- as.character(co_twin_id)
-
-      # Skip if already processed this pair (O(1) lookup)
-      if (exists(twin_id_chr, envir = processed, inherits = FALSE) ||
-        exists(co_twin_id_chr, envir = processed, inherits = FALSE)) {
-        next
-      }
-
-      # O(1) row lookup via named vector
-      idx1 <- id_to_row[twin_id_chr]
-      idx2 <- id_to_row[co_twin_id_chr]
-
-      if (is.na(idx1) || is.na(idx2)) next
-
-      # Always put the lower index first for consistency
-      if (idx1 > idx2) {
-        tmp <- idx1
-        idx1 <- idx2
-        idx2 <- tmp
-      }
-
-      # O(1) insert into hash set
-      assign(twin_id_chr, TRUE, envir = processed)
-      assign(co_twin_id_chr, TRUE, envir = processed)
-
-      n_pairs <- n_pairs + 1L
-      pair_rows[[n_pairs]] <- c(idx1, idx2)
-      if (returnIDs) {
-        pair_ids[[n_pairs]] <- c(twin_id, co_twin_id)
-      }
-      if (verbose) {
-        message(
-          "MZ twin pair found: ", twin_id, " (row ", idx1,
-          ") and ", co_twin_id, " (row ", idx2, ")"
-        )
-      }
+    if (verbose) {
+      message(
+        "MZ twin pair found: ", twin_id, " (row ", idx1,
+        ") and ", co_twin_id, " (row ", idx2, ")"
+      )
     }
+  }
 
-    # Trim pre-allocated lists to actual size
-    if (n_pairs == 0L) {
-      return(NULL)
-    }
-    pair_rows <- pair_rows[seq_len(n_pairs)]
-    if (returnIDs) {
-      pair_ids <- pair_ids[seq_len(n_pairs)]
-    }
+  # Trim pre-allocated lists to actual size
+  if (n_pairs == 0L) {
+    return(NULL)
+  }
+  pair_rows <- pair_rows[seq_len(n_pairs)]
+  if (returnIDs) {
+    pair_ids <- pair_ids[seq_len(n_pairs)]
+  }
 
-    if (returnIDs == TRUE && returnRows == FALSE) {
-      if (returnAsList == TRUE) {
-        return(pair_ids)
-      } else {
-        data.frame(
-          twin1_id = vapply(pair_ids, `[`, numeric(1), 1L),
-          twin2_id = vapply(pair_ids, `[`, numeric(1), 2L)
-        )
-      }
-    } else if (returnRows == TRUE && returnIDs == FALSE) {
-      if (returnAsList == TRUE) {
-        return(pair_rows)
-      } else {
-        data.frame(
-          twin1_row = vapply(pair_rows, `[`, integer(1), 1L),
-          twin2_row = vapply(pair_rows, `[`, integer(1), 2L)
-        )
-      }
-    } else if (returnIDs == TRUE && returnRows == TRUE) {
-      if (returnAsList == TRUE) {
-        return(list(pair_rows = pair_rows, pair_ids = pair_ids))
-      } else {
-        return(data.frame(
-          twin1_id = vapply(pair_ids, `[`, numeric(1), 1L),
-          twin2_id = vapply(pair_ids, `[`, numeric(1), 2L),
-          twin1_row = vapply(pair_rows, `[`, integer(1), 1L),
-          twin2_row = vapply(pair_rows, `[`, integer(1), 2L)
-        ))
-      }
+  if (returnIDs == TRUE && returnRows == FALSE) {
+    if (returnAsList == TRUE) {
+      return(pair_ids)
     } else {
-      stop("Invalid combination of returnRows and returnIDs parameters")
+      data.frame(
+        twin1_id = vapply(pair_ids, `[`, numeric(1), 1L),
+        twin2_id = vapply(pair_ids, `[`, numeric(1), 2L)
+      )
+    }
+  } else if (returnRows == TRUE && returnIDs == FALSE) {
+    if (returnAsList == TRUE) {
+      return(pair_rows)
+    } else {
+      data.frame(
+        twin1_row = vapply(pair_rows, `[`, integer(1), 1L),
+        twin2_row = vapply(pair_rows, `[`, integer(1), 2L)
+      )
+    }
+  } else if (returnIDs == TRUE && returnRows == TRUE) {
+    if (returnAsList == TRUE) {
+      return(list(pair_rows = pair_rows, pair_ids = pair_ids))
+    } else {
+      return(data.frame(
+        twin1_id = vapply(pair_ids, `[`, numeric(1), 1L),
+        twin2_id = vapply(pair_ids, `[`, numeric(1), 2L),
+        twin1_row = vapply(pair_rows, `[`, integer(1), 1L),
+        twin2_row = vapply(pair_rows, `[`, integer(1), 2L)
+      ))
     }
   } else {
-    twin_rows <- which(!is.na(ped$twinID))
-
-    # If zygosity column exists, restrict to MZ pair_rows
-    if ("zygosity" %in% colnames(ped)) {
-      twin_rows <- twin_rows[!is.na(ped$zygosity[twin_rows]) &
-        ped$zygosity[twin_rows] %in% c("mz", "MZ")]
-    }
-
-    if (length(twin_rows) == 0) {
-      return(NULL)
-    }
-
-    processed <- c()
-    pair_rows <- list()
-
-    if (returnIDs) {
-      pair_ids <- list()
-    }
-
-    for (idx in twin_rows) {
-      twin_id <- ped$ID[idx]
-      co_twin_id <- ped$twinID[idx]
-
-
-      # Skip if already processed this pair
-      if (twin_id %in% processed || co_twin_id %in% processed) next
-
-      idx1 <- which(ped$ID == twin_id)
-      idx2 <- which(ped$ID == co_twin_id)
-
-      if (length(idx1) != 1 || length(idx2) != 1) next
-
-      # Always put the lower index first for consistency
-      if (idx1 > idx2) {
-        tmp <- idx1
-        idx1 <- idx2
-        idx2 <- tmp
-      }
-      processed <- c(processed, twin_id, co_twin_id)
-      pair_rows[[length(pair_rows) + 1]] <- c(idx1, idx2)
-      if (returnIDs) {
-        pair_ids[[length(pair_ids) + 1]] <- c(twin_id, co_twin_id)
-      }
-
-      if (verbose) {
-        message(
-          "MZ twin pair found: ", twin_id, " (row ", idx1,
-          ") and ", co_twin_id, " (row ", idx2, ")"
-        )
-      }
-    }
-
-    if (length(pair_rows) == 0) {
-      return(NULL)
-    }
-
-
-    if (returnIDs == TRUE && returnRows == FALSE) {
-      if (returnAsList == TRUE) {
-        return(pair_ids)
-      } else {
-        data.frame(
-          twin1_id = sapply(pair_ids, function(x) x[1]),
-          twin2_id = sapply(pair_ids, function(x) x[2])
-        )
-      }
-    } else if (returnRows == TRUE && returnIDs == FALSE) {
-      if (returnAsList == TRUE) {
-        return(pair_rows)
-      } else {
-        data.frame(
-          twin1_row = sapply(pair_rows, function(x) x[1]),
-          twin2_row = sapply(pair_rows, function(x) x[2])
-        )
-      }
-    } else if (returnIDs == TRUE && returnRows == TRUE) {
-      if (returnAsList == TRUE) {
-        return(list(pair_rows = pair_rows, pair_ids = pair_ids))
-      } else {
-        return(data.frame(
-          twin1_id = sapply(pair_ids, function(x) x[1]),
-          twin2_id = sapply(pair_ids, function(x) x[2]),
-          twin1_row = sapply(pair_rows, function(x) x[1]),
-          twin2_row = sapply(pair_rows, function(x) x[2])
-        ))
-      }
-    } else {
-      stop("Invalid combination of returnRows and returnIDs parameters")
-    }
+    stop("Invalid combination of returnRows and returnIDs parameters")
   }
 }
 # replace all MZ twin IDs with the first twin's ID in each pair so they are merged for the path tracing and all subsequent steps.  We will copy the values back to the second twin at the end.

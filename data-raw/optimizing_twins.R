@@ -255,12 +255,13 @@ write_csv(results, "ped2com_benchmark_results.csv")
 summary(results)
 
 if (cfg$reps > 8) {
-  notch <- TRUE
+  notch <- FALSE
 } else {
   notch <- FALSE
 }
 
 results %>%
+  dplyr::filter(!ped_label %in% c("1gen", "lowgen")) %>%
   mutate(
     beta_sparse = paste0("beta=", beta, ", sparse=", sparse_matrix),
     beta_sparse = factor(beta_sparse, levels = c(
@@ -274,22 +275,26 @@ results %>%
     aes(
       x = ped_label,
       y = time / 1e6,
-      color = twin_method,
-      fill = beta_sparse
+      fill = twin_method,
+      color = sparse_matrix,
+      shape = beta
     )
   ) +
-  geom_boxplot(notch = notch, position = position_dodge(width = 0.8)) +
+  geom_boxplot(
+    notch = notch, position = position_dodge(width = 0.8), outlier.size = 0.5,
+    linewidth = 0.25
+  ) +
   scale_y_log10() +
   facet_grid(~scenario) +
   labs(
     title = "Benchmarking ped2com() by twin handling and beta option",
-    x = "Pedigree", y = "Execution time (ms)", color = "Twin method", fill = "Beta"
+    x = "Pedigree", y = "Execution time (ms)", color = "sparse_matrix", fill = "Twin method"
   ) +
-  theme_minimal() +
-  scale_fill_manual(values = c(
-    "beta=FALSE, sparse=FALSE" = "lightgray",
-    "beta=FALSE, sparse=TRUE" = "gray8",
-    "beta=TRUE, sparse=FALSE" = "lightcoral",
-    "beta=TRUE, sparse=TRUE" = "red2"
-  )) +
-  scale_color_manual(values = c("NULL" = "gray", "addtwins" = "skyblue3", "merging" = "tomato2"))
+  theme_minimal() #+
+#  scale_fill_manual(values = c(
+#    "beta=FALSE, sparse=FALSE" = "lightgray",
+#    "beta=FALSE, sparse=TRUE" = "gray8",
+#    "beta=TRUE, sparse=FALSE" = "lightcoral",
+#    "beta=TRUE, sparse=TRUE" = "red2"
+#  )) +
+#  scale_color_manual(values = c("NULL" = "gray", "addtwins" = "skyblue3", "merging" = "tomato2"))

@@ -208,7 +208,7 @@
   return(list_of_adjacency)
 }
 
-#' Construct Adjacency Matrix for Parent-Child Relationships Using Beta Method
+#' Construct Adjacency Matrix for Parent-Child Relationships Using Beta Methods
 #' This function constructs an adjacency matrix for parent-child relationships
 #' using a method in beta testing. It identifies parent-child pairs based on the
 #' specified component of relatedness.
