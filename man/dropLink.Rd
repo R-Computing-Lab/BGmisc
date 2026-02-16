@@ -9,7 +9,8 @@ dropLink(
   ID_drop = NA_integer_,
   gen_drop = 2,
   sex_drop = NA_character_,
-  n_drop = 1
+  n_drop = 1,
+  verbose = FALSE
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ dropLink(
 \item{sex_drop}{the biological sex of the randomly dropped person.}
 
 \item{n_drop}{the number of times the mutation happens.}
+
+\item{verbose}{logical.  If TRUE, print progress through stages of algorithm}
 }
 \value{
 a pedigree with the dropped person's `dadID` and `momID` set to NA.
