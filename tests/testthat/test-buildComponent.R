@@ -112,7 +112,95 @@ test_that("MZ twins coded at relatedness 1 via twinID column (sparse matrix)", {
   expect_equal(length(r_mz1@x), length(r_mz2@x))
   expect_equal(length(r_mz1@p), length(r_mz2@p))
 })
+test_that("MZ twins coded at relatedness 1 via twinID column (sparse matrix)", {
+  set.seed(1667)
+  Ngen <- 5
+  kpc <- 4
+  sexR <- .50 # sometimes fails above .5
+  marR <- 1
 
+  gen_twin <- 3 # max(c(floor(Ngen / 2) - 1, 2))
+
+  # create base pedigree with twins at gen_twin
+
+  df_midgen_base <- simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR, beta = TRUE) |>
+    makeTwins(gen_twin = gen_twin)
+
+  twinIDS <-  findMZtwins(df_midgen_base, returnRows =  FALSE,
+    returnIDs = TRUE, returnAsList = FALSE)
+
+  moms_of_twins <- df_midgen_base$momID[df_midgen_base$ID %in% c(twinIDS$twin1_id, twinIDS$twin2_id)] %>% unique()
+  dads_of_twins <- df_midgen_base$dadID[df_midgen_base$ID %in% c(twinIDS$twin1_id, twinIDS$twin2_id)] %>% unique()
+  parents_of_twins <- unique(c(moms_of_twins, dads_of_twins))
+
+  grandmothers_of_twins <- df_midgen_base$momID[df_midgen_base$ID %in% parents_of_twins] %>% unique()
+  grandfathers_of_twins <- df_midgen_base$dadID[df_midgen_base$ID %in% parents_of_twins] %>% unique()
+  grandfathers_of_twins <- grandfathers_of_twins[!is.na(grandfathers_of_twins)]
+  grandmothers_of_twins <- grandmothers_of_twins[!is.na(grandmothers_of_twins)]
+  grandparents_of_twins <- unique(c(grandmothers_of_twins, grandfathers_of_twins))
+
+  female_children_of_twins <- df_midgen_base$ID[(df_midgen_base$momID %in% c(twinIDS$twin1_id, twinIDS$twin2_id) | df_midgen_base$dadID %in% c(twinIDS$twin1_id, twinIDS$twin2_id)) & df_midgen_base$sex == "F"] %>% unique()
+
+  male_children_of_twins <- df_midgen_base$ID[(df_midgen_base$momID %in% c(twinIDS$twin1_id, twinIDS$twin2_id) | df_midgen_base$dadID %in% c(twinIDS$twin1_id, twinIDS$twin2_id)) & df_midgen_base$sex == "M"] %>% unique()
+
+  children_of_twins <- c(male_children_of_twins, female_children_of_twins)
+
+  df_midgen_below <- df_midgen_base |> makeInbreeding(ID_mate1 = male_children_of_twins[1], ID_mate2 = female_children_of_twins[1])
+
+  df_midgen_above <- df_midgen_base
+
+  df_midgen_above$momID[df_midgen_above$ID %in% parents_of_twins] <- grandmothers_of_twins[1]
+  df_midgen_above$dadID[df_midgen_above$ID %in% parents_of_twins] <- grandfathers_of_twins[1]
+  df_midgen_below %>% rename(personID = ID) %>%
+    ggpedigree::ggPedigreeInteractive(config = list(code_male = "M", focal_fill_personID = twinIDS$twin1_id,
+      focal_fill_include = TRUE,
+      sex_color_include = FALSE))
+  for (df_midgen in list(df_midgen_below, df_midgen_above)) {
+    r_mz1 <- df_midgen |>
+      ped2add(mz_method = "merging", mz_twins = TRUE)
+    r_mz2 <- df_midgen |>
+      ped2add(mz_method = "addtwins", mz_twins = TRUE)
+
+    r_mz3 <- df_midgen |>
+      ped2add(mz_twins = FALSE)
+
+
+    # object.size(r_mz3)
+    # object.size(r_mz2)
+    # object.size(r_mz1)
+
+    # which rows are the twins
+    twin_rows <- which(!is.na(df_midgen$twinID))
+    child_rows <- which(df_midgen$momID %in% df_midgen$ID[twin_rows] | df_midgen$dadID %in% df_midgen$ID[twin_rows])
+
+    family_rows <- unique(c(twin_rows, child_rows))
+
+    expect_equal(sum(as.matrix(r_mz1[family_rows, family_rows]) - as.matrix(r_mz2[family_rows, family_rows])), 0)
+
+    expect_gt(sum(as.matrix(r_mz1[family_rows, family_rows])), sum(as.matrix(r_mz3[family_rows, family_rows])))
+
+    expect_gt(sum(as.matrix(r_mz2[family_rows, family_rows])), sum(as.matrix(r_mz3[family_rows, family_rows])))
+
+
+    r_mz1_ordered <- r_mz1[order(rownames(r_mz1)), order(colnames(r_mz1))]
+    r_mz2_ordered <- r_mz2[order(rownames(r_mz2)), order(colnames(r_mz2))]
+
+    expect_equal(sum(r_mz1_ordered - r_mz2_ordered), 0)
+
+    expect_equal(length(r_mz1@i), length(r_mz2@i))
+    expect_equal(length(r_mz1@x), length(r_mz2@x))
+    expect_equal(length(r_mz1@p), length(r_mz2@p))
+
+    expect_equal(length(r_mz1@i), length(r_mz3@i))
+    expect_equal(length(r_mz2@i), length(r_mz3@i))
+
+    expect_equal(length(r_mz1@x), length(r_mz3@x))
+    expect_equal(length(r_mz2@x), length(r_mz3@x))
+
+    expect_equal(length(r_mz1@p), length(r_mz3@p))
+    expect_equal(length(r_mz2@p), length(r_mz3@p))
+  }
+})
 
 test_that("MZ twins coded at relatedness 1 via twinID column (minimal data.frame)", {
   # Simple pedigree: two parents and two MZ twin children

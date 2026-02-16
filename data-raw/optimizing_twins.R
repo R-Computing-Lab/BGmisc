@@ -313,8 +313,8 @@ results %>%
       x = ped_label,
       y = time / 1e6,
       fill = twin_method,
-      color = sparse_matrix,
-      shape = beta
+      color = sparse_matrix # ,
+      #  shape = beta
     )
   ) +
   geom_boxplot(

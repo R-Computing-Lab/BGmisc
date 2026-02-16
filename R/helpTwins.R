@@ -247,8 +247,8 @@ fuseTwins <- function(ped,
     twin2s_row <- df_twins$twin2_row
 
     # Make twin2s founders
-    ped$momID[twin2s_row] <- NA
-    ped$dadID[twin2s_row] <- NA
+    #    ped$momID[twin2s_row] <- NA
+    #   ped$dadID[twin2s_row] <- NA
 
     twin2s_as_mom <- which(ped$momID %in% twin2s_id)
     twin2s_as_dad <- which(ped$dadID %in% twin2s_id)
