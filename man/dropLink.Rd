@@ -9,7 +9,8 @@ dropLink(
   ID_drop = NA_integer_,
   gen_drop = 2,
   sex_drop = NA_character_,
-  n_drop = 1
+  n_drop = 1,
+  verbose = FALSE
 )
 }
 \arguments{
