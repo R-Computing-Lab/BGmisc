@@ -20,7 +20,7 @@
 #' @param adjBeta_method numeric The method to use for computing the building the adjacency_method matrix when using the "beta" build
 #' @param compress logical. If TRUE, use compression when saving the checkpoint files.  Defaults to TRUE.
 #' @param mz_twins logical. If TRUE, merge MZ co-twin columns in the r2 matrix before tcrossprod so that MZ twins are coded with relatedness 1 instead of 0.5. Twin pairs are identified from the \code{twinID} column. When a \code{zygosity} column is also present, only pairs where both members have \code{zygosity == "MZ"} are used; otherwise all \code{twinID} pairs are assumed to be MZ. Defaults to FALSE.
-#' @param mz_method character. The method to handle MZ twins.  Options are "addtwins" (default) or "merging".  "addtwins" adds the twin2 column to the twin1 column before tcrossprod so that all relatedness flows through a single source, then leaves the twin2 column as zero and relies on the fact that the row/col names are the same to copy the values back to twin2 after tcrossprod.  "merging" merges the twin2 column into the twin1 column before tcrossprod and then copies the values back to twin2 after tcrossprod so that both twins appear in the final matrix.
+#' @param mz_method character. The method to handle MZ twins.  Options are "merging" (default) or "addtwins".  "addtwins" adds the twin2 column to the twin1 column before tcrossprod so that all relatedness flows through a single source, then leaves the twin2 column as zero and relies on the fact that the row/col names are the same to copy the values back to twin2 after tcrossprod.  "merging" merges the twin2 column into the twin1 column before tcrossprod and then copies the values back to twin2 after tcrossprod so that both twins appear in the final matrix.
 #' @param beta logical. Used for benchmarking
 #' @param ... additional arguments to be passed to \code{\link{ped2com}}
 #' @details The algorithms and methodologies used in this function are further discussed and exemplified in the vignette titled "examplePedigreeFunctions". For more advanced scenarios and detailed explanations, consult this vignette.
@@ -35,7 +35,7 @@ ped2com <- function(ped, component,
                     standardize_colnames = TRUE,
                     transpose_method = "tcrossprod",
                     adjacency_method = "direct",
-                    isChild_method = "classic",
+                    isChild_method = "partialparent",
                     saveable = FALSE,
                     resume = FALSE,
                     save_rate = 5,
@@ -45,7 +45,7 @@ ped2com <- function(ped, component,
                     save_path = "checkpoint/",
                     adjBeta_method = NULL,
                     compress = TRUE,
-                    mz_twins = FALSE,
+                    mz_twins = TRUE,
                     mz_method = "addtwins",
                     beta = FALSE,
                     ...) {
@@ -173,8 +173,6 @@ ped2com <- function(ped, component,
   }
 
   #
-  # TODO mz method would be to assign all relatedness through one twin and then copy the row/col to the other twin at the end.  This way you don't have to worry about the fact that they are merged for the path tracing but not for the rest of the algorithm.
-
   # Step 1: Construct parent-child adjacency matrix
 
   ## A. Resume from Checkpoint if Needed
@@ -317,7 +315,7 @@ ped2com <- function(ped, component,
     compress = config$compress
   )
 
-  if (mz_method == "addtwins" && mz_twins == TRUE) {
+  if (mz_method == "addtwins" && mz_twins == TRUE && !is.null(mz_row_pairs) && length(mz_row_pairs) > 0) {
     if (config$verbose == TRUE) {
       message("MZ twin merging enabled: Will merge MZ twin columns in r2 before tcrossprod")
     }
@@ -359,59 +357,58 @@ ped2com <- function(ped, component,
     }
   }
 
-  if (mz_method %in% c("merging", "addtwins") && mz_twins == TRUE && config$component %in% c("additive")) {
+  if (mz_method %in% c("merging", "addtwins") && mz_twins == TRUE && config$component %in% c("additive") && !is.null(mz_row_pairs) && length(mz_row_pairs) > 0) {
     # --- Step 4b: Restore MZ twins ---
     # Copy twin1's row/col to twin2 so both twins appear in the final matrix.
-    if (!is.null(mz_row_pairs) && length(mz_row_pairs)) {
-      if (config$sparse == FALSE) {
-        r <- as.matrix(r)
-        rnames <- rownames(r)
-        ids_mat <- do.call(rbind, mz_id_pairs)
-        idx1_all <- match(ids_mat[, 1], rnames)
-        idx2_all <- match(ids_mat[, 2], rnames)
-        # Batch copy: twin1 rows/cols -> twin2 rows/cols
-        r[idx2_all, ] <- r[idx1_all, ]
+    if (config$sparse == FALSE) {
+      r <- as.matrix(r)
+      rnames <- rownames(r)
+      ids_mat <- do.call(rbind, mz_id_pairs)
+      idx1_all <- match(ids_mat[, 1], rnames)
+      idx2_all <- match(ids_mat[, 2], rnames)
+      # Batch copy: twin1 rows/cols -> twin2 rows/cols
+      r[idx2_all, ] <- r[idx1_all, ]
 
-        r[, idx2_all] <- r[, idx1_all]
-      } else {
-        # TODO this is really slow.  Can we do it without coercing to dense?  Maybe by doing row/col replacement on the sparse matrix directly?  Or by constructing a sparse matrix with the twin2 values and adding it to r?
-        #  r <- df_add
+      r[, idx2_all] <- r[, idx1_all]
+    } else {
+      # TODO this is really slow.  Can we do it without coercing to dense?  Maybe by doing row/col replacement on the sparse matrix directly?  Or by constructing a sparse matrix with the twin2 values and adding it to r?
+      #  r <- df_add
 
-        rnames <- r@Dimnames[[1]]
+      rnames <- r@Dimnames[[1]]
 
-        ids_mat <- do.call(rbind, mz_id_pairs)
-        # needs to use sparse indexing to avoid coercion to dense
-        idx1_all <- match(ids_mat[, 1], rnames)
-        idx2_all <- match(ids_mat[, 2], rnames)
+      ids_mat <- do.call(rbind, mz_id_pairs)
+      # needs to use sparse indexing to avoid coercion to dense
+      idx1_all <- match(ids_mat[, 1], rnames)
+      idx2_all <- match(ids_mat[, 2], rnames)
 
-        twin1_rows <- r[idx1_all, , drop = FALSE]
-        twin1_cols <- r[, idx1_all, drop = FALSE]
-        twin1_rows@Dimnames[[1]] <- rnames[idx2_all]
-        twin1_cols@Dimnames[[2]] <- rnames[idx2_all]
-        twin1_self <- r[idx1_all, idx1_all, drop = FALSE]
-        twin1_self@Dimnames[[1]] <- rnames[idx2_all]
+      twin1_rows <- r[idx1_all, , drop = FALSE]
+      twin1_cols <- r[, idx1_all, drop = FALSE]
+      twin1_rows@Dimnames[[1]] <- rnames[idx2_all]
+      twin1_cols@Dimnames[[2]] <- rnames[idx2_all]
+      twin1_self <- r[idx1_all, idx1_all, drop = FALSE]
+      twin1_self@Dimnames[[1]] <- rnames[idx2_all]
 
-        r[idx2_all, ] <- twin1_rows
-        r[, idx2_all] <- twin1_cols
-        r[idx2_all, idx2_all] <- twin1_self
+      r[idx2_all, ] <- twin1_rows
+      r[, idx2_all] <- twin1_cols
+      r[idx2_all, idx2_all] <- twin1_self
 
-        # Batch copy: twin1 rows/cols -> twin2 rows/cols
+      # Batch copy: twin1 rows/cols -> twin2 rows/cols
 
-        # Row/column replacement on a dsCMatrix (symmetric) causes Matrix to
-        # coerce to dgCMatrix (general), doubling stored entries.  Convert back
+      # Row/column replacement on a dsCMatrix (symmetric) causes Matrix to
+      # coerce to dgCMatrix (general), doubling stored entries.  Convert back
 
-        r <- Matrix::drop0(r)
+      r <- Matrix::drop0(r)
 
-        # so both mz_method paths return the same sparse class.
-        if (methods::is(r, "CsparseMatrix") && !methods::is(r, "symmetricMatrix")) {
-          r <- Matrix::forceSymmetric(r)
-        }
-      }
-      if (config$verbose == TRUE) {
-        message("Restored ", length(mz_row_pairs), " MZ twin pair(s) in relatedness matrix")
+      # so both mz_method paths return the same sparse class.
+      if (methods::is(r, "CsparseMatrix") && !methods::is(r, "symmetricMatrix")) {
+        r <- Matrix::forceSymmetric(r)
       }
     }
+    if (config$verbose == TRUE) {
+      message("Restored ", length(mz_row_pairs), " MZ twin pair(s) in relatedness matrix")
+    }
   }
+
 
   if (config$component %in% c("mitochondrial", "mtdna", "mitochondria")) {
     r@x <- rep(1, length(r@x))

@@ -163,17 +163,24 @@ test_that("makeInbreeding - Inbred mates specified by generation and sibling", {
   marR <- .7
   gen_inbred <- 2
   type_inbred <- "sibling"
+  prefer_unmated <- c(TRUE, FALSE)
+
 
   ped <- simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR)
   #
-  result <- makeInbreeding(ped, gen_inbred = gen_inbred, type_inbred = type_inbred)
-  expect_equal(names(result), c("famID", "ID", "gen", "dadID", "momID", "spID", "sex"))
+  for (prefer in prefer_unmated) {
 
-  # do we have the same people?
-  expect_equal(result$ID, ped$ID)
+    result <- makeInbreeding(ped, gen_inbred = gen_inbred, type_inbred = type_inbred,
+      prefer_unmated = prefer,
+      verbose = TRUE)
+    expect_equal(names(result), c("famID", "ID", "gen", "dadID", "momID", "spID", "sex"))
 
-  # did we get more spID values than we started with?
-  expect_gt(sum(!is.na(result$spID)), sum(!is.na(ped$spID)))
+    # do we have the same people?
+    expect_equal(result$ID, ped$ID)
+
+    # did we get more spID values than we started with?
+    expect_gt(sum(!is.na(result$spID)), sum(!is.na(ped$spID)))
+  }
 })
 
 test_that("makeInbreeding - Inbred mates specified by generation and cousin", {
