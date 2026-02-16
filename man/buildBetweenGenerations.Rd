@@ -62,7 +62,18 @@ kids per mate will be fixed at kpc.}
 
 \item{code_female}{The value to use for females. Default is "F"}
 
-\item{beta}{logical. If TRUE, use the optimized version of the algorithm.}
+\item{beta}{logical or character. Controls which algorithm version to use:
+\itemize{
+  \item{\code{FALSE}, \code{"base"}, or \code{"original"} (default): Use the original algorithm.
+        Slower but ensures exact reproducibility with set.seed().}
+  \item{\code{TRUE} or \code{"optimized"}: Use the optimized algorithm with 4-5x speedup.
+        Produces statistically equivalent results but not identical to base version
+        due to different random number consumption. Recommended for large simulations
+        where speed matters more than exact reproducibility.}
+}
+Note: Both versions are mathematically correct and produce valid pedigrees with the
+same statistical properties (sex ratios, mating rates, etc.). The optimized version
+uses vectorized operations instead of loops, making it much faster for large pedigrees.}
 }
 \value{
 The function updates the `df_Fam` data frame in place, adding or modifying columns related to parental and offspring status,

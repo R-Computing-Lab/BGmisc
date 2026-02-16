@@ -163,17 +163,24 @@ test_that("makeInbreeding - Inbred mates specified by generation and sibling", {
   marR <- .7
   gen_inbred <- 2
   type_inbred <- "sibling"
+  prefer_unmated <- c(TRUE, FALSE)
+
 
   ped <- simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR)
   #
-  result <- makeInbreeding(ped, gen_inbred = gen_inbred, type_inbred = type_inbred)
-  expect_equal(names(result), c("famID", "ID", "gen", "dadID", "momID", "spID", "sex"))
+  for (prefer in prefer_unmated) {
 
-  # do we have the same people?
-  expect_equal(result$ID, ped$ID)
+    result <- makeInbreeding(ped, gen_inbred = gen_inbred, type_inbred = type_inbred,
+      prefer_unmated = prefer,
+      verbose = TRUE)
+    expect_equal(names(result), c("famID", "ID", "gen", "dadID", "momID", "spID", "sex"))
 
-  # did we get more spID values than we started with?
-  expect_gt(sum(!is.na(result$spID)), sum(!is.na(ped$spID)))
+    # do we have the same people?
+    expect_equal(result$ID, ped$ID)
+
+    # did we get more spID values than we started with?
+    expect_gt(sum(!is.na(result$spID)), sum(!is.na(ped$spID)))
+  }
 })
 
 test_that("makeInbreeding - Inbred mates specified by generation and cousin", {
@@ -221,6 +228,9 @@ test_that("dropLink - Drop specified by ID", {
 
 
   # are the dataframes the same in both the undropped and dropepd relationships for all but the dropped ID?
+  expect_equal(colnames(result), c("famID", "ID", "gen", "dadID", "momID", "spID", "sex"))
+  names(ped) <- c("famID", "ID", "gen", "dadID", "momID", "spID", "sex")
+
   expect_equal(result[result$ID != ID_drop, ], ped[ped$ID != ID_drop, ])
 
   # are the families of the dropped ID in the original?
@@ -242,6 +252,9 @@ test_that("dropLink - Drop specified by ID", {
   ped <- simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR)
   result <- dropLink(ped, ID_drop = ID_drop)
 
+  expect_equal(colnames(result), c("famID", "ID", "gen", "dadID", "momID", "spID", "sex"))
+  names(ped) <- c("famID", "ID", "gen", "dadID", "momID", "spID", "sex")
+
   # are the dataframes the same in both the undropped and dropped relationships for all but the dropped ID?
   expect_equal(result[result$ID != ID_drop, ], ped[ped$ID != ID_drop, ])
 
@@ -262,7 +275,8 @@ test_that("dropLink - Drop specified by generation", {
 
   ped <- simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR)
   result <- dropLink(ped, gen_drop = gen_drop)
-
+  expect_equal(colnames(result), c("famID", "ID", "gen", "dadID", "momID", "spID", "sex"))
+  names(ped) <- c("famID", "ID", "gen", "dadID", "momID", "spID", "sex")
   # are the dataframes the same in both the undropped and dropped relationships for all but the dropped gen?
   expect_equal(result[result$gen != gen_drop, ], ped[ped$gen != gen_drop, ])
 
@@ -398,4 +412,56 @@ test_that("addPersonToPed works as expected with zygosity", {
   expect_true(is.na(updated3$zygosity[4]))
 
   expect_equal(updated3$personID[4], max(ped$personID, na.rm = TRUE) + 2)
+})
+
+# Tests for single-ID specification (auto-find the other)
+
+test_that("makeTwins - specify only ID_twin1, auto-find twin2", {
+  ped <- data.frame(
+    famID = c(1, 1, 1, 1),
+    ID = c(1, 2, 3, 4),
+    gen = c(1, 1, 2, 2),
+    dadID = c(NA, NA, 1, 1),
+    momID = c(NA, NA, 2, 2),
+    spID = c(NA, NA, NA, NA),
+    sex = c("M", "F", "M", "F")
+  )
+  # Person 3 (M) and 4 (F) are siblings. With DZ zygosity, either could be auto-selected.
+  result <- makeTwins(ped, ID_twin1 = 3, zygosity = "DZ")
+  expect_equal(sum(!is.na(result$twinID)), 2)
+  # Twin1 should be person 3
+  expect_equal(result$twinID[result$ID == 3], 4)
+  expect_equal(result$twinID[result$ID == 4], 3)
+})
+
+test_that("makeTwins - specify only ID_twin2, auto-find twin1", {
+  ped <- data.frame(
+    famID = c(1, 1, 1, 1),
+    ID = c(1, 2, 3, 4),
+    gen = c(1, 1, 2, 2),
+    dadID = c(NA, NA, 1, 1),
+    momID = c(NA, NA, 2, 2),
+    spID = c(NA, NA, NA, NA),
+    sex = c("M", "F", "M", "F")
+  )
+  result <- makeTwins(ped, ID_twin2 = 4, zygosity = "DZ")
+  expect_equal(sum(!is.na(result$twinID)), 2)
+  expect_equal(result$twinID[result$ID == 4], 3)
+  expect_equal(result$twinID[result$ID == 3], 4)
+})
+
+test_that("makeInbreeding - specify only ID_mate1, auto-find mate2", {
+  ped <- data.frame(
+    famID = c(1, 1, 1, 1),
+    ID = c(1, 2, 3, 4),
+    gen = c(1, 1, 2, 2),
+    dadID = c(NA, NA, 1, 1),
+    momID = c(NA, NA, 2, 2),
+    spID = c(NA, NA, NA, NA),
+    sex = c("M", "F", "M", "F")
+  )
+  # Person 3 (M) should auto-find person 4 (F) as opposite-sex sibling
+  result <- makeInbreeding(ped, ID_mate1 = 3)
+  expect_equal(result$spID[result$ID == 3], 4)
+  expect_equal(result$spID[result$ID == 4], 3)
 })

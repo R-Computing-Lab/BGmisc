@@ -10,6 +10,7 @@
 #' @param momID character.  Name of the column in ped for the mother ID variable
 #' @param dadID character.  Name of the column in ped for the father ID variable
 #' @param famID character.  Name of the column to be created in ped for the family ID variable
+#' @param twinID character.  Name of the column in ped for the twin ID variable, if applicable
 #' @param ... additional arguments to be passed to \code{\link{ped2com}}
 #' @details
 #' The general idea of this function is to use person ID, mother ID, and father ID to
@@ -29,17 +30,25 @@
 #'
 ped2fam <- function(ped, personID = "ID",
                     momID = "momID", dadID = "dadID", famID = "famID",
+                    twinID = "twinID",
                     ...) {
   # Call to wrapper function
-  .ped2id(ped = ped, personID = personID, momID = momID, dadID = dadID, famID = famID, type = "parents")
+  .ped2id(
+    ped = ped, personID = personID, momID = momID, dadID = dadID, famID = famID, twinID = twinID,
+    type = "parents"
+  )
 }
 
 .ped2id <- function(ped,
                     personID = "ID", momID = "momID", dadID = "dadID",
-                    famID = "famID", type,
+                    famID = "famID", twinID = "twinID",
+                    type,
                     ...) {
   # Turn pedigree into family
-  pg <- ped2graph(ped = ped, personID = personID, momID = momID, dadID = dadID, adjacent = type)
+  pg <- ped2graph(
+    ped = ped, personID = personID, momID = momID, dadID = dadID, twinID = twinID,
+    adjacent = type
+  )
 
   # Find weakly connected components of graph
   wcc <- igraph::components(pg)
@@ -97,6 +106,7 @@ ped2graph <- function(ped,
                       personID = "ID",
                       momID = "momID",
                       dadID = "dadID",
+                      twinID = "twinID",
                       directed = TRUE,
                       adjacent = c("parents", "mothers", "fathers"),
                       ...) {
@@ -196,11 +206,14 @@ ped2graph <- function(ped,
 #'
 ped2maternal <- function(ped, personID = "ID",
                          momID = "momID", dadID = "dadID",
-                         matID = "matID", ...) {
+                         matID = "matID",
+                         twinID = "twinID",
+                         ...) {
   # Call to wrapper function
   .ped2id(
     ped = ped, personID = personID, momID = momID,
-    dadID = dadID, famID = matID, type = "mothers"
+    dadID = dadID, famID = matID, twinID = twinID,
+    type = "mothers"
   )
 }
 
@@ -219,10 +232,14 @@ ped2maternal <- function(ped, personID = "ID",
 #'
 ped2paternal <- function(ped, personID = "ID",
                          momID = "momID", dadID = "dadID",
-                         patID = "patID", ...) {
+                         patID = "patID",
+                         twinID = "twinID",
+                         ...) {
   # Call to wrapper function
   .ped2id(
     ped = ped, personID = personID, momID = momID,
-    dadID = dadID, famID = patID, type = "fathers"
+    dadID = dadID, famID = patID,
+    twinID = twinID,
+    type = "fathers"
   )
 }

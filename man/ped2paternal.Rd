@@ -10,6 +10,7 @@ ped2paternal(
   momID = "momID",
   dadID = "dadID",
   patID = "patID",
+  twinID = "twinID",
   ...
 )
 }
@@ -23,6 +24,8 @@ ped2paternal(
 \item{dadID}{character.  Name of the column in ped for the father ID variable}
 
 \item{patID}{Character.  Paternal line ID variable to be created and added to the pedigree}
+
+\item{twinID}{character.  Name of the column in ped for the twin ID variable, if applicable}
 
 \item{...}{additional arguments to be passed to \code{\link{ped2com}}}
 }
