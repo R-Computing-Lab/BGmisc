@@ -152,9 +152,12 @@ test_that("MZ twins coded at relatedness 1 via twinID column (sparse matrix)", {
   df_midgen_above$momID[df_midgen_above$ID %in% parents_of_twins] <- grandmothers_of_twins[1]
   df_midgen_above$dadID[df_midgen_above$ID %in% parents_of_twins] <- grandfathers_of_twins[1]
   df_midgen_below %>% rename(personID = ID) %>%
-    ggpedigree::ggPedigreeInteractive(config = list(code_male = "M", focal_fill_personID = twinIDS$twin1_id,
-      focal_fill_include = TRUE,
-      sex_color_include = FALSE))
+    if (FALSE) {
+      ggpedigree::ggPedigreeInteractive(config = list(code_male = "M", focal_fill_personID = twinIDS$twin1_id,
+        focal_fill_include = TRUE,
+        sex_color_include = FALSE))
+
+    }
   for (df_midgen in list(df_midgen_below, df_midgen_above)) {
     r_mz1 <- df_midgen |>
       ped2add(mz_method = "merging", mz_twins = TRUE)
