@@ -32,8 +32,11 @@ makeTwins <- function(ped, ID_twin1 = NA_integer_,
     }
     # stop("The input pedigree is not in the same format as the output of simulatePedigree")
   }
+  if (MZtwin %in% colnames(ped)) {
+    warning("The input pedigree already has a column named MZtwin. The function will overwrite the MZtwin column with the new twin information.")
+  }
   ped$MZtwin <- NA_integer_
-  ped$zygosity <- NA_character_
+  ped$MZzygosity <- NA_character_
   # Check if the two IDs are provided
   if (is.na(ID_twin1) || is.na(ID_twin2)) {
     # Check if the generation is provided
@@ -44,7 +47,7 @@ makeTwins <- function(ped, ID_twin1 = NA_integer_,
       if (gen_twin < 2 || gen_twin > max(ped$gen)) {
         warning("The generation of the twins should be an integer between 2 and the maximum generation in the pedigree")
         # remove the MZtwin and zygosity columns
-        ped$zygosity <- NULL
+        ped$MZzygosity <- NULL
         ped$MZtwin <- NULL
         return(ped)
       } else {
@@ -148,9 +151,22 @@ makeTwins <- function(ped, ID_twin1 = NA_integer_,
     cat("twin1", ID_twin1, "\n")
     cat("twin2", ID_twin2, "\n")
   }
-  names(ped)[names(ped) == "MZtwin"] <- "twinID"
-  ped$zygosity[ped$ID == ID_twin1] <- zygosity
-  ped$zygosity[ped$ID == ID_twin2] <- zygosity
+  if ("twinID" %in% colnames(ped)) {
+    ped$twinID[!is.na(ped$MZtwin)] <- ped$MZtwin[!is.na(ped$MZtwin)]
+    ped$MZtwin <- NULL
+  } else {
+    names(ped)[names(ped) == "MZtwin"] <- "twinID"
+  }
+  if ("zygosity" %in% colnames(ped)) {
+    ped$zygosity[ped$ID == ID_twin1] <- zygosity
+    ped$zygosity[ped$ID == ID_twin2] <- zygosity
+    ped$MZzygosity <- NULL
+  } else {
+    names(ped)[names(ped) == "MZzygosity"] <- "zygosity"
+    ped$zygosity[ped$ID == ID_twin1] <- zygosity
+    ped$zygosity[ped$ID == ID_twin2] <- zygosity
+  }
+
   return(ped)
 }
 
