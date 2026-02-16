@@ -159,7 +159,7 @@ findMZtwins <- function(ped, verbose = FALSE, returnRows = TRUE,
 #' @param beta logical. If TRUE, use an optimized approach with O(1) lookups for large pedigrees when identifying MZ twins. Default is FALSE.
 #' @param config A list of configuration options.
 #' @return A modified version of the input pedigree data.frame with MZ twin pairs fused for path tracing. If \code{test_df_twins} is TRUE, returns the data frame of identified twin pairs instead.
-
+# 70% of the time is here
 fuseTwins <- function(ped,
                       df_twins = NULL,
                       mz_id_pairs = NULL,
