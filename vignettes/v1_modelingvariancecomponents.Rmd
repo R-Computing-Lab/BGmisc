@@ -189,5 +189,3 @@ if (!requireNamespace("EasyMx", quietly = TRUE)) {
 ```
 
 
-## Fitting Pedigree Models
-
