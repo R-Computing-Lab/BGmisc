@@ -347,7 +347,14 @@ buildPedigreeMx <- function(model_name, vars, group_models) {
 #' @param data A matrix or data frame of observed data, where each row is a family
 #'   and columns correspond to individuals. Only used when \code{group_models} is NULL.
 #' @param group_models Optional list of pre-built OpenMx family group models
-#'   (from \code{\link{buildOneFamilyGroup}}). If NULL, they are generated from \code{data}.
+#'   (from \code{\link{buildOneFamilyGroup}}). If NULL, they are generated from \code{data}
+#'   using the provided relatedness matrices.
+#' @param Addmat Additive genetic relatedness matrix. Required when \code{group_models} is NULL.
+#' @param Nucmat Common nuclear environment relatedness matrix. Optional.
+#' @param Extmat Common extended environment relatedness matrix. Optional.
+#' @param Mtdmat Mitochondrial relatedness matrix. Optional.
+#' @param Amimat Additive-by-mitochondrial interaction matrix. Optional.
+#' @param Dmgmat Dominance genetic relatedness matrix. Optional.
 #' @param tryhard Logical. If TRUE (default), use \code{mxTryHard} for robust optimization;
 #'   if FALSE, use \code{mxRun}.
 #' @return A fitted OpenMx model.
@@ -374,11 +381,20 @@ fitPedigreeModel <- function(
   }
 
   if (is.null(group_models)) {
-    # generate them from data
+    # generate them from data and relatedness matrices
+    if (is.null(data)) {
+      stop("Either 'group_models' or 'data' must be provided.")
+    }
     ytemp <- colnames(data)
     group_models <- buildFamilyGroups(
       dat = data,
-      ytemp = ytemp
+      ytemp = ytemp,
+      Addmat = Addmat,
+      Nucmat = Nucmat,
+      Extmat = Extmat,
+      Mtdmat = Mtdmat,
+      Amimat = Amimat,
+      Dmgmat = Dmgmat
     )
   }
 

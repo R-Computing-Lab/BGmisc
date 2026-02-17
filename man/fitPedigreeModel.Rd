@@ -10,6 +10,12 @@ fitPedigreeModel(
     0.6),
   data = NULL,
   group_models = NULL,
+  Addmat = NULL,
+  Nucmat = NULL,
+  Extmat = NULL,
+  Mtdmat = NULL,
+  Amimat = NULL,
+  Dmgmat = NULL,
   tryhard = TRUE
 )
 }
@@ -22,7 +28,20 @@ fitPedigreeModel(
 and columns correspond to individuals. Only used when \code{group_models} is NULL.}
 
 \item{group_models}{Optional list of pre-built OpenMx family group models
-(from \code{\link{buildOneFamilyGroup}}). If NULL, they are generated from \code{data}.}
+(from \code{\link{buildOneFamilyGroup}}). If NULL, they are generated from \code{data}
+using the provided relatedness matrices.}
+
+\item{Addmat}{Additive genetic relatedness matrix. Required when \code{group_models} is NULL.}
+
+\item{Nucmat}{Common nuclear environment relatedness matrix. Optional.}
+
+\item{Extmat}{Common extended environment relatedness matrix. Optional.}
+
+\item{Mtdmat}{Mitochondrial relatedness matrix. Optional.}
+
+\item{Amimat}{Additive-by-mitochondrial interaction matrix. Optional.}
+
+\item{Dmgmat}{Dominance genetic relatedness matrix. Optional.}
 
 \item{tryhard}{Logical. If TRUE (default), use \code{mxTryHard} for robust optimization;
 if FALSE, use \code{mxRun}.}

@@ -266,3 +266,47 @@ test_that("fitPedigreeModel runs end-to-end with a trivial dataset", {
   )
   expect_true(inherits(result, "MxModel"))
 })
+
+test_that("fitPedigreeModel generates group_models from data and relatedness matrices", {
+  skip_if_not_installed("OpenMx")
+  set.seed(42)
+  # Two families, each with 2 (simulated) observed scores
+  dat <- matrix(
+    c(0.1, -0.1, 0.2, -0.2),
+    nrow = 2,
+    dimnames = list(NULL, c("y1", "y2"))
+  )
+  Addmat <- make_add2()
+  vars <- list(
+    ad2 = 0.4, dd2 = 0.1, cn2 = 0.1, ce2 = 0.1,
+    mt2 = 0.05, am2 = 0.05, ee2 = 0.3
+  )
+  result <- expect_no_error(
+    fitPedigreeModel(
+      model_name   = "FitTestAutoGroup",
+      vars         = vars,
+      data         = dat,
+      group_models = NULL,  # Will be auto-generated
+      Addmat       = Addmat,
+      tryhard      = FALSE
+    )
+  )
+  expect_true(inherits(result, "MxModel"))
+})
+
+test_that("fitPedigreeModel errors when group_models and data are both NULL", {
+  skip_if_not_installed("OpenMx")
+  vars <- list(
+    ad2 = 0.4, dd2 = 0.1, cn2 = 0.1, ce2 = 0.1,
+    mt2 = 0.05, am2 = 0.05, ee2 = 0.3
+  )
+  expect_error(
+    fitPedigreeModel(
+      model_name   = "FitTest",
+      vars         = vars,
+      data         = NULL,
+      group_models = NULL
+    ),
+    regexp = "Either 'group_models' or 'data' must be provided"
+  )
+})
