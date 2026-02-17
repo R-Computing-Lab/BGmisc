@@ -16,22 +16,24 @@
 #' @return An OpenMx model representing the pedigree with specified variance components.
 #' @export
 
-buildPedigreeModelCovariance <- function(vars = list(
-  ad2 = 0.5,
-  dd2 = 0.3,
-  cn2 = 0.2, ce2 = 0.4,
-  mt2 = 0.1,
-  am2 = 0.25,
-  ee2 = 0.6
-),
-Vad = TRUE,
-Vdd = FALSE,
-Vcn = TRUE,
-Vce = TRUE,
-Vmt = TRUE,
-Vam = FALSE,
-Ver = TRUE) {
-  if (require(OpenMx) == FALSE) {
+buildPedigreeModelCovariance <- function(
+  vars = list(
+    ad2 = 0.5,
+    dd2 = 0.3,
+    cn2 = 0.2, ce2 = 0.4,
+    mt2 = 0.1,
+    am2 = 0.25,
+    ee2 = 0.6
+  ),
+  Vad = TRUE,
+  Vdd = FALSE,
+  Vcn = TRUE,
+  Vce = TRUE,
+  Vmt = TRUE,
+  Vam = FALSE,
+  Ver = TRUE
+) {
+  if (!requireNamespace("OpenMx", quietly = TRUE)) {
     stop("OpenMx package is required for buildPedigreeModelCovariance function. Please install it.")
   } else {
     library(OpenMx)
@@ -110,16 +112,17 @@ Ver = TRUE) {
 #' @export
 
 buildOneFamilyGroup <- function(
-    group_name,
-    Addmat = NULL,
-    Nucmat = NULL,
-    Extmat = NULL,
-    Mtdmat = NULL,
-    Amimat = NULL,
-    Dmgmat = NULL,
-    full_df_row,
-    ytemp) {
-  if (require(OpenMx) == FALSE) {
+  group_name,
+  Addmat = NULL,
+  Nucmat = NULL,
+  Extmat = NULL,
+  Mtdmat = NULL,
+  Amimat = NULL,
+  Dmgmat = NULL,
+  full_df_row,
+  ytemp
+) {
+  if (!requireNamespace("OpenMx", quietly = TRUE)) {
     stop("OpenMx package is required for buildOneFamilyGroup function. Please install it.")
   } else {
     library(OpenMx)
@@ -148,22 +151,28 @@ buildOneFamilyGroup <- function(
 
   if (!is.null(Addmat)) {
     mat_list <- c(mat_list, list(
-      mxMatrix("Symm", nrow = fsize, ncol = fsize,
-               values = as.matrix(Addmat), name = "A")
+      mxMatrix("Symm",
+        nrow = fsize, ncol = fsize,
+        values = as.matrix(Addmat), name = "A"
+      )
     ))
     algebra_terms <- c(algebra_terms, "(A %x% ModelOne.Vad)")
   }
   if (!is.null(Dmgmat)) {
     mat_list <- c(mat_list, list(
-      mxMatrix("Symm", nrow = fsize, ncol = fsize,
-               values = as.matrix(Dmgmat), name = "D")
+      mxMatrix("Symm",
+        nrow = fsize, ncol = fsize,
+        values = as.matrix(Dmgmat), name = "D"
+      )
     ))
     algebra_terms <- c(algebra_terms, "(D %x% ModelOne.Vdd)")
   }
   if (!is.null(Nucmat)) {
     mat_list <- c(mat_list, list(
-      mxMatrix("Symm", nrow = fsize, ncol = fsize,
-               values = as.matrix(Nucmat), name = "Cn")
+      mxMatrix("Symm",
+        nrow = fsize, ncol = fsize,
+        values = as.matrix(Nucmat), name = "Cn"
+      )
     ))
     algebra_terms <- c(algebra_terms, "(Cn %x% ModelOne.Vcn)")
   }
@@ -173,15 +182,19 @@ buildOneFamilyGroup <- function(
   }
   if (!is.null(Amimat)) {
     mat_list <- c(mat_list, list(
-      mxMatrix("Symm", nrow = fsize, ncol = fsize,
-               values = as.matrix(Amimat), name = "Am")
+      mxMatrix("Symm",
+        nrow = fsize, ncol = fsize,
+        values = as.matrix(Amimat), name = "Am"
+      )
     ))
     algebra_terms <- c(algebra_terms, "(Am %x% ModelOne.Vam)")
   }
   if (!is.null(Mtdmat)) {
     mat_list <- c(mat_list, list(
-      mxMatrix("Symm", nrow = fsize, ncol = fsize,
-               values = as.matrix(Mtdmat), name = "Mt")
+      mxMatrix("Symm",
+        nrow = fsize, ncol = fsize,
+        values = as.matrix(Mtdmat), name = "Mt"
+      )
     ))
     algebra_terms <- c(algebra_terms, "(Mt %x% ModelOne.Vmt)")
   }
@@ -198,11 +211,11 @@ buildOneFamilyGroup <- function(
     list(
       mxData(observed = full_df_row, type = "raw", sort = FALSE),
       mxMatrix("Full",
-               nrow = 1, ncol = fsize, name = "M", free = TRUE,
-               labels = "meanLI", dimnames = list(NULL, ytemp)
+        nrow = 1, ncol = fsize, name = "M", free = TRUE,
+        labels = "meanLI", dimnames = list(NULL, ytemp)
       ),
       mxAlgebraFromString(algebra_str,
-                          name = "V", dimnames = list(ytemp, ytemp)
+        name = "V", dimnames = list(ytemp, ytemp)
       ),
       mxExpectationNormal(covariance = "V", means = "M"),
       mxFitFunctionML()
@@ -230,14 +243,15 @@ buildOneFamilyGroup <- function(
 #' @export
 
 buildFamilyGroups <- function(
-    dat, ytemp,
-    Addmat = NULL,
-    Nucmat = NULL,
-    Extmat = NULL,
-    Mtdmat = NULL,
-    Amimat = NULL,
-    Dmgmat = NULL,
-    prefix = "fam") {
+  dat, ytemp,
+  Addmat = NULL,
+  Nucmat = NULL,
+  Extmat = NULL,
+  Mtdmat = NULL,
+  Amimat = NULL,
+  Dmgmat = NULL,
+  prefix = "fam"
+) {
   numfam <- nrow(dat)
   groups <- vector("list", numfam)
 
@@ -273,7 +287,7 @@ buildFamilyGroups <- function(
 #' @export
 
 buildPedigreeMx <- function(model_name, vars, group_models) {
-  if (require(OpenMx) == FALSE) {
+  if (!requireNamespace("OpenMx", quietly = TRUE)) {
     stop("OpenMx package is required for buildPedigreeMx function. Please install it.")
   } else {
     library(OpenMx)
@@ -347,25 +361,20 @@ buildPedigreeMx <- function(model_name, vars, group_models) {
 #' @export
 
 fitPedigreeModel <- function(
-    model_name = "PedigreeModel",
-    vars = list(
-      ad2 = 0.5,
-      dd2 = 0.3,
-      cn2 = 0.2, ce2 = 0.4,
-      mt2 = 0.1,
-      am2 = 0.25,
-      ee2 = 0.6
-    ),
-    data = NULL,
-    group_models = NULL,
-    Addmat = NULL,
-    Nucmat = NULL,
-    Extmat = NULL,
-    Mtdmat = NULL,
-    Amimat = NULL,
-    Dmgmat = NULL,
-    tryhard = TRUE) {
-  if (require(OpenMx) == FALSE) {
+  model_name = "PedigreeModel",
+  vars = list(
+    ad2 = 0.5,
+    dd2 = 0.3,
+    cn2 = 0.2, ce2 = 0.4,
+    mt2 = 0.1,
+    am2 = 0.25,
+    ee2 = 0.6
+  ),
+  data = NULL,
+  group_models = NULL,
+  tryhard = TRUE
+) {
+  if (!requireNamespace("OpenMx", quietly = TRUE)) {
     stop("OpenMx package is required for fitPedigreeModel function. Please install it.")
   } else {
     library(OpenMx)
