@@ -17,7 +17,8 @@ buildBetweenGenerations(
   momID = "momID",
   dadID = "dadID",
   code_male = "M",
-  code_female = "F"
+  code_female = "F",
+  beta = FALSE
 )
 }
 \arguments{
@@ -60,6 +61,8 @@ kids per mate will be fixed at kpc.}
 \item{code_male}{The value to use for males. Default is "M"}
 
 \item{code_female}{The value to use for females. Default is "F"}
+
+\item{beta}{logical. If TRUE, use the optimized version of the algorithm.}
 }
 \value{
 The function updates the `df_Fam` data frame in place, adding or modifying columns related to parental and offspring status,

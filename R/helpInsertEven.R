@@ -9,34 +9,49 @@
 #' The function takes two vectors, m and n, and inserts the elements of m evenly into n.
 #' If the length of m is greater than the length of n, the vectors are swapped, and the insertion proceeds.
 #' The resulting vector is a combination of m and n, with the elements of m evenly distributed within n.
-#' @export
 #' @seealso \code{\link{SimPed}} for the main function that uses this supporting function.
 
 insertEven <- function(m, n, verbose = FALSE) {
-  if (length(m) > length(n)) {
+  lm <- length(m)
+  ln <- length(n)
+  if (lm > ln) {
     temp <- m
     m <- n
     n <- temp
+
+    temp <- lm
+    lm <- ln
+    ln <- temp
+    temp <- NULL
+
+    if (isTRUE(verbose)) {
+      message("Swapped m and n because length(m) > length(n)")
+    }
   }
 
-  # idx <- numeric()
-  for (i in seq_along(m)) {
-    names(m)[i] <- ceiling(i * length(n) / length(m))
+
+  if (lm == 0L) {
+    return(unname(n))
   }
-  if (verbose == TRUE) {
-    message(m)
+  if (ln == 0L) {
+    return(unname(m))
   }
-  names(n) <- seq_along(n)
-  if (verbose == TRUE) {
-    message(n)
+
+  pos_m <- ceiling(seq_len(lm) * ln / lm)
+
+  if (isTRUE(verbose)) {
+    message("m insertion targets: ", paste(pos_m, collapse = ", "))
+    message("n indices: ", paste(seq_len(ln), collapse = ", "))
   }
+
+
   vec <- c(m, n)
-  vec <- vec[order(as.numeric(names(vec)))]
-  vec <- unname(vec)
+  primary <- c(pos_m, seq_len(ln))
+  secondary <- c(rep.int(0L, lm), rep.int(1L, ln))
+  vec <- vec[order(primary, secondary)]
 
-  return(vec)
+  unname(vec)
 }
 
 #' @rdname insertEven
-#' @export
 evenInsert <- insertEven

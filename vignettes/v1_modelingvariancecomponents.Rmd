@@ -98,6 +98,7 @@ identifyComponentModel(
 As you can see the model is identified, now that we've added another group. Let us confirm by fitting a model. First we prepare the data.
 
 ```{r, include=FALSE}
+library(dplyr)
 if (!requireNamespace("OpenMx", quietly = TRUE)) {
   # if OpenMx isn't available
   n_subjects <- 500
@@ -117,12 +118,14 @@ if (!requireNamespace("OpenMx", quietly = TRUE)) {
     zyg = rep(c(1, 3), each = n_subjects / 2)
   )
   twinData$ht2 <- twinData$ht1 * ifelse(twinData$zyg == 1, 1, 0.5) +
-    rnorm(n_subjects, 
-          mean = 0, sd = df_summary_data$ht2_sd) + 
-    .1 * rnorm(n_subjects, 
-               mean = df_summary_data$ht2_mean,
-               sd = df_summary_data$ht2_sd)
-  
+    rnorm(n_subjects,
+      mean = 0, sd = df_summary_data$ht2_sd
+    ) +
+    .1 * rnorm(n_subjects,
+      mean = df_summary_data$ht2_mean,
+      sd = df_summary_data$ht2_sd
+    )
+
   twinData$ht2[twinData$zyg == 3] <- twinData$ht2[twinData$zyg == 3] + .5 * rnorm(sum(twinData$zyg == 3), mean = df_summary_data$ht2_mean, sd = df_summary_data$ht2_sd)
 } else {
   data(twinData, package = "OpenMx")
@@ -130,7 +133,7 @@ if (!requireNamespace("OpenMx", quietly = TRUE)) {
 ```
 
 ```{r}
-require(dplyr)
+library(dplyr)
 
 
 selVars <- c("ht1", "ht2")
