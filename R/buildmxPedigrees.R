@@ -372,7 +372,13 @@ fitPedigreeModel <- function(
   ),
   data = NULL,
   group_models = NULL,
-  tryhard = TRUE
+  tryhard = TRUE,
+  Addmat = NULL,
+  Nucmat = NULL,
+  Extmat = NULL,
+  Mtdmat = NULL,
+  Amimat = NULL,
+  Dmgmat = NULL
 ) {
   if (!requireNamespace("OpenMx", quietly = TRUE)) {
     stop("OpenMx package is required for fitPedigreeModel function. Please install it.")

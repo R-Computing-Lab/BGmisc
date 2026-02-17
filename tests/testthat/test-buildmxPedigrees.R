@@ -286,7 +286,7 @@ test_that("fitPedigreeModel generates group_models from data and relatedness mat
       model_name   = "FitTestAutoGroup",
       vars         = vars,
       data         = dat,
-      group_models = NULL,  # Will be auto-generated
+      group_models = NULL, # Will be auto-generated
       Addmat       = Addmat,
       tryhard      = FALSE
     )
