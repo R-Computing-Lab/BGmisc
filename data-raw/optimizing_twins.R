@@ -272,13 +272,15 @@ write_csv(results, "data-raw/ped2com_benchmark_results.csv")
 summary(results)
 results %>%
   group_by(ped_label, twin_method, sparse_matrix) %>%
-  summarise(median_time_ms = median(time / 1e6),
+  summarise(
+    median_time_ms = median(time / 1e6),
     mean_time_ms = mean(time / 1e6),
     var_time_ms = var(time / 1e6),
     sd_time_ms = sd(time / 1e6),
     se_time_ms = sd(time / 1e6) / sqrt(n()),
     n_time = n(),
-    .groups = "drop_last") %>%
+    .groups = "drop_last"
+  ) %>%
   arrange(ped_label, twin_method, sparse_matrix) %>%
   write_csv("data-raw/ped2com_benchmark_summary.csv")
 
@@ -344,29 +346,30 @@ if (FALSE) {
     {
       sim_tbl$ped[[1]] %>% ped2com(component = "additive", mz_twins = TRUE, mz_method = "addtwins", beta = TRUE, sparse = TRUE)
     },
-    interval = 0.01)
+    interval = 0.01
+  )
 
 
   profvis(
     {
       sim_tbl$ped[[1]] %>% ped2com(component = "additive", mz_twins = TRUE, mz_method = "merging", beta = TRUE, sparse = FALSE)
     },
-    interval = 0.01)
+    interval = 0.01
+  )
   # could it be the interaction between NA and gc??
-  test_df_twins <-  sim_tbl$ped[[1]] %>% fuseTwins(test_df_twins = TRUE)
-  foundreturnedall <-  findMZtwins(sim_tbl$ped[[1]],
+  test_df_twins <- sim_tbl$ped[[1]] %>% fuseTwins(test_df_twins = TRUE)
+  foundreturnedall <- findMZtwins(sim_tbl$ped[[1]],
     verbose = F,
     returnRows = TRUE, returnIDs = TRUE, returnAsList = T
   )
-  foundreturnedrows <-  findMZtwins(sim_tbl$ped[[1]],
+  foundreturnedrows <- findMZtwins(sim_tbl$ped[[1]],
     verbose = F,
     returnRows = TRUE, returnIDs = FALSE, returnAsList = T
   )
-  foundreturnedids <-  findMZtwins(sim_tbl$ped[[1]],
+  foundreturnedids <- findMZtwins(sim_tbl$ped[[1]],
     verbose = F,
     returnRows = FALSE, returnIDs = TRUE, returnAsList = T
   )
-
 }
 if (FALSE) {
   # Example of how to run a single benchmark for one condition

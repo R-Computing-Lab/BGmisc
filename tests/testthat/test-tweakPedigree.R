@@ -169,10 +169,11 @@ test_that("makeInbreeding - Inbred mates specified by generation and sibling", {
   ped <- simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR)
   #
   for (prefer in prefer_unmated) {
-
-    result <- makeInbreeding(ped, gen_inbred = gen_inbred, type_inbred = type_inbred,
+    result <- makeInbreeding(ped,
+      gen_inbred = gen_inbred, type_inbred = type_inbred,
       prefer_unmated = prefer,
-      verbose = TRUE)
+      verbose = TRUE
+    )
     expect_equal(names(result), c("famID", "ID", "gen", "dadID", "momID", "spID", "sex"))
 
     # do we have the same people?

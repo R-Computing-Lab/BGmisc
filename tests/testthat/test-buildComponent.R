@@ -76,8 +76,10 @@ test_that("MZ twins coded at relatedness 1 via twinID column (complex pedigree)"
   df_midgen_base <- simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR, beta = TRUE) |>
     makeTwins(gen_twin = gen_twin)
 
-  twinIDS <-  findMZtwins(df_midgen_base, returnRows =  FALSE,
-    returnIDs = TRUE, returnAsList = FALSE)
+  twinIDS <- findMZtwins(df_midgen_base,
+    returnRows = FALSE,
+    returnIDs = TRUE, returnAsList = FALSE
+  )
 
   moms_of_twins <- df_midgen_base$momID[df_midgen_base$ID %in% c(twinIDS$twin1_id, twinIDS$twin2_id)] %>% unique()
   dads_of_twins <- df_midgen_base$dadID[df_midgen_base$ID %in% c(twinIDS$twin1_id, twinIDS$twin2_id)] %>% unique()
@@ -103,11 +105,13 @@ test_that("MZ twins coded at relatedness 1 via twinID column (complex pedigree)"
   df_midgen_above$dadID[df_midgen_above$ID %in% parents_of_twins] <- grandfathers_of_twins[1]
 
   if (FALSE) {
-    df_midgen_below %>% rename(personID = ID) %>%
-      ggpedigree::ggPedigreeInteractive(config = list(code_male = "M", focal_fill_personID = twinIDS$twin1_id,
+    df_midgen_below %>%
+      rename(personID = ID) %>%
+      ggpedigree::ggPedigreeInteractive(config = list(
+        code_male = "M", focal_fill_personID = twinIDS$twin1_id,
         focal_fill_include = TRUE,
-        sex_color_include = FALSE))
-
+        sex_color_include = FALSE
+      ))
   }
   for (df_midgen in list(df_midgen_base, df_midgen_below, df_midgen_above)) {
     r_mz1 <- df_midgen |>

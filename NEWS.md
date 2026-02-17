@@ -1,6 +1,6 @@
 # BGmisc NEWS
 # Development version: 1.6.0.9000
-
+Add OpenMx pedigree model builders and docs
 Add option for MZ twins in the additive genetic matrix
 Add option to select sex for MZ twin generation.
 Add option to tweak pedigree with one id provided
