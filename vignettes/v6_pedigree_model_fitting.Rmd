@@ -157,7 +157,7 @@ not_identified_text <- "The full model is NOT identified. We will need to refine
 
 ```
 
-``r if (identified) paste(identified_text) else not_identified_text `` 
+`r if (identified) paste(identified_text) else not_identified_text` 
 
 ```{r identify-full-model-details, include = identified}
 # show if model is identified
