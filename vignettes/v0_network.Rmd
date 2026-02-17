@@ -2,7 +2,7 @@
 title: "Network tools for finding extended pedigrees and path tracing"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Network}
+  %\VignetteIndexEntry{Network tools for finding extended pedigrees and path tracing}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

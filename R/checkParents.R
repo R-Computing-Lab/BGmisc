@@ -59,9 +59,6 @@ checkParentIDs <- function(ped, verbose = FALSE, repair = FALSE,
   validation_results$single_parents <- (length(missing_fathers) + length(missing_mothers)) > 0
 
 
-
-
-
   if (verbose && validation_results$single_parents) cat("Missing single parents found.\n")
   if (verbose && !validation_results$single_parents) cat("No missing single parents found.\n")
 
@@ -269,12 +266,12 @@ checkParentIDs <- function(ped, verbose = FALSE, repair = FALSE,
   }
 
   # restore orginal names that the user orginally provided
-  ped <-  restorePedColnames(ped,
+  ped <- restorePedColnames(ped,
     famID = famID,
     personID = personID,
     momID = momID,
-    dadID = dadID)
-
+    dadID = dadID
+  )
 }
 #' Repair Parent IDs
 #'

@@ -2,7 +2,7 @@
 title: "Pedigree Simulation and Visualization with BGmisc"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Pedigree}
+  %\VignetteIndexEntry{Pedigree Simulation and Visualization}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

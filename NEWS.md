@@ -1,6 +1,10 @@
 # BGmisc NEWS
 # Development version: 1.6.0.9000
 
+Add option for MZ twins in the additive genetic matrix
+Add option to select sex for MZ twin generation.
+Add option to tweak pedigree with one id provided
+
 # BGmisc 1.6.0.1
 * Add helper functions for checkParents etc
 * fixed incorrect direction so that parents are pointing to children in the graphs
