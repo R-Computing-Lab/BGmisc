@@ -1,0 +1,546 @@
+---
+title: "Fitting Pedigree-Based Variance Component Models"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Fitting Pedigree-Based Variance Component Models}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+options(rmarkdown.html_vignette.check_title = FALSE)
+```
+
+# Introduction
+
+A core goal of behavior genetics is to decompose observed phenotypic variance into genetic and environmental components. Traditionally, this has been done using twin studies, which compare monozygotic (MZ) and dizygotic (DZ) twin pairs. However, extended pedigrees -- multi-generational families with known parentage -- provide richer information about relatedness and allow researchers to estimate a wider array of variance components.
+
+The `BGmisc` package provides a complete pipeline for pedigree-based variance component modeling:
+
+1. **Simulate** multi-generational pedigrees with `simulatePedigree()`
+2. **Compute** relatedness matrices with `ped2add()`, `ped2cn()`, `ped2mit()`, and `ped2ce()`
+3. **Check identification** with `identifyComponentModel()` and `comp2vech()`
+4. **Build and fit** structural equation models with `buildOneFamilyGroup()`, `buildPedigreeMx()`, and `fitPedigreeModel()`
+
+This vignette walks through each step, from generating a pedigree to fitting a variance component model and interpreting the results.
+
+## Prerequisites
+
+This vignette requires the `OpenMx` package for structural equation modeling. If you don't have it installed, you can install it from CRAN or from the OpenMx website.
+
+```{r setup}
+library(BGmisc)
+
+has_openmx <- requireNamespace("OpenMx", quietly = TRUE)
+has_mvtnorm <- requireNamespace("mvtnorm", quietly = TRUE)
+
+if (has_openmx) {
+  library(OpenMx)
+} else {
+  message(
+    "OpenMx is not installed. Code will be shown but not executed.\n",
+    "Install OpenMx with: install.packages('OpenMx')"
+  )
+}
+
+if (!has_mvtnorm) {
+  message(
+    "mvtnorm is not installed. Data simulation examples will not run.\n",
+    "Install mvtnorm with: install.packages('mvtnorm')"
+  )
+}
+
+run_models <- has_openmx && has_mvtnorm
+```
+
+
+# Step 1: Simulate a Pedigree
+
+We begin by simulating a multi-generational pedigree using `simulatePedigree()`. This creates a balanced family structure with a specified number of generations and children per couple.
+
+```{r simulate-pedigree}
+set.seed(421)
+
+ped <- simulatePedigree(
+  kpc = 3,    # 3 children per couple
+  Ngen = 4,   # 4 generations
+  sexR = 0.5, # equal sex ratio
+  marR = 0.6  # 60% mating rate
+)
+
+head(ped)
+```
+
+The resulting data frame contains one row per individual with columns for family ID (`fam`), personal ID (`ID`), generation (`gen`), parent IDs (`dadID`, `momID`), spouse ID (`spID`), and biological sex (`sex`).
+
+- Number of individuals: ``r nrow(ped)``
+- Number of generations: ``r length(unique(ped$gen))``
+
+```{r ped-summary}
+summarizeFamilies(ped, famID = "fam")$family_summary
+```
+
+
+# Step 2: Compute Relatedness Matrices
+
+With a pedigree in hand, we compute the various relatedness component matrices. Each matrix is square and symmetric, with rows and columns corresponding to individuals in the pedigree. The entry in row *i* and column *j* quantifies the relatedness between person *i* and person *j* along a specific pathway.
+
+## Additive Genetic Relatedness
+
+The additive genetic relatedness matrix captures the expected proportion of nuclear DNA shared identical by descent (IBD) between two individuals. For example, parent-offspring pairs share 0.5, full siblings share 0.5 on average, half-siblings share 0.25, and so on.
+
+```{r compute-additive}
+add_matrix <- ped2add(ped, sparse = FALSE)
+add_matrix[1:5, 1:5]
+```
+
+## Common Nuclear Environment
+
+The common nuclear environment matrix captures whether two individuals shared both biological parents (i.e., were raised in the same nuclear family). Full siblings who share the same mother and father have a value of 1; all others have 0.
+
+```{r compute-nuclear}
+cn_matrix <- ped2cn(ped, sparse = FALSE)
+cn_matrix[1:5, 1:5]
+```
+
+## Mitochondrial Relatedness
+
+The mitochondrial relatedness matrix captures shared maternal lineage. Individuals who share the same maternal line (mother, maternal grandmother, etc.) share mitochondrial DNA.
+
+```{r compute-mito}
+mt_matrix <- ped2mit(ped, sparse = FALSE)
+mt_matrix[1:5, 1:5]
+```
+
+## Common Extended Family Environment
+
+The common extended family environment matrix indicates whether individuals belong to the same extended family. For a single pedigree, this is simply a matrix of ones.
+
+```{r compute-extended}
+ce_matrix <- ped2ce(ped)
+ce_matrix[1:5, 1:5]
+```
+
+
+# Step 3: Check Model Identification
+
+Before fitting a model, we need to verify that the variance components are *identified* -- that is, the data provide enough information to uniquely estimate each parameter. If components are not identified, their estimates can trade off against each other, leading to unstable or meaningless results.
+
+The `identifyComponentModel()` function checks identification by vectorizing each relatedness component matrix (via `comp2vech()`) and testing whether the resulting design matrix has full column rank. Each component matrix becomes a column in this design matrix. If the rank equals the number of components, the model is identified.
+
+For more background on identification in variance component models, see `vignette("v1_modelingvariancecomponents", package = "BGmisc")`.
+
+## Checking Our Full Model
+
+We plan to fit a 5-component model with additive genetic (A), common nuclear environment (Cn), common extended environment (Ce), mitochondrial (Mt), and unique environment (E) components. Let's check whether these five components are simultaneously identified using the relatedness matrices we just computed:
+
+```{r identify-full-model}
+id_full <- identifyComponentModel(
+  A  = add_matrix,
+  Cn = cn_matrix,
+  Ce = ce_matrix,
+  Mt = mt_matrix,
+  E  = diag(1, nrow(add_matrix))
+)
+id_full
+```
+```{r, include=FALSE}
+identified <- id_full$identified
+
+identified_text <- "The full model is identified. We can proceed to fit it. However, to illustrate the process of checking identification and refining the model, we will also show how to interpret the details of the identification check. Below, I have provided an unidentified model to demonstrate how to use the `nidp` element of the result to understand which components are confounded."
+
+not_identified_text <- "The full model is NOT identified. We will need to refine the model by dropping or fixing some components."
+
+```
+
+``r if (identified) paste(identified_text) else not_identified_text `` 
+
+```{r identify-full-model-details, include = identified}
+# show if model is identified
+
+identifyComponentModel(
+  A  = add_matrix,
+  A2  = add_matrix,
+  Cn = cn_matrix,
+  Ce = ce_matrix,
+  Mt = mt_matrix,
+  E  = diag(1, nrow(add_matrix))
+)
+
+```
+
+With a single pedigree, the 5-component model *may* not be fully identified. The `nidp` element in the result tells us which components are confounded. This is because some relatedness matrices can be linearly dependent -- for example, `ce_matrix` is a matrix of all ones for a single family, and the identity matrix (E) plus other components may span a similar space. In this case, our model is identified, but if it were not, we would see a message like "Variance components are not all identified. (And even if they were, we might not have enough data to estimate them all.) 
+
+## Narrowing Down to an Identified Model
+
+Based on the identification check above, we can drop or fix the non-identified components. A natural choice is to remove the components flagged by `identifyComponentModel()` and re-check:
+
+```{r identify-reduced}
+# A simpler model: A + Cn + E
+id_ace <- identifyComponentModel(
+  A  = list(add_matrix),
+  Cn = list(cn_matrix),
+  E  = diag(1, nrow(add_matrix))
+)
+id_ace
+```
+
+A single extended pedigree typically provides enough variation in relatedness coefficients (parent-offspring = 0.5, siblings = 0.5, grandparent-grandchild = 0.25, cousins = 0.125, etc.) to identify the A + Cn + E model.
+
+## Recovering Identification with Multiple Families
+
+When a component is not identified with one family, adding families with different structures can help. Each family contributes additional rows to the design matrix. Let's check whether the full 5-component model becomes identified when we combine two pedigrees:
+
+```{r identify-multi}
+set.seed(99)
+ped2 <- simulatePedigree(kpc = 4, Ngen = 3, marR = 0.5) |> makeTwins()
+add2 <- ped2add(ped2, sparse = FALSE)
+cn2  <- ped2cn(ped2, sparse = FALSE)
+ce2  <- ped2ce(ped2)
+mt2  <- ped2mit(ped2, sparse = FALSE)
+
+# Check the full model across two families
+n_combined <- nrow(add_matrix) + nrow(add2)
+id_two_fam <- identifyComponentModel(
+  A  = list(add_matrix, add2),
+  Cn = list(cn_matrix, cn2),
+  Ce = list(ce_matrix, ce2),
+  Mt = list(mt_matrix, mt2),
+  E  = diag(1, n_combined)
+)
+id_two_fam
+```
+
+This result guides our modeling decisions in the steps that follow. When fitting the model below, we set the non-identified components' true values to zero so that we have a known ground truth to recover.
+
+
+# Step 4: Simulate Phenotypic Data
+
+Before fitting a model, we need observed data. In practice, this would be measured phenotypes (e.g., height, cognitive ability, disease status). Here, we simulate phenotypic data from a known variance component structure so we can verify that our model recovers the true parameters.
+
+We define "true" variance components and use the relatedness matrices to construct the population covariance matrix, then sample from it.
+
+```{r simulate-phenotype, eval = run_models}
+# True variance components (proportions of total variance)
+true_var <- list(
+  ad2 = 0.50,  # additive genetic
+  cn2 = 0.10,  # common nuclear environment
+  ce2 = 0.00,  # common extended environment (set to 0 for identifiability)
+  mt2 = 0.00,  # mitochondrial (set to 0 for simplicity)
+  ee2 = 0.40   # unique environment (residual)
+)
+
+# Build the implied covariance matrix
+# V = ad2*A + cn2*Cn + ce2*U + mt2*Mt + ee2*I
+n <- nrow(add_matrix)
+I_mat <- diag(1, n)
+U_mat <- matrix(1, n, n)
+
+V_true <- true_var$ad2 * add_matrix +
+  true_var$cn2 * cn_matrix +
+  true_var$ce2 * U_mat +
+  true_var$mt2 * mt_matrix +
+  true_var$ee2 * I_mat
+
+# Simulate one realization of the phenotype vector
+set.seed(123)
+y <- mvtnorm::rmvnorm(1, sigma = V_true)
+
+# Create named variable labels (required by OpenMx)
+ytemp <- paste("S", rownames(add_matrix))
+
+cat("Simulated phenotype for", ncol(y), "individuals\n")
+cat("Mean:", round(mean(y), 3), " SD:", round(sd(y), 3), "\n")
+```
+
+In practice, you would have data from multiple independently ascertained families. Here we simulate data from a single pedigree for simplicity, but the model-fitting functions support multiple pedigrees (shown in a later section).
+
+
+# Step 5: Build the OpenMx Model
+
+The `BGmisc` package provides helper functions that construct the OpenMx model in three layers:
+
+1. **`buildPedigreeModelCovariance()`** -- Creates the variance component parameters (free parameters to be estimated)
+2. **`buildOneFamilyGroup()`** -- Creates the model for a single family, embedding the relatedness matrices and observed data
+3. **`buildPedigreeMx()`** -- Combines the variance components with one or more family groups into a multi-group model
+
+## Building a Single-Family Model
+
+Let's walk through building the model step by step.
+
+### Variance Component Parameters
+
+The `buildPedigreeModelCovariance()` function creates the OpenMx sub-model that holds the free variance component parameters. You can control which components to include:
+
+```{r build-covariance, eval = run_models}
+# Starting values for the optimizer
+start_vars <- list(
+  ad2 = 0.3, dd2 = 0, cn2 = 0.1,
+  ce2 = 0.1, mt2 = 0.1, am2 = 0,
+  ee2 = 0.4
+)
+
+# Build variance component sub-model
+vc_model <- buildPedigreeModelCovariance(
+  vars = start_vars,
+  Vad = TRUE,   # estimate additive genetic variance
+  Vdd = FALSE,  # do not estimate dominance
+  Vcn = TRUE,   # estimate common nuclear environment
+  Vce = TRUE,   # estimate common extended environment
+  Vmt = TRUE,   # estimate mitochondrial
+  Vam = FALSE,  # do not estimate A x Mt interaction
+  Ver = TRUE    # estimate unique environment
+)
+summary(vc_model)
+```
+
+### Family Group Model
+
+The `buildOneFamilyGroup()` function constructs the model for one family. It takes the relatedness matrices and the observed data for that family:
+
+```{r build-group, eval = run_models}
+# Format the observed data as a 1-row matrix with named columns
+obs_data <- matrix(y, nrow = 1, dimnames = list(NULL, ytemp))
+
+# Build the family group model
+family_group <- buildOneFamilyGroup(
+  group_name = "family1",
+  Addmat = add_matrix,
+  Nucmat = cn_matrix,
+  Extmat = ce_matrix,
+  Mtdmat = mt_matrix,
+  full_df_row = obs_data,
+  ytemp = ytemp
+)
+```
+
+The family group model contains:
+
+- **Identity matrix (I)** and **unit matrix (U)** for the unique and extended environment components
+- **Relatedness matrices** (A, Cn, Mt, etc.) as fixed data matrices
+- **An mxAlgebra** that computes the implied covariance: $V = \sigma^2_a A + \sigma^2_{cn} C_n + \sigma^2_{ce} U + \sigma^2_{mt} Mt + \sigma^2_e I$
+- **Normal expectation** with the covariance and a free mean
+
+
+### Assembling the Full Model
+
+The `buildPedigreeMx()` function combines the variance component parameters (shared across all families) with the family group model(s):
+
+```{r build-full, eval = run_models}
+full_model <- buildPedigreeMx(
+  model_name = "PedigreeVCModel",
+  vars = start_vars,
+  group_models = list(family_group)
+)
+```
+
+
+# Step 6: Fit the Model
+
+With the model assembled, we fit it using OpenMx's optimizer. The `mxRun()` function performs maximum likelihood estimation:
+
+```{r fit-model, eval = run_models}
+fitted_model <- mxRun(full_model)
+smr <- summary(fitted_model)
+```
+
+```{r show-results, eval = run_models}
+# Extract variance component estimates
+estimates <- c(
+  Vad = fitted_model$ModelOne$Vad$values[1, 1],
+  Vcn = fitted_model$ModelOne$Vcn$values[1, 1],
+  Vce = fitted_model$ModelOne$Vce$values[1, 1],
+  Vmt = fitted_model$ModelOne$Vmt$values[1, 1],
+  Ver = fitted_model$ModelOne$Ver$values[1, 1]
+)
+
+# Compare estimates to true values
+truth <- c(
+  Vad = true_var$ad2,
+  Vcn = true_var$cn2,
+  Vce = true_var$ce2,
+  Vmt = true_var$mt2,
+  Ver = true_var$ee2
+)
+
+comparison <- data.frame(
+  Component = names(truth),
+  True = truth,
+  Estimated = round(estimates, 4)
+)
+comparison
+```
+
+```{r show-fit-stats, eval = run_models}
+cat("-2 Log Likelihood:", smr$Minus2LogLikelihood, "\n")
+cat("Converged:", fitted_model$output$status$code == 0, "\n")
+```
+
+With a single pedigree realization, estimates will vary from the true values due to sampling variability. Estimation improves substantially with multiple families, as shown next.
+
+
+# Step 7: Multi-Pedigree Model
+
+In practice, researchers have data from multiple families. The BGmisc helpers are designed for this multi-group scenario, where variance component parameters are shared across families but each family has its own relatedness structure and data.
+
+## Simulating Multiple Families
+
+```{r multi-ped-simulate, eval = run_models}
+set.seed(2024)
+n_families <- 5
+
+# Storage
+ped_list <- vector("list", n_families)
+add_list <- vector("list", n_families)
+cn_list <- vector("list", n_families)
+mt_list <- vector("list", n_families)
+ce_list <- vector("list", n_families)
+y_list <- vector("list", n_families)
+ytemp_list <- vector("list", n_families)
+
+for (i in seq_len(n_families)) {
+  # Simulate each family with slightly different structure
+  ped_i <- simulatePedigree(kpc = 3, Ngen = 4, marR = 0.6)
+  ped_list[[i]] <- ped_i
+
+  # Compute relatedness matrices
+  A_i <- as.matrix(ped2add(ped_i))
+  Cn_i <- as.matrix(ped2cn(ped_i))
+  Mt_i <- as.matrix(ped2mit(ped_i))
+  Ce_i <- ped2ce(ped_i)
+  n_i <- nrow(A_i)
+
+  add_list[[i]] <- A_i
+  cn_list[[i]] <- Cn_i
+  mt_list[[i]] <- Mt_i
+  ce_list[[i]] <- Ce_i
+
+  # Build implied covariance and simulate data
+  I_i <- diag(1, n_i)
+  U_i <- matrix(1, n_i, n_i)
+  V_i <- true_var$ad2 * A_i +
+    true_var$cn2 * Cn_i +
+    true_var$ce2 * U_i +
+    true_var$mt2 * Mt_i +
+    true_var$ee2 * I_i
+
+  y_list[[i]] <- mvtnorm::rmvnorm(1, sigma = V_i)
+  ytemp_list[[i]] <- paste("S", rownames(A_i))
+}
+
+cat("Simulated", n_families, "families\n")
+cat("Family sizes:", vapply(ped_list, nrow, integer(1)), "\n")
+```
+
+## Building and Fitting the Multi-Group Model
+
+We build a group model for each family and then combine them:
+
+```{r multi-ped-fit, eval = run_models}
+# Build group models for each family
+group_models <- lapply(seq_len(n_families), function(i) {
+  obs_data_i <- matrix(y_list[[i]], nrow = 1, dimnames = list(NULL, ytemp_list[[i]]))
+
+  buildOneFamilyGroup(
+    group_name = paste0("ped", i),
+    Addmat = add_list[[i]],
+    Nucmat = cn_list[[i]],
+    Extmat = ce_list[[i]],
+    Mtdmat = mt_list[[i]],
+    full_df_row = obs_data_i,
+    ytemp = ytemp_list[[i]]
+  )
+})
+
+# Build the multi-group model
+multi_model <- buildPedigreeMx(
+  model_name = "MultiPedigreeModel",
+  vars = start_vars,
+  group_models = group_models
+)
+
+# Fit the model
+fitted_multi <- mxRun(multi_model)
+smr_multi <- summary(fitted_multi)
+```
+
+```{r multi-ped-results, eval = run_models}
+# Extract and compare estimates
+estimates_multi <- c(
+  Vad = fitted_multi$ModelOne$Vad$values[1, 1],
+  Vcn = fitted_multi$ModelOne$Vcn$values[1, 1],
+  Vce = fitted_multi$ModelOne$Vce$values[1, 1],
+  Vmt = fitted_multi$ModelOne$Vmt$values[1, 1],
+  Ver = fitted_multi$ModelOne$Ver$values[1, 1]
+)
+
+comparison_multi <- data.frame(
+  Component = c("Additive genetic (Vad)", "Common nuclear (Vcn)",
+                "Common extended (Vce)", "Mitochondrial (Vmt)",
+                "Unique environment (Ver)"),
+  True = truth,
+  Estimated = round(estimates_multi, 4)
+)
+comparison_multi
+
+cat("\n-2 Log Likelihood:", smr_multi$Minus2LogLikelihood, "\n")
+cat("Converged:", fitted_multi$output$status$code == 0, "\n")
+```
+
+With multiple families providing more information, the estimates should more closely approximate the true generating values.
+
+
+# Using the High-Level `fitPedigreeModel()` Wrapper
+
+For convenience, `fitPedigreeModel()` wraps the build and fit steps together. It accepts pre-built group models and uses `mxTryHard()` for robust optimization with multiple starts:
+
+```{r fit-highlevel, eval = run_models}
+fitted_easy <- fitPedigreeModel(
+  model_name = "EasyFit",
+  vars = start_vars,
+  data = NULL,
+  group_models = group_models,
+  tryhard = TRUE
+)
+
+summary(fitted_easy)
+```
+
+
+# Understanding the Covariance Structure
+
+The key equation underlying the model is:
+
+$$V = \sigma^2_a \mathbf{A} + \sigma^2_{cn} \mathbf{C}_n + \sigma^2_{ce} \mathbf{U} + \sigma^2_{mt} \mathbf{M} + \sigma^2_e \mathbf{I}$$
+
+where:
+
+- $\mathbf{A}$ is the additive genetic relatedness matrix (from `ped2add()`)
+- $\mathbf{C}_n$ is the common nuclear environment matrix (from `ped2cn()`)
+- $\mathbf{U}$ is a matrix of ones representing shared extended family environment (from `ped2ce()`)
+- $\mathbf{M}$ is the mitochondrial relatedness matrix (from `ped2mit()`)
+- $\mathbf{I}$ is the identity matrix (unique environment, one per person)
+- $\sigma^2_a, \sigma^2_{cn}, \sigma^2_{ce}, \sigma^2_{mt}, \sigma^2_e$ are the variance components to be estimated
+
+This is an extension of the classical twin model to arbitrary pedigree structures. The additive genetic relatedness matrix generalizes the concept of MZ twins sharing 100% of genes and DZ twins sharing 50% -- in a pedigree, every pair of relatives has a specific coefficient of relatedness determined by their genealogical connection.
+
+
+# Summary
+
+This vignette demonstrated the full workflow for pedigree-based variance component modeling:
+
+| Step | Function | Purpose |
+|------|----------|---------|
+| 1 | `simulatePedigree()` | Generate a multi-generational pedigree |
+| 2 | `ped2add()`, `ped2cn()`, `ped2mit()`, `ped2ce()` | Compute relatedness matrices |
+| 3 | `identifyComponentModel()`| Check model identification |
+| 4 | Simulate or prepare phenotypic data | Observed data for model fitting |
+| 5 | `buildOneFamilyGroup()`, `buildPedigreeModelCovariance()` | Build OpenMx model components |
+| 6 | `buildPedigreeMx()`, `mxRun()` or `fitPedigreeModel()` | Assemble and fit the model |
+| 7 | Multiple families | Scale to multi-group pedigree models |
+
+The helper functions (`buildPedigreeModelCovariance()`, `buildOneFamilyGroup()`, `buildFamilyGroups()`, `buildPedigreeMx()`, `fitPedigreeModel()`) handle the mechanics of translating pedigree relatedness matrices into proper OpenMx model specifications, allowing researchers to focus on the substantive questions rather than the modeling boilerplate.
