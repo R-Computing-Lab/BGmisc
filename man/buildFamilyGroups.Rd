@@ -2,8 +2,7 @@
 % Please edit documentation in R/buildmxPedigrees.R
 \name{buildFamilyGroups}
 \alias{buildFamilyGroups}
-\title{Build family group models
-This function constructs OpenMx models for multiple family groups based on provided relatedness matrices and observed data.}
+\title{Build family group models}
 \usage{
 buildFamilyGroups(
   dat,
@@ -40,6 +39,6 @@ buildFamilyGroups(
 A list of OpenMx models for each family group.
 }
 \description{
-Build family group models
-This function constructs OpenMx models for multiple family groups based on provided relatedness matrices and observed data.
+This function constructs OpenMx models for multiple family groups based on
+provided relatedness matrices and observed data.
 }

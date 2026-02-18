@@ -2,15 +2,14 @@
 % Please edit documentation in R/buildmxPedigrees.R
 \name{buildPedigreeMx}
 \alias{buildPedigreeMx}
-\title{Build Pedigree mxModel
-This function constructs an OpenMx pedigree model by combining variance component models and family group models.}
+\title{Build Pedigree mxModel}
 \usage{
 buildPedigreeMx(model_name, vars, group_models)
 }
 \arguments{
 \item{model_name}{Name of the overall pedigree model.}
 
-\item{vars}{A named vector of initial variance component values.}
+\item{vars}{A named list or vector of initial variance component values.}
 
 \item{group_models}{A list of OpenMx models for each family group.}
 }
@@ -18,6 +17,8 @@ buildPedigreeMx(model_name, vars, group_models)
 An OpenMx pedigree model combining variance components and family groups.
 }
 \description{
-Build Pedigree mxModel
-This function constructs an OpenMx pedigree model by combining variance component models and family group models.
+This function constructs an OpenMx pedigree model by combining variance
+component parameters and family group models. It auto-detects which
+variance components are referenced in the group algebras and creates
+only those parameters.
 }

@@ -2,8 +2,7 @@
 % Please edit documentation in R/buildmxPedigrees.R
 \name{buildOneFamilyGroup}
 \alias{buildOneFamilyGroup}
-\title{Build one family group model
-This function constructs an OpenMx model for a single family group based on provided relatedness matrices and observed data.}
+\title{Build one family group model}
 \usage{
 buildOneFamilyGroup(
   group_name,
@@ -20,26 +19,30 @@ buildOneFamilyGroup(
 \arguments{
 \item{group_name}{Name of the family group.}
 
-\item{Addmat}{Additive genetic relatedness matrix.}
+\item{Addmat}{Additive genetic relatedness matrix (from \code{\link{ped2add}}).}
 
-\item{Nucmat}{Nuclear family shared environment relatedness matrix.}
+\item{Nucmat}{Nuclear family shared environment relatedness matrix (from \code{\link{ped2cn}}).}
 
-\item{Extmat}{Extended family shared environment relatedness matrix.}
+\item{Extmat}{Extended family shared environment indicator. When non-NULL,
+a common-extended-environment term using a unit matrix is included.}
 
-\item{Mtdmat}{Mitochondrial genetic relatedness matrix.}
+\item{Mtdmat}{Mitochondrial genetic relatedness matrix (from \code{\link{ped2mit}}).}
 
 \item{Amimat}{Additive by mitochondrial interaction relatedness matrix.}
 
 \item{Dmgmat}{Dominance genetic relatedness matrix.}
 
-\item{full_df_row}{A matrix representing the observed data for the family group.}
+\item{full_df_row}{A 1-row matrix of observed data with column names matching \code{ytemp}.}
 
-\item{ytemp}{A vector of variable names corresponding to the observed data.}
+\item{ytemp}{A character vector of variable names corresponding to the observed data columns.}
 }
 \value{
 An OpenMx model for the specified family group.
 }
 \description{
-Build one family group model
-This function constructs an OpenMx model for a single family group based on provided relatedness matrices and observed data.
+This function constructs an OpenMx model for a single family group based on
+provided relatedness matrices and observed data. The implied covariance
+is built as a weighted sum of the supplied relatedness matrices, where
+the weights are variance component parameters shared across groups via
+a parent \code{ModelOne} sub-model.
 }

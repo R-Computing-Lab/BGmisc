@@ -5,7 +5,8 @@
 \title{Create an mxModel for a pedigree}
 \usage{
 buildPedigreeModelCovariance(
-  vars = c(ad2 = 0.5, dd2 = 0.3, cn2 = 0.2, ce2 = 0.4, mt2 = 0.1, am2 = 0.25, ee2 = 0.6),
+  vars = list(ad2 = 0.5, dd2 = 0.3, cn2 = 0.2, ce2 = 0.4, mt2 = 0.1, am2 = 0.25, ee2 =
+    0.6),
   Vad = TRUE,
   Vdd = FALSE,
   Vcn = TRUE,
@@ -16,13 +17,16 @@ buildPedigreeModelCovariance(
 )
 }
 \arguments{
-\item{vars}{A named vector of initial variance component values. Default values are provided.}
+\item{vars}{A named list or vector of initial variance component values. Names should include
+ad2 (additive), dd2 (dominance), cn2 (common nuclear), ce2 (common extended),
+mt2 (mitochondrial), am2 (additive-mitochondrial interaction), and ee2 (unique environment).
+Default values are provided.}
 
 \item{Vad}{Logical. Include additive genetic variance component. Default is TRUE.}
 
 \item{Vdd}{Logical. Include dominance genetic variance component. Default is FALSE.}
 
-\item{Vcn}{Logical. Include common nuclear family environment variance component. Default is TRUE}
+\item{Vcn}{Logical. Include common nuclear family environment variance component. Default is TRUE.}
 
 \item{Vce}{Logical. Include common extended family environment variance component. Default is TRUE.}
 

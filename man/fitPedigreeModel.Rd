@@ -2,19 +2,54 @@
 % Please edit documentation in R/buildmxPedigrees.R
 \name{fitPedigreeModel}
 \alias{fitPedigreeModel}
-\title{fitPedigreeModel
-Fit an OpenMx pedigree model to observed data.
-This function constructs and fits an OpenMx model for a pedigree using specified variance components and family group models.}
+\title{Fit an OpenMx pedigree model to observed data}
 \usage{
 fitPedigreeModel(
   model_name = "PedigreeModel",
-  vars = c(ad2 = 0.5, dd2 = 0.3, cn2 = 0.2, ce2 = 0.4, mt2 = 0.1, am2 = 0.25, ee2 = 0.6),
-  data,
-  group_models = NULL
+  vars = list(ad2 = 0.5, dd2 = 0.3, cn2 = 0.2, ce2 = 0.4, mt2 = 0.1, am2 = 0.25, ee2 =
+    0.6),
+  data = NULL,
+  group_models = NULL,
+  tryhard = TRUE,
+  Addmat = NULL,
+  Nucmat = NULL,
+  Extmat = NULL,
+  Mtdmat = NULL,
+  Amimat = NULL,
+  Dmgmat = NULL
 )
 }
+\arguments{
+\item{model_name}{Character. Name for the overall OpenMx model. Default is "PedigreeModel".}
+
+\item{vars}{A named list or vector of initial variance component values.}
+
+\item{data}{A matrix or data frame of observed data, where each row is a family
+and columns correspond to individuals. Only used when \code{group_models} is NULL.}
+
+\item{group_models}{Optional list of pre-built OpenMx family group models
+(from \code{\link{buildOneFamilyGroup}}). If NULL, they are generated from \code{data}
+using the provided relatedness matrices.}
+
+\item{tryhard}{Logical. If TRUE (default), use \code{mxTryHard} for robust optimization;
+if FALSE, use \code{mxRun}.}
+
+\item{Addmat}{Additive genetic relatedness matrix. Required when \code{group_models} is NULL.}
+
+\item{Nucmat}{Common nuclear environment relatedness matrix. Optional.}
+
+\item{Extmat}{Common extended environment relatedness matrix. Optional.}
+
+\item{Mtdmat}{Mitochondrial relatedness matrix. Optional.}
+
+\item{Amimat}{Additive-by-mitochondrial interaction matrix. Optional.}
+
+\item{Dmgmat}{Dominance genetic relatedness matrix. Optional.}
+}
+\value{
+A fitted OpenMx model.
+}
 \description{
-fitPedigreeModel
-Fit an OpenMx pedigree model to observed data.
-This function constructs and fits an OpenMx model for a pedigree using specified variance components and family group models.
+This function constructs and fits an OpenMx model for a pedigree using
+specified variance components and family group models.
 }
