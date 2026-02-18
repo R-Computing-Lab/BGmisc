@@ -609,7 +609,7 @@ makePool <- function(ped, mate_id, mate_sex, mate_dad, mate_mom, prefer_unmated 
 
   # should we prefer unmated siblings when automatically selecting inbred mates? If yes, we will only consider unmated siblings. If no, we will consider all siblings regardless of their mating status.
   if (prefer_unmated == TRUE) {
-    mated_mask <- !is.na(ped$spID)
+    mated_mask <- is.na(ped$spID)
   } else {
     mated_mask <- rep(TRUE, nrow(ped))
   }
