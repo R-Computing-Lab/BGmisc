@@ -69,7 +69,8 @@ add <- ped2com(df_got,
   isChild_method = "partialparent",
   component = "additive",
   adjacency_method = "direct",
-  sparse = TRUE
+  sparse = TRUE,
+  mz_twins = TRUE
 )
 
 mt <- ped2com(df_got,

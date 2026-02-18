@@ -1,10 +1,15 @@
 # BGmisc NEWS
 # Development version: 1.6.0.9000
+Add OpenMx pedigree model builders and docs
+Added vignette for OpenMx pedigree model builders
+Add option for MZ twins in the additive genetic matrix
+Add option to select sex for MZ twin generation.
+Add option to tweak pedigree with one id provided
 
 # BGmisc 1.6.0.1
 * Add helper functions for checkParents etc
 * fixed incorrect direction so that parents are pointing to children in the graphs
-* Optimize  simulatePedigree and helpers for speed and memory usage
+* Optimize simulatePedigree and helpers for speed and memory usage
 * Major gains in speed for deeper pedigrees
 * Added more tests for simulatePedigree
 * Fix error when not enough single people available

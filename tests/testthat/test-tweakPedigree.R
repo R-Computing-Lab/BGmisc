@@ -163,17 +163,25 @@ test_that("makeInbreeding - Inbred mates specified by generation and sibling", {
   marR <- .7
   gen_inbred <- 2
   type_inbred <- "sibling"
+  prefer_unmated <- c(TRUE, FALSE)
+
 
   ped <- simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR)
   #
-  result <- makeInbreeding(ped, gen_inbred = gen_inbred, type_inbred = type_inbred)
-  expect_equal(names(result), c("famID", "ID", "gen", "dadID", "momID", "spID", "sex"))
+  for (prefer in prefer_unmated) {
+    result <- makeInbreeding(ped,
+      gen_inbred = gen_inbred, type_inbred = type_inbred,
+      prefer_unmated = prefer,
+      verbose = TRUE
+    )
+    expect_equal(names(result), c("famID", "ID", "gen", "dadID", "momID", "spID", "sex"))
 
-  # do we have the same people?
-  expect_equal(result$ID, ped$ID)
+    # do we have the same people?
+    expect_equal(result$ID, ped$ID)
 
-  # did we get more spID values than we started with?
-  expect_gt(sum(!is.na(result$spID)), sum(!is.na(ped$spID)))
+    # did we get more spID values than we started with?
+    expect_gt(sum(!is.na(result$spID)), sum(!is.na(ped$spID)))
+  }
 })
 
 test_that("makeInbreeding - Inbred mates specified by generation and cousin", {
@@ -221,6 +229,9 @@ test_that("dropLink - Drop specified by ID", {
 
 
   # are the dataframes the same in both the undropped and dropepd relationships for all but the dropped ID?
+  expect_equal(colnames(result), c("famID", "ID", "gen", "dadID", "momID", "spID", "sex"))
+  names(ped) <- c("famID", "ID", "gen", "dadID", "momID", "spID", "sex")
+
   expect_equal(result[result$ID != ID_drop, ], ped[ped$ID != ID_drop, ])
 
   # are the families of the dropped ID in the original?
@@ -242,6 +253,9 @@ test_that("dropLink - Drop specified by ID", {
   ped <- simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR)
   result <- dropLink(ped, ID_drop = ID_drop)
 
+  expect_equal(colnames(result), c("famID", "ID", "gen", "dadID", "momID", "spID", "sex"))
+  names(ped) <- c("famID", "ID", "gen", "dadID", "momID", "spID", "sex")
+
   # are the dataframes the same in both the undropped and dropped relationships for all but the dropped ID?
   expect_equal(result[result$ID != ID_drop, ], ped[ped$ID != ID_drop, ])
 
@@ -262,7 +276,8 @@ test_that("dropLink - Drop specified by generation", {
 
   ped <- simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR)
   result <- dropLink(ped, gen_drop = gen_drop)
-
+  expect_equal(colnames(result), c("famID", "ID", "gen", "dadID", "momID", "spID", "sex"))
+  names(ped) <- c("famID", "ID", "gen", "dadID", "momID", "spID", "sex")
   # are the dataframes the same in both the undropped and dropped relationships for all but the dropped gen?
   expect_equal(result[result$gen != gen_drop, ], ped[ped$gen != gen_drop, ])
 
@@ -398,4 +413,329 @@ test_that("addPersonToPed works as expected with zygosity", {
   expect_true(is.na(updated3$zygosity[4]))
 
   expect_equal(updated3$personID[4], max(ped$personID, na.rm = TRUE) + 2)
+})
+
+# Tests for single-ID specification (auto-find the other)
+
+test_that("makeTwins - specify only ID_twin1, auto-find twin2", {
+  ped <- data.frame(
+    famID = c(1, 1, 1, 1),
+    ID = c(1, 2, 3, 4),
+    gen = c(1, 1, 2, 2),
+    dadID = c(NA, NA, 1, 1),
+    momID = c(NA, NA, 2, 2),
+    spID = c(NA, NA, NA, NA),
+    sex = c("M", "F", "M", "F")
+  )
+  # Person 3 (M) and 4 (F) are siblings. With DZ zygosity, either could be auto-selected.
+  result <- makeTwins(ped, ID_twin1 = 3, zygosity = "DZ")
+  expect_equal(sum(!is.na(result$twinID)), 2)
+  # Twin1 should be person 3
+  expect_equal(result$twinID[result$ID == 3], 4)
+  expect_equal(result$twinID[result$ID == 4], 3)
+})
+
+test_that("makeTwins - specify only ID_twin2, auto-find twin1", {
+  ped <- data.frame(
+    famID = c(1, 1, 1, 1),
+    ID = c(1, 2, 3, 4),
+    gen = c(1, 1, 2, 2),
+    dadID = c(NA, NA, 1, 1),
+    momID = c(NA, NA, 2, 2),
+    spID = c(NA, NA, NA, NA),
+    sex = c("M", "F", "M", "F")
+  )
+  result <- makeTwins(ped, ID_twin2 = 4, zygosity = "DZ")
+  expect_equal(sum(!is.na(result$twinID)), 2)
+  expect_equal(result$twinID[result$ID == 4], 3)
+  expect_equal(result$twinID[result$ID == 3], 4)
+})
+
+test_that("makeInbreeding - specify only ID_mate1, auto-find mate2", {
+  ped <- data.frame(
+    famID = c(1, 1, 1, 1),
+    ID = c(1, 2, 3, 4),
+    gen = c(1, 1, 2, 2),
+    dadID = c(NA, NA, 1, 1),
+    momID = c(NA, NA, 2, 2),
+    spID = c(NA, NA, NA, NA),
+    sex = c("M", "F", "M", "F")
+  )
+  # Person 3 (M) should auto-find person 4 (F) as opposite-sex sibling
+  result <- makeInbreeding(ped, ID_mate1 = 3)
+  expect_equal(result$spID[result$ID == 3], 4)
+  expect_equal(result$spID[result$ID == 4], 3)
+})
+
+# ─── makeTwins edge cases ────────────────────────────────────────────────────
+
+test_that("makeTwins - invalid gen_twin below 2 issues warning and returns unchanged ped", {
+  set.seed(1)
+  ped <- simulatePedigree(kpc = 4, Ngen = 4, sexR = .5, marR = .7)
+  # gen_twin = 1 is invalid (< 2)
+  expect_warning(
+    result <- makeTwins(ped, gen_twin = 1),
+    regexp = "generation of the twins"
+  )
+  # The returned pedigree should not have twinID or zygosity columns
+  expect_false("twinID" %in% colnames(result))
+  expect_false("zygosity" %in% colnames(result))
+  # Row count unchanged
+  expect_equal(nrow(result), nrow(ped))
+})
+
+test_that("makeTwins - invalid gen_twin above max generation issues warning", {
+  set.seed(1)
+  ped <- simulatePedigree(kpc = 4, Ngen = 4, sexR = .5, marR = .7)
+  max_gen <- max(ped$gen)
+  expect_warning(
+    result <- makeTwins(ped, gen_twin = max_gen + 1),
+    regexp = "generation of the twins"
+  )
+  expect_false("twinID" %in% colnames(result))
+})
+
+test_that("makeTwins - verbose prints twin IDs when both specified", {
+  ped <- data.frame(
+    famID = c(1, 1, 1, 1),
+    ID    = c(1, 2, 3, 4),
+    gen   = c(1, 1, 2, 2),
+    dadID = c(NA, NA, 1, 1),
+    momID = c(NA, NA, 2, 2),
+    spID  = c(NA, NA, NA, NA),
+    sex   = c("M", "F", "M", "F")
+  )
+  # verbose = TRUE should not error
+  expect_no_error(makeTwins(ped, ID_twin1 = 3, ID_twin2 = 4, verbose = TRUE))
+})
+
+test_that("makeTwins - twinID column is updated in-place when it already exists", {
+  set.seed(2)
+  ped <- simulatePedigree(kpc = 4, Ngen = 3, sexR = .5, marR = .7)
+  # Create first pair of twins (adds twinID column)
+  ped_t1 <- makeTwins(ped, gen_twin = 2)
+  expect_true("twinID" %in% colnames(ped_t1))
+  # Second call should reuse the existing twinID column (not create a new MZtwin column)
+  ped_t2 <- expect_no_error(makeTwins(ped_t1, gen_twin = 2))
+  expect_true("twinID" %in% colnames(ped_t2))
+  expect_false("MZtwin" %in% colnames(ped_t2))
+  # At minimum the original twin pair is still recorded
+  expect_gte(sum(!is.na(ped_t2$twinID)), 2)
+})
+
+# ─── makeInbreeding – auto-find mate1 when only ID_mate2 provided ────────────
+
+test_that("makeInbreeding - specify only ID_mate2, auto-find mate1", {
+  ped <- data.frame(
+    famID = c(1, 1, 1, 1),
+    ID    = c(1, 2, 3, 4),
+    gen   = c(1, 1, 2, 2),
+    dadID = c(NA, NA, 1, 1),
+    momID = c(NA, NA, 2, 2),
+    spID  = c(NA, NA, NA, NA),
+    sex   = c("M", "F", "M", "F")
+  )
+  # Person 4 (F) specified; person 3 (M) should be auto-selected as opposite-sex sibling
+  result <- makeInbreeding(ped, ID_mate2 = 4)
+  expect_equal(result$spID[result$ID == 3], 4)
+  expect_equal(result$spID[result$ID == 4], 3)
+})
+
+test_that("makeInbreeding - prefer_unmated=TRUE with single ID_mate1 runs without error", {
+  set.seed(42)
+  ped <- simulatePedigree(kpc = 4, Ngen = 4, sexR = .5, marR = .7)
+  # Pick a generation-2 individual with an opposite-sex sibling
+  gen2_ids <- ped$ID[ped$gen == 2 & !is.na(ped$dadID)]
+  for (cand in gen2_ids) {
+    cand_sex <- ped$sex[ped$ID == cand]
+    cand_dad <- ped$dadID[ped$ID == cand]
+    cand_mom <- ped$momID[ped$ID == cand]
+    opp_pool <- ped$ID[
+      ped$ID != cand & ped$gen == 2 &
+        !is.na(ped$dadID) & ped$dadID == cand_dad &
+        !is.na(ped$momID) & ped$momID == cand_mom &
+        ped$sex != cand_sex
+    ]
+    if (length(opp_pool) > 0) {
+      result <- expect_no_error(
+        makeInbreeding(ped, ID_mate1 = cand, prefer_unmated = TRUE)
+      )
+      # The candidate's spID should have been set to one of the eligible siblings
+      selected_mate <- result$spID[result$ID == cand]
+      expect_true(!is.na(selected_mate))
+      expect_true(selected_mate %in% opp_pool)
+      # The relationship should be symmetric
+      expect_equal(result$spID[result$ID == selected_mate], cand)
+      break
+    }
+  }
+})
+
+test_that("makeInbreeding - prefer_unmated=TRUE with only ID_mate2", {
+  ped <- data.frame(
+    famID = c(1, 1, 1, 1),
+    ID    = c(1, 2, 3, 4),
+    gen   = c(1, 1, 2, 2),
+    dadID = c(NA, NA, 1, 1),
+    momID = c(NA, NA, 2, 2),
+    spID  = c(NA, NA, NA, NA),
+    sex   = c("M", "F", "M", "F")
+  )
+  result <- expect_no_error(
+    makeInbreeding(ped, ID_mate2 = 4, prefer_unmated = TRUE)
+  )
+  expect_equal(result$spID[result$ID == 4], 3)
+  expect_equal(result$spID[result$ID == 3], 4)
+})
+
+# ─── dropLink – sex_drop filter ──────────────────────────────────────────────
+
+test_that("dropLink - drop only males in a generation via sex_drop", {
+  set.seed(15)
+  ped <- simulatePedigree(kpc = 4, Ngen = 4, sexR = .5, marR = .7)
+  names(ped)[names(ped) == "fam"] <- "famID"
+
+  result <- dropLink(ped, gen_drop = 2, sex_drop = "M")
+
+  # Some male in gen 2 should now have NA parents
+  males_gen2 <- result[result$gen == 2 & result$sex == "M", ]
+  expect_true(any(is.na(males_gen2$dadID) | is.na(males_gen2$momID)))
+
+  # Females in gen 2 should be completely unchanged
+  females_gen2_orig <- ped[ped$gen == 2 & ped$sex == "F", ]
+  females_gen2_res <- result[result$gen == 2 & result$sex == "F", ]
+  expect_equal(females_gen2_res$dadID, females_gen2_orig$dadID)
+  expect_equal(females_gen2_res$momID, females_gen2_orig$momID)
+})
+
+test_that("dropLink - warning when target pool is empty", {
+  # Generation 1 founders have no dadID/momID, so the pool is always empty
+  set.seed(15)
+  ped <- simulatePedigree(kpc = 4, Ngen = 4, sexR = .5, marR = .7)
+  expect_warning(
+    result <- dropLink(ped, gen_drop = 1),
+    regexp = "No individual is dropped"
+  )
+  # Pedigree should be returned unchanged
+  expect_equal(nrow(result), nrow(ped))
+})
+
+# ─── addPersonToPed – additional paths ───────────────────────────────────────
+
+test_that("addPersonToPed - error when overwrite=TRUE and personID does not exist", {
+  ped <- data.frame(
+    personID = c(1L, 2L),
+    name = c("Alice", "Bob"),
+    sex = c("F", "M"),
+    momID = c(NA, NA),
+    dadID = c(NA, NA),
+    twinID = c(NA_integer_, NA_integer_),
+    stringsAsFactors = FALSE
+  )
+  expect_error(
+    addPersonToPed(ped, personID = 99, overwrite = TRUE),
+    regexp = "does not exist in the pedigree"
+  )
+})
+
+test_that("addPersonToPed - notes column is handled when present in ped", {
+  ped <- data.frame(
+    personID = c(1L, 2L),
+    name = c("Alice", "Bob"),
+    sex = c("F", "M"),
+    momID = c(NA, NA),
+    dadID = c(NA, NA),
+    twinID = c(NA_integer_, NA_integer_),
+    notes = c(NA_character_, NA_character_),
+    stringsAsFactors = FALSE
+  )
+  updated <- addPersonToPed(ped,
+    name = "Charlie", sex = "M",
+    momID = 1, dadID = 2,
+    notes = "test note", personID = 10
+  )
+  expect_equal(nrow(updated), 3)
+  expect_equal(updated$notes[3], "test note")
+
+  # When notes not supplied it should be NA
+  updated2 <- addPersonToPed(ped, name = "Dana", sex = "F")
+  expect_true(is.na(updated2$notes[3]))
+})
+
+test_that("addPersonToPed - non-data.frame input raises error", {
+  expect_error(
+    addPersonToPed(list(personID = 1), personID = 2)
+    # stopifnot(is.data.frame(ped)) fires for non-data.frame input
+  )
+})
+
+# ─── makePool ────────────────────────────────────────────────────────────────
+
+test_that("makePool returns opposite-sex siblings with shared parents", {
+  ped <- data.frame(
+    famID = c(1, 1, 1, 1),
+    ID    = c(1, 2, 3, 4),
+    gen   = c(1, 1, 2, 2),
+    dadID = c(NA, NA, 1, 1),
+    momID = c(NA, NA, 2, 2),
+    spID  = c(NA, NA, NA, NA),
+    sex   = c("M", "F", "M", "F")
+  )
+  # Person 3 is male; person 4 should be the pool
+  pool <- BGmisc:::makePool(
+    ped = ped,
+    mate_id = 3,
+    mate_sex = "M",
+    mate_dad = 1,
+    mate_mom = 2,
+    prefer_unmated = FALSE
+  )
+  expect_equal(pool, 4)
+})
+
+test_that("makePool with prefer_unmated=FALSE returns all qualifying siblings", {
+  ped <- data.frame(
+    famID = c(1, 1, 1, 1, 1),
+    ID    = c(1, 2, 3, 4, 5),
+    gen   = c(1, 1, 2, 2, 2),
+    dadID = c(NA, NA, 1, 1, 1),
+    momID = c(NA, NA, 2, 2, 2),
+    spID  = c(NA, NA, NA, 5, NA), # person 4 is mated, person 6 is not
+    sex   = c("M", "F", "M", "F", "F")
+  )
+  # Both female siblings (4 and 5) should appear with prefer_unmated=FALSE
+  pool <- BGmisc:::makePool(
+    ped = ped,
+    mate_id = 3,
+    mate_sex = "M",
+    mate_dad = 1,
+    mate_mom = 2,
+    prefer_unmated = FALSE
+  )
+  expect_true(4 %in% pool)
+  expect_true(5 %in% pool)
+})
+
+test_that("makePool with gen_inbred filters by generation", {
+  ped <- data.frame(
+    famID = c(1, 1, 1, 1, 1, 1),
+    ID    = c(1, 2, 3, 4, 5, 6),
+    gen   = c(1, 1, 2, 2, 3, 3),
+    dadID = c(NA, NA, 1, 1, NA, NA),
+    momID = c(NA, NA, 2, 2, NA, NA),
+    spID  = c(NA, NA, NA, NA, NA, NA),
+    sex   = c("M", "F", "M", "F", "M", "F")
+  )
+  # With gen_inbred=2 the pool should be restricted to gen 2
+  pool <- BGmisc:::makePool(
+    ped = ped,
+    mate_id = 3,
+    mate_sex = "M",
+    mate_dad = 1,
+    mate_mom = 2,
+    prefer_unmated = FALSE,
+    gen_inbred = 2
+  )
+  # Only person 4 is in gen 2, opposite sex, same parents
+  expect_equal(pool, 4)
 })

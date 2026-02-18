@@ -9,6 +9,7 @@
 #' @param verbose logical.  If TRUE, print progress through stages of algorithm
 #' @param gen_twin A vector of \code{generation} of the twin to be imputed.
 #' @param zygosity A character string indicating the zygosity of the twins. Default is "MZ" for monozygotic twins.
+#' @param twin_sex A character string indicating the sex of the twins. Default is randomly assigned ("R"). If specified, it should be either "M" or "F"
 #' @return Returns a \code{data.frame} with MZ twins information added as a new column.
 #' @export
 
@@ -18,7 +19,8 @@ makeTwins <- function(ped, ID_twin1 = NA_integer_,
                       ID_twin2 = NA_integer_,
                       gen_twin = 2,
                       verbose = FALSE,
-                      zygosity = "MZ") {
+                      zygosity = "MZ",
+                      twin_sex = "R") {
   # Check if the ped is the same format as the output of simulatePedigree
   if (paste0(colnames(ped), collapse = "") != paste0(c(
     "famID", "ID", "gen",
@@ -30,37 +32,57 @@ makeTwins <- function(ped, ID_twin1 = NA_integer_,
     }
     # stop("The input pedigree is not in the same format as the output of simulatePedigree")
   }
+
   ped$MZtwin <- NA_integer_
-  ped$zygosity <- NA_character_
+  ped$MZzygosity <- NA_character_
   # Check if the two IDs are provided
-  if (is.na(ID_twin1) || is.na(ID_twin2)) {
+
+  # Build ID-to-row index for O(1) attribute lookups
+  id_row_map <- seq_len(nrow(ped))
+  names(id_row_map) <- as.character(ped$ID)
+
+  if (is.na(ID_twin1) && is.na(ID_twin2)) {
     # Check if the generation is provided
     if (is.na(gen_twin)) {
       stop("You should provide either the IDs of the twins or the generation of the twins")
     } else {
       # Check if the generation is valid
       if (gen_twin < 2 || gen_twin > max(ped$gen)) {
-        stop("The generation of the twins should be an integer between 2 and the maximum generation in the pedigree")
+        warning("The generation of the twins should be an integer between 2 and the maximum generation in the pedigree")
+        # remove the MZtwin and zygosity columns
+        ped$MZzygosity <- NULL
+        ped$MZtwin <- NULL
+        return(ped)
       } else {
         idx <- nrow(ped[ped$gen == gen_twin & !is.na(ped$dadID), ])
         usedID <- c()
         # randomly loop through all the individuals in the generation until find an individual who is the same sex and shares the same dadID and momID with another individual
+        # Pre-compute generation mask once to avoid repeated subsetting
+        gen_mask <- ped$gen == gen_twin & !is.na(ped$dadID)
+        gen_ids <- ped$ID[gen_mask]
+        # Build ID-to-row index for O(1) attribute lookups
+        id_row_map <- seq_len(nrow(ped))
+        names(id_row_map) <- as.character(ped$ID)
         for (i in 1:idx) {
-          # cat("loop", i, "\n")
           # check if i is equal to the number of individuals in the generation
           usedID <- c(usedID, ID_twin1)
           # message(usedID)
           if (i < idx) {
             # randomly select one individual from the generation
-            ID_twin1 <- resample(ped$ID[ped$gen == gen_twin & !(ped$ID %in% usedID) & !is.na(ped$dadID)], 1)
-            # cat("twin1", ID_twin1, "\n")
+            ID_twin1 <- resample(ped$ID[gen_mask & !(ped$ID %in% usedID)], 1)
+            # Cache twin1 attributes via O(1) row lookup
+            twin1_row <- id_row_map[as.character(ID_twin1)]
+            twin1_sex <- ped$sex[twin1_row]
+            twin1_dad <- ped$dadID[twin1_row]
+            twin1_mom <- ped$momID[twin1_row]
             # find one same sex sibling who has the same dadID and momID as the selected individual
-            if (zygosity %in% c("MZ", "SS")) {
-              twin2_Pool <- ped$ID[ped$ID != ID_twin1 & ped$gen == gen_twin & ped$sex == ped$sex[ped$ID == ID_twin1] & ped$dadID == ped$dadID[ped$ID == ID_twin1] & ped$momID == ped$momID[ped$ID == ID_twin1]]
-            } else if (zygosity == "DZ") {
-              twin2_Pool <- ped$ID[ped$ID != ID_twin1 & ped$gen == gen_twin & ped$dadID == ped$dadID[ped$ID == ID_twin1] & ped$momID == ped$momID[ped$ID == ID_twin1]]
-            } else if (zygosity == "OS") {
-              twin2_Pool <- ped$ID[ped$ID != ID_twin1 & ped$gen == gen_twin & ped$sex != ped$sex[ped$ID == ID_twin1] & ped$dadID == ped$dadID[ped$ID == ID_twin1] & ped$momID == ped$momID[ped$ID == ID_twin1]]
+            sib_mask <- ped$ID != ID_twin1 & gen_mask & ped$dadID == twin1_dad & ped$momID == twin1_mom
+            if (zygosity %in% c("mz", "MZ", "SS", "ss")) {
+              twin2_Pool <- ped$ID[sib_mask & ped$sex == twin1_sex]
+            } else if (zygosity %in% c("DZ", "dz")) {
+              twin2_Pool <- ped$ID[sib_mask]
+            } else if (zygosity %in% c("OS", "os")) {
+              twin2_Pool <- ped$ID[sib_mask & ped$sex != twin1_sex]
             } else {
               stop("The zygosity should be either 'MZ', 'DZ', or 'OS'")
             }
@@ -81,7 +103,14 @@ makeTwins <- function(ped, ID_twin1 = NA_integer_,
           } else {
             # randomly select all males or females in the generation and put them in a vector
             if (zygosity %in% c("MZ", "SS")) {
-              selectGender <- ped$ID[ped$gen == gen_twin & ped$sex == resample(c("M", "F"), 1) & !is.na(ped$dadID) & !is.na(ped$momID)]
+              if (twin_sex == "R") {
+                twin_sex_select <- resample(c("M", "F"), 1)
+              } else {
+                twin_sex_select <- twin_sex
+              }
+
+              selectGender <- ped$ID[ped$gen == gen_twin & ped$sex == twin_sex_select & !is.na(ped$dadID) & !is.na(ped$momID)]
+              notselectGender <- ped$ID[ped$gen == gen_twin & ped$sex != twin_sex_select & !is.na(ped$dadID) & !is.na(ped$momID)]
             } else if (zygosity %in% c("DZ")) {
               selectGender <- ped$ID[ped$gen == gen_twin & !is.na(ped$dadID) & !is.na(ped$momID)]
             } else if (zygosity %in% c("OS")) {
@@ -91,9 +120,13 @@ makeTwins <- function(ped, ID_twin1 = NA_integer_,
             }
 
             # message(selectGender)
-            if (length(selectGender) < 2) {
+            if (length(selectGender) < 2 && length(notselectGender) < 2) {
               stop("There are no available same-sex people in the generation to make twins")
+            } else if (twin_sex == "R" && length(selectGender) < 2 && length(notselectGender) >= 2) {
+              selectGender <- notselectGender
             }
+
+
             # randomly select two individuals from the vector
             ID_DoubleTwin <- resample(selectGender, 2)
             # message(ID_DoubleTwin)
@@ -112,18 +145,81 @@ makeTwins <- function(ped, ID_twin1 = NA_integer_,
         # Set the zygosity of the twins
       }
     }
-  } else {
+  } else if (!is.na(ID_twin1) && !is.na(ID_twin2)) {
     # Impute the IDs of the twin in the MZtwin column
     ped$MZtwin[ped$ID == ID_twin1] <- ID_twin2
     ped$MZtwin[ped$ID == ID_twin2] <- ID_twin1
+  } else if (!is.na(ID_twin1) && is.na(ID_twin2)) {
+    twin1_row <- id_row_map[as.character(ID_twin1)]
+    twin1_sex <- ped$sex[twin1_row]
+    twin1_dad <- ped$dadID[twin1_row]
+    twin1_mom <- ped$momID[twin1_row]
+    sib_mask <- ped$ID != ID_twin1 & !is.na(ped$dadID) & ped$dadID == twin1_dad & !is.na(ped$momID) & ped$momID == twin1_mom
+    if (zygosity %in% c("mz", "MZ", "SS", "ss")) {
+      twin2_Pool <- ped$ID[sib_mask & ped$sex == twin1_sex]
+    } else if (zygosity %in% c("DZ", "dz")) {
+      twin2_Pool <- ped$ID[sib_mask]
+    } else if (zygosity %in% c("OS", "os")) {
+      twin2_Pool <- ped$ID[sib_mask & ped$sex != twin1_sex]
+    } else {
+      stop("The zygosity should be either 'MZ', 'DZ', or 'OS'")
+    }
+    twin2_Pool <- twin2_Pool[!is.na(twin2_Pool)]
+    if (length(twin2_Pool) == 0) {
+      stop("No suitable sibling found for ID_twin1 = ", ID_twin1, " with zygosity '", zygosity, "'")
+    }
+    ID_twin2 <- resample(twin2_Pool, 1)
+    if (verbose) cat("Auto-selected ID_twin2 =", ID_twin2, "\n")
+  } else if (is.na(ID_twin1) && !is.na(ID_twin2)) {
+    # Mirror: find a match for twin2
+    twin2_row <- id_row_map[as.character(ID_twin2)]
+    twin2_sex <- ped$sex[twin2_row]
+    twin2_dad <- ped$dadID[twin2_row]
+    twin2_mom <- ped$momID[twin2_row]
+    sib_mask <- ped$ID != ID_twin2 & !is.na(ped$dadID) & ped$dadID == twin2_dad & !is.na(ped$momID) & ped$momID == twin2_mom
+    if (zygosity %in% c("mz", "MZ", "SS", "ss")) {
+      twin1_Pool <- ped$ID[sib_mask & ped$sex == twin2_sex]
+    } else if (zygosity %in% c("DZ", "dz")) {
+      twin1_Pool <- ped$ID[sib_mask]
+    } else if (zygosity %in% c("OS", "os")) {
+      twin1_Pool <- ped$ID[sib_mask & ped$sex != twin2_sex]
+    } else {
+      stop("The zygosity should be either 'MZ', 'DZ', or 'OS'")
+    }
+
+
+    twin1_Pool <- twin1_Pool[!is.na(twin1_Pool)]
+    if (length(twin1_Pool) == 0) {
+      stop("No suitable sibling found for ID_twin2 = ", ID_twin2, " with zygosity '", zygosity, "'")
+    }
+    ID_twin1 <- resample(twin1_Pool, 1)
+    if (verbose) cat("Auto-selected ID_twin1 =", ID_twin1, "\n")
   }
+
+
   if (verbose == TRUE) {
     cat("twin1", ID_twin1, "\n")
     cat("twin2", ID_twin2, "\n")
   }
-  names(ped)[names(ped) == "MZtwin"] <- "twinID"
-  ped$zygosity[ped$ID == ID_twin1] <- zygosity
-  ped$zygosity[ped$ID == ID_twin2] <- zygosity
+  ped$MZtwin[ped$ID == ID_twin1] <- ID_twin2
+  ped$MZtwin[ped$ID == ID_twin2] <- ID_twin1
+
+  if ("twinID" %in% colnames(ped)) {
+    ped$twinID[!is.na(ped$MZtwin)] <- ped$MZtwin[!is.na(ped$MZtwin)]
+    ped$MZtwin <- NULL
+  } else {
+    names(ped)[names(ped) == "MZtwin"] <- "twinID"
+  }
+  if ("zygosity" %in% colnames(ped)) {
+    ped$zygosity[ped$ID == ID_twin1] <- zygosity
+    ped$zygosity[ped$ID == ID_twin2] <- zygosity
+    ped$MZzygosity <- NULL
+  } else {
+    names(ped)[names(ped) == "MZzygosity"] <- "zygosity"
+    ped$zygosity[ped$ID == ID_twin1] <- zygosity
+    ped$zygosity[ped$ID == ID_twin2] <- zygosity
+  }
+
   return(ped)
 }
 
@@ -139,6 +235,7 @@ makeTwins <- function(ped, ID_twin1 = NA_integer_,
 #' @param verbose logical.  If TRUE, print progress through stages of algorithm
 #' @param gen_inbred A vector of \code{generation} of the twin to be imputed.
 #' @param type_inbred A character vector indicating the type of inbreeding. "sib" for sibling inbreeding and "cousin" for cousin inbreeding.
+#' @param prefer_unmated A logical indicating whether to prefer unmated siblings when automatically selecting inbred mates. Default is FALSE, which means the function will consider all siblings regardless of their mating status.
 #' @return Returns a \code{data.frame} with some inbred mates.
 #' @details
 #' This function creates inbred mates in the simulated pedigree \code{data.frame}. This function's purpose is to evaluate the effect of inbreeding on model fitting and parameter estimation. In case it needs to be said, we do not condone inbreeding in real life. But we recognize that it is a common practice in some fields to create inbred strains for research purposes.
@@ -150,7 +247,8 @@ makeInbreeding <- function(ped,
                            ID_mate2 = NA_integer_,
                            verbose = FALSE,
                            gen_inbred = 2,
-                           type_inbred = "sib") {
+                           type_inbred = "sib",
+                           prefer_unmated = FALSE) {
   # check if the ped is the same format as the output of simulatePedigree
 
   if (paste0(colnames(ped),
@@ -175,8 +273,67 @@ makeInbreeding <- function(ped,
     stop("The type of inbreeding should be either 'sib' or 'cousin'")
     return()
   }
-  # check if the two IDs are provided
-  if (is.na(ID_mate1) || is.na(ID_mate2)) {
+
+  if (!is.na(ID_mate1) && is.na(ID_mate2)) {
+    mate1_sex <- ped$sex[ped$ID == ID_mate1]
+    mate1_dad <- ped$dadID[ped$ID == ID_mate1]
+    mate1_mom <- ped$momID[ped$ID == ID_mate1]
+    if (!is.na(mate1_dad) && !is.na(mate1_mom)) {
+      # prefer unmated opposite-sex sibling
+      if (prefer_unmated == TRUE) {
+        pool <- makePool(
+          ped = ped, mate_id = ID_mate1, mate_sex = mate1_sex,
+          mate_dad = mate1_dad, mate_mom = mate1_mom, prefer_unmated = TRUE
+        )
+
+        if (length(pool) == 0) {
+          # fall back to mated opposite-sex sibling
+          pool <- makePool(
+            ped = ped, mate_id = ID_mate1, mate_sex = mate1_sex,
+            mate_dad = mate1_dad, mate_mom = mate1_mom, prefer_unmated = FALSE
+          )
+        }
+      } else {
+        pool <- makePool(
+          ped = ped, mate_id = ID_mate1, mate_sex = mate1_sex,
+          mate_dad = mate1_dad, mate_mom = mate1_mom, prefer_unmated = FALSE
+        )
+      }
+
+      if (length(pool) > 0) {
+        ID_mate2 <- resample(pool, 1)
+        if (verbose) message("Auto-selected ID_mate2 = ", ID_mate2)
+      }
+    }
+  } else if (is.na(ID_mate1) && !is.na(ID_mate2)) {
+    mate2_sex <- ped$sex[ped$ID == ID_mate2]
+    mate2_dad <- ped$dadID[ped$ID == ID_mate2]
+    mate2_mom <- ped$momID[ped$ID == ID_mate2]
+    if (!is.na(mate2_dad) && !is.na(mate2_mom)) {
+      if (prefer_unmated) {
+        pool <- makePool(
+          ped = ped, mate_id = ID_mate2, mate_sex = mate2_sex,
+          mate_dad = mate2_dad, mate_mom = mate2_mom, prefer_unmated = TRUE
+        )
+        # fall back
+        if (length(pool) == 0) {
+          pool <- makePool(
+            ped = ped, mate_id = ID_mate2, mate_sex = mate2_sex,
+            mate_dad = mate2_dad, mate_mom = mate2_mom, prefer_unmated = FALSE
+          )
+        }
+      } else {
+        pool <- makePool(
+          ped = ped, mate_id = ID_mate2, mate_sex = mate2_sex,
+          mate_dad = mate2_dad, mate_mom = mate2_mom, prefer_unmated = FALSE
+        )
+      }
+      if (length(pool) > 0) {
+        ID_mate1 <- resample(pool, 1)
+        if (verbose) message("Auto-selected ID_mate1 = ", ID_mate1)
+      }
+    } # check if the two IDs are provided
+  } else if (is.na(ID_mate1) && is.na(ID_mate2)) {
     # Check if the generation is provided
     if (is.na(gen_inbred)) {
       stop("You should provide either the IDs of the inbred mates or the generation of the inbred mates")
@@ -195,15 +352,34 @@ makeInbreeding <- function(ped,
             if (!is.na(ID_mate2)) {
               break
             }
-            ID_pool_mate1 <- ped$ID[ped$gen == gen_inbred & !is.na(ped$dadID) & !is.na(ped$momID) & is.na(ped$spID) & !(ped$ID %in% usedID)]
-            # if the pool is empty, find all individuals who have the same dadID and momID as the selected individual but mated
-            if (length(ID_pool_mate1) == 0) {
+
+            if (prefer_unmated) {
+              # try to find one opposite
+              ID_pool_mate1 <- ped$ID[ped$gen == gen_inbred & !is.na(ped$dadID) & !is.na(ped$momID) & is.na(ped$spID) & !(ped$ID %in% usedID)]
+
+
+              # if the pool is empty, find all individuals who have the same dadID and momID as the selected individual but mated
+              if (length(ID_pool_mate1) == 0) {
+                ID_pool_mate1 <- ped$ID[ped$gen == gen_inbred & !is.na(ped$dadID) & !is.na(ped$momID) & !(ped$ID %in% usedID)]
+              }
+            } else {
               ID_pool_mate1 <- ped$ID[ped$gen == gen_inbred & !is.na(ped$dadID) & !is.na(ped$momID) & !(ped$ID %in% usedID)]
             }
+
             ID_mate1 <- resample(ID_pool_mate1, 1)
             usedID <- c(usedID, ID_mate1)
             # try to find one opposite-sex individual who has the same dadID and momID as the selected individual, preferalbly not mated
-            ID_pool_mate2 <- ped$ID[ped$gen == gen_inbred & ped$sex != ped$sex[ped$ID == ID_mate1] & ped$dadID == ped$dadID[ped$ID == ID_mate1] & ped$momID == ped$momID[ped$ID == ID_mate1] & is.na(ped$spID)]
+            if (prefer_unmated) {
+              ID_pool_mate2 <- ped$ID[ped$gen == gen_inbred & ped$sex != ped$sex[ped$ID == ID_mate1] & ped$dadID == ped$dadID[ped$ID == ID_mate1] & ped$momID == ped$momID[ped$ID == ID_mate1] & is.na(ped$spID)]
+              # back up
+              if (length(ID_pool_mate1) == 0) {
+                ID_pool_mate2 <- ped$ID[ped$gen == gen_inbred & ped$sex != ped$sex[ped$ID == ID_mate1] & ped$dadID == ped$dadID[ped$ID == ID_mate1] & ped$momID == ped$momID[ped$ID == ID_mate1]]
+              }
+            } else {
+              #     ID_pool_mate2 <- ped$ID[ped$gen == gen_inbred & ped$sex != ped$sex[ped$ID == ID_mate1] & ped$dadID == ped$dadID[ped$ID == ID_mate1] & ped$momID == ped$momID[ped$ID == ID_mate1]]
+              ID_pool_mate2 <- makePool(ped = ped, mate_id = ID_mate1, mate_sex = ped$sex[ped$ID == ID_mate1], mate_dad = ped$dadID[ped$ID == ID_mate1], mate_mom = ped$momID[ped$ID == ID_mate1], prefer_unmated = prefer_unmated, gen_inbred = gen_inbred)
+            }
+
             # if the pool is not empty, randomly select one individual from the pool
             if (length(ID_pool_mate2) > 0) {
               ID_mate2 <- resample(ID_pool_mate2, 1)
@@ -237,20 +413,18 @@ makeInbreeding <- function(ped,
   # change the spouseID of ID_mate1 and ID_mate2 to each other
   ped$spID[ped$ID == ID_mate1] <- ID_mate2
   ped$spID[ped$ID == ID_mate2] <- ID_mate1
-  # change the individuals in next generation whose dadID and momID are ID_mate1 and ID_mate2's former mates to ID_mate1 and ID_mate2
-  for (j in seq_len(nrow(ped))) {
-    if (!is.na(ped$dadID[j]) & !is.na(ID_mate1_former_mate) & ped$dadID[j] == ID_mate1_former_mate) {
-      ped$dadID[j] <- ID_mate2
-    }
-    if (!is.na(ped$momID[j]) & !is.na(ID_mate1_former_mate) & ped$momID[j] == ID_mate1_former_mate) {
-      ped$momID[j] <- ID_mate2
-    }
-    if (!is.na(ped$dadID[j]) & !is.na(ID_mate2_former_mate) & ped$dadID[j] == ID_mate2_former_mate) {
-      ped$dadID[j] <- ID_mate1
-    }
-    if (!is.na(ped$momID[j]) & !is.na(ID_mate2_former_mate) & ped$momID[j] == ID_mate2_former_mate) {
-      ped$momID[j] <- ID_mate1
-    }
+  # Vectorized replacement of former mates' IDs in children's parent columns
+  if (!is.na(ID_mate1_former_mate)) {
+    dad_match1 <- which(!is.na(ped$dadID) & ped$dadID == ID_mate1_former_mate)
+    if (length(dad_match1) > 0) ped$dadID[dad_match1] <- ID_mate2
+    mom_match1 <- which(!is.na(ped$momID) & ped$momID == ID_mate1_former_mate)
+    if (length(mom_match1) > 0) ped$momID[mom_match1] <- ID_mate2
+  }
+  if (!is.na(ID_mate2_former_mate)) {
+    dad_match2 <- which(!is.na(ped$dadID) & ped$dadID == ID_mate2_former_mate)
+    if (length(dad_match2) > 0) ped$dadID[dad_match2] <- ID_mate1
+    mom_match2 <- which(!is.na(ped$momID) & ped$momID == ID_mate2_former_mate)
+    if (length(mom_match2) > 0) ped$momID[mom_match2] <- ID_mate1
   }
   return(ped)
 }
@@ -265,13 +439,28 @@ makeInbreeding <- function(ped,
 #' @param gen_drop the generation in which the randomly dropped person is. Will work if `ID_drop` is not specified.
 #' @param sex_drop the biological sex of the randomly dropped person.
 #' @param n_drop the number of times the mutation happens.
+#' @param verbose logical.  If TRUE, print progress through stages of algorithm
 #' @return a pedigree with the dropped person's `dadID` and `momID` set to NA.
 #' @export
 dropLink <- function(ped,
                      ID_drop = NA_integer_,
                      gen_drop = 2,
                      sex_drop = NA_character_,
-                     n_drop = 1) {
+                     n_drop = 1,
+                     verbose = FALSE) {
+  # Standardize column names for consistency with other functions
+
+  if (paste0(colnames(ped),
+    collapse = ""
+  ) != paste0(
+    c("famID", "ID", "gen", "dadID", "momID", "spID", "sex"),
+    collapse = ""
+  )) {
+    ped <- standardizeColnames(ped, verbose = verbose)
+    if (verbose == TRUE) {
+      message("The input pedigree is not in the same format as the output of simulatePedigree\n")
+    }
+  }
   # check if the ID_drop is specified
   if (is.na(ID_drop)) {
     # check if the sex_drop is specified
@@ -405,4 +594,28 @@ addPersonToPed <- function(ped, name = NULL,
   } else {
     return(rbind(ped, new_row))
   }
+}
+
+
+makePool <- function(ped, mate_id, mate_sex, mate_dad, mate_mom, prefer_unmated = FALSE,
+                     gen_inbred = NULL, usedID = NULL) {
+  if (!is.null(gen_inbred)) {
+    ped <- ped[ped$gen == gen_inbred, ]
+  }
+  if (!is.null(usedID)) {
+    ped <- ped[!(ped$ID %in% usedID), ]
+  }
+
+
+  # should we prefer unmated siblings when automatically selecting inbred mates? If yes, we will only consider unmated siblings. If no, we will consider all siblings regardless of their mating status.
+  if (prefer_unmated == TRUE) {
+    mated_mask <- !is.na(ped$spID)
+  } else {
+    mated_mask <- rep(TRUE, nrow(ped))
+  }
+
+  pool <- ped$ID[ped$ID != mate_id & ped$sex != mate_sex &
+    !is.na(ped$dadID) & ped$dadID == mate_dad &
+    !is.na(ped$momID) & ped$momID == mate_mom & mated_mask]
+  return(pool)
 }

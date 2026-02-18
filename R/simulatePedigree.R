@@ -637,7 +637,7 @@ buildBetweenGenerations_optimized <- function(df_Fam,
 
         # Calculate how many couples to select
         # Target: marR proportion of individuals = (marR * n) / 2 couples
-        n_couples_target <- floor(sizeGens[i - 1] * marR / 2)
+        n_couples_target <- ceiling(sizeGens[i - 1] * marR / 2)
         n_couples_target <- min(n_couples_target, length(unique_couples_ordered))
 
         # Select first n couples (in randomized order from the shuffling above)

@@ -19,6 +19,9 @@
 #' @param isChild_method character. The method to use for computing the isChild matrix.  Options are "classic" or "partialparent"
 #' @param adjBeta_method numeric The method to use for computing the building the adjacency_method matrix when using the "beta" build
 #' @param compress logical. If TRUE, use compression when saving the checkpoint files.  Defaults to TRUE.
+#' @param mz_twins logical. If TRUE, merge MZ co-twin columns in the r2 matrix before tcrossprod so that MZ twins are coded with relatedness 1 instead of 0.5. Twin pairs are identified from the \code{twinID} column. When a \code{zygosity} column is also present, only pairs where both members have \code{zygosity == "MZ"} are used; otherwise all \code{twinID} pairs are assumed to be MZ. Defaults to FALSE.
+#' @param mz_method character. The method to handle MZ twins.  Options are "merging" (default) or "addtwins".  "addtwins" adds the twin2 column to the twin1 column before tcrossprod so that all relatedness flows through a single source, then leaves the twin2 column as zero and relies on the fact that the row/col names are the same to copy the values back to twin2 after tcrossprod.  "merging" merges the twin2 column into the twin1 column before tcrossprod and then copies the values back to twin2 after tcrossprod so that both twins appear in the final matrix.
+#' @param beta logical. Used for benchmarking
 #' @param ... additional arguments to be passed to \code{\link{ped2com}}
 #' @details The algorithms and methodologies used in this function are further discussed and exemplified in the vignette titled "examplePedigreeFunctions". For more advanced scenarios and detailed explanations, consult this vignette.
 #' @export
@@ -32,7 +35,7 @@ ped2com <- function(ped, component,
                     standardize_colnames = TRUE,
                     transpose_method = "tcrossprod",
                     adjacency_method = "direct",
-                    isChild_method = "classic",
+                    isChild_method = "partialparent",
                     saveable = FALSE,
                     resume = FALSE,
                     save_rate = 5,
@@ -42,6 +45,9 @@ ped2com <- function(ped, component,
                     save_path = "checkpoint/",
                     adjBeta_method = NULL,
                     compress = TRUE,
+                    mz_twins = TRUE,
+                    mz_method = "addtwins",
+                    beta = FALSE,
                     ...) {
   #------
   # Check inputs
@@ -121,10 +127,35 @@ ped2com <- function(ped, component,
     ped <- standardizeColnames(ped, verbose = config$verbose)
   }
 
+  mz_row_pairs <- NULL
+  mz_id_pairs <- NULL
+
+  if (mz_twins == TRUE && "twinID" %in% colnames(ped)) {
+    df_mz <- findMZtwins(ped,
+      verbose = config$verbose,
+      returnIDs = TRUE,
+      returnRows = TRUE,
+      returnAsList = TRUE,
+      beta = beta
+    )
+    mz_row_pairs <- df_mz$pair_rows
+    mz_id_pairs <- df_mz$pair_ids
+  }
+
+
   # Load final result if computation was completed
   if (config$resume == TRUE && file.exists(checkpoint_files$final_matrix)) {
     if (config$verbose == TRUE) cat("Loading final computed matrix...\n")
     return(readRDS(checkpoint_files$final_matrix))
+  }
+
+  if (mz_method %in% c("merging") && mz_twins == TRUE && !is.null(mz_row_pairs) && length(mz_row_pairs) > 0 &&
+    config$component %in% c("additive")) {
+    # replace all MZ twin IDs with the first twin's ID in each pair so they are merged for the path tracing and all subsequent steps.  We will copy the values back to the second twin at the end.
+    ped <- fuseTwins(ped = ped, mz_row_pairs = mz_row_pairs, mz_id_pairs = mz_id_pairs, config = config, beta = beta)
+    if (config$verbose == TRUE) {
+      message("Merged ", length(mz_row_pairs), " MZ twin pair(s) in pedigree dataset for path tracing")
+    }
   }
 
 
@@ -141,6 +172,7 @@ ped2com <- function(ped, component,
     cat(paste0("Family Size = ", config$nr, "\n"))
   }
 
+  #
   # Step 1: Construct parent-child adjacency matrix
 
   ## A. Resume from Checkpoint if Needed
@@ -195,6 +227,8 @@ ped2com <- function(ped, component,
     config = config,
     compress = config$compress
   )
+
+  # TODO merge twin columns
   # --- Step 2: Compute Relatedness Matrix ---
 
 
@@ -226,7 +260,7 @@ ped2com <- function(ped, component,
   # r is I + A + A^2 + ... = (I-A)^-1 from RAM
   # could trim, here
   ## it keeps going until it explains all of the relatedness with themselves (i.e., mtSum == 0)
-  # some of this precision is articifuial because we literally get to the point that the condon is eaither there or not. probabiliticy
+  # some of this precision is artificial because we literally get to the point that the condon is eaither there or not. probabiliticy
 
   # how much percision do we need to get unbiased estimates
 
@@ -281,6 +315,29 @@ ped2com <- function(ped, component,
     compress = config$compress
   )
 
+  if (mz_method == "addtwins" && mz_twins == TRUE && !is.null(mz_row_pairs) && length(mz_row_pairs) > 0) {
+    if (config$verbose == TRUE) {
+      message("MZ twin merging enabled: Will merge MZ twin columns in r2 before tcrossprod")
+    }
+
+    # --- Step 3b: Add  ---
+    # MZ twins share the same genetic source.  We absorb twin2's column into
+    # twin1's before tcrossprod so all path-traced relatedness flows through a
+    # single source.  After tcrossprod we copy twin1's row/col back to twin2.
+    if (!is.null(mz_row_pairs) && length(mz_row_pairs) > 0 && config$component %in% c("additive")) {
+      # Extract all indices at once for batch operations
+      pairs_mat <- do.call(rbind, mz_row_pairs)
+      idx1_all <- pairs_mat[, 1]
+      idx2_all <- pairs_mat[, 2]
+      # Batch: absorb all twin2 columns into twin1 columns, then zero twin2
+      r2[, idx1_all] <- r2[, idx1_all, drop = FALSE] + r2[, idx2_all, drop = FALSE]
+      r2[, idx2_all] <- 0
+
+      if (config$verbose == TRUE) {
+        message("Added ", length(mz_row_pairs), " MZ twin pair column(s) in r2")
+      }
+    }
+  }
   # --- Step 4: T crossproduct  ---
 
   if (config$resume == TRUE && file.exists(checkpoint_files$tcrossprod_checkpoint) &&
@@ -300,12 +357,68 @@ ped2com <- function(ped, component,
     }
   }
 
+  if (mz_method %in% c("merging", "addtwins") && mz_twins == TRUE && config$component %in% c("additive") && !is.null(mz_row_pairs) && length(mz_row_pairs) > 0) {
+    # --- Step 4b: Restore MZ twins ---
+    # Copy twin1's row/col to twin2 so both twins appear in the final matrix.
+    if (config$sparse == FALSE) {
+      r <- as.matrix(r)
+      rnames <- rownames(r)
+      ids_mat <- do.call(rbind, mz_id_pairs)
+      idx1_all <- match(ids_mat[, 1], rnames)
+      idx2_all <- match(ids_mat[, 2], rnames)
+      # Batch copy: twin1 rows/cols -> twin2 rows/cols
+      r[idx2_all, ] <- r[idx1_all, ]
+
+      r[, idx2_all] <- r[, idx1_all]
+    } else {
+      # TODO this is really slow.  Can we do it without coercing to dense?  Maybe by doing row/col replacement on the sparse matrix directly?  Or by constructing a sparse matrix with the twin2 values and adding it to r?
+      #  r <- df_add
+
+      rnames <- r@Dimnames[[1]]
+
+      ids_mat <- do.call(rbind, mz_id_pairs)
+      # needs to use sparse indexing to avoid coercion to dense
+      idx1_all <- match(ids_mat[, 1], rnames)
+      idx2_all <- match(ids_mat[, 2], rnames)
+
+      twin1_rows <- r[idx1_all, , drop = FALSE]
+      twin1_cols <- r[, idx1_all, drop = FALSE]
+      twin1_rows@Dimnames[[1]] <- rnames[idx2_all]
+      twin1_cols@Dimnames[[2]] <- rnames[idx2_all]
+      twin1_self <- r[idx1_all, idx1_all, drop = FALSE]
+      twin1_self@Dimnames[[1]] <- rnames[idx2_all]
+
+      r[idx2_all, ] <- twin1_rows
+      r[, idx2_all] <- twin1_cols
+      r[idx2_all, idx2_all] <- twin1_self
+
+      # Batch copy: twin1 rows/cols -> twin2 rows/cols
+
+      # Row/column replacement on a dsCMatrix (symmetric) causes Matrix to
+      # coerce to dgCMatrix (general), doubling stored entries.  Convert back
+
+      r <- Matrix::drop0(r)
+
+      # so both mz_method paths return the same sparse class.
+      if (methods::is(r, "CsparseMatrix") && !methods::is(r, "symmetricMatrix")) {
+        r <- Matrix::forceSymmetric(r)
+      }
+    }
+    if (config$verbose == TRUE) {
+      message("Restored ", length(mz_row_pairs), " MZ twin pair(s) in relatedness matrix")
+    }
+  }
+
+
   if (config$component %in% c("mitochondrial", "mtdna", "mitochondria")) {
     r@x <- rep(1, length(r@x))
     # Assign 1 to all nonzero elements for mitochondrial component
   }
 
-  if (config$sparse == FALSE) {
+  # Remove explicit zeros so that both mz_method paths produce
+  # structurally identical sparse matrices
+
+  if (config$sparse == FALSE && !methods::is(r, "matrix")) {
     r <- as.matrix(r)
   }
   # flattens diagonal if you don't want to deal with inbreeding
@@ -335,6 +448,8 @@ ped2add <- function(ped, max_gen = 25, sparse = TRUE, verbose = FALSE,
                     save_rate_parlist = 100000 * save_rate,
                     save_path = "checkpoint/",
                     compress = TRUE,
+                    mz_twins = FALSE,
+                    mz_method = "addtwins",
                     ...) {
   ped2com(
     ped = ped,
@@ -353,6 +468,8 @@ ped2add <- function(ped, max_gen = 25, sparse = TRUE, verbose = FALSE,
     save_rate_parlist = save_rate_parlist,
     save_path = save_path,
     compress = compress,
+    mz_twins = mz_twins,
+    mz_method = mz_method,
     ...
   )
 }

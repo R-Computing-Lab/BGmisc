@@ -10,7 +10,8 @@ makeInbreeding(
   ID_mate2 = NA_integer_,
   verbose = FALSE,
   gen_inbred = 2,
-  type_inbred = "sib"
+  type_inbred = "sib",
+  prefer_unmated = FALSE
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ makeInbreeding(
 \item{gen_inbred}{A vector of \code{generation} of the twin to be imputed.}
 
 \item{type_inbred}{A character vector indicating the type of inbreeding. "sib" for sibling inbreeding and "cousin" for cousin inbreeding.}
+
+\item{prefer_unmated}{A logical indicating whether to prefer unmated siblings when automatically selecting inbred mates. Default is FALSE, which means the function will consider all siblings regardless of their mating status.}
 }
 \value{
 Returns a \code{data.frame} with some inbred mates.
