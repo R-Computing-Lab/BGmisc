@@ -224,7 +224,7 @@ Before fitting a model, we need observed data. In practice, this would be measur
 
 We define "true" variance components and use the relatedness matrices to construct the population covariance matrix, then sample from it.
 
-```{r simulate-phenotype, eval = run_models}
+```{r simulate-phenotype, eval = has_mvtnorm}
 # True variance components (proportions of total variance)
 true_var <- list(
   ad2 = 0.50,  # additive genetic
@@ -250,12 +250,22 @@ V_true <- true_var$ad2 * add_matrix +
 set.seed(123)
 y <- mvtnorm::rmvnorm(1, sigma = V_true)
 
+
 # Create named variable labels (required by OpenMx)
 ytemp <- paste("S", rownames(add_matrix))
-
-cat("Simulated phenotype for", ncol(y), "individuals\n")
-cat("Mean:", round(mean(y), 3), " SD:", round(sd(y), 3), "\n")
 ```
+
+```{r show-phenotype}
+
+if (is.null(y)) {
+  y <- rep(NA, nrow(add_matrix))
+
+}
+
+```
+
+
+We simulated phenotypic data for`r ncol(y)` individuals, with a mean of `r round(mean(y), 3)` and a standard deviation of `r round(sd(y), 3)`. The variance in this simulated phenotype arises from the specified genetic and environmental components according to the covariance structure we defined.
 
 In practice, you would have data from multiple independently ascertained families. Here we simulate data from a single pedigree for simplicity, but the model-fitting functions support multiple pedigrees (shown in a later section).
 
@@ -295,6 +305,8 @@ vc_model <- buildPedigreeModelCovariance(
   Vam = FALSE,  # do not estimate A x Mt interaction
   Ver = TRUE    # estimate unique environment
 )
+vc_model
+
 summary(vc_model)
 ```
 
@@ -336,6 +348,7 @@ full_model <- buildPedigreeMx(
   vars = start_vars,
   group_models = list(family_group)
 )
+full_model$submodels 
 ```
 
 
