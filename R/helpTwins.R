@@ -1,16 +1,13 @@
 #' Determine isTwin Status
 #' @param ped pedigree data frame
-#' @return isTwin 'S' matrix
+#' @return A logical vector indicating, for each row of \code{ped}, whether
+#'   \code{twinID} is non-\code{NA}.
 #' @keywords internal
 
-
 isTwin <- function(ped) {
-  isTwin <- apply(ped[, c("twinID")], 1, function(x) {
-    !is.na(x)
-  })
+  is_twin <- !is.na(ped[["twinID"]])
+  is_twin
 }
-
-
 #' Find MZ twin pair_rows in a pedigree
 #'
 #' Identifies MZ twin pair_rows from the \code{twinID} column and returns their
