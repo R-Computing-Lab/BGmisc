@@ -14,9 +14,9 @@ test_that("checkParentIDs identifies parent coding correctly in potter dataset",
 
 # Test Case 2: Validate sex coding without repair
 test_that("checksif single parents found correctly in ASOIAF dataset", {
-  data(ASOIAF)
+  data(ASOIAF, package = "ggpedigree")
   df_asoiaf <- ASOIAF
-  results <- checkParentIDs(df_asoiaf, verbose = FALSE, repair = FALSE)
+  results <- checkParentIDs(df_asoiaf, verbose = FALSE, repair = FALSE, personID = "id")
   expect_true(results$single_parents)
   single_dads <- length(df_asoiaf$id[!is.na(df_asoiaf$dadID) & is.na(df_asoiaf$momID)])
   single_moms <- length(df_asoiaf$id[is.na(df_asoiaf$dadID) & !is.na(df_asoiaf$momID)])
@@ -24,11 +24,20 @@ test_that("checksif single parents found correctly in ASOIAF dataset", {
   expect_equal(single_dads, length(results$missing_mothers))
   repaired_df <- checkParentIDs(df_asoiaf, verbose = FALSE, repair = TRUE, parentswithoutrow = TRUE)
   expect_equal(nrow(repaired_df), nrow(df_asoiaf) + single_moms + single_dads)
+
+
+  repaired_phantoms <- checkParentIDs(df_asoiaf, verbose = FALSE, repair = TRUE, addphantoms = TRUE)
+  expect_equal(nrow(repaired_phantoms), nrow(df_asoiaf) + single_moms + single_dads)
+  # did it add more famIDs?
+  expect_true(length(repaired_phantoms$famID[!is.na(repaired_phantoms$famID)]) > length(df_asoiaf$famID[!is.na(df_asoiaf$famID)]))
+  # do the original famIDs remain unique?
+  expect_true(length(unique(repaired_phantoms$famID[!is.na(repaired_phantoms$famID)])) == length(unique(df_asoiaf$famID[!is.na(df_asoiaf$famID)])))
 })
 
 test_that("verbose checks", {
-  data(ASOIAF)
+  data(ASOIAF, package = "ggpedigree")
   df_asoiaf <- ASOIAF
   expect_message(checkParentIDs(df_asoiaf, verbose = TRUE, repair = TRUE))
+  expect_message(repairParentIDs(df_asoiaf, verbose = TRUE))
   expect_message(checkParentIDs(df_asoiaf, verbose = TRUE, parentswithoutrow = TRUE))
 })

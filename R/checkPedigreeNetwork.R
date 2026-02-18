@@ -37,7 +37,7 @@ checkPedigreeNetwork <- function(ped, personID = "ID", momID = "momID", dadID = 
 
   results$individuals_with_excess_parents <- ids_excess_parents
 
-  if (verbose) {
+  if (verbose == TRUE) {
     if (length(ids_excess_parents) > 0) {
       message("Individuals with more than two parents detected: ", paste(ids_excess_parents, collapse = ", "))
     } else {
@@ -52,7 +52,7 @@ checkPedigreeNetwork <- function(ped, personID = "ID", momID = "momID", dadID = 
 
   results$duplicate_edges <- duplicate_edges
 
-  if (verbose) {
+  if (verbose == TRUE) {
     if (nrow(duplicate_edges) > 0) {
       message("Duplicate edges detected:")
       message(duplicate_edges)
@@ -68,13 +68,13 @@ checkPedigreeNetwork <- function(ped, personID = "ID", momID = "momID", dadID = 
     cyclic_edges <- igraph::feedback_arc_set(ped_graph)
     cyclic_relationships <- igraph::as_edgelist(ped_graph)[cyclic_edges, ]
     results$cyclic_relationships <- cyclic_relationships
-    if (verbose) {
+    if (verbose == TRUE) {
       message("Cyclic relationships detected:")
       message(cyclic_relationships)
     }
   } else {
     results$cyclic_relationships <- NULL
-    if (verbose) message("No cyclic relationships detected.")
+    if (verbose == TRUE) message("No cyclic relationships detected.")
   }
 
   return(results)

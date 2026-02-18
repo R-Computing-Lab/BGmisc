@@ -1,12 +1,30 @@
-#' Calculate Confidence Intervals for Correlation Coefficients
+#' Confidence Intervals for Correlations with Optional Design-Effect Adjustment
 #'
-#' This function calculates confidence intervals for correlation coefficients using different methods.
+#' @description
+#' Compute confidence intervals (CIs) for correlation coefficients using either
+#' Fisher's \eqn{r \rightarrow z} approach (Raykov-style on the \eqn{z} scale) or
+#' a Wald CI on the \eqn{r} scale. Standard errors are first **adjusted** by a
+#' design-effect factor when available, and optionally for double entry.
+#' The adjusted standard errors are used for all calculations, including CIs, z-tests, and p-values.
+#'
 #'
 #' @param tbl A data frame or tibble containing the correlation coefficient and standard error variables.
 #' @param rho_var The name of the column in \code{tbl} that contains the correlation coefficients.
 #' @param se_var The name of the column in \code{tbl} that contains the standard errors.
 #' @param doubleentered Logical. If \code{TRUE}, the function assumes that the correlation coefficients are double-entered, which adjusts the standard errors accordingly. Default is \code{FALSE}.
-#' @param method The method to use for calculating the confidence intervals. Options are "raykov", "fisherz", "doubleenteredconserv", or "doubleentered".
+#' @param method Character; CI method selector. Supported values:
+#'   \itemize{
+#'     \item \code{"raykov"} — Fisher \eqn{r \rightarrow z} CI (back-transformed).
+#'     \item \code{"fisherz"} — alias of \code{"raykov"}.
+#'     \item \code{"wald"} — Wald CI on the \eqn{r} scale.
+#'     \item \code{"doubleentered"} — like \code{"raykov"} and, if
+#'           \code{doubleentered} was not explicitly provided, it is set to
+#'           \code{TRUE} (applies the \eqn{\sqrt{2}} multiplier).
+#'     \item \code{"doubleenteredconserv"} — like \code{"wald"} and, if
+#'           \code{doubleentered} was not explicitly provided, it is set to
+#'           \code{TRUE}.
+#'   }
+#'
 #' @param conf_level The confidence level for the intervals. Default is 0.95.
 #' @param adjust_base A numeric value to adjust the standard errors. Default is 1.
 #' @param design_effect_m A numeric value for the design effect related to the mean. Default is \code{NULL}.
@@ -21,7 +39,12 @@
 #'
 #' @export
 #' @importFrom stats qnorm pnorm
-
+#' @note Double-entry handling and design effects are governed by
+#'   \code{doubleentered}, \code{design_effect_m}/\code{design_effect_rho}
+#'   (or their \code{*_col} variants), and \code{adjust_base}. The
+#'   \code{"doubleentered*"} method values simply provide convenient aliases:
+#'   they toggle \code{doubleentered} to \code{TRUE} only when the user hasn't
+#'   explicitly set it, and map to \code{"raykov"} or \code{"wald"} as described.
 calculateCIs <- function(tbl,
                          rho_var,
                          se_var,
@@ -34,6 +57,31 @@ calculateCIs <- function(tbl,
                          design_effect_rho_col = NULL,
                          conf_level = 0.95) {
   # Load necessary packages
+  # Normalize and interpret `method`, preserving user intent for `doubleentered`
+  mc <- match.call()
+  user_set_doubleentered <- "doubleentered" %in% names(mc)
+
+  method_in <- tolower(method %||% "raykov") # `%||%` if you have it; else just tolower(method)
+  method_effective <- switch(method_in,
+    "raykov" = "raykov",
+    "fisherz" = "raykov", # alias
+    "wald" = "wald",
+    "doubleentered" = {
+      if (!user_set_doubleentered) doubleentered <- TRUE
+      "raykov" # double-entry + Fisher z
+    },
+    "doubleenteredconserv" = {
+      if (!user_set_doubleentered) doubleentered <- TRUE
+      "wald" # double-entry + Wald (more conservative)
+    },
+    {
+      warning(sprintf("Unrecognized method '%s'; defaulting to 'wald'.", method),
+        call. = FALSE
+      )
+      "wald"
+    }
+  )
+
 
   # Get the name of the rho column regardless of input type
   if (mode(rho_var) != "character") {
@@ -71,23 +119,44 @@ calculateCIs <- function(tbl,
   tbl_out <- tbl
   n_rows <- nrow(tbl_out)
 
-
-  # Resolve design effect vector
-  if (!is.null(design_effect_m_col) && !is.null(design_effect_rho_col)) {
+  # Resolve m input
+  if (exists("design_effect_m_col") && length(design_effect_m_col) > 0) {
     m_vals <- tbl_out[[design_effect_m_col]]
+  } else if (exists("design_effect_m") && length(design_effect_m) > 0) {
+    if (length(design_effect_m) == 1) {
+      design_effect_m <- rep(as.numeric(design_effect_m), n_rows)
+    }
+    m_vals <- design_effect_m
+  } else {
+    m_vals <- NULL
+  }
+
+  # Resolve rho input
+  if (exists("design_effect_rho_col") && length(design_effect_rho_col) > 0) {
     rho_vals <- tbl_out[[design_effect_rho_col]]
-    design_effect <- sqrt(1 + (m_vals - 1) * rho_vals)
-  } else if (doubleentered == TRUE && is.null(design_effect_m) && is.null(design_effect_rho)) {
-    design_effect <- rep(sqrt(1 + (2 - 1) * 1), n_rows)
-  } else if (!is.null(design_effect_m) && !is.null(design_effect_rho)) {
-    design_effect <- rep(sqrt(1 + (design_effect_m - 1) * design_effect_rho), n_rows)
+  } else if (exists("design_effect_rho") && length(design_effect_rho) > 0) {
+    if (length(design_effect_rho) == 1) {
+      design_effect_rho <- rep(as.numeric(design_effect_rho), n_rows)
+    }
+    rho_vals <- design_effect_rho
+  } else {
+    rho_vals <- NULL
+  }
+  # Compute design_effect based on what is available
+  if (!is.null(m_vals) && !is.null(rho_vals)) {
+    design_effect <- sqrt(1 + (as.numeric(m_vals) - 1) * as.numeric(rho_vals))
   } else {
     design_effect <- rep(adjust_base, n_rows)
   }
-
+  if (
+    isTRUE(doubleentered)
+  ) {
+    # Adjust standard errors for double entry
+    design_effect <- design_effect * sqrt(2)
+  }
   z_crit <- stats::qnorm((1 + conf_level) / 2)
 
-  if (method == "raykov") {
+  if (method_effective == "raykov") {
     # Apply Fisher's r to z transform
     z_vals <- .fisherz(tbl_out[[rho_col_name]])
     sez_vals <- tbl_out[[se_col_name]] / (1 - tbl_out[[rho_col_name]]^2)
@@ -116,7 +185,6 @@ calculateCIs <- function(tbl,
   tbl_out[[wald_col_name]] <- tbl_out[[rho_col_name]] / tbl_out[[se_adjusted_col_name]]
   tbl_out[[waldp1tail_col_name]] <- stats::pnorm(q = abs(tbl_out[[wald_col_name]]), lower.tail = FALSE)
   tbl_out[[waldp2tail_col_name]] <- 2 * tbl_out[[waldp1tail_col_name]]
-
 
   return(tbl_out)
 }

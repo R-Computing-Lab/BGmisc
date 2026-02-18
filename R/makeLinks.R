@@ -24,24 +24,25 @@
 #' @export com2links
 
 com2links <- function(
-    rel_pairs_file = "dataRelatedPairs.csv",
-    ad_ped_matrix = NULL,
-    mit_ped_matrix = mt_ped_matrix,
-    mt_ped_matrix = NULL,
-    cn_ped_matrix = NULL,
-    #  pat_ped_matrix = NULL,
-    #  mat_ped_matrix = NULL,
-    #  mapa_id_file = "data_mapaID.csv",
-    write_buffer_size = 1000,
-    update_rate = 1000,
-    gc = TRUE,
-    writetodisk = TRUE,
-    verbose = FALSE,
-    legacy = FALSE,
-    outcome_name = "data",
-    drop_upper_triangular = TRUE,
-    include_all_links_1ped = FALSE,
-    ...) {
+  rel_pairs_file = "dataRelatedPairs.csv",
+  ad_ped_matrix = NULL,
+  mit_ped_matrix = mt_ped_matrix,
+  mt_ped_matrix = NULL,
+  cn_ped_matrix = NULL,
+  #  pat_ped_matrix = NULL,
+  #  mat_ped_matrix = NULL,
+  #  mapa_id_file = "data_mapaID.csv",
+  write_buffer_size = 1000,
+  update_rate = 1000,
+  gc = TRUE,
+  writetodisk = TRUE,
+  verbose = FALSE,
+  legacy = FALSE,
+  outcome_name = "data",
+  drop_upper_triangular = TRUE,
+  include_all_links_1ped = FALSE,
+  ...
+) {
   # --- Input Validations and Preprocessing ---
 
   # Ensure that at least one relationship matrix is provided.
@@ -80,7 +81,6 @@ com2links <- function(
   ids <- NULL
 
 
-
   if (!is.null(cn_ped_matrix)) {
     ids <- as.numeric(dimnames(cn_ped_matrix)[[1]])
     nc <- ncol(cn_ped_matrix)
@@ -103,7 +103,7 @@ com2links <- function(
     if (!is.null(cn_ped_matrix)) "cn" else NULL
   )), collapse = "-")
 
-  if (verbose) {
+  if (verbose == TRUE) {
     print(matrix_case)
   }
 
@@ -228,7 +228,6 @@ com2links <- function(
 #' @keywords internal
 
 
-
 process_one <- function(matrix, rel_name, ids, nc, rel_pairs_file, writetodisk,
                         write_buffer_size, drop_upper_triangular, update_rate, verbose, gc,
                         include_all_links = TRUE, ...) {
@@ -340,18 +339,19 @@ process_one <- function(matrix, rel_name, ids, nc, rel_pairs_file, writetodisk,
 }
 
 process_all_three <- function(
-    mat1, name1,
-    mat2, name2,
-    mat3, name3,
-    ids, nc,
-    rel_pairs_file,
-    writetodisk,
-    write_buffer_size,
-    drop_upper_triangular,
-    update_rate,
-    verbose,
-    gc,
-    ...) {
+  mat1, name1,
+  mat2, name2,
+  mat3, name3,
+  ids, nc,
+  rel_pairs_file,
+  writetodisk,
+  write_buffer_size,
+  drop_upper_triangular,
+  update_rate,
+  verbose,
+  gc,
+  ...
+) {
   # Extract matrix slots
   p1 <- mat1@p + 1L
   i1 <- mat1@i + 1L
@@ -446,17 +446,18 @@ process_all_three <- function(
 }
 
 process_two <- function(
-    matrix1, name1,
-    matrix2, name2,
-    ids, nc,
-    rel_pairs_file,
-    writetodisk,
-    write_buffer_size,
-    drop_upper_triangular,
-    update_rate,
-    verbose,
-    gc,
-    ...) {
+  matrix1, name1,
+  matrix2, name2,
+  ids, nc,
+  rel_pairs_file,
+  writetodisk,
+  write_buffer_size,
+  drop_upper_triangular,
+  update_rate,
+  verbose,
+  gc,
+  ...
+) {
   # Extract internal slots
   p1 <- matrix1@p + 1L
   i1 <- matrix1@i + 1L

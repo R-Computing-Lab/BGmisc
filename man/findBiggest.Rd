@@ -2,22 +2,25 @@
 % Please edit documentation in R/summarizePedigree.R
 \name{findBiggest}
 \alias{findBiggest}
-\title{This function finds the biggest families in a pedigree. It is supposed to be
+\alias{findbiggest}
+\title{Function to find the biggest families in a pedigree
+This function finds the biggest families in a pedigree. It is supposed to be
 used internally by the \code{summarize_pedigree} function.}
 \usage{
-findBiggest(foo_summary_dt, nbiggest, n_foo)
+findBiggest(foo_summary_dt, n_fooest = 5, n_foo_total = nrow(foo_summary_dt))
 }
 \arguments{
 \item{foo_summary_dt}{A data.table containing the summary statistics.}
 
-\item{nbiggest}{Integer. Number of largest lineages to return (sorted by count).}
+\item{n_fooest}{An integer specifying the number of individuals in the summary.}
 
-\item{n_foo}{An integer specifying the number of individuals in the summary.}
+\item{n_foo_total}{An integer specifying the total number of individuals in the summary.}
 }
 \value{
 a data.table containing the biggest families in the pedigree.
 }
 \description{
+Function to find the biggest families in a pedigree
 This function finds the biggest families in a pedigree. It is supposed to be
 used internally by the \code{summarize_pedigree} function.
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/estimateCIs.R
 \name{calculateCIs}
 \alias{calculateCIs}
-\title{Calculate Confidence Intervals for Correlation Coefficients}
+\title{Confidence Intervals for Correlations with Optional Design-Effect Adjustment}
 \usage{
 calculateCIs(
   tbl,
@@ -27,7 +27,18 @@ calculateCIs(
 
 \item{doubleentered}{Logical. If \code{TRUE}, the function assumes that the correlation coefficients are double-entered, which adjusts the standard errors accordingly. Default is \code{FALSE}.}
 
-\item{method}{The method to use for calculating the confidence intervals. Options are "raykov", "fisherz", "doubleenteredconserv", or "doubleentered".}
+\item{method}{Character; CI method selector. Supported values:
+\itemize{
+  \item \code{"raykov"} — Fisher \eqn{r \rightarrow z} CI (back-transformed).
+  \item \code{"fisherz"} — alias of \code{"raykov"}.
+  \item \code{"wald"} — Wald CI on the \eqn{r} scale.
+  \item \code{"doubleentered"} — like \code{"raykov"} and, if
+        \code{doubleentered} was not explicitly provided, it is set to
+        \code{TRUE} (applies the \eqn{\sqrt{2}} multiplier).
+  \item \code{"doubleenteredconserv"} — like \code{"wald"} and, if
+        \code{doubleentered} was not explicitly provided, it is set to
+        \code{TRUE}.
+}}
 
 \item{adjust_base}{A numeric value to adjust the standard errors. Default is 1.}
 
@@ -46,7 +57,19 @@ A modified version of \code{tbl} with additional columns for the confidence inte
 Everything uses adjusted standard errors, including confidence intervals, z-tests, and p-values.
 }
 \description{
-This function calculates confidence intervals for correlation coefficients using different methods.
+Compute confidence intervals (CIs) for correlation coefficients using either
+Fisher's \eqn{r \rightarrow z} approach (Raykov-style on the \eqn{z} scale) or
+a Wald CI on the \eqn{r} scale. Standard errors are first **adjusted** by a
+design-effect factor when available, and optionally for double entry.
+The adjusted standard errors are used for all calculations, including CIs, z-tests, and p-values.
+}
+\note{
+Double-entry handling and design effects are governed by
+  \code{doubleentered}, \code{design_effect_m}/\code{design_effect_rho}
+  (or their \code{*_col} variants), and \code{adjust_base}. The
+  \code{"doubleentered*"} method values simply provide convenient aliases:
+  they toggle \code{doubleentered} to \code{TRUE} only when the user hasn't
+  explicitly set it, and map to \code{"raykov"} or \code{"wald"} as described.
 }
 \examples{
 tbl <- data.frame(rho = c(0.5, 0.7, 0.3), se = c(0.1, 0.2, 0.05))

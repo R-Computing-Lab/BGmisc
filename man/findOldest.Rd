@@ -2,22 +2,30 @@
 % Please edit documentation in R/summarizePedigree.R
 \name{findOldest}
 \alias{findOldest}
-\title{This function finds the oldest families in a pedigree. It is supposed to be used internally by the \code{summarize_pedigree} function.}
+\alias{findoldest}
+\title{Function to find the oldest individuals in a pedigree
+This function finds the oldest families in a pedigree. It is supposed to be used internally by the \code{summarize_pedigree} function.}
 \usage{
-findOldest(foo_summary_dt, byr, noldest, n_foo)
+findOldest(
+  foo_summary_dt,
+  byr = "byr",
+  n_fooest = 5,
+  n_foo_total = nrow(foo_summary_dt)
+)
 }
 \arguments{
 \item{foo_summary_dt}{A data.table containing the summary statistics.}
 
 \item{byr}{Character. Optional column name for birth year. Used to determine the oldest lineages.}
 
-\item{noldest}{Integer. Number of oldest lineages to return (sorted by birth year).}
+\item{n_fooest}{An integer specifying the number of individuals in the summary.}
 
-\item{n_foo}{An integer specifying the number of individuals in the summary.}
+\item{n_foo_total}{An integer specifying the total number of individuals in the summary.}
 }
 \value{
 a data.table containing the oldest families in the pedigree.
 }
 \description{
+Function to find the oldest individuals in a pedigree
 This function finds the oldest families in a pedigree. It is supposed to be used internally by the \code{summarize_pedigree} function.
 }

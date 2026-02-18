@@ -10,7 +10,13 @@ checkParentIDs(
   repair = FALSE,
   repairsex = repair,
   addphantoms = repair,
-  parentswithoutrow = repair
+  parentswithoutrow = repair,
+  famID = "famID",
+  personID = "ID",
+  momID = "momID",
+  dadID = "dadID",
+  code_male = NULL,
+  code_female = NULL
 )
 }
 \arguments{
@@ -25,6 +31,18 @@ checkParentIDs(
 \item{addphantoms}{A logical flag indicating whether to add phantom parents for missing parent IDs.}
 
 \item{parentswithoutrow}{A logical flag indicating whether to add parents without a row in the pedigree.}
+
+\item{famID}{Character. Column name for family IDs.}
+
+\item{personID}{Character. Column name for individual IDs.}
+
+\item{momID}{Character. Column name for maternal IDs.}
+
+\item{dadID}{Character. Column name for paternal IDs.}
+
+\item{code_male}{The code value used to represent male sex in the 'sex' column of \code{ped}.}
+
+\item{code_female}{The code value used to represent female sex in the 'sex' column of \code{ped}.}
 }
 \value{
 Depending on the value of `repair`, either a list containing validation results or a repaired dataframe is returned.

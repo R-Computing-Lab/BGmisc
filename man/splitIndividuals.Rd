@@ -18,3 +18,8 @@ A list of character vectors, each representing one individual.
 This function partitions the GEDCOM file (as a vector of lines) into a list of blocks,
 where each block corresponds to a single individual starting with an "@ INDI" line.
 }
+\details{
+Each block runs until the next "@ INDI" line or end-of-file.
+Blocks are raw subsets of the file; no parsing occurs here.
+}
+\keyword{internal}

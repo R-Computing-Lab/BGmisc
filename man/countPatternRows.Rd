@@ -14,5 +14,5 @@ A list with counts of specific GEDCOM tag occurrences.
 }
 \description{
 Counts the number of lines in a file (passed as a data frame with column "X1")
-that match various GEDCOM patterns.
+that match various GEDCOM patterns. Returns a list with counts for each pattern.
 }

@@ -44,10 +44,24 @@ ped2fam <- function(ped, personID = "ID",
   # Find weakly connected components of graph
   wcc <- igraph::components(pg)
 
-  fam <- data.frame(
-    V1 = as.numeric(names(wcc$membership)),
-    V2 = wcc$membership
-  )
+  # Create famID data.frame
+  # Convert IDs to numeric, with warning if coercion collapses IDs
+  uniques <- suppressWarnings(unique(as.numeric(names(wcc$membership))))
+
+  if (length(uniques) == 1L && is.na(uniques)) {
+    warning("After converting IDs to numeric, all IDs became NA. This indicates ID coercion collapsed IDs. Please ensure IDs aren't character or factor variables.")
+
+    fam <- data.frame(
+      V1 = names(wcc$membership),
+      V2 = wcc$membership
+    )
+  } else {
+    fam <- data.frame(
+      V1 = as.numeric(names(wcc$membership)),
+      V2 = wcc$membership
+    )
+  }
+
   names(fam) <- c(personID, famID)
   ped2 <- merge(fam, ped,
     by = personID, all.x = FALSE, all.y = TRUE
@@ -125,12 +139,13 @@ ped2graph <- function(ped,
     )
     edges <- rbind(
       as.matrix(data.frame(
-        personID = as.character(ped[[personID]]),
-        momID = as.character(ped[[momID]])
+        # need to be parent to child for igraph
+        momID = as.character(ped[[momID]]),
+        personID = as.character(ped[[personID]])
       )),
       as.matrix(data.frame(
-        personID = as.character(ped[[personID]]),
-        dadID = as.character(ped[[dadID]])
+        dadID = as.character(ped[[dadID]]),
+        personID = as.character(ped[[personID]])
       ))
     )
   } else if (adjacent == "mothers") {
@@ -140,8 +155,8 @@ ped2graph <- function(ped,
       )
     )
     edges <- as.matrix(data.frame(
-      personID = as.character(ped[[personID]]),
-      momID = as.character(ped[[momID]])
+      momID = as.character(ped[[momID]]),
+      personID = as.character(ped[[personID]])
     ))
   } else if (adjacent == "fathers") {
     nodes <- unique(
@@ -150,8 +165,8 @@ ped2graph <- function(ped,
       )
     )
     edges <- as.matrix(data.frame(
-      personID = as.character(ped[[personID]]),
-      dadID = as.character(ped[[dadID]])
+      dadID = as.character(ped[[dadID]]),
+      personID = as.character(ped[[personID]])
     ))
   }
   edges <- edges[stats::complete.cases(edges), ]

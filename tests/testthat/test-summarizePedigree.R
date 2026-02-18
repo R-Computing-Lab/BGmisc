@@ -17,8 +17,8 @@ test_that("SummarizeFamilies works like SummariseFamilies", {
 # Test Case 2: Multiple families
 test_that("summarizeFamilies() works with multiple families", {
   df <- ped2fam(inbreeding, famID = "newFamID", personID = "ID")
-  nbiggest <- 5
-  df_summarized <- summarizeFamilies(df, famID = "newFamID", personID = "ID", nbiggest = nbiggest)
+  n_biggest <- 5
+  df_summarized <- summarizeFamilies(df, famID = "newFamID", personID = "ID", n_biggest = n_biggest)
   # is the total count from the family summary the same as the raw data?
   result_observed <- sum(df_summarized$family_summary$count)
   result_expected <- nrow(inbreeding)
@@ -29,7 +29,7 @@ test_that("summarizeFamilies() works with multiple families", {
   expect_equal(result_observed, result_expected)
   # is the count of the biggest families equal to the number of unique families in the input data frame?
   result_observed <- nrow(df_summarized$biggest_families)
-  expect_equal(result_observed, nbiggest)
+  expect_equal(result_observed, n_biggest)
 })
 
 # Test Case 3: 5 number summary work on all the same variables?
@@ -56,13 +56,13 @@ test_that("summarizeFamilies() works with additional summary stats", {
 
 # Test Case 4: Does this function work for summarizeMatrilines
 test_that("summarizeMatrilines() works", {
-  nbiggest <- 2
+  n_biggest <- 2
   df <- ped2fam(potter, famID = "newFamID", personID = "personID") %>%
     ped2maternal(personID = "personID")
   df_summarized <- summarizeMatrilines(df,
     famID = "newFamID",
     personID = "personID",
-    nbiggest = nbiggest
+    n_biggest = n_biggest
   )
   # is the total count from the family summary the same as the raw data?
   result_observed <- sum(df_summarized$maternal_summary$count)
@@ -76,27 +76,31 @@ test_that("summarizeMatrilines() works", {
   # is the count of the biggest families equal to the number of
   # unique families in the input data frame?
   result_observed <- nrow(df_summarized$biggest_maternal)
-  expect_equal(result_observed, nbiggest)
+  expect_equal(result_observed, n_biggest)
 })
 # Test: SummarizeMatrilines is used when SummariseMatrilines
 test_that("SummarizeMatrilines works like SummariseMatrilines", {
   df <- ped2fam(potter, famID = "newFamID", personID = "personID")
-  df_summarized <- summarizeMatrilines(df, famID = "newFamID", personID = "personID",
-                                       verbose = TRUE)
-  df_summarised <- summariseMatrilines(df, famID = "newFamID",
-                                       personID = "personID",
-                                       verbose = TRUE)
+  df_summarized <- summarizeMatrilines(df,
+    famID = "newFamID", personID = "personID",
+    verbose = TRUE
+  )
+  df_summarised <- summariseMatrilines(df,
+    famID = "newFamID",
+    personID = "personID",
+    verbose = TRUE
+  )
   expect_equal(df_summarised, df_summarized)
 })
 # Test Case 5: Does this function work for summarizePatrilines
 test_that("summarizePatrilines() works", {
-  nbiggest <- 4
+  n_biggest <- 4
   df <- ped2fam(potter, famID = "newFamID", personID = "personID") %>%
     ped2paternal(personID = "personID")
   df_summarized <- summarizePatrilines(df,
     famID = "newFamID",
     personID = "personID",
-    nbiggest = nbiggest,
+    n_biggest = n_biggest,
     verbose = TRUE
   )
   # is the total count from the family summary the same as the raw data?
@@ -111,7 +115,7 @@ test_that("summarizePatrilines() works", {
   # is the count of the biggest families equal to the number of
   # unique families in the input data frame?
   result_observed <- nrow(df_summarized$biggest_paternal)
-  expect_equal(result_observed, nbiggest)
+  expect_equal(result_observed, n_biggest)
 })
 
 # Test: summarizePatrilines is used when SummarisePatrilines
@@ -147,7 +151,7 @@ test_that("summarizePedigrees works when all numeric variables are skipped", {
     age = c(30, 40, 50, 60, 70)
   )
 
-  df_summarized <- summarizePedigrees(df, skip_var = c("age"),verbose = TRUE)
+  df_summarized <- summarizePedigrees(df, skip_var = c("age"), verbose = TRUE)
   expect_true(all(!grepl("age", names(df_summarized$family_summary))))
 })
 
@@ -159,8 +163,6 @@ test_that("summarizePedigrees() throws error on invalid column names", {
   )
   expect_error(summarizePedigrees(df, byr = "unknown_column"))
 })
-
-
 
 
 # Test Case 9: Handling empty dataset
@@ -177,9 +179,26 @@ test_that("summarizePedigrees() throws error on invalid column names", {
 # Test Case 10: Handling single entry pedigree
 test_that("summarizePedigrees() works for single-entry pedigree", {
   df <- data.frame(ID = 1, momID = NA, dadID = NA, famID = 1, byr = 1920)
-  df_summarized <- summarizePedigrees(df, byr = "byr",verbose = TRUE)
+  df_summarized <- summarizePedigrees(df, byr = "byr", verbose = TRUE)
   expect_equal(nrow(df_summarized$family_summary), 1)
+
+
   expect_equal(df_summarized$oldest_families$byr_mean, 1920)
+})
+
+# network check
+test_that("summarizePedigrees() works for network pedigree", {
+  df <- data.frame(
+    ID = 1:5,
+    momID = c(NA, 1, 1, NA, 4),
+    dadID = c(NA, 2, 2, NA, 5),
+    famID = c(1, 1, 1, 2, 2),
+    byr = c(1922, 1945, 1950, 1930, 1960)
+  )
+
+  df_summarized <- summarizePedigrees(df, byr = "byr", network_checks = TRUE)
+  expect_equal(nrow(df_summarized$family_summary), 2)
+  expect_equal(df_summarized$family_summary$byr_mean, c(1939, 1945))
 })
 
 # Test: summarizePedigrees is used when SummarisePedigrees
@@ -213,22 +232,27 @@ test_that("SummarizePedigrees verboses", {
 
   expect_message(
     summarizePedigrees(df,
-                       famID = "newFamID", personID = "personID",
-                       verbose = TRUE,
-                       network_checks = TRUE, type = c("families")))
+      famID = "newFamID", personID = "personID",
+      verbose = TRUE,
+      network_checks = TRUE, type = c("families")
+    )
+  )
   expect_message(
     summarizePedigrees(df,
-                       famID = "newFamID",
-                       personID = "personID",
-                       verbose = TRUE,
-                       network_checks = TRUE,
-                       type = c("matrilines")))
+      famID = "newFamID",
+      personID = "personID",
+      verbose = TRUE,
+      network_checks = TRUE,
+      type = c("matrilines")
+    )
+  )
   expect_message(
-    summarizePedigrees(df,famID = "newFamID",
-                       personID = "personID",
-                       verbose = TRUE,
-                       network_checks = TRUE,
-                       type = c("patrilines")))
-
-
+    summarizePedigrees(df,
+      famID = "newFamID",
+      personID = "personID",
+      verbose = TRUE,
+      network_checks = TRUE,
+      type = c("patrilines")
+    )
+  )
 })

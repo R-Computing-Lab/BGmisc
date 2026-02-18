@@ -2,6 +2,8 @@
 % Please edit documentation in R/summarizePedigree.R
 \name{summarizeFounder}
 \alias{summarizeFounder}
+\alias{summarizefounder}
+\alias{summariseFounder}
 \title{Function to summarize the originating members for each line}
 \usage{
 summarizeFounder(ped_dt, group_var, sort_var, foo_summary_dt, verbose)

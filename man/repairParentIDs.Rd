@@ -4,12 +4,27 @@
 \alias{repairParentIDs}
 \title{Repair Parent IDs}
 \usage{
-repairParentIDs(ped, verbose = FALSE)
+repairParentIDs(
+  ped,
+  verbose = FALSE,
+  famID = "famID",
+  personID = "ID",
+  momID = "momID",
+  dadID = "dadID"
+)
 }
 \arguments{
 \item{ped}{A dataframe representing the pedigree data with columns 'ID', 'dadID', and 'momID'.}
 
 \item{verbose}{A logical flag indicating whether to print progress and validation messages to the console.}
+
+\item{famID}{Character. Column name for family IDs.}
+
+\item{personID}{Character. Column name for individual IDs.}
+
+\item{momID}{Character. Column name for maternal IDs.}
+
+\item{dadID}{Character. Column name for paternal IDs.}
 }
 \value{
 A corrected pedigree

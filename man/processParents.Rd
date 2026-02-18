@@ -15,5 +15,5 @@ processParents(df_temp, datasource)
 The updated data frame with parent IDs added.
 }
 \description{
-Adds parent IDs to the individuals based on family relationship data.
+This function adds mother and father IDs to individuals in the data frame
 }

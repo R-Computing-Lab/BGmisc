@@ -6,7 +6,6 @@ test_that("com2links handles missing matrices properly", {
 })
 
 
-
 test_that("com2links rejects invalid matrix types", {
   fake_matrix <- data.frame(A = c(1, 2), B = c(3, 4))
   expect_error(com2links(ad_ped_matrix = fake_matrix), "The 'ad_ped_matrix' must be a matrix or generalMatrix")
@@ -25,7 +24,7 @@ test_that("com2links produces correct output with a single relationship matrix (
 })
 
 test_that("com2links produces correct output with cn_ped_matrix", {
-  data(ASOIAF)
+  data(ASOIAF, package = "ggpedigree")
   cn_ped_matrix <- ped2cn(ASOIAF, sparse = TRUE)
 
   result <- com2links(cn_ped_matrix = cn_ped_matrix, writetodisk = FALSE)

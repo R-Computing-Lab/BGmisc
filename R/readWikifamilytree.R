@@ -16,12 +16,12 @@ readWikifamilytree <- function(text = NULL, verbose = FALSE, file_path = NULL, .
   if (!is.null(file_path)) {
     if (!file.exists(file_path)) stop("File does not exist: ", file_path)
 
-    if (verbose) {
+    if (verbose == TRUE) {
       message(paste("Reading file:", file_path))
     }
     file <- data.frame(X1 = readLines(file_path))
     file_length <- nrow(file)
-    if (verbose) {
+    if (verbose == TRUE) {
       message(paste0("File is ", file_length, " lines long"))
     }
     text <- paste0(file$X1, collapse = "\n")

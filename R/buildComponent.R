@@ -1,9 +1,7 @@
 #' Take a pedigree and turn it into a relatedness matrix
 #' @param ped a pedigree dataset.  Needs ID, momID, and dadID columns
 #' @param component character.  Which component of the pedigree to return.  See Details.
-#' @param max.gen the maximum number of generations to compute
-#'  (e.g., only up to 4th degree relatives).  The default is 25. However it can be set to infinity.
-#'   `Inf` uses as many generations as there are in the data.
+#' @param max_gen the maximum number of iterations that the adjacency matrix is multiplied to get the relatedness matrix. `Inf` uses as many iterations as there are in the data. Defaults to 25.
 #' @param sparse logical.  If TRUE, use and return sparse matrices from Matrix package
 #' @param verbose logical.  If TRUE, print progress through stages of algorithm
 #' @param update_rate numeric. The rate at which to print progress
@@ -14,23 +12,24 @@
 #' @param save_rate_parlist numeric. The rate at which to save the intermediate results by parent list. If NULL, defaults to save_rate*1000
 #' @param resume logical. If TRUE, resume from a checkpoint
 #' @param save_path character. The path to save the checkpoint files
-#' @param flatten.diag logical. If TRUE, overwrite the diagonal of the final relatedness matrix with ones
-#' @param standardize.colnames logical. If TRUE, standardize the column names of the pedigree dataset
+#' @param flatten_diag logical. If TRUE, overwrite the diagonal of the final relatedness matrix with ones
+#' @param standardize_colnames logical. If TRUE, standardize the column names of the pedigree dataset
 #' @param transpose_method character. The method to use for computing the transpose.  Options are "tcrossprod", "crossprod", or "star"
 #' @param adjacency_method character. The method to use for computing the adjacency matrix.  Options are "loop", "indexed", direct or beta
 #' @param isChild_method character. The method to use for computing the isChild matrix.  Options are "classic" or "partialparent"
 #' @param adjBeta_method numeric The method to use for computing the building the adjacency_method matrix when using the "beta" build
+#' @param compress logical. If TRUE, use compression when saving the checkpoint files.  Defaults to TRUE.
 #' @param ... additional arguments to be passed to \code{\link{ped2com}}
 #' @details The algorithms and methodologies used in this function are further discussed and exemplified in the vignette titled "examplePedigreeFunctions". For more advanced scenarios and detailed explanations, consult this vignette.
 #' @export
 #'
 ped2com <- function(ped, component,
-                    max.gen = 25,
+                    max_gen = 25,
                     sparse = TRUE,
                     verbose = FALSE,
                     gc = FALSE,
-                    flatten.diag = FALSE,
-                    standardize.colnames = TRUE,
+                    flatten_diag = FALSE,
+                    standardize_colnames = TRUE,
                     transpose_method = "tcrossprod",
                     adjacency_method = "direct",
                     isChild_method = "classic",
@@ -42,6 +41,7 @@ ped2com <- function(ped, component,
                     update_rate = 100,
                     save_path = "checkpoint/",
                     adjBeta_method = NULL,
+                    compress = TRUE,
                     ...) {
   #------
   # Check inputs
@@ -52,10 +52,10 @@ ped2com <- function(ped, component,
     saveable = saveable,
     resume = resume,
     save_path = save_path,
-    max.gen = max.gen,
+    max_gen = max_gen,
     sparse = sparse,
-    flatten.diag = flatten.diag,
-    standardize.colnames = standardize.colnames,
+    flatten_diag = flatten_diag,
+    standardize_colnames = standardize_colnames,
     transpose_method = transpose_method,
     adjacency_method = adjacency_method,
     isChild_method = isChild_method,
@@ -66,17 +66,18 @@ ped2com <- function(ped, component,
     gc = gc,
     component = component,
     adjBeta_method = adjBeta_method,
-    nr = nrow(ped)
+    nr = nrow(ped),
+    compress = compress
   )
 
 
   #------
   # Checkpointing
   #------
-  if (config$saveable || config$resume) { # prepare checkpointing
-    if (config$verbose) cat("Preparing checkpointing...\n")
-
-    checkpoint_files <- initializeCheckpoint(config) # initialize checkpoint files
+  if (config$saveable == TRUE || config$resume == TRUE) { # prepare checkpointing
+    if (config$verbose == TRUE) message("Preparing checkpointing...\n")
+    # initialize checkpoint files
+    checkpoint_files <- initializeCheckpoint(config)
   }
   #------
   # Validation/Preparation
@@ -97,6 +98,7 @@ ped2com <- function(ped, component,
     "tcrossprod", "crossprod", "star",
     "tcross.alt.crossprod", "tcross.alt.star"
   )
+
   if (!config$transpose_method %in% transpose_method_options) {
     stop(paste0(
       "Invalid method specified. Choose from ",
@@ -104,19 +106,24 @@ ped2com <- function(ped, component,
     ))
   }
 
-
-  if (!config$adjacency_method %in% c("indexed", "loop", "direct", "beta")) {
-    stop("Invalid method specified. Choose from 'indexed', 'loop', 'direct', or 'beta'.")
+  # Validate the 'adjacency_method' argument
+  adjacency_method_options <- c("indexed", "loop", "direct", "beta")
+  if (!config$adjacency_method %in% adjacency_method_options
+  ) {
+    stop(paste0(
+      "Invalid method specified. Choose from ",
+      paste(adjacency_method_options, collapse = ", "), "."
+    ))
   }
 
   # standardize colnames
-  if (config$standardize.colnames) {
+  if (config$standardize_colnames == TRUE) {
     ped <- standardizeColnames(ped, verbose = config$verbose)
   }
 
   # Load final result if computation was completed
-  if (config$resume && file.exists(checkpoint_files$final_matrix)) {
-    if (config$verbose) cat("Loading final computed matrix...\n")
+  if (config$resume == TRUE && file.exists(checkpoint_files$final_matrix)) {
+    if (config$verbose == TRUE) cat("Loading final computed matrix...\n")
     return(readRDS(checkpoint_files$final_matrix))
   }
 
@@ -125,11 +132,12 @@ ped2com <- function(ped, component,
   # Algorithm
   #------
 
-  # Get the number of rows in the pedigree dataset, representing the size of the family
+  # Get the number of rows in the pedigree dataset,
+  # representing the size of the family
   #  nr <- nrow(ped)
 
   # Print the family size if verbose is TRUE
-  if (config$verbose) {
+  if (config$verbose == TRUE) {
     cat(paste0("Family Size = ", config$nr, "\n"))
   }
 
@@ -149,7 +157,7 @@ ped2com <- function(ped, component,
 
   # Construct sparse matrix
   # Garbage collection if gc is TRUE
-  if (config$gc) {
+  if (config$gc == TRUE) {
     gc()
   }
 
@@ -166,7 +174,7 @@ ped2com <- function(ped, component,
     checkpoint_files = checkpoint_files,
     config = config
   )
-  if (config$verbose) {
+  if (config$verbose == TRUE) {
     cat("Completed first degree relatives (adjacency)\n")
   }
 
@@ -184,15 +192,19 @@ ped2com <- function(ped, component,
   isChild <- .loadOrComputeIsChild(
     ped = ped,
     checkpoint_files = checkpoint_files,
-    config = config
+    config = config,
+    compress = config$compress
   )
   # --- Step 2: Compute Relatedness Matrix ---
 
 
-  if (config$resume && file.exists(checkpoint_files$r_checkpoint) && file.exists(checkpoint_files$gen_checkpoint) && file.exists(checkpoint_files$mtSum_checkpoint) && file.exists(checkpoint_files$newIsPar_checkpoint) &&
+  if (config$resume == TRUE && file.exists(checkpoint_files$r_checkpoint) &&
+    file.exists(checkpoint_files$gen_checkpoint) &&
+    file.exists(checkpoint_files$mtSum_checkpoint) &&
+    file.exists(checkpoint_files$newIsPar_checkpoint) &&
     file.exists(checkpoint_files$count_checkpoint)
   ) {
-    if (config$verbose) cat("Resuming: Loading previous computation...\n")
+    if (config$verbose == TRUE) cat("Resuming: Loading previous computation...\n")
     r <- readRDS(checkpoint_files$r_checkpoint)
     gen <- readRDS(checkpoint_files$gen_checkpoint)
     mtSum <- readRDS(checkpoint_files$mtSum_checkpoint)
@@ -205,48 +217,57 @@ ped2com <- function(ped, component,
     newIsPar <- isPar
     count <- 0
   }
-  maxCount <- config$max.gen + 1
-  if (config$verbose) {
+  maxCount <- config$max_gen + 1
+
+  if (config$verbose == TRUE) {
     cat("About to do RAM path tracing\n")
   }
 
   # r is I + A + A^2 + ... = (I-A)^-1 from RAM
   # could trim, here
+  ## it keeps going until it explains all of the relatedness with themselves (i.e., mtSum == 0)
+  # some of this precision is articifuial because we literally get to the point that the condon is eaither there or not. probabiliticy
+
+  # how much percision do we need to get unbiased estimates
+
+  # big matrix still happens here because the network is built. just less percise on inbreeding
+
+  # bias-precision tradeoff. how much percision do we need to get unbiased estimates? not a lot
   while (mtSum != 0 && count < maxCount) {
     r <- r + newIsPar
     gen <- gen + (Matrix::rowSums(newIsPar) > 0)
     newIsPar <- newIsPar %*% isPar
     mtSum <- sum(newIsPar)
     count <- count + 1
-    if (config$verbose) {
+    if (config$verbose == TRUE) {
       cat(paste0("Completed ", count - 1, " degree relatives\n"))
     }
     # Save progress every save_rate iterations
-    if (config$saveable && (count %% save_rate_gen == 0)) {
-      saveRDS(r, file = checkpoint_files$r_checkpoint)
-      saveRDS(gen, file = checkpoint_files$gen_checkpoint)
-      saveRDS(newIsPar, file = checkpoint_files$newIsPar_checkpoint)
-      saveRDS(mtSum, file = checkpoint_files$mtSum_checkpoint)
-      saveRDS(count, file = checkpoint_files$count_checkpoint)
+    if (config$saveable == TRUE && (count %% save_rate_gen == 0)) {
+      saveRDS(r, file = checkpoint_files$r_checkpoint, compress = config$compress)
+      saveRDS(gen, file = checkpoint_files$gen_checkpoint, compress = config$compress)
+      saveRDS(newIsPar, file = checkpoint_files$newIsPar_checkpoint, compress = config$compress)
+      saveRDS(mtSum, file = checkpoint_files$mtSum_checkpoint, compress = config$compress)
+      saveRDS(count, file = checkpoint_files$count_checkpoint, compress = config$compress)
     }
-    if (config$gc && config$nr > 1000000) {
+    if (config$gc == TRUE && config$nr > 1000000) {
       gc()
     } # extra gc if large
   }
   # compute rsq <- r %*% sqrt(diag(isChild))
   # compute rel <- tcrossprod(rsq)
-  if (config$gc) {
+  if (config$gc == TRUE) {
     rm(isPar, newIsPar)
     gc()
   }
-  if (config$saveable) {
-    saveRDS(r, file = checkpoint_files$ram_checkpoint)
+  if (config$saveable == TRUE) {
+    saveRDS(r, file = checkpoint_files$ram_checkpoint, compress = config$compress)
   }
 
   if (config$component == "generation") { # no need to do the rest
     return(gen)
   } else {
-    if (config$verbose) {
+    if (config$verbose == TRUE) {
       cat("Completed RAM path tracing\n")
     }
   }
@@ -256,18 +277,26 @@ ped2com <- function(ped, component,
     r = r,
     isChild = isChild,
     checkpoint_files = checkpoint_files,
-    config = config
+    config = config,
+    compress = config$compress
   )
 
   # --- Step 4: T crossproduct  ---
 
-  if (config$resume && file.exists(checkpoint_files$tcrossprod_checkpoint) && config$component != "generation") {
-    if (config$verbose) cat("Resuming: Loading tcrossprod...\n")
+  if (config$resume == TRUE && file.exists(checkpoint_files$tcrossprod_checkpoint) &&
+    config$component != "generation") {
+    if (config$verbose == TRUE) message("Resuming: Loading tcrossprod...\n")
     r <- readRDS(checkpoint_files$tcrossprod_checkpoint)
   } else {
-    r <- .computeTranspose(r2 = r2, transpose_method = transpose_method, verbose = config$verbose)
-    if (config$saveable) {
-      saveRDS(r, file = checkpoint_files$tcrossprod_checkpoint)
+    r <- .computeTranspose(
+      r2 = r2, transpose_method = transpose_method,
+      verbose = config$verbose
+    )
+    if (config$saveable == TRUE) {
+      saveRDS(r,
+        file = checkpoint_files$tcrossprod_checkpoint,
+        compress = config$compress
+      )
     }
   }
 
@@ -279,11 +308,12 @@ ped2com <- function(ped, component,
   if (config$sparse == FALSE) {
     r <- as.matrix(r)
   }
-  if (config$flatten.diag) { # flattens diagonal if you don't want to deal with inbreeding
+  # flattens diagonal if you don't want to deal with inbreeding
+  if (config$flatten_diag == TRUE) {
     diag(r) <- 1
   }
-  if (config$saveable) {
-    saveRDS(r, file = checkpoint_files$final_matrix)
+  if (config$saveable == TRUE) {
+    saveRDS(r, file = checkpoint_files$final_matrix, compress = config$compress)
   }
   return(r)
 }
@@ -293,9 +323,9 @@ ped2com <- function(ped, component,
 #' @inherit ped2com details
 #' @export
 #'
-ped2add <- function(ped, max.gen = 25, sparse = TRUE, verbose = FALSE,
+ped2add <- function(ped, max_gen = 25, sparse = TRUE, verbose = FALSE,
                     gc = FALSE,
-                    flatten.diag = FALSE, standardize.colnames = TRUE,
+                    flatten_diag = FALSE, standardize_colnames = TRUE,
                     transpose_method = "tcrossprod",
                     adjacency_method = "direct",
                     saveable = FALSE,
@@ -304,23 +334,26 @@ ped2add <- function(ped, max.gen = 25, sparse = TRUE, verbose = FALSE,
                     save_rate_gen = save_rate,
                     save_rate_parlist = 100000 * save_rate,
                     save_path = "checkpoint/",
+                    compress = TRUE,
                     ...) {
   ped2com(
     ped = ped,
-    max.gen = max.gen,
+    max_gen = max_gen,
     sparse = sparse,
     verbose = verbose,
     gc = gc,
     component = "additive",
-    flatten.diag = flatten.diag,
-    standardize.colnames = standardize.colnames,
+    flatten_diag = flatten_diag,
+    standardize_colnames = standardize_colnames,
     transpose_method = transpose_method,
     adjacency_method = adjacency_method,
     saveable = saveable,
     resume = resume,
     save_rate_gen = save_rate_gen,
     save_rate_parlist = save_rate_parlist,
-    save_path = save_path
+    save_path = save_path,
+    compress = compress,
+    ...
   )
 }
 
@@ -330,11 +363,11 @@ ped2add <- function(ped, max.gen = 25, sparse = TRUE, verbose = FALSE,
 #' @export
 #' @aliases ped2mt
 #'
-ped2mit <- ped2mt <- function(ped, max.gen = 25,
+ped2mit <- ped2mt <- function(ped, max_gen = 25,
                               sparse = TRUE,
                               verbose = FALSE, gc = FALSE,
-                              flatten.diag = FALSE,
-                              standardize.colnames = TRUE,
+                              flatten_diag = FALSE,
+                              standardize_colnames = TRUE,
                               transpose_method = "tcrossprod",
                               adjacency_method = "direct",
                               saveable = FALSE,
@@ -343,16 +376,17 @@ ped2mit <- ped2mt <- function(ped, max.gen = 25,
                               save_rate_gen = save_rate,
                               save_rate_parlist = 100000 * save_rate,
                               save_path = "checkpoint/",
+                              compress = TRUE,
                               ...) {
   ped2com(
     ped = ped,
-    max.gen = max.gen,
+    max_gen = max_gen,
     sparse = sparse,
     verbose = verbose,
     gc = gc,
     component = "mitochondrial",
-    flatten.diag = flatten.diag,
-    standardize.colnames = standardize.colnames,
+    flatten_diag = flatten_diag,
+    standardize_colnames = standardize_colnames,
     transpose_method = transpose_method,
     adjacency_method = adjacency_method,
     saveable = saveable,
@@ -360,18 +394,19 @@ ped2mit <- ped2mt <- function(ped, max.gen = 25,
     save_rate_gen = save_rate_gen,
     save_rate_parlist = save_rate_parlist,
     save_path = save_path,
+    compress = compress,
     ...
   )
 }
 
-#' Take a pedigree and turn it into a common nuclear environmental relatedness matrix
+#' Take a pedigree and turn it into a common nuclear environmental  matrix
 #' @inheritParams ped2com
 #' @inherit ped2com details
 #' @export
 #'
-ped2cn <- function(ped, max.gen = 25, sparse = TRUE, verbose = FALSE,
-                   gc = FALSE, flatten.diag = FALSE,
-                   standardize.colnames = TRUE,
+ped2cn <- function(ped, max_gen = 25, sparse = TRUE, verbose = FALSE,
+                   gc = FALSE, flatten_diag = FALSE,
+                   standardize_colnames = TRUE,
                    transpose_method = "tcrossprod",
                    saveable = FALSE,
                    resume = FALSE,
@@ -380,26 +415,68 @@ ped2cn <- function(ped, max.gen = 25, sparse = TRUE, verbose = FALSE,
                    save_rate_gen = save_rate,
                    save_rate_parlist = 1000 * save_rate,
                    save_path = "checkpoint/",
+                   compress = TRUE,
                    ...) {
   ped2com(
     ped = ped,
-    max.gen = max.gen,
+    max_gen = max_gen,
     sparse = sparse,
     verbose = verbose,
     gc = gc,
     component = "common nuclear",
     adjacency_method = adjacency_method,
-    flatten.diag = flatten.diag,
-    standardize.colnames = standardize.colnames,
+    flatten_diag = flatten_diag,
+    standardize_colnames = standardize_colnames,
     transpose_method = transpose_method,
     saveable = saveable,
     resume = resume,
     save_rate_gen = save_rate_gen,
     save_rate_parlist = save_rate_parlist,
     save_path = save_path,
+    compress = compress,
     ...
   )
 }
+#' Take a pedigree and turn it into a generation relatedness matrix
+#' @inheritParams ped2com
+#' @inherit ped2com details
+#' @export
+#'
+ped2gen <- function(ped, max_gen = 25, sparse = TRUE, verbose = FALSE,
+                    gc = FALSE, flatten_diag = FALSE,
+                    standardize_colnames = TRUE,
+                    transpose_method = "tcrossprod",
+                    saveable = FALSE,
+                    resume = FALSE,
+                    save_rate = 5,
+                    adjacency_method = "direct",
+                    save_rate_gen = save_rate,
+                    save_rate_parlist = 1000 * save_rate,
+                    save_path = "checkpoint/",
+                    compress = TRUE,
+                    ...) {
+  ped2com(
+    ped = ped,
+    max_gen = max_gen,
+    sparse = sparse,
+    verbose = verbose,
+    gc = gc,
+    component = "generation",
+    adjacency_method = adjacency_method,
+    flatten_diag = flatten_diag,
+    standardize_colnames = standardize_colnames,
+    transpose_method = transpose_method,
+    saveable = saveable,
+    resume = resume,
+    save_rate_gen = save_rate_gen,
+    save_rate_parlist = save_rate_parlist,
+    save_path = save_path,
+    compress = compress,
+    ...
+  )
+}
+
+
 #' Take a pedigree and turn it into an extended environmental relatedness matrix
 #' @inheritParams ped2com
 #' @inherit ped2com details
@@ -421,7 +498,9 @@ ped2ce <- function(ped, ...) {
     "tcross.alt.crossprod", "tcross.alt.star"
   )
   if (!transpose_method %in% valid_methods) {
-    stop("Invalid method specified. Choose from 'tcrossprod', 'crossprod', 'star', 'tcross.alt.crossprod', or 'tcross.alt.star'.")
+    stop("Invalid method specified. Choose from
+         'tcrossprod', 'crossprod', 'star', 'tcross.alt.crossprod',
+         or 'tcross.alt.star'.")
   }
 
   # Map aliases to core methods
@@ -438,15 +517,15 @@ ped2ce <- function(ped, ...) {
 
   result <- switch(method_normalized,
     "tcrossprod" = {
-      if (verbose) cat("Doing tcrossprod\n")
+      if (verbose == TRUE) cat("Doing tcrossprod\n")
       Matrix::tcrossprod(r2)
     },
     "crossprod" = {
-      if (verbose) cat("Doing tcrossprod using crossprod(t(.))\n")
+      if (verbose == TRUE) cat("Doing tcrossprod using crossprod(t(.))\n")
       crossprod(t(as.matrix(r2)))
     },
     "star" = {
-      if (verbose) cat("Doing tcrossprod using %*% t(.)\n")
+      if (verbose == TRUE) cat("Doing tcrossprod using %*% t(.)\n")
       r2 %*% t(as.matrix(r2))
     }
   )
@@ -466,10 +545,10 @@ initializeCheckpoint <- function(config = list(
                                  )) {
   # Define checkpoint files
   # Ensure save path exists
-  if (config$saveable && !dir.exists(config$save_path)) {
-    if (config$verbose) cat("Creating save path...\n")
+  if (config$saveable == TRUE && !dir.exists(config$save_path)) {
+    if (config$verbose == TRUE) cat("Creating save path...\n")
     dir.create(config$save_path, recursive = TRUE)
-  } else if (config$resume && !dir.exists(config$save_path)) {
+  } else if (config$resume == TRUE && !dir.exists(config$save_path)) {
     stop("Cannot resume from checkpoint. Save path does not exist.")
   }
 
@@ -482,11 +561,17 @@ initializeCheckpoint <- function(config = list(
     isChild = file.path(config$save_path, "isChild.rds"),
     r_checkpoint = file.path(config$save_path, "r_checkpoint.rds"),
     gen_checkpoint = file.path(config$save_path, "gen_checkpoint.rds"),
-    newIsPar_checkpoint = file.path(config$save_path, "newIsPar_checkpoint.rds"),
+    newIsPar_checkpoint = file.path(
+      config$save_path,
+      "newIsPar_checkpoint.rds"
+    ),
     mtSum_checkpoint = file.path(config$save_path, "mtSum_checkpoint.rds"),
     ram_checkpoint = file.path(config$save_path, "ram_checkpoint.rds"),
     r2_checkpoint = file.path(config$save_path, "r2_checkpoint.rds"),
-    tcrossprod_checkpoint = file.path(config$save_path, "tcrossprod_checkpoint.rds"),
+    tcrossprod_checkpoint = file.path(
+      config$save_path,
+      "tcrossprod_checkpoint.rds"
+    ),
     count_checkpoint = file.path(config$save_path, "count_checkpoint.rds"),
     final_matrix = file.path(config$save_path, "final_matrix.rds")
   )
@@ -500,7 +585,8 @@ initializeCheckpoint <- function(config = list(
   # Set parent values depending on the component type
   if (component %in% c("generation", "additive")) {
     parVal <- .5
-  } else if (component %in% c("common nuclear", "mitochondrial", "mtdna", "mitochondria")) {
+  } else if (component %in%
+    c("common nuclear", "mitochondrial", "mtdna", "mitochondria")) {
     parVal <- 1
   } else {
     stop("Don't know how to set parental value")
@@ -514,16 +600,20 @@ initializeCheckpoint <- function(config = list(
 #' @param config A list containing configuration parameters such as `resume`, `verbose`, and `saveable`.
 #' @param message_resume Optional message to display when resuming from a checkpoint.
 #' @param message_compute Optional message to display when computing the checkpoint.
+#' @param compress a logical specifying whether saving to a named file is to use "gzip" compression, or one of "gzip", "bzip2", "xz" or "zstd" to indicate the type of compression to be used. Ignored if file is a connection.
 #' @return The loaded or computed checkpoint.
 #' @keywords internal
-loadOrComputeCheckpoint <- function(file, compute_fn, config, message_resume = NULL, message_compute = NULL) {
-  if (config$resume && file.exists(file)) {
-    if (config$verbose && !is.null(message_resume)) cat(message_resume)
+loadOrComputeCheckpoint <- function(file, compute_fn,
+                                    config, message_resume = NULL,
+                                    message_compute = NULL,
+                                    compress = TRUE) {
+  if (config$resume == TRUE && file.exists(file)) {
+    if (config$verbose == TRUE && !is.null(message_resume)) cat(message_resume)
     return(readRDS(file))
   } else {
-    if (config$verbose && !is.null(message_compute)) cat(message_compute)
+    if (config$verbose == TRUE && !is.null(message_compute)) cat(message_compute)
     result <- compute_fn()
-    if (config$saveable) saveRDS(result, file = file)
+    if (config$saveable == TRUE) saveRDS(result, file = file, compress = compress)
     return(result)
   }
 }
@@ -539,7 +629,8 @@ loadOrComputeCheckpoint <- function(file, compute_fn, config, message_resume = N
 #'
 #' @keywords internal
 #' @importFrom Matrix sparseMatrix
-.loadOrComputeIsPar <- function(iss, jss, parVal, ped, checkpoint_files, config) {
+.loadOrComputeIsPar <- function(iss, jss, parVal, ped, checkpoint_files, config,
+                                compress = TRUE) {
   isPar <- loadOrComputeCheckpoint(
     file = checkpoint_files$isPar,
     compute_fn = function() {
@@ -551,7 +642,8 @@ loadOrComputeCheckpoint <- function(file, compute_fn, config, message_resume = N
     },
     config = config,
     message_resume = "Resuming: Loading adjacency matrix...\n",
-    message_compute = "Initializing adjacency matrix...\n"
+    message_compute = "Initializing adjacency matrix...\n",
+    compress = compress
   )
 
   return(isPar)
@@ -564,13 +656,14 @@ loadOrComputeCheckpoint <- function(file, compute_fn, config, message_resume = N
 #'
 #'  @keywords internal
 
-.loadOrComputeIsChild <- function(ped, checkpoint_files, config) {
+.loadOrComputeIsChild <- function(ped, checkpoint_files, config, compress = TRUE) {
   isChild <- loadOrComputeCheckpoint(
     file = checkpoint_files$isChild,
     compute_fn = function() isChild(isChild_method = config$isChild_method, ped = ped),
     config = config,
     message_resume = "Resuming: Loading isChild matrix...\n",
-    message_compute = "Computing isChild matrix...\n"
+    message_compute = "Computing isChild matrix...\n",
+    compress = compress
   )
 
   return(isChild)
@@ -585,7 +678,9 @@ loadOrComputeCheckpoint <- function(file, compute_fn, config, message_resume = N
 #' @return The computed inverse diagonal matrix.
 
 
-.loadOrComputeInverseDiagonal <- function(r, isChild, checkpoint_files, config) {
+.loadOrComputeInverseDiagonal <- function(r, isChild,
+                                          checkpoint_files, config,
+                                          compress = TRUE) {
   r2 <- loadOrComputeCheckpoint(
     file = checkpoint_files$r2_checkpoint,
     compute_fn = function() {
@@ -593,15 +688,15 @@ loadOrComputeCheckpoint <- function(file, compute_fn, config, message_resume = N
     },
     config = config,
     message_resume = "Resuming: Loading I-A inverse...\n",
-    message_compute = "Doing I-A inverse times diagonal multiplication\n"
+    message_compute = "Doing I-A inverse times diagonal multiplication\n",
+    compress = compress
   )
-  if (config$gc) {
+  if (config$gc == TRUE) {
     rm(r, isChild)
     gc()
   }
   return(r2)
 }
-
 
 
 #' parent-child adjacency data
@@ -613,32 +708,46 @@ loadOrComputeCheckpoint <- function(file, compute_fn, config, message_resume = N
 #' @param lens A vector of lengths for each parent-child relationship.
 #' @keywords internal
 
-#' @return A list containing the parent-child adjacency data either loaded from a checkpoint or initialized.
+#' @return A list containing the parent-child adjacency data either
+#'         loaded from a checkpoint or initialized.
 #'
 
-.loadOrComputeParList <- function(checkpoint_files, config, ped = NULL, parList = NULL, lens = NULL) {
-  if (config$resume && file.exists(checkpoint_files$parList) && file.exists(checkpoint_files$lens)) {
-    if (config$verbose) cat("Resuming: Loading parent-child adjacency data...\n")
+.loadOrComputeParList <- function(checkpoint_files, config,
+                                  ped = NULL,
+                                  parList = NULL, lens = NULL,
+                                  compress = TRUE) {
+  if (config$resume == TRUE &&
+    file.exists(checkpoint_files$parList) &&
+    file.exists(checkpoint_files$lens)) {
+    if (config$verbose == TRUE) {
+      message("Resuming: Loading parent-child adjacency data...\n")
+    }
     parList <- readRDS(checkpoint_files$parList)
     lens <- readRDS(checkpoint_files$lens)
-    computed_indices <- which(!sapply(parList, is.null))
-    lastComputed <- if (length(computed_indices) > 0) max(computed_indices) else 0
-    if (config$verbose) cat("Resuming from iteration", lastComputed + 1, "\n")
+    computed_indices <- which(!vapply(parList, is.null))
+    lastComputed <- if (length(computed_indices) > 0) {
+      max(computed_indices)
+    } else {
+      0
+    }
+    if (config$verbose == TRUE) message("Resuming from iteration", lastComputed + 1, "\n")
   } else {
     ## Initialize variables
     parList <- vector("list", config$nr)
     lens <- integer(config$nr)
     lastComputed <- 0
-    if (config$verbose) cat("Building parent adjacency matrix...\n")
+    if (config$verbose == TRUE) cat("Building parent adjacency matrix...\n")
   }
 
-  if (config$resume && file.exists(checkpoint_files$iss) && file.exists(checkpoint_files$jss)) { # fix to check actual
-    if (config$verbose) message("Resuming: Constructed matrix...\n")
+  if (config$resume == TRUE &&
+    file.exists(checkpoint_files$iss) &&
+    file.exists(checkpoint_files$jss)) { # fix to check actual
+    if (config$verbose == TRUE) message("Resuming: Constructed matrix...\n")
     jss <- readRDS(checkpoint_files$jss)
     iss <- readRDS(checkpoint_files$iss)
     list_of_adjacencies <- list(iss = iss, jss = jss)
   } else {
-    if (config$verbose) message("Computing parent-child adjacency matrix...\n")
+    if (config$verbose == TRUE) message("Computing parent-child adjacency matrix...\n")
     list_of_adjacencies <- computeParentAdjacency(
       ped = ped,
       save_rate_parlist = config$save_rate_parlist,
@@ -660,12 +769,12 @@ loadOrComputeCheckpoint <- function(file, compute_fn, config, message_resume = N
     # Construct sparse matrix
 
 
-    if (config$verbose) {
+    if (config$verbose == TRUE) {
       message("Constructed sparse matrix\n")
     }
-    if (config$saveable) {
-      saveRDS(list_of_adjacencies$jss, file = checkpoint_files$jss)
-      saveRDS(list_of_adjacencies$iss, file = checkpoint_files$iss)
+    if (config$saveable == TRUE) {
+      saveRDS(list_of_adjacencies$jss, file = checkpoint_files$jss, compress = compress)
+      saveRDS(list_of_adjacencies$iss, file = checkpoint_files$iss, compress = compress)
     }
   }
   return(list_of_adjacencies)

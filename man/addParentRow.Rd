@@ -4,18 +4,20 @@
 \alias{addParentRow}
 \title{Create a properly formatted parent row for the pedigree}
 \usage{
-addParentRow(template_row, new_id, sex, momID = NA, dadID = NA)
+addParentRow(template_row, newID, sex, momID = NA, dadID = NA, famID = NA)
 }
 \arguments{
 \item{template_row}{A single row from ped, used as a template for column structure}
 
-\item{new_id}{The new parent's ID}
+\item{newID}{The new parent's ID}
 
 \item{sex}{The new parent's sex value (e.g., 0 for female, 1 for male, or "F"/"M")}
 
 \item{momID}{The new parent's mother ID (default is NA)}
 
 \item{dadID}{The new parent's father ID (default is NA)}
+
+\item{famID}{The new parent's family ID (default is NA)}
 }
 \value{
 A single-row dataframe for the new parent

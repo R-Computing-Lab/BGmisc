@@ -1,6 +1,6 @@
 Package: BGmisc
 Title: An R Package for Extended Behavior Genetics Analysis
-Version: 1.4.3.1
+Version: 1.6.0.1
 Authors@R: c(
     person("S. Mason", "Garrison", , "garrissm@wfu.edu", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-4804-6003")),
@@ -10,7 +10,7 @@ Authors@R: c(
            comment = c(ORCID = "0000-0002-2841-5529")),
     person(c("Rachel", "N."), "Good", role = "ctb"),
     person(c("Jonathan", "D."), "Trattner", , "code@jdtrat.com", role = "aut",
-           comment = c(ORCID = "0000-0002-1097-7603", url = "https://www.jdtrat.com/")),
+           comment = c(ORCID = "0000-0002-1097-7603")),
     person(c("S.", "Alexandra"), "Burt", role = "aut",
            comment = c(ORCID = "0000-0001-5538-7431"))
   )
@@ -36,21 +36,22 @@ Imports:
     methods
 Suggests: 
     corrplot,
-    ggpedigree,
-    kinship2,
-    ggplot2,
     discord,
     dplyr,
     EasyMx,
+    ggpedigree,
+    ggplot2,
+    kinship2,
     knitr,
     OpenMx,
     rmarkdown,
     testthat (>= 3.0.0),
-    tidyverse
+    tidyverse,
+    withr
 VignetteBuilder: 
     knitr
 Config/testthat/edition: 3
 Encoding: UTF-8
 Language: en-US
 LazyData: true
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3

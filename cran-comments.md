@@ -1,15 +1,13 @@
 
 # Description
 
-This update includes minor enhancements, a major update to the ASOIAF dataset, and rewritten vignettes to use ggpedigree.
-
-I am also moving the lone plotting function from BGmisc to ggpedigree package. I maintain both packages. As promised, now that the ggpedigree package update is on CRAN, I am uploading the new version of BGmisc that does not include the plotting function. 
+This update includes minor enhancements and bug fixes related to how string ids are handled in various functions. It also now allows certain vignettes to not throw an error if openmx is not installed for older R versions. This should resolve r-oldrel-windows-x86_64	1.5.0	22.00	246.00	268.00	ERROR seen in the last CRAN check.	
 
 # Test Environments
 
-1. Local OS: Windows 11 x64 (build 26120), R 4.5.0 (2025-04-11 ucrt)
+1. Local OS: Windows 11 x64 (build 26220), R 4.5.2 (2025-10-31 ucrt)
 2. **GitHub Actions**:  
-    - [Link](https://github.com/R-Computing-Lab/BGmisc/actions/runs/15559609383)
+    - [Link](https://github.com/R-Computing-Lab/BGmisc/actions/runs/20786177599)
     - macOS (latest version) with the latest R release.
     - Windows (latest version) with the latest R release.
     - Ubuntu (latest version) with:
@@ -19,10 +17,28 @@ I am also moving the lone plotting function from BGmisc to ggpedigree package. I
         
 ## R CMD check results
 
-
-── R CMD check results ─ BGmisc 1.4.3.1 ────
-Duration: 2m 10s
+── R CMD check results ───────────────────────────────────────────────────────────────────────── BGmisc 1.5.2 ────
+Duration: 1m 35.9s
 
 0 errors ✔ | 0 warnings ✔ | 0 notes ✔
 
 R CMD check succeeded
+
+## revdepcheck results
+
+We checked 2 reverse dependencies, comparing R CMD check results across CRAN and dev versions of this package. 
+
+ * We saw 0 new problems
+ * We failed to check 0 packages
+ 
+The development version of ggpedigree resolves "E: 1" seen in the CRAN version. I maintain both packages, so once the latest version of BGmisc is on CRAN, I will submit the updated ggpedigree version.
+
+> revdepcheck::revdep_check(num_workers = 4)
+── INSTALL ────────────────────────────────────────────────────────── 2 versions ──
+── CHECK ──────────────────────────────────────────────────────────── 2 packages ──
+✔ discord 1.2.4.1                        ── E: 0     | W: 0     | N: 0             
+✔ ggpedigree 1.0.0.1                     ── E: 1     | W: 0     | N: 0             
+OK: 2                                                                            
+
+BROKEN: 0
+Total time: 3 min

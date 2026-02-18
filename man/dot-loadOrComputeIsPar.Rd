@@ -4,7 +4,15 @@
 \alias{.loadOrComputeIsPar}
 \title{Load or compute the isPar matrix}
 \usage{
-.loadOrComputeIsPar(iss, jss, parVal, ped, checkpoint_files, config)
+.loadOrComputeIsPar(
+  iss,
+  jss,
+  parVal,
+  ped,
+  checkpoint_files,
+  config,
+  compress = TRUE
+)
 }
 \arguments{
 \item{iss}{The row indices of the sparse matrix.}
@@ -18,6 +26,8 @@
 \item{checkpoint_files}{A list of checkpoint file paths.}
 
 \item{config}{A list containing configuration parameters such as `resume`, `verbose`, and `saveable`.}
+
+\item{compress}{a logical specifying whether saving to a named file is to use "gzip" compression, or one of "gzip", "bzip2", "xz" or "zstd" to indicate the type of compression to be used. Ignored if file is a connection.}
 }
 \description{
 Load or compute the isPar matrix

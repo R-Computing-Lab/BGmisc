@@ -13,5 +13,5 @@ initializeRecord(all_var_names)
 A named list representing an empty individual record.
 }
 \description{
-Creates a named list with all GEDCOM fields set to NA.
+Creates a named list with all GEDCOM initialized to NA_character_.
 }

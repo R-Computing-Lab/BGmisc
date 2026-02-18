@@ -5,13 +5,13 @@
 \alias{potter}
 \title{Fictional pedigree data on a wizarding family}
 \format{
-A data frame (and ped object) with 36 rows and 8 variables
+A data frame (and ped object) with 36 rows and 10 variables
 }
 \usage{
 data(potter)
 }
 \description{
-A dataset created  for educational and illustrative use, containing a fictional pedigree modeled after characters from the Harry Potter series.
+A dataset created for educational and illustrative use, containing a fictional pedigree modeled after characters from the Harry Potter series.
 This data is structured for use in software demonstrations involving pedigree diagrams, inheritance structures, and kinship modeling.
 This dataset is not intended to represent any real individuals or families.
 It includes no narrative content or protected expression from the original works and is provided solely for educational purposes.
@@ -24,6 +24,8 @@ The variables are as follows:
   \item \code{personID}:  Person identification variable
   \item \code{famID}: Family identification variable
   \item \code{name}:  Name of the person
+  \item \code{first_name}: First name of the person
+  \item \code{surname}: Last name of the person
   \item \code{gen}: Generation of the person
   \item \code{momID}:  ID of the mother
   \item \code{dadID}:  ID of the father

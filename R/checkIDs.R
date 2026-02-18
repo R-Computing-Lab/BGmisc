@@ -22,7 +22,7 @@ checkIDs <- function(ped, verbose = FALSE, repair = FALSE) {
   # Initialize a list to store validation results
   validation_results <- list()
 
-  if (verbose) {
+  if (verbose == TRUE) {
     cat("Checking IDs...\n")
     cat("Step 1: Checking for unique IDs...\n")
   }
@@ -30,51 +30,44 @@ checkIDs <- function(ped, verbose = FALSE, repair = FALSE) {
   # Identify non-unique IDs
   id_check <- checkIDuniqueness(ped = ped, verbose = verbose)
 
-  if (verbose) {
+  if (verbose == TRUE) {
     cat("Step 2: Checking for within row duplicats...\n")
   }
   row_check <- checkWithinRowDuplicates(ped = ped, verbose = verbose)
 
   validation_results <- c(id_check, row_check)
 
-  if (verbose) {
+  if (verbose == TRUE) {
     cat("Validation Results:\n")
     message(validation_results)
   }
-  if (repair) {
-    if (verbose) {
+  if (repair == TRUE) {
+    if (verbose == TRUE) {
       cat("Attempting to repair:\n")
       cat("Step 1: Attempting to repair non-unique IDs...\n")
     }
 
     # Initialize a list to track changes made during repair
     changes <- list()
-    if (verbose) {
+    if (verbose == TRUE) {
       cat("Is the row a between-person duplicate?\n")
     }
     repaired_ped <- ped
     # if there are non-unique IDs
     if (length(validation_results$non_unique_ids) > 0) {
       # loop through each non-unique ID
-      for (id in validation_results$non_unique_ids) {
-        rows_with_id <- repaired_ped[repaired_ped$ID == id, ]
-        # If all rows with the same ID are truly identical, keep only the first occurrence
-        if (nrow(unique(rows_with_id)) == 1) {
-          # Mark as removed in the changes list
-          changes[[paste0("ID", id)]] <- "Removed duplicates"
-          # Keep only the first row, remove the rest
-          repaired_ped <- repaired_ped[-which(repaired_ped$ID == id)[-1], ] # Remove all but the first occurrence
-        } else {
-          # Mark as kept in the changes list
-          changes[[paste0("ID", id)]] <- "Kept duplicates"
-        }
-      }
+
+      processed <- dropIdenticalDuplicateIDs(ped = repaired_ped,
+        ids = validation_results$non_unique_ids,
+        changes = changes)
+      repaired_ped <- processed$ped
+      changes <- processed$changes
     }
-    if (verbose) {
+    if (verbose == TRUE) {
       cat("Step 2: No repair for parents who are their children at this time\n")
     }
 
-    if (verbose) {
+    if (verbose == TRUE) {
       cat("Changes Made:\n")
       message(changes)
     }
@@ -106,7 +99,7 @@ checkIDuniqueness <- function(ped, verbose = FALSE) {
 
   duplicated_ids <- ped$ID[duplicated(ped$ID) | duplicated(ped$ID, fromLast = TRUE)]
 
-  if (verbose) {
+  if (verbose == TRUE) {
     if (length(duplicated_ids) > 0) {
       cat(length(duplicated_ids), " non-unique IDs found.\n")
     } else {
@@ -121,7 +114,6 @@ checkIDuniqueness <- function(ped, verbose = FALSE) {
     non_unique_ids = if (length(duplicated_ids) > 0) unique(duplicated_ids) else NULL
   )
 }
-
 
 
 #' Check for within-row duplicates (self-parents, same mom/dad)
@@ -145,7 +137,7 @@ checkWithinRowDuplicates <- function(ped, verbose = FALSE) {
   # get the total number of within row duplicates
   total <- length(is_own_father) + length(is_own_mother) + length(duplicated_parents)
 
-  if (verbose) {
+  if (verbose == TRUE) {
     if (total > 0) {
       cat(total, " within row duplicates found.\n")
       if (length(is_own_father) > 0) cat(length(is_own_father), " individuals are their own fathers.\n")

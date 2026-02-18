@@ -13,8 +13,7 @@ data(inbreeding)
 \description{
 A dataset created purely from imagination that includes several types of inbreeding.
 Different kinds of inbreeding occur in each extended family.
-}
-\details{
+
 The types of inbreeding are as follows:
 
 \itemize{

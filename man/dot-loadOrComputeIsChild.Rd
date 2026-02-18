@@ -4,7 +4,7 @@
 \alias{.loadOrComputeIsChild}
 \title{Load or compute the isChild matrix}
 \usage{
-.loadOrComputeIsChild(ped, checkpoint_files, config)
+.loadOrComputeIsChild(ped, checkpoint_files, config, compress = TRUE)
 }
 \arguments{
 \item{ped}{a pedigree dataset.  Needs ID, momID, and dadID columns}
@@ -14,6 +14,8 @@
  @keywords internal}
 
 \item{config}{A list containing configuration parameters such as `resume`, `verbose`, and `saveable`.}
+
+\item{compress}{a logical specifying whether saving to a named file is to use "gzip" compression, or one of "gzip", "bzip2", "xz" or "zstd" to indicate the type of compression to be used. Ignored if file is a connection.}
 }
 \description{
 Load or compute the isChild matrix

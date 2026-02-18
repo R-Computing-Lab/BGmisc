@@ -2,11 +2,7 @@
 % Please edit documentation in R/tweakPedigree.R
 \name{makeInbreeding}
 \alias{makeInbreeding}
-\title{makeInbreeding
-A function to create inbred mates in the simulated pedigree \code{data.frame}.
-Inbred mates can be created by specifying their IDs or the generation the inbred mate should be created.
-When specifying the generation, inbreeding between siblings or 1st cousin needs to be specified.
-This is a supplementary function for \code{simulatePedigree}.}
+\title{makeInbreeding}
 \usage{
 makeInbreeding(
   ped,
@@ -34,7 +30,6 @@ makeInbreeding(
 Returns a \code{data.frame} with some inbred mates.
 }
 \description{
-makeInbreeding
 A function to create inbred mates in the simulated pedigree \code{data.frame}.
 Inbred mates can be created by specifying their IDs or the generation the inbred mate should be created.
 When specifying the generation, inbreeding between siblings or 1st cousin needs to be specified.

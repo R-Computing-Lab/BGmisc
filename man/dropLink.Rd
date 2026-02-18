@@ -2,11 +2,7 @@
 % Please edit documentation in R/tweakPedigree.R
 \name{dropLink}
 \alias{dropLink}
-\title{dropLink
-A function to drop a person from his/her parents in the simulated pedigree \code{data.frame}.
-The person can be dropped by specifying his/her ID or by specifying the generation which the randomly to-be-dropped person is in.
-The function can separate one pedigree into two pedigrees. Separating into small pieces should be done by running the function multiple times.
-This is a supplementary function for \code{simulatePedigree}.}
+\title{dropLink}
 \usage{
 dropLink(
   ped,
@@ -31,7 +27,6 @@ dropLink(
 a pedigree with the dropped person's `dadID` and `momID` set to NA.
 }
 \description{
-dropLink
 A function to drop a person from his/her parents in the simulated pedigree \code{data.frame}.
 The person can be dropped by specifying his/her ID or by specifying the generation which the randomly to-be-dropped person is in.
 The function can separate one pedigree into two pedigrees. Separating into small pieces should be done by running the function multiple times.

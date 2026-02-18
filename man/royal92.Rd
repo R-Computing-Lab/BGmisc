@@ -15,7 +15,6 @@ A dataset created by Denis Reid from the Royal Families of Europe.
 }
 \details{
 The variables are as follows:
-id,momID,dadID,name,sex,birth_date,death_date,attribute_title
 \itemize{
   \item \code{id}:  Person identification variable
   \item \code{momID}:  ID of the mother

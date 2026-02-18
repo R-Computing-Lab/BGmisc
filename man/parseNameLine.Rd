@@ -2,7 +2,7 @@
 % Please edit documentation in R/readGedcom.R
 \name{parseNameLine}
 \alias{parseNameLine}
-\title{Parse a Full Name Line}
+\title{Parse Name Line}
 \usage{
 parseNameLine(line, record)
 }

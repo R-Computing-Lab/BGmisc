@@ -179,7 +179,6 @@ test_that("if file does not exist, readGedcom throws an error", {
 })
 
 
-
 test_that("readGedcom parses death event correctly", {
   # Test that a GEDCOM file with a death event is parsed correctly.
   gedcom_content <- c(
