@@ -52,6 +52,8 @@ if (!has_mvtnorm) {
     "mvtnorm is not installed. Data simulation examples will not run.\n",
     "Install mvtnorm with: install.packages('mvtnorm')"
   )
+} else {
+  library(mvtnorm)
 }
 
 run_models <- has_openmx && has_mvtnorm
@@ -257,9 +259,8 @@ ytemp <- paste("S", rownames(add_matrix))
 
 ```{r show-phenotype}
 
-if (is.null(y)) {
+if (!exists("y")) {
   y <- rep(NA, nrow(add_matrix))
-
 }
 
 ```

@@ -10,7 +10,8 @@ isTwin(ped)
 \item{ped}{pedigree data frame}
 }
 \value{
-isTwin 'S' matrix
+A logical vector indicating, for each row of \code{ped}, whether
+  \code{twinID} is non-\code{NA}.
 }
 \description{
 Determine isTwin Status
