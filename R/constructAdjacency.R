@@ -70,7 +70,8 @@
 .adjIndexed <- function(ped, component, saveable, resume,
                         save_path, verbose, lastComputed,
                         checkpoint_files, update_rate,
-                        parList, lens, save_rate_parlist, config, compress = config$compress) {
+                        parList, lens, save_rate_parlist,
+                        config, compress = config$compress) {
   # Loop through each individual in the pedigree
   # Build the adjacency matrix for parent-child relationships
   # Is person in column j the parent of the person in row i? .5 for yes, 0 for no.
@@ -207,7 +208,7 @@
   return(list_of_adjacency)
 }
 
-#' Construct Adjacency Matrix for Parent-Child Relationships Using Beta Method
+#' Construct Adjacency Matrix for Parent-Child Relationships Using Beta Methods
 #' This function constructs an adjacency matrix for parent-child relationships
 #' using a method in beta testing. It identifies parent-child pairs based on the
 #' specified component of relatedness.
