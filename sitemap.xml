@@ -10,6 +10,7 @@
 <url><loc>https://r-computing-lab.github.io/BGmisc/articles/v3_analyticrelatedness.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/articles/v4_validation.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/articles/v5_ASOIAF.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/articles/v6_pedigree_model_fitting.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/authors.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/copilot-instructions.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/index.html</loc></url>
@@ -24,6 +25,10 @@
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/applyTagMappings.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/assignCoupleIDs.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/buildBetweenGenerations.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/buildFamilyGroups.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/buildOneFamilyGroup.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/buildPedigreeModelCovariance.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/buildPedigreeMx.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/buildTreeGrid.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/buildWithinGenerations.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/calcAllGens.html</loc></url>
@@ -83,8 +88,11 @@
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/findBiggest.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/findFooest.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/findFounder.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/findMZtwins.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/findOldest.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/fitComponentModel.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/fitPedigreeModel.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/fuseTwins.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/getGridNeighbors.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/getWikiTreeSummary.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/hazard.html</loc></url>
@@ -97,6 +105,7 @@
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/initialize_empty_df.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/insertEven.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/isChild.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/isTwin.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/loadOrComputeCheckpoint.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/makeInbreeding.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/makeTwins.html</loc></url>

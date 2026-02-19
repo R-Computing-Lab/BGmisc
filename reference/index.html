@@ -24,6 +24,7 @@
     <li><a class="dropdown-item" href="../articles/v3_analyticrelatedness.html">Understanding and Computing Relatedness from Pedigree Data</a></li>
     <li><a class="dropdown-item" href="../articles/v4_validation.html">Validating and Repairing Pedigree Data with BGmisc</a></li>
     <li><a class="dropdown-item" href="../articles/v5_ASOIAF.html">ASOIAF: How related are Jon and Danny?</a></li>
+    <li><a class="dropdown-item" href="../articles/v6_pedigree_model_fitting.html">Fitting Pedigree-Based Variance Component Models</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -84,6 +85,34 @@
 
         </dt>
         <dd>Process Generation Connections</dd>
+
+        <dt>
+
+          <code><a href="buildFamilyGroups.html">buildFamilyGroups()</a></code>
+
+        </dt>
+        <dd>Build family group models</dd>
+
+        <dt>
+
+          <code><a href="buildOneFamilyGroup.html">buildOneFamilyGroup()</a></code>
+
+        </dt>
+        <dd>Build one family group model</dd>
+
+        <dt>
+
+          <code><a href="buildPedigreeModelCovariance.html">buildPedigreeModelCovariance()</a></code>
+
+        </dt>
+        <dd>Create an mxModel for a pedigree</dd>
+
+        <dt>
+
+          <code><a href="buildPedigreeMx.html">buildPedigreeMx()</a></code>
+
+        </dt>
+        <dd>Build Pedigree mxModel</dd>
 
         <dt>
 
@@ -237,7 +266,7 @@
           <code><a href="dot-adjBeta.html">.adjBeta()</a></code>
 
         </dt>
-        <dd>Construct Adjacency Matrix for Parent-Child Relationships Using Beta Method This function constructs an adjacency matrix for parent-child relationships using a method in beta testing. It identifies parent-child pairs based on the specified component of relatedness.</dd>
+        <dd>Construct Adjacency Matrix for Parent-Child Relationships Using Beta Methods This function constructs an adjacency matrix for parent-child relationships using a method in beta testing. It identifies parent-child pairs based on the specified component of relatedness.</dd>
 
         <dt>
 
@@ -315,6 +344,20 @@
 
         </dt>
         <dd>fitComponentModel Fit the estimated variance components of a model to covariance data</dd>
+
+        <dt>
+
+          <code><a href="fitPedigreeModel.html">fitPedigreeModel()</a></code>
+
+        </dt>
+        <dd>Fit an OpenMx pedigree model to observed data</dd>
+
+        <dt>
+
+          <code><a href="fuseTwins.html">fuseTwins()</a></code>
+
+        </dt>
+        <dd>Fuse MZ twin pairs in a pedigree dataset for path tracing This function identifies MZ twin pairs in the pedigree dataset and merges their IDs for path tracing purposes. The second twin in each pair is made a founder (with NA parents), and all children of the second twin are redirected to the first twin. This allows for correct relatedness calculations without diagonal or downstream artifacts.</dd>
 
         <dt>
 

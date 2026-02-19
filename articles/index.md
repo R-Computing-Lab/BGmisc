@@ -14,3 +14,5 @@
   BGmisc](https://r-computing-lab.github.io/BGmisc/articles/v4_validation.md):
 - [ASOIAF: How related are Jon and
   Danny?](https://r-computing-lab.github.io/BGmisc/articles/v5_ASOIAF.md):
+- [Fitting Pedigree-Based Variance Component
+  Models](https://r-computing-lab.github.io/BGmisc/articles/v6_pedigree_model_fitting.md):

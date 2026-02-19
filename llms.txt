@@ -107,6 +107,18 @@ file.
 - [`buildBetweenGenerations()`](https://r-computing-lab.github.io/BGmisc/reference/buildBetweenGenerations.md)
   : Process Generation Connections
 
+- [`buildFamilyGroups()`](https://r-computing-lab.github.io/BGmisc/reference/buildFamilyGroups.md)
+  : Build family group models
+
+- [`buildOneFamilyGroup()`](https://r-computing-lab.github.io/BGmisc/reference/buildOneFamilyGroup.md)
+  : Build one family group model
+
+- [`buildPedigreeModelCovariance()`](https://r-computing-lab.github.io/BGmisc/reference/buildPedigreeModelCovariance.md)
+  : Create an mxModel for a pedigree
+
+- [`buildPedigreeMx()`](https://r-computing-lab.github.io/BGmisc/reference/buildPedigreeMx.md)
+  : Build Pedigree mxModel
+
 - [`buildWithinGenerations()`](https://r-computing-lab.github.io/BGmisc/reference/buildWithinGenerations.md)
   : Process Generations for Pedigree Simulation
 
@@ -190,7 +202,7 @@ file.
 
 - [`.adjBeta()`](https://r-computing-lab.github.io/BGmisc/reference/dot-adjBeta.md)
   : Construct Adjacency Matrix for Parent-Child Relationships Using Beta
-  Method This function constructs an adjacency matrix for parent-child
+  Methods This function constructs an adjacency matrix for parent-child
   relationships using a method in beta testing. It identifies
   parent-child pairs based on the specified component of relatedness.
 
@@ -237,6 +249,17 @@ file.
 - [`fitComponentModel()`](https://r-computing-lab.github.io/BGmisc/reference/fitComponentModel.md)
   : fitComponentModel Fit the estimated variance components of a model
   to covariance data
+
+- [`fitPedigreeModel()`](https://r-computing-lab.github.io/BGmisc/reference/fitPedigreeModel.md)
+  : Fit an OpenMx pedigree model to observed data
+
+- [`fuseTwins()`](https://r-computing-lab.github.io/BGmisc/reference/fuseTwins.md)
+  : Fuse MZ twin pairs in a pedigree dataset for path tracing This
+  function identifies MZ twin pairs in the pedigree dataset and merges
+  their IDs for path tracing purposes. The second twin in each pair is
+  made a founder (with NA parents), and all children of the second twin
+  are redirected to the first twin. This allows for correct relatedness
+  calculations without diagonal or downstream artifacts.
 
 - [`hazard`](https://r-computing-lab.github.io/BGmisc/reference/hazard.md)
   : Simulated pedigree with two extended families and an age-related
@@ -400,3 +423,5 @@ file.
   BGmisc](https://r-computing-lab.github.io/BGmisc/articles/v4_validation.md):
 - [ASOIAF: How related are Jon and
   Danny?](https://r-computing-lab.github.io/BGmisc/articles/v5_ASOIAF.md):
+- [Fitting Pedigree-Based Variance Component
+  Models](https://r-computing-lab.github.io/BGmisc/articles/v6_pedigree_model_fitting.md):

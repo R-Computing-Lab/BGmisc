@@ -101,7 +101,21 @@ buildBetweenGenerations(
 
 - beta:
 
-  logical. If TRUE, use the optimized version of the algorithm.
+  logical or character. Controls which algorithm version to use:
+
+  - `FALSE`, `"base"`, or `"original"` (default): Use the original
+    algorithm. Slower but ensures exact reproducibility with set.seed().
+
+  - `TRUE` or `"optimized"`: Use the optimized algorithm with 4-5x
+    speedup. Produces statistically equivalent results but not identical
+    to base version due to different random number consumption.
+    Recommended for large simulations where speed matters more than
+    exact reproducibility.
+
+  Note: Both versions are mathematically correct and produce valid
+  pedigrees with the same statistical properties (sex ratios, mating
+  rates, etc.). The optimized version uses vectorized operations instead
+  of loops, making it much faster for large pedigrees.
 
 ## Value
 

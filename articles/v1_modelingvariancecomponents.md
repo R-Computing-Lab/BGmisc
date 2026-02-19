@@ -153,8 +153,8 @@ if (!requireNamespace("EasyMx", quietly = TRUE)) {
 #> AIC:      -5917.148              -3685.148                -3685.078
 #> BIC:     -10747.543              -3667.773                -3680.471
 #> To get additional fit indices, see help(mxRefModels)
-#> timestamp: 2026-01-30 02:01:00 
-#> Wall clock time: 0.1256938 secs 
+#> timestamp: 2026-02-19 01:25:12 
+#> Wall clock time: 0.07003617 secs 
 #> optimizer:  SLSQP 
 #> OpenMx version number: 2.22.10 
 #> Need help?  See help(mxSummary)
@@ -201,9 +201,27 @@ if (!requireNamespace("EasyMx", quietly = TRUE)) {
 #> AIC:      -9113.092              -5499.092                -5499.048
 #> BIC:     -17811.437              -5479.794                -5492.498
 #> To get additional fit indices, see help(mxRefModels)
-#> timestamp: 2026-01-30 02:01:01 
-#> Wall clock time: 0.05105686 secs 
+#> timestamp: 2026-02-19 01:25:12 
+#> Wall clock time: 0.05049157 secs 
 #> optimizer:  SLSQP 
 #> OpenMx version number: 2.22.10 
 #> Need help?  See help(mxSummary)
 ```
+
+### Extended Pedigrees
+
+The variance component framework used above for twin data extends
+naturally to more complex family structures, such as multi-generational
+pedigrees. In this setting, BGmisc can be used to derive the appropriate
+relatedness coefficients (e.g., additive genetic, shared environmental,
+and dominance relationships) from a pedigree object, and these
+coefficients can then be supplied to a structural equation modeling
+package (such as EasyMx/OpenMx) to fit the model.
+
+In practice, the workflow mirrors the twin example: (1) prepare a
+pedigree dataset with individual IDs and parental links, (2) use BGmisc
+functions to compute the relevant relatedness matrices for the pedigree,
+(3) specify a variance component model (e.g., ACE, ADE, or custom
+structures) that uses these matrices, and (4) estimate the model
+parameters via maximum likelihood. Please see the vignette on “Modeling
+with pedigrees” for a detailed example of this process.

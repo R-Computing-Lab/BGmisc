@@ -11,6 +11,7 @@ ped2paternal(
   momID = "momID",
   dadID = "dadID",
   patID = "patID",
+  twinID = "twinID",
   ...
 )
 ```
@@ -37,6 +38,11 @@ ped2paternal(
 
   Character. Paternal line ID variable to be created and added to the
   pedigree
+
+- twinID:
+
+  character. Name of the column in ped for the twin ID variable, if
+  applicable
 
 - ...:
 

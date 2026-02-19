@@ -15,7 +15,7 @@ parentage data, and compute additive genetic and common nuclear
 relatedness. We’ll focus on Jon and Daenerys as a case study, but the
 methods generalize to any characters in the provided dataset.
 
-## Load Packages and Data
+### Load Packages and Data
 
 We begin by loading the required libraries and examining the structure
 of the built-in `ASOIAF` pedigree.
@@ -50,7 +50,7 @@ head(ASOIAF)
     ## 5    https://awoiaf.westeros.org/index.php/Aenys_Frey     NA     <NA>
     ## 6 https://awoiaf.westeros.org/index.php/Corenna_Swann     NA     <NA>
 
-## Prepare and Validate Sex Codes
+### Prepare and Validate Sex Codes
 
 Many pedigree-based algorithms rely on biological sex for downstream
 calculationss and visualization. We use
@@ -65,7 +65,7 @@ df_got <- checkSex(ASOIAF,
 )
 ```
 
-## Compute Relatedness Matrices
+### Compute Relatedness Matrices
 
 With validated pedigree data, we can now compute two distinct
 relationship matrices:
@@ -97,7 +97,8 @@ add <- ped2com(df_got,
   isChild_method = "partialparent",
   component = "additive",
   adjacency_method = "direct",
-  sparse = TRUE
+  sparse = TRUE,
+  mz_twins = TRUE
 )
 
 mt <- ped2com(df_got,
@@ -114,7 +115,66 @@ cn <- ped2cn(df_got,
 )
 ```
 
-## Convert to Pairwise Format
+Each of these matrices is square, with dimensions equal to the number of
+individuals in the pedigree. The entries represent pairwise relatedness
+coefficients.
+
+To verify the matrices, we can plot their sparsity patterns:
+
+``` r
+par(mfrow = c(1, 3))
+ggRelatednessMatrix(as.matrix(add),
+  config = list(
+    matrix_color_palette = c("white", "gold", "red"),
+    color_scale_midpoint = 0.5,
+    matrix_cluster = TRUE,
+    plot_title = "Relatedness Matrix",
+    axis_x_label = "Individuals",
+    axis_y_label = "Individuals",
+    label_include = FALSE
+  )
+)
+```
+
+![](v5_ASOIAF_files/figure-html/unnamed-chunk-5-1.png)
+
+``` r
+ggRelatednessMatrix(as.matrix(cn),
+  config = list(
+    matrix_color_palette = c("white", "lightblue", "blue"),
+    color_scale_midpoint = 0.5,
+    matrix_cluster = TRUE,
+    plot_title = "Common Nuclear Relatedness Matrix",
+    axis_x_label = "Individuals",
+    axis_y_label = "Individuals",
+    axis_text_size = 8
+  )
+)
+```
+
+![](v5_ASOIAF_files/figure-html/unnamed-chunk-5-2.png)
+
+``` r
+ggRelatednessMatrix(as.matrix(mt),
+  config = list(
+    matrix_color_palette = c("white", "lightgreen", "darkgreen"),
+    color_scale_midpoint = 0.5,
+    matrix_cluster = TRUE,
+    plot_title = "Mitochondrial Relatedness Matrix",
+    axis_x_label = "Individuals",
+    axis_y_label = "Individuals",
+    axis_text_size = 8
+  )
+)
+```
+
+![](v5_ASOIAF_files/figure-html/unnamed-chunk-5-3.png)
+
+``` r
+par(mfrow = c(1, 1))
+```
+
+### Convert to Pairwise Format
 
 For interpretability, we convert these square matrices into long-format
 tables using
@@ -138,7 +198,7 @@ part, which is often sufficient for our purposes. Setting
 dyad, since the matrices are symmetric. We also keep the data in memory
 by setting `writetodisk = FALSE`.
 
-## Locate Jon and Daenerys
+### Locate Jon and Daenerys
 
 We next identify the rows in the pairwise relatedness table that
 correspond to Jon Snow and Daenerys Targaryen. First, we retrieve their
@@ -208,7 +268,7 @@ the expected 0.25 for a full uncle-neice relationship. In terms of
 mitochondrial relatedness, both pairs have a coefficient of 1,
 indicating that they share the same mitochondrial lineage.
 
-## Plotting the Pedigree with Incomplete Parental Information
+### Plotting the Pedigree with Incomplete Parental Information
 
 Many real-world and fictional pedigrees contain individuals with unknown
 or partially known parentage. In such cases, plotting tools typically
@@ -306,7 +366,7 @@ confirms that all IDs are unique, while
 verifies that there are no structural issues like individuals with more
 than two parents or cyclic relationships.
 
-## Visualize the Pedigree
+### Visualize the Pedigree
 
 We can now visualize the repaired pedigree using the
 [`ggPedigree()`](https://r-computing-lab.github.io/ggpedigree/reference/ggPedigree.html)
@@ -357,7 +417,7 @@ plt <- ggpedigree(df_repaired_renamed,
 plt
 ```
 
-![](v5_ASOIAF_files/figure-html/unnamed-chunk-13-1.png)
+![](v5_ASOIAF_files/figure-html/unnamed-chunk-14-1.png)
 
 ``` r
 # reduce file size for CRAN
@@ -375,7 +435,7 @@ pedigree (if interactive is set to TRUE), allowing users to explore
 relationships and affected status. The focal individual is highlighted,
 and tooltips provide additional information about each character.
 
-## Conclusion
+### Conclusion
 
 In this vignette, we demonstrated how to reconstruct and analyze the *A
 Song of Ice and Fire* pedigree using the `BGmisc` package. We computed

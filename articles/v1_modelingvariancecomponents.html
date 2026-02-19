@@ -39,6 +39,7 @@
     <li><a class="dropdown-item" href="../articles/v3_analyticrelatedness.html">Understanding and Computing Relatedness from Pedigree Data</a></li>
     <li><a class="dropdown-item" href="../articles/v4_validation.html">Validating and Repairing Pedigree Data with BGmisc</a></li>
     <li><a class="dropdown-item" href="../articles/v5_ASOIAF.html">ASOIAF: How related are Jon and Danny?</a></li>
+    <li><a class="dropdown-item" href="../articles/v6_pedigree_model_fitting.html">Fitting Pedigree-Based Variance Component Models</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -212,8 +213,8 @@ group. Let us confirm by fitting a model. First we prepare the data.</p>
 <span><span class="co">#&gt; AIC:      -5917.148              -3685.148                -3685.078</span></span>
 <span><span class="co">#&gt; BIC:     -10747.543              -3667.773                -3680.471</span></span>
 <span><span class="co">#&gt; To get additional fit indices, see help(mxRefModels)</span></span>
-<span><span class="co">#&gt; timestamp: 2026-01-30 02:01:00 </span></span>
-<span><span class="co">#&gt; Wall clock time: 0.1256938 secs </span></span>
+<span><span class="co">#&gt; timestamp: 2026-02-19 01:25:12 </span></span>
+<span><span class="co">#&gt; Wall clock time: 0.07003617 secs </span></span>
 <span><span class="co">#&gt; optimizer:  SLSQP </span></span>
 <span><span class="co">#&gt; OpenMx version number: 2.22.10 </span></span>
 <span><span class="co">#&gt; Need help?  See help(mxSummary)</span></span></code></pre></div>
@@ -257,11 +258,29 @@ identified, the model now fits.</p>
 <span><span class="co">#&gt; AIC:      -9113.092              -5499.092                -5499.048</span></span>
 <span><span class="co">#&gt; BIC:     -17811.437              -5479.794                -5492.498</span></span>
 <span><span class="co">#&gt; To get additional fit indices, see help(mxRefModels)</span></span>
-<span><span class="co">#&gt; timestamp: 2026-01-30 02:01:01 </span></span>
-<span><span class="co">#&gt; Wall clock time: 0.05105686 secs </span></span>
+<span><span class="co">#&gt; timestamp: 2026-02-19 01:25:12 </span></span>
+<span><span class="co">#&gt; Wall clock time: 0.05049157 secs </span></span>
 <span><span class="co">#&gt; optimizer:  SLSQP </span></span>
 <span><span class="co">#&gt; OpenMx version number: 2.22.10 </span></span>
 <span><span class="co">#&gt; Need help?  See help(mxSummary)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="extended-pedigrees">Extended Pedigrees<a class="anchor" aria-label="anchor" href="#extended-pedigrees"></a>
+</h3>
+<p>The variance component framework used above for twin data extends
+naturally to more complex family structures, such as multi-generational
+pedigrees. In this setting, BGmisc can be used to derive the appropriate
+relatedness coefficients (e.g., additive genetic, shared environmental,
+and dominance relationships) from a pedigree object, and these
+coefficients can then be supplied to a structural equation modeling
+package (such as EasyMx/OpenMx) to fit the model.</p>
+<p>In practice, the workflow mirrors the twin example: (1) prepare a
+pedigree dataset with individual IDs and parental links, (2) use BGmisc
+functions to compute the relevant relatedness matrices for the pedigree,
+(3) specify a variance component model (e.g., ACE, ADE, or custom
+structures) that uses these matrices, and (4) estimate the model
+parameters via maximum likelihood. Please see the vignette on “Modeling
+with pedigrees” for a detailed example of this process.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

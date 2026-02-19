@@ -22,6 +22,8 @@ ped2add(
   save_rate_parlist = 1e+05 * save_rate,
   save_path = "checkpoint/",
   compress = TRUE,
+  mz_twins = FALSE,
+  mz_method = "addtwins",
   ...
 )
 ```
@@ -100,6 +102,26 @@ ped2add(
 
   logical. If TRUE, use compression when saving the checkpoint files.
   Defaults to TRUE.
+
+- mz_twins:
+
+  logical. If TRUE, merge MZ co-twin columns in the r2 matrix before
+  tcrossprod so that MZ twins are coded with relatedness 1 instead of
+  0.5. Twin pairs are identified from the `twinID` column. When a
+  `zygosity` column is also present, only pairs where both members have
+  `zygosity == "MZ"` are used; otherwise all `twinID` pairs are assumed
+  to be MZ. Defaults to FALSE.
+
+- mz_method:
+
+  character. The method to handle MZ twins. Options are "merging"
+  (default) or "addtwins". "addtwins" adds the twin2 column to the twin1
+  column before tcrossprod so that all relatedness flows through a
+  single source, then leaves the twin2 column as zero and relies on the
+  fact that the row/col names are the same to copy the values back to
+  twin2 after tcrossprod. "merging" merges the twin2 column into the
+  twin1 column before tcrossprod and then copies the values back to
+  twin2 after tcrossprod so that both twins appear in the final matrix.
 
 - ...:
 

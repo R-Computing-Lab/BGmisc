@@ -28,6 +28,7 @@ This is a supplementary function for simulatePedigree."></head><body>
     <li><a class="dropdown-item" href="../articles/v3_analyticrelatedness.html">Understanding and Computing Relatedness from Pedigree Data</a></li>
     <li><a class="dropdown-item" href="../articles/v4_validation.html">Validating and Repairing Pedigree Data with BGmisc</a></li>
     <li><a class="dropdown-item" href="../articles/v5_ASOIAF.html">ASOIAF: How related are Jon and Danny?</a></li>
+    <li><a class="dropdown-item" href="../articles/v6_pedigree_model_fitting.html">Fitting Pedigree-Based Variance Component Models</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -60,7 +61,8 @@ This is a supplementary function for <code>simulatePedigree</code>.</p>
 <span>  ID_twin2 <span class="op">=</span> <span class="cn">NA_integer_</span>,</span>
 <span>  gen_twin <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  zygosity <span class="op">=</span> <span class="st">"MZ"</span></span>
+<span>  zygosity <span class="op">=</span> <span class="st">"MZ"</span>,</span>
+<span>  twin_sex <span class="op">=</span> <span class="st">"R"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -90,6 +92,10 @@ This is a supplementary function for <code>simulatePedigree</code>.</p>
 
 <dt id="arg-zygosity">zygosity<a class="anchor" aria-label="anchor" href="#arg-zygosity"></a></dt>
 <dd><p>A character string indicating the zygosity of the twins. Default is "MZ" for monozygotic twins.</p></dd>
+
+
+<dt id="arg-twin-sex">twin_sex<a class="anchor" aria-label="anchor" href="#arg-twin-sex"></a></dt>
+<dd><p>A character string indicating the sex of the twins. Default is randomly assigned ("R"). If specified, it should be either "M" or "F"</p></dd>
 
 </dl></div>
     <div class="section level2">

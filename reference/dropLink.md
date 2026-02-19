@@ -15,7 +15,8 @@ dropLink(
   ID_drop = NA_integer_,
   gen_drop = 2,
   sex_drop = NA_character_,
-  n_drop = 1
+  n_drop = 1,
+  verbose = FALSE
 )
 ```
 
@@ -41,6 +42,10 @@ dropLink(
 - n_drop:
 
   the number of times the mutation happens.
+
+- verbose:
+
+  logical. If TRUE, print progress through stages of algorithm
 
 ## Value
 

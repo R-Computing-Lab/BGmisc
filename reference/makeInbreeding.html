@@ -30,6 +30,7 @@ This is a supplementary function for simulatePedigree."></head><body>
     <li><a class="dropdown-item" href="../articles/v3_analyticrelatedness.html">Understanding and Computing Relatedness from Pedigree Data</a></li>
     <li><a class="dropdown-item" href="../articles/v4_validation.html">Validating and Repairing Pedigree Data with BGmisc</a></li>
     <li><a class="dropdown-item" href="../articles/v5_ASOIAF.html">ASOIAF: How related are Jon and Danny?</a></li>
+    <li><a class="dropdown-item" href="../articles/v6_pedigree_model_fitting.html">Fitting Pedigree-Based Variance Component Models</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -63,7 +64,8 @@ This is a supplementary function for <code>simulatePedigree</code>.</p>
 <span>  ID_mate2 <span class="op">=</span> <span class="cn">NA_integer_</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  gen_inbred <span class="op">=</span> <span class="fl">2</span>,</span>
-<span>  type_inbred <span class="op">=</span> <span class="st">"sib"</span></span>
+<span>  type_inbred <span class="op">=</span> <span class="st">"sib"</span>,</span>
+<span>  prefer_unmated <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -93,6 +95,10 @@ This is a supplementary function for <code>simulatePedigree</code>.</p>
 
 <dt id="arg-type-inbred">type_inbred<a class="anchor" aria-label="anchor" href="#arg-type-inbred"></a></dt>
 <dd><p>A character vector indicating the type of inbreeding. "sib" for sibling inbreeding and "cousin" for cousin inbreeding.</p></dd>
+
+
+<dt id="arg-prefer-unmated">prefer_unmated<a class="anchor" aria-label="anchor" href="#arg-prefer-unmated"></a></dt>
+<dd><p>A logical indicating whether to prefer unmated siblings when automatically selecting inbred mates. Default is FALSE, which means the function will consider all siblings regardless of their mating status.</p></dd>
 
 </dl></div>
     <div class="section level2">

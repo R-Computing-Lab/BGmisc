@@ -24,6 +24,7 @@
     <li><a class="dropdown-item" href="../articles/v3_analyticrelatedness.html">Understanding and Computing Relatedness from Pedigree Data</a></li>
     <li><a class="dropdown-item" href="../articles/v4_validation.html">Validating and Repairing Pedigree Data with BGmisc</a></li>
     <li><a class="dropdown-item" href="../articles/v5_ASOIAF.html">ASOIAF: How related are Jon and Danny?</a></li>
+    <li><a class="dropdown-item" href="../articles/v6_pedigree_model_fitting.html">Fitting Pedigree-Based Variance Component Models</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -53,6 +54,7 @@
 <span>  personID <span class="op">=</span> <span class="st">"ID"</span>,</span>
 <span>  momID <span class="op">=</span> <span class="st">"momID"</span>,</span>
 <span>  dadID <span class="op">=</span> <span class="st">"dadID"</span>,</span>
+<span>  twinID <span class="op">=</span> <span class="st">"twinID"</span>,</span>
 <span>  directed <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  adjacent <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"parents"</span>, <span class="st">"mothers"</span>, <span class="st">"fathers"</span><span class="op">)</span>,</span>
 <span>  <span class="va">...</span></span>
@@ -77,6 +79,10 @@
 
 <dt id="arg-dadid">dadID<a class="anchor" aria-label="anchor" href="#arg-dadid"></a></dt>
 <dd><p>character.  Name of the column in ped for the father ID variable</p></dd>
+
+
+<dt id="arg-twinid">twinID<a class="anchor" aria-label="anchor" href="#arg-twinid"></a></dt>
+<dd><p>character.  Name of the column in ped for the twin ID variable, if applicable</p></dd>
 
 
 <dt id="arg-directed">directed<a class="anchor" aria-label="anchor" href="#arg-directed"></a></dt>

@@ -10,6 +10,7 @@ ped2graph(
   personID = "ID",
   momID = "momID",
   dadID = "dadID",
+  twinID = "twinID",
   directed = TRUE,
   adjacent = c("parents", "mothers", "fathers"),
   ...
@@ -33,6 +34,11 @@ ped2graph(
 - dadID:
 
   character. Name of the column in ped for the father ID variable
+
+- twinID:
+
+  character. Name of the column in ped for the twin ID variable, if
+  applicable
 
 - directed:
 

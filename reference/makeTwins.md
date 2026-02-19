@@ -14,7 +14,8 @@ makeTwins(
   ID_twin2 = NA_integer_,
   gen_twin = 2,
   verbose = FALSE,
-  zygosity = "MZ"
+  zygosity = "MZ",
+  twin_sex = "R"
 )
 ```
 
@@ -44,6 +45,11 @@ makeTwins(
 
   A character string indicating the zygosity of the twins. Default is
   "MZ" for monozygotic twins.
+
+- twin_sex:
+
+  A character string indicating the sex of the twins. Default is
+  randomly assigned ("R"). If specified, it should be either "M" or "F"
 
 ## Value
 

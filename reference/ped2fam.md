@@ -13,6 +13,7 @@ ped2fam(
   momID = "momID",
   dadID = "dadID",
   famID = "famID",
+  twinID = "twinID",
   ...
 )
 ```
@@ -39,6 +40,11 @@ ped2fam(
 
   character. Name of the column to be created in ped for the family ID
   variable
+
+- twinID:
+
+  character. Name of the column in ped for the twin ID variable, if
+  applicable
 
 - ...:
 

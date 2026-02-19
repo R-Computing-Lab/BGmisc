@@ -24,6 +24,7 @@
     <li><a class="dropdown-item" href="../articles/v3_analyticrelatedness.html">Understanding and Computing Relatedness from Pedigree Data</a></li>
     <li><a class="dropdown-item" href="../articles/v4_validation.html">Validating and Repairing Pedigree Data with BGmisc</a></li>
     <li><a class="dropdown-item" href="../articles/v5_ASOIAF.html">ASOIAF: How related are Jon and Danny?</a></li>
+    <li><a class="dropdown-item" href="../articles/v6_pedigree_model_fitting.html">Fitting Pedigree-Based Variance Component Models</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -59,7 +60,7 @@
 <span>  standardize_colnames <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  transpose_method <span class="op">=</span> <span class="st">"tcrossprod"</span>,</span>
 <span>  adjacency_method <span class="op">=</span> <span class="st">"direct"</span>,</span>
-<span>  isChild_method <span class="op">=</span> <span class="st">"classic"</span>,</span>
+<span>  isChild_method <span class="op">=</span> <span class="st">"partialparent"</span>,</span>
 <span>  saveable <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  resume <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  save_rate <span class="op">=</span> <span class="fl">5</span>,</span>
@@ -69,6 +70,9 @@
 <span>  save_path <span class="op">=</span> <span class="st">"checkpoint/"</span>,</span>
 <span>  adjBeta_method <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  compress <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  mz_twins <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  mz_method <span class="op">=</span> <span class="st">"addtwins"</span>,</span>
+<span>  beta <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -155,6 +159,18 @@
 
 <dt id="arg-compress">compress<a class="anchor" aria-label="anchor" href="#arg-compress"></a></dt>
 <dd><p>logical. If TRUE, use compression when saving the checkpoint files.  Defaults to TRUE.</p></dd>
+
+
+<dt id="arg-mz-twins">mz_twins<a class="anchor" aria-label="anchor" href="#arg-mz-twins"></a></dt>
+<dd><p>logical. If TRUE, merge MZ co-twin columns in the r2 matrix before tcrossprod so that MZ twins are coded with relatedness 1 instead of 0.5. Twin pairs are identified from the <code>twinID</code> column. When a <code>zygosity</code> column is also present, only pairs where both members have <code>zygosity == "MZ"</code> are used; otherwise all <code>twinID</code> pairs are assumed to be MZ. Defaults to FALSE.</p></dd>
+
+
+<dt id="arg-mz-method">mz_method<a class="anchor" aria-label="anchor" href="#arg-mz-method"></a></dt>
+<dd><p>character. The method to handle MZ twins.  Options are "merging" (default) or "addtwins".  "addtwins" adds the twin2 column to the twin1 column before tcrossprod so that all relatedness flows through a single source, then leaves the twin2 column as zero and relies on the fact that the row/col names are the same to copy the values back to twin2 after tcrossprod.  "merging" merges the twin2 column into the twin1 column before tcrossprod and then copies the values back to twin2 after tcrossprod so that both twins appear in the final matrix.</p></dd>
+
+
+<dt id="arg-beta">beta<a class="anchor" aria-label="anchor" href="#arg-beta"></a></dt>
+<dd><p>logical. Used for benchmarking</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
