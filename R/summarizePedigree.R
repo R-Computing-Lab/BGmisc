@@ -78,7 +78,7 @@ summarizePedigrees <- function(ped,
     )
   }
   if (!is.null(founder_sort_var) &&
-    !founder_sort_var %in% names(ped)) {
+      !founder_sort_var %in% names(ped)) {
     stop(
       "If you set founder_sort_var, that variable must be a column in the pedigree data. If you want to sort by using the default, set founder_sort_var = NULL. The default is to sort by birth year if that's present and by personID otherwise."
     )
@@ -265,7 +265,7 @@ summarizePedigrees <- function(ped,
       )
     }
   }
-  return(output)
+  output
 }
 
 
@@ -316,7 +316,7 @@ calculateSummaryDT <- function(data,
   ]
   # Flatten the nested lists
   summary_stats <- data.table::as.data.table(summary_stats[, lapply(.SD, unlist), by = group_var])
-  return(summary_stats)
+  summary_stats
 }
 
 #' Function to find the originating member for each line
@@ -363,7 +363,7 @@ summarizeFounder <- function(ped_dt,
     by = group_var,
     suffixes = c("", "_founder")
   )
-  return(foo_summary_dt)
+  foo_summary_dt
 }
 
 
@@ -392,7 +392,7 @@ findFooest <- function(foo_summary_dt,
     }
   ))
 
-  return(subset_foo)
+  subset_foo
 }
 
 #' Function to find the oldest individuals in a pedigree
@@ -414,7 +414,7 @@ findOldest <- function(foo_summary_dt,
     n_fooest = n_fooest,
     decreasing = FALSE
   )
-  return(oldest_foo)
+  oldest_foo
 }
 
 #' Function to find the biggest families in a pedigree
@@ -436,7 +436,7 @@ findBiggest <- function(foo_summary_dt,
     n_fooest = n_fooest,
     decreasing = TRUE
   )
-  return(biggest_foo)
+  biggest_foo
 }
 
 #' Function to prepare the pedigree for summarization
@@ -492,7 +492,7 @@ prepSummarizePedigrees <- function(ped,
   }
 
 
-  return(ped)
+  ped
 }
 
 #' Function to summarize the oldest individuals in a pedigree
@@ -548,5 +548,5 @@ summarizeOldest <- function(byr = NULL,
       )
     }
   }
-  return(output)
+  output
 }
