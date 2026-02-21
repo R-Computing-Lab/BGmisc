@@ -150,7 +150,7 @@ ped2com <- function(ped, component,
   }
 
   if (mz_method %in% c("merging") && mz_twins == TRUE && !is.null(mz_row_pairs) && length(mz_row_pairs) > 0 &&
-    config$component %in% c("additive")) {
+        config$component %in% c("additive")) {
     # replace all MZ twin IDs with the first twin's ID in each pair so they are merged for the path tracing and all subsequent steps.  We will copy the values back to the second twin at the end.
     ped <- fuseTwins(ped = ped, mz_row_pairs = mz_row_pairs, mz_id_pairs = mz_id_pairs, config = config, beta = beta)
     if (config$verbose == TRUE) {
@@ -233,7 +233,7 @@ ped2com <- function(ped, component,
 
 
   if (config$resume == TRUE && file.exists(checkpoint_files$r_checkpoint) &&
-    file.exists(checkpoint_files$gen_checkpoint) &&
+      file.exists(checkpoint_files$gen_checkpoint) &&
     file.exists(checkpoint_files$mtSum_checkpoint) &&
     file.exists(checkpoint_files$newIsPar_checkpoint) &&
     file.exists(checkpoint_files$count_checkpoint)
@@ -341,7 +341,7 @@ ped2com <- function(ped, component,
   # --- Step 4: T crossproduct  ---
 
   if (config$resume == TRUE && file.exists(checkpoint_files$tcrossprod_checkpoint) &&
-    config$component != "generation") {
+        config$component != "generation") {
     if (config$verbose == TRUE) message("Resuming: Loading tcrossprod...\n")
     r <- readRDS(checkpoint_files$tcrossprod_checkpoint)
   } else {
@@ -428,7 +428,7 @@ ped2com <- function(ped, component,
   if (config$saveable == TRUE) {
     saveRDS(r, file = checkpoint_files$final_matrix, compress = config$compress)
   }
-  return(r)
+  r
 }
 
 #' Take a pedigree and turn it into an additive genetics relatedness matrix
@@ -647,7 +647,7 @@ ped2ce <- function(ped, ...) {
     }
   )
 
-  return(result)
+  result
 }
 
 #' Initialize checkpoint files
@@ -655,11 +655,11 @@ ped2ce <- function(ped, ...) {
 #' @keywords internal
 
 initializeCheckpoint <- function(config = list(
-                                   verbose = FALSE,
-                                   saveable = FALSE,
-                                   resume = FALSE,
-                                   save_path = "checkpoint/"
-                                 )) {
+  verbose = FALSE,
+  saveable = FALSE,
+  resume = FALSE,
+  save_path = "checkpoint/"
+)) {
   # Define checkpoint files
   # Ensure save path exists
   if (config$saveable == TRUE && !dir.exists(config$save_path)) {
@@ -693,7 +693,7 @@ initializeCheckpoint <- function(config = list(
     final_matrix = file.path(config$save_path, "final_matrix.rds")
   )
 
-  return(checkpoint_files)
+  checkpoint_files
 }
 
 #' Assign parent values based on component type
@@ -703,12 +703,12 @@ initializeCheckpoint <- function(config = list(
   if (component %in% c("generation", "additive")) {
     parVal <- .5
   } else if (component %in%
-    c("common nuclear", "mitochondrial", "mtdna", "mitochondria")) {
+               c("common nuclear", "mitochondrial", "mtdna", "mitochondria")) {
     parVal <- 1
   } else {
     stop("Don't know how to set parental value")
   }
-  return(parVal)
+  parVal
 }
 
 #' Load or compute a checkpoint
@@ -726,12 +726,12 @@ loadOrComputeCheckpoint <- function(file, compute_fn,
                                     compress = TRUE) {
   if (config$resume == TRUE && file.exists(file)) {
     if (config$verbose == TRUE && !is.null(message_resume)) cat(message_resume)
-    return(readRDS(file))
+    readRDS(file)
   } else {
     if (config$verbose == TRUE && !is.null(message_compute)) cat(message_compute)
     result <- compute_fn()
     if (config$saveable == TRUE) saveRDS(result, file = file, compress = compress)
-    return(result)
+    result
   }
 }
 
@@ -763,7 +763,7 @@ loadOrComputeCheckpoint <- function(file, compute_fn,
     compress = compress
   )
 
-  return(isPar)
+  isPar
 }
 
 #' Load or compute the isChild matrix
@@ -783,7 +783,7 @@ loadOrComputeCheckpoint <- function(file, compute_fn,
     compress = compress
   )
 
-  return(isChild)
+  isChild
 }
 
 #' Load or compute the inverse diagonal matrix
@@ -812,7 +812,7 @@ loadOrComputeCheckpoint <- function(file, compute_fn,
     rm(r, isChild)
     gc()
   }
-  return(r2)
+  r2
 }
 
 
@@ -834,7 +834,7 @@ loadOrComputeCheckpoint <- function(file, compute_fn,
                                   parList = NULL, lens = NULL,
                                   compress = TRUE) {
   if (config$resume == TRUE &&
-    file.exists(checkpoint_files$parList) &&
+        file.exists(checkpoint_files$parList) &&
     file.exists(checkpoint_files$lens)) {
     if (config$verbose == TRUE) {
       message("Resuming: Loading parent-child adjacency data...\n")
@@ -857,7 +857,7 @@ loadOrComputeCheckpoint <- function(file, compute_fn,
   }
 
   if (config$resume == TRUE &&
-    file.exists(checkpoint_files$iss) &&
+        file.exists(checkpoint_files$iss) &&
     file.exists(checkpoint_files$jss)) { # fix to check actual
     if (config$verbose == TRUE) message("Resuming: Constructed matrix...\n")
     jss <- readRDS(checkpoint_files$jss)
@@ -894,5 +894,5 @@ loadOrComputeCheckpoint <- function(file, compute_fn,
       saveRDS(list_of_adjacencies$iss, file = checkpoint_files$iss, compress = compress)
     }
   }
-  return(list_of_adjacencies)
+  list_of_adjacencies
 }
