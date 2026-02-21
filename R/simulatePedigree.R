@@ -22,7 +22,7 @@
 #'         as well as assigning unique couple IDs. It does not return a value explicitly.
 #'
 
-buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose = FALSE, marR, sexR, kpc,
+buildBtwnGenerations <- function(df_Fam, Ngen, sizeGens, verbose = FALSE, marR, sexR, kpc,
                                     rd_kpc, personID = "ID",
                                     momID = "momID",
                                     dadID = "dadID",
@@ -41,7 +41,7 @@ buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose = FALSE, mar
   }
 
   if (use_optimized) {
-    df_Fam <- buildBetweenGens_optimized(
+    df_Fam <- buildBtwnGenerations_opt(
       df_Fam = df_Fam,
       Ngen = Ngen,
       sizeGens = sizeGens,
@@ -58,7 +58,7 @@ buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose = FALSE, mar
       beta = TRUE
     )
   } else {
-    df_Fam <- buildBetweenGenerations_base(
+    df_Fam <- buildBtwnGenerations_base(
       df_Fam = df_Fam,
       Ngen = Ngen,
       sizeGens = sizeGens,
@@ -79,7 +79,7 @@ buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose = FALSE, mar
 }
 
 
-buildBetweenGenerations_base <- function(df_Fam,
+buildBtwnGenerations_base <- function(df_Fam,
                                          Ngen,
                                          sizeGens,
                                          verbose = FALSE,
@@ -453,7 +453,7 @@ buildBetweenGenerations_base <- function(df_Fam,
   df_Fam
 }
 
-buildBetweenGens_optimized <- function(df_Fam,
+buildBtwnGenerations_opt <- function(df_Fam,
                                               Ngen,
                                               sizeGens,
                                               verbose = FALSE,
@@ -946,7 +946,7 @@ simulatePedigree <- function(kpc = 3,
     )
   }
 
-  df_Fam <- buildBetweenGenerations(
+  df_Fam <- buildBtwnGenerations(
     df_Fam = df_Fam,
     Ngen = Ngen,
     sizeGens = sizeGens,
