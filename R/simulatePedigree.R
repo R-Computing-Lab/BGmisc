@@ -22,7 +22,7 @@
 #'         as well as assigning unique couple IDs. It does not return a value explicitly.
 #'
 
-buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose = FALSE, marR, sexR, kpc,
+buildBtwnGenerations <- function(df_Fam, Ngen, sizeGens, verbose = FALSE, marR, sexR, kpc,
                                     rd_kpc, personID = "ID",
                                     momID = "momID",
                                     dadID = "dadID",
@@ -41,7 +41,7 @@ buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose = FALSE, mar
   }
 
   if (use_optimized) {
-    df_Fam <- buildBetweenGenerations_optimized(
+    df_Fam <- buildBtwnGenerations_opt(
       df_Fam = df_Fam,
       Ngen = Ngen,
       sizeGens = sizeGens,
@@ -58,7 +58,7 @@ buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose = FALSE, mar
       beta = TRUE
     )
   } else {
-    df_Fam <- buildBetweenGenerations_base(
+    df_Fam <- buildBtwnGenerations_base(
       df_Fam = df_Fam,
       Ngen = Ngen,
       sizeGens = sizeGens,
@@ -75,11 +75,11 @@ buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose = FALSE, mar
       beta = FALSE
     )
   }
-  return(df_Fam)
+  df_Fam
 }
 
 
-buildBetweenGenerations_base <- function(df_Fam,
+buildBtwnGenerations_base <- function(df_Fam,
                                          Ngen,
                                          sizeGens,
                                          verbose = FALSE,
@@ -360,15 +360,10 @@ buildBetweenGenerations_base <- function(df_Fam,
 
         # Align lengths between couples and random_numbers.
         # If random_numbers is longer than couples, truncate random_numbers.
-        # If random_numbers is shorter than couples, drop extra couples.
         nCouples <- length(parent_rows)
 
         if (length(random_numbers) > nCouples) {
           random_numbers <- random_numbers[seq_len(nCouples)]
-        } else if (length(random_numbers) < nCouples) {
-          keep <- seq_len(length(random_numbers))
-          ma_ids <- ma_ids[keep]
-          pa_ids <- pa_ids[keep]
         }
 
         # Expand from "one mother/father per couple" to "one mother/father per child".
@@ -455,10 +450,10 @@ buildBetweenGenerations_base <- function(df_Fam,
       }
     }
   }
-  return(df_Fam)
+  df_Fam
 }
 
-buildBetweenGenerations_optimized <- function(df_Fam,
+buildBtwnGenerations_opt <- function(df_Fam,
                                               Ngen,
                                               sizeGens,
                                               verbose = FALSE,
@@ -743,15 +738,10 @@ buildBetweenGenerations_optimized <- function(df_Fam,
 
         # Align lengths between couples and random_numbers.
         # If random_numbers is longer than couples, truncate random_numbers.
-        # If random_numbers is shorter than couples, drop extra couples.
         nCouples <- length(parent_rows)
 
         if (length(random_numbers) > nCouples) {
           random_numbers <- random_numbers[seq_len(nCouples)]
-        } else if (length(random_numbers) < nCouples) {
-          keep <- seq_len(length(random_numbers))
-          ma_ids <- ma_ids[keep]
-          pa_ids <- pa_ids[keep]
         }
 
         # Expand from "one mother/father per couple" to "one mother/father per child".
@@ -838,7 +828,7 @@ buildBetweenGenerations_optimized <- function(df_Fam,
       }
     }
   }
-  return(df_Fam)
+  df_Fam
 }
 
 #' Simulate Pedigrees
@@ -956,7 +946,7 @@ simulatePedigree <- function(kpc = 3,
     )
   }
 
-  df_Fam <- buildBetweenGenerations(
+  df_Fam <- buildBtwnGenerations(
     df_Fam = df_Fam,
     Ngen = Ngen,
     sizeGens = sizeGens,
@@ -981,7 +971,7 @@ simulatePedigree <- function(kpc = 3,
   # connect the detached members
   df_Fam[is.na(df_Fam[[momID]]) & is.na(df_Fam[[dadID]]) & df_Fam$gen > 1, ]
 
-  return(df_Fam)
+  df_Fam
 }
 
 #' @rdname simulatePedigree
