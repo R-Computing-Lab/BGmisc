@@ -41,7 +41,7 @@ buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose = FALSE, mar
   }
 
   if (use_optimized) {
-    df_Fam <- buildBetweenGenerations_optimized(
+    df_Fam <- buildBetweenGens_optimized(
       df_Fam = df_Fam,
       Ngen = Ngen,
       sizeGens = sizeGens,
@@ -75,7 +75,7 @@ buildBetweenGenerations <- function(df_Fam, Ngen, sizeGens, verbose = FALSE, mar
       beta = FALSE
     )
   }
-  return(df_Fam)
+  df_Fam
 }
 
 
@@ -366,7 +366,7 @@ buildBetweenGenerations_base <- function(df_Fam,
         if (length(random_numbers) > nCouples) {
           random_numbers <- random_numbers[seq_len(nCouples)]
         } else if (length(random_numbers) < nCouples) {
-          keep <- seq_len(length(random_numbers))
+          keep <- seq_along(random_numbers)
           ma_ids <- ma_ids[keep]
           pa_ids <- pa_ids[keep]
         }
@@ -455,10 +455,10 @@ buildBetweenGenerations_base <- function(df_Fam,
       }
     }
   }
-  return(df_Fam)
+  df_Fam
 }
 
-buildBetweenGenerations_optimized <- function(df_Fam,
+buildBetweenGens_optimized <- function(df_Fam,
                                               Ngen,
                                               sizeGens,
                                               verbose = FALSE,
@@ -749,7 +749,7 @@ buildBetweenGenerations_optimized <- function(df_Fam,
         if (length(random_numbers) > nCouples) {
           random_numbers <- random_numbers[seq_len(nCouples)]
         } else if (length(random_numbers) < nCouples) {
-          keep <- seq_len(length(random_numbers))
+          keep <- seq_along(random_numbers)
           ma_ids <- ma_ids[keep]
           pa_ids <- pa_ids[keep]
         }
@@ -838,7 +838,7 @@ buildBetweenGenerations_optimized <- function(df_Fam,
       }
     }
   }
-  return(df_Fam)
+  df_Fam
 }
 
 #' Simulate Pedigrees
@@ -981,7 +981,7 @@ simulatePedigree <- function(kpc = 3,
   # connect the detached members
   df_Fam[is.na(df_Fam[[momID]]) & is.na(df_Fam[[dadID]]) & df_Fam$gen > 1, ]
 
-  return(df_Fam)
+  df_Fam
 }
 
 #' @rdname simulatePedigree
