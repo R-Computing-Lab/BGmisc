@@ -14,7 +14,7 @@
 - [`applyTagMappings()`](https://r-computing-lab.github.io/BGmisc/reference/applyTagMappings.md)
   : Apply Tag Mappings to a Line
 
-- [`buildBetweenGenerations()`](https://r-computing-lab.github.io/BGmisc/reference/buildBetweenGenerations.md)
+- [`buildBtwnGenerations()`](https://r-computing-lab.github.io/BGmisc/reference/buildBtwnGenerations.md)
   : Process Generation Connections
 
 - [`buildFamilyGroups()`](https://r-computing-lab.github.io/BGmisc/reference/buildFamilyGroups.md)
