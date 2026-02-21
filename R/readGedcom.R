@@ -164,7 +164,7 @@ readGedcom <- function(file_path,
     )
   }
 
-  return(df_temp)
+  df_temp
 }
 
 # --- SUBFUNCTIONS ---
@@ -196,7 +196,7 @@ splitIndividuals <- function(lines, verbose = FALSE) {
     blocks[[length(blocks) + 1]] <- block
   }
   if (verbose == TRUE) message("Found ", length(blocks), " individual blocks")
-  return(blocks)
+  blocks
 }
 
 #' Initialize an Empty Individual Record
@@ -321,7 +321,7 @@ parseIndividualBlock <- function(block, pattern_rows, all_var_names, verbose = F
   if (is.na(record$personID)) {
     return(NULL)
   }
-  return(record)
+  record
 }
 
 #' @title Parse Name Line
@@ -336,7 +336,7 @@ parseNameLine <- function(line, record) {
   record$name_given <- stringr::str_extract(record$name, ".*(?= /)")
   record$name_surn <- stringr::str_extract(record$name, "(?<=/).*(?=/)")
   record$name <- stringr::str_squish(stringr::str_replace(record$name, "/", " "))
-  return(record)
+  record
 }
 
 #' Process Event Lines (Birth or Death)
@@ -365,7 +365,7 @@ processEventLine <- function(event, block, i, record, pattern_rows) {
     if (i + 4 <= n_lines) record$death_lat <- extract_info(block[i + 4], "LATI")
     if (i + 5 <= n_lines) record$death_long <- extract_info(block[i + 5], "LONG")
   }
-  return(record)
+  record
 }
 
 #' Apply Tag Mappings to a Line
@@ -394,7 +394,7 @@ applyTagMappings <- function(line, record, pattern_rows, tag_mappings) {
       return(list(record = record, matched = TRUE))
     }
   }
-  return(list(record = record, matched = FALSE))
+  list(record = record, matched = FALSE)
 }
 
 
@@ -463,7 +463,7 @@ countPatternRows <- function(file) {
     num_date_rows = pattern_counts[" DATE"],
     num_caus_rows = pattern_counts[" CAUS"]
   )
-  return(num_rows)
+  num_rows
 }
 
 #' Process a GEDCOM Tag
@@ -484,8 +484,8 @@ process_tag <- function(tag, field_name, pattern_rows, line, vars,
   count_name <- paste0("num_", tolower(tag), "_rows")
   matched <- FALSE
   if (!is.null(pattern_rows[[count_name]]) &&
-    pattern_rows[[count_name]] > 0 &&
-    grepl(paste0(" ", tag), line)) {
+        pattern_rows[[count_name]] > 0 &&
+        grepl(paste0(" ", tag), line)) {
     value <- if (is.null(extractor)) {
       extract_info(line, tag)
     } else {
@@ -498,7 +498,7 @@ process_tag <- function(tag, field_name, pattern_rows, line, vars,
     }
     matched <- TRUE
   }
-  return(list(vars = vars, matched = matched))
+  list(vars = vars, matched = matched)
 }
 
 #' Post-process GEDCOM Data Frame
@@ -536,7 +536,7 @@ postProcessGedcom <- function(df_temp,
     df_temp$FAMC <- NULL
     df_temp$FAMS <- NULL
   }
-  return(df_temp)
+  df_temp
 }
 
 #' Process Parents Information from GEDCOM Data
@@ -564,7 +564,7 @@ processParents <- function(df_temp, datasource) {
     return(df_temp)
   }
   df_temp <- mapFAMC2parents(df_temp, family_to_parents)
-  return(df_temp)
+  df_temp
 }
 
 #' Create a Mapping from Family IDs to Parent IDs
@@ -580,7 +580,7 @@ mapFAMS2parents <- function(df_temp) {
     return(NULL)
   }
   family_to_parents <- list()
-  for (i in 1:nrow(df_temp)) {
+  for (i in seq_len(nrow(df_temp))) {
     if (!is.na(df_temp$FAMS[i])) {
       fams_ids <- unlist(strsplit(df_temp$FAMS[i], ", "))
       for (fams_id in fams_ids) {
@@ -601,7 +601,7 @@ mapFAMS2parents <- function(df_temp) {
       }
     }
   }
-  return(family_to_parents)
+  family_to_parents
 }
 
 #' Assign momID and dadID based on family mapping
@@ -616,7 +616,7 @@ mapFAMS2parents <- function(df_temp) {
 mapFAMC2parents <- function(df_temp, family_to_parents) {
   df_temp$momID <- NA_character_
   df_temp$dadID <- NA_character_
-  for (i in 1:nrow(df_temp)) {
+  for (i in seq_len(nrow(df_temp))) {
     if (!is.na(df_temp$FAMC[i])) {
       famc_ids <- unlist(strsplit(df_temp$FAMC[i], ", "))
       for (famc_id in famc_ids) {
@@ -631,7 +631,7 @@ mapFAMC2parents <- function(df_temp, family_to_parents) {
       }
     }
   }
-  return(df_temp)
+  df_temp
 }
 
 #' collapse Names
@@ -644,18 +644,18 @@ mapFAMC2parents <- function(df_temp, family_to_parents) {
 collapseNames <- function(verbose, df_temp) {
   if (verbose == TRUE) message("Combining Duplicate Columns")
 
-  if (!all(is.na(df_temp$name_given_pieces)) | !all(is.na(df_temp$name_given))) {
+  if (!all(is.na(df_temp$name_given_pieces)) || !all(is.na(df_temp$name_given))) {
     result <- combine_columns(df_temp$name_given, df_temp$name_given_pieces)
     df_temp$name_given <- result$combined
     if (!result$retain_col2) df_temp$name_given_pieces <- NULL
   }
 
-  if (!all(is.na(df_temp$name_surn_pieces)) | !all(is.na(df_temp$name_surn))) {
+  if (!all(is.na(df_temp$name_surn_pieces)) || !all(is.na(df_temp$name_surn))) {
     result <- combine_columns(df_temp$name_surn, df_temp$name_surn_pieces)
     df_temp$name_surn <- result$combined
     if (!result$retain_col2) df_temp$name_surn_pieces <- NULL
   }
-  return(df_temp)
+  df_temp
 }
 
 #' Combine Columns
@@ -672,10 +672,10 @@ combine_columns <- function(col1, col2) {
   conflicts <- !is.na(col1_lower) & !is.na(col2_lower) & col1_lower != col2_lower
   if (any(conflicts)) {
     warning("Columns have conflicting values. They were not merged.")
-    return(list(combined = col1, retain_col2 = TRUE))
+    list(combined = col1, retain_col2 = TRUE)
   } else {
     combined <- ifelse(is.na(col1), col2, col1)
-    return(list(combined = combined, retain_col2 = FALSE))
+    list(combined = combined, retain_col2 = FALSE)
   }
 }
 
