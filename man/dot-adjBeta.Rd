@@ -2,7 +2,7 @@
 % Please edit documentation in R/constructAdjacency.R
 \name{.adjBeta}
 \alias{.adjBeta}
-\title{Construct Adjacency Matrix for Parent-Child Relationships Using Beta Method
+\title{Construct Adjacency Matrix for Parent-Child Relationships Using Beta Methods
 This function constructs an adjacency matrix for parent-child relationships
 using a method in beta testing. It identifies parent-child pairs based on the
 specified component of relatedness.}
@@ -60,7 +60,7 @@ specified component of relatedness.}
 \item{...}{additional arguments to be passed to \code{\link{ped2com}}}
 }
 \description{
-Construct Adjacency Matrix for Parent-Child Relationships Using Beta Method
+Construct Adjacency Matrix for Parent-Child Relationships Using Beta Methods
 This function constructs an adjacency matrix for parent-child relationships
 using a method in beta testing. It identifies parent-child pairs based on the
 specified component of relatedness.

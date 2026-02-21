@@ -10,6 +10,7 @@ ped2fam(
   momID = "momID",
   dadID = "dadID",
   famID = "famID",
+  twinID = "twinID",
   ...
 )
 }
@@ -23,6 +24,8 @@ ped2fam(
 \item{dadID}{character.  Name of the column in ped for the father ID variable}
 
 \item{famID}{character.  Name of the column to be created in ped for the family ID variable}
+
+\item{twinID}{character.  Name of the column in ped for the twin ID variable, if applicable}
 
 \item{...}{additional arguments to be passed to \code{\link{ped2com}}}
 }

@@ -1,9 +1,11 @@
 test_that("ped2fam is smart about string ids", {
   data(hazard)
+  # ped2fam should work with numeric IDs and produce numeric IDs
   ds_num <- ped2fam(hazard, famID = "newFamID")
   expect_true(is.numeric(ds_num$ID))
   expect_true(is.numeric(ds_num$newFamID))
   hazard$ID_og <- hazard$ID
+  # ped2fam should work with string IDs and produce string IDs
   hazard$ID <- paste0("ID", hazard$ID)
   hazard$dadID <- paste0("ID", hazard$dadID)
   hazard$dadID[hazard$dadID == "IDNA"] <- NA
@@ -45,7 +47,6 @@ test_that("ped2graph produces a graph for hazard data with mothers", {
   g <- ped2graph(hazard, adjacent = "mothers")
   expect_true(inherits(g, "igraph"))
 })
-
 
 
 test_that("ped2graph produces a graph for hazard data with fathers", {
