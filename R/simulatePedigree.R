@@ -360,15 +360,10 @@ buildBetweenGenerations_base <- function(df_Fam,
 
         # Align lengths between couples and random_numbers.
         # If random_numbers is longer than couples, truncate random_numbers.
-        # If random_numbers is shorter than couples, drop extra couples.
         nCouples <- length(parent_rows)
 
         if (length(random_numbers) > nCouples) {
           random_numbers <- random_numbers[seq_len(nCouples)]
-        } else if (length(random_numbers) < nCouples) {
-          keep <- seq_along(random_numbers)
-          ma_ids <- ma_ids[keep]
-          pa_ids <- pa_ids[keep]
         }
 
         # Expand from "one mother/father per couple" to "one mother/father per child".
@@ -743,15 +738,10 @@ buildBetweenGens_optimized <- function(df_Fam,
 
         # Align lengths between couples and random_numbers.
         # If random_numbers is longer than couples, truncate random_numbers.
-        # If random_numbers is shorter than couples, drop extra couples.
         nCouples <- length(parent_rows)
 
         if (length(random_numbers) > nCouples) {
           random_numbers <- random_numbers[seq_len(nCouples)]
-        } else if (length(random_numbers) < nCouples) {
-          keep <- seq_along(random_numbers)
-          ma_ids <- ma_ids[keep]
-          pa_ids <- pa_ids[keep]
         }
 
         # Expand from "one mother/father per couple" to "one mother/father per child".
