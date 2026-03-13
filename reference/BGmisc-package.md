@@ -8,10 +8,13 @@ component model identification \[Hunter et al. (2021)
 McArdle & McDonald (1984)
 [doi:10.1111/j.2044-8317.1984.tb00802.x](https://doi.org/10.1111/j.2044-8317.1984.tb00802.x)
 \], inference of relatedness, pedigree conversion, and simulation of
-multi-generational family data \[Lyu et al. (2024)
-[doi:10.1101/2024.12.19.629449](https://doi.org/10.1101/2024.12.19.629449)
+multi-generational family data \[Lyu et al. (2025)
+[doi:10.1007/s10519-025-10225-1](https://doi.org/10.1007/s10519-025-10225-1)
 \]. For a full overview, see \[Garrison et al. (2024)
-[doi:10.21105/joss.06203](https://doi.org/10.21105/joss.06203) \].
+[doi:10.21105/joss.06203](https://doi.org/10.21105/joss.06203) \]. For a
+big data application see \[Burt et al. (2025) [doi:
+10.1016/j.ebiom.2025.105911](https://doi.org/%2010.1016/j.ebiom.2025.105911)
+.
 
 ## See also
 
