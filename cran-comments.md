@@ -1,11 +1,11 @@
 
 # Description
 
-This update includes minor enhancements and bug fixes related to how string ids are handled in various functions. It also now allows certain vignettes to not throw an error if openmx is not installed for older R versions. This should resolve r-oldrel-windows-x86_64	1.5.0	22.00	246.00	268.00	ERROR seen in the last CRAN check.	
+This update includes an extended vignette and several openmx convenience functions. We left openmx as a suggests rather than a dependency because the openmx convenience aren't essential to the core functions. This should resolve r-oldrel-windows-x86_64	1.5.0	22.00	246.00	268.00	ERROR seen in the last CRAN check.	
 
 # Test Environments
 
-1. Local OS: Windows 11 x64 (build 26220), R 4.5.2 (2025-10-31 ucrt)
+1. Local OS: Windows 11 x64 (build 26220), R 4.5.3 (2026-03-11 ucrt)
 2. **GitHub Actions**:  
     - [Link](https://github.com/R-Computing-Lab/BGmisc/actions/runs/20786177599)
     - macOS (latest version) with the latest R release.
@@ -14,11 +14,11 @@ This update includes minor enhancements and bug fixes related to how string ids 
         - The development version of R.
         - The latest R release.
 
-        
 ## R CMD check results
 
-── R CMD check results ───────────────────────────────────────────────────────────────────────── BGmisc 1.5.2 ────
-Duration: 1m 35.9s
+
+── R CMD check results ───────────────── BGmisc 1.6.0.1 ────
+Duration: 1m 44.2s
 
 0 errors ✔ | 0 warnings ✔ | 0 notes ✔
 

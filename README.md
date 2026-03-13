@@ -19,6 +19,7 @@ downloads](https://cranlogs.r-pkg.org/badges/grand-total/BGmisc)](https://cran.r
 [![R-CMD-check](https://github.com/R-Computing-Lab/BGmisc/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/R-Computing-Lab/BGmisc/actions/workflows/R-CMD-check.yaml)
 [![Dev Main
 branch](https://github.com/R-Computing-Lab/BGmisc/actions/workflows/R-CMD-dev_maincheck.yaml/badge.svg)](https://github.com/R-Computing-Lab/BGmisc/actions/workflows/R-CMD-dev_maincheck.yaml)
+[![CodeFactor](https://www.codefactor.io/repository/github/r-computing-lab/bgmisc/badge)](https://www.codefactor.io/repository/github/r-computing-lab/bgmisc)
 [![Codecov test
 coverage](https://codecov.io/gh/R-Computing-Lab/BGmisc/graph/badge.svg?token=2IARK2XSA6)](https://app.codecov.io/gh/R-Computing-Lab/BGmisc)
 ![License](https://img.shields.io/badge/License-GPL_v3-blue.svg)
