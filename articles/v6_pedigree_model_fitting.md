@@ -773,7 +773,7 @@ fitted_easy <- fitPedigreeModel(
   group_models = group_models,
   tryhard = TRUE
 )
-#> Beginning initial fit attemptFit attempt 0, fit=352.182707904671, new current best! (was 361.708560299926)                                                                             
+#> Beginning initial fit attemptFit attempt 0, fit=352.182707904758, new current best! (was 361.708560299926)                                                                             
 #> 
 #>  Solution found!  Final fit=352.18271 (started at 361.70856)  (1 attempt(s): 1 valid, 0 errors)
 
@@ -782,12 +782,12 @@ summary(fitted_easy)
 #>  
 #> free parameters:
 #>     name       matrix row     col      Estimate  Std.Error A lbound ubound
-#> 1    vad ModelOne.Vad   1       1  0.4779742776 0.31046793    1e-10       
-#> 2    vcn ModelOne.Vcn   1       1  0.0644825463 0.09488139    1e-10       
-#> 3    vce ModelOne.Vce   1       1  0.0000000001 0.22037970 !     0!       
-#> 4    vmt ModelOne.Vmt   1       1  0.0000000001 0.10411427 !     0!       
-#> 5    ver ModelOne.Ver   1       1  0.5457065967 0.19822812    1e-10       
-#> 6 meanLI       ped1.M   1 S 10101 -0.1761523285 0.15313148                
+#> 1    vad ModelOne.Vad   1       1  4.779743e-01 0.31046714    1e-10       
+#> 2    vcn ModelOne.Vcn   1       1  6.448255e-02 0.09488079    1e-10       
+#> 3    vce ModelOne.Vce   1       1  1.042504e-10 0.22037833 !     0!       
+#> 4    vmt ModelOne.Vmt   1       1  1.008520e-10 0.10411390 !     0!       
+#> 5    ver ModelOne.Ver   1       1  5.457066e-01 0.19822666    1e-10       
+#> 6 meanLI       ped1.M   1 S 10101 -1.761523e-01 0.15313133                
 #> 
 #> Model Statistics: 
 #>                |  Parameters  |  Degrees of Freedom  |  Fit (-2lnL units)
@@ -801,8 +801,8 @@ summary(fitted_easy)
 #> AIC:       114.1827               364.1827                 322.1827
 #> BIC:       160.6596               361.8393                 344.7898
 #> To get additional fit indices, see help(mxRefModels)
-#> timestamp: 2026-03-13 16:26:22 
-#> Wall clock time: 0.1785128 secs 
+#> timestamp: 2026-03-13 16:40:26 
+#> Wall clock time: 0.1843491 secs 
 #> optimizer:  SLSQP 
 #> OpenMx version number: 2.22.11 
 #> Need help?  See help(mxSummary)
