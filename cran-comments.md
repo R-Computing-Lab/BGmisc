@@ -1,7 +1,7 @@
 
 # Description
 
-This update includes minor enhancements and bug fixes related to how string ids are handled in various functions. It also now allows certain vignettes to not throw an error if openmx is not installed for older R versions. This should resolve r-oldrel-windows-x86_64	1.5.0	22.00	246.00	268.00	ERROR seen in the last CRAN check.	
+This update includes an extended vignette and several openmx convenience functions. We left openmx as a suggests rather than a dependency because the openmx convenience aren't essential to the core functions. This should resolve r-oldrel-windows-x86_64	1.5.0	22.00	246.00	268.00	ERROR seen in the last CRAN check.	
 
 # Test Environments
 

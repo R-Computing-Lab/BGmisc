@@ -252,6 +252,12 @@ buildFamilyGroups <- function(
   Dmgmat = NULL,
   prefix = "fam"
 ) {
+  if (!requireNamespace("OpenMx", quietly = TRUE)) {
+    stop("OpenMx package is required for fitPedigreeModel function. Please install it.")
+  } else {
+    library(OpenMx)
+  }
+
   numfam <- nrow(dat)
   groups <- vector("list", numfam)
 
