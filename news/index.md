@@ -2,6 +2,8 @@
 
 ## BGmisc 1.6.0.1
 
+CRAN release: 2026-03-13
+
 ### CRAN submission
 
 - Add OpenMx pedigree model builders and docs
