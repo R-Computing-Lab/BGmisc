@@ -1,0 +1,324 @@
+---
+title: "Trimming Large Pedigrees with BGmisc"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Trimming Large Pedigrees}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+options(rmarkdown.html_vignette.check_title = FALSE)
+```
+
+# Introduction
+
+Large pedigrees collected in genetic or epidemiological studies often contain
+many individuals who contribute little information to the analyses of interest.
+Founders who appear as a parent of only one child, or terminal individuals with
+no children and no recorded phenotype, can often be pruned from a dataset
+without altering the connectivity or informational content of the core family
+structure. This process --- *pedigree trimming* --- reduces computational
+overhead for downstream analyses such as relatedness matrix estimation and
+pedigree-based model fitting.
+
+`BGmisc` provides two functions for this purpose:
+
+- `findLeaves()`: identifies structural "leaf" nodes that are candidates for
+  removal.
+- `trimPedigree()`: iteratively removes those leaves, with optional stopping
+  rules and phenotype-based protection.
+
+Both functions operate on the directed pedigree graph produced internally by
+`ped2graph()`, where edges run from **parent to child**. Node degree in this
+representation has a direct pedigree interpretation:
+
+| Degree | Pedigree meaning |
+|---|---|
+| indegree | number of recorded parents |
+| outdegree | number of recorded children |
+
+## Loading Required Libraries and Data
+
+```{r setup}
+library(BGmisc)
+data(hazard)
+data(inbreeding)
+```
+
+The `hazard` dataset contains `r nrow(hazard)` individuals across two extended
+families and includes an `affected` status variable, making it well suited for
+demonstrating phenotype-guided trimming. The `inbreeding` dataset contains
+`r nrow(inbreeding)` individuals across eight families with various inbreeding
+structures, useful for showing how trimming interacts with complex pedigree
+topologies.
+
+# Understanding Leaf Nodes
+
+`findLeaves()` recognises two structural leaf types, both controlled by logical
+flags.
+
+**Terminal nodes** (`include_terminal = TRUE`, the default) are individuals with
+no recorded children (outdegree 0). They sit at the outermost tips of the
+pedigree. Removing them does not sever any path between the remaining
+individuals.
+
+**Founder singletons** (`include_founder_singletons = TRUE`, the default) are
+founders --- individuals with no recorded parents (indegree 0) --- who appear as
+a parent of exactly one child (outdegree 1). Because they connect to the network
+through only a single edge, they can be removed without disconnecting any other
+pair.
+
+At least one of these types must be enabled; calling `findLeaves()` with both
+disabled raises an error.
+
+# Identifying Leaves with `findLeaves()`
+
+## Basic usage
+
+```{r}
+leaves <- findLeaves(hazard)
+leaves
+```
+
+There are `r length(leaves)` leaf candidates in the `hazard` pedigree. To
+understand *why* each individual is flagged, use `verbose = TRUE`:
+
+```{r, message = TRUE}
+leaves <- findLeaves(hazard, verbose = TRUE)
+```
+
+## Controlling which leaf types to include
+
+By default both leaf types are flagged. You can restrict to one or the other:
+
+```{r}
+# Terminal nodes only (outdegree == 0)
+terminal_only   <- findLeaves(hazard, include_founder_singletons = FALSE)
+
+# Founder singletons only (indegree == 0 & outdegree == 1)
+singletons_only <- findLeaves(hazard, include_terminal = FALSE)
+
+cat("Terminal only:    ", length(terminal_only),   "\n")
+cat("Singletons only:  ", length(singletons_only),  "\n")
+cat("Both combined:    ", length(leaves),            "\n")
+```
+
+Notice that the combined count can be smaller than the two individual counts
+summed, because some individuals may qualify under both criteria simultaneously.
+
+## Using a dataset with non-default column names
+
+`findLeaves()` inherits the `personID`, `momID`, and `dadID` arguments from
+`ped2fam()`. The `potter` dataset uses `personID` instead of `ID`:
+
+```{r}
+data(potter)
+potter_leaves <- findLeaves(
+  potter,
+  personID = "personID"
+)
+length(potter_leaves)
+```
+
+# Iterative Trimming with `trimPedigree()`
+
+`trimPedigree()` repeatedly calls `findLeaves()` and removes the identified
+individuals, re-evaluating the pedigree structure after each pass. Trimming
+peels the tree from the outside in: removing one layer of leaves may expose
+individuals who were previously internal nodes and are now themselves leaves.
+
+```{r, message = TRUE}
+trimmed <- trimPedigree(hazard, verbose = TRUE)
+
+cat("Before:", nrow(hazard), "individuals\n")
+cat("After: ", nrow(trimmed), "individuals\n")
+```
+
+After trimming, `momID` and `dadID` columns are automatically updated so that
+any reference to a removed individual is replaced with `NA`. You can verify
+that no dangling references remain:
+
+```{r}
+removed_ids <- setdiff(as.character(hazard$ID), as.character(trimmed$ID))
+sum(as.character(trimmed$dadID) %in% removed_ids, na.rm = TRUE)
+sum(as.character(trimmed$momID) %in% removed_ids, na.rm = TRUE)
+```
+
+Both return 0, confirming the cleaned pedigree is self-consistent.
+
+# Stopping Rules
+
+Two parameters give fine-grained control over when iterative trimming halts
+before all leaves are exhausted.
+
+## `max_iter`: limit the number of passes
+
+Setting `max_iter` trims only a fixed number of "shells" from the outside of the
+pedigree. This preserves the broader structure while removing only the most
+peripheral individuals.
+
+```{r, message = TRUE}
+trimmed_1 <- trimPedigree(hazard, max_iter = 1L, verbose = TRUE)
+trimmed_2 <- trimPedigree(hazard, max_iter = 2L, verbose = TRUE)
+
+cat("After 1 iteration: ", nrow(trimmed_1), "individuals\n")
+cat("After 2 iterations:", nrow(trimmed_2), "individuals\n")
+cat("Full trim:         ", nrow(trimmed),   "individuals\n")
+```
+
+## `min_size`: retain a minimum number of individuals
+
+Setting `min_size` prevents the pedigree from being trimmed below a specified
+number of rows. Trimming halts before any iteration that would violate this
+threshold:
+
+```{r, message = TRUE}
+trimmed_min <- trimPedigree(hazard, min_size = 20L, verbose = TRUE)
+cat("Retained:", nrow(trimmed_min), "individuals (minimum was 20)\n")
+```
+
+`max_iter` and `min_size` can be combined. Trimming stops as soon as either
+condition is met:
+
+```{r, message = TRUE}
+trimmed_both <- trimPedigree(hazard, max_iter = 2L, min_size = 20L, verbose = TRUE)
+cat("Retained:", nrow(trimmed_both), "individuals\n")
+```
+
+# Phenotype-Guided Trimming
+
+In genetic epidemiology, the most important individuals in a pedigree are often
+those with recorded phenotypic data. Removing such individuals discards valuable
+information even when they are structural leaves. `findLeaves()` and
+`trimPedigree()` both accept `keep_var` and `keep_vals` to protect
+phenotypically informative individuals from removal at every iteration.
+
+The `hazard` dataset includes an `affected` column that records disease status:
+
+```{r}
+table(hazard$affected, useNA = "ifany")
+```
+
+## Protect everyone with any recorded phenotype (`keep_var` only)
+
+When `keep_vals` is omitted, any individual with a **non-missing** value in
+`keep_var` is protected regardless of what that value is:
+
+```{r, message = TRUE}
+trimmed_any_pheno <- trimPedigree(hazard, keep_var = "affected", verbose = TRUE)
+
+cat("Without phenotype protection:", nrow(trimmed),          "individuals\n")
+cat("With phenotype protection:   ", nrow(trimmed_any_pheno), "individuals\n")
+```
+
+We can confirm that every individual with a recorded phenotype survived:
+
+```{r}
+protected_ids <- hazard$ID[!is.na(hazard$affected)]
+all(protected_ids %in% trimmed_any_pheno$ID)
+```
+
+## Protect only individuals with a specific phenotype value
+
+Use `keep_vals` when only certain phenotype values indicate that an individual
+must be retained. Here, we protect only *affected* individuals (`TRUE`) and
+allow removal of unaffected (`FALSE`) leaves:
+
+```{r, message = TRUE}
+trimmed_affected_only <- trimPedigree(
+  hazard,
+  keep_var  = "affected",
+  keep_vals = TRUE,
+  verbose   = TRUE
+)
+cat("Retained:", nrow(trimmed_affected_only), "individuals\n")
+
+# Confirm all affected individuals are still present
+affected_ids <- hazard$ID[isTRUE(hazard$affected) | hazard$affected == TRUE]
+all(affected_ids %in% trimmed_affected_only$ID)
+```
+
+## Protect individuals with *missing* phenotype data
+
+To retain individuals precisely because their phenotype is **not yet known**
+(and may be collected in a follow-up wave), pass `keep_vals = NA`. This inverts
+the default: only those with missing values are protected.
+
+```{r, message = TRUE}
+trimmed_keep_na <- trimPedigree(
+  hazard,
+  keep_var  = "affected",
+  keep_vals = NA,
+  verbose   = TRUE
+)
+cat("Retained:", nrow(trimmed_keep_na), "individuals\n")
+```
+
+## Combining protection criteria
+
+`keep_vals` accepts a vector, so you can protect individuals with missing data
+*and* those with a specific value simultaneously:
+
+```{r, message = TRUE}
+trimmed_na_or_true <- trimPedigree(
+  hazard,
+  keep_var  = "affected",
+  keep_vals = c(TRUE, NA),
+  verbose   = TRUE
+)
+cat("Retained:", nrow(trimmed_na_or_true), "individuals\n")
+```
+
+# Forced Removal with `remove_ids`
+
+Before any leaf-based trimming, you can unconditionally remove specific
+individuals using `remove_ids`. This is useful when particular individuals
+should be excluded for reasons unrelated to pedigree topology --- for example,
+data quality issues or consent withdrawal:
+
+```{r, message = TRUE}
+force_out <- head(hazard$ID, 2)
+
+trimmed_forced <- trimPedigree(
+  hazard,
+  remove_ids = force_out,
+  verbose    = TRUE
+)
+cat("IDs force-removed:", paste(force_out, collapse = ", "), "\n")
+cat("Retained:", nrow(trimmed_forced), "individuals\n")
+```
+
+Forced removals are applied first; subsequent leaf passes then operate on the
+already-reduced pedigree, which may expose new leaves that would not have
+appeared otherwise.
+
+# Summary
+
+| Parameter | Controls |
+|---|---|
+| `include_terminal` | Whether outdegree-0 nodes are leaf candidates |
+| `include_founder_singletons` | Whether indegree-0 & outdegree-1 nodes are leaf candidates |
+| `max_iter` | Maximum number of trimming passes |
+| `min_size` | Minimum pedigree size; trimming halts before breaching this threshold |
+| `keep_var` | Phenotype column used for protection |
+| `keep_vals` | Specific values (or `NA`) that shield individuals from removal |
+| `remove_ids` | IDs to remove unconditionally before leaf-based trimming |
+
+The two functions work together naturally. Use `findLeaves()` to *preview* which
+individuals would be removed under a given set of parameters, then pass those
+same parameters to `trimPedigree()` to carry out the removal iteratively:
+
+```{r}
+# Preview
+candidates <- findLeaves(hazard, keep_var = "affected")
+cat(length(candidates), "individuals are leaf candidates given phenotype protection\n")
+
+# Execute
+result <- trimPedigree(hazard, keep_var = "affected")
+cat(nrow(hazard) - nrow(result), "individuals removed;", nrow(result), "retained\n")
+```
