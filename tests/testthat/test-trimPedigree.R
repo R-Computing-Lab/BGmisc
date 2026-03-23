@@ -1,20 +1,53 @@
 # Test Case 1: findLeaves returns a character vector for the hazard dataset
 test_that("findLeaves returns a character vector of leaf IDs for hazard dataset", {
   data(hazard)
-  leaves <- findLeaves(hazard)
+  leaves <- findLeaves(hazard, include_terminal = TRUE, include_founder_singletons = FALSE)
+
+
   expect_true(is.character(leaves))
   expect_true(length(leaves) > 0)
-})
+
+  expect_true(all(leaves %in% as.character(hazard$ID)))
+}
+)
+
 
 # Test Case 2: findLeaves identifies terminal nodes correctly in the hazard dataset
 test_that("findLeaves correctly identifies terminal nodes in hazard dataset", {
   data(hazard)
-  leaves_terminal <- findLeaves(hazard, include_founder_singletons = FALSE)
-  leaves_all <- findLeaves(hazard, include_founder_singletons = TRUE)
+  leaves_terminal <- findLeaves(hazard, include_terminal = TRUE, include_founder_singletons = FALSE)
+  leaves_all <- findLeaves(hazard, include_founder_singletons = TRUE, include_terminal = TRUE)
   # Terminal-only should be a subset of all leaves
   expect_true(all(leaves_terminal %in% leaves_all))
   # All returned IDs must be present in the pedigree rows
   expect_true(all(leaves_all %in% as.character(hazard$ID)))
+
+
+
+    # find all terminal nodes (outdegree == 0) in the hazard dataset
+  hazard$dadID0 <- hazard$dadID
+  hazard$momID0 <- hazard$momID
+  hazard$dadID0[is.na(hazard$dadID)] <- 0
+  hazard$momID0[is.na(hazard$momID)] <- 0
+  parent_ids <- unique(c(hazard$dadID0, hazard$momID0))
+  terminal_nodes <- setdiff(as.character(hazard$ID), as.character(parent_ids))
+  expect_true(all(leaves_terminal %in% terminal_nodes))
+
+  leaves_founder <- findLeaves(hazard, include_terminal = F, include_founder_singletons = T)
+  # find all founder singletons (indegree == 0, outdegree == 1) in the hazard dataset
+  outdegree <- table(c(hazard$dadID0, hazard$momID0))
+
+
+
+  viable <- names(outdegree)[outdegree == 1]
+  # needs to have no parents
+  parentless <- as.character(hazard$ID[hazard$dadID0 == 0 & hazard$momID0 == 0])
+  founder_singletons <- parentless[parentless %in% viable]
+
+  expect_true(all(leaves_founder %in% founder_singletons))
+
+  leaves_all <- findLeaves(hazard, include_founder_singletons = TRUE, include_terminal = TRUE)
+  expect_true(all(leaves_all %in% c(terminal_nodes, founder_singletons)))
 })
 
 # Test Case 3: findLeaves include_founder_singletons flag adds more leaves in hazard dataset
