@@ -161,14 +161,17 @@ ggpedigree(
   trimmed,
   personID       = "ID",
 #  famID          = "FamID",
-  status_column = "affected",
-  overlay_column = "affected",
+#  status_column = "affected", # not working with overlays ``shrug 
+  overlays = list(
+    list(column = "affected", code_affected = TRUE, shape = "cross", color = "black"),
+    list(column = "affected", code_affected = TRUE, shape = "slash", color = "red", stroke = 2)
+  ),
   config = list(
     overlay_include   = TRUE,
-    overlay_code_affected = TRUE,
-    overlay_code_unaffected = FALSE,
+    status_include    = T,
     code_male         = 0,
-    sex_color_include = FALSE
+    sex_color_include = T,
+    overlay_mode    = "shape"
   )
 )
 ```
