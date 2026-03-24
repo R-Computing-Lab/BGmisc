@@ -232,7 +232,13 @@ ped2com <- function(ped, component,
   # --- Step 2: Compute Relatedness Matrix ---
 
 
-  if (config$resume == TRUE && file.exists(checkpoint_files$r_checkpoint) &&
+  if (config$resume == TRUE && file.exists(checkpoint_files$ram_checkpoint)) {
+    if (config$verbose == TRUE) cat("Resuming: Loading completed RAM matrix...\n")
+    r <- readRDS(checkpoint_files$ram_checkpoint)
+    gen <- rep(0, config$nr)
+    mtSum <- 0
+    count <- 0
+  } else if (config$resume == TRUE && file.exists(checkpoint_files$r_checkpoint) &&
       file.exists(checkpoint_files$gen_checkpoint) &&
     file.exists(checkpoint_files$mtSum_checkpoint) &&
     file.exists(checkpoint_files$newIsPar_checkpoint) &&
