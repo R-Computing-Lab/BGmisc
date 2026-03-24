@@ -4,12 +4,19 @@
 \alias{.computeTranspose}
 \title{Compute the transpose multiplication for the relatedness matrix}
 \usage{
-.computeTranspose(r2, transpose_method = "tcrossprod", verbose = FALSE)
+.computeTranspose(
+  r2,
+  transpose_method = "tcrossprod",
+  chunk_size = 1000L,
+  verbose = FALSE
+)
 }
 \arguments{
 \item{r2}{a relatedness matrix}
 
-\item{transpose_method}{character. The method to use for computing the transpose.  Options are "tcrossprod", "crossprod", or "star"}
+\item{transpose_method}{character. The method to use for computing the transpose.  Options are "tcrossprod", "crossprod", "star", or "chunked"}
+
+\item{chunk_size}{integer. Number of rows per chunk when \code{transpose_method = "chunked"}. Defaults to 1000.}
 
 \item{verbose}{logical.  If TRUE, print progress through stages of algorithm}
 }

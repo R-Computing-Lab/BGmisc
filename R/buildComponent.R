@@ -77,7 +77,10 @@ ped2com <- function(ped, component,
     component = component,
     adjBeta_method = adjBeta_method,
     nr = nrow(ped),
-    compress = compress
+    compress = compress,
+    keep_ids = keep_ids,
+    mz_method = mz_method,
+    mz_twins = mz_twins
   )
 
 
@@ -135,7 +138,7 @@ ped2com <- function(ped, component,
   mz_row_pairs <- NULL
   mz_id_pairs <- NULL
 
-  if (mz_twins == TRUE && "twinID" %in% colnames(ped)) {
+  if (config$mz_twins == TRUE && "twinID" %in% colnames(ped)) {
     df_mz <- findMZtwins(ped,
       verbose = config$verbose,
       returnIDs = TRUE,
@@ -154,7 +157,7 @@ ped2com <- function(ped, component,
     return(readRDS(checkpoint_files$final_matrix))
   }
 
-  if (mz_method %in% c("merging") && mz_twins == TRUE && !is.null(mz_row_pairs) && length(mz_row_pairs) > 0 &&
+  if (config$mz_method %in% c("merging") && config$mz_twins == TRUE && !is.null(mz_row_pairs) && length(mz_row_pairs) > 0 &&
         config$component %in% c("additive")) {
     # replace all MZ twin IDs with the first twin's ID in each pair so they are merged for the path tracing and all subsequent steps.  We will copy the values back to the second twin at the end.
     ped <- fuseTwins(ped = ped, mz_row_pairs = mz_row_pairs, mz_id_pairs = mz_id_pairs, config = config, beta = beta)
@@ -326,7 +329,7 @@ ped2com <- function(ped, component,
     compress = config$compress
   )
 
-  if (mz_method == "addtwins" && mz_twins == TRUE && !is.null(mz_row_pairs) && length(mz_row_pairs) > 0) {
+  if (config$mz_method == "addtwins" && config$mz_twins == TRUE && !is.null(mz_row_pairs) && length(mz_row_pairs) > 0) {
     if (config$verbose == TRUE) {
       message("MZ twin merging enabled: Will merge MZ twin columns in r2 before tcrossprod")
     }
@@ -353,9 +356,9 @@ ped2com <- function(ped, component,
 
   # Subset rows of r2 to target individuals if requested.
   # All columns are kept so dot products use the full ancestry paths.
-  if (!is.null(keep_ids)) {
-    idx <- match(keep_ids, rownames(r2))
-    missing <- keep_ids[is.na(idx)]
+  if (!is.null(config$keep_ids)) {
+    idx <- match(config$keep_ids, rownames(r2))
+    missing <- config$keep_ids[is.na(idx)]
     if (length(missing) > 0) {
       warning(length(missing), " keep_ids not found in pedigree and will be dropped: ",
               paste(head(missing, 5), collapse = ", "),
@@ -376,7 +379,7 @@ ped2com <- function(ped, component,
     } else {
       NULL
     }
-    if (identical(saved_keep_ids, keep_ids)) {
+    if (identical(saved_keep_ids, config$keep_ids)) {
       if (config$verbose == TRUE) message("Resuming: Loading tcrossprod...\n")
       r <- readRDS(checkpoint_files$tcrossprod_checkpoint)
       use_tcrossprod_checkpoint <- TRUE
@@ -384,14 +387,14 @@ ped2com <- function(ped, component,
       warning(
         "tcrossprod checkpoint keep_ids do not match — recomputing.\n",
         "  saved:    ", if (is.null(saved_keep_ids)) "NULL (full pedigree)" else paste(length(saved_keep_ids), "IDs"), "\n",
-        "  expected: ", if (is.null(keep_ids)) "NULL (full pedigree)" else paste(length(keep_ids), "IDs")
+        "  expected: ", if (is.null(config$keep_ids)) "NULL (full pedigree)" else paste(length(config$keep_ids), "IDs")
       )
     }
   }
 
   if (use_tcrossprod_checkpoint == FALSE) {
     if (config$saveable == TRUE) {
-      saveRDS(keep_ids, file = checkpoint_files$tcrossprod_ids, compress = config$compress)
+      saveRDS(config$keep_ids, file = checkpoint_files$tcrossprod_ids, compress = config$compress)
     }
     r <- .computeTranspose(
       r2 = r2, transpose_method = transpose_method,
@@ -403,7 +406,7 @@ ped2com <- function(ped, component,
     }
   }
 
-  if (mz_method %in% c("merging", "addtwins") && mz_twins == TRUE && config$component %in% c("additive") && !is.null(mz_row_pairs) && length(mz_row_pairs) > 0) {
+  if (config$mz_method %in% c("merging", "addtwins") && config$mz_twins == TRUE && config$component %in% c("additive") && !is.null(mz_row_pairs) && length(mz_row_pairs) > 0) {
     # --- Step 4b: Restore MZ twins ---
     # Copy twin1's row/col to twin2 so both twins appear in the final matrix.
     if (config$sparse == FALSE) {
