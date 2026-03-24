@@ -841,7 +841,7 @@ loadOrComputeCheckpoint <- function(file, compute_fn,
     }
     parList <- readRDS(checkpoint_files$parList)
     lens <- readRDS(checkpoint_files$lens)
-    computed_indices <- which(!vapply(parList, is.null))
+    computed_indices <- which(!vapply(parList, is.null, logical(1)))
     lastComputed <- if (length(computed_indices) > 0) {
       max(computed_indices)
     } else {
