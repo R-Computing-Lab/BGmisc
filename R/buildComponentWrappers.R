@@ -20,6 +20,7 @@ ped2add <- function(ped, max_gen = 25, sparse = TRUE, verbose = FALSE,
                     compress = TRUE,
                     mz_twins = FALSE,
                     mz_method = "addtwins",
+                    force_symmetric = FALSE,
                     ...) {
   ped2com(
     ped = ped,
@@ -42,6 +43,7 @@ ped2add <- function(ped, max_gen = 25, sparse = TRUE, verbose = FALSE,
     compress = compress,
     mz_twins = mz_twins,
     mz_method = mz_method,
+    force_symmetric = force_symmetric,
     ...
   )
 }
@@ -66,6 +68,7 @@ ped2mit <- ped2mt <- function(ped, max_gen = 25,
                               save_rate_parlist = 100000 * save_rate,
                               save_path = "checkpoint/",
                               compress = TRUE,
+                              force_symmetric = FALSE,
                               ...) {
   ped2com(
     ped = ped,
@@ -84,6 +87,7 @@ ped2mit <- ped2mt <- function(ped, max_gen = 25,
     save_rate_parlist = save_rate_parlist,
     save_path = save_path,
     compress = compress,
+    force_symmetric = force_symmetric,
     ...
   )
 }
@@ -105,6 +109,7 @@ ped2cn <- function(ped, max_gen = 25, sparse = TRUE, verbose = FALSE,
                    save_rate_parlist = 1000 * save_rate,
                    save_path = "checkpoint/",
                    compress = TRUE,
+                   force_symmetric = FALSE,
                    ...) {
   ped2com(
     ped = ped,
@@ -123,6 +128,7 @@ ped2cn <- function(ped, max_gen = 25, sparse = TRUE, verbose = FALSE,
     save_rate_parlist = save_rate_parlist,
     save_path = save_path,
     compress = compress,
+    force_symmetric = force_symmetric,
     ...
   )
 }
@@ -143,6 +149,7 @@ ped2gen <- function(ped, max_gen = 25, sparse = TRUE, verbose = FALSE,
                     save_rate_parlist = 1000 * save_rate,
                     save_path = "checkpoint/",
                     compress = TRUE,
+                    force_symmetric = FALSE,
                     ...) {
   ped2com(
     ped = ped,
@@ -161,6 +168,7 @@ ped2gen <- function(ped, max_gen = 25, sparse = TRUE, verbose = FALSE,
     save_rate_parlist = save_rate_parlist,
     save_path = save_path,
     compress = compress,
+    force_symmetric = force_symmetric,
     ...
   )
 }
@@ -171,7 +179,8 @@ ped2gen <- function(ped, max_gen = 25, sparse = TRUE, verbose = FALSE,
 #' @inherit ped2com details
 #' @export
 #'
-ped2ce <- function(ped, ...) {
-  matrix(1, nrow = nrow(ped), ncol = nrow(ped), dimnames = list(ped$ID, ped$ID))
+ped2ce <- function(ped, personID = "ID",
+                   ...) {
+  matrix(1, nrow = nrow(ped), ncol = nrow(ped), dimnames = list(ped[[personID]], ped[[personID]]))
 }
 

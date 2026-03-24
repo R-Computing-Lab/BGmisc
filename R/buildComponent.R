@@ -23,6 +23,7 @@
 #' @param compress logical. If TRUE, use compression when saving the checkpoint files.  Defaults to TRUE.
 #' @param mz_twins logical. If TRUE, merge MZ co-twin columns in the r2 matrix before tcrossprod so that MZ twins are coded with relatedness 1 instead of 0.5. Twin pairs are identified from the \code{twinID} column. When a \code{zygosity} column is also present, only pairs where both members have \code{zygosity == "MZ"} are used; otherwise all \code{twinID} pairs are assumed to be MZ. Defaults to FALSE.
 #' @param mz_method character. The method to handle MZ twins.  Options are "merging" (default) or "addtwins".  "addtwins" adds the twin2 column to the twin1 column before tcrossprod so that all relatedness flows through a single source, then leaves the twin2 column as zero and relies on the fact that the row/col names are the same to copy the values back to twin2 after tcrossprod.  "merging" merges the twin2 column into the twin1 column before tcrossprod and then copies the values back to twin2 after tcrossprod so that both twins appear in the final matrix.
+#' @param force_symmetric logical. If TRUE, force the final relatedness matrix to be symmetric. This can help mitigate any numerical asymmetry introduced by the transpose method, especially when using sparse matrices. Defaults to TRUE.
 #' @param beta logical. Used for benchmarking
 #' @param ... additional arguments to be passed to \code{\link{ped2com}}
 #' @details The algorithms and methodologies used in this function are further discussed and exemplified in the vignette titled "examplePedigreeFunctions". For more advanced scenarios and detailed explanations, consult this vignette.
@@ -52,6 +53,7 @@ ped2com <- function(ped, component,
                     mz_twins = TRUE,
                     mz_method = "addtwins",
                     beta = FALSE,
+                    force_symmetric = FALSE,
                     ...) {
   #------
   # Check inputs
@@ -80,7 +82,8 @@ ped2com <- function(ped, component,
     compress = compress,
     keep_ids = keep_ids,
     mz_method = mz_method,
-    mz_twins = mz_twins
+    mz_twins = mz_twins,
+    force_symmetric = force_symmetric
   )
 
 
@@ -401,9 +404,11 @@ ped2com <- function(ped, component,
       saveRDS(config$keep_ids, file = checkpoint_files$tcrossprod_ids, compress = config$compress)
     }
     r <- .computeTranspose(
-      r2 = r2, transpose_method = transpose_method,
+      r2 = r2,
+      transpose_method = transpose_method,
       chunk_size = chunk_size,
-      verbose = config$verbose
+      verbose = config$verbose,
+      force_symmetric = config$force_symmetric
     )
     if (config$saveable == TRUE) {
       saveRDS(r, file = checkpoint_files$tcrossprod_checkpoint, compress = config$compress)
@@ -488,9 +493,12 @@ ped2com <- function(ped, component,
 #' @inheritParams ped2com
 #' @inherit ped2com details
 #' @param r2 a relatedness matrix
+#' @param force_symmetric logical. If TRUE, forces the output matrix to be symmetric using Matrix::forceSymmetric.  This can be helpful when using chunked multiplication to ensure the final result is exactly symmetric despite potential numerical issues.  Defaults to TRUE.
 #'
 .computeTranspose <- function(r2, transpose_method = "tcrossprod", chunk_size = 1000L,
-                             verbose = FALSE) {
+                             verbose = FALSE, force_symmetric = FALSE, config = NULL,
+                             checkpoint_files = NULL
+                             ) {
   valid_methods <- c(
     "tcrossprod", "crossprod", "star",
     "tcross.alt.crossprod", "tcross.alt.star",
@@ -543,14 +551,25 @@ ped2com <- function(ped, component,
         if (verbose == TRUE) {
           cat(sprintf("  chunk %d/%d (rows %d-%d)\n", i, n_chunks, row_start, row_end))
         }
+
+        if(resum
         blocks[[i]] <- Matrix::tcrossprod(r2[row_start:row_end, , drop = FALSE], r2)
         gc()
+
+        if(saveable == TRUE && (i %% save_rate_parlist == 0)) {
+          saveRDS(blocks[[i]], file = paste0(checkpoint_files$tcrossprod_checkpoint, "_chunk_", i, ".rds"), compress = config$compress)
+        }
       }
+
       do.call(rbind, blocks)
+
     }
   )
-
+  if(force_symmetric == TRUE) {
+    Matrix:::forceSymmetric(result)
+  } else {
   result
+  }
 }
 
 #' Initialize checkpoint files

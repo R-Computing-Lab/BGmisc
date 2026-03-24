@@ -362,6 +362,19 @@ test_that("keep_ids subset produces correct relatedness values", {
 
   # values in the subset must match the corresponding entries of the full matrix
   expect_equal(r_sub, r_full[keep, keep], tolerance = 1e-10)
+
+
+  r_full  <- ped2com(hazard, component = "additive", sparse = T,
+                     keep_ids = NULL)
+  r_sub   <- ped2com(hazard, component = "additive", sparse = T,
+                     keep_ids = keep)
+
+  expect_equal(dim(r_sub), c(length(keep), length(keep)))
+  expect_equal(rownames(r_sub), keep)
+
+  # values in the subset must match the corresponding entries of the full matrix
+  expect_equal(r_sub, r_full[keep, keep], tolerance = 1e-10)
+
 })
 
 test_that("keep_ids with unknown IDs warns and drops missing entries", {
@@ -393,6 +406,28 @@ test_that("chunked tcrossprod matches standard tcrossprod", {
                         transpose_method = "chunked", chunk_size = 3L)
 
   expect_equal(as.matrix(r_standard), as.matrix(r_chunked), tolerance = 1e-10)
+  expect_equal(r_standard, r_chunked, tolerance = 1e-10)
+
+
+  data(inbreeding)
+  r_standard <- ped2com(inbreeding, component = "additive", sparse = T,
+                        transpose_method = "tcrossprod")
+  r_chunked  <- ped2com(inbreeding, component = "additive", sparse = T,
+                        transpose_method = "chunked", chunk_size = 3L,force_symmetric = FALSE)
+
+  r_chunked_sym  <- ped2com(inbreeding, component = "additive", sparse = T,
+                        transpose_method = "chunked", chunk_size = 3L,force_symmetric = TRUE)
+
+  expect_equal(as.matrix(r_standard), as.matrix(r_chunked), tolerance = 1e-10)
+
+  expect_equal(r_standard,
+               r_chunked
+               # convert to symmetric matrix for comparison since chunked output may not be perfectly symmetric due to numerical precision
+               , tolerance = 1e-10)
+  expect_equal(r_standard,
+               r_chunked_sym
+               # convert to symmetric matrix for comparison since chunked output may not be perfectly symmetric due to numerical precision
+               , tolerance = 1e-10)
 })
 
 test_that("chunked tcrossprod with chunk_size >= nrow behaves like tcrossprod", {
@@ -404,6 +439,34 @@ test_that("chunked tcrossprod with chunk_size >= nrow behaves like tcrossprod", 
                         chunk_size = nrow(hazard) + 1L)
 
   expect_equal(as.matrix(r_standard), as.matrix(r_chunked), tolerance = 1e-10)
+})
+
+
+
+
+test_that("chunked tcrossprod matches standard tcrossprod when also subsetted", {
+  data(inbreeding)
+
+  keep <- as.character(inbreeding$ID[5:10])
+
+  r_full  <- ped2com(inbreeding, component = "additive", sparse = T,
+                     keep_ids = NULL)
+  r_sub   <- ped2com(inbreeding, component = "additive", sparse = T,
+                     keep_ids = keep)
+
+  expect_equal(dim(r_sub), c(length(keep), length(keep)))
+  expect_equal(rownames(r_sub), keep)
+
+  # values in the subset must match the corresponding entries of the full matrix
+  expect_equal(r_sub, r_full[keep, keep], tolerance = 1e-10)
+
+  r_chunked  <- ped2com(inbreeding, component = "additive", sparse = T,
+                        transpose_method = "chunked", chunk_size = 3L,keep_ids = keep)
+
+  expect_equal(as.matrix(r_sub), as.matrix(r_chunked), tolerance = 1e-10)
+  expect_equal(r_sub, r_chunked, tolerance = 1e-10)
+  expect_equal(r_full[keep, keep], r_chunked, tolerance = 1e-10)
+
 })
 
 # ── tcrossprod_ids checkpoint validation ──────────────────────────────────────
