@@ -295,3 +295,212 @@ deviantions all make sense", {
   # reconstruct the orginal generation values from generated values of children
   expect_true(all(df_hazard$min_gen_children[df_hazard$ID %in% founders] - 1 == df_hazard$gen_og[df_hazard$ID %in% founders]))
 })
+
+# ── ram_checkpoint ────────────────────────────────────────────────────────────
+
+test_that("resume loads ram_checkpoint and skips RAM loop when mid-loop files absent", {
+  data(hazard)
+  save_path <- file.path(tempdir(), "test_ram_checkpoint")
+  dir.create(save_path, showWarnings = FALSE)
+  on.exit(unlink(save_path, recursive = TRUE))
+
+  # First run: save all checkpoints
+  r_full <- ped2com(hazard, component = "additive", sparse = FALSE,
+                    saveable = TRUE, resume = FALSE,
+                    save_rate_gen = 1, save_path = save_path)
+
+  # Remove mid-loop files so only ram_checkpoint (and earlier) remain
+  mid_loop_files <- c("r_checkpoint.rds", "gen_checkpoint.rds",
+                      "mtSum_checkpoint.rds", "newIsPar_checkpoint.rds",
+                      "count_checkpoint.rds")
+  file.remove(file.path(save_path, mid_loop_files))
+
+  expect_true(file.exists(file.path(save_path, "ram_checkpoint.rds")))
+  expect_false(file.exists(file.path(save_path, "r_checkpoint.rds")))
+
+  # Second run: should load ram_checkpoint, skip loop, and produce same result
+  r_resumed <- ped2com(hazard, component = "additive", sparse = FALSE,
+                       saveable = FALSE, resume = TRUE,
+                       save_path = save_path)
+
+  expect_equal(r_full, r_resumed)
+})
+
+test_that("ram_checkpoint resume produces identical result to fresh run", {
+  data(hazard)
+  save_path <- file.path(tempdir(), "test_ram_idempotent")
+  dir.create(save_path, showWarnings = FALSE)
+  on.exit(unlink(save_path, recursive = TRUE))
+
+  r_fresh <- ped2com(hazard, component = "additive", sparse = FALSE,
+                     saveable = TRUE, resume = FALSE,
+                     save_rate_gen = 1, save_path = save_path)
+
+  file.remove(file.path(save_path, "r_checkpoint.rds"))
+  file.remove(file.path(save_path, "tcrossprod_checkpoint.rds"))
+
+  r_resumed <- ped2com(hazard, component = "additive", sparse = FALSE,
+                       saveable = FALSE, resume = TRUE,
+                       save_path = save_path)
+
+  expect_equal(r_fresh, r_resumed, tolerance = 1e-10)
+})
+
+# ── keep_ids ──────────────────────────────────────────────────────────────────
+
+test_that("keep_ids subset produces correct relatedness values", {
+  data(hazard)
+  keep <- as.character(hazard$ID[5:10])
+
+  r_full  <- ped2com(hazard, component = "additive", sparse = FALSE,
+                     keep_ids = NULL)
+  r_sub   <- ped2com(hazard, component = "additive", sparse = FALSE,
+                     keep_ids = keep)
+
+  expect_equal(dim(r_sub), c(length(keep), length(keep)))
+  expect_equal(rownames(r_sub), keep)
+
+  # values in the subset must match the corresponding entries of the full matrix
+  expect_equal(r_sub, r_full[keep, keep], tolerance = 1e-10)
+})
+
+test_that("keep_ids with unknown IDs warns and drops missing entries", {
+  data(hazard)
+  keep <- c(as.character(hazard$ID[1:3]), "BOGUS_ID")
+
+  expect_warning(
+    r_sub <- ped2com(hazard, component = "additive", sparse = FALSE,
+                     keep_ids = keep),
+    "keep_ids not found"
+  )
+  expect_equal(nrow(r_sub), 3L)
+})
+
+test_that("keep_ids = NULL returns full pedigree matrix", {
+  data(hazard)
+  r_full <- ped2com(hazard, component = "additive", sparse = FALSE,
+                    keep_ids = NULL)
+  expect_equal(nrow(r_full), nrow(hazard))
+})
+
+# ── chunked tcrossprod ────────────────────────────────────────────────────────
+
+test_that("chunked tcrossprod matches standard tcrossprod", {
+  data(hazard)
+  r_standard <- ped2com(hazard, component = "additive", sparse = FALSE,
+                        transpose_method = "tcrossprod")
+  r_chunked  <- ped2com(hazard, component = "additive", sparse = FALSE,
+                        transpose_method = "chunked", chunk_size = 3L)
+
+  expect_equal(as.matrix(r_standard), as.matrix(r_chunked), tolerance = 1e-10)
+})
+
+test_that("chunked tcrossprod with chunk_size >= nrow behaves like tcrossprod", {
+  data(hazard)
+  r_standard <- ped2com(hazard, component = "additive", sparse = FALSE,
+                        transpose_method = "tcrossprod")
+  r_chunked  <- ped2com(hazard, component = "additive", sparse = FALSE,
+                        transpose_method = "chunked",
+                        chunk_size = nrow(hazard) + 1L)
+
+  expect_equal(as.matrix(r_standard), as.matrix(r_chunked), tolerance = 1e-10)
+})
+
+# ── tcrossprod_ids checkpoint validation ──────────────────────────────────────
+
+test_that("tcrossprod checkpoint is reused when keep_ids matches saved ids", {
+  data(hazard)
+  keep <- as.character(hazard$ID[1:5])
+  save_path <- file.path(tempdir(), "test_tcp_ids_match")
+  dir.create(save_path, showWarnings = FALSE)
+  on.exit(unlink(save_path, recursive = TRUE))
+
+  # First run: saves tcrossprod_checkpoint and tcrossprod_ids
+  r1 <- ped2com(hazard, component = "additive", sparse = FALSE,
+                keep_ids = keep, saveable = TRUE, resume = FALSE,
+                save_path = save_path)
+
+  expect_true(file.exists(file.path(save_path, "tcrossprod_ids.rds")))
+  expect_equal(readRDS(file.path(save_path, "tcrossprod_ids.rds")), keep)
+
+  # Second run: same keep_ids → should load checkpoint, not recompute
+  r2 <- ped2com(hazard, component = "additive", sparse = FALSE,
+                keep_ids = keep, saveable = FALSE, resume = TRUE,
+                save_path = save_path)
+
+  expect_equal(r1, r2)
+})
+
+test_that("tcrossprod checkpoint is recomputed with warning when keep_ids changes", {
+  data(hazard)
+  keep1 <- as.character(hazard$ID[1:5])
+  keep2 <- as.character(hazard$ID[6:10])
+  save_path <- file.path(tempdir(), "test_tcp_ids_mismatch")
+  unlink(save_path, recursive = TRUE)   # guarantee clean state
+  dir.create(save_path, showWarnings = FALSE)
+
+
+  ped2com(hazard, component = "additive", sparse = FALSE,
+          keep_ids = keep1, saveable = TRUE, resume = FALSE,
+          save_path = save_path)
+
+  # verify the setup saved what we expect before testing the warning
+  expect_true(file.exists(file.path(save_path, "tcrossprod_checkpoint.rds")))
+  expect_equal(readRDS(file.path(save_path, "tcrossprod_ids.rds")), keep1)
+
+  unlink(file.path(save_path, "final_matrix.rds")) # ensure we're testing the checkpoint loading, not final matrix loading
+
+
+  expect_warning(
+    r2 <- ped2com(hazard, component = "additive", sparse = FALSE,
+                  keep_ids = keep2, saveable = FALSE, resume = TRUE,verbose = TRUE,
+                  save_path = save_path),
+    "keep_ids do not match"
+  )
+  expect_equal(rownames(r2), keep2)
+  on.exit(unlink(save_path, recursive = TRUE))
+})
+
+test_that("tcrossprod checkpoint saved with keep_ids=NULL is reused on NULL resume", {
+  data(hazard)
+  save_path <- file.path(tempdir(), "test_tcp_ids_null")
+  dir.create(save_path, showWarnings = FALSE)
+  on.exit(unlink(save_path, recursive = TRUE))
+
+  r1 <- ped2com(hazard, component = "additive", sparse = FALSE,
+                keep_ids = NULL, saveable = TRUE, resume = FALSE,
+                save_path = save_path)
+
+  expect_null(readRDS(file.path(save_path, "tcrossprod_ids.rds")))
+
+  r2 <- ped2com(hazard, component = "additive", sparse = FALSE,
+                keep_ids = NULL, saveable = FALSE, resume = TRUE,
+                save_path = save_path)
+
+  expect_equal(r1, r2)
+})
+
+test_that("tcrossprod checkpoint saved with NULL warns when resumed with keep_ids", {
+  data(hazard)
+  keep <- as.character(hazard$ID[1:5])
+  save_path <- file.path(tempdir(), "test_tcp_ids_null_mismatch")
+  unlink(save_path, recursive = TRUE)   # guarantee clean state
+  dir.create(save_path, showWarnings = FALSE)
+  on.exit(unlink(save_path, recursive = TRUE))
+
+  ped2com(hazard, component = "additive", sparse = FALSE,
+          keep_ids = NULL, saveable = TRUE, resume = FALSE,
+          save_path = save_path)
+
+  # verify the setup saved what we expect before testing the warning
+  expect_true(file.exists(file.path(save_path, "tcrossprod_checkpoint.rds")))
+  expect_null(readRDS(file.path(save_path, "tcrossprod_ids.rds")))
+  unlink(file.path(save_path, "final_matrix.rds")) # ensure we're testing the checkpoint loading, not final matrix loading
+
+  expect_warning(
+    ped2com(hazard, component = "additive", sparse = FALSE,
+            keep_ids = keep, saveable = FALSE, resume = TRUE,
+            save_path = save_path),
+    "keep_ids do not match"
+  )
+})
