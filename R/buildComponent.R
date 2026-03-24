@@ -16,6 +16,7 @@
 #' @param standardize_colnames logical. If TRUE, standardize the column names of the pedigree dataset
 #' @param transpose_method character. The method to use for computing the transpose.  Options are "tcrossprod", "crossprod", "star", or "chunked"
 #' @param chunk_size integer. Number of rows per chunk when \code{transpose_method = "chunked"}. Defaults to 1000.
+#' @param keep_ids character vector of IDs to retain in the final relatedness matrix. When supplied, only the rows of \code{r2} corresponding to these IDs are used in the tcrossprod, so the result is a \code{length(keep_ids) x length(keep_ids)} matrix. All columns of \code{r2} are retained during the multiplication so relatedness values remain correct. IDs not found in the pedigree are silently dropped with a warning.
 #' @param adjacency_method character. The method to use for computing the adjacency matrix.  Options are "loop", "indexed", direct or beta
 #' @param isChild_method character. The method to use for computing the isChild matrix.  Options are "classic" or "partialparent"
 #' @param adjBeta_method numeric The method to use for computing the building the adjacency_method matrix when using the "beta" build
@@ -36,6 +37,7 @@ ped2com <- function(ped, component,
                     standardize_colnames = TRUE,
                     transpose_method = "tcrossprod",
                     chunk_size = 1000L,
+                    keep_ids = NULL,
                     adjacency_method = "direct",
                     isChild_method = "partialparent",
                     saveable = FALSE,
@@ -348,21 +350,55 @@ ped2com <- function(ped, component,
   }
   # --- Step 4: T crossproduct  ---
 
+  # Subset rows of r2 to target individuals if requested.
+  # All columns are kept so dot products use the full ancestry paths.
+  if (!is.null(keep_ids)) {
+    idx <- match(keep_ids, rownames(r2))
+    missing <- keep_ids[is.na(idx)]
+    if (length(missing) > 0) {
+      warning(length(missing), " keep_ids not found in pedigree and will be dropped: ",
+              paste(head(missing, 5), collapse = ", "),
+              if (length(missing) > 5) " ..." else "")
+    }
+    idx <- idx[!is.na(idx)]
+    if (config$verbose == TRUE) {
+      cat(sprintf("Subsetting r2 to %d target individuals before tcrossprod\n", length(idx)))
+    }
+    r2 <- r2[idx, , drop = FALSE]
+  }
+
+  use_tcrossprod_checkpoint <- FALSE
   if (config$resume == TRUE && file.exists(checkpoint_files$tcrossprod_checkpoint) &&
         config$component != "generation") {
-    if (config$verbose == TRUE) message("Resuming: Loading tcrossprod...\n")
-    r <- readRDS(checkpoint_files$tcrossprod_checkpoint)
-  } else {
+    saved_keep_ids <- if (file.exists(checkpoint_files$tcrossprod_ids)) {
+      readRDS(checkpoint_files$tcrossprod_ids)
+    } else {
+      NULL
+    }
+    if (identical(saved_keep_ids, keep_ids)) {
+      if (config$verbose == TRUE) message("Resuming: Loading tcrossprod...\n")
+      r <- readRDS(checkpoint_files$tcrossprod_checkpoint)
+      use_tcrossprod_checkpoint <- TRUE
+    } else {
+      warning(
+        "tcrossprod checkpoint keep_ids do not match — recomputing.\n",
+        "  saved:    ", if (is.null(saved_keep_ids)) "NULL (full pedigree)" else paste(length(saved_keep_ids), "IDs"), "\n",
+        "  expected: ", if (is.null(keep_ids)) "NULL (full pedigree)" else paste(length(keep_ids), "IDs")
+      )
+    }
+  }
+
+  if (use_tcrossprod_checkpoint == FALSE) {
+    if (config$saveable == TRUE) {
+      saveRDS(keep_ids, file = checkpoint_files$tcrossprod_ids, compress = config$compress)
+    }
     r <- .computeTranspose(
       r2 = r2, transpose_method = transpose_method,
       chunk_size = chunk_size,
       verbose = config$verbose
     )
     if (config$saveable == TRUE) {
-      saveRDS(r,
-        file = checkpoint_files$tcrossprod_checkpoint,
-        compress = config$compress
-      )
+      saveRDS(r, file = checkpoint_files$tcrossprod_checkpoint, compress = config$compress)
     }
   }
 
@@ -548,6 +584,7 @@ initializeCheckpoint <- function(config = list(
       config$save_path,
       "tcrossprod_checkpoint.rds"
     ),
+    tcrossprod_ids = file.path(config$save_path, "tcrossprod_ids.rds"),
     count_checkpoint = file.path(config$save_path, "count_checkpoint.rds"),
     final_matrix = file.path(config$save_path, "final_matrix.rds")
   )
