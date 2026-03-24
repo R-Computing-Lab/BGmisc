@@ -377,13 +377,17 @@ ped2com <- function(ped, component,
     saved_keep_ids <- if (file.exists(checkpoint_files$tcrossprod_ids)) {
       readRDS(checkpoint_files$tcrossprod_ids)
     } else {
-      NULL
+      saved_keep_ids <-  NULL
+      if(config$verbose == TRUE) {
+        message("No saved keep_ids found for tcrossprod checkpoint.  Expected at: ", checkpoint_files$tcrossprod_ids, "\n")
+      }
     }
     if (identical(saved_keep_ids, config$keep_ids)) {
       if (config$verbose == TRUE) message("Resuming: Loading tcrossprod...\n")
       r <- readRDS(checkpoint_files$tcrossprod_checkpoint)
       use_tcrossprod_checkpoint <- TRUE
     } else {
+      use_tcrossprod_checkpoint <- FALSE
       warning(
         "tcrossprod checkpoint keep_ids do not match — recomputing.\n",
         "  saved:    ", if (is.null(saved_keep_ids)) "NULL (full pedigree)" else paste(length(saved_keep_ids), "IDs"), "\n",
