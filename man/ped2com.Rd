@@ -30,6 +30,7 @@ ped2com(
   mz_twins = TRUE,
   mz_method = "addtwins",
   beta = FALSE,
+  force_symmetric = FALSE,
   ...
 )
 }
@@ -83,6 +84,8 @@ ped2com(
 \item{mz_method}{character. The method to handle MZ twins.  Options are "merging" (default) or "addtwins".  "addtwins" adds the twin2 column to the twin1 column before tcrossprod so that all relatedness flows through a single source, then leaves the twin2 column as zero and relies on the fact that the row/col names are the same to copy the values back to twin2 after tcrossprod.  "merging" merges the twin2 column into the twin1 column before tcrossprod and then copies the values back to twin2 after tcrossprod so that both twins appear in the final matrix.}
 
 \item{beta}{logical. Used for benchmarking}
+
+\item{force_symmetric}{logical. If TRUE, force the final relatedness matrix to be symmetric. This can help mitigate any numerical asymmetry introduced by the transpose method, especially when using sparse matrices. Defaults to TRUE.}
 
 \item{...}{additional arguments to be passed to \code{\link{ped2com}}}
 }

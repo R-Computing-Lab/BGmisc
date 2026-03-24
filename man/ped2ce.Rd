@@ -4,7 +4,7 @@
 \alias{ped2ce}
 \title{Take a pedigree and turn it into an extended environmental relatedness matrix}
 \usage{
-ped2ce(ped, ...)
+ped2ce(ped, personID = "ID", ...)
 }
 \arguments{
 \item{ped}{a pedigree dataset.  Needs ID, momID, and dadID columns}

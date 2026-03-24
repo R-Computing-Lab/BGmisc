@@ -22,6 +22,7 @@ ped2mit(
   save_rate_parlist = 1e+05 * save_rate,
   save_path = "checkpoint/",
   compress = TRUE,
+  force_symmetric = FALSE,
   ...
 )
 }
@@ -57,6 +58,8 @@ ped2mit(
 \item{save_path}{character. The path to save the checkpoint files}
 
 \item{compress}{logical. If TRUE, use compression when saving the checkpoint files.  Defaults to TRUE.}
+
+\item{force_symmetric}{logical. If TRUE, force the final relatedness matrix to be symmetric. This can help mitigate any numerical asymmetry introduced by the transpose method, especially when using sparse matrices. Defaults to TRUE.}
 
 \item{...}{additional arguments to be passed to \code{\link{ped2com}}}
 }

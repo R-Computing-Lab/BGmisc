@@ -8,7 +8,10 @@
   r2,
   transpose_method = "tcrossprod",
   chunk_size = 1000L,
-  verbose = FALSE
+  verbose = FALSE,
+  force_symmetric = FALSE,
+  config = NULL,
+  checkpoint_files = NULL
 )
 }
 \arguments{
@@ -19,6 +22,8 @@
 \item{chunk_size}{integer. Number of rows per chunk when \code{transpose_method = "chunked"}. Defaults to 1000.}
 
 \item{verbose}{logical.  If TRUE, print progress through stages of algorithm}
+
+\item{force_symmetric}{logical. If TRUE, forces the output matrix to be symmetric using Matrix::forceSymmetric.  This can be helpful when using chunked multiplication to ensure the final result is exactly symmetric despite potential numerical issues.  Defaults to TRUE.}
 }
 \description{
 Compute the transpose multiplication for the relatedness matrix

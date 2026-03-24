@@ -566,15 +566,17 @@ ped2com <- function(ped, component,
         }
       }
 
-      do.call(rbind, blocks)
 
+      if(force_symmetric == TRUE) {
+        Matrix:::forceSymmetric( do.call(rbind, blocks))
+      } else {
+        do.call(rbind, blocks)
+      }
     }
   )
-  if(force_symmetric == TRUE) {
-    Matrix:::forceSymmetric(result)
-  } else {
+
   result
-  }
+
 }
 
 #' Initialize checkpoint files
