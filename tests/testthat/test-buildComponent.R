@@ -420,10 +420,12 @@ test_that("chunked tcrossprod matches standard tcrossprod", {
 
   expect_equal(as.matrix(r_standard), as.matrix(r_chunked), tolerance = 1e-10)
 
-  expect_equal(r_standard,
-               r_chunked
-               # convert to symmetric matrix for comparison since chunked output may not be perfectly symmetric due to numerical precision
-               , tolerance = 1e-10)
+  expect_gt(# size of matrix in gb r_chunked should be bigger than r_standard due to chunking overhead
+              object.size(r_chunked) / 1e9,
+               object.size(r_standard) / 1e9)
+
+  expect_equal(Matrix:::forceSymmetric(r_chunked),
+               r_chunked_sym, tolerance = 1e-10)
   expect_equal(r_standard,
                r_chunked_sym
                # convert to symmetric matrix for comparison since chunked output may not be perfectly symmetric due to numerical precision
@@ -461,7 +463,7 @@ test_that("chunked tcrossprod matches standard tcrossprod when also subsetted", 
   expect_equal(r_sub, r_full[keep, keep], tolerance = 1e-10)
 
   r_chunked  <- ped2com(inbreeding, component = "additive", sparse = T,
-                        transpose_method = "chunked", chunk_size = 3L,keep_ids = keep)
+                        transpose_method = "chunked", chunk_size = 3L,keep_ids = keep,force_symmetric = T)
 
   expect_equal(as.matrix(r_sub), as.matrix(r_chunked), tolerance = 1e-10)
   expect_equal(r_sub, r_chunked, tolerance = 1e-10)

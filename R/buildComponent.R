@@ -408,7 +408,8 @@ ped2com <- function(ped, component,
       transpose_method = transpose_method,
       chunk_size = chunk_size,
       verbose = config$verbose,
-      force_symmetric = config$force_symmetric
+      force_symmetric = config$force_symmetric,
+      config = config
     )
     if (config$saveable == TRUE) {
       saveRDS(r, file = checkpoint_files$tcrossprod_checkpoint, compress = config$compress)
@@ -552,11 +553,15 @@ ped2com <- function(ped, component,
           cat(sprintf("  chunk %d/%d (rows %d-%d)\n", i, n_chunks, row_start, row_end))
         }
 
-        if(resum
+        if(config$resume == TRUE && file.exists(paste0(checkpoint_files$tcrossprod_checkpoint, "_chunk_", i, ".rds"))) {
+          if (verbose == TRUE) cat("    Resuming: Loading chunk from checkpoint...\n")
+          blocks[[i]] <- readRDS(paste0(checkpoint_files$tcrossprod_checkpoint, "_chunk_", i, ".rds"))
+          next
+        }
         blocks[[i]] <- Matrix::tcrossprod(r2[row_start:row_end, , drop = FALSE], r2)
         gc()
 
-        if(saveable == TRUE && (i %% save_rate_parlist == 0)) {
+        if(config$saveable == TRUE) {
           saveRDS(blocks[[i]], file = paste0(checkpoint_files$tcrossprod_checkpoint, "_chunk_", i, ".rds"), compress = config$compress)
         }
       }
