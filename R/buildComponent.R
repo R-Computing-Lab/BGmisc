@@ -106,7 +106,8 @@ ped2com <- function(ped, component,
 
   transpose_method_options <- c(
     "tcrossprod", "crossprod", "star",
-    "tcross.alt.crossprod", "tcross.alt.star"
+    "tcross.alt.crossprod", "tcross.alt.star",
+    "chunked"
   )
 
   if (!config$transpose_method %in% transpose_method_options) {
