@@ -14,7 +14,8 @@
 #' @param save_path character. The path to save the checkpoint files
 #' @param flatten_diag logical. If TRUE, overwrite the diagonal of the final relatedness matrix with ones
 #' @param standardize_colnames logical. If TRUE, standardize the column names of the pedigree dataset
-#' @param transpose_method character. The method to use for computing the transpose.  Options are "tcrossprod", "crossprod", or "star"
+#' @param transpose_method character. The method to use for computing the transpose.  Options are "tcrossprod", "crossprod", "star", or "chunked"
+#' @param chunk_size integer. Number of rows per chunk when \code{transpose_method = "chunked"}. Defaults to 1000.
 #' @param adjacency_method character. The method to use for computing the adjacency matrix.  Options are "loop", "indexed", direct or beta
 #' @param isChild_method character. The method to use for computing the isChild matrix.  Options are "classic" or "partialparent"
 #' @param adjBeta_method numeric The method to use for computing the building the adjacency_method matrix when using the "beta" build
@@ -34,6 +35,7 @@ ped2com <- function(ped, component,
                     flatten_diag = FALSE,
                     standardize_colnames = TRUE,
                     transpose_method = "tcrossprod",
+                    chunk_size = 1000L,
                     adjacency_method = "direct",
                     isChild_method = "partialparent",
                     saveable = FALSE,
@@ -353,6 +355,7 @@ ped2com <- function(ped, component,
   } else {
     r <- .computeTranspose(
       r2 = r2, transpose_method = transpose_method,
+      chunk_size = chunk_size,
       verbose = config$verbose
     )
     if (config$saveable == TRUE) {
@@ -442,15 +445,17 @@ ped2com <- function(ped, component,
 #' @inherit ped2com details
 #' @param r2 a relatedness matrix
 #'
-.computeTranspose <- function(r2, transpose_method = "tcrossprod", verbose = FALSE) {
+.computeTranspose <- function(r2, transpose_method = "tcrossprod", chunk_size = 1000L,
+                             verbose = FALSE) {
   valid_methods <- c(
     "tcrossprod", "crossprod", "star",
-    "tcross.alt.crossprod", "tcross.alt.star"
+    "tcross.alt.crossprod", "tcross.alt.star",
+    "chunked"
   )
   if (!transpose_method %in% valid_methods) {
     stop("Invalid method specified. Choose from
          'tcrossprod', 'crossprod', 'star', 'tcross.alt.crossprod',
-         or 'tcross.alt.star'.")
+         'tcross.alt.star', or 'chunked'.")
   }
 
   # Map aliases to core methods
@@ -477,6 +482,27 @@ ped2com <- function(ped, component,
     "star" = {
       if (verbose == TRUE) cat("Doing tcrossprod using %*% t(.)\n")
       r2 %*% t(as.matrix(r2))
+    },
+    "chunked" = {
+      n <- nrow(r2)
+      n_chunks <- ceiling(n / chunk_size)
+      if (verbose == TRUE) {
+        cat(sprintf(
+          "Doing chunked tcrossprod: %d rows, chunk size %d (%d chunks)\n",
+          n, chunk_size, n_chunks
+        ))
+      }
+      blocks <- vector("list", n_chunks)
+      for (i in seq_len(n_chunks)) {
+        row_start <- (i - 1L) * chunk_size + 1L
+        row_end <- min(i * chunk_size, n)
+        if (verbose == TRUE) {
+          cat(sprintf("  chunk %d/%d (rows %d-%d)\n", i, n_chunks, row_start, row_end))
+        }
+        blocks[[i]] <- Matrix::tcrossprod(r2[row_start:row_end, , drop = FALSE], r2)
+        gc()
+      }
+      do.call(rbind, blocks)
     }
   )
 
