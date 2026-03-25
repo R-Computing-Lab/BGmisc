@@ -19,7 +19,7 @@
 
 \item{transpose_method}{character. The method to use for computing the transpose.  Options are "tcrossprod", "crossprod", "star", or "chunked"}
 
-\item{chunk_size}{integer. Number of rows per chunk when \code{transpose_method = "chunked"}. Defaults to 1000.}
+\item{chunk_size}{numeric. If greater than 1 is Number of rows per chunk when \code{transpose_method = "chunked"}. Defaults to 1000. If less than or equal to 1, the entire matrix is processed in a single chunk.}
 
 \item{verbose}{logical.  If TRUE, print progress through stages of algorithm}
 

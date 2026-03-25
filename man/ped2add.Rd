@@ -46,7 +46,7 @@ ped2add(
 
 \item{transpose_method}{character. The method to use for computing the transpose.  Options are "tcrossprod", "crossprod", "star", or "chunked"}
 
-\item{chunk_size}{integer. Number of rows per chunk when \code{transpose_method = "chunked"}. Defaults to 1000.}
+\item{chunk_size}{numeric. If greater than 1 is Number of rows per chunk when \code{transpose_method = "chunked"}. Defaults to 1000. If less than or equal to 1, the entire matrix is processed in a single chunk.}
 
 \item{keep_ids}{character vector of IDs to retain in the final relatedness matrix. When supplied, only the rows of \code{r2} corresponding to these IDs are used in the tcrossprod, so the result is a \code{length(keep_ids) x length(keep_ids)} matrix. All columns of \code{r2} are retained during the multiplication so relatedness values remain correct. IDs not found in the pedigree are silently dropped with a warning.}
 

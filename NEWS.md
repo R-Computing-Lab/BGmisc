@@ -1,7 +1,7 @@
 # BGmisc NEWS
 
 # Development version:
-* Fixed bug in  parList
+* Fixed bug in parList
 * Moved wrappers of ped2com to own .R file
 * Fixed missing checkpoint for ram_checkpoint
 * Try a chunk_size argument for ped2com to reduce memory usage during transpose

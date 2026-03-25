@@ -108,16 +108,16 @@ test_that("chunked tcrossprod saves per-chunk files when saveable = TRUE and siz
 test_that("chunked tcrossprod saves per-chunk files when saveable = TRUE and size is propoportion", {
   data(hazard)
   save_path <- file.path(tempdir(), "test_chunk_save")
-  unlink(save_path, recursive = TRUE)
+
   dir.create(save_path, showWarnings = FALSE)
   on.exit(unlink(save_path, recursive = TRUE))
 
-  chunk_size <- .3
+  chunk_size <- .32
   r_full <- ped2com(hazard, component = "additive", sparse = FALSE,
                     transpose_method = "chunked", chunk_size = chunk_size,
                     saveable = TRUE, resume = FALSE, save_path = save_path)
 
-  n_chunks <- ceiling(nrow(r_full)*chunk_size)
+  n_chunks <- ceiling(nrow(r_full) / ceiling(nrow(r_full) * chunk_size))
   for (i in seq_len(n_chunks)) {
     expect_true(file.exists(chunk_path(save_path, i)),
                 info = paste("chunk file", i, "should exist"))
