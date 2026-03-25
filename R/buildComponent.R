@@ -392,7 +392,7 @@ ped2com <- function(ped, component,
     } else {
       use_tcrossprod_checkpoint <- FALSE
       warning(
-        "tcrossprod checkpoint keep_ids do not match — recomputing.\n",
+        "tcrossprod checkpoint keep_ids do not match \u2014 recomputing.\n",
         "  saved:    ", if (is.null(saved_keep_ids)) "NULL (full pedigree)" else paste(length(saved_keep_ids), "IDs"), "\n",
         "  expected: ", if (is.null(config$keep_ids)) "NULL (full pedigree)" else paste(length(config$keep_ids), "IDs")
       )
