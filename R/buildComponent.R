@@ -15,7 +15,7 @@
 #' @param flatten_diag logical. If TRUE, overwrite the diagonal of the final relatedness matrix with ones
 #' @param standardize_colnames logical. If TRUE, standardize the column names of the pedigree dataset
 #' @param transpose_method character. The method to use for computing the transpose.  Options are "tcrossprod", "crossprod", "star", or "chunked"
-#' @param chunk_size integer. Number of rows per chunk when \code{transpose_method = "chunked"}. Defaults to 1000.
+#' @param chunk_size numeric. If greater than 1 is Number of rows per chunk when \code{transpose_method = "chunked"}. Defaults to 1000. If less than or equal to 1, the entire matrix is processed in a single chunk.
 #' @param keep_ids character vector of IDs to retain in the final relatedness matrix. When supplied, only the rows of \code{r2} corresponding to these IDs are used in the tcrossprod, so the result is a \code{length(keep_ids) x length(keep_ids)} matrix. All columns of \code{r2} are retained during the multiplication so relatedness values remain correct. IDs not found in the pedigree are silently dropped with a warning.
 #' @param adjacency_method character. The method to use for computing the adjacency matrix.  Options are "loop", "indexed", direct or beta
 #' @param isChild_method character. The method to use for computing the isChild matrix.  Options are "classic" or "partialparent"
@@ -409,7 +409,8 @@ ped2com <- function(ped, component,
       chunk_size = chunk_size,
       verbose = config$verbose,
       force_symmetric = config$force_symmetric,
-      config = config
+      config = config,
+      checkpoint_files = if (exists("checkpoint_files")) checkpoint_files else NULL
     )
     if (config$saveable == TRUE) {
       saveRDS(r, file = checkpoint_files$tcrossprod_checkpoint, compress = config$compress)
@@ -517,6 +518,15 @@ ped2com <- function(ped, component,
     "tcross.alt.star" = "star"
   )
 
+  if(chunk_size>1){
+    chunk_size_method <- "lines"
+  } else if (chunk_size > 0 && chunk_size <= 1) {
+    chunk_size_method <- "proportion"
+  } else {
+    chunk_size_method <- "full"
+  }
+
+
   if (transpose_method %in% names(alias_map)) {
     method_normalized <- alias_map[[transpose_method]]
   } else {
@@ -538,6 +548,9 @@ ped2com <- function(ped, component,
     },
     "chunked" = {
       n <- nrow(r2)
+      if (chunk_size_method == "proportion") {
+        chunk_size <- ceiling(n * chunk_size)
+      }
       n_chunks <- ceiling(n / chunk_size)
       if (verbose == TRUE) {
         cat(sprintf(
