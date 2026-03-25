@@ -377,25 +377,27 @@ test_that("keep_ids subset produces correct relatedness values", {
 
 })
 
-test_that("keep_ids subset produces correct relatedness values ", {
+test_that("keep_ids subset produces correct relatedness values across all families", {
   data(inbreeding)
+
+  r_full_nosparse  <- ped2com(inbreeding, component = "additive", sparse = FALSE,
+                     keep_ids = NULL)
+
+  r_full_sparse  <- ped2com(inbreeding, component = "additive", sparse = T,
+                     keep_ids = NULL)
   for (i in unique(inbreeding$famID)) {
   keep <- as.character(sample(inbreeding$ID[inbreeding$famID ==i], 6))
 
-  r_full  <- ped2com(inbreeding, component = "additive", sparse = FALSE,
-                     keep_ids = NULL)
   r_sub   <- ped2com(inbreeding, component = "additive", sparse = FALSE,
                      keep_ids = keep)
 
   expect_equal(dim(r_sub), c(length(keep), length(keep)))
   expect_equal(rownames(r_sub), keep)
-
+  r_full <- r_full_nosparse
   # values in the subset must match the corresponding entries of the full matrix
   expect_equal(r_sub, r_full[keep, keep], tolerance = 1e-10)
 
-
-  r_full  <- ped2com(inbreeding, component = "additive", sparse = T,
-                     keep_ids = NULL)
+  r_full <- r_full_sparse
   r_sub   <- ped2com(inbreeding, component = "additive", sparse = T,
                      keep_ids = keep)
 
