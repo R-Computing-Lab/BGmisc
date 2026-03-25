@@ -364,7 +364,7 @@ ped2com <- function(ped, component,
     missing <- config$keep_ids[is.na(idx)]
     if (length(missing) > 0) {
       warning(length(missing), " keep_ids not found in pedigree and will be dropped: ",
-              paste(head(missing, 5), collapse = ", "),
+              paste(Matrix::head(missing, 5), collapse = ", "),
               if (length(missing) > 5) " ..." else "")
     }
     idx <- idx[!is.na(idx)]
@@ -581,7 +581,7 @@ ped2com <- function(ped, component,
 
 
       if(force_symmetric == TRUE) {
-        Matrix:::forceSymmetric( do.call(rbind, blocks))
+        Matrix::forceSymmetric( do.call(rbind, blocks))
       } else {
         do.call(rbind, blocks)
       }
