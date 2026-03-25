@@ -377,6 +377,36 @@ test_that("keep_ids subset produces correct relatedness values", {
 
 })
 
+test_that("keep_ids subset produces correct relatedness values ", {
+  data(inbreeding)
+  keep <- as.character(sample(inbreeding$ID, 6))
+
+  r_full  <- ped2com(inbreeding, component = "additive", sparse = FALSE,
+                     keep_ids = NULL)
+  r_sub   <- ped2com(inbreeding, component = "additive", sparse = FALSE,
+                     keep_ids = keep)
+
+  expect_equal(dim(r_sub), c(length(keep), length(keep)))
+  expect_equal(rownames(r_sub), keep)
+
+  # values in the subset must match the corresponding entries of the full matrix
+  expect_equal(r_sub, r_full[keep, keep], tolerance = 1e-10)
+
+
+  r_full  <- ped2com(inbreeding, component = "additive", sparse = T,
+                     keep_ids = NULL)
+  r_sub   <- ped2com(inbreeding, component = "additive", sparse = T,
+                     keep_ids = keep)
+
+  expect_equal(dim(r_sub), c(length(keep), length(keep)))
+  expect_equal(rownames(r_sub), keep)
+
+  # values in the subset must match the corresponding entries of the full matrix
+  expect_equal(r_sub, r_full[keep, keep], tolerance = 1e-10)
+
+})
+
+
 test_that("keep_ids with unknown IDs warns and drops missing entries", {
   data(hazard)
   keep <- c(as.character(hazard$ID[1:3]), "BOGUS_ID")
