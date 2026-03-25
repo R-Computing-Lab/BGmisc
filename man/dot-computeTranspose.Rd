@@ -24,6 +24,10 @@
 \item{verbose}{logical.  If TRUE, print progress through stages of algorithm}
 
 \item{force_symmetric}{logical. If TRUE, forces the output matrix to be symmetric using Matrix::forceSymmetric.  This can be helpful when using chunked multiplication to ensure the final result is exactly symmetric despite potential numerical issues.  Defaults to TRUE.}
+
+\item{config}{list of configuration parameters, used for checkpointing and verbose output}
+
+\item{checkpoint_files}{list of checkpoint file paths for saving intermediate results when using chunked multiplication. Should contain at least 'tcrossprod_checkpoint' for saving the chunks and 'tcrossprod_ids' for saving the keep_ids used in the tcrossprod checkpoint.}
 }
 \description{
 Compute the transpose multiplication for the relatedness matrix

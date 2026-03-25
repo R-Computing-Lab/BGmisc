@@ -177,6 +177,7 @@ ped2gen <- function(ped, max_gen = 25, sparse = TRUE, verbose = FALSE,
 #' Take a pedigree and turn it into an extended environmental relatedness matrix
 #' @inheritParams ped2com
 #' @inherit ped2com details
+#' @param personID Character. Column name for individual IDs.
 #' @export
 #'
 ped2ce <- function(ped, personID = "ID",

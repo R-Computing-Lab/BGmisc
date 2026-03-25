@@ -496,7 +496,8 @@ ped2com <- function(ped, component,
 #' @inherit ped2com details
 #' @param r2 a relatedness matrix
 #' @param force_symmetric logical. If TRUE, forces the output matrix to be symmetric using Matrix::forceSymmetric.  This can be helpful when using chunked multiplication to ensure the final result is exactly symmetric despite potential numerical issues.  Defaults to TRUE.
-#'
+#' @param checkpoint_files list of checkpoint file paths for saving intermediate results when using chunked multiplication. Should contain at least 'tcrossprod_checkpoint' for saving the chunks and 'tcrossprod_ids' for saving the keep_ids used in the tcrossprod checkpoint.
+#' @param config list of configuration parameters, used for checkpointing and verbose output
 .computeTranspose <- function(r2, transpose_method = "tcrossprod", chunk_size = 1000L,
                              verbose = FALSE, force_symmetric = FALSE, config = NULL,
                              checkpoint_files = NULL

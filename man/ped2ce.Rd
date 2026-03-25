@@ -9,6 +9,8 @@ ped2ce(ped, personID = "ID", ...)
 \arguments{
 \item{ped}{a pedigree dataset.  Needs ID, momID, and dadID columns}
 
+\item{personID}{Character. Column name for individual IDs.}
+
 \item{...}{additional arguments to be passed to \code{\link{ped2com}}}
 }
 \description{
