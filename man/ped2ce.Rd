@@ -4,12 +4,25 @@
 \alias{ped2ce}
 \title{Take a pedigree and turn it into an extended environmental relatedness matrix}
 \usage{
-ped2ce(ped, personID = "ID", ...)
+ped2ce(
+  ped,
+  personID = "ID",
+  keep_ids = NULL,
+  sparse = FALSE,
+  verbose = FALSE,
+  ...
+)
 }
 \arguments{
 \item{ped}{a pedigree dataset.  Needs ID, momID, and dadID columns}
 
 \item{personID}{Character. Column name for individual IDs.}
+
+\item{keep_ids}{character vector of IDs to retain in the final relatedness matrix. When supplied, only the rows of \code{r2} corresponding to these IDs are used in the tcrossprod, so the result is a \code{length(keep_ids) x length(keep_ids)} matrix. All columns of \code{r2} are retained during the multiplication so relatedness values remain correct. IDs not found in the pedigree are silently dropped with a warning.}
+
+\item{sparse}{logical.  If TRUE, use and return sparse matrices from Matrix package}
+
+\item{verbose}{logical.  If TRUE, print progress through stages of algorithm}
 
 \item{...}{additional arguments to be passed to \code{\link{ped2com}}}
 }

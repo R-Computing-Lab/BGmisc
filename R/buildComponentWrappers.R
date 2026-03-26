@@ -19,7 +19,7 @@ ped2add <- function(ped, max_gen = 25, sparse = TRUE, verbose = FALSE,
                     compress = TRUE,
                     mz_twins = FALSE,
                     mz_method = "addtwins",
-                    force_symmetric = FALSE,
+                    force_symmetric = TRUE,
                     ...) {
   ped2com(
     ped = ped,
@@ -59,6 +59,7 @@ ped2mit <- ped2mt <- function(ped, max_gen = 25,
                               flatten_diag = FALSE,
                               standardize_colnames = TRUE,
                               transpose_method = "tcrossprod",
+                              keep_ids = NULL,
                               adjacency_method = "direct",
                               saveable = FALSE,
                               resume = FALSE,
@@ -79,6 +80,7 @@ ped2mit <- ped2mt <- function(ped, max_gen = 25,
     flatten_diag = flatten_diag,
     standardize_colnames = standardize_colnames,
     transpose_method = transpose_method,
+    keep_ids = keep_ids,
     adjacency_method = adjacency_method,
     saveable = saveable,
     resume = resume,
@@ -100,6 +102,7 @@ ped2cn <- function(ped, max_gen = 25, sparse = TRUE, verbose = FALSE,
                    gc = FALSE, flatten_diag = FALSE,
                    standardize_colnames = TRUE,
                    transpose_method = "tcrossprod",
+                   keep_ids = NULL,
                    saveable = FALSE,
                    resume = FALSE,
                    save_rate = 5,
@@ -121,6 +124,7 @@ ped2cn <- function(ped, max_gen = 25, sparse = TRUE, verbose = FALSE,
     flatten_diag = flatten_diag,
     standardize_colnames = standardize_colnames,
     transpose_method = transpose_method,
+    keep_ids = keep_ids,
     saveable = saveable,
     resume = resume,
     save_rate_gen = save_rate_gen,
@@ -140,6 +144,7 @@ ped2gen <- function(ped, max_gen = 25, sparse = TRUE, verbose = FALSE,
                     gc = FALSE, flatten_diag = FALSE,
                     standardize_colnames = TRUE,
                     transpose_method = "tcrossprod",
+                    keep_ids = NULL,
                     saveable = FALSE,
                     resume = FALSE,
                     save_rate = 5,
@@ -161,6 +166,7 @@ ped2gen <- function(ped, max_gen = 25, sparse = TRUE, verbose = FALSE,
     flatten_diag = flatten_diag,
     standardize_colnames = standardize_colnames,
     transpose_method = transpose_method,
+    keep_ids = keep_ids,
     saveable = saveable,
     resume = resume,
     save_rate_gen = save_rate_gen,
@@ -180,6 +186,21 @@ ped2gen <- function(ped, max_gen = 25, sparse = TRUE, verbose = FALSE,
 #' @export
 #'
 ped2ce <- function(ped, personID = "ID",
+                   keep_ids = NULL,
+                   sparse = FALSE, verbose = FALSE,
                    ...) {
+  if (!is.null(keep_ids)) {
+    ped <- ped[ped[[personID]] %in% keep_ids, ]
+  }
+  if (sparse) {
+    mat <- Matrix::sparseMatrix(
+      i = seq_len(nrow(ped)),
+      j = seq_len(nrow(ped)),
+      x = 1,
+      dimnames = list(ped[[personID]], ped[[personID]])
+    )
+    return(mat)
+  } else {
   matrix(1, nrow = nrow(ped), ncol = nrow(ped), dimnames = list(ped[[personID]], ped[[personID]]))
+  }
 }

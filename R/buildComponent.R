@@ -316,6 +316,13 @@ ped2com <- function(ped, component,
   }
 
   if (config$component == "generation") { # no need to do the rest
+    gen <- .subsetKeepIds(
+      component = gen,
+      keep_ids = config$keep_ids,
+      available_ids = rownames(r),
+      config = config,
+      verbose_message = "Subsetting generation component to %d target individuals\n"
+    )
     return(gen)
   } else {
     if (config$verbose == TRUE) {
@@ -360,20 +367,14 @@ ped2com <- function(ped, component,
   # Subset rows of r2 to target individuals if requested.
   # All columns are kept so dot products use the full ancestry paths.
   if (!is.null(config$keep_ids)) {
-    idx <- match(config$keep_ids, rownames(r2))
-    missing <- config$keep_ids[is.na(idx)]
-    if (length(missing) > 0) {
-      warning(
-        length(missing), " keep_ids not found in pedigree and will be dropped: ",
-        paste(Matrix::head(missing, 5), collapse = ", "),
-        if (length(missing) > 5) " ..." else ""
-      )
-    }
-    idx <- idx[!is.na(idx)]
-    if (config$verbose == TRUE) {
-      cat(sprintf("Subsetting r2 to %d target individuals before tcrossprod\n", length(idx)))
-    }
-    r2 <- r2[idx, , drop = FALSE]
+    r2 <- .subsetKeepIds(
+      component = r2,
+      keep_ids = config$keep_ids,
+      available_ids = rownames(r2),
+      config = config,
+      verbose_message = "Subsetting r2 to %d target individuals before tcrossprod\n",
+      drop = FALSE
+    )
   }
 
   use_tcrossprod_checkpoint <- FALSE
@@ -839,4 +840,46 @@ loadOrComputeCheckpoint <- function(file, compute_fn,
     }
   }
   list_of_adjacencies
+}
+
+
+#' Subset output to requested IDs
+#' @inheritParams ped2com
+#' @param component A component to subset.
+#' @param keep_ids Character vector of IDs to retain.
+#' @param available_ids Character vector of IDs available in \code{x}.
+#' @param verbose_message Character. Message prefix to print when \code{config$verbose == TRUE}.
+#' @param drop logical. Passed to \code{[} when subsetting matrices.
+#' @keywords internal
+.subsetKeepIds <- function(component, keep_ids = NULL, available_ids, config,
+                           verbose_message = "Subsetting to %d target individuals\n",
+                           drop = FALSE) {
+  if (is.null(keep_ids)) {
+    return(component)
+  }
+
+  idx <- match(keep_ids, available_ids)
+  missing <- keep_ids[is.na(idx)]
+
+  if (length(missing) > 0) {
+    warning(
+      length(missing), " keep_ids not found in pedigree and will be dropped: ",
+      paste(Matrix::head(missing, 5), collapse = ", "),
+      if (length(missing) > 5) " ..." else ""
+    )
+  }
+
+  idx <- idx[!is.na(idx)]
+
+  if (config$verbose == TRUE) {
+    cat(sprintf(verbose_message, length(idx)))
+  }
+
+  if (is.matrix(component) || methods::is(component, "Matrix")) {
+    component <- component[idx, , drop = drop]
+  } else {
+    component <- component[idx]
+  }
+
+  component
 }

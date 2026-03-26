@@ -13,6 +13,7 @@ ped2gen(
   flatten_diag = FALSE,
   standardize_colnames = TRUE,
   transpose_method = "tcrossprod",
+  keep_ids = NULL,
   saveable = FALSE,
   resume = FALSE,
   save_rate = 5,
@@ -41,6 +42,8 @@ ped2gen(
 \item{standardize_colnames}{logical. If TRUE, standardize the column names of the pedigree dataset}
 
 \item{transpose_method}{character. The method to use for computing the transpose.  Options are "tcrossprod", "crossprod", "star", or "chunked"}
+
+\item{keep_ids}{character vector of IDs to retain in the final relatedness matrix. When supplied, only the rows of \code{r2} corresponding to these IDs are used in the tcrossprod, so the result is a \code{length(keep_ids) x length(keep_ids)} matrix. All columns of \code{r2} are retained during the multiplication so relatedness values remain correct. IDs not found in the pedigree are silently dropped with a warning.}
 
 \item{saveable}{logical. If TRUE, save the intermediate results to disk}
 

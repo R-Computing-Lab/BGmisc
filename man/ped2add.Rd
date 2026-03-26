@@ -25,7 +25,7 @@ ped2add(
   compress = TRUE,
   mz_twins = FALSE,
   mz_method = "addtwins",
-  force_symmetric = FALSE,
+  force_symmetric = TRUE,
   ...
 )
 }
