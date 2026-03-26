@@ -9,12 +9,12 @@ devtools::load_all(".")
 # ---------------------------
 cfg <- list(
   seed = 1164127,
-  Ngen_base = 2,
-  reps = 10,
+  Ngen_base = 3,
+  reps = 2,
   all_scenarios = TRUE, # set to TRUE to run all scenarios defined below
   include_highgen = TRUE,
   include_1gen = FALSE,
-  include_lowgen = FALSE
+  include_lowgen = TRUE
 )
 cfg$gen_twin <- ceiling(cfg$Ngen_base - 1)
 
@@ -47,7 +47,7 @@ levels <- list(
   ),
 
   # Simulation-side factors (simulatePedigree)
-  kpc = 5, # set to c(2, 3, 4) to vary
+  kpc = 4, # set to c(2, 3, 4) to vary
   sexR = 0.50, # sometimes fails above .5
   marR = c(0.9), # set to c(0.6, 0.8, 0.9) to vary
   sim_beta = TRUE, # set to c(TRUE, FALSE) if you ever want to vary

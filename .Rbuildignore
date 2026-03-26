@@ -24,6 +24,7 @@ CITATION.cff$
 ^checkParents\.X
 ^checklist.yml$
 ^codecov\.yml$
+^codecov\.xaml$
 ^cran-comments\.md$
 ^data-raw$
 ^doc$
@@ -34,3 +35,4 @@ CITATION.cff$
 ^revdep$
 ^test-clean\.X
 ^vignettes/articles$
+^.claude$
