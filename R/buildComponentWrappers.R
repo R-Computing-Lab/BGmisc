@@ -1,4 +1,3 @@
-
 #' Take a pedigree and turn it into an additive genetics relatedness matrix
 #' @inheritParams ped2com
 #' @inherit ped2com details
@@ -184,4 +183,3 @@ ped2ce <- function(ped, personID = "ID",
                    ...) {
   matrix(1, nrow = nrow(ped), ncol = nrow(ped), dimnames = list(ped[[personID]], ped[[personID]]))
 }
-

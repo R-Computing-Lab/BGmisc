@@ -23,10 +23,10 @@
 #'
 
 buildBtwnGenerations <- function(df_Fam, Ngen, sizeGens, verbose = FALSE, marR, sexR, kpc,
-                                    rd_kpc, personID = "ID",
-                                    momID = "momID",
-                                    dadID = "dadID",
-                                    code_male = "M", code_female = "F", beta = FALSE) {
+                                 rd_kpc, personID = "ID",
+                                 momID = "momID",
+                                 dadID = "dadID",
+                                 code_male = "M", code_female = "F", beta = FALSE) {
   # Normalize string aliases to logical values for downstream functions
   use_optimized <- FALSE
 
@@ -80,16 +80,16 @@ buildBtwnGenerations <- function(df_Fam, Ngen, sizeGens, verbose = FALSE, marR, 
 
 
 buildBtwnGenerations_base <- function(df_Fam,
-                                         Ngen,
-                                         sizeGens,
-                                         verbose = FALSE,
-                                         marR, sexR, kpc,
-                                         rd_kpc, personID = "ID",
-                                         momID = "momID",
-                                         dadID = "dadID",
-                                         code_male = "M",
-                                         code_female = "F",
-                                         beta = FALSE) {
+                                      Ngen,
+                                      sizeGens,
+                                      verbose = FALSE,
+                                      marR, sexR, kpc,
+                                      rd_kpc, personID = "ID",
+                                      momID = "momID",
+                                      dadID = "dadID",
+                                      code_male = "M",
+                                      code_female = "F",
+                                      beta = FALSE) {
   # Initialize flags for the full pedigree data frame.
   # These are used throughout linkage and get overwritten per-generation as needed.
 
@@ -454,16 +454,16 @@ buildBtwnGenerations_base <- function(df_Fam,
 }
 
 buildBtwnGenerations_opt <- function(df_Fam,
-                                              Ngen,
-                                              sizeGens,
-                                              verbose = FALSE,
-                                              marR, sexR, kpc,
-                                              rd_kpc, personID = "ID",
-                                              momID = "momID",
-                                              dadID = "dadID",
-                                              code_male = "M",
-                                              code_female = "F",
-                                              beta = TRUE) {
+                                     Ngen,
+                                     sizeGens,
+                                     verbose = FALSE,
+                                     marR, sexR, kpc,
+                                     rd_kpc, personID = "ID",
+                                     momID = "momID",
+                                     dadID = "dadID",
+                                     code_male = "M",
+                                     code_female = "F",
+                                     beta = TRUE) {
   # Initialize flags for the full pedigree data frame.
   # These are used throughout linkage and get overwritten per-generation as needed.
 

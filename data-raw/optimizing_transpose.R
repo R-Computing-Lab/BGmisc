@@ -54,8 +54,10 @@ levels <- list(
 
   # Conversion-side factors (ped2com)
   component = c("additive"),
-  transpose_method = c("tcrossprod", "crossprod", "star",
-                       "chunked"),
+  transpose_method = c(
+    "tcrossprod", "crossprod", "star",
+    "chunked"
+  ),
   twin_method = c("NULL"),
   beta = c(TRUE),
   sparse_matrix = c(FALSE, TRUE) # user-facing name, translated to ped2com's `sparse`
@@ -75,11 +77,11 @@ scopes <- list(
 # Each scenario says what to vary and what to fix. No other code changes.
 scenarios <- list(
   full = list(
-    vary  = c("ped", "marR", "twin_method", "beta", "sparse_matrix","transpose_method"),
+    vary  = c("ped", "marR", "twin_method", "beta", "sparse_matrix", "transpose_method"),
     fixed = list()
   ),
   quick = list(
-    vary  = c("ped", "twin_method","transpose_method"),
+    vary  = c("ped", "twin_method", "transpose_method"),
     fixed = list(marR = 0.8, beta = FALSE, sparse_matrix = TRUE, component = "additive")
   )
 
@@ -163,7 +165,7 @@ design <- design %>%
 # ---------------------------
 # 4) Simulation cache (simulate once per unique sim condition)
 # ---------------------------
-simulate_one <- function(Ngen_total, gen_twin, kpc, sexR, marR, sim_beta,fam_shift=1) {
+simulate_one <- function(Ngen_total, gen_twin, kpc, sexR, marR, sim_beta, fam_shift = 1) {
   simulatePedigree(
     kpc = kpc, Ngen = Ngen_total, sexR = sexR, marR = marR,
     fam_shift = fam_shift,
@@ -172,12 +174,12 @@ simulate_one <- function(Ngen_total, gen_twin, kpc, sexR, marR, sim_beta,fam_shi
     makeTwins(gen_twin = gen_twin)
 }
 
-simulate_many <- function(number_of_families,
-    Ngen_total, gen_twin, kpc, sexR, marR, sim_beta) {
-  replicate(simulate_one(Ngen_total, gen_twin, kpc, sexR, marR, sim_beta,fam_shift = 1
-                         ), number_of_families, simplify = FALSE)
+simulate_many <- function(
+  number_of_families,
+  Ngen_total, gen_twin, kpc, sexR, marR, sim_beta
+) {
+  replicate(simulate_one(Ngen_total, gen_twin, kpc, sexR, marR, sim_beta, fam_shift = 1), number_of_families, simplify = FALSE)
 }
-
 
 
 sim_tbl <- design %>%
@@ -288,8 +290,10 @@ results <- results %>%
       )
     ),
     ped_label = factor(ped_label, levels = levels$ped$ped_label),
-    gen_factor = factor(ped_label, levels = levels$ped$ped_label,
-                        labels = paste0(levels$ped$Ngen_total, " gen"))
+    gen_factor = factor(ped_label,
+      levels = levels$ped$ped_label,
+      labels = paste0(levels$ped$Ngen_total, " gen")
+    )
   )
 write_csv(results, "data-raw/ped2com_benchmark_results.csv")
 
@@ -348,7 +352,7 @@ results %>%
     linewidth = 0.25
   ) +
   scale_y_log10() +
- # facet_grid(~scenario) +
+  # facet_grid(~scenario) +
   labs(
     title = "Benchmarking ped2com() by transpose method",
     x = "Pedigree",
@@ -357,15 +361,14 @@ results %>%
     fill = "Transpose method"
   ) +
   theme_minimal() +
-#  scale_fill_manual(values = c(
-#    "beta=FALSE, sparse=FALSE" = "lightgray",
-#    "beta=FALSE, sparse=TRUE" = "gray8",
-#    "beta=TRUE, sparse=FALSE" = "lightcoral",
-#    "beta=TRUE, sparse=TRUE" = "red2"
-#  )) +
+  #  scale_fill_manual(values = c(
+  #    "beta=FALSE, sparse=FALSE" = "lightgray",
+  #    "beta=FALSE, sparse=TRUE" = "gray8",
+  #    "beta=TRUE, sparse=FALSE" = "lightcoral",
+  #    "beta=TRUE, sparse=TRUE" = "red2"
+  #  )) +
   scale_color_manual(values = c("FALSE" = "gray", "TRUE" = "black"))
-                       #c("NULL" = "gray", "addtwins" = "skyblue3", "merging" = "tomato2"))
+# c("NULL" = "gray", "addtwins" = "skyblue3", "merging" = "tomato2"))
 # df <- sim_tbl$ped[[2]]
 
 # df_add <- df %>% ped2add()
-

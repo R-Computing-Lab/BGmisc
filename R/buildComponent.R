@@ -161,7 +161,7 @@ ped2com <- function(ped, component,
   }
 
   if (config$mz_method %in% c("merging") && config$mz_twins == TRUE && !is.null(mz_row_pairs) && length(mz_row_pairs) > 0 &&
-        config$component %in% c("additive")) {
+    config$component %in% c("additive")) {
     # replace all MZ twin IDs with the first twin's ID in each pair so they are merged for the path tracing and all subsequent steps.  We will copy the values back to the second twin at the end.
     ped <- fuseTwins(ped = ped, mz_row_pairs = mz_row_pairs, mz_id_pairs = mz_id_pairs, config = config, beta = beta)
     if (config$verbose == TRUE) {
@@ -250,7 +250,7 @@ ped2com <- function(ped, component,
     mtSum <- 0
     count <- 0
   } else if (config$resume == TRUE && file.exists(checkpoint_files$r_checkpoint) &&
-      file.exists(checkpoint_files$gen_checkpoint) &&
+    file.exists(checkpoint_files$gen_checkpoint) &&
     file.exists(checkpoint_files$mtSum_checkpoint) &&
     file.exists(checkpoint_files$newIsPar_checkpoint) &&
     file.exists(checkpoint_files$count_checkpoint)
@@ -363,9 +363,11 @@ ped2com <- function(ped, component,
     idx <- match(config$keep_ids, rownames(r2))
     missing <- config$keep_ids[is.na(idx)]
     if (length(missing) > 0) {
-      warning(length(missing), " keep_ids not found in pedigree and will be dropped: ",
-              paste(Matrix::head(missing, 5), collapse = ", "),
-              if (length(missing) > 5) " ..." else "")
+      warning(
+        length(missing), " keep_ids not found in pedigree and will be dropped: ",
+        paste(Matrix::head(missing, 5), collapse = ", "),
+        if (length(missing) > 5) " ..." else ""
+      )
     }
     idx <- idx[!is.na(idx)]
     if (config$verbose == TRUE) {
@@ -376,12 +378,12 @@ ped2com <- function(ped, component,
 
   use_tcrossprod_checkpoint <- FALSE
   if (config$resume == TRUE && file.exists(checkpoint_files$tcrossprod_checkpoint) &&
-        config$component != "generation") {
+    config$component != "generation") {
     saved_keep_ids <- if (file.exists(checkpoint_files$tcrossprod_ids)) {
       readRDS(checkpoint_files$tcrossprod_ids)
     } else {
-      saved_keep_ids <-  NULL
-      if(config$verbose == TRUE) {
+      saved_keep_ids <- NULL
+      if (config$verbose == TRUE) {
         message("No saved keep_ids found for tcrossprod checkpoint.  Expected at: ", checkpoint_files$tcrossprod_ids, "\n")
       }
     }
@@ -499,9 +501,8 @@ ped2com <- function(ped, component,
 #' @param checkpoint_files list of checkpoint file paths for saving intermediate results when using chunked multiplication. Should contain at least 'tcrossprod_checkpoint' for saving the chunks and 'tcrossprod_ids' for saving the keep_ids used in the tcrossprod checkpoint.
 #' @param config list of configuration parameters, used for checkpointing and verbose output
 .computeTranspose <- function(r2, transpose_method = "tcrossprod", chunk_size = 1000L,
-                             verbose = FALSE, force_symmetric = FALSE, config = NULL,
-                             checkpoint_files = NULL
-                             ) {
+                              verbose = FALSE, force_symmetric = FALSE, config = NULL,
+                              checkpoint_files = NULL) {
   valid_methods <- c(
     "tcrossprod", "crossprod", "star",
     "tcross.alt.crossprod", "tcross.alt.star",
@@ -519,7 +520,7 @@ ped2com <- function(ped, component,
     "tcross.alt.star" = "star"
   )
 
-  if(chunk_size>1){
+  if (chunk_size > 1) {
     chunk_size_method <- "lines"
   } else if (chunk_size > 0 && chunk_size <= 1) {
     chunk_size_method <- "proportion"
@@ -567,7 +568,7 @@ ped2com <- function(ped, component,
           cat(sprintf("  chunk %d/%d (rows %d-%d)\n", i, n_chunks, row_start, row_end))
         }
 
-        if(config$resume == TRUE && file.exists(paste0(checkpoint_files$tcrossprod_checkpoint, "_chunk_", i, ".rds"))) {
+        if (config$resume == TRUE && file.exists(paste0(checkpoint_files$tcrossprod_checkpoint, "_chunk_", i, ".rds"))) {
           if (verbose == TRUE) cat("    Resuming: Loading chunk from checkpoint...\n")
           blocks[[i]] <- readRDS(paste0(checkpoint_files$tcrossprod_checkpoint, "_chunk_", i, ".rds"))
           next
@@ -575,14 +576,14 @@ ped2com <- function(ped, component,
         blocks[[i]] <- Matrix::tcrossprod(r2[row_start:row_end, , drop = FALSE], r2)
         gc()
 
-        if(config$saveable == TRUE) {
+        if (config$saveable == TRUE) {
           saveRDS(blocks[[i]], file = paste0(checkpoint_files$tcrossprod_checkpoint, "_chunk_", i, ".rds"), compress = config$compress)
         }
       }
 
 
-      if(force_symmetric == TRUE) {
-        Matrix::forceSymmetric( do.call(rbind, blocks))
+      if (force_symmetric == TRUE) {
+        Matrix::forceSymmetric(do.call(rbind, blocks))
       } else {
         do.call(rbind, blocks)
       }
@@ -590,7 +591,6 @@ ped2com <- function(ped, component,
   )
 
   result
-
 }
 
 #' Initialize checkpoint files
@@ -598,11 +598,11 @@ ped2com <- function(ped, component,
 #' @keywords internal
 
 initializeCheckpoint <- function(config = list(
-  verbose = FALSE,
-  saveable = FALSE,
-  resume = FALSE,
-  save_path = "checkpoint/"
-)) {
+                                   verbose = FALSE,
+                                   saveable = FALSE,
+                                   resume = FALSE,
+                                   save_path = "checkpoint/"
+                                 )) {
   # Define checkpoint files
   # Ensure save path exists
   if (config$saveable == TRUE && !dir.exists(config$save_path)) {
@@ -647,7 +647,7 @@ initializeCheckpoint <- function(config = list(
   if (component %in% c("generation", "additive")) {
     parVal <- .5
   } else if (component %in%
-               c("common nuclear", "mitochondrial", "mtdna", "mitochondria")) {
+    c("common nuclear", "mitochondrial", "mtdna", "mitochondria")) {
     parVal <- 1
   } else {
     stop("Don't know how to set parental value")
@@ -778,7 +778,7 @@ loadOrComputeCheckpoint <- function(file, compute_fn,
                                   parList = NULL, lens = NULL,
                                   compress = TRUE) {
   if (config$resume == TRUE &&
-        file.exists(checkpoint_files$parList) &&
+    file.exists(checkpoint_files$parList) &&
     file.exists(checkpoint_files$lens)) {
     if (config$verbose == TRUE) {
       message("Resuming: Loading parent-child adjacency data...\n")
@@ -801,7 +801,7 @@ loadOrComputeCheckpoint <- function(file, compute_fn,
   }
 
   if (config$resume == TRUE &&
-        file.exists(checkpoint_files$iss) &&
+    file.exists(checkpoint_files$iss) &&
     file.exists(checkpoint_files$jss)) { # fix to check actual
     if (config$verbose == TRUE) message("Resuming: Constructed matrix...\n")
     jss <- readRDS(checkpoint_files$jss)
