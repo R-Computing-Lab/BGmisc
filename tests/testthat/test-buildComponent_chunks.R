@@ -40,7 +40,7 @@ test_that("chunked tcrossprod matches standard tcrossprod", {
     object.size(r_chunked) / 1e9,
     object.size(r_standard) / 1e9)
 
-  expect_equal(Matrix:::forceSymmetric(r_chunked),
+  expect_equal(Matrix::forceSymmetric(r_chunked),
                r_chunked_sym, tolerance = 1e-10)
   expect_equal(r_standard,
                r_chunked_sym
@@ -105,7 +105,7 @@ test_that("chunked tcrossprod saves per-chunk files when saveable = TRUE and siz
   }
 })
 
-test_that("chunked tcrossprod saves per-chunk files when saveable = TRUE and size is propoportion", {
+test_that("chunked tcrossprod saves per-chunk files when saveable = TRUE and size is proportion", {
   data(hazard)
   save_path <- file.path(tempdir(), "test_chunk_save")
 
