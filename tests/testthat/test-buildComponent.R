@@ -435,6 +435,58 @@ test_that("keep_ids subset produces correct relatedness values across all famili
 })
 
 
+test_that("keep_ids subset produces correct relatedness values across all families", {
+  library(ggpedigree)
+  data(ASOIAF)
+df <-ASOIAF |> dplyr::rename(ID = id)
+
+  r_full_sparse <- ped2com(df,
+                           component = "additive", sparse = TRUE,
+                           keep_ids = NULL,
+                           mz_twins = FALSE
+  )
+  for (i in unique(df$famID)) {
+    n_rows <- sum(df$famID == i)
+    if (n_rows < 3) {
+      next
+    }
+    keep <- as.character(sample(df$ID[df$famID == i], min(15,n_rows)))
+
+
+    r_full <- r_full_sparse
+    r_sub <- ped2com(df,
+                     component = "additive", sparse = TRUE,
+                     keep_ids = keep,
+                     mz_twins = FALSE
+    )
+
+    expect_equal(dim(r_sub), c(length(keep), length(keep)))
+    expect_equal(rownames(r_sub), keep)
+
+    # values in the subset must match the corresponding entries of the full matrix
+    expect_equal(r_sub, r_full[keep, keep], tolerance = 1e-10, info = paste("Family", i))
+
+    #entirely random subset of IDs across the whole dataset (not just within family)
+    keep <- as.character(sample(df$ID, 15))
+
+
+    r_full <- r_full_sparse
+    r_sub <- ped2com(df,
+                     component = "additive", sparse = TRUE,
+                     keep_ids = keep,
+                     mz_twins = FALSE
+    )
+
+    expect_equal(dim(r_sub), c(length(keep), length(keep)))
+    expect_equal(rownames(r_sub), keep)
+
+    # values in the subset must match the corresponding entries of the full matrix
+    expect_equal(r_sub, r_full[keep, keep], tolerance = 1e-10, info = paste(keep))
+  }
+})
+
+
+
 test_that("keep_ids with unknown IDs warns and drops missing entries", {
   data(hazard)
   keep <- c(as.character(hazard$ID[1:3]), "BOGUS_ID")
