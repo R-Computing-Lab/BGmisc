@@ -94,7 +94,7 @@ Individuals present in the pedigree only to trace relatedness (e.g., deceased an
 
 We start with one family from the built-in `hazard` dataset. Every step is written out explicitly — no helper functions, no loops — so you can see exactly what happens.
 
-```{r load-hazard}
+```{r load-hazard, eval = run_models}
 data(hazard)
 
 # Two families: famID 1 and famID 2
@@ -103,7 +103,7 @@ table(hazard$famID)
 
 ## Step 1: Subset to one family and inspect
 
-```{r single-fam-subset}
+```{r single-fam-subset, eval = run_models}
 fam1 <- subset(hazard, famID == 1)
 
 # What does the pedigree look like?
@@ -114,7 +114,7 @@ head(fam1[, c("famID", "ID", "sex", "dadID", "momID", "DA1")])
 
 ## Step 2: Compute relatedness matrices
 
-```{r single-fam-matrices}
+```{r single-fam-matrices, eval = run_models}
 
 
 
@@ -141,7 +141,7 @@ rownames(add_mat1)
 
 The model needs a **one-row matrix** with one column per individual, in the same order as the relatedness matrix rows.
 
-```{r single-fam-pheno}
+```{r single-fam-pheno, eval = run_models}
 # Individual IDs in the order the matrices use
 id_order1 <- rownames(add_mat1)
 
@@ -173,7 +173,7 @@ pheno_row1[1, 1:6]  # first few values
 
 Individuals without a phenotype must be removed from the matrices — their rows and columns are dropped.
 
-```{r single-fam-subset-mat}
+```{r single-fam-subset-mat, eval = run_models}
 # Use the original (non-make.names) IDs to index the matrix
 raw_obs_ids1 <- id_order1[observed1]
 
@@ -252,7 +252,7 @@ Multi-group modeling means that **variance component parameters are shared** acr
 
 ## Family 2: matrices
 
-```{r two-fam-matrices}
+```{r two-fam-matrices, eval = run_models}
 fam2 <- subset(hazard, famID == 2)
 
 add_mat2 <- ped2add(fam2, sparse = FALSE,
@@ -271,7 +271,7 @@ dim(add_mat2)
 
 ## Family 2: phenotype data
 
-```{r two-fam-pheno}
+```{r two-fam-pheno, eval = run_models}
 id_order2 <- rownames(add_mat2)
 
 pheno_vals2 <- fam2$DA1[match(id_order2, as.character(fam2$ID))]
@@ -292,7 +292,7 @@ cat("Family 2 observed:", sum(observed2), "of", length(id_order2), "\n")
 
 ## Family 2: subset matrices
 
-```{r two-fam-subset-mat}
+```{r two-fam-subset-mat, eval = run_models}
 add_mat2_obs <- add_mat2[raw_obs_ids2, raw_obs_ids2]
 cn_mat2_obs  <- cn_mat2[raw_obs_ids2, raw_obs_ids2]
 
@@ -324,7 +324,7 @@ group2 <- buildOneFamilyGroup(
   Addmat      = add_mat2_obs,
   Nucmat      = cn_mat2_obs,
   full_df_row = pheno_row2,
-  obs_ids     = obs_ids2
+  obs_ids     = obs_ids2  
 )
 
 # Both groups share the same variance component parameters
@@ -351,7 +351,7 @@ The estimates from both families together are generally more stable than those f
 # Part 3: Scaling Up to Many Families
 
 
-```{r krsp-prep, eval=has_krsp}
+```{r krsp-prep, eval = run_models}
 library(ggpedigree)  # for pedigree data)
 library(tidyverse)
 data("redsquirrels_full")
@@ -371,7 +371,7 @@ cat("KRSP pedigree:", nrow(ped_krsp), "individuals,",
 summarizeFamilies(ped_krsp, famID = "famID")$family_summary |> arrange(desc(count))
 ```
 
-```{r}
+```{r, eval = FALSE && run_models}
 
 minim_family_size <- 3
 
@@ -435,7 +435,7 @@ multi_model <- buildPedigreeMx(
 )
 
 fitted_multi <- mxRun(multi_model)
-saveRDS(fitted_multi, "fitted_multi.RDS")
+#saveRDS(fitted_multi, "fitted_multi.RDS")
 ```
 
 ---

@@ -19,7 +19,8 @@ buildFamilyGroups(
 \arguments{
 \item{dat}{A data frame where each row represents a family group and columns correspond to observed variables.}
 
-\item{obs_ids}{A character vector of individual IDs corresponding to the columns of \code{dat} and the rows/columns of the relatedness matrices.}
+\item{obs_ids}{A character vector of individual IDs corresponding to the columns of \code{dat}
+and the rows/columns of the relatedness matrices.}
 
 \item{Addmat}{Additive genetic relatedness matrix.}
 
