@@ -201,6 +201,6 @@ ped2ce <- function(ped, personID = "ID",
     )
     return(mat)
   } else {
-  matrix(1, nrow = nrow(ped), ncol = nrow(ped), dimnames = list(ped[[personID]], ped[[personID]]))
+    matrix(1, nrow = nrow(ped), ncol = nrow(ped), dimnames = list(ped[[personID]], ped[[personID]]))
   }
 }
