@@ -20,7 +20,8 @@ buildPedigreeModelCovariance <- function(
   vars = list(
     ad2 = 0.5,
     dd2 = 0.3,
-    cn2 = 0.2, ce2 = 0.4,
+    cn2 = 0.2,
+    ce2 = 0.4,
     mt2 = 0.1,
     am2 = 0.25,
     ee2 = 0.6
@@ -104,8 +105,10 @@ buildPedigreeModelCovariance <- function(
 #' @param Mtdmat Mitochondrial genetic relatedness matrix (from \code{\link{ped2mit}}).
 #' @param Amimat Additive by mitochondrial interaction relatedness matrix.
 #' @param Dmgmat Dominance genetic relatedness matrix.
-#' @param full_df_row A 1-row matrix of observed data with column names matching \code{ytemp}.
-#' @param ytemp A character vector of variable names corresponding to the observed data columns.
+#' @param full_df_row A 1-row matrix of observed data with column names matching \code{obs_ids}.
+#' @param obs_ids A character vector of individual IDs corresponding to the columns of
+#'   \code{full_df_row} and the rows/columns of the relatedness matrices. Must be in the
+#'   same order as the relatedness matrix rows.
 #' @return An OpenMx model for the specified family group.
 #' @export
 
@@ -118,7 +121,7 @@ buildOneFamilyGroup <- function(
   Amimat = NULL,
   Dmgmat = NULL,
   full_df_row,
-  ytemp
+  obs_ids
 ) {
   if (!requireNamespace("OpenMx", quietly = TRUE)) {
     stop("OpenMx package is required for buildOneFamilyGroup function. Please install it.")
@@ -208,10 +211,10 @@ buildOneFamilyGroup <- function(
       OpenMx::mxData(observed = full_df_row, type = "raw", sort = FALSE),
       OpenMx::mxMatrix("Full",
         nrow = 1, ncol = fsize, name = "M", free = TRUE,
-        labels = "meanLI", dimnames = list(NULL, ytemp)
+        labels = "meanLI", dimnames = list(NULL, obs_ids)
       ),
       OpenMx::mxAlgebraFromString(algebra_str,
-        name = "V", dimnames = list(ytemp, ytemp)
+        name = "V", dimnames = list(obs_ids, obs_ids)
       ),
       OpenMx::mxExpectationNormal(covariance = "V", means = "M"),
       OpenMx::mxFitFunctionML()
@@ -227,7 +230,8 @@ buildOneFamilyGroup <- function(
 #' provided relatedness matrices and observed data.
 #'
 #' @param dat A data frame where each row represents a family group and columns correspond to observed variables.
-#' @param ytemp A vector of variable names corresponding to the observed data.
+#' @param obs_ids A character vector of individual IDs corresponding to the columns of \code{dat}
+#'   and the rows/columns of the relatedness matrices.
 #' @param Addmat Additive genetic relatedness matrix.
 #' @param Nucmat Nuclear family shared environment relatedness matrix.
 #' @param Extmat Extended family shared environment relatedness matrix.
@@ -239,7 +243,7 @@ buildOneFamilyGroup <- function(
 #' @export
 
 buildFamilyGroups <- function(
-  dat, ytemp,
+  dat, obs_ids,
   Addmat = NULL,
   Nucmat = NULL,
   Extmat = NULL,
@@ -256,7 +260,7 @@ buildFamilyGroups <- function(
   groups <- vector("list", numfam)
 
   for (afam in seq_len(numfam)) {
-    full_df_row <- matrix(dat[afam, ], nrow = 1, dimnames = list(NULL, ytemp))
+    full_df_row <- matrix(dat[afam, ], nrow = 1, dimnames = list(NULL, obs_ids))
     groups[[afam]] <- buildOneFamilyGroup(
       group_name  = paste0(prefix, afam),
       Addmat      = Addmat,
@@ -266,7 +270,7 @@ buildFamilyGroups <- function(
       Amimat      = Amimat,
       Dmgmat      = Dmgmat,
       full_df_row = full_df_row,
-      ytemp       = ytemp
+      obs_ids  = obs_ids
     )
   }
 
@@ -363,7 +367,8 @@ fitPedigreeModel <- function(
   vars = list(
     ad2 = 0.5,
     dd2 = 0.3,
-    cn2 = 0.2, ce2 = 0.4,
+    cn2 = 0.2,
+    ce2 = 0.4,
     mt2 = 0.1,
     am2 = 0.25,
     ee2 = 0.6
@@ -387,10 +392,10 @@ fitPedigreeModel <- function(
     if (is.null(data)) {
       stop("Either 'group_models' or 'data' must be provided.")
     }
-    ytemp <- colnames(data)
+    obs_ids <- colnames(data)
     group_models <- buildFamilyGroups(
       dat = data,
-      ytemp = ytemp,
+      obs_ids = obs_ids,
       Addmat = Addmat,
       Nucmat = Nucmat,
       Extmat = Extmat,
