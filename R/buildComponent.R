@@ -222,9 +222,28 @@ ped2com <- function(ped, component,
   }
 
   # isPar is the adjacency matrix.  'A' matrix from RAM
-
   if (config$component %in% c("common nuclear")) {
     Matrix::diag(isPar) <- 1
+
+    if(!is.null(config$keep_ids)) {
+
+      isPar <- .subsetKeepIds(
+        component = isPar,
+        keep_ids = keep_ids,
+        available_ids = rownames(isPar),
+        config = config,
+        drop = FALSE,
+        verbose_message = "Subsetting adjacency matrix to %d target individuals\n"
+      ) # also need to drop columns here because the adjacency matrix is used in the path tracing and we want to make sure the paths are correct for the target individuals.  We will keep all columns for the path tracing but subset to the target rows so that the relatedness values are correct for the target individuals.
+
+      if(length(rownames(isPar)>1)) {
+        isPar <- isPar[, rownames(isPar), drop = FALSE]
+      } #else {
+  #      isPar <- isPar[rownames(isPar)]
+  #    }
+    #  isPar <- isPar[, rownames(isPar)] #
+
+    }
     if (config$sparse == FALSE) {
       isPar <- as.matrix(isPar)
     }
