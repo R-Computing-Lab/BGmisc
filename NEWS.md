@@ -1,5 +1,12 @@
 # BGmisc NEWS
 
+# Development version:
+* Fixed bug in parList
+* Moved wrappers of ped2com to own .R file
+* Fixed missing checkpoint for ram_checkpoint
+* Try a chunk_size argument for ped2com to reduce memory usage during transpose
+* Try filter method for whose relatedness to return by individual ID
+
 # BGmisc 1.6.0.1
 ## CRAN submission
 * Add OpenMx pedigree model builders and docs

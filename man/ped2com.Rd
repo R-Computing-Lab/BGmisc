@@ -14,6 +14,8 @@ ped2com(
   flatten_diag = FALSE,
   standardize_colnames = TRUE,
   transpose_method = "tcrossprod",
+  chunk_size = 1000L,
+  keep_ids = NULL,
   adjacency_method = "direct",
   isChild_method = "partialparent",
   saveable = FALSE,
@@ -28,6 +30,7 @@ ped2com(
   mz_twins = TRUE,
   mz_method = "addtwins",
   beta = FALSE,
+  force_symmetric = FALSE,
   ...
 )
 }
@@ -48,7 +51,11 @@ ped2com(
 
 \item{standardize_colnames}{logical. If TRUE, standardize the column names of the pedigree dataset}
 
-\item{transpose_method}{character. The method to use for computing the transpose.  Options are "tcrossprod", "crossprod", or "star"}
+\item{transpose_method}{character. The method to use for computing the transpose.  Options are "tcrossprod", "crossprod", "star", or "chunked"}
+
+\item{chunk_size}{numeric. If greater than 1 is Number of rows per chunk when \code{transpose_method = "chunked"}. Defaults to 1000. If less than or equal to 1, the entire matrix is processed in a single chunk.}
+
+\item{keep_ids}{character vector of IDs to retain in the final relatedness matrix. When supplied, only the rows of \code{r2} corresponding to these IDs are used in the tcrossprod, so the result is a \code{length(keep_ids) x length(keep_ids)} matrix. All columns of \code{r2} are retained during the multiplication so relatedness values remain correct. IDs not found in the pedigree are silently dropped with a warning.}
 
 \item{adjacency_method}{character. The method to use for computing the adjacency matrix.  Options are "loop", "indexed", direct or beta}
 
@@ -72,11 +79,13 @@ ped2com(
 
 \item{compress}{logical. If TRUE, use compression when saving the checkpoint files.  Defaults to TRUE.}
 
-\item{mz_twins}{logical. If TRUE, merge MZ co-twin columns in the r2 matrix before tcrossprod so that MZ twins are coded with relatedness 1 instead of 0.5. Twin pairs are identified from the \code{twinID} column. When a \code{zygosity} column is also present, only pairs where both members have \code{zygosity == "MZ"} are used; otherwise all \code{twinID} pairs are assumed to be MZ. Defaults to FALSE.}
+\item{mz_twins}{logical. If TRUE, merge MZ co-twin columns in the r2 matrix before tcrossprod so that MZ twins are coded with relatedness 1 instead of 0.5. Twin pairs are identified from the \code{twinID} column. When a \code{zygosity} column is also present, only pairs where both members have \code{zygosity == "MZ"} are used; otherwise all \code{twinID} pairs are assumed to be MZ. Defaults to TRUE.}
 
 \item{mz_method}{character. The method to handle MZ twins.  Options are "merging" (default) or "addtwins".  "addtwins" adds the twin2 column to the twin1 column before tcrossprod so that all relatedness flows through a single source, then leaves the twin2 column as zero and relies on the fact that the row/col names are the same to copy the values back to twin2 after tcrossprod.  "merging" merges the twin2 column into the twin1 column before tcrossprod and then copies the values back to twin2 after tcrossprod so that both twins appear in the final matrix.}
 
 \item{beta}{logical. Used for benchmarking}
+
+\item{force_symmetric}{logical. If TRUE, force the final relatedness matrix to be symmetric. This can help mitigate any numerical asymmetry introduced by the transpose method, especially when using sparse matrices. Defaults to TRUE.}
 
 \item{...}{additional arguments to be passed to \code{\link{ped2com}}}
 }

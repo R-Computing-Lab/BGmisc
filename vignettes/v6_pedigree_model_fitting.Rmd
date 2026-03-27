@@ -68,10 +68,10 @@ We begin by simulating a multi-generational pedigree using `simulatePedigree()`.
 set.seed(421)
 
 ped <- simulatePedigree(
-  kpc = 3,    # 3 children per couple
-  Ngen = 4,   # 4 generations
+  kpc = 3, # 3 children per couple
+  Ngen = 4, # 4 generations
   sexR = 0.5, # equal sex ratio
-  marR = 0.6  # 60% mating rate
+  marR = 0.6 # 60% mating rate
 )
 
 head(ped)
@@ -156,7 +156,6 @@ identified <- id_full$identified
 identified_text <- "The full model is identified. We can proceed to fit it. However, to illustrate the process of checking identification and refining the model, we will also show how to interpret the details of the identification check. Below, I have provided an unidentified model to demonstrate how to use the `nidp` element of the result to understand which components are confounded."
 
 not_identified_text <- "The full model is NOT identified. We will need to refine the model by dropping or fixing some components."
-
 ```
 
 `r if (identified) paste(identified_text) else not_identified_text` 
@@ -165,14 +164,13 @@ not_identified_text <- "The full model is NOT identified. We will need to refine
 # show if model is identified
 
 identifyComponentModel(
-  A  = add_matrix,
-  A2  = add_matrix,
+  A = add_matrix,
+  A2 = add_matrix,
   Cn = cn_matrix,
   Ce = ce_matrix,
   Mt = mt_matrix,
-  E  = diag(1, nrow(add_matrix))
+  E = diag(1, nrow(add_matrix))
 )
-
 ```
 
 With a single pedigree, the 5-component model *may* not be fully identified. The `nidp` element in the result tells us which components are confounded. This is because some relatedness matrices can be linearly dependent -- for example, `ce_matrix` is a matrix of all ones for a single family, and the identity matrix (E) plus other components may span a similar space. In this case, our model is identified, but if it were not, we would see a message like "Variance components are not all identified. (And even if they were, we might not have enough data to estimate them all.) 
@@ -201,9 +199,9 @@ When a component is not identified with one family, adding families with differe
 set.seed(99)
 ped2 <- simulatePedigree(kpc = 4, Ngen = 3, marR = 0.5) |> makeTwins()
 add2 <- ped2add(ped2, sparse = FALSE)
-cn2  <- ped2cn(ped2, sparse = FALSE)
-ce2  <- ped2ce(ped2)
-mt2  <- ped2mit(ped2, sparse = FALSE)
+cn2 <- ped2cn(ped2, sparse = FALSE)
+ce2 <- ped2ce(ped2)
+mt2 <- ped2mit(ped2, sparse = FALSE)
 
 # Check the full model across two families
 n_combined <- nrow(add_matrix) + nrow(add2)
@@ -229,11 +227,11 @@ We define "true" variance components and use the relatedness matrices to constru
 ```{r simulate-phenotype, eval = has_mvtnorm}
 # True variance components (proportions of total variance)
 true_var <- list(
-  ad2 = 0.50,  # additive genetic
-  cn2 = 0.10,  # common nuclear environment
-  ce2 = 0.00,  # common extended environment (set to 0 for identifiability)
-  mt2 = 0.00,  # mitochondrial (set to 0 for simplicity)
-  ee2 = 0.40   # unique environment (residual)
+  ad2 = 0.50, # additive genetic
+  cn2 = 0.10, # common nuclear environment
+  ce2 = 0.00, # common extended environment (set to 0 for identifiability)
+  mt2 = 0.00, # mitochondrial (set to 0 for simplicity)
+  ee2 = 0.40 # unique environment (residual)
 )
 
 # Build the implied covariance matrix
@@ -258,11 +256,9 @@ ytemp <- paste("S", rownames(add_matrix))
 ```
 
 ```{r show-phenotype}
-
 if (!exists("y")) {
   y <- rep(NA, nrow(add_matrix))
 }
-
 ```
 
 
@@ -298,13 +294,13 @@ start_vars <- list(
 # Build variance component sub-model
 vc_model <- buildPedigreeModelCovariance(
   vars = start_vars,
-  Vad = TRUE,   # estimate additive genetic variance
-  Vdd = FALSE,  # do not estimate dominance
-  Vcn = TRUE,   # estimate common nuclear environment
-  Vce = TRUE,   # estimate common extended environment
-  Vmt = TRUE,   # estimate mitochondrial
-  Vam = FALSE,  # do not estimate A x Mt interaction
-  Ver = TRUE    # estimate unique environment
+  Vad = TRUE, # estimate additive genetic variance
+  Vdd = FALSE, # do not estimate dominance
+  Vcn = TRUE, # estimate common nuclear environment
+  Vce = TRUE, # estimate common extended environment
+  Vmt = TRUE, # estimate mitochondrial
+  Vam = FALSE, # do not estimate A x Mt interaction
+  Ver = TRUE # estimate unique environment
 )
 vc_model
 
@@ -349,7 +345,7 @@ full_model <- buildPedigreeMx(
   vars = start_vars,
   group_models = list(family_group)
 )
-full_model$submodels 
+full_model$submodels
 ```
 
 
@@ -493,9 +489,11 @@ estimates_multi <- c(
 )
 
 comparison_multi <- data.frame(
-  Component = c("Additive genetic (Vad)", "Common nuclear (Vcn)",
-                "Common extended (Vce)", "Mitochondrial (Vmt)",
-                "Unique environment (Ver)"),
+  Component = c(
+    "Additive genetic (Vad)", "Common nuclear (Vcn)",
+    "Common extended (Vce)", "Mitochondrial (Vmt)",
+    "Unique environment (Ver)"
+  ),
   True = truth,
   Estimated = round(estimates_multi, 4)
 )

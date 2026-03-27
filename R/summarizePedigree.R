@@ -78,7 +78,7 @@ summarizePedigrees <- function(ped,
     )
   }
   if (!is.null(founder_sort_var) &&
-      !founder_sort_var %in% names(ped)) {
+    !founder_sort_var %in% names(ped)) {
     stop(
       "If you set founder_sort_var, that variable must be a column in the pedigree data. If you want to sort by using the default, set founder_sort_var = NULL. The default is to sort by birth year if that's present and by personID otherwise."
     )

@@ -250,6 +250,7 @@ test_that("ped2com handles checkpoint uncompressed saving and resuming", {
     ram_checkpoint = file.path(save_path, "ram_checkpoint.rds"),
     r2_checkpoint = file.path(save_path, "r2_checkpoint.rds"),
     tcrossprod_checkpoint = file.path(save_path, "tcrossprod_checkpoint.rds"),
+    tcrossprod_ids = file.path(save_path, "tcrossprod_ids.rds"),
     count_checkpoint = file.path(save_path, "count_checkpoint.rds"),
     final_matrix = file.path(save_path, "final_matrix.rds")
   )
@@ -296,6 +297,7 @@ test_that("ped2com handles checkpoint saving and resuming", {
     ram_checkpoint = file.path(save_path, "ram_checkpoint.rds"),
     r2_checkpoint = file.path(save_path, "r2_checkpoint.rds"),
     tcrossprod_checkpoint = file.path(save_path, "tcrossprod_checkpoint.rds"),
+    tcrossprod_ids = file.path(save_path, "tcrossprod_ids.rds"),
     count_checkpoint = file.path(save_path, "count_checkpoint.rds"),
     final_matrix = file.path(save_path, "final_matrix.rds")
   )
