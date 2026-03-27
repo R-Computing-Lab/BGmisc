@@ -52,5 +52,7 @@ tests/testthat/Rplots.pdf
 vignettes/articles/paper.html
 vignettes/rewritten_relatedness_vignette.Rmd
 vignettes/rewritten_relatedness_vignette.Xmd
+revdep/
+/.claude
 vignettes/understanding_relatedness.Rmd
 vignettes/understanding_relatedness.Xmd
