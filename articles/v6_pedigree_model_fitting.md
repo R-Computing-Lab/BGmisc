@@ -14,22 +14,22 @@ The `BGmisc` package provides a complete pipeline for pedigree-based
 variance component modeling:
 
 1.  **Simulate** multi-generational pedigrees with
-    [`simulatePedigree()`](https://r-computing-lab.github.io/BGmisc/reference/simulatePedigree.md)
+    [`simulatePedigree()`](https://R-Computing-Lab.github.io/BGmisc/reference/simulatePedigree.md)
 2.  **Compute** relatedness matrices with
-    [`ped2add()`](https://r-computing-lab.github.io/BGmisc/reference/ped2add.md),
-    [`ped2cn()`](https://r-computing-lab.github.io/BGmisc/reference/ped2cn.md),
-    [`ped2mit()`](https://r-computing-lab.github.io/BGmisc/reference/ped2mit.md),
+    [`ped2add()`](https://R-Computing-Lab.github.io/BGmisc/reference/ped2add.md),
+    [`ped2cn()`](https://R-Computing-Lab.github.io/BGmisc/reference/ped2cn.md),
+    [`ped2mit()`](https://R-Computing-Lab.github.io/BGmisc/reference/ped2mit.md),
     and
-    [`ped2ce()`](https://r-computing-lab.github.io/BGmisc/reference/ped2ce.md)
+    [`ped2ce()`](https://R-Computing-Lab.github.io/BGmisc/reference/ped2ce.md)
 3.  **Check identification** with
-    [`identifyComponentModel()`](https://r-computing-lab.github.io/BGmisc/reference/identifyComponentModel.md)
+    [`identifyComponentModel()`](https://R-Computing-Lab.github.io/BGmisc/reference/identifyComponentModel.md)
     and
-    [`comp2vech()`](https://r-computing-lab.github.io/BGmisc/reference/comp2vech.md)
+    [`comp2vech()`](https://R-Computing-Lab.github.io/BGmisc/reference/comp2vech.md)
 4.  **Build and fit** structural equation models with
-    [`buildOneFamilyGroup()`](https://r-computing-lab.github.io/BGmisc/reference/buildOneFamilyGroup.md),
-    [`buildPedigreeMx()`](https://r-computing-lab.github.io/BGmisc/reference/buildPedigreeMx.md),
+    [`buildOneFamilyGroup()`](https://R-Computing-Lab.github.io/BGmisc/reference/buildOneFamilyGroup.md),
+    [`buildPedigreeMx()`](https://R-Computing-Lab.github.io/BGmisc/reference/buildPedigreeMx.md),
     and
-    [`fitPedigreeModel()`](https://r-computing-lab.github.io/BGmisc/reference/fitPedigreeModel.md)
+    [`fitPedigreeModel()`](https://R-Computing-Lab.github.io/BGmisc/reference/fitPedigreeModel.md)
 
 This vignette walks through each step, from generating a pedigree to
 fitting a variance component model and interpreting the results.
@@ -78,7 +78,7 @@ run_models <- has_openmx && has_mvtnorm
 ## Step 1: Simulate a Pedigree
 
 We begin by simulating a multi-generational pedigree using
-[`simulatePedigree()`](https://r-computing-lab.github.io/BGmisc/reference/simulatePedigree.md).
+[`simulatePedigree()`](https://R-Computing-Lab.github.io/BGmisc/reference/simulatePedigree.md).
 This creates a balanced family structure with a specified number of
 generations and children per couple.
 
@@ -86,10 +86,10 @@ generations and children per couple.
 set.seed(421)
 
 ped <- simulatePedigree(
-  kpc = 3,    # 3 children per couple
-  Ngen = 4,   # 4 generations
+  kpc = 3, # 3 children per couple
+  Ngen = 4, # 4 generations
   sexR = 0.5, # equal sex ratio
-  marR = 0.6  # 60% mating rate
+  marR = 0.6 # 60% mating rate
 )
 
 head(ped)
@@ -206,16 +206,16 @@ their estimates can trade off against each other, leading to unstable or
 meaningless results.
 
 The
-[`identifyComponentModel()`](https://r-computing-lab.github.io/BGmisc/reference/identifyComponentModel.md)
+[`identifyComponentModel()`](https://R-Computing-Lab.github.io/BGmisc/reference/identifyComponentModel.md)
 function checks identification by vectorizing each relatedness component
 matrix (via
-[`comp2vech()`](https://r-computing-lab.github.io/BGmisc/reference/comp2vech.md))
+[`comp2vech()`](https://R-Computing-Lab.github.io/BGmisc/reference/comp2vech.md))
 and testing whether the resulting design matrix has full column rank.
 Each component matrix becomes a column in this design matrix. If the
 rank equals the number of components, the model is identified.
 
 For more background on identification in variance component models, see
-[`vignette("v1_modelingvariancecomponents", package = "BGmisc")`](https://r-computing-lab.github.io/BGmisc/articles/v1_modelingvariancecomponents.md).
+[`vignette("v1_modelingvariancecomponents", package = "BGmisc")`](https://R-Computing-Lab.github.io/BGmisc/articles/v1_modelingvariancecomponents.md).
 
 ### Checking Our Full Model
 
@@ -253,12 +253,12 @@ which components are confounded.
 # show if model is identified
 
 identifyComponentModel(
-  A  = add_matrix,
-  A2  = add_matrix,
+  A = add_matrix,
+  A2 = add_matrix,
   Cn = cn_matrix,
   Ce = ce_matrix,
   Mt = mt_matrix,
-  E  = diag(1, nrow(add_matrix))
+  E = diag(1, nrow(add_matrix))
 )
 #> Component model is not identified.
 #> Non-identified parameters are  A, A2
@@ -284,7 +284,7 @@ estimate them all.)
 Based on the identification check above, we can drop or fix the
 non-identified components. A natural choice is to remove the components
 flagged by
-[`identifyComponentModel()`](https://r-computing-lab.github.io/BGmisc/reference/identifyComponentModel.md)
+[`identifyComponentModel()`](https://R-Computing-Lab.github.io/BGmisc/reference/identifyComponentModel.md)
 and re-check:
 
 ``` r
@@ -319,9 +319,9 @@ becomes identified when we combine two pedigrees:
 set.seed(99)
 ped2 <- simulatePedigree(kpc = 4, Ngen = 3, marR = 0.5) |> makeTwins()
 add2 <- ped2add(ped2, sparse = FALSE)
-cn2  <- ped2cn(ped2, sparse = FALSE)
-ce2  <- ped2ce(ped2)
-mt2  <- ped2mit(ped2, sparse = FALSE)
+cn2 <- ped2cn(ped2, sparse = FALSE)
+ce2 <- ped2ce(ped2)
+mt2 <- ped2mit(ped2, sparse = FALSE)
 
 # Check the full model across two families
 n_combined <- nrow(add_matrix) + nrow(add2)
@@ -359,11 +359,11 @@ construct the population covariance matrix, then sample from it.
 ``` r
 # True variance components (proportions of total variance)
 true_var <- list(
-  ad2 = 0.50,  # additive genetic
-  cn2 = 0.10,  # common nuclear environment
-  ce2 = 0.00,  # common extended environment (set to 0 for identifiability)
-  mt2 = 0.00,  # mitochondrial (set to 0 for simplicity)
-  ee2 = 0.40   # unique environment (residual)
+  ad2 = 0.50, # additive genetic
+  cn2 = 0.10, # common nuclear environment
+  ce2 = 0.00, # common extended environment (set to 0 for identifiability)
+  mt2 = 0.00, # mitochondrial (set to 0 for simplicity)
+  ee2 = 0.40 # unique environment (residual)
 )
 
 # Build the implied covariance matrix
@@ -388,7 +388,6 @@ ytemp <- paste("S", rownames(add_matrix))
 ```
 
 ``` r
-
 if (!exists("y")) {
   y <- rep(NA, nrow(add_matrix))
 }
@@ -409,13 +408,13 @@ later section).
 The `BGmisc` package provides helper functions that construct the OpenMx
 model in three layers:
 
-1.  **[`buildPedigreeModelCovariance()`](https://r-computing-lab.github.io/BGmisc/reference/buildPedigreeModelCovariance.md)**
+1.  **[`buildPedigreeModelCovariance()`](https://R-Computing-Lab.github.io/BGmisc/reference/buildPedigreeModelCovariance.md)**
     – Creates the variance component parameters (free parameters to be
     estimated)
-2.  **[`buildOneFamilyGroup()`](https://r-computing-lab.github.io/BGmisc/reference/buildOneFamilyGroup.md)**
+2.  **[`buildOneFamilyGroup()`](https://R-Computing-Lab.github.io/BGmisc/reference/buildOneFamilyGroup.md)**
     – Creates the model for a single family, embedding the relatedness
     matrices and observed data
-3.  **[`buildPedigreeMx()`](https://r-computing-lab.github.io/BGmisc/reference/buildPedigreeMx.md)**
+3.  **[`buildPedigreeMx()`](https://R-Computing-Lab.github.io/BGmisc/reference/buildPedigreeMx.md)**
     – Combines the variance components with one or more family groups
     into a multi-group model
 
@@ -426,7 +425,7 @@ Let’s walk through building the model step by step.
 #### Variance Component Parameters
 
 The
-[`buildPedigreeModelCovariance()`](https://r-computing-lab.github.io/BGmisc/reference/buildPedigreeModelCovariance.md)
+[`buildPedigreeModelCovariance()`](https://R-Computing-Lab.github.io/BGmisc/reference/buildPedigreeModelCovariance.md)
 function creates the OpenMx sub-model that holds the free variance
 component parameters. You can control which components to include:
 
@@ -441,13 +440,13 @@ start_vars <- list(
 # Build variance component sub-model
 vc_model <- buildPedigreeModelCovariance(
   vars = start_vars,
-  Vad = TRUE,   # estimate additive genetic variance
-  Vdd = FALSE,  # do not estimate dominance
-  Vcn = TRUE,   # estimate common nuclear environment
-  Vce = TRUE,   # estimate common extended environment
-  Vmt = TRUE,   # estimate mitochondrial
-  Vam = FALSE,  # do not estimate A x Mt interaction
-  Ver = TRUE    # estimate unique environment
+  Vad = TRUE, # estimate additive genetic variance
+  Vdd = FALSE, # do not estimate dominance
+  Vcn = TRUE, # estimate common nuclear environment
+  Vce = TRUE, # estimate common extended environment
+  Vmt = TRUE, # estimate mitochondrial
+  Vam = FALSE, # do not estimate A x Mt interaction
+  Ver = TRUE # estimate unique environment
 )
 vc_model
 #> MxModel 'ModelOne' 
@@ -490,7 +489,7 @@ summary(vc_model)
 #### Family Group Model
 
 The
-[`buildOneFamilyGroup()`](https://r-computing-lab.github.io/BGmisc/reference/buildOneFamilyGroup.md)
+[`buildOneFamilyGroup()`](https://R-Computing-Lab.github.io/BGmisc/reference/buildOneFamilyGroup.md)
 function constructs the model for one family. It takes the relatedness
 matrices and the observed data for that family:
 
@@ -522,7 +521,7 @@ The family group model contains:
 #### Assembling the Full Model
 
 The
-[`buildPedigreeMx()`](https://r-computing-lab.github.io/BGmisc/reference/buildPedigreeMx.md)
+[`buildPedigreeMx()`](https://R-Computing-Lab.github.io/BGmisc/reference/buildPedigreeMx.md)
 function combines the variance component parameters (shared across all
 families) with the family group model(s):
 
@@ -532,7 +531,7 @@ full_model <- buildPedigreeMx(
   vars = start_vars,
   group_models = list(family_group)
 )
-full_model$submodels 
+full_model$submodels
 #> $ModelOne
 #> MxModel 'ModelOne' 
 #> type : default 
@@ -732,9 +731,11 @@ estimates_multi <- c(
 )
 
 comparison_multi <- data.frame(
-  Component = c("Additive genetic (Vad)", "Common nuclear (Vcn)",
-                "Common extended (Vce)", "Mitochondrial (Vmt)",
-                "Unique environment (Ver)"),
+  Component = c(
+    "Additive genetic (Vad)", "Common nuclear (Vcn)",
+    "Common extended (Vce)", "Mitochondrial (Vmt)",
+    "Unique environment (Ver)"
+  ),
   True = truth,
   Estimated = round(estimates_multi, 4)
 )
@@ -759,7 +760,7 @@ more closely approximate the true generating values.
 ## Using the High-Level `fitPedigreeModel()` Wrapper
 
 For convenience,
-[`fitPedigreeModel()`](https://r-computing-lab.github.io/BGmisc/reference/fitPedigreeModel.md)
+[`fitPedigreeModel()`](https://R-Computing-Lab.github.io/BGmisc/reference/fitPedigreeModel.md)
 wraps the build and fit steps together. It accepts pre-built group
 models and uses
 [`mxTryHard()`](https://rdrr.io/pkg/OpenMx/man/mxTryHard.html) for
@@ -801,8 +802,8 @@ summary(fitted_easy)
 #> AIC:       114.1827               364.1827                 322.1827
 #> BIC:       160.6596               361.8393                 344.7898
 #> To get additional fit indices, see help(mxRefModels)
-#> timestamp: 2026-03-25 21:23:20 
-#> Wall clock time: 0.1998079 secs 
+#> timestamp: 2026-03-27 03:09:07 
+#> Wall clock time: 0.1876616 secs 
 #> optimizer:  SLSQP 
 #> OpenMx version number: 2.22.11 
 #> Need help?  See help(mxSummary)
@@ -817,14 +818,14 @@ $$V = \sigma_{a}^{2}\mathbf{A} + \sigma_{cn}^{2}\mathbf{C}_{n} + \sigma_{ce}^{2}
 where:
 
 - $\mathbf{A}$ is the additive genetic relatedness matrix (from
-  [`ped2add()`](https://r-computing-lab.github.io/BGmisc/reference/ped2add.md))
+  [`ped2add()`](https://R-Computing-Lab.github.io/BGmisc/reference/ped2add.md))
 - $\mathbf{C}_{n}$ is the common nuclear environment matrix (from
-  [`ped2cn()`](https://r-computing-lab.github.io/BGmisc/reference/ped2cn.md))
+  [`ped2cn()`](https://R-Computing-Lab.github.io/BGmisc/reference/ped2cn.md))
 - $\mathbf{U}$ is a matrix of ones representing shared extended family
   environment (from
-  [`ped2ce()`](https://r-computing-lab.github.io/BGmisc/reference/ped2ce.md))
+  [`ped2ce()`](https://R-Computing-Lab.github.io/BGmisc/reference/ped2ce.md))
 - $\mathbf{M}$ is the mitochondrial relatedness matrix (from
-  [`ped2mit()`](https://r-computing-lab.github.io/BGmisc/reference/ped2mit.md))
+  [`ped2mit()`](https://R-Computing-Lab.github.io/BGmisc/reference/ped2mit.md))
 - $\mathbf{I}$ is the identity matrix (unique environment, one per
   person)
 - $\sigma_{a}^{2},\sigma_{cn}^{2},\sigma_{ce}^{2},\sigma_{mt}^{2},\sigma_{e}^{2}$
@@ -843,20 +844,20 @@ component modeling:
 
 | Step | Function                                                                                                                                                                                                                                                                                                           | Purpose                                |
 |------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------|
-| 1    | [`simulatePedigree()`](https://r-computing-lab.github.io/BGmisc/reference/simulatePedigree.md)                                                                                                                                                                                                                     | Generate a multi-generational pedigree |
-| 2    | [`ped2add()`](https://r-computing-lab.github.io/BGmisc/reference/ped2add.md), [`ped2cn()`](https://r-computing-lab.github.io/BGmisc/reference/ped2cn.md), [`ped2mit()`](https://r-computing-lab.github.io/BGmisc/reference/ped2mit.md), [`ped2ce()`](https://r-computing-lab.github.io/BGmisc/reference/ped2ce.md) | Compute relatedness matrices           |
-| 3    | [`identifyComponentModel()`](https://r-computing-lab.github.io/BGmisc/reference/identifyComponentModel.md)                                                                                                                                                                                                         | Check model identification             |
+| 1    | [`simulatePedigree()`](https://R-Computing-Lab.github.io/BGmisc/reference/simulatePedigree.md)                                                                                                                                                                                                                     | Generate a multi-generational pedigree |
+| 2    | [`ped2add()`](https://R-Computing-Lab.github.io/BGmisc/reference/ped2add.md), [`ped2cn()`](https://R-Computing-Lab.github.io/BGmisc/reference/ped2cn.md), [`ped2mit()`](https://R-Computing-Lab.github.io/BGmisc/reference/ped2mit.md), [`ped2ce()`](https://R-Computing-Lab.github.io/BGmisc/reference/ped2ce.md) | Compute relatedness matrices           |
+| 3    | [`identifyComponentModel()`](https://R-Computing-Lab.github.io/BGmisc/reference/identifyComponentModel.md)                                                                                                                                                                                                         | Check model identification             |
 | 4    | Simulate or prepare phenotypic data                                                                                                                                                                                                                                                                                | Observed data for model fitting        |
-| 5    | [`buildOneFamilyGroup()`](https://r-computing-lab.github.io/BGmisc/reference/buildOneFamilyGroup.md), [`buildPedigreeModelCovariance()`](https://r-computing-lab.github.io/BGmisc/reference/buildPedigreeModelCovariance.md)                                                                                       | Build OpenMx model components          |
-| 6    | [`buildPedigreeMx()`](https://r-computing-lab.github.io/BGmisc/reference/buildPedigreeMx.md), [`mxRun()`](https://rdrr.io/pkg/OpenMx/man/mxRun.html) or [`fitPedigreeModel()`](https://r-computing-lab.github.io/BGmisc/reference/fitPedigreeModel.md)                                                             | Assemble and fit the model             |
+| 5    | [`buildOneFamilyGroup()`](https://R-Computing-Lab.github.io/BGmisc/reference/buildOneFamilyGroup.md), [`buildPedigreeModelCovariance()`](https://R-Computing-Lab.github.io/BGmisc/reference/buildPedigreeModelCovariance.md)                                                                                       | Build OpenMx model components          |
+| 6    | [`buildPedigreeMx()`](https://R-Computing-Lab.github.io/BGmisc/reference/buildPedigreeMx.md), [`mxRun()`](https://rdrr.io/pkg/OpenMx/man/mxRun.html) or [`fitPedigreeModel()`](https://R-Computing-Lab.github.io/BGmisc/reference/fitPedigreeModel.md)                                                             | Assemble and fit the model             |
 | 7    | Multiple families                                                                                                                                                                                                                                                                                                  | Scale to multi-group pedigree models   |
 
 The helper functions
-([`buildPedigreeModelCovariance()`](https://r-computing-lab.github.io/BGmisc/reference/buildPedigreeModelCovariance.md),
-[`buildOneFamilyGroup()`](https://r-computing-lab.github.io/BGmisc/reference/buildOneFamilyGroup.md),
-[`buildFamilyGroups()`](https://r-computing-lab.github.io/BGmisc/reference/buildFamilyGroups.md),
-[`buildPedigreeMx()`](https://r-computing-lab.github.io/BGmisc/reference/buildPedigreeMx.md),
-[`fitPedigreeModel()`](https://r-computing-lab.github.io/BGmisc/reference/fitPedigreeModel.md))
+([`buildPedigreeModelCovariance()`](https://R-Computing-Lab.github.io/BGmisc/reference/buildPedigreeModelCovariance.md),
+[`buildOneFamilyGroup()`](https://R-Computing-Lab.github.io/BGmisc/reference/buildOneFamilyGroup.md),
+[`buildFamilyGroups()`](https://R-Computing-Lab.github.io/BGmisc/reference/buildFamilyGroups.md),
+[`buildPedigreeMx()`](https://R-Computing-Lab.github.io/BGmisc/reference/buildPedigreeMx.md),
+[`fitPedigreeModel()`](https://R-Computing-Lab.github.io/BGmisc/reference/fitPedigreeModel.md))
 handle the mechanics of translating pedigree relatedness matrices into
 proper OpenMx model specifications, allowing researchers to focus on the
 substantive questions rather than the modeling boilerplate.

@@ -14,6 +14,8 @@ ped2add(
   flatten_diag = FALSE,
   standardize_colnames = TRUE,
   transpose_method = "tcrossprod",
+  chunk_size = 1000L,
+  keep_ids = NULL,
   adjacency_method = "direct",
   saveable = FALSE,
   resume = FALSE,
@@ -24,6 +26,7 @@ ped2add(
   compress = TRUE,
   mz_twins = FALSE,
   mz_method = "addtwins",
+  force_symmetric = TRUE,
   ...
 )
 ```
@@ -65,7 +68,23 @@ ped2add(
 - transpose_method:
 
   character. The method to use for computing the transpose. Options are
-  "tcrossprod", "crossprod", or "star"
+  "tcrossprod", "crossprod", "star", or "chunked"
+
+- chunk_size:
+
+  numeric. If greater than 1 is Number of rows per chunk when
+  `transpose_method = "chunked"`. Defaults to 1000. If less than or
+  equal to 1, the entire matrix is processed in a single chunk.
+
+- keep_ids:
+
+  character vector of IDs to retain in the final relatedness matrix.
+  When supplied, only the rows of `r2` corresponding to these IDs are
+  used in the tcrossprod, so the result is a
+  `length(keep_ids) x length(keep_ids)` matrix. All columns of `r2` are
+  retained during the multiplication so relatedness values remain
+  correct. IDs not found in the pedigree are silently dropped with a
+  warning.
 
 - adjacency_method:
 
@@ -110,7 +129,7 @@ ped2add(
   0.5. Twin pairs are identified from the `twinID` column. When a
   `zygosity` column is also present, only pairs where both members have
   `zygosity == "MZ"` are used; otherwise all `twinID` pairs are assumed
-  to be MZ. Defaults to FALSE.
+  to be MZ. Defaults to TRUE.
 
 - mz_method:
 
@@ -123,10 +142,17 @@ ped2add(
   twin1 column before tcrossprod and then copies the values back to
   twin2 after tcrossprod so that both twins appear in the final matrix.
 
+- force_symmetric:
+
+  logical. If TRUE, force the final relatedness matrix to be symmetric.
+  This can help mitigate any numerical asymmetry introduced by the
+  transpose method, especially when using sparse matrices. Defaults to
+  TRUE.
+
 - ...:
 
   additional arguments to be passed to
-  [`ped2com`](https://r-computing-lab.github.io/BGmisc/reference/ped2com.md)
+  [`ped2com`](https://R-Computing-Lab.github.io/BGmisc/reference/ped2com.md)
 
 ## Details
 

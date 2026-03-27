@@ -14,7 +14,7 @@ multi-generational family data \[Lyu et al. (2025)
 [doi:10.21105/joss.06203](https://doi.org/10.21105/joss.06203) \]. For a
 big data application see \[Burt et al. (2025) [doi:
 10.1016/j.ebiom.2025.105911](https://doi.org/%2010.1016/j.ebiom.2025.105911)
-.
+\].
 
 ## See also
 

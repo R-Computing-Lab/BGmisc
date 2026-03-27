@@ -62,4 +62,4 @@ process_one(
 - ...:
 
   Additional arguments to be passed to
-  [`com2links`](https://r-computing-lab.github.io/BGmisc/reference/com2links.md)
+  [`com2links`](https://R-Computing-Lab.github.io/BGmisc/reference/com2links.md)

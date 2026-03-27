@@ -54,7 +54,7 @@ head(ASOIAF)
 
 Many pedigree-based algorithms rely on biological sex for downstream
 calculationss and visualization. We use
-[`checkSex()`](https://r-computing-lab.github.io/BGmisc/reference/checkSex.md)
+[`checkSex()`](https://R-Computing-Lab.github.io/BGmisc/reference/checkSex.md)
 to inspect the sex variable, repairing inconsistencies programmatically.
 
 ``` r
@@ -178,7 +178,7 @@ par(mfrow = c(1, 1))
 
 For interpretability, we convert these square matrices into long-format
 tables using
-[`com2links()`](https://r-computing-lab.github.io/BGmisc/reference/com2links.md).
+[`com2links()`](https://R-Computing-Lab.github.io/BGmisc/reference/com2links.md).
 This function returns a dataframe where each row represents a unique
 pair of individuals, including their additive and common nuclear
 coefficients.
@@ -273,7 +273,7 @@ indicating that they share the same mitochondrial lineage.
 Many real-world and fictional pedigrees contain individuals with unknown
 or partially known parentage. In such cases, plotting tools typically
 fail unless these gaps are handled. We use
-[`checkParentIDs()`](https://r-computing-lab.github.io/BGmisc/reference/checkParentIDs.md)
+[`checkParentIDs()`](https://R-Computing-Lab.github.io/BGmisc/reference/checkParentIDs.md)
 to:
 
 - Identify individuals with one known parent and one missing
@@ -360,9 +360,9 @@ checkPedigreeNetwork
 
 As we can see, the repaired pedigree now has unique IDs for all
 individuals, and the parent-child relationships are intact. The function
-[`checkIDs()`](https://r-computing-lab.github.io/BGmisc/reference/checkIDs.md)
+[`checkIDs()`](https://R-Computing-Lab.github.io/BGmisc/reference/checkIDs.md)
 confirms that all IDs are unique, while
-[`checkPedigreeNetwork()`](https://r-computing-lab.github.io/BGmisc/reference/checkPedigreeNetwork.md)
+[`checkPedigreeNetwork()`](https://R-Computing-Lab.github.io/BGmisc/reference/checkPedigreeNetwork.md)
 verifies that there are no structural issues like individuals with more
 than two parents or cyclic relationships.
 

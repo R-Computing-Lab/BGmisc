@@ -157,10 +157,10 @@ couple.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">421</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">ped</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulatePedigree.html">simulatePedigree</a></span><span class="op">(</span></span>
-<span>  kpc <span class="op">=</span> <span class="fl">3</span>,    <span class="co"># 3 children per couple</span></span>
-<span>  Ngen <span class="op">=</span> <span class="fl">4</span>,   <span class="co"># 4 generations</span></span>
+<span>  kpc <span class="op">=</span> <span class="fl">3</span>, <span class="co"># 3 children per couple</span></span>
+<span>  Ngen <span class="op">=</span> <span class="fl">4</span>, <span class="co"># 4 generations</span></span>
 <span>  sexR <span class="op">=</span> <span class="fl">0.5</span>, <span class="co"># equal sex ratio</span></span>
-<span>  marR <span class="op">=</span> <span class="fl">0.6</span>  <span class="co"># 60% mating rate</span></span>
+<span>  marR <span class="op">=</span> <span class="fl">0.6</span> <span class="co"># 60% mating rate</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">ped</span><span class="op">)</span></span>
@@ -316,12 +316,12 @@ understand which components are confounded.</p>
 <code class="sourceCode R"><span><span class="co"># show if model is identified</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/identifyComponentModel.html">identifyComponentModel</a></span><span class="op">(</span></span>
-<span>  A  <span class="op">=</span> <span class="va">add_matrix</span>,</span>
-<span>  A2  <span class="op">=</span> <span class="va">add_matrix</span>,</span>
+<span>  A <span class="op">=</span> <span class="va">add_matrix</span>,</span>
+<span>  A2 <span class="op">=</span> <span class="va">add_matrix</span>,</span>
 <span>  Cn <span class="op">=</span> <span class="va">cn_matrix</span>,</span>
 <span>  Ce <span class="op">=</span> <span class="va">ce_matrix</span>,</span>
 <span>  Mt <span class="op">=</span> <span class="va">mt_matrix</span>,</span>
-<span>  E  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">add_matrix</span><span class="op">)</span><span class="op">)</span></span>
+<span>  E <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">add_matrix</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; Component model is not identified.</span></span>
 <span><span class="co">#&gt; Non-identified parameters are  A, A2</span></span>
@@ -376,9 +376,9 @@ model becomes identified when we combine two pedigrees:</p>
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">99</span><span class="op">)</span></span>
 <span><span class="va">ped2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulatePedigree.html">simulatePedigree</a></span><span class="op">(</span>kpc <span class="op">=</span> <span class="fl">4</span>, Ngen <span class="op">=</span> <span class="fl">3</span>, marR <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/makeTwins.html">makeTwins</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">add2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ped2add.html">ped2add</a></span><span class="op">(</span><span class="va">ped2</span>, sparse <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="va">cn2</span>  <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ped2cn.html">ped2cn</a></span><span class="op">(</span><span class="va">ped2</span>, sparse <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="va">ce2</span>  <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ped2ce.html">ped2ce</a></span><span class="op">(</span><span class="va">ped2</span><span class="op">)</span></span>
-<span><span class="va">mt2</span>  <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ped2mit.html">ped2mit</a></span><span class="op">(</span><span class="va">ped2</span>, sparse <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="va">cn2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ped2cn.html">ped2cn</a></span><span class="op">(</span><span class="va">ped2</span>, sparse <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="va">ce2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ped2ce.html">ped2ce</a></span><span class="op">(</span><span class="va">ped2</span><span class="op">)</span></span>
+<span><span class="va">mt2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ped2mit.html">ped2mit</a></span><span class="op">(</span><span class="va">ped2</span>, sparse <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Check the full model across two families</span></span>
 <span><span class="va">n_combined</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">add_matrix</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">add2</span><span class="op">)</span></span>
@@ -414,11 +414,11 @@ to construct the population covariance matrix, then sample from it.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># True variance components (proportions of total variance)</span></span>
 <span><span class="va">true_var</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>  ad2 <span class="op">=</span> <span class="fl">0.50</span>,  <span class="co"># additive genetic</span></span>
-<span>  cn2 <span class="op">=</span> <span class="fl">0.10</span>,  <span class="co"># common nuclear environment</span></span>
-<span>  ce2 <span class="op">=</span> <span class="fl">0.00</span>,  <span class="co"># common extended environment (set to 0 for identifiability)</span></span>
-<span>  mt2 <span class="op">=</span> <span class="fl">0.00</span>,  <span class="co"># mitochondrial (set to 0 for simplicity)</span></span>
-<span>  ee2 <span class="op">=</span> <span class="fl">0.40</span>   <span class="co"># unique environment (residual)</span></span>
+<span>  ad2 <span class="op">=</span> <span class="fl">0.50</span>, <span class="co"># additive genetic</span></span>
+<span>  cn2 <span class="op">=</span> <span class="fl">0.10</span>, <span class="co"># common nuclear environment</span></span>
+<span>  ce2 <span class="op">=</span> <span class="fl">0.00</span>, <span class="co"># common extended environment (set to 0 for identifiability)</span></span>
+<span>  mt2 <span class="op">=</span> <span class="fl">0.00</span>, <span class="co"># mitochondrial (set to 0 for simplicity)</span></span>
+<span>  ee2 <span class="op">=</span> <span class="fl">0.40</span> <span class="co"># unique environment (residual)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Build the implied covariance matrix</span></span>
@@ -441,8 +441,7 @@ to construct the population covariance matrix, then sample from it.</p>
 <span><span class="co"># Create named variable labels (required by OpenMx)</span></span>
 <span><span class="va">ytemp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"S"</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">add_matrix</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/exists.html" class="external-link">exists</a></span><span class="op">(</span><span class="st">"y"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/exists.html" class="external-link">exists</a></span><span class="op">(</span><span class="st">"y"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">add_matrix</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 <p>We simulated phenotypic data for25 individuals, with a mean of -0.064
@@ -494,13 +493,13 @@ can control which components to include:</p>
 <span><span class="co"># Build variance component sub-model</span></span>
 <span><span class="va">vc_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/buildPedigreeModelCovariance.html">buildPedigreeModelCovariance</a></span><span class="op">(</span></span>
 <span>  vars <span class="op">=</span> <span class="va">start_vars</span>,</span>
-<span>  Vad <span class="op">=</span> <span class="cn">TRUE</span>,   <span class="co"># estimate additive genetic variance</span></span>
-<span>  Vdd <span class="op">=</span> <span class="cn">FALSE</span>,  <span class="co"># do not estimate dominance</span></span>
-<span>  Vcn <span class="op">=</span> <span class="cn">TRUE</span>,   <span class="co"># estimate common nuclear environment</span></span>
-<span>  Vce <span class="op">=</span> <span class="cn">TRUE</span>,   <span class="co"># estimate common extended environment</span></span>
-<span>  Vmt <span class="op">=</span> <span class="cn">TRUE</span>,   <span class="co"># estimate mitochondrial</span></span>
-<span>  Vam <span class="op">=</span> <span class="cn">FALSE</span>,  <span class="co"># do not estimate A x Mt interaction</span></span>
-<span>  Ver <span class="op">=</span> <span class="cn">TRUE</span>    <span class="co"># estimate unique environment</span></span>
+<span>  Vad <span class="op">=</span> <span class="cn">TRUE</span>, <span class="co"># estimate additive genetic variance</span></span>
+<span>  Vdd <span class="op">=</span> <span class="cn">FALSE</span>, <span class="co"># do not estimate dominance</span></span>
+<span>  Vcn <span class="op">=</span> <span class="cn">TRUE</span>, <span class="co"># estimate common nuclear environment</span></span>
+<span>  Vce <span class="op">=</span> <span class="cn">TRUE</span>, <span class="co"># estimate common extended environment</span></span>
+<span>  Vmt <span class="op">=</span> <span class="cn">TRUE</span>, <span class="co"># estimate mitochondrial</span></span>
+<span>  Vam <span class="op">=</span> <span class="cn">FALSE</span>, <span class="co"># do not estimate A x Mt interaction</span></span>
+<span>  Ver <span class="op">=</span> <span class="cn">TRUE</span> <span class="co"># estimate unique environment</span></span>
 <span><span class="op">)</span></span>
 <span><span class="va">vc_model</span></span>
 <span><span class="co">#&gt; MxModel 'ModelOne' </span></span>
@@ -588,7 +587,7 @@ model(s):</p>
 <span>  vars <span class="op">=</span> <span class="va">start_vars</span>,</span>
 <span>  group_models <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">family_group</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span><span class="va">full_model</span><span class="op">$</span><span class="va">submodels</span> </span>
+<span><span class="va">full_model</span><span class="op">$</span><span class="va">submodels</span></span>
 <span><span class="co">#&gt; $ModelOne</span></span>
 <span><span class="co">#&gt; MxModel 'ModelOne' </span></span>
 <span><span class="co">#&gt; type : default </span></span>
@@ -781,9 +780,11 @@ own relatedness structure and data.</p>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">comparison_multi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>  Component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Additive genetic (Vad)"</span>, <span class="st">"Common nuclear (Vcn)"</span>,</span>
-<span>                <span class="st">"Common extended (Vce)"</span>, <span class="st">"Mitochondrial (Vmt)"</span>,</span>
-<span>                <span class="st">"Unique environment (Ver)"</span><span class="op">)</span>,</span>
+<span>  Component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>    <span class="st">"Additive genetic (Vad)"</span>, <span class="st">"Common nuclear (Vcn)"</span>,</span>
+<span>    <span class="st">"Common extended (Vce)"</span>, <span class="st">"Mitochondrial (Vmt)"</span>,</span>
+<span>    <span class="st">"Unique environment (Ver)"</span></span>
+<span>  <span class="op">)</span>,</span>
 <span>  True <span class="op">=</span> <span class="va">truth</span>,</span>
 <span>  Estimated <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">estimates_multi</span>, <span class="fl">4</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
@@ -847,8 +848,8 @@ starts:</p>
 <span><span class="co">#&gt; AIC:       114.1827               364.1827                 322.1827</span></span>
 <span><span class="co">#&gt; BIC:       160.6596               361.8393                 344.7898</span></span>
 <span><span class="co">#&gt; To get additional fit indices, see help(mxRefModels)</span></span>
-<span><span class="co">#&gt; timestamp: 2026-03-25 21:23:20 </span></span>
-<span><span class="co">#&gt; Wall clock time: 0.1998079 secs </span></span>
+<span><span class="co">#&gt; timestamp: 2026-03-27 03:09:07 </span></span>
+<span><span class="co">#&gt; Wall clock time: 0.1876616 secs </span></span>
 <span><span class="co">#&gt; optimizer:  SLSQP </span></span>
 <span><span class="co">#&gt; OpenMx version number: 2.22.11 </span></span>
 <span><span class="co">#&gt; Need help?  See help(mxSummary)</span></span></code></pre></div>

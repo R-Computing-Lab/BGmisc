@@ -74,7 +74,7 @@ transgender and LGBTQ+ communities.
 
 ## See also
 
-[`checkSex`](https://r-computing-lab.github.io/BGmisc/reference/checkSex.md)
+[`checkSex`](https://R-Computing-Lab.github.io/BGmisc/reference/checkSex.md)
 
 ## Examples
 

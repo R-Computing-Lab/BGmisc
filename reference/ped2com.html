@@ -59,6 +59,8 @@
 <span>  flatten_diag <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  standardize_colnames <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  transpose_method <span class="op">=</span> <span class="st">"tcrossprod"</span>,</span>
+<span>  chunk_size <span class="op">=</span> <span class="fl">1000L</span>,</span>
+<span>  keep_ids <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  adjacency_method <span class="op">=</span> <span class="st">"direct"</span>,</span>
 <span>  isChild_method <span class="op">=</span> <span class="st">"partialparent"</span>,</span>
 <span>  saveable <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -73,6 +75,7 @@
 <span>  mz_twins <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  mz_method <span class="op">=</span> <span class="st">"addtwins"</span>,</span>
 <span>  beta <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  force_symmetric <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -114,7 +117,15 @@
 
 
 <dt id="arg-transpose-method">transpose_method<a class="anchor" aria-label="anchor" href="#arg-transpose-method"></a></dt>
-<dd><p>character. The method to use for computing the transpose.  Options are "tcrossprod", "crossprod", or "star"</p></dd>
+<dd><p>character. The method to use for computing the transpose.  Options are "tcrossprod", "crossprod", "star", or "chunked"</p></dd>
+
+
+<dt id="arg-chunk-size">chunk_size<a class="anchor" aria-label="anchor" href="#arg-chunk-size"></a></dt>
+<dd><p>numeric. If greater than 1 is Number of rows per chunk when <code>transpose_method = "chunked"</code>. Defaults to 1000. If less than or equal to 1, the entire matrix is processed in a single chunk.</p></dd>
+
+
+<dt id="arg-keep-ids">keep_ids<a class="anchor" aria-label="anchor" href="#arg-keep-ids"></a></dt>
+<dd><p>character vector of IDs to retain in the final relatedness matrix. When supplied, only the rows of <code>r2</code> corresponding to these IDs are used in the tcrossprod, so the result is a <code>length(keep_ids) x length(keep_ids)</code> matrix. All columns of <code>r2</code> are retained during the multiplication so relatedness values remain correct. IDs not found in the pedigree are silently dropped with a warning.</p></dd>
 
 
 <dt id="arg-adjacency-method">adjacency_method<a class="anchor" aria-label="anchor" href="#arg-adjacency-method"></a></dt>
@@ -162,7 +173,7 @@
 
 
 <dt id="arg-mz-twins">mz_twins<a class="anchor" aria-label="anchor" href="#arg-mz-twins"></a></dt>
-<dd><p>logical. If TRUE, merge MZ co-twin columns in the r2 matrix before tcrossprod so that MZ twins are coded with relatedness 1 instead of 0.5. Twin pairs are identified from the <code>twinID</code> column. When a <code>zygosity</code> column is also present, only pairs where both members have <code>zygosity == "MZ"</code> are used; otherwise all <code>twinID</code> pairs are assumed to be MZ. Defaults to FALSE.</p></dd>
+<dd><p>logical. If TRUE, merge MZ co-twin columns in the r2 matrix before tcrossprod so that MZ twins are coded with relatedness 1 instead of 0.5. Twin pairs are identified from the <code>twinID</code> column. When a <code>zygosity</code> column is also present, only pairs where both members have <code>zygosity == "MZ"</code> are used; otherwise all <code>twinID</code> pairs are assumed to be MZ. Defaults to TRUE.</p></dd>
 
 
 <dt id="arg-mz-method">mz_method<a class="anchor" aria-label="anchor" href="#arg-mz-method"></a></dt>
@@ -171,6 +182,10 @@
 
 <dt id="arg-beta">beta<a class="anchor" aria-label="anchor" href="#arg-beta"></a></dt>
 <dd><p>logical. Used for benchmarking</p></dd>
+
+
+<dt id="arg-force-symmetric">force_symmetric<a class="anchor" aria-label="anchor" href="#arg-force-symmetric"></a></dt>
+<dd><p>logical. If TRUE, force the final relatedness matrix to be symmetric. This can help mitigate any numerical asymmetry introduced by the transpose method, especially when using sparse matrices. Defaults to TRUE.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>

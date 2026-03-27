@@ -15,6 +15,8 @@ ped2com(
   flatten_diag = FALSE,
   standardize_colnames = TRUE,
   transpose_method = "tcrossprod",
+  chunk_size = 1000L,
+  keep_ids = NULL,
   adjacency_method = "direct",
   isChild_method = "partialparent",
   saveable = FALSE,
@@ -29,6 +31,7 @@ ped2com(
   mz_twins = TRUE,
   mz_method = "addtwins",
   beta = FALSE,
+  force_symmetric = FALSE,
   ...
 )
 ```
@@ -74,7 +77,23 @@ ped2com(
 - transpose_method:
 
   character. The method to use for computing the transpose. Options are
-  "tcrossprod", "crossprod", or "star"
+  "tcrossprod", "crossprod", "star", or "chunked"
+
+- chunk_size:
+
+  numeric. If greater than 1 is Number of rows per chunk when
+  `transpose_method = "chunked"`. Defaults to 1000. If less than or
+  equal to 1, the entire matrix is processed in a single chunk.
+
+- keep_ids:
+
+  character vector of IDs to retain in the final relatedness matrix.
+  When supplied, only the rows of `r2` corresponding to these IDs are
+  used in the tcrossprod, so the result is a
+  `length(keep_ids) x length(keep_ids)` matrix. All columns of `r2` are
+  retained during the multiplication so relatedness values remain
+  correct. IDs not found in the pedigree are silently dropped with a
+  warning.
 
 - adjacency_method:
 
@@ -133,7 +152,7 @@ ped2com(
   0.5. Twin pairs are identified from the `twinID` column. When a
   `zygosity` column is also present, only pairs where both members have
   `zygosity == "MZ"` are used; otherwise all `twinID` pairs are assumed
-  to be MZ. Defaults to FALSE.
+  to be MZ. Defaults to TRUE.
 
 - mz_method:
 
@@ -149,6 +168,13 @@ ped2com(
 - beta:
 
   logical. Used for benchmarking
+
+- force_symmetric:
+
+  logical. If TRUE, force the final relatedness matrix to be symmetric.
+  This can help mitigate any numerical asymmetry introduced by the
+  transpose method, especially when using sparse matrices. Defaults to
+  TRUE.
 
 - ...:
 

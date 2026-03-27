@@ -42,7 +42,7 @@ fitPedigreeModel(
 - group_models:
 
   Optional list of pre-built OpenMx family group models (from
-  [`buildOneFamilyGroup`](https://r-computing-lab.github.io/BGmisc/reference/buildOneFamilyGroup.md)).
+  [`buildOneFamilyGroup`](https://R-Computing-Lab.github.io/BGmisc/reference/buildOneFamilyGroup.md)).
   If NULL, they are generated from `data` using the provided relatedness
   matrices.
 

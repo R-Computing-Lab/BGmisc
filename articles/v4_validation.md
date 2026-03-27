@@ -11,7 +11,7 @@ vignette demonstrates how to validate and clean pedigree data using
 ## Identifying and Repairing ID Issues
 
 The
-[`checkIDs()`](https://r-computing-lab.github.io/BGmisc/reference/checkIDs.md)
+[`checkIDs()`](https://R-Computing-Lab.github.io/BGmisc/reference/checkIDs.md)
 function detects two types of common ID errors in pedigree data:
 
 - Between-row duplication: When two or more individuals share the same
@@ -26,7 +26,7 @@ they imply for downstream structure.
 ### A Clean Dataset
 
 We’ll begin with the Potter family dataset, cleaned and reformatted with
-[`ped2fam()`](https://r-computing-lab.github.io/BGmisc/reference/ped2fam.md):
+[`ped2fam()`](https://R-Computing-Lab.github.io/BGmisc/reference/ped2fam.md):
 
 ``` r
 library(BGmisc)
@@ -76,7 +76,7 @@ stay that simple.
 #### What `checkIDs()` Reports
 
 The
-[`checkIDs()`](https://r-computing-lab.github.io/BGmisc/reference/checkIDs.md)
+[`checkIDs()`](https://R-Computing-Lab.github.io/BGmisc/reference/checkIDs.md)
 function checks for:
 
 - Whether all IDs are unique (reported by `all_unique_ids`, which tells
@@ -158,7 +158,7 @@ summarizeFamilies(df_duplicates,
 ```
 
 But
-[`checkIDs()`](https://r-computing-lab.github.io/BGmisc/reference/checkIDs.md)
+[`checkIDs()`](https://R-Computing-Lab.github.io/BGmisc/reference/checkIDs.md)
 detects the problems clearly:
 
 ``` r

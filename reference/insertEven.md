@@ -41,5 +41,5 @@ within n.
 
 ## See also
 
-[`SimPed`](https://r-computing-lab.github.io/BGmisc/reference/simulatePedigree.md)
+[`SimPed`](https://R-Computing-Lab.github.io/BGmisc/reference/simulatePedigree.md)
 for the main function that uses this supporting function.

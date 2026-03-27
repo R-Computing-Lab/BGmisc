@@ -14,6 +14,7 @@ ped2mit(
   flatten_diag = FALSE,
   standardize_colnames = TRUE,
   transpose_method = "tcrossprod",
+  keep_ids = NULL,
   adjacency_method = "direct",
   saveable = FALSE,
   resume = FALSE,
@@ -22,6 +23,7 @@ ped2mit(
   save_rate_parlist = 1e+05 * save_rate,
   save_path = "checkpoint/",
   compress = TRUE,
+  force_symmetric = FALSE,
   ...
 )
 ```
@@ -63,7 +65,17 @@ ped2mit(
 - transpose_method:
 
   character. The method to use for computing the transpose. Options are
-  "tcrossprod", "crossprod", or "star"
+  "tcrossprod", "crossprod", "star", or "chunked"
+
+- keep_ids:
+
+  character vector of IDs to retain in the final relatedness matrix.
+  When supplied, only the rows of `r2` corresponding to these IDs are
+  used in the tcrossprod, so the result is a
+  `length(keep_ids) x length(keep_ids)` matrix. All columns of `r2` are
+  retained during the multiplication so relatedness values remain
+  correct. IDs not found in the pedigree are silently dropped with a
+  warning.
 
 - adjacency_method:
 
@@ -101,10 +113,17 @@ ped2mit(
   logical. If TRUE, use compression when saving the checkpoint files.
   Defaults to TRUE.
 
+- force_symmetric:
+
+  logical. If TRUE, force the final relatedness matrix to be symmetric.
+  This can help mitigate any numerical asymmetry introduced by the
+  transpose method, especially when using sparse matrices. Defaults to
+  TRUE.
+
 - ...:
 
   additional arguments to be passed to
-  [`ped2com`](https://r-computing-lab.github.io/BGmisc/reference/ped2com.md)
+  [`ped2com`](https://R-Computing-Lab.github.io/BGmisc/reference/ped2com.md)
 
 ## Details
 

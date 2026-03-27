@@ -31,12 +31,12 @@ buildOneFamilyGroup(
 - Addmat:
 
   Additive genetic relatedness matrix (from
-  [`ped2add`](https://r-computing-lab.github.io/BGmisc/reference/ped2add.md)).
+  [`ped2add`](https://R-Computing-Lab.github.io/BGmisc/reference/ped2add.md)).
 
 - Nucmat:
 
   Nuclear family shared environment relatedness matrix (from
-  [`ped2cn`](https://r-computing-lab.github.io/BGmisc/reference/ped2cn.md)).
+  [`ped2cn`](https://R-Computing-Lab.github.io/BGmisc/reference/ped2cn.md)).
 
 - Extmat:
 
@@ -46,7 +46,7 @@ buildOneFamilyGroup(
 - Mtdmat:
 
   Mitochondrial genetic relatedness matrix (from
-  [`ped2mit`](https://r-computing-lab.github.io/BGmisc/reference/ped2mit.md)).
+  [`ped2mit`](https://R-Computing-Lab.github.io/BGmisc/reference/ped2mit.md)).
 
 - Amimat:
 
