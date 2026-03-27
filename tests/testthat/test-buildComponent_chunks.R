@@ -32,16 +32,16 @@ test_that("chunked tcrossprod matches standard tcrossprod", {
 
   data(inbreeding)
   r_standard <- ped2com(inbreeding,
-    component = "additive", sparse = T,
+    component = "additive", sparse = TRUE,
     transpose_method = "tcrossprod"
   )
   r_chunked <- ped2com(inbreeding,
-    component = "additive", sparse = T,
+    component = "additive", sparse = TRUE,
     transpose_method = "chunked", chunk_size = 3L, force_symmetric = FALSE
   )
 
   r_chunked_sym <- ped2com(inbreeding,
-    component = "additive", sparse = T,
+    component = "additive", sparse = TRUE,
     transpose_method = "chunked", chunk_size = 3L, force_symmetric = TRUE
   )
 
@@ -86,11 +86,11 @@ test_that("chunked tcrossprod matches standard tcrossprod when also subsetted", 
   keep <- as.character(inbreeding$ID[5:10])
 
   r_full <- ped2com(inbreeding,
-    component = "additive", sparse = T,
+    component = "additive", sparse = TRUE,
     keep_ids = NULL
   )
   r_sub <- ped2com(inbreeding,
-    component = "additive", sparse = T,
+    component = "additive", sparse = TRUE,
     keep_ids = keep
   )
 
@@ -101,9 +101,9 @@ test_that("chunked tcrossprod matches standard tcrossprod when also subsetted", 
   expect_equal(r_sub, r_full[keep, keep], tolerance = 1e-10)
 
   r_chunked <- ped2com(inbreeding,
-    component = "additive", sparse = T,
+    component = "additive", sparse = TRUE,
     transpose_method = "chunked", chunk_size = 3L,
-    keep_ids = keep, force_symmetric = T
+    keep_ids = keep, force_symmetric = TRUE
   )
 
   expect_equal(as.matrix(r_sub), as.matrix(r_chunked), tolerance = 1e-10)

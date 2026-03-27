@@ -874,7 +874,7 @@ loadOrComputeCheckpoint <- function(file, compute_fn,
   if (config$verbose == TRUE) {
     cat(sprintf(verbose_message, length(idx)))
   }
-# consequence is missing data
+  # consequence is missing data
   if (is.matrix(component) || methods::is(component, "Matrix")) {
     component <- component[idx, , drop = drop]
   } else {
