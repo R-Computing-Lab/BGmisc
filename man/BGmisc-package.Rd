@@ -6,7 +6,7 @@
 \alias{BGmisc-package}
 \title{BGmisc: An R Package for Extended Behavior Genetics Analysis}
 \description{
-Provides functions for behavior genetics analysis, including variance component model identification [Hunter et al. (2021) \doi{10.1007/s10519-021-10055-x}], calculation of relatedness coefficients using path-tracing methods [Wright (1922) \doi{10.1086/279872}; McArdle & McDonald (1984) \doi{10.1111/j.2044-8317.1984.tb00802.x}], inference of relatedness, pedigree conversion, and simulation of multi-generational family data [Lyu et al. (2025) \doi{10.1007/s10519-025-10225-1}]. For a full overview, see [Garrison et al. (2024) \doi{10.21105/joss.06203}]. For a big data application see [Burt et al. (2025) \doi{ 10.1016/j.ebiom.2025.105911}.
+Provides functions for behavior genetics analysis, including variance component model identification [Hunter et al. (2021) \doi{10.1007/s10519-021-10055-x}], calculation of relatedness coefficients using path-tracing methods [Wright (1922) \doi{10.1086/279872}; McArdle & McDonald (1984) \doi{10.1111/j.2044-8317.1984.tb00802.x}], inference of relatedness, pedigree conversion, and simulation of multi-generational family data [Lyu et al. (2025) \doi{10.1007/s10519-025-10225-1}]. For a full overview, see [Garrison et al. (2024) \doi{10.21105/joss.06203}]. For a big data application see [Burt et al. (2025) \doi{ 10.1016/j.ebiom.2025.105911}].
 }
 \seealso{
 Useful links:

@@ -484,8 +484,8 @@ process_tag <- function(tag, field_name, pattern_rows, line, vars,
   count_name <- paste0("num_", tolower(tag), "_rows")
   matched <- FALSE
   if (!is.null(pattern_rows[[count_name]]) &&
-        pattern_rows[[count_name]] > 0 &&
-        grepl(paste0(" ", tag), line)) {
+    pattern_rows[[count_name]] > 0 &&
+    grepl(paste0(" ", tag), line)) {
     value <- if (is.null(extractor)) {
       extract_info(line, tag)
     } else {

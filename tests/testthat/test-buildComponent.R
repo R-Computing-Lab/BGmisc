@@ -295,3 +295,217 @@ deviantions all make sense", {
   # reconstruct the orginal generation values from generated values of children
   expect_true(all(df_hazard$min_gen_children[df_hazard$ID %in% founders] - 1 == df_hazard$gen_og[df_hazard$ID %in% founders]))
 })
+
+# ── ram_checkpoint ────────────────────────────────────────────────────────────
+
+test_that("resume loads ram_checkpoint and skips RAM loop when mid-loop files absent", {
+  data(hazard)
+  save_path <- file.path(tempdir(), "test_ram_checkpoint")
+  dir.create(save_path, showWarnings = FALSE)
+  on.exit(unlink(save_path, recursive = TRUE))
+
+  # First run: save all checkpoints
+  r_full <- ped2com(hazard,
+    component = "additive", sparse = FALSE,
+    saveable = TRUE, resume = FALSE,
+    save_rate_gen = 1, save_path = save_path
+  )
+
+  # Remove mid-loop files so only ram_checkpoint (and earlier) remain
+  mid_loop_files <- c(
+    "r_checkpoint.rds", "gen_checkpoint.rds",
+    "mtSum_checkpoint.rds", "newIsPar_checkpoint.rds",
+    "count_checkpoint.rds"
+  )
+  file.remove(file.path(save_path, mid_loop_files))
+
+  expect_true(file.exists(file.path(save_path, "ram_checkpoint.rds")))
+  expect_false(file.exists(file.path(save_path, "r_checkpoint.rds")))
+
+  # Second run: should load ram_checkpoint, skip loop, and produce same result
+  r_resumed <- ped2com(hazard,
+    component = "additive", sparse = FALSE,
+    saveable = FALSE, resume = TRUE,
+    save_path = save_path
+  )
+
+  expect_equal(r_full, r_resumed)
+})
+
+test_that("ram_checkpoint resume produces identical result to fresh run", {
+  data(hazard)
+  save_path <- file.path(tempdir(), "test_ram_idempotent")
+  dir.create(save_path, showWarnings = FALSE)
+  on.exit(unlink(save_path, recursive = TRUE))
+
+  r_fresh <- ped2com(hazard,
+    component = "additive", sparse = FALSE,
+    saveable = TRUE, resume = FALSE,
+    save_rate_gen = 1, save_path = save_path
+  )
+
+  file.remove(file.path(save_path, "r_checkpoint.rds"))
+  file.remove(file.path(save_path, "tcrossprod_checkpoint.rds"))
+
+  r_resumed <- ped2com(hazard,
+    component = "additive", sparse = FALSE,
+    saveable = FALSE, resume = TRUE,
+    save_path = save_path
+  )
+
+  expect_equal(r_fresh, r_resumed, tolerance = 1e-10)
+})
+
+# ── keep_ids ──────────────────────────────────────────────────────────────────
+
+test_that("keep_ids subset produces correct relatedness values", {
+  data(hazard)
+  keep <- as.character(hazard$ID[5:10])
+
+  r_full <- ped2com(hazard,
+    component = "additive", sparse = FALSE,
+    keep_ids = NULL
+  )
+  r_sub <- ped2com(hazard,
+    component = "additive", sparse = FALSE,
+    keep_ids = keep
+  )
+
+  expect_equal(dim(r_sub), c(length(keep), length(keep)))
+  expect_equal(rownames(r_sub), keep)
+
+  # values in the subset must match the corresponding entries of the full matrix
+  expect_equal(r_sub, r_full[keep, keep], tolerance = 1e-10)
+
+
+  r_full <- ped2com(hazard,
+    component = "additive", sparse = TRUE,
+    keep_ids = NULL
+  )
+  r_sub <- ped2com(hazard,
+    component = "additive", sparse = TRUE,
+    keep_ids = keep
+  )
+
+  expect_equal(dim(r_sub), c(length(keep), length(keep)))
+  expect_equal(rownames(r_sub), keep)
+
+  # values in the subset must match the corresponding entries of the full matrix
+  expect_equal(r_sub, r_full[keep, keep], tolerance = 1e-10)
+})
+
+test_that("keep_ids subset produces correct relatedness values across all families", {
+  data(inbreeding)
+
+  r_full_nosparse <- ped2com(inbreeding,
+    component = "additive", sparse = FALSE,
+    keep_ids = NULL
+  )
+
+  r_full_sparse <- ped2com(inbreeding,
+    component = "additive", sparse = TRUE,
+    keep_ids = NULL
+  )
+  for (i in unique(inbreeding$famID)) {
+    keep <- as.character(sample(inbreeding$ID[inbreeding$famID == i], 6))
+
+    r_sub <- ped2com(inbreeding,
+      component = "additive", sparse = FALSE,
+      keep_ids = keep
+    )
+
+    expect_equal(dim(r_sub), c(length(keep), length(keep)))
+    expect_equal(rownames(r_sub), keep)
+    r_full <- r_full_nosparse
+    # values in the subset must match the corresponding entries of the full matrix
+    expect_equal(r_sub, r_full[keep, keep], tolerance = 1e-10)
+
+    r_full <- r_full_sparse
+    r_sub <- ped2com(inbreeding,
+      component = "additive", sparse = TRUE,
+      keep_ids = keep
+    )
+
+    expect_equal(dim(r_sub), c(length(keep), length(keep)))
+    expect_equal(rownames(r_sub), keep)
+
+    # values in the subset must match the corresponding entries of the full matrix
+    expect_equal(r_sub, r_full[keep, keep], tolerance = 1e-10)
+  }
+})
+
+
+test_that("keep_ids subset produces correct relatedness values across all families", {
+  library(ggpedigree)
+  data(ASOIAF)
+  df <- ASOIAF |> dplyr::rename(ID = id)
+
+  r_full_sparse <- ped2com(df,
+    component = "additive", sparse = TRUE,
+    keep_ids = NULL,
+    mz_twins = FALSE
+  )
+  for (i in unique(df$famID)) {
+    n_rows <- sum(df$famID == i)
+    if (n_rows < 3) {
+      next
+    }
+    keep <- as.character(sample(df$ID[df$famID == i], min(15, n_rows)))
+
+
+    r_full <- r_full_sparse
+    r_sub <- ped2com(df,
+      component = "additive", sparse = TRUE,
+      keep_ids = keep,
+      mz_twins = FALSE
+    )
+
+    expect_equal(dim(r_sub), c(length(keep), length(keep)))
+    expect_equal(rownames(r_sub), keep)
+
+    # values in the subset must match the corresponding entries of the full matrix
+    expect_equal(r_sub, r_full[keep, keep], tolerance = 1e-10, info = paste("Family", i))
+
+    # entirely random subset of IDs across the whole dataset (not just within family)
+    keep <- as.character(sample(df$ID, 15))
+
+
+    r_full <- r_full_sparse
+    r_sub <- ped2com(df,
+      component = "additive", sparse = TRUE,
+      keep_ids = keep,
+      mz_twins = FALSE
+    )
+
+    expect_equal(dim(r_sub), c(length(keep), length(keep)))
+    expect_equal(rownames(r_sub), keep)
+
+    # values in the subset must match the corresponding entries of the full matrix
+    expect_equal(r_sub, r_full[keep, keep], tolerance = 1e-10, info = paste(keep))
+  }
+})
+
+
+
+test_that("keep_ids with unknown IDs warns and drops missing entries", {
+  data(hazard)
+  keep <- c(as.character(hazard$ID[1:3]), "BOGUS_ID")
+
+  expect_warning(
+    r_sub <- ped2com(hazard,
+      component = "additive", sparse = FALSE,
+      keep_ids = keep
+    ),
+    "keep_ids not found"
+  )
+  expect_equal(nrow(r_sub), 3L)
+})
+
+test_that("keep_ids = NULL returns full pedigree matrix", {
+  data(hazard)
+  r_full <- ped2com(hazard,
+    component = "additive", sparse = FALSE,
+    keep_ids = NULL
+  )
+  expect_equal(nrow(r_full), nrow(hazard))
+})

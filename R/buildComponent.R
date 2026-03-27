@@ -14,13 +14,16 @@
 #' @param save_path character. The path to save the checkpoint files
 #' @param flatten_diag logical. If TRUE, overwrite the diagonal of the final relatedness matrix with ones
 #' @param standardize_colnames logical. If TRUE, standardize the column names of the pedigree dataset
-#' @param transpose_method character. The method to use for computing the transpose.  Options are "tcrossprod", "crossprod", or "star"
+#' @param transpose_method character. The method to use for computing the transpose.  Options are "tcrossprod", "crossprod", "star", or "chunked"
+#' @param chunk_size numeric. If greater than 1 is Number of rows per chunk when \code{transpose_method = "chunked"}. Defaults to 1000. If less than or equal to 1, the entire matrix is processed in a single chunk.
+#' @param keep_ids character vector of IDs to retain in the final relatedness matrix. When supplied, only the rows of \code{r2} corresponding to these IDs are used in the tcrossprod, so the result is a \code{length(keep_ids) x length(keep_ids)} matrix. All columns of \code{r2} are retained during the multiplication so relatedness values remain correct. IDs not found in the pedigree are silently dropped with a warning.
 #' @param adjacency_method character. The method to use for computing the adjacency matrix.  Options are "loop", "indexed", direct or beta
 #' @param isChild_method character. The method to use for computing the isChild matrix.  Options are "classic" or "partialparent"
 #' @param adjBeta_method numeric The method to use for computing the building the adjacency_method matrix when using the "beta" build
 #' @param compress logical. If TRUE, use compression when saving the checkpoint files.  Defaults to TRUE.
-#' @param mz_twins logical. If TRUE, merge MZ co-twin columns in the r2 matrix before tcrossprod so that MZ twins are coded with relatedness 1 instead of 0.5. Twin pairs are identified from the \code{twinID} column. When a \code{zygosity} column is also present, only pairs where both members have \code{zygosity == "MZ"} are used; otherwise all \code{twinID} pairs are assumed to be MZ. Defaults to FALSE.
+#' @param mz_twins logical. If TRUE, merge MZ co-twin columns in the r2 matrix before tcrossprod so that MZ twins are coded with relatedness 1 instead of 0.5. Twin pairs are identified from the \code{twinID} column. When a \code{zygosity} column is also present, only pairs where both members have \code{zygosity == "MZ"} are used; otherwise all \code{twinID} pairs are assumed to be MZ. Defaults to TRUE.
 #' @param mz_method character. The method to handle MZ twins.  Options are "merging" (default) or "addtwins".  "addtwins" adds the twin2 column to the twin1 column before tcrossprod so that all relatedness flows through a single source, then leaves the twin2 column as zero and relies on the fact that the row/col names are the same to copy the values back to twin2 after tcrossprod.  "merging" merges the twin2 column into the twin1 column before tcrossprod and then copies the values back to twin2 after tcrossprod so that both twins appear in the final matrix.
+#' @param force_symmetric logical. If TRUE, force the final relatedness matrix to be symmetric. This can help mitigate any numerical asymmetry introduced by the transpose method, especially when using sparse matrices. Defaults to TRUE.
 #' @param beta logical. Used for benchmarking
 #' @param ... additional arguments to be passed to \code{\link{ped2com}}
 #' @details The algorithms and methodologies used in this function are further discussed and exemplified in the vignette titled "examplePedigreeFunctions". For more advanced scenarios and detailed explanations, consult this vignette.
@@ -34,6 +37,8 @@ ped2com <- function(ped, component,
                     flatten_diag = FALSE,
                     standardize_colnames = TRUE,
                     transpose_method = "tcrossprod",
+                    chunk_size = 1000L,
+                    keep_ids = NULL,
                     adjacency_method = "direct",
                     isChild_method = "partialparent",
                     saveable = FALSE,
@@ -48,6 +53,7 @@ ped2com <- function(ped, component,
                     mz_twins = TRUE,
                     mz_method = "addtwins",
                     beta = FALSE,
+                    force_symmetric = FALSE,
                     ...) {
   #------
   # Check inputs
@@ -73,7 +79,11 @@ ped2com <- function(ped, component,
     component = component,
     adjBeta_method = adjBeta_method,
     nr = nrow(ped),
-    compress = compress
+    compress = compress,
+    keep_ids = keep_ids,
+    mz_method = mz_method,
+    mz_twins = mz_twins,
+    force_symmetric = force_symmetric
   )
 
 
@@ -102,7 +112,8 @@ ped2com <- function(ped, component,
 
   transpose_method_options <- c(
     "tcrossprod", "crossprod", "star",
-    "tcross.alt.crossprod", "tcross.alt.star"
+    "tcross.alt.crossprod", "tcross.alt.star",
+    "chunked"
   )
 
   if (!config$transpose_method %in% transpose_method_options) {
@@ -130,7 +141,7 @@ ped2com <- function(ped, component,
   mz_row_pairs <- NULL
   mz_id_pairs <- NULL
 
-  if (mz_twins == TRUE && "twinID" %in% colnames(ped)) {
+  if (config$mz_twins == TRUE && "twinID" %in% colnames(ped)) {
     df_mz <- findMZtwins(ped,
       verbose = config$verbose,
       returnIDs = TRUE,
@@ -149,8 +160,8 @@ ped2com <- function(ped, component,
     return(readRDS(checkpoint_files$final_matrix))
   }
 
-  if (mz_method %in% c("merging") && mz_twins == TRUE && !is.null(mz_row_pairs) && length(mz_row_pairs) > 0 &&
-        config$component %in% c("additive")) {
+  if (config$mz_method %in% c("merging") && config$mz_twins == TRUE && !is.null(mz_row_pairs) && length(mz_row_pairs) > 0 &&
+    config$component %in% c("additive")) {
     # replace all MZ twin IDs with the first twin's ID in each pair so they are merged for the path tracing and all subsequent steps.  We will copy the values back to the second twin at the end.
     ped <- fuseTwins(ped = ped, mz_row_pairs = mz_row_pairs, mz_id_pairs = mz_id_pairs, config = config, beta = beta)
     if (config$verbose == TRUE) {
@@ -232,8 +243,14 @@ ped2com <- function(ped, component,
   # --- Step 2: Compute Relatedness Matrix ---
 
 
-  if (config$resume == TRUE && file.exists(checkpoint_files$r_checkpoint) &&
-      file.exists(checkpoint_files$gen_checkpoint) &&
+  if (config$resume == TRUE && file.exists(checkpoint_files$ram_checkpoint)) {
+    if (config$verbose == TRUE) cat("Resuming: Loading completed RAM matrix...\n")
+    r <- readRDS(checkpoint_files$ram_checkpoint)
+    gen <- rep(0, config$nr)
+    mtSum <- 0
+    count <- 0
+  } else if (config$resume == TRUE && file.exists(checkpoint_files$r_checkpoint) &&
+    file.exists(checkpoint_files$gen_checkpoint) &&
     file.exists(checkpoint_files$mtSum_checkpoint) &&
     file.exists(checkpoint_files$newIsPar_checkpoint) &&
     file.exists(checkpoint_files$count_checkpoint)
@@ -299,6 +316,13 @@ ped2com <- function(ped, component,
   }
 
   if (config$component == "generation") { # no need to do the rest
+    gen <- .subsetKeepIds(
+      component = gen,
+      keep_ids = config$keep_ids,
+      available_ids = rownames(r),
+      config = config,
+      verbose_message = "Subsetting generation component to %d target individuals\n"
+    )
     return(gen)
   } else {
     if (config$verbose == TRUE) {
@@ -315,7 +339,7 @@ ped2com <- function(ped, component,
     compress = config$compress
   )
 
-  if (mz_method == "addtwins" && mz_twins == TRUE && !is.null(mz_row_pairs) && length(mz_row_pairs) > 0) {
+  if (config$mz_method == "addtwins" && config$mz_twins == TRUE && !is.null(mz_row_pairs) && length(mz_row_pairs) > 0) {
     if (config$verbose == TRUE) {
       message("MZ twin merging enabled: Will merge MZ twin columns in r2 before tcrossprod")
     }
@@ -340,24 +364,63 @@ ped2com <- function(ped, component,
   }
   # --- Step 4: T crossproduct  ---
 
-  if (config$resume == TRUE && file.exists(checkpoint_files$tcrossprod_checkpoint) &&
-        config$component != "generation") {
-    if (config$verbose == TRUE) message("Resuming: Loading tcrossprod...\n")
-    r <- readRDS(checkpoint_files$tcrossprod_checkpoint)
-  } else {
-    r <- .computeTranspose(
-      r2 = r2, transpose_method = transpose_method,
-      verbose = config$verbose
+  # Subset rows of r2 to target individuals if requested.
+  # All columns are kept so dot products use the full ancestry paths.
+  if (!is.null(config$keep_ids)) {
+    r2 <- .subsetKeepIds(
+      component = r2,
+      keep_ids = config$keep_ids,
+      available_ids = rownames(r2),
+      config = config,
+      verbose_message = "Subsetting r2 to %d target individuals before tcrossprod\n",
+      drop = FALSE
     )
-    if (config$saveable == TRUE) {
-      saveRDS(r,
-        file = checkpoint_files$tcrossprod_checkpoint,
-        compress = config$compress
+  }
+
+  use_tcrossprod_checkpoint <- FALSE
+  if (config$resume == TRUE && file.exists(checkpoint_files$tcrossprod_checkpoint) &&
+    config$component != "generation") {
+    saved_keep_ids <- if (file.exists(checkpoint_files$tcrossprod_ids)) {
+      readRDS(checkpoint_files$tcrossprod_ids)
+    } else {
+      saved_keep_ids <- NULL
+      if (config$verbose == TRUE) {
+        message("No saved keep_ids found for tcrossprod checkpoint.  Expected at: ", checkpoint_files$tcrossprod_ids, "\n")
+      }
+    }
+    if (identical(saved_keep_ids, config$keep_ids)) {
+      if (config$verbose == TRUE) message("Resuming: Loading tcrossprod...\n")
+      r <- readRDS(checkpoint_files$tcrossprod_checkpoint)
+      use_tcrossprod_checkpoint <- TRUE
+    } else {
+      use_tcrossprod_checkpoint <- FALSE
+      warning(
+        "tcrossprod checkpoint keep_ids do not match \u2014 recomputing.\n",
+        "  saved:    ", if (is.null(saved_keep_ids)) "NULL (full pedigree)" else paste(length(saved_keep_ids), "IDs"), "\n",
+        "  expected: ", if (is.null(config$keep_ids)) "NULL (full pedigree)" else paste(length(config$keep_ids), "IDs")
       )
     }
   }
 
-  if (mz_method %in% c("merging", "addtwins") && mz_twins == TRUE && config$component %in% c("additive") && !is.null(mz_row_pairs) && length(mz_row_pairs) > 0) {
+  if (use_tcrossprod_checkpoint == FALSE) {
+    if (config$saveable == TRUE) {
+      saveRDS(config$keep_ids, file = checkpoint_files$tcrossprod_ids, compress = config$compress)
+    }
+    r <- .computeTranspose(
+      r2 = r2,
+      transpose_method = transpose_method,
+      chunk_size = chunk_size,
+      verbose = config$verbose,
+      force_symmetric = config$force_symmetric,
+      config = config,
+      checkpoint_files = if (exists("checkpoint_files")) checkpoint_files else NULL
+    )
+    if (config$saveable == TRUE) {
+      saveRDS(r, file = checkpoint_files$tcrossprod_checkpoint, compress = config$compress)
+    }
+  }
+
+  if (config$mz_method %in% c("merging", "addtwins") && config$mz_twins == TRUE && config$component %in% c("additive") && !is.null(mz_row_pairs) && length(mz_row_pairs) > 0) {
     # --- Step 4b: Restore MZ twins ---
     # Copy twin1's row/col to twin2 so both twins appear in the final matrix.
     if (config$sparse == FALSE) {
@@ -431,193 +494,25 @@ ped2com <- function(ped, component,
   r
 }
 
-#' Take a pedigree and turn it into an additive genetics relatedness matrix
-#' @inheritParams ped2com
-#' @inherit ped2com details
-#' @export
-#'
-ped2add <- function(ped, max_gen = 25, sparse = TRUE, verbose = FALSE,
-                    gc = FALSE,
-                    flatten_diag = FALSE, standardize_colnames = TRUE,
-                    transpose_method = "tcrossprod",
-                    adjacency_method = "direct",
-                    saveable = FALSE,
-                    resume = FALSE,
-                    save_rate = 5,
-                    save_rate_gen = save_rate,
-                    save_rate_parlist = 100000 * save_rate,
-                    save_path = "checkpoint/",
-                    compress = TRUE,
-                    mz_twins = FALSE,
-                    mz_method = "addtwins",
-                    ...) {
-  ped2com(
-    ped = ped,
-    max_gen = max_gen,
-    sparse = sparse,
-    verbose = verbose,
-    gc = gc,
-    component = "additive",
-    flatten_diag = flatten_diag,
-    standardize_colnames = standardize_colnames,
-    transpose_method = transpose_method,
-    adjacency_method = adjacency_method,
-    saveable = saveable,
-    resume = resume,
-    save_rate_gen = save_rate_gen,
-    save_rate_parlist = save_rate_parlist,
-    save_path = save_path,
-    compress = compress,
-    mz_twins = mz_twins,
-    mz_method = mz_method,
-    ...
-  )
-}
-
-#' Take a pedigree and turn it into a mitochondrial relatedness matrix
-#' @inheritParams ped2com
-#' @inherit ped2com details
-#' @export
-#' @aliases ped2mt
-#'
-ped2mit <- ped2mt <- function(ped, max_gen = 25,
-                              sparse = TRUE,
-                              verbose = FALSE, gc = FALSE,
-                              flatten_diag = FALSE,
-                              standardize_colnames = TRUE,
-                              transpose_method = "tcrossprod",
-                              adjacency_method = "direct",
-                              saveable = FALSE,
-                              resume = FALSE,
-                              save_rate = 5,
-                              save_rate_gen = save_rate,
-                              save_rate_parlist = 100000 * save_rate,
-                              save_path = "checkpoint/",
-                              compress = TRUE,
-                              ...) {
-  ped2com(
-    ped = ped,
-    max_gen = max_gen,
-    sparse = sparse,
-    verbose = verbose,
-    gc = gc,
-    component = "mitochondrial",
-    flatten_diag = flatten_diag,
-    standardize_colnames = standardize_colnames,
-    transpose_method = transpose_method,
-    adjacency_method = adjacency_method,
-    saveable = saveable,
-    resume = resume,
-    save_rate_gen = save_rate_gen,
-    save_rate_parlist = save_rate_parlist,
-    save_path = save_path,
-    compress = compress,
-    ...
-  )
-}
-
-#' Take a pedigree and turn it into a common nuclear environmental  matrix
-#' @inheritParams ped2com
-#' @inherit ped2com details
-#' @export
-#'
-ped2cn <- function(ped, max_gen = 25, sparse = TRUE, verbose = FALSE,
-                   gc = FALSE, flatten_diag = FALSE,
-                   standardize_colnames = TRUE,
-                   transpose_method = "tcrossprod",
-                   saveable = FALSE,
-                   resume = FALSE,
-                   save_rate = 5,
-                   adjacency_method = "direct",
-                   save_rate_gen = save_rate,
-                   save_rate_parlist = 1000 * save_rate,
-                   save_path = "checkpoint/",
-                   compress = TRUE,
-                   ...) {
-  ped2com(
-    ped = ped,
-    max_gen = max_gen,
-    sparse = sparse,
-    verbose = verbose,
-    gc = gc,
-    component = "common nuclear",
-    adjacency_method = adjacency_method,
-    flatten_diag = flatten_diag,
-    standardize_colnames = standardize_colnames,
-    transpose_method = transpose_method,
-    saveable = saveable,
-    resume = resume,
-    save_rate_gen = save_rate_gen,
-    save_rate_parlist = save_rate_parlist,
-    save_path = save_path,
-    compress = compress,
-    ...
-  )
-}
-#' Take a pedigree and turn it into a generation relatedness matrix
-#' @inheritParams ped2com
-#' @inherit ped2com details
-#' @export
-#'
-ped2gen <- function(ped, max_gen = 25, sparse = TRUE, verbose = FALSE,
-                    gc = FALSE, flatten_diag = FALSE,
-                    standardize_colnames = TRUE,
-                    transpose_method = "tcrossprod",
-                    saveable = FALSE,
-                    resume = FALSE,
-                    save_rate = 5,
-                    adjacency_method = "direct",
-                    save_rate_gen = save_rate,
-                    save_rate_parlist = 1000 * save_rate,
-                    save_path = "checkpoint/",
-                    compress = TRUE,
-                    ...) {
-  ped2com(
-    ped = ped,
-    max_gen = max_gen,
-    sparse = sparse,
-    verbose = verbose,
-    gc = gc,
-    component = "generation",
-    adjacency_method = adjacency_method,
-    flatten_diag = flatten_diag,
-    standardize_colnames = standardize_colnames,
-    transpose_method = transpose_method,
-    saveable = saveable,
-    resume = resume,
-    save_rate_gen = save_rate_gen,
-    save_rate_parlist = save_rate_parlist,
-    save_path = save_path,
-    compress = compress,
-    ...
-  )
-}
-
-
-#' Take a pedigree and turn it into an extended environmental relatedness matrix
-#' @inheritParams ped2com
-#' @inherit ped2com details
-#' @export
-#'
-ped2ce <- function(ped, ...) {
-  matrix(1, nrow = nrow(ped), ncol = nrow(ped), dimnames = list(ped$ID, ped$ID))
-}
-
-
 #' Compute the transpose multiplication for the relatedness matrix
 #' @inheritParams ped2com
 #' @inherit ped2com details
 #' @param r2 a relatedness matrix
-#'
-.computeTranspose <- function(r2, transpose_method = "tcrossprod", verbose = FALSE) {
+#' @param force_symmetric logical. If TRUE, forces the output matrix to be symmetric using Matrix::forceSymmetric.  This can be helpful when using chunked multiplication to ensure the final result is exactly symmetric despite potential numerical issues.  Defaults to TRUE.
+#' @param checkpoint_files list of checkpoint file paths for saving intermediate results when using chunked multiplication. Should contain at least 'tcrossprod_checkpoint' for saving the chunks and 'tcrossprod_ids' for saving the keep_ids used in the tcrossprod checkpoint.
+#' @param config list of configuration parameters, used for checkpointing and verbose output
+.computeTranspose <- function(r2, transpose_method = "tcrossprod", chunk_size = 1000L,
+                              verbose = FALSE, force_symmetric = FALSE, config = NULL,
+                              checkpoint_files = NULL) {
   valid_methods <- c(
     "tcrossprod", "crossprod", "star",
-    "tcross.alt.crossprod", "tcross.alt.star"
+    "tcross.alt.crossprod", "tcross.alt.star",
+    "chunked"
   )
   if (!transpose_method %in% valid_methods) {
     stop("Invalid method specified. Choose from
          'tcrossprod', 'crossprod', 'star', 'tcross.alt.crossprod',
-         or 'tcross.alt.star'.")
+         'tcross.alt.star', or 'chunked'.")
   }
 
   # Map aliases to core methods
@@ -625,6 +520,15 @@ ped2ce <- function(ped, ...) {
     "tcross.alt.crossprod" = "crossprod",
     "tcross.alt.star" = "star"
   )
+
+  if (chunk_size > 1) {
+    chunk_size_method <- "lines"
+  } else if (chunk_size > 0 && chunk_size <= 1) {
+    chunk_size_method <- "proportion"
+  } else {
+    chunk_size_method <- "full"
+  }
+
 
   if (transpose_method %in% names(alias_map)) {
     method_normalized <- alias_map[[transpose_method]]
@@ -644,6 +548,46 @@ ped2ce <- function(ped, ...) {
     "star" = {
       if (verbose == TRUE) cat("Doing tcrossprod using %*% t(.)\n")
       r2 %*% t(as.matrix(r2))
+    },
+    "chunked" = {
+      n <- nrow(r2)
+      if (chunk_size_method == "proportion") {
+        chunk_size <- ceiling(n * chunk_size)
+      }
+      n_chunks <- ceiling(n / chunk_size)
+      if (verbose == TRUE) {
+        cat(sprintf(
+          "Doing chunked tcrossprod: %d rows, chunk size %d (%d chunks)\n",
+          n, chunk_size, n_chunks
+        ))
+      }
+      blocks <- vector("list", n_chunks)
+      for (i in seq_len(n_chunks)) {
+        row_start <- (i - 1L) * chunk_size + 1L
+        row_end <- min(i * chunk_size, n)
+        if (verbose == TRUE) {
+          cat(sprintf("  chunk %d/%d (rows %d-%d)\n", i, n_chunks, row_start, row_end))
+        }
+
+        if (config$resume == TRUE && file.exists(paste0(checkpoint_files$tcrossprod_checkpoint, "_chunk_", i, ".rds"))) {
+          if (verbose == TRUE) cat("    Resuming: Loading chunk from checkpoint...\n")
+          blocks[[i]] <- readRDS(paste0(checkpoint_files$tcrossprod_checkpoint, "_chunk_", i, ".rds"))
+          next
+        }
+        blocks[[i]] <- Matrix::tcrossprod(r2[row_start:row_end, , drop = FALSE], r2)
+        gc()
+
+        if (config$saveable == TRUE) {
+          saveRDS(blocks[[i]], file = paste0(checkpoint_files$tcrossprod_checkpoint, "_chunk_", i, ".rds"), compress = config$compress)
+        }
+      }
+
+
+      if (force_symmetric == TRUE) {
+        Matrix::forceSymmetric(do.call(rbind, blocks))
+      } else {
+        do.call(rbind, blocks)
+      }
     }
   )
 
@@ -655,11 +599,11 @@ ped2ce <- function(ped, ...) {
 #' @keywords internal
 
 initializeCheckpoint <- function(config = list(
-  verbose = FALSE,
-  saveable = FALSE,
-  resume = FALSE,
-  save_path = "checkpoint/"
-)) {
+                                   verbose = FALSE,
+                                   saveable = FALSE,
+                                   resume = FALSE,
+                                   save_path = "checkpoint/"
+                                 )) {
   # Define checkpoint files
   # Ensure save path exists
   if (config$saveable == TRUE && !dir.exists(config$save_path)) {
@@ -689,6 +633,7 @@ initializeCheckpoint <- function(config = list(
       config$save_path,
       "tcrossprod_checkpoint.rds"
     ),
+    tcrossprod_ids = file.path(config$save_path, "tcrossprod_ids.rds"),
     count_checkpoint = file.path(config$save_path, "count_checkpoint.rds"),
     final_matrix = file.path(config$save_path, "final_matrix.rds")
   )
@@ -703,7 +648,7 @@ initializeCheckpoint <- function(config = list(
   if (component %in% c("generation", "additive")) {
     parVal <- .5
   } else if (component %in%
-               c("common nuclear", "mitochondrial", "mtdna", "mitochondria")) {
+    c("common nuclear", "mitochondrial", "mtdna", "mitochondria")) {
     parVal <- 1
   } else {
     stop("Don't know how to set parental value")
@@ -834,14 +779,14 @@ loadOrComputeCheckpoint <- function(file, compute_fn,
                                   parList = NULL, lens = NULL,
                                   compress = TRUE) {
   if (config$resume == TRUE &&
-        file.exists(checkpoint_files$parList) &&
+    file.exists(checkpoint_files$parList) &&
     file.exists(checkpoint_files$lens)) {
     if (config$verbose == TRUE) {
       message("Resuming: Loading parent-child adjacency data...\n")
     }
     parList <- readRDS(checkpoint_files$parList)
     lens <- readRDS(checkpoint_files$lens)
-    computed_indices <- which(!vapply(parList, is.null))
+    computed_indices <- which(!vapply(parList, is.null, logical(1)))
     lastComputed <- if (length(computed_indices) > 0) {
       max(computed_indices)
     } else {
@@ -857,7 +802,7 @@ loadOrComputeCheckpoint <- function(file, compute_fn,
   }
 
   if (config$resume == TRUE &&
-        file.exists(checkpoint_files$iss) &&
+    file.exists(checkpoint_files$iss) &&
     file.exists(checkpoint_files$jss)) { # fix to check actual
     if (config$verbose == TRUE) message("Resuming: Constructed matrix...\n")
     jss <- readRDS(checkpoint_files$jss)
@@ -895,4 +840,46 @@ loadOrComputeCheckpoint <- function(file, compute_fn,
     }
   }
   list_of_adjacencies
+}
+
+
+#' Subset output to requested IDs
+#' @inheritParams ped2com
+#' @param component A component to subset.
+#' @param keep_ids Character vector of IDs to retain.
+#' @param available_ids Character vector of IDs available in \code{x}.
+#' @param verbose_message Character. Message prefix to print when \code{config$verbose == TRUE}.
+#' @param drop logical. Passed to \code{[} when subsetting matrices.
+#' @keywords internal
+.subsetKeepIds <- function(component, keep_ids = NULL, available_ids, config,
+                           verbose_message = "Subsetting to %d target individuals\n",
+                           drop = FALSE) {
+  if (is.null(keep_ids)) {
+    return(component)
+  }
+
+  idx <- match(keep_ids, available_ids)
+  missing <- keep_ids[is.na(idx)]
+
+  if (length(missing) > 0) {
+    warning(
+      length(missing), " keep_ids not found in pedigree and will be dropped: ",
+      paste(Matrix::head(missing, 5), collapse = ", "),
+      if (length(missing) > 5) " ..." else ""
+    )
+  }
+
+  idx <- idx[!is.na(idx)]
+
+  if (config$verbose == TRUE) {
+    cat(sprintf(verbose_message, length(idx)))
+  }
+  # consequence is missing data
+  if (is.matrix(component) || methods::is(component, "Matrix")) {
+    component <- component[idx, , drop = drop]
+  } else {
+    component <- component[idx]
+  }
+
+  component
 }
