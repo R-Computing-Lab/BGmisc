@@ -1,0 +1,244 @@
+---
+title: "Fitting Pedigree-Based Variance Component Models"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Fitting Pedigree-Based Variance Component Models}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+options(rmarkdown.html_vignette.check_title = FALSE)
+```
+
+# Introduction
+
+This vignette extends the example from `vignette("v60_pedigree_model_fitting.Rmd", package = "BGmisc")` to show how to fit models to multiple families simultaneously. The key functions are `buildOneFamilyGroup()` and `buildPedigreeMx()`, which translate pedigree data into OpenMx model specifications.
+
+# Scaling Up to Many Families
+
+
+```{r krsp-prep, eval = run_models}
+library(ggpedigree)  # for pedigree data)
+library(tidyverse)
+data("redsquirrels_full")
+
+ped_krsp <- redsquirrels_full |>
+  transmute(
+    ID    = as.integer(personID),
+    momID = as.integer(momID),
+    dadID = as.integer(dadID),
+    sex   = sex,
+  famID = as.integer(famID),
+  lrs = lrs
+  ) 
+
+cat("KRSP pedigree:", nrow(ped_krsp), "individuals,",
+    n_distinct(ped_krsp$famID), "grids\n")
+summarizeFamilies(ped_krsp, famID = "famID")$family_summary |> arrange(desc(count))
+```
+
+```{r, eval = FALSE && run_models}
+
+minim_family_size <- 3
+
+ped_krsp_subset <- ped_krsp |>
+  group_by(famID) |>
+  filter(sum(!is.na(lrs)) >= minim_family_size) |>
+  ungroup()
+
+n_families <- unique(ped_krsp_subset$famID)
+
+
+
+# Pre-allocate storage
+add_list     <- vector("list", length(n_families))
+cn_list      <- vector("list", length(n_families))
+obs_ids_list <- vector("list", length(n_families))
+pheno_list   <- vector("list", length(n_families))
+
+for (i in seq_along(n_families)) {
+  
+  ped_i <- subset(ped_krsp_subset, famID == n_families[i])
+  phenotypic_ids <- ped_i$ID[!is.na(ped_i$lrs)]
+  A_i  <- as.matrix(ped2add(ped_i, sparse = FALSE, keep_ids = phenotypic_ids))
+  Cn_i <- as.matrix(ped2cn(ped_i,  sparse = FALSE, keep_ids = phenotypic_ids))
+  
+   n_i  <- nrow(A_i)
+  id_order_i <- rownames(A_i)
+  
+  pheno_vals  <- ped_i$lrs[match(id_order_i, as.character(ped_i$ID))]
+  
+  obs_ids_i   <- make.names(id_order_i[!is.na(pheno_vals)])
+  pheno_row_i <- matrix( as.double(pheno_vals[!is.na(pheno_vals)]), 
+                         nrow = 1, 
+                         dimnames = list(NULL, obs_ids_i))
+  
+  rownames(A_i) <- colnames(A_i) <- id_order_i
+  
+  rownames(Cn_i) <- colnames(Cn_i) <- id_order_i
+    add_list[[i]]     <- A_i
+  cn_list[[i]]      <- Cn_i
+  obs_ids_list[[i]] <- obs_ids_i
+  pheno_list[[i]]   <- pheno_row_i
+}
+
+
+
+group_models <- lapply(seq_len(n_families), function(i) {
+  buildOneFamilyGroup(
+    group_name  = paste0("ped", i),
+    Addmat      = add_list[[i]],
+    Nucmat      = cn_list[[i]],
+    full_df_row = pheno_list[[i]],
+    obs_ids     = obs_ids_list[[i]]
+  )
+})
+
+multi_model <- buildPedigreeMx(
+  model_name   = "MultiPedigreeModel",
+  vars         = start_vars,
+  group_models = group_models
+)
+
+fitted_multi <- mxRun(multi_model)
+#saveRDS(fitted_multi, "fitted_multi.RDS")
+```
+
+---
+
+
+
+
+
+
+# Part 3: Scaling Up — Many Families and Parameter Recovery
+
+Once you understand the pattern from Parts 1 and 2, you can scale to many families using a loop. We switch to **simulated data** here so we have known true parameter values to check our estimates against.
+
+## Simulate pedigrees and data
+
+```{r simulate-many, eval = has_mvtnorm && run_models}
+library(mvtnorm)
+set.seed(2024)
+
+# True variance components
+true_var <- list(ad2 = 0.50, cn2 = 0.10, ee2 = 0.40,
+                 ce2 = 0, mt2 = 0, dd2 = 0, am2 = 0)
+
+n_families <- 10
+
+# Pre-allocate storage
+add_list     <- vector("list", n_families)
+cn_list      <- vector("list", n_families)
+obs_ids_list <- vector("list", n_families)
+pheno_list   <- vector("list", n_families)
+
+for (i in seq_len(n_families)) {
+  ped_i <- simulatePedigree(kpc = 3, Ngen = 4, marR = 0.6)
+
+  A_i  <- as.matrix(ped2add(ped_i, sparse = FALSE))
+  Cn_i <- as.matrix(ped2cn(ped_i,  sparse = FALSE))
+  n_i  <- nrow(A_i)
+
+  # Implied covariance from true parameters
+  V_i <- true_var$ad2 * A_i +
+         true_var$cn2 * Cn_i +
+         true_var$ee2 * diag(1, n_i)
+
+  y_i <- rmvnorm(1, sigma = V_i)
+
+  ids_i <- make.names(rownames(A_i))
+  rownames(A_i) <- colnames(A_i) <- ids_i
+  rownames(Cn_i) <- colnames(Cn_i) <- ids_i
+
+  add_list[[i]]     <- A_i
+  cn_list[[i]]      <- Cn_i
+  obs_ids_list[[i]] <- ids_i
+  pheno_list[[i]]   <- matrix(y_i, nrow = 1, dimnames = list(NULL, ids_i))
+}
+
+cat("Family sizes:", vapply(add_list, nrow, integer(1)), "\n")
+```
+
+## Build and fit the multi-family model
+
+```{r fit-many, eval = has_mvtnorm && run_models}
+group_models <- lapply(seq_len(n_families), function(i) {
+  buildOneFamilyGroup(
+    group_name  = paste0("ped", i),
+    Addmat      = add_list[[i]],
+    Nucmat      = cn_list[[i]],
+    full_df_row = pheno_list[[i]],
+    obs_ids     = obs_ids_list[[i]]
+  )
+})
+
+multi_model <- buildPedigreeMx(
+  model_name   = "MultiPedigreeModel",
+  vars         = start_vars,
+  group_models = group_models
+)
+
+fitted_multi <- mxRun(multi_model)
+```
+
+## Compare estimates to true values
+
+```{r compare-many, eval = has_mvtnorm && run_models}
+data.frame(
+  Component = c("Additive genetic (Vad)",
+                "Common nuclear  (Vcn)",
+                "Unique environ. (Ver)"),
+  True      = c(true_var$ad2, true_var$cn2, true_var$ee2),
+  Estimated = round(c(
+    fitted_multi$ModelOne$Vad$values,
+    fitted_multi$ModelOne$Vcn$values,
+    fitted_multi$ModelOne$Ver$values
+  ), 4)
+)
+```
+
+With ten families, estimates should be substantially closer to the true values than with a single family.
+
+## Using the high-level wrapper
+
+For convenience, `fitPedigreeModel()` wraps the build and fit steps together, and uses `mxTryHard()` for robust optimization:
+
+```{r fit-wrapper, eval = has_mvtnorm && run_models}
+fitted_easy <- fitPedigreeModel(
+  model_name   = "EasyFit",
+  vars         = start_vars,
+  group_models = group_models,
+  tryhard      = TRUE
+)
+summary(fitted_easy)
+```
+
+---
+
+# Understanding the Covariance Structure
+
+The model estimated above is defined by:
+
+$$V = \sigma^2_a \mathbf{A} + \sigma^2_{cn} \mathbf{C}_n + \sigma^2_e \mathbf{I}$$
+
+where $\mathbf{A}$ is the additive genetic relatedness matrix, $\mathbf{C}_n$ is the common nuclear environment matrix, $\mathbf{I}$ is the identity matrix (unique environment), and the $\sigma^2$ terms are the variance components estimated by the model.
+
+This is an extension of the classical twin model to arbitrary pedigree structures. Additional components can be added by passing `Extmat` (common extended environment), `Mtdmat` (mitochondrial), or `Dmgmat` (dominance) to `buildOneFamilyGroup()`. See `vignette("v1_modelingvariancecomponents", package = "BGmisc")` for background on identification.
+
+---
+
+# Summary
+
+| Part | Data | Key point |
+|------|------|-----------|
+| 1 — Single family | `hazard`, family 1 | Full pipeline, one group model |
+| 2 — Two families | `hazard`, families 1 & 2 | Same steps twice; `buildPedigreeMx()` combines them |
+| 3 — Many families | Simulated | Loop over families; verify parameter recovery |
+
+The helper functions (`buildOneFamilyGroup()`, `buildPedigreeMx()`, `fitPedigreeModel()`) handle the translation from pedigree relatedness matrices into OpenMx model specifications. The pattern is always the same: one call to `buildOneFamilyGroup()` per family, then one call to `buildPedigreeMx()` to combine them.

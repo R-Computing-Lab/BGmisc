@@ -17,7 +17,7 @@ options(rmarkdown.html_vignette.check_title = FALSE)
 
 # Introduction
 
-A core goal of behavior genetics is to decompose observed phenotypic variance into genetic and environmental components. Extended pedigrees — multi-generational families with known parentage — provide richer information about relatedness than twin studies alone and allow researchers to estimate a wider array of variance components.
+A core goal of behavior genetics is to decompose observed phenotypic variance into genetic and environmental components. Extended pedigrees — multi-generational families with known parentage — provide richer information about relatedness than twin studies alone and allow researchers to estimate a wider array of variance components. 
 
 The `BGmisc` package provides a complete pipeline for pedigree-based variance component modeling:
 
@@ -26,7 +26,7 @@ The `BGmisc` package provides a complete pipeline for pedigree-based variance co
 3. **Build** OpenMx group models with `buildOneFamilyGroup()`
 4. **Fit** the combined model with `buildPedigreeMx()` and `mxRun()` (or the wrapper `fitPedigreeModel()`)
 
-This vignette builds up in three parts: a single-family model, a two-family multi-group model, and a scaled-up simulation study.
+This vignette builds up in three parts: a single-family model, a two-family multi-group model, and a scaled-up simulation study. An extension vignette  `vignette("v61_pedigree_model_fitting.Rmd", package = "BGmisc")` covers more complex models using squirel data from the Kluane Red Squirrel Project.
 
 ## Prerequisites
 
@@ -439,10 +439,6 @@ fitted_multi <- mxRun(multi_model)
 ```
 
 ---
-
-
-
-
 
 
 # Part 3: Scaling Up — Many Families and Parameter Recovery
