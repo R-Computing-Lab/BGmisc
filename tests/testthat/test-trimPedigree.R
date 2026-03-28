@@ -8,8 +8,7 @@ test_that("findLeaves returns a character vector of leaf IDs for hazard dataset"
   expect_true(length(leaves) > 0)
 
   expect_true(all(leaves %in% as.character(hazard$ID)))
-}
-)
+})
 
 
 # Test Case 2: findLeaves identifies terminal nodes correctly in the hazard dataset
@@ -23,8 +22,7 @@ test_that("findLeaves correctly identifies terminal nodes in hazard dataset", {
   expect_true(all(leaves_all %in% as.character(hazard$ID)))
 
 
-
-    # find all terminal nodes (outdegree == 0) in the hazard dataset
+  # find all terminal nodes (outdegree == 0) in the hazard dataset
   hazard$dadID0 <- hazard$dadID
   hazard$momID0 <- hazard$momID
   hazard$dadID0[is.na(hazard$dadID)] <- 0
@@ -36,7 +34,6 @@ test_that("findLeaves correctly identifies terminal nodes in hazard dataset", {
   leaves_founder <- findLeaves(hazard, include_terminal = F, include_founder_singletons = T)
   # find all founder singletons (indegree == 0, outdegree == 1) in the hazard dataset
   outdegree <- table(c(hazard$dadID0, hazard$momID0))
-
 
 
   viable <- names(outdegree)[outdegree == 1]
@@ -179,7 +176,7 @@ test_that("findLeaves identifies founder singletons correctly in a minimal pedig
     dadID = c(NA, NA, 1),
     momID = c(NA, NA, 2)
   )
-  leaves_all      <- findLeaves(ped, include_founder_singletons = TRUE)
+  leaves_all <- findLeaves(ped, include_founder_singletons = TRUE)
   leaves_terminal <- findLeaves(ped, include_founder_singletons = FALSE)
   expect_true("1" %in% leaves_all)
   expect_true("2" %in% leaves_all)
@@ -211,8 +208,10 @@ test_that("trimPedigree remove_ids forces removal before leaf trimming in a mini
     dadID = c(NA, NA, 1, 3),
     momID = c(NA, NA, 2, NA)
   )
-  trimmed <- trimPedigree(ped, remove_ids = 4,
-                          include_founder_singletons = FALSE, max_iter = 1)
+  trimmed <- trimPedigree(ped,
+    remove_ids = 4,
+    include_founder_singletons = FALSE, max_iter = 1
+  )
   expect_false(4 %in% trimmed$ID)
   expect_false(3 %in% trimmed$ID)
 })
@@ -273,7 +272,7 @@ test_that("trimPedigree min_size prevents pedigree from falling below threshold 
 # Test Case 25: trimPedigree min_size = 0 behaves identically to default in hazard dataset
 test_that("trimPedigree min_size = 0 behaves identically to default in hazard dataset", {
   data(hazard)
-  trimmed_default  <- trimPedigree(hazard)
+  trimmed_default <- trimPedigree(hazard)
   trimmed_min_zero <- trimPedigree(hazard, min_size = 0L)
   expect_equal(trimmed_default, trimmed_min_zero)
 })
@@ -364,7 +363,7 @@ test_that("trimPedigree with keep_var removes fewer individuals than without in 
   hazard$affected[1:10] <- 1
 
   trimmed_no_keep <- trimPedigree(hazard)
-  trimmed_keep    <- trimPedigree(hazard, keep_var = "affected")
+  trimmed_keep <- trimPedigree(hazard, keep_var = "affected")
   # Protecting phenotyped individuals means fewer are removed overall
   expect_true(nrow(trimmed_keep) >= nrow(trimmed_no_keep))
 })

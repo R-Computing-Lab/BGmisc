@@ -39,27 +39,28 @@ This vignette extends the example from `vignette("v60_pedigree_model_fitting.Rmd
 
 
 ```{r krsp-prep, eval = run_models}
-library(ggpedigree)  # for pedigree data)
+library(ggpedigree) # for pedigree data)
 library(tidyverse)
 data("redsquirrels_full")
 
 ped_krsp <- redsquirrels_full |>
   transmute(
-    ID    = as.integer(personID),
+    ID = as.integer(personID),
     momID = as.integer(momID),
     dadID = as.integer(dadID),
-    sex   = sex,
-  famID = as.integer(famID),
-  lrs = lrs
-  ) 
+    sex = sex,
+    famID = as.integer(famID),
+    lrs = lrs
+  )
 
-cat("KRSP pedigree:", nrow(ped_krsp), "individuals,",
-    n_distinct(ped_krsp$famID), "grids\n")
+cat(
+  "KRSP pedigree:", nrow(ped_krsp), "individuals,",
+  n_distinct(ped_krsp$famID), "grids\n"
+)
 summarizeFamilies(ped_krsp, famID = "famID")$family_summary |> arrange(desc(count))
 ```
 
 ```{r, eval = TRUE && run_models}
-
 minim_family_size <- 3
 
 ped_krsp_subset <- ped_krsp |>
@@ -70,39 +71,51 @@ ped_krsp_subset <- ped_krsp |>
 n_families <- unique(ped_krsp_subset$famID)
 
 
-
 # Pre-allocate storage
-add_list     <- vector("list", length(n_families))
-cn_list      <- vector("list", length(n_families))
-mt_list      <- vector("list", length(n_families))
+add_list <- vector("list", length(n_families))
+cn_list <- vector("list", length(n_families))
+mt_list <- vector("list", length(n_families))
 obs_ids_list <- vector("list", length(n_families))
-pheno_list   <- vector("list", length(n_families))
+pheno_list <- vector("list", length(n_families))
+
+
+# Starting values for variance components
+start_vars <- list(
+  ad2 = 0.3, # additive genetic
+  cn2 = 0.1, # common nuclear environment
+  ce2 = 0, # common extended (not estimated here)
+  mt2 = 0.1, # mitochondrial
+  dd2 = 0, # dominance (not estimated here)
+  am2 = 0, # A x Mt interaction (not estimated here)
+  ee2 = 0.5 # unique environment
+)
 
 for (i in seq_along(n_families)) {
-  
   ped_i <- subset(ped_krsp_subset, famID == n_families[i])
   phenotypic_ids <- ped_i$ID[!is.na(ped_i$lrs)]
-  A_i  <- as.matrix(ped2add(ped_i, sparse = FALSE, keep_ids = phenotypic_ids))
-  Cn_i <- as.matrix(ped2cn(ped_i,  sparse = FALSE, keep_ids = phenotypic_ids))
-  Mt_i <- as.matrix(ped2mit(ped_i,  sparse = FALSE, keep_ids = phenotypic_ids))
-  
-   n_i  <- nrow(A_i)
+  A_i <- as.matrix(ped2add(ped_i, sparse = FALSE, keep_ids = phenotypic_ids))
+  Cn_i <- as.matrix(ped2cn(ped_i, sparse = FALSE, keep_ids = phenotypic_ids))
+  Mt_i <- as.matrix(ped2mit(ped_i, sparse = FALSE, keep_ids = phenotypic_ids))
+
+  n_i <- nrow(A_i)
   id_order_i <- rownames(A_i)
-  
-  pheno_vals  <- ped_i$lrs[match(id_order_i, as.character(ped_i$ID))]
-  
-  obs_ids_i   <- make.names(id_order_i[!is.na(pheno_vals)])
-  pheno_row_i <- matrix( as.double(pheno_vals[!is.na(pheno_vals)]), 
-                         nrow = 1, 
-                         dimnames = list(NULL, obs_ids_i))
-  
+
+  pheno_vals <- ped_i$lrs[match(id_order_i, as.character(ped_i$ID))]
+
+  obs_ids_i <- make.names(id_order_i[!is.na(pheno_vals)])
+  pheno_row_i <- matrix(as.double(pheno_vals[!is.na(pheno_vals)]),
+    nrow = 1,
+    dimnames = list(NULL, obs_ids_i)
+  )
+
   rownames(A_i) <- colnames(A_i) <- id_order_i
-  
   rownames(Cn_i) <- colnames(Cn_i) <- id_order_i
-    add_list[[i]]     <- A_i
-  cn_list[[i]]      <- Cn_i
+  rownames(Mt_i) <- colnames(Mt_i) <- id_order_i
+  add_list[[i]] <- A_i
+  cn_list[[i]] <- Cn_i
+  mt_list[[i]] <- Mt_i
   obs_ids_list[[i]] <- obs_ids_i
-  pheno_list[[i]]   <- pheno_row_i
+  pheno_list[[i]] <- pheno_row_i
 }
 
 
@@ -111,6 +124,7 @@ group_models <- lapply(seq_len(n_families), function(i) {
     group_name  = paste0("ped", i),
     Addmat      = add_list[[i]],
     Nucmat      = cn_list[[i]],
+    Mitmat      = mt_list[[i]],
     full_df_row = pheno_list[[i]],
     obs_ids     = obs_ids_list[[i]]
   )
@@ -123,7 +137,7 @@ multi_model <- buildPedigreeMx(
 )
 
 fitted_multi <- mxRun(multi_model)
-#saveRDS(fitted_multi, "fitted_multi.RDS")
+# saveRDS(fitted_multi, "fitted_multi.RDS")
 ```
 
 
