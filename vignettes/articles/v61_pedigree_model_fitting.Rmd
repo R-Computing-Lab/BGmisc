@@ -154,12 +154,12 @@ fitted_multi <- readRDS(
   system.file("extdata", "fitted_multi.rds", package = "BGmisc")
 )
 ```
-```{r, eval = has_openmx}
+```{r, eval = has_openmx && !is.null(fitted_multi)}
 summary(fitted_multi)
 ```
 
 
-```{r single-fam-results, eval = has_openmx}
+```{r single-fam-results, eval = has_openmx && !is.null(fitted_multi)}
 cat("Additive genetic (Vad):", fitted_multi$ModelOne$Vad$values, "\n")
 cat("Common nuclear  (Vcn):", fitted_multi$ModelOne$Vcn$values, "\n")
 cat("Mitochondrial (Vmt):", fitted_multi$ModelOne$Vmt$values, "\n")
