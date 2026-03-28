@@ -107,10 +107,10 @@ table(hazard$famID)
 fam1 <- subset(hazard, famID == 1)
 
 # What does the pedigree look like?
-head(fam1[, c("famID", "ID", "sex", "dadID", "momID", "DA1")])
+head(fam1[, c("famID", "ID", "sex", "dadID", "momID", "DA2")])
 ```
 
-`DA1` is the phenotype we will model. It is binary in the actual dataset; for a real continuous-trait analysis you would substitute your own measure.
+`DA2` is the phenotype we will model. It is binary in the actual dataset; for a real continuous-trait analysis you would substitute your own measure.
 
 ## Step 2: Compute relatedness matrices
 
@@ -132,6 +132,12 @@ cn_mat1 <- ped2cn(fam1, sparse = FALSE,
                   keep_ids = fam1$ID
                   )
 
+mt_mat1 <- ped2mit(fam1, sparse = FALSE,
+                    famID = "famID", personID = "ID",
+                    momID = "momID", dadID = "dadID", sex = "sex",
+                  keep_ids = fam1$ID
+                  )
+
 # The matrices are square and labeled with individual IDs
 dim(add_mat1)
 rownames(add_mat1)
@@ -146,7 +152,7 @@ The model needs a **one-row matrix** with one column per individual, in the same
 id_order1 <- rownames(add_mat1)
 
 # Pull phenotype values, reordered to match the matrix
-pheno_vals1 <- fam1$DA1[match(id_order1, as.character(fam1$ID))]
+pheno_vals1 <- fam1$DA2[match(id_order1, as.character(fam1$ID))]
 names(pheno_vals1) <- id_order1
 
 # Who actually has an observed phenotype?
@@ -179,10 +185,12 @@ raw_obs_ids1 <- id_order1[observed1]
 
 add_mat1_obs <- add_mat1[raw_obs_ids1, raw_obs_ids1]
 cn_mat1_obs  <- cn_mat1[raw_obs_ids1, raw_obs_ids1]
+mt_mat1_obs <- mt_mat1[raw_obs_ids1, raw_obs_ids1]
 
 # Rename rows/cols to match obs_ids1 (the make.names versions)
 rownames(add_mat1_obs) <- colnames(add_mat1_obs) <- obs_ids1
 rownames(cn_mat1_obs)  <- colnames(cn_mat1_obs)  <- obs_ids1
+rownames(mt_mat1_obs) <- colnames(mt_mat1_obs) <- obs_ids1
 
 dim(add_mat1_obs)
 ```
@@ -195,6 +203,7 @@ Before fitting, verify that the variance components you want to estimate are sta
 id_check1 <- identifyComponentModel(
   A  = add_mat1_obs,
   Cn = cn_mat1_obs,
+  Mt = mt_mat1_obs,
   E  = diag(1, nrow(add_mat1_obs))
 )
 id_check1
@@ -205,10 +214,10 @@ id_check1
 ```{r single-fam-fit, eval = run_models}
 # Starting values for variance components
 start_vars <- list(
-  ad2 = 0.4,   # additive genetic
+  ad2 = 0.3,   # additive genetic
   cn2 = 0.1,   # common nuclear environment
   ce2 = 0,     # common extended (not estimated here)
-  mt2 = 0,     # mitochondrial (not estimated here)
+  mt2 = 0.1,     # mitochondrial
   dd2 = 0,     # dominance (not estimated here)
   am2 = 0,     # A x Mt interaction (not estimated here)
   ee2 = 0.5    # unique environment
@@ -219,6 +228,7 @@ group1 <- buildOneFamilyGroup(
   group_name  = "family1",
   Addmat      = add_mat1_obs,
   Nucmat      = cn_mat1_obs,
+  Mtdmat      = mt_mat1_obs,
   full_df_row = pheno_row1,
   obs_ids     = obs_ids1
 )
@@ -239,6 +249,7 @@ The estimated variance components are in `fitted1$ModelOne`:
 ```{r single-fam-results, eval = run_models}
 cat("Additive genetic (Vad):", fitted1$ModelOne$Vad$values, "\n")
 cat("Common nuclear  (Vcn):", fitted1$ModelOne$Vcn$values, "\n")
+cat("Mitochondrial (Vmt):", fitted1$ModelOne$Vmt$values, "\n")
 cat("Unique environ. (Ver):", fitted1$ModelOne$Ver$values, "\n")
 ```
 
@@ -266,6 +277,12 @@ cn_mat2 <- ped2cn(fam2, sparse = FALSE,
                   keep_ids = fam2$ID
                   )
 
+mt_mat2 <- ped2mit(fam2, sparse = FALSE,
+                    famID = "famID", personID = "ID",
+                    momID = "momID", dadID = "dadID", sex = "sex",
+                  keep_ids = fam2$ID
+                  )
+
 dim(add_mat2)
 ```
 
@@ -274,7 +291,7 @@ dim(add_mat2)
 ```{r two-fam-pheno, eval = run_models}
 id_order2 <- rownames(add_mat2)
 
-pheno_vals2 <- fam2$DA1[match(id_order2, as.character(fam2$ID))]
+pheno_vals2 <- fam2$DA2[match(id_order2, as.character(fam2$ID))]
 names(pheno_vals2) <- id_order2
 
 observed2  <- !is.na(pheno_vals2)
@@ -295,9 +312,11 @@ cat("Family 2 observed:", sum(observed2), "of", length(id_order2), "\n")
 ```{r two-fam-subset-mat, eval = run_models}
 add_mat2_obs <- add_mat2[raw_obs_ids2, raw_obs_ids2]
 cn_mat2_obs  <- cn_mat2[raw_obs_ids2, raw_obs_ids2]
+mt_mat2_obs  <- mt_mat2[raw_obs_ids2, raw_obs_ids2]
 
 rownames(add_mat2_obs) <- colnames(add_mat2_obs) <- obs_ids2
 rownames(cn_mat2_obs)  <- colnames(cn_mat2_obs)  <- obs_ids2
+rownames(mt_mat2_obs) <- colnames(mt_mat2_obs) <- obs_ids2
 ```
 
 ## Check identification across both families
@@ -308,6 +327,7 @@ n_total <- nrow(add_mat1_obs) + nrow(add_mat2_obs)
 id_check2 <- identifyComponentModel(
   A  = list(add_mat1_obs, add_mat2_obs),
   Cn = list(cn_mat1_obs,  cn_mat2_obs),
+  Mt = list(mt_mat1_obs,  mt_mat2_obs),
   E  = diag(1, n_total)
 )
 id_check2
@@ -323,6 +343,7 @@ group2 <- buildOneFamilyGroup(
   group_name  = "family2",
   Addmat      = add_mat2_obs,
   Nucmat      = cn_mat2_obs,
+  Mtdmat      = mt_mat2_obs,
   full_df_row = pheno_row2,
   obs_ids     = obs_ids2  
 )
@@ -341,102 +362,11 @@ summary(fitted2)
 ```{r two-fam-results, eval = run_models}
 cat("Additive genetic (Vad):", fitted2$ModelOne$Vad$values, "\n")
 cat("Common nuclear  (Vcn):", fitted2$ModelOne$Vcn$values, "\n")
+cat("Mitochondrial (Vmt):", fitted2$ModelOne$Vmt$values, "\n")
 cat("Unique environ. (Ver):", fitted2$ModelOne$Ver$values, "\n")
 ```
 
 The estimates from both families together are generally more stable than those from either family alone.
-
----
-
-# Part 3: Scaling Up to Many Families
-
-
-```{r krsp-prep, eval = run_models}
-library(ggpedigree)  # for pedigree data)
-library(tidyverse)
-data("redsquirrels_full")
-
-ped_krsp <- redsquirrels_full |>
-  transmute(
-    ID    = as.integer(personID),
-    momID = as.integer(momID),
-    dadID = as.integer(dadID),
-    sex   = sex,
-  famID = as.integer(famID),
-  lrs = lrs
-  ) 
-
-cat("KRSP pedigree:", nrow(ped_krsp), "individuals,",
-    n_distinct(ped_krsp$famID), "grids\n")
-summarizeFamilies(ped_krsp, famID = "famID")$family_summary |> arrange(desc(count))
-```
-
-```{r, eval = FALSE && run_models}
-
-minim_family_size <- 3
-
-ped_krsp_subset <- ped_krsp |>
-  group_by(famID) |>
-  filter(sum(!is.na(lrs)) >= minim_family_size) |>
-  ungroup()
-
-n_families <- unique(ped_krsp_subset$famID)
-
-
-
-# Pre-allocate storage
-add_list     <- vector("list", length(n_families))
-cn_list      <- vector("list", length(n_families))
-obs_ids_list <- vector("list", length(n_families))
-pheno_list   <- vector("list", length(n_families))
-
-for (i in seq_along(n_families)) {
-  
-  ped_i <- subset(ped_krsp_subset, famID == n_families[i])
-  phenotypic_ids <- ped_i$ID[!is.na(ped_i$lrs)]
-  A_i  <- as.matrix(ped2add(ped_i, sparse = FALSE, keep_ids = phenotypic_ids))
-  Cn_i <- as.matrix(ped2cn(ped_i,  sparse = FALSE, keep_ids = phenotypic_ids))
-  
-   n_i  <- nrow(A_i)
-  id_order_i <- rownames(A_i)
-  
-  pheno_vals  <- ped_i$lrs[match(id_order_i, as.character(ped_i$ID))]
-  
-  obs_ids_i   <- make.names(id_order_i[!is.na(pheno_vals)])
-  pheno_row_i <- matrix( as.double(pheno_vals[!is.na(pheno_vals)]), 
-                         nrow = 1, 
-                         dimnames = list(NULL, obs_ids_i))
-  
-  rownames(A_i) <- colnames(A_i) <- id_order_i
-  
-  rownames(Cn_i) <- colnames(Cn_i) <- id_order_i
-    add_list[[i]]     <- A_i
-  cn_list[[i]]      <- Cn_i
-  obs_ids_list[[i]] <- obs_ids_i
-  pheno_list[[i]]   <- pheno_row_i
-}
-
-
-
-group_models <- lapply(seq_len(n_families), function(i) {
-  buildOneFamilyGroup(
-    group_name  = paste0("ped", i),
-    Addmat      = add_list[[i]],
-    Nucmat      = cn_list[[i]],
-    full_df_row = pheno_list[[i]],
-    obs_ids     = obs_ids_list[[i]]
-  )
-})
-
-multi_model <- buildPedigreeMx(
-  model_name   = "MultiPedigreeModel",
-  vars         = start_vars,
-  group_models = group_models
-)
-
-fitted_multi <- mxRun(multi_model)
-#saveRDS(fitted_multi, "fitted_multi.RDS")
-```
 
 ---
 
@@ -452,14 +382,15 @@ library(mvtnorm)
 set.seed(2024)
 
 # True variance components
-true_var <- list(ad2 = 0.50, cn2 = 0.10, ee2 = 0.40,
-                 ce2 = 0, mt2 = 0, dd2 = 0, am2 = 0)
+true_var <- list(ad2 = 0.40, cn2 = 0.10, ee2 = 0.40,
+                 ce2 = 0, mt2 = 0.10, dd2 = 0, am2 = 0)
 
-n_families <- 10
+n_families <- 15
 
 # Pre-allocate storage
 add_list     <- vector("list", n_families)
 cn_list      <- vector("list", n_families)
+mt_list      <- vector("list", n_families)
 obs_ids_list <- vector("list", n_families)
 pheno_list   <- vector("list", n_families)
 
@@ -468,11 +399,13 @@ for (i in seq_len(n_families)) {
 
   A_i  <- as.matrix(ped2add(ped_i, sparse = FALSE))
   Cn_i <- as.matrix(ped2cn(ped_i,  sparse = FALSE))
+  Mt_i <- as.matrix(ped2mit(ped_i,  sparse = FALSE))
   n_i  <- nrow(A_i)
 
   # Implied covariance from true parameters
   V_i <- true_var$ad2 * A_i +
          true_var$cn2 * Cn_i +
+         true_var$mt2 * Mt_i +
          true_var$ee2 * diag(1, n_i)
 
   y_i <- rmvnorm(1, sigma = V_i)
@@ -480,9 +413,11 @@ for (i in seq_len(n_families)) {
   ids_i <- make.names(rownames(A_i))
   rownames(A_i) <- colnames(A_i) <- ids_i
   rownames(Cn_i) <- colnames(Cn_i) <- ids_i
+  rownames(Mt_i) <- colnames(Mt_i) <- ids_i
 
   add_list[[i]]     <- A_i
   cn_list[[i]]      <- Cn_i
+  mt_list[[i]]      <- Mt_i
   obs_ids_list[[i]] <- ids_i
   pheno_list[[i]]   <- matrix(y_i, nrow = 1, dimnames = list(NULL, ids_i))
 }
@@ -498,6 +433,7 @@ group_models <- lapply(seq_len(n_families), function(i) {
     group_name  = paste0("ped", i),
     Addmat      = add_list[[i]],
     Nucmat      = cn_list[[i]],
+    Mtdmat      = mt_list[[i]],
     full_df_row = pheno_list[[i]],
     obs_ids     = obs_ids_list[[i]]
   )
@@ -518,11 +454,15 @@ fitted_multi <- mxRun(multi_model)
 data.frame(
   Component = c("Additive genetic (Vad)",
                 "Common nuclear  (Vcn)",
+                "Mitochondrial (Vmt)",
                 "Unique environ. (Ver)"),
-  True      = c(true_var$ad2, true_var$cn2, true_var$ee2),
+  True      = c(true_var$ad2, true_var$cn2, 
+                true_var$mt2,
+                true_var$ee2),
   Estimated = round(c(
     fitted_multi$ModelOne$Vad$values,
     fitted_multi$ModelOne$Vcn$values,
+    fitted_multi$ModelOne$Vmt$values,
     fitted_multi$ModelOne$Ver$values
   ), 4)
 )

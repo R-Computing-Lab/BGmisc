@@ -351,6 +351,7 @@ buildPedigreeMx <- function(model_name, vars, group_models) {
 #' @param group_models Optional list of pre-built OpenMx family group models
 #'   (from \code{\link{buildOneFamilyGroup}}). If NULL, they are generated from \code{data}
 #'   using the provided relatedness matrices.
+#' @param intervals Logical. If TRUE (default), compute confidence intervals for the parameters using \code{mxSE} and \code{mxCI}.
 #' @param Addmat Additive genetic relatedness matrix. Required when \code{group_models} is NULL.
 #' @param Nucmat Common nuclear environment relatedness matrix. Optional.
 #' @param Extmat Common extended environment relatedness matrix. Optional.
@@ -376,6 +377,7 @@ fitPedigreeModel <- function(
   data = NULL,
   group_models = NULL,
   tryhard = TRUE,
+  intervals = TRUE,
   Addmat = NULL,
   Nucmat = NULL,
   Extmat = NULL,
@@ -410,8 +412,8 @@ fitPedigreeModel <- function(
     vars = vars,
     group_models = group_models
   )
-  if (tryhard) {
-    fitted_model <- OpenMx::mxTryHard(pedigree_model, silent = TRUE, extraTries = 10, intervals = TRUE)
+  if (tryhard==TRUE) {
+    fitted_model <- OpenMx::mxTryHard(pedigree_model, silent = TRUE, extraTries = 10, intervals = intervals)
   } else {
     fitted_model <- OpenMx::mxRun(pedigree_model)
   }
