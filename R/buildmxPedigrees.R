@@ -262,15 +262,15 @@ buildFamilyGroups <- function(
   for (afam in seq_len(numfam)) {
     full_df_row <- matrix(dat[afam, ], nrow = 1, dimnames = list(NULL, obs_ids))
     groups[[afam]] <- buildOneFamilyGroup(
-      group_name  = paste0(prefix, afam),
-      Addmat      = Addmat,
-      Nucmat      = Nucmat,
-      Extmat      = Extmat,
-      Mtdmat      = Mtdmat,
-      Amimat      = Amimat,
-      Dmgmat      = Dmgmat,
+      group_name = paste0(prefix, afam),
+      Addmat = Addmat,
+      Nucmat = Nucmat,
+      Extmat = Extmat,
+      Mtdmat = Mtdmat,
+      Amimat = Amimat,
+      Dmgmat = Dmgmat,
       full_df_row = full_df_row,
-      obs_ids  = obs_ids
+      obs_ids = obs_ids
     )
   }
 
@@ -412,7 +412,7 @@ fitPedigreeModel <- function(
     vars = vars,
     group_models = group_models
   )
-  if (tryhard==TRUE) {
+  if (tryhard == TRUE) {
     fitted_model <- OpenMx::mxTryHard(pedigree_model, silent = TRUE, extraTries = 10, intervals = intervals)
   } else {
     fitted_model <- OpenMx::mxRun(pedigree_model)

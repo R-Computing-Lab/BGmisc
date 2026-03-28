@@ -6,7 +6,7 @@
 * Fixed missing checkpoint for ram_checkpoint
 * Try a chunk_size argument for ped2com to reduce memory usage during transpose
 * Try filter method for whose relatedness to return by individual ID
-* **Breaking change:** renamed `ytemp` parameter to `obs_ids` in `buildOneFamilyGroup()` and `buildFamilyGroups()` for clarity
+* Renamed `ytemp` parameter to `obs_ids` in `buildOneFamilyGroup()` and `buildFamilyGroups()` for clarity
 * Expanded v6 vignette with data requirements reference and real-data workflow using the `hazard` dataset
 
 # BGmisc 1.6.0.1

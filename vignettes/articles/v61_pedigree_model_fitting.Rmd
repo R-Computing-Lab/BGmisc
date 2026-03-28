@@ -84,7 +84,7 @@ for (i in seq_along(n_families)) {
   phenotypic_ids <- ped_i$ID[!is.na(ped_i$lrs)]
   A_i  <- as.matrix(ped2add(ped_i, sparse = FALSE, keep_ids = phenotypic_ids))
   Cn_i <- as.matrix(ped2cn(ped_i,  sparse = FALSE, keep_ids = phenotypic_ids))
-  Mt_i <- as.matrix(ped2mtd(ped_i,  sparse = FALSE, keep_ids = phenotypic_ids))
+  Mt_i <- as.matrix(ped2mit(ped_i,  sparse = FALSE, keep_ids = phenotypic_ids))
   
    n_i  <- nrow(A_i)
   id_order_i <- rownames(A_i)
@@ -104,7 +104,6 @@ for (i in seq_along(n_families)) {
   obs_ids_list[[i]] <- obs_ids_i
   pheno_list[[i]]   <- pheno_row_i
 }
-
 
 
 group_models <- lapply(seq_len(n_families), function(i) {
