@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 options(rmarkdown.html_vignette.check_title = FALSE)
-
+#source('https://vipbg.vcu.edu/vipbg/OpenMx2/software/getOpenMx.R')
 
 library(BGmisc)
 
@@ -21,6 +21,8 @@ has_openmx <- requireNamespace("OpenMx", quietly = TRUE)
 
 if (has_openmx) {
   library(OpenMx)
+  mxOption(key="Number of Threads", value=imxGetNumThreads())
+
 } else {
   message(
     "OpenMx is not installed. Code will be shown but not executed.\n",
@@ -139,13 +141,15 @@ multi_model <- buildPedigreeMx(
   group_models = group_models
 )
 ```
-
-```{r, eval = run_models}
-fitted_multi <- mxRun(multi_model)
-#   fitted_multi <- readRDS("vignettes/pkgdown-assets/fitted_multi.rds")
-
-saveRDS(fitted_multi, "inst/extdata/fitted_multi.RDS")
+```{r, include = FALSE}
+fitted_multi <- NULL # ensure variable exists for later use
 ```
+```{r, eval = run_models}
+fitted_multi <- mxRun(multi_model, intervals= FALSE)
+
+saveRDS(fitted_multi, "inst/extdata/fitted_multi.rds")
+```
+
 ```
 fitted_multi <- mxRun(multi_model)
 ```
