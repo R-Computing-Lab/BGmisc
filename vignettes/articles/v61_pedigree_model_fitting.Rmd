@@ -29,7 +29,7 @@ if (has_openmx) {
 }
 
 run_models <- has_openmx && interactive() && !isTRUE(Sys.getenv("BGMISC_TESTING", unset = FALSE))
-rds_dir <- file.path("vignettes", "pkgdown-assets")
+rds_dir <- file.path( "inst/extdata/")
 rds_file <- file.path(rds_dir, "fitted_multi.rds")
 ```
 
@@ -151,7 +151,7 @@ fitted_multi <- mxRun(multi_model)
 ```
 ```{r, include = FALSE, eval = !file.exists(rds_file) && !run_models}
 fitted_multi <- readRDS(
-  system.file("extdata", "fitted_multi.RDS", package = "BGmisc")
+  system.file("extdata", "fitted_multi.rds", package = "BGmisc")
 )
 ```
 ```{r, eval = has_openmx}
