@@ -28,7 +28,9 @@ if (has_openmx) {
   )
 }
 
-run_models <- has_openmx
+run_models <- has_openmx && interactive() && !isTRUE(Sys.getenv("BGMISC_TESTING", unset = FALSE))
+rds_dir <- file.path("vignettes", "pkgdown-assets")
+rds_file <- file.path(rds_dir, "fitted_multi.rds")
 ```
 
 # Introduction
@@ -38,7 +40,7 @@ This vignette extends the example from `vignette("v60_pedigree_model_fitting.Rmd
 # Scaling Up to Many Families
 
 
-```{r krsp-prep, eval = run_models}
+```{r krsp-prep}
 library(ggpedigree) # for pedigree data)
 library(tidyverse)
 data("redsquirrels_full")
@@ -60,16 +62,16 @@ cat(
 summarizeFamilies(ped_krsp, famID = "famID")$family_summary |> arrange(desc(count))
 ```
 
-```{r, eval = TRUE && run_models}
-minim_family_size <- 3
+```{r}
+minim_family_size <- 10
 
 ped_krsp_subset <- ped_krsp |>
   group_by(famID) |>
   filter(sum(!is.na(lrs)) >= minim_family_size) |>
   ungroup()
 
-n_families <- unique(ped_krsp_subset$famID)
-
+id_families <- unique(ped_krsp_subset$famID)
+n_families <- length(id_families)
 
 # Pre-allocate storage
 add_list <- vector("list", length(n_families))
@@ -89,9 +91,10 @@ start_vars <- list(
   am2 = 0, # A x Mt interaction (not estimated here)
   ee2 = 0.5 # unique environment
 )
-
-for (i in seq_along(n_families)) {
-  ped_i <- subset(ped_krsp_subset, famID == n_families[i])
+```
+```{r, eval = has_openmx}
+for (i in seq_len(n_families)) {
+  ped_i <- subset(ped_krsp_subset, famID == id_families[i])
   phenotypic_ids <- ped_i$ID[!is.na(ped_i$lrs)]
   A_i <- as.matrix(ped2add(ped_i, sparse = FALSE, keep_ids = phenotypic_ids))
   Cn_i <- as.matrix(ped2cn(ped_i, sparse = FALSE, keep_ids = phenotypic_ids))
@@ -124,7 +127,7 @@ group_models <- lapply(seq_len(n_families), function(i) {
     group_name  = paste0("ped", i),
     Addmat      = add_list[[i]],
     Nucmat      = cn_list[[i]],
-    Mitmat      = mt_list[[i]],
+    Mtdmat      = mt_list[[i]],
     full_df_row = pheno_list[[i]],
     obs_ids     = obs_ids_list[[i]]
   )
@@ -135,10 +138,32 @@ multi_model <- buildPedigreeMx(
   vars         = start_vars,
   group_models = group_models
 )
+```
 
+```{r, eval = run_models}
 fitted_multi <- mxRun(multi_model)
-# saveRDS(fitted_multi, "fitted_multi.RDS")
+#   fitted_multi <- readRDS("vignettes/pkgdown-assets/fitted_multi.rds")
+
+saveRDS(fitted_multi, "inst/extdata/fitted_multi.RDS")
+```
+```
+fitted_multi <- mxRun(multi_model)
+```
+```{r, include = FALSE, eval = !file.exists(rds_file) && !run_models}
+fitted_multi <- readRDS(
+  system.file("extdata", "fitted_multi.RDS", package = "BGmisc")
+)
+```
+```{r, eval = has_openmx}
+summary(fitted_multi)
 ```
 
 
+```{r single-fam-results, eval = has_openmx}
+cat("Additive genetic (Vad):", fitted_multi$ModelOne$Vad$values, "\n")
+cat("Common nuclear  (Vcn):", fitted_multi$ModelOne$Vcn$values, "\n")
+cat("Mitochondrial (Vmt):", fitted_multi$ModelOne$Vmt$values, "\n")
+cat("Unique environ. (Ver):", fitted_multi$ModelOne$Ver$values, "\n")
+```
 
+As you can see, we have fit a multigroup pedigree model using `r n_families` of squirrels. 
