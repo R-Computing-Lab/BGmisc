@@ -149,7 +149,7 @@ saveRDS(fitted_multi, "inst/extdata/fitted_multi.RDS")
 ```
 fitted_multi <- mxRun(multi_model)
 ```
-```{r, include = FALSE, eval = !file.exists(rds_file) && !run_models}
+```{r, include = FALSE, eval = file.exists(rds_file) && !run_models}
 fitted_multi <- readRDS(
   system.file("extdata", "fitted_multi.rds", package = "BGmisc")
 )
