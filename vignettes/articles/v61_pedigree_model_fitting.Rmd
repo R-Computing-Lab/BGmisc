@@ -30,14 +30,16 @@ if (has_openmx) {
   )
 }
 
-run_models <- has_openmx && interactive() && !isTRUE(Sys.getenv("BGMISC_TESTING", unset = FALSE))
+bgmisc_testing_env <- Sys.getenv("BGMISC_TESTING", unset = "")
+bgmisc_testing <- tolower(bgmisc_testing_env) %in% c("1", "true", "yes")
+run_models <- has_openmx && interactive() && !bgmisc_testing
 rds_dir <- file.path( "inst/extdata/")
 rds_file <- file.path(rds_dir, "fitted_multi.rds")
 ```
 
 # Introduction
 
-This vignette extends the example from `vignette("v60_pedigree_model_fitting.Rmd", package = "BGmisc")` to show how to fit models to multiple families simultaneously. The key functions are `buildOneFamilyGroup()` and `buildPedigreeMx()`, which translate pedigree data into OpenMx model specifications.
+This vignette extends the example from `vignette("v60_pedigree_model_fitting", package = "BGmisc")` to show how to fit models to multiple families simultaneously. The key functions are `buildOneFamilyGroup()` and `buildPedigreeMx()`, which translate pedigree data into OpenMx model specifications.
 
 # Scaling Up to Many Families
 
@@ -113,9 +115,9 @@ for (i in seq_len(n_families)) {
     dimnames = list(NULL, obs_ids_i)
   )
 
-  rownames(A_i) <- colnames(A_i) <- id_order_i
-  rownames(Cn_i) <- colnames(Cn_i) <- id_order_i
-  rownames(Mt_i) <- colnames(Mt_i) <- id_order_i
+  rownames(A_i) <- colnames(A_i) <- obs_ids_i
+  rownames(Cn_i) <- colnames(Cn_i) <- obs_ids_i
+  rownames(Mt_i) <- colnames(Mt_i) <- obs_ids_i
   add_list[[i]] <- A_i
   cn_list[[i]] <- Cn_i
   mt_list[[i]] <- Mt_i

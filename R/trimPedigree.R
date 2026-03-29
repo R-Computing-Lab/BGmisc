@@ -230,10 +230,14 @@ trimPedigree <- function(ped,
 
   # Nullify dangling parent references introduced by removals
   if (momID %in% names(ped)) {
-    ped[[momID]][!as.character(ped[[momID]]) %in% as.character(ped[[personID]])] <- NA
+    mom_vec <- ped[[momID]]
+    mom_idx <- !is.na(mom_vec) & !as.character(mom_vec) %in% as.character(ped[[personID]])
+    ped[[momID]][mom_idx] <- NA
   }
   if (dadID %in% names(ped)) {
-    ped[[dadID]][!as.character(ped[[dadID]]) %in% as.character(ped[[personID]])] <- NA
+    dad_vec <- ped[[dadID]]
+    dad_idx <- !is.na(dad_vec) & !as.character(dad_vec) %in% as.character(ped[[personID]])
+    ped[[dadID]][dad_idx] <- NA
   }
 
   return(ped)

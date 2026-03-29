@@ -26,7 +26,7 @@ The `BGmisc` package provides a complete pipeline for pedigree-based variance co
 3. **Build** OpenMx group models with `buildOneFamilyGroup()`
 4. **Fit** the combined model with `buildPedigreeMx()` and `mxRun()` (or the wrapper `fitPedigreeModel()`)
 
-This vignette builds up in three parts: a single-family model, a two-family multi-group model, and a scaled-up simulation study. An extension vignette  `vignette("v61_pedigree_model_fitting.Rmd", package = "BGmisc")` covers more complex models using squirel data from the Kluane Red Squirrel Project.
+This vignette builds up in three parts: a single-family model, a two-family multi-group model, and a scaled-up simulation study. An extension vignette  `vignette("v61_pedigree_model_fitting", package = "BGmisc")` covers more complex models using squirrel data from the Kluane Red Squirrel Project.
 
 ## Prerequisites
 
