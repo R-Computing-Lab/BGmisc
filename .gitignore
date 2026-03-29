@@ -2,7 +2,6 @@
 *.ASOIAF.ged
 *.Rproj
 *.[rR][dD]ata
-*.[rR]ds
 *.dbf
 *.doc*
 *.eps

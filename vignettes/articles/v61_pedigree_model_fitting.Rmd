@@ -154,20 +154,20 @@ saveRDS(fitted_multi, "inst/extdata/fitted_multi.rds")
 fitted_multi <- mxRun(multi_model)
 ```
 ```{r, include = FALSE, eval = file.exists(rds_file) && !run_models}
-fitted_multi <- readRDS(
-  system.file("extdata", "fitted_multi.rds", package = "BGmisc")
-)
+fitted_multi <- readRDS(rds_file)
 ```
 ```{r, eval = has_openmx && !is.null(fitted_multi)}
 summary(fitted_multi)
+
+total_var <- sum(fitted_multi$ModelOne$Vad$values, fitted_multi$ModelOne$Vcn$values, fitted_multi$ModelOne$Vmt$values, fitted_multi$ModelOne$Ver$values)
 ```
 
 
 ```{r single-fam-results, eval = has_openmx && !is.null(fitted_multi)}
-cat("Additive genetic (Vad):", fitted_multi$ModelOne$Vad$values, "\n")
-cat("Common nuclear  (Vcn):", fitted_multi$ModelOne$Vcn$values, "\n")
-cat("Mitochondrial (Vmt):", fitted_multi$ModelOne$Vmt$values, "\n")
-cat("Unique environ. (Ver):", fitted_multi$ModelOne$Ver$values, "\n")
+cat("Additive genetic (Vad):", fitted_multi$ModelOne$Vad$values/total_var, "\n")
+cat("Common nuclear  (Vcn):", fitted_multi$ModelOne$Vcn$values/total_var, "\n")
+cat("Mitochondrial (Vmt):", fitted_multi$ModelOne$Vmt$values/total_var, "\n")
+cat("Unique environ. (Ver):", fitted_multi$ModelOne$Ver$values/total_var, "\n")
 ```
 
 As you can see, we have fit a multigroup pedigree model using `r n_families` of squirrels. 
