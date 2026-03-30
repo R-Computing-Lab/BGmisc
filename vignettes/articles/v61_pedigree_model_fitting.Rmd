@@ -32,7 +32,7 @@ if (has_openmx) {
 
 bgmisc_testing_env <- Sys.getenv("BGMISC_TESTING", unset = "")
 bgmisc_testing <- tolower(bgmisc_testing_env) %in% c("1", "true", "yes")
-run_models <- has_openmx && interactive() && !bgmisc_testing
+run_models <- has_openmx && interactive() #&& !bgmisc_testing
 rds_dir <- file.path( "inst/extdata/")
 rds_file <- file.path(rds_dir, "fitted_multi.rds")
 ```
@@ -147,7 +147,7 @@ multi_model <- buildPedigreeMx(
 fitted_multi <- NULL # ensure variable exists for later use
 ```
 ```{r, eval = run_models}
-fitted_multi <- mxRun(multi_model, intervals= FALSE)
+fitted_multi <- mxRun(multi_model, intervals= TRUE)
 
 saveRDS(fitted_multi, "inst/extdata/fitted_multi.rds")
 ```
