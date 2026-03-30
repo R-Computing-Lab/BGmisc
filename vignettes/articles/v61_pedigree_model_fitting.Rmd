@@ -34,7 +34,8 @@ bgmisc_testing_env <- Sys.getenv("BGMISC_TESTING", unset = "")
 bgmisc_testing <- tolower(bgmisc_testing_env) %in% c("1", "true", "yes")
 run_models <- has_openmx && interactive() #&& !bgmisc_testing
 rds_dir <- file.path( "inst/extdata/")
-rds_file <- file.path(rds_dir, "fitted_multi.rds")
+rds_file_ace <- file.path(rds_dir, "fitted_multi_ace.rds")
+rds_file_mace <- file.path(rds_dir, "fitted_multi_mace.rds")
 ```
 
 # Introduction
@@ -43,6 +44,8 @@ This vignette extends the example from `vignette("v60_pedigree_model_fitting", p
 
 # Scaling Up to Many Families
 
+
+Here we replicate several estimates of heritability across multiple families of red squirrels.  We use the `redsquirrels_full` dataset from the `ggpedigree` package, which contains pedigree and phenotypic data on red squirrels from the Kluane region of the Yukon, Canada.  The phenotype we analyze is lifetime reproductive success (LRS), which is a count of the number of offspring that survive to a certain age.
 
 ```{r krsp-prep}
 library(ggpedigree) # for pedigree data)
@@ -118,6 +121,7 @@ for (i in seq_len(n_families)) {
   rownames(A_i) <- colnames(A_i) <- obs_ids_i
   rownames(Cn_i) <- colnames(Cn_i) <- obs_ids_i
   rownames(Mt_i) <- colnames(Mt_i) <- obs_ids_i
+  
   add_list[[i]] <- A_i
   cn_list[[i]] <- Cn_i
   mt_list[[i]] <- Mt_i
@@ -126,7 +130,18 @@ for (i in seq_len(n_families)) {
 }
 
 
-group_models <- lapply(seq_len(n_families), function(i) {
+group_models_ace <- lapply(seq_len(n_families), function(i) {
+  buildOneFamilyGroup(
+    group_name  = paste0("ped", i),
+    Addmat      = add_list[[i]],
+    Nucmat      = cn_list[[i]],
+    Mtdmat      = NULL,
+    full_df_row = pheno_list[[i]],
+    obs_ids     = obs_ids_list[[i]]
+  )
+})
+
+group_models_mace <- lapply(seq_len(n_families), function(i) {
   buildOneFamilyGroup(
     group_name  = paste0("ped", i),
     Addmat      = add_list[[i]],
@@ -137,39 +152,71 @@ group_models <- lapply(seq_len(n_families), function(i) {
   )
 })
 
-multi_model <- buildPedigreeMx(
+
+multi_model_ace <- buildPedigreeMx(
   model_name   = "MultiPedigreeModel",
   vars         = start_vars,
-  group_models = group_models
+  group_models = group_models_ace
+)
+
+multi_model_mace <- buildPedigreeMx(
+  model_name   = "MultiPedigreeModel",
+  vars         = start_vars,
+  group_models = group_models_mace
 )
 ```
 ```{r, include = FALSE}
-fitted_multi <- NULL # ensure variable exists for later use
+fitted_multi_ace <- NULL # ensure variable exists for later use
+fitted_multi_mace <- NULL # ensure variable exists for later use
 ```
 ```{r, eval = run_models}
-fitted_multi <- mxRun(multi_model, intervals= TRUE)
+fitted_multi_ace <- mxRun(multi_model_ace, intervals= TRUE)
+saveRDS(fitted_multi_ace, "inst/extdata/fitted_multi_ace.rds")
 
-saveRDS(fitted_multi, "inst/extdata/fitted_multi.rds")
+fitted_multi_mace <- mxRun(multi_model_mace, intervals= TRUE)
+saveRDS(fitted_multi_mace, "inst/extdata/fitted_multi_mace.rds")
 ```
 
 ```
-fitted_multi <- mxRun(multi_model)
+fitted_multi_ace <- mxRun(multi_model_ace)
+fitted_multi_mace <- mxRun(multi_model_mace)
 ```
-```{r, include = FALSE, eval = file.exists(rds_file) && !run_models}
-fitted_multi <- readRDS(rds_file)
+```{r, include = FALSE, eval = file.exists(rds_file_ace) && !run_models && file.exists(rds_file_mace)}
+fitted_multi_ace <- readRDS(rds_file_ace)
+fitted_multi_mace <- readRDS(rds_file_mace)
 ```
-```{r, eval = has_openmx && !is.null(fitted_multi)}
-summary(fitted_multi)
+```{r, eval = has_openmx && !is.null(fitted_multi_ace)}
+summary(fitted_multi_ace)
 
-total_var <- sum(fitted_multi$ModelOne$Vad$values, fitted_multi$ModelOne$Vcn$values, fitted_multi$ModelOne$Vmt$values, fitted_multi$ModelOne$Ver$values)
-```
-
-
-```{r single-fam-results, eval = has_openmx && !is.null(fitted_multi)}
-cat("Additive genetic (Vad):", fitted_multi$ModelOne$Vad$values/total_var, "\n")
-cat("Common nuclear  (Vcn):", fitted_multi$ModelOne$Vcn$values/total_var, "\n")
-cat("Mitochondrial (Vmt):", fitted_multi$ModelOne$Vmt$values/total_var, "\n")
-cat("Unique environ. (Ver):", fitted_multi$ModelOne$Ver$values/total_var, "\n")
+total_var_ace <- sum(fitted_multi_ace$ModelOne$Vad$values, 
+                 fitted_multi_ace$ModelOne$Vcn$values,
+                 #fitted_multi_ace$ModelOne$Vmt$values, 
+                 fitted_multi_ace$ModelOne$Ver$values)
 ```
 
-As you can see, we have fit a multigroup pedigree model using `r n_families` of squirrels. 
+
+```{r total-fam-results, eval = has_openmx && !is.null(fitted_multi_ace)}
+cat("Additive genetic (Vad):", fitted_multi_ace$ModelOne$Vad$values/total_var_ace, "\n")
+cat("Common nuclear  (Vcn):", fitted_multi_ace$ModelOne$Vcn$values/total_var_ace, "\n")
+cat("Unique environ. (Ver):", fitted_multi_ace$ModelOne$Ver$values/total_var_ace, "\n")
+```
+
+As you can see, we have fit a multigroup pedigree model using `r n_families` families of several thousand squirrels. The model includes additive genetic variance (Vad), common nuclear environmental variance (Vcn), and unique environmental variance (Ver). The mitochondrial variance component (Vmt) was included in the MACE model but not estimated in the ACE model. The results show the proportion of total variance attributed to each component, which can be interpreted as heritability and environmental contributions to the phenotype of interest (LRS) in these
+squirrels.
+
+```{r, eval = has_openmx &&  !is.null(fitted_multi_mace)}
+summary(fitted_multi_mace)
+
+total_var_mace <- sum(fitted_multi_mace$ModelOne$Vad$values, 
+                 fitted_multi_mace$ModelOne$Vcn$values,
+                 fitted_multi_mace$ModelOne$Vmt$values, 
+                 fitted_multi_mace$ModelOne$Ver$values)
+```
+
+
+```{r total-fam-results-mace, eval = has_openmx && !is.null(fitted_multi_ace)}
+cat("Additive genetic (Vad):", fitted_multi_mace$ModelOne$Vad$values/total_var_mace, "\n")
+cat("Common nuclear  (Vcn):", fitted_multi_mace$ModelOne$Vcn$values/total_var_mace, "\n")
+cat("Mitochondrial (Vmt):", fitted_multi_mace$ModelOne$Vmt$values/total_var_mace, "\n")
+cat("Unique environ. (Ver):", fitted_multi_mace$ModelOne$Ver$values/total_var_mace, "\n")
+```
