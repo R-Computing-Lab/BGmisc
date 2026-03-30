@@ -190,7 +190,7 @@ fitted_multi_mace <- readRDS(rds_file_mace)
 ```
 ```{r, eval = has_openmx && !is.null(fitted_multi_ace)}
 summary(fitted_multi_ace)
-
+summary(fitted_multi_ace)$CI
 total_var_ace <- sum(fitted_multi_ace$ModelOne$Vad$values, 
                  fitted_multi_ace$ModelOne$Vcn$values,
                  #fitted_multi_ace$ModelOne$Vmt$values, 
@@ -209,7 +209,7 @@ squirrels.
 
 ```{r, eval = has_openmx &&  !is.null(fitted_multi_mace)}
 summary(fitted_multi_mace)
-
+summary(fitted_multi_mace)$CI
 total_var_mace <- sum(fitted_multi_mace$ModelOne$Vad$values, 
                  fitted_multi_mace$ModelOne$Vcn$values,
                  fitted_multi_mace$ModelOne$Vmt$values, 

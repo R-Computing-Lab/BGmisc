@@ -4,7 +4,7 @@
 \alias{buildPedigreeMx}
 \title{Build Pedigree mxModel}
 \usage{
-buildPedigreeMx(model_name, vars, group_models)
+buildPedigreeMx(model_name, vars, group_models, ci = FALSE)
 }
 \arguments{
 \item{model_name}{Name of the overall pedigree model.}
@@ -12,6 +12,8 @@ buildPedigreeMx(model_name, vars, group_models)
 \item{vars}{A named list or vector of initial variance component values.}
 
 \item{group_models}{A list of OpenMx models for each family group.}
+
+\item{ci}{Logical. If TRUE, include confidence interval computations for the variance components. Default is FALSE}
 }
 \value{
 An OpenMx pedigree model combining variance components and family groups.
