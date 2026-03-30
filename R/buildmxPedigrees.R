@@ -287,10 +287,12 @@ buildFamilyGroups <- function(
 #' @param model_name Name of the overall pedigree model.
 #' @param vars A named list or vector of initial variance component values.
 #' @param group_models A list of OpenMx models for each family group.
+#' @param ci Logical. If TRUE, include confidence interval computations for the variance components. Default is FALSE
 #' @return An OpenMx pedigree model combining variance components and family groups.
 #' @export
 
-buildPedigreeMx <- function(model_name, vars, group_models) {
+buildPedigreeMx <- function(model_name, vars, group_models,
+                            ci = FALSE) {
   if (!requireNamespace("OpenMx", quietly = TRUE)) {
     stop("OpenMx package is required for buildPedigreeMx function. Please install it.")
   }
@@ -335,7 +337,12 @@ buildPedigreeMx <- function(model_name, vars, group_models) {
       Ver = isTRUE(flags$Ver)
     ),
     group_models,
-    OpenMx::mxFitFunctionMultigroup(group_names)
+    OpenMx::mxFitFunctionMultigroup(group_names),
+    ci = if (ci & any(flags$Vad, flags$Vdd, flags$Vcn, flags$Vce, flags$Vmt, flags$Vam, flags$Ver)) {
+      OpenMx::mxCI(c("vad", "vdd", "vcn", "vce", "vmt", "vam", "ver")[c(flags$Vad, flags$Vdd, flags$Vcn, flags$Vce, flags$Vmt, flags$Vam, flags$Ver)])
+    } else {
+      NULL
+    }
   )
 }
 

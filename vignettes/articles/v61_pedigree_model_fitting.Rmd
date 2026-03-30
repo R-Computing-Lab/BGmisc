@@ -156,13 +156,15 @@ group_models_mace <- lapply(seq_len(n_families), function(i) {
 multi_model_ace <- buildPedigreeMx(
   model_name   = "MultiPedigreeModel",
   vars         = start_vars,
-  group_models = group_models_ace
+  group_models = group_models_ace,
+  ci = TRUE
 )
 
 multi_model_mace <- buildPedigreeMx(
   model_name   = "MultiPedigreeModel",
   vars         = start_vars,
-  group_models = group_models_mace
+  group_models = group_models_mace,
+  ci = TRUE
 )
 ```
 ```{r, include = FALSE}
@@ -170,7 +172,8 @@ fitted_multi_ace <- NULL # ensure variable exists for later use
 fitted_multi_mace <- NULL # ensure variable exists for later use
 ```
 ```{r, eval = run_models}
-fitted_multi_ace <- mxRun(multi_model_ace, intervals= TRUE)
+fitted_multi_ace <- mxRun(multi_model_ace,
+                          intervals= TRUE)
 saveRDS(fitted_multi_ace, "inst/extdata/fitted_multi_ace.rds")
 
 fitted_multi_mace <- mxRun(multi_model_mace, intervals= TRUE)
@@ -219,4 +222,13 @@ cat("Additive genetic (Vad):", fitted_multi_mace$ModelOne$Vad$values/total_var_m
 cat("Common nuclear  (Vcn):", fitted_multi_mace$ModelOne$Vcn$values/total_var_mace, "\n")
 cat("Mitochondrial (Vmt):", fitted_multi_mace$ModelOne$Vmt$values/total_var_mace, "\n")
 cat("Unique environ. (Ver):", fitted_multi_mace$ModelOne$Ver$values/total_var_mace, "\n")
+```
+Now we can compare the ACE and MACE models to see if including the mitochondrial component changes our estimates of heritability and environmental contributions. This can provide insights into the role of mitochondrial inheritance in the trait of interest (LRS) in these squirrels.
+
+```{r, eval = has_openmx && !is.null(fitted_multi_ace) && !is.null(fitted_multi_mace)}
+
+mxCompare(fitted_multi_mace, fitted_multi_ace)
+
+fitted_multi_ace_ci <- omxRunCI(fitted_multi_ace, verbose = 0, optimizer = "SLSQP")
+
 ```
