@@ -44,6 +44,8 @@ rds_file_ce <- file.path(rds_dir, "fitted_multi_ce.rds")
 run_models
 has_openmx
 interactive()
+bgmisc_testing
+bgmisc_testing_env
 ```
 
 # Introduction
