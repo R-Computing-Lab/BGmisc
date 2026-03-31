@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 options(rmarkdown.html_vignette.check_title = FALSE)
-#source('https://vipbg.vcu.edu/vipbg/OpenMx2/software/getOpenMx.R')
+# source('https://vipbg.vcu.edu/vipbg/OpenMx2/software/getOpenMx.R')
 
 library(BGmisc)
 library(ggpedigree) # for pedigree data)
@@ -22,8 +22,7 @@ has_openmx <- requireNamespace("OpenMx", quietly = TRUE)
 
 if (has_openmx) {
   library(OpenMx)
-  mxOption(key="Number of Threads", value=imxGetNumThreads())
-
+  mxOption(key = "Number of Threads", value = imxGetNumThreads())
 } else {
   message(
     "OpenMx is not installed. Code will be shown but not executed.\n",
@@ -33,8 +32,8 @@ if (has_openmx) {
 
 bgmisc_testing_env <- Sys.getenv("BGMISC_TESTING", unset = "")
 bgmisc_testing <- tolower(bgmisc_testing_env) %in% c("1", "true", "yes")
-run_models <- has_openmx && interactive() #&& !bgmisc_testing
-rds_dir <- file.path( "extdata/")
+run_models <- has_openmx && interactive() # && !bgmisc_testing
+rds_dir <- file.path("extdata/")
 rds_file_ace <- file.path(rds_dir, "fitted_multi_ace.rds")
 rds_file_mace <- file.path(rds_dir, "fitted_multi_mace.rds")
 rds_file_ce <- file.path(rds_dir, "fitted_multi_ce.rds")
@@ -105,7 +104,6 @@ pheno_list <- vector("list", length(n_families))
 Creating starting values for the variance components is important for model convergence. Here we set some reasonable starting values based on prior knowledge or expectations about the trait and the population. These starting values can be adjusted based on the specific dataset and trait being analyzed.
 
 ```{r}
-
 # Starting values for variance components
 start_vars <- list(
   ad2 = 0.1, # additive genetic
@@ -142,7 +140,7 @@ for (i in seq_len(n_families)) {
   rownames(A_i) <- colnames(A_i) <- obs_ids_i
   rownames(Cn_i) <- colnames(Cn_i) <- obs_ids_i
   rownames(Mt_i) <- colnames(Mt_i) <- obs_ids_i
-  
+
   add_list[[i]] <- A_i
   cn_list[[i]] <- Cn_i
   mt_list[[i]] <- Mt_i
@@ -155,7 +153,6 @@ For convenience, we build the group models for each family separately for the AC
 
 
 ```{r, eval = has_openmx}
-
 group_models_mace <- lapply(seq_len(n_families), function(i) {
   buildOneFamilyGroup(
     group_name  = paste0("ped", i),
@@ -189,7 +186,6 @@ group_models_ce <- lapply(seq_len(n_families), function(i) {
     obs_ids     = obs_ids_list[[i]]
   )
 })
-
 ```
 
 The `lapply()` function is used to create a list of group models for each family, which are then combined into a single multigroup model using the buildPedigreeMx() function. The resulting models can then be fitted in OpenMx to estimate the variance components for each family and compare the ACE, MACE, and CE models.
@@ -197,24 +193,23 @@ The `lapply()` function is used to create a list of group models for each family
 
 
 ```{r, eval = has_openmx}
-
 multi_model_mace <- buildPedigreeMx(
-  model_name   = "MultiPedigreeModel",
-  vars         = start_vars,
+  model_name = "MultiPedigreeModel",
+  vars = start_vars,
   group_models = group_models_mace,
   ci = TRUE
 )
 
 multi_model_ace <- buildPedigreeMx(
-  model_name   = "MultiPedigreeModel",
-  vars         = start_vars,
+  model_name = "MultiPedigreeModel",
+  vars = start_vars,
   group_models = group_models_ace,
   ci = TRUE
 )
 
 multi_model_ce <- buildPedigreeMx(
-  model_name   = "MultiPedigreeModel",
-  vars         = start_vars,
+  model_name = "MultiPedigreeModel",
+  vars = start_vars,
   group_models = group_models_ce,
   ci = TRUE
 )
@@ -232,13 +227,14 @@ fitted_multi_ce <- NULL # ensure variable exists for later use
 # these models take a while to fit, so we save the fitted models as RDS files for later use. If the RDS files already exist, we can skip fitting the models and just load the fitted models from the RDS files.
 
 fitted_multi_ace <- mxRun(multi_model_ace,
-                          intervals= TRUE)
+  intervals = TRUE
+)
 saveRDS(fitted_multi_ace, "inst/extdata/fitted_multi_ace.rds")
 
-fitted_multi_mace <- mxRun(multi_model_mace, intervals= TRUE)
+fitted_multi_mace <- mxRun(multi_model_mace, intervals = TRUE)
 saveRDS(fitted_multi_mace, "inst/extdata/fitted_multi_mace.rds")
 
-fitted_multi_ce <- mxRun(multi_model_ce, intervals= TRUE)
+fitted_multi_ce <- mxRun(multi_model_ce, intervals = TRUE)
 saveRDS(fitted_multi_ce, "inst/extdata/fitted_multi_ce.rds")
 ```
 
@@ -274,39 +270,43 @@ squirrels.
 ```{r, eval = has_openmx &&  !is.null(fitted_multi_mace), echo = TRUE}
 summary(fitted_multi_mace)
 summary(fitted_multi_mace)$CI
-total_var_mace <- sum(fitted_multi_mace$ModelOne$Vad$values, 
-                 fitted_multi_mace$ModelOne$Vcn$values,
-                 fitted_multi_mace$ModelOne$Vmt$values, 
-                 fitted_multi_mace$ModelOne$Ver$values)
+total_var_mace <- sum(
+  fitted_multi_mace$ModelOne$Vad$values,
+  fitted_multi_mace$ModelOne$Vcn$values,
+  fitted_multi_mace$ModelOne$Vmt$values,
+  fitted_multi_mace$ModelOne$Ver$values
+)
 ```
 
 
 ```{r total-fam-results-mace, eval = has_openmx && !is.null(fitted_multi_ace)}
-cat("Additive genetic (Vad):", fitted_multi_mace$ModelOne$Vad$values/total_var_mace, "\n")
-cat("Common nuclear  (Vcn):", fitted_multi_mace$ModelOne$Vcn$values/total_var_mace, "\n")
-cat("Mitochondrial (Vmt):", fitted_multi_mace$ModelOne$Vmt$values/total_var_mace, "\n")
-cat("Unique environ. (Ver):", fitted_multi_mace$ModelOne$Ver$values/total_var_mace, "\n")
+cat("Additive genetic (Vad):", fitted_multi_mace$ModelOne$Vad$values / total_var_mace, "\n")
+cat("Common nuclear  (Vcn):", fitted_multi_mace$ModelOne$Vcn$values / total_var_mace, "\n")
+cat("Mitochondrial (Vmt):", fitted_multi_mace$ModelOne$Vmt$values / total_var_mace, "\n")
+cat("Unique environ. (Ver):", fitted_multi_mace$ModelOne$Ver$values / total_var_mace, "\n")
 ```
 
 
 
 
 ```{r, eval = has_openmx && !is.null(fitted_multi_ace)}
-summary(fitted_multi_ace,verbose=T)
+summary(fitted_multi_ace, verbose = T)
 summary(fitted_multi_ace)$CI
 
 
-total_var_ace <- sum(fitted_multi_ace$ModelOne$Vad$values, 
-                 fitted_multi_ace$ModelOne$Vcn$values,
-                 #fitted_multi_ace$ModelOne$Vmt$values, 
-                 fitted_multi_ace$ModelOne$Ver$values)
+total_var_ace <- sum(
+  fitted_multi_ace$ModelOne$Vad$values,
+  fitted_multi_ace$ModelOne$Vcn$values,
+  # fitted_multi_ace$ModelOne$Vmt$values,
+  fitted_multi_ace$ModelOne$Ver$values
+)
 ```
 
 
 ```{r total-fam-results, eval = has_openmx && !is.null(fitted_multi_ace)}
-cat("Additive genetic (Vad):", fitted_multi_ace$ModelOne$Vad$values/total_var_ace, "\n")
-cat("Common nuclear  (Vcn):", fitted_multi_ace$ModelOne$Vcn$values/total_var_ace, "\n")
-cat("Unique environ. (Ver):", fitted_multi_ace$ModelOne$Ver$values/total_var_ace, "\n")
+cat("Additive genetic (Vad):", fitted_multi_ace$ModelOne$Vad$values / total_var_ace, "\n")
+cat("Common nuclear  (Vcn):", fitted_multi_ace$ModelOne$Vcn$values / total_var_ace, "\n")
+cat("Unique environ. (Ver):", fitted_multi_ace$ModelOne$Ver$values / total_var_ace, "\n")
 ```
 
 
@@ -314,11 +314,8 @@ cat("Unique environ. (Ver):", fitted_multi_ace$ModelOne$Ver$values/total_var_ace
 Now we can compare the ACE and MACE models to see if including the mitochondrial component changes our estimates of heritability and environmental contributions. This can provide insights into the role of mitochondrial inheritance in the trait of interest (LRS) in these squirrels. In the original paper, the authors found that a maternally inherited component (which could be due to mitochondria or maternal effects) explained a significant portion of the variance in LRS,. 
 
 ```{r, eval = has_openmx && !is.null(fitted_multi_ace) && !is.null(fitted_multi_mace) && !is.null(fitted_multi_ce)}
-
 mxCompare(fitted_multi_mace, fitted_multi_ace)
 mxCompare(fitted_multi_ace, fitted_multi_ce)
-
-
 ```
 
 However, as you can see when we compare the ACE and MACE models, the inclusion of the mitochondrial component does not substantially change the estimates of additive genetic and common nuclear environmental variance, suggesting that the mitochondrial component may not be a major contributor to LRS in this dataset.
