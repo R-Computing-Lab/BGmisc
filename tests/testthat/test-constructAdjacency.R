@@ -16,8 +16,8 @@ test_that("computeParentAdjacency matches across all methods for additive compon
     verbose = FALSE, lastComputed = 0, checkpoint_files = checkpoint_files,
     update_rate = 10, parList = init_list, lens = init_lens, save_rate_parlist = 20,
     config = config
-  ) %>%
-    as.data.frame() %>% # sort by iss and jss to ensure consistent ordering
+  ) |>
+    as.data.frame() |> # sort by iss and jss to ensure consistent ordering
     dplyr::arrange(iss, jss)
 
   adj_indexed <- computeParentAdjacency(
@@ -26,8 +26,8 @@ test_that("computeParentAdjacency matches across all methods for additive compon
     verbose = FALSE, lastComputed = 0, checkpoint_files = checkpoint_files,
     update_rate = 10, parList = init_list, lens = init_lens, save_rate_parlist = 20,
     config = config
-  ) %>%
-    as.data.frame() %>% # sort by iss and jss to ensure consistent ordering
+  ) |>
+    as.data.frame() |> # sort by iss and jss to ensure consistent ordering
     dplyr::arrange(iss, jss)
 
   adj_direct <- computeParentAdjacency(
@@ -36,8 +36,8 @@ test_that("computeParentAdjacency matches across all methods for additive compon
     verbose = FALSE, lastComputed = 0, checkpoint_files = checkpoint_files,
     update_rate = 10, parList = init_list, lens = init_lens, save_rate_parlist = 20,
     config = config
-  ) %>%
-    as.data.frame() %>% # sort by iss and jss to ensure consistent ordering
+  ) |>
+    as.data.frame() |> # sort by iss and jss to ensure consistent ordering
     dplyr::arrange(iss, jss)
 
   expect_equal(adj_loop, adj_indexed, tolerance = tolerance)
@@ -55,8 +55,8 @@ test_that("adjBeta matches .adjDirect for common nuclear component", {
     parList = NULL, lens = NULL, lastComputed = 0, saveable = FALSE, resume = FALSE,
     save_path = NULL, verbose = FALSE, save_rate_parlist = NULL, update_rate = NULL,
     checkpoint_files = NULL, config = config
-  ) %>%
-    as.data.frame() %>% # sort by iss and jss to ensure consistent ordering
+  ) |>
+    as.data.frame() |> # sort by iss and jss to ensure consistent ordering
     dplyr::arrange(iss, jss)
 
   direct <- .adjDirect(
@@ -64,8 +64,8 @@ test_that("adjBeta matches .adjDirect for common nuclear component", {
     save_path = NULL, verbose = FALSE, lastComputed = 0, checkpoint_files = NULL,
     update_rate = NULL, parList = NULL, lens = NULL, save_rate_parlist = NULL,
     config = config
-  ) %>%
-    as.data.frame() %>% # sort by iss and jss to ensure consistent ordering
+  ) |>
+    as.data.frame() |> # sort by iss and jss to ensure consistent ordering
     dplyr::arrange(iss, jss)
 
   expect_equal(beta_5, direct, tolerance = tolerance)
