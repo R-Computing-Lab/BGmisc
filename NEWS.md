@@ -7,7 +7,8 @@
 * Try a chunk_size argument for ped2com to reduce memory usage during transpose
 * Try filter method for whose relatedness to return by individual ID
 * Renamed `ytemp` parameter to `obs_ids` in `buildOneFamilyGroup()` and `buildFamilyGroups()` for clarity
-* Expanded v6 vignette with data requirements reference and real-data workflow using the `hazard` dataset
+* Expanded v6 vignettes with data requirements reference and real-data workflow using the `hazard` dataset
+* Allow confidence intervals for pedigree mx wrappers
 
 # BGmisc 1.6.0.1
 ## CRAN submission
