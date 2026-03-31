@@ -1,0 +1,341 @@
+---
+title: "Trimming Large Pedigrees with BGmisc"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Trimming Large Pedigrees}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+options(rmarkdown.html_vignette.check_title = FALSE)
+```
+
+# Introduction
+
+Pedigree data collected in genetic epidemiology studies are rarely tidy. A
+registry may include thousands of individuals, but the people who actually
+carry phenotypic measurements --- disease diagnoses, biomarker values, survey
+responses --- are often a small subset. The rest are relatives recruited to
+establish family structure: parents of probands, spouses who appear in only
+one mating, distant founders entered solely to connect two branches of a tree.
+
+These peripheral individuals matter for defining genetic relationships, but
+once those relationships are established they may add little to an analysis.
+Keeping them inflates relatedness matrices, slows model fitting, and increases
+memory use, all without improving estimates. The practical question is: *which
+individuals can be safely removed without disrupting the connectivity of the
+core network?*
+
+The answer depends on graph structure. In the directed pedigree graph used by
+`BGmisc` (edges run from parent to child), two kinds of node are structurally
+dispensable:
+
+- **Terminal nodes** have no children (outdegree 0). They sit at the tips of
+  the tree. Removing them severs no path between any other pair of
+  individuals.
+- **Founder singletons** have no recorded parents (indegree 0) and exactly
+  one child (outdegree 1). They are attached to the network by a single edge.
+  Removing them leaves every other connection intact.
+
+`BGmisc` provides two functions that operationalise this idea:
+
+- `findLeaves()` identifies which individuals currently qualify as leaves.
+- `trimPedigree()` removes them iteratively, peeling the pedigree from the
+  outside in until a stopping condition is met.
+
+Crucially, topology alone should not decide who gets removed. An individual
+who is a structural leaf but carries a disease diagnosis should stay. Both
+functions therefore accept a `keep_var` argument that protects individuals
+based on their phenotypic data, regardless of their position in the graph.
+
+## Data
+
+```{r setup, message = FALSE, warning = FALSE}
+library(BGmisc)
+library(ggpedigree)
+library(ggplot2)
+data(hazard)
+```
+
+The `hazard` dataset contains `r nrow(hazard)` individuals across two extended
+families, simulated with an age-related disease hazard. It includes an
+`affected` column (logical disease status) alongside standard pedigree
+variables. The two families are shown below, with filled shapes indicating
+affected individuals.
+
+```{r fig-full, fig.width = 10, fig.height = 5, warning = FALSE, message = FALSE, fig.cap = "Full hazard pedigree. Filled shapes indicate affected individuals."}
+ggpedigree(
+  hazard,
+  personID       = "ID",
+  famID          = "FamID",
+  overlay_column = "affected",
+  config = list(
+    overlay_include   = TRUE,
+    code_male         = 0,
+    sex_color_include = FALSE
+  )
+) +
+  facet_wrap(~FamID, scales = "free")
+```
+
+# Finding Leaves
+
+`findLeaves()` returns the IDs of all current leaf nodes. Both types are
+enabled by default. Use `verbose = TRUE` to see the breakdown by type:
+
+```{r, message = TRUE}
+leaves <- findLeaves(hazard, verbose = TRUE)
+leaves
+```
+
+To make the candidates concrete, we can mark them in the dataset and plot
+them directly. In the figure below, filled shapes are leaf candidates ---
+nodes that could be removed without severing any connection between the
+remaining individuals.
+
+```{r fig-leaves, fig.width = 10, fig.height = 5, warning = FALSE, message = FALSE, fig.cap = "Leaf candidates (filled). These individuals can be removed without disconnecting the rest of the network."}
+hazard_marked           <- hazard
+hazard_marked$is_leaf   <- hazard_marked$ID %in% leaves
+
+ggpedigree(
+  hazard_marked,
+  personID       = "ID",
+  famID          = "FamID",
+  overlay_column = "is_leaf",
+  config = list(
+    overlay_include   = TRUE,
+    code_male         = 0,
+    sex_color_include = FALSE
+  )
+) +
+  facet_wrap(~FamID, scales = "free")
+```
+
+You can restrict to one leaf type if needed:
+
+```{r}
+terminal_only   <- findLeaves(hazard, include_founder_singletons = FALSE)
+singletons_only <- findLeaves(hazard, include_terminal = FALSE)
+
+cat("Terminal only:   ", length(terminal_only),   "\n")
+cat("Singletons only: ", length(singletons_only),  "\n")
+cat("Both combined:   ", length(leaves),            "\n")
+```
+
+# Iterative Trimming
+
+Identifying leaves once is rarely enough. After the outermost tips are removed,
+what were previously internal nodes may themselves become leaves. `trimPedigree()`
+handles this by calling `findLeaves()` in a loop, removing one layer at a time
+until nothing more can be pruned or a stopping condition is reached.
+
+```{r, message = TRUE}
+trimPedigree(hazard, verbose = TRUE)
+
+trimmed <- trimPedigree(hazard, verbose = TRUE,max_iter =1)
+
+cat("Before:", nrow(hazard),   "individuals\n")
+cat("After: ", nrow(trimmed),  "individuals\n")
+```
+
+Parent ID columns are updated automatically: any `momID` or `dadID` that
+pointed to a removed individual is set to `NA`.
+
+```{r}
+removed_ids <- setdiff(as.character(hazard$ID), as.character(trimmed$ID))
+sum(as.character(trimmed$dadID) %in% removed_ids, na.rm = TRUE)
+sum(as.character(trimmed$momID) %in% removed_ids, na.rm = TRUE)
+```
+
+The resulting tree retains only the structurally essential core --- the
+individuals who connect others and could not be peeled away without breaking
+the network.
+
+```{r fig-trimmed, fig.width = 10, fig.height = 5, warning = FALSE, message = FALSE, fig.cap = "Pedigree after full trimming. Filled shapes indicate affected individuals."}
+ggpedigree(
+  trimmed,
+  personID       = "ID",
+#  famID          = "FamID",
+#  status_column = "affected", # not working with overlays ``shrug 
+  overlays = list(
+    list(column = "affected", code_affected = TRUE, shape = "cross", color = "black"),
+    list(column = "affected", code_affected = TRUE, shape = "slash", color = "red", stroke = 2)
+  ),
+  config = list(
+    overlay_include   = TRUE,
+    status_include    = TRUE,
+    code_male         = 0,
+    sex_color_include = TRUE,
+    overlay_mode    = "shape"
+  )
+)
+```
+
+# Stopping Rules
+
+## `max_iter`: limit the number of passes
+
+`max_iter` trims only a fixed number of outer shells, leaving the broader
+structure intact:
+
+```{r, message = TRUE}
+trimmed_1 <- trimPedigree(hazard, max_iter = 1L, verbose = TRUE)
+trimmed_2 <- trimPedigree(hazard, max_iter = 2L, verbose = TRUE)
+
+cat("After 1 pass: ", nrow(trimmed_1), "individuals\n")
+cat("After 2 passes:", nrow(trimmed_2), "individuals\n")
+cat("Full trim:    ", nrow(trimmed),   "individuals\n")
+```
+
+## `min_size`: retain a minimum number of individuals
+
+`min_size` halts trimming before any pass that would drop below the threshold:
+
+```{r, message = TRUE}
+trimmed_min <- trimPedigree(hazard, min_size = 20L, verbose = TRUE)
+cat("Retained:", nrow(trimmed_min), "individuals\n")
+```
+
+The two rules can be combined; trimming stops as soon as either is met:
+
+```{r, message = TRUE}
+trimmed_both <- trimPedigree(hazard, max_iter = 2L, min_size = 20L, verbose = TRUE)
+cat("Retained:", nrow(trimmed_both), "individuals\n")
+```
+
+# Phenotype-Guided Trimming
+
+Consider a proband-ascertained study: families were recruited because at least
+one member was diagnosed with a condition of interest. Many relatives were then
+enrolled simply to fill out the pedigree. Those relatives may be structural
+leaves --- but if they themselves carry a diagnosis, removing them would discard
+the very observations that motivated data collection.
+
+The `keep_var` and `keep_vals` arguments solve this by protecting individuals
+based on their phenotypic values. The protection is re-applied at every
+iteration, so an individual who becomes a leaf only after several rounds of
+trimming is still safe if their phenotype qualifies.
+
+In `hazard`, disease status is recorded in `affected`:
+
+```{r}
+table(hazard$affected, useNA = "ifany")
+```
+
+## Protect anyone with a recorded phenotype
+
+Omitting `keep_vals` protects every individual whose `keep_var` value is
+non-missing:
+
+```{r, message = TRUE}
+trimmed_pheno <- trimPedigree(hazard, keep_var = "affected", verbose = TRUE)
+
+cat("Without protection:", nrow(trimmed),       "individuals\n")
+cat("With protection:   ", nrow(trimmed_pheno),  "individuals\n")
+
+# Confirm no phenotyped individual was removed
+all(hazard$ID[!is.na(hazard$affected)] %in% trimmed_pheno$ID)
+```
+
+The resulting tree is larger than the basic trim because affected individuals
+are held in place even when they sit at the tips of the graph.
+
+```{r fig-pheno, fig.width = 10, fig.height = 5, warning = FALSE, message = FALSE, fig.cap = "Pedigree after phenotype-protected trimming. Filled shapes are affected individuals, all retained regardless of their structural position."}
+ggpedigree(
+  trimmed_pheno,
+  personID       = "ID",
+  famID          = "FamID",
+  overlay_column = "affected",
+  config = list(
+    overlay_include   = TRUE,
+    code_male         = 0,
+    sex_color_include = FALSE
+  )
+) +
+  facet_wrap(~FamID, scales = "free")
+```
+
+## Protect only individuals with a specific value
+
+Pass `keep_vals` to narrow the protection to particular values. Here we keep
+only affected individuals and allow removal of unaffected leaves:
+
+```{r, message = TRUE}
+trimmed_affected <- trimPedigree(
+  hazard,
+  keep_var  = "affected",
+  keep_vals = TRUE,
+  verbose   = TRUE
+)
+cat("Retained:", nrow(trimmed_affected), "individuals\n")
+```
+
+## Protect individuals with missing phenotype data
+
+`keep_vals = NA` reverses the default: it protects individuals whose status
+has *not* yet been recorded, which is useful when follow-up data collection
+is planned:
+
+```{r, message = TRUE}
+trimmed_keep_na <- trimPedigree(
+  hazard,
+  keep_var  = "affected",
+  keep_vals = NA,
+  verbose   = TRUE
+)
+cat("Retained:", nrow(trimmed_keep_na), "individuals\n")
+```
+
+`keep_vals` is a vector, so multiple criteria can be combined --- for example,
+protect both affected individuals and those with missing status:
+
+```{r, message = TRUE}
+trimmed_combined <- trimPedigree(
+  hazard,
+  keep_var  = "affected",
+  keep_vals = c(TRUE, NA),
+  verbose   = TRUE
+)
+cat("Retained:", nrow(trimmed_combined), "individuals\n")
+```
+
+# Forced Removal
+
+`remove_ids` removes specific individuals unconditionally before any
+leaf-based trimming begins --- useful for excluding individuals due to data
+quality issues or consent withdrawal:
+
+```{r, message = TRUE}
+force_out <- head(hazard$ID, 2)
+
+trimmed_forced <- trimPedigree(hazard, remove_ids = force_out, verbose = TRUE)
+cat("Force-removed:", paste(force_out, collapse = ", "), "\n")
+cat("Retained:", nrow(trimmed_forced), "individuals\n")
+```
+
+# Quick Reference
+
+| Parameter | Controls |
+|---|---|
+| `include_terminal` | Flag outdegree-0 nodes as leaves |
+| `include_founder_singletons` | Flag indegree-0 & outdegree-1 nodes as leaves |
+| `max_iter` | Maximum number of trimming passes |
+| `min_size` | Minimum retained pedigree size |
+| `keep_var` | Phenotype column used for protection |
+| `keep_vals` | Values (or `NA`) that shield individuals from removal |
+| `remove_ids` | IDs to remove unconditionally before leaf trimming |
+
+Use `findLeaves()` to preview candidates before committing to a trim:
+
+```{r}
+candidates <- findLeaves(hazard, keep_var = "affected")
+cat(length(candidates), "candidates with phenotype protection\n")
+
+result <- trimPedigree(hazard, keep_var = "affected")
+cat(nrow(hazard) - nrow(result), "removed,", nrow(result), "retained\n")
+```

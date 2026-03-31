@@ -486,7 +486,6 @@ test_that("keep_ids subset produces correct relatedness values across all famili
 })
 
 
-
 test_that("keep_ids with unknown IDs warns and drops missing entries", {
   data(hazard)
   keep <- c(as.character(hazard$ID[1:3]), "BOGUS_ID")

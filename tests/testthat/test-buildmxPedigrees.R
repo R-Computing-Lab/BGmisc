@@ -6,8 +6,8 @@
 make_add2 <- function() matrix(c(1, 0.5, 0.5, 1), nrow = 2)
 
 # Helper: a 2-person observed data row
-make_dat2 <- function(ytemp = c("y1", "y2")) {
-  matrix(c(1.5, 2.5), nrow = 1, dimnames = list(NULL, ytemp))
+make_dat2 <- function(obs_ids = c("y1", "y2")) {
+  matrix(c(1.5, 2.5), nrow = 1, dimnames = list(NULL, obs_ids))
 }
 
 # ─── buildPedigreeModelCovariance ────────────────────────────────────────────
@@ -98,11 +98,11 @@ test_that("buildOneFamilyGroup errors when no relatedness matrix is provided", {
   dat <- make_dat2()
   expect_error(
     buildOneFamilyGroup(
-      group_name  = "fam1",
-      Addmat      = NULL, Nucmat = NULL, Extmat = NULL,
-      Mtdmat      = NULL, Amimat = NULL, Dmgmat = NULL,
+      group_name = "fam1",
+      Addmat = NULL, Nucmat = NULL, Extmat = NULL,
+      Mtdmat = NULL, Amimat = NULL, Dmgmat = NULL,
       full_df_row = dat,
-      ytemp       = c("y1", "y2")
+      obs_ids = c("y1", "y2")
     ),
     regexp = "At least one relatedness matrix must be provided"
   )
@@ -114,10 +114,10 @@ test_that("buildOneFamilyGroup returns an mxModel with an additive matrix", {
   dat <- make_dat2()
   mod <- expect_no_error(
     buildOneFamilyGroup(
-      group_name  = "fam1",
-      Addmat      = Addmat,
+      group_name = "fam1",
+      Addmat = Addmat,
       full_df_row = dat,
-      ytemp       = c("y1", "y2")
+      obs_ids = c("y1", "y2")
     )
   )
   expect_true(inherits(mod, "MxModel"))
@@ -131,10 +131,10 @@ test_that("buildOneFamilyGroup returns an mxModel with nuclear family matrix", {
   dat <- make_dat2()
   mod <- expect_no_error(
     buildOneFamilyGroup(
-      group_name  = "fam2",
-      Nucmat      = Nucmat,
+      group_name = "fam2",
+      Nucmat = Nucmat,
       full_df_row = dat,
-      ytemp       = c("y1", "y2")
+      obs_ids = c("y1", "y2")
     )
   )
   expect_true(inherits(mod, "MxModel"))
@@ -148,10 +148,10 @@ test_that("buildOneFamilyGroup determines family size from any provided matrix",
   dat <- make_dat2()
   mod <- expect_no_error(
     buildOneFamilyGroup(
-      group_name  = "famExt",
-      Extmat      = Extmat,
+      group_name = "famExt",
+      Extmat = Extmat,
       full_df_row = dat,
-      ytemp       = c("y1", "y2")
+      obs_ids = c("y1", "y2")
     )
   )
   # # Extmat signals "include Vce"; the algebra always uses U (unit matrix)
@@ -169,7 +169,7 @@ test_that("buildFamilyGroups returns one group model per row of data", {
     dimnames = list(NULL, c("y1", "y2"))
   )
   groups <- expect_no_error(
-    buildFamilyGroups(dat = dat, ytemp = c("y1", "y2"), Addmat = Addmat)
+    buildFamilyGroups(dat = dat, obs_ids = c("y1", "y2"), Addmat = Addmat)
   )
   expect_true(is.list(groups))
   expect_equal(length(groups), nrow(dat))
@@ -180,7 +180,7 @@ test_that("buildFamilyGroups names group models with supplied prefix", {
   Addmat <- make_add2()
   dat <- matrix(c(1.0, 2.0), nrow = 1, dimnames = list(NULL, c("y1", "y2")))
   groups <- buildFamilyGroups(
-    dat = dat, ytemp = c("y1", "y2"),
+    dat = dat, obs_ids = c("y1", "y2"),
     Addmat = Addmat, prefix = "family"
   )
   expect_equal(groups[[1]]$name, "family1")
@@ -191,7 +191,7 @@ test_that("buildFamilyGroups default prefix is 'fam'", {
   Addmat <- make_add2()
   dat <- matrix(c(1.0, 2.0), nrow = 1, dimnames = list(NULL, c("y1", "y2")))
   groups <- buildFamilyGroups(
-    dat = dat, ytemp = c("y1", "y2"), Addmat = Addmat
+    dat = dat, obs_ids = c("y1", "y2"), Addmat = Addmat
   )
   expect_equal(groups[[1]]$name, "fam1")
 })
@@ -210,7 +210,7 @@ test_that("buildPedigreeMx returns a multigroup mxModel", {
     dimnames = list(NULL, c("y1", "y2"))
   )
   group_models <- buildFamilyGroups(
-    dat = dat, ytemp = c("y1", "y2"), Addmat = Addmat
+    dat = dat, obs_ids = c("y1", "y2"), Addmat = Addmat
   )
   mod <- expect_no_error(
     buildPedigreeMx(
@@ -249,7 +249,7 @@ test_that("fitPedigreeModel runs end-to-end with a trivial dataset", {
   )
   Addmat <- make_add2()
   group_models <- buildFamilyGroups(
-    dat = dat, ytemp = c("y1", "y2"), Addmat = Addmat
+    dat = dat, obs_ids = c("y1", "y2"), Addmat = Addmat
   )
   vars <- list(
     ad2 = 0.4, dd2 = 0.1, cn2 = 0.1, ce2 = 0.1,

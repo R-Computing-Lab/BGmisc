@@ -11,6 +11,7 @@ fitPedigreeModel(
   data = NULL,
   group_models = NULL,
   tryhard = TRUE,
+  intervals = TRUE,
   Addmat = NULL,
   Nucmat = NULL,
   Extmat = NULL,
@@ -33,6 +34,8 @@ using the provided relatedness matrices.}
 
 \item{tryhard}{Logical. If TRUE (default), use \code{mxTryHard} for robust optimization;
 if FALSE, use \code{mxRun}.}
+
+\item{intervals}{Logical. If TRUE (default), compute confidence intervals for the parameters using \code{mxSE} and \code{mxCI}.}
 
 \item{Addmat}{Additive genetic relatedness matrix. Required when \code{group_models} is NULL.}
 

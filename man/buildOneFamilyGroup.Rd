@@ -13,7 +13,7 @@ buildOneFamilyGroup(
   Amimat = NULL,
   Dmgmat = NULL,
   full_df_row,
-  ytemp
+  obs_ids
 )
 }
 \arguments{
@@ -32,9 +32,11 @@ a common-extended-environment term using a unit matrix is included.}
 
 \item{Dmgmat}{Dominance genetic relatedness matrix.}
 
-\item{full_df_row}{A 1-row matrix of observed data with column names matching \code{ytemp}.}
+\item{full_df_row}{A 1-row matrix of observed data with column names matching \code{obs_ids}.}
 
-\item{ytemp}{A character vector of variable names corresponding to the observed data columns.}
+\item{obs_ids}{A character vector of individual IDs corresponding to the columns of
+\code{full_df_row} and the rows/columns of the relatedness matrices. Must be in the
+same order as the relatedness matrix rows.}
 }
 \value{
 An OpenMx model for the specified family group.
