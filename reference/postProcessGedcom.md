@@ -3,7 +3,7 @@
 This function optionally adds parent information, combines duplicate
 columns, and removes empty columns from the GEDCOM data frame. It is
 called by
-[`readGedcom()`](https://R-Computing-Lab.github.io/BGmisc/reference/readGedcom.md)
+[`readGedcom()`](https://r-computing-lab.github.io/BGmisc/reference/readGedcom.md)
 if `post_process = TRUE`.
 
 ## Usage
@@ -24,7 +24,7 @@ postProcessGedcom(
 - df_temp:
 
   A data frame produced by
-  [`readGedcom()`](https://R-Computing-Lab.github.io/BGmisc/reference/readGedcom.md).
+  [`readGedcom()`](https://r-computing-lab.github.io/BGmisc/reference/readGedcom.md).
 
 - remove_empty_cols:
 

@@ -122,7 +122,7 @@ CRAN release: 2025-05-30
 ## BGmisc 1.3.5.1
 
 - Setting the default for the `sparse` argument in
-  [`ped2com()`](https://R-Computing-Lab.github.io/BGmisc/reference/ped2com.md)
+  [`ped2com()`](https://r-computing-lab.github.io/BGmisc/reference/ped2com.md)
   to TRUE
 
 ## BGmisc 1.3.5

@@ -8,7 +8,7 @@ only those parameters.
 ## Usage
 
 ``` r
-buildPedigreeMx(model_name, vars, group_models)
+buildPedigreeMx(model_name, vars, group_models, ci = FALSE)
 ```
 
 ## Arguments
@@ -24,6 +24,11 @@ buildPedigreeMx(model_name, vars, group_models)
 - group_models:
 
   A list of OpenMx models for each family group.
+
+- ci:
+
+  Logical. If TRUE, include confidence interval computations for the
+  variance components. Default is FALSE
 
 ## Value
 

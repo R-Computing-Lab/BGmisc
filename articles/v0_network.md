@@ -63,7 +63,7 @@ our newly created variable to the pre-existing one. They match!
 Once you know which sets of people are related at all to one another,
 you’ll likely want to know how much. For additive genetic relatedness,
 you can use the
-[`ped2add()`](https://R-Computing-Lab.github.io/BGmisc/reference/ped2add.md)
+[`ped2add()`](https://r-computing-lab.github.io/BGmisc/reference/ped2add.md)
 function.
 
 ``` r

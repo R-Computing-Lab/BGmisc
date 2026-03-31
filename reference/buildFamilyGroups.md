@@ -8,7 +8,7 @@ on provided relatedness matrices and observed data.
 ``` r
 buildFamilyGroups(
   dat,
-  ytemp,
+  obs_ids,
   Addmat = NULL,
   Nucmat = NULL,
   Extmat = NULL,
@@ -26,9 +26,10 @@ buildFamilyGroups(
   A data frame where each row represents a family group and columns
   correspond to observed variables.
 
-- ytemp:
+- obs_ids:
 
-  A vector of variable names corresponding to the observed data.
+  A character vector of individual IDs corresponding to the columns of
+  `dat` and the rows/columns of the relatedness matrices.
 
 - Addmat:
 

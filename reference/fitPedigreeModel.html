@@ -26,7 +26,8 @@ specified variance components and family group models."></head><body>
     <li><a class="dropdown-item" href="../articles/v3_analyticrelatedness.html">Understanding and Computing Relatedness from Pedigree Data</a></li>
     <li><a class="dropdown-item" href="../articles/v4_validation.html">Validating and Repairing Pedigree Data with BGmisc</a></li>
     <li><a class="dropdown-item" href="../articles/v5_ASOIAF.html">ASOIAF: How related are Jon and Danny?</a></li>
-    <li><a class="dropdown-item" href="../articles/v6_pedigree_model_fitting.html">Fitting Pedigree-Based Variance Component Models</a></li>
+    <li><a class="dropdown-item" href="../articles/v60_pedigree_model_fitting.html">Fitting Pedigree-Based Variance Component Models</a></li>
+    <li><a class="dropdown-item" href="../articles/v61_pedigree_model_fitting.html">Extended: Fitting Pedigree-Based Variance Component Models</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -59,6 +60,7 @@ specified variance components and family group models.</p>
 <span>  data <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  group_models <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  tryhard <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  intervals <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  Addmat <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  Nucmat <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  Extmat <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -94,6 +96,10 @@ using the provided relatedness matrices.</p></dd>
 <dt id="arg-tryhard">tryhard<a class="anchor" aria-label="anchor" href="#arg-tryhard"></a></dt>
 <dd><p>Logical. If TRUE (default), use <code>mxTryHard</code> for robust optimization;
 if FALSE, use <code>mxRun</code>.</p></dd>
+
+
+<dt id="arg-intervals">intervals<a class="anchor" aria-label="anchor" href="#arg-intervals"></a></dt>
+<dd><p>Logical. If TRUE (default), compute confidence intervals for the parameters using <code>mxSE</code> and <code>mxCI</code>.</p></dd>
 
 
 <dt id="arg-addmat">Addmat<a class="anchor" aria-label="anchor" href="#arg-addmat"></a></dt>

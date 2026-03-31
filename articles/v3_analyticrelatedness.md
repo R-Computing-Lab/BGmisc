@@ -25,7 +25,7 @@ expectations about genetic similarity.
 
 From there, the vignette introduces a general-purpose matrix-based
 method for computing pairwise relatedness across pedigrees. Using the
-[`ped2com()`](https://R-Computing-Lab.github.io/BGmisc/reference/ped2com.md)
+[`ped2com()`](https://r-computing-lab.github.io/BGmisc/reference/ped2com.md)
 function, we demonstrate how to build additive genetic relationship
 matrices under both complete and incomplete parentage, and we evaluate
 how different assumptions affect the resulting estimates. The goal is to

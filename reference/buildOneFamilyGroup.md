@@ -18,7 +18,7 @@ buildOneFamilyGroup(
   Amimat = NULL,
   Dmgmat = NULL,
   full_df_row,
-  ytemp
+  obs_ids
 )
 ```
 
@@ -31,12 +31,12 @@ buildOneFamilyGroup(
 - Addmat:
 
   Additive genetic relatedness matrix (from
-  [`ped2add`](https://R-Computing-Lab.github.io/BGmisc/reference/ped2add.md)).
+  [`ped2add`](https://r-computing-lab.github.io/BGmisc/reference/ped2add.md)).
 
 - Nucmat:
 
   Nuclear family shared environment relatedness matrix (from
-  [`ped2cn`](https://R-Computing-Lab.github.io/BGmisc/reference/ped2cn.md)).
+  [`ped2cn`](https://r-computing-lab.github.io/BGmisc/reference/ped2cn.md)).
 
 - Extmat:
 
@@ -46,7 +46,7 @@ buildOneFamilyGroup(
 - Mtdmat:
 
   Mitochondrial genetic relatedness matrix (from
-  [`ped2mit`](https://R-Computing-Lab.github.io/BGmisc/reference/ped2mit.md)).
+  [`ped2mit`](https://r-computing-lab.github.io/BGmisc/reference/ped2mit.md)).
 
 - Amimat:
 
@@ -58,12 +58,13 @@ buildOneFamilyGroup(
 
 - full_df_row:
 
-  A 1-row matrix of observed data with column names matching `ytemp`.
+  A 1-row matrix of observed data with column names matching `obs_ids`.
 
-- ytemp:
+- obs_ids:
 
-  A character vector of variable names corresponding to the observed
-  data columns.
+  A character vector of individual IDs corresponding to the columns of
+  `full_df_row` and the rows/columns of the relatedness matrices. Must
+  be in the same order as the relatedness matrix rows.
 
 ## Value
 

@@ -13,6 +13,7 @@ fitPedigreeModel(
   data = NULL,
   group_models = NULL,
   tryhard = TRUE,
+  intervals = TRUE,
   Addmat = NULL,
   Nucmat = NULL,
   Extmat = NULL,
@@ -42,7 +43,7 @@ fitPedigreeModel(
 - group_models:
 
   Optional list of pre-built OpenMx family group models (from
-  [`buildOneFamilyGroup`](https://R-Computing-Lab.github.io/BGmisc/reference/buildOneFamilyGroup.md)).
+  [`buildOneFamilyGroup`](https://r-computing-lab.github.io/BGmisc/reference/buildOneFamilyGroup.md)).
   If NULL, they are generated from `data` using the provided relatedness
   matrices.
 
@@ -50,6 +51,11 @@ fitPedigreeModel(
 
   Logical. If TRUE (default), use `mxTryHard` for robust optimization;
   if FALSE, use `mxRun`.
+
+- intervals:
+
+  Logical. If TRUE (default), compute confidence intervals for the
+  parameters using `mxSE` and `mxCI`.
 
 - Addmat:
 

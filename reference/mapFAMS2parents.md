@@ -14,7 +14,7 @@ mapFAMS2parents(df_temp)
 - df_temp:
 
   A data frame produced by
-  [`readGedcom()`](https://R-Computing-Lab.github.io/BGmisc/reference/readGedcom.md).
+  [`readGedcom()`](https://r-computing-lab.github.io/BGmisc/reference/readGedcom.md).
 
 ## Value
 

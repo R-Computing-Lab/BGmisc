@@ -96,4 +96,4 @@ pairs based on the specified component of relatedness.
 - ...:
 
   additional arguments to be passed to
-  [`ped2com`](https://R-Computing-Lab.github.io/BGmisc/reference/ped2com.md)
+  [`ped2com`](https://r-computing-lab.github.io/BGmisc/reference/ped2com.md)
