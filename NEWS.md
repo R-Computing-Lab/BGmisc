@@ -1,6 +1,9 @@
 # BGmisc NEWS
 
 # Development version:
+
+
+# BGmisc 1.7.0.0
 * Fixed bug in parList
 * Moved wrappers of ped2com to own .R file
 * Fixed missing checkpoint for ram_checkpoint
