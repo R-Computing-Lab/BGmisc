@@ -34,7 +34,7 @@ if (has_openmx) {
 bgmisc_testing_env <- Sys.getenv("BGMISC_TESTING", unset = "")
 bgmisc_testing <- tolower(bgmisc_testing_env) %in% c("1", "true", "yes")
 run_models <- has_openmx && interactive() #&& !bgmisc_testing
-rds_dir <- file.path( "inst/extdata/")
+rds_dir <- file.path( "extdata/")
 rds_file_ace <- file.path(rds_dir, "fitted_multi_ace.rds")
 rds_file_mace <- file.path(rds_dir, "fitted_multi_mace.rds")
 rds_file_ce <- file.path(rds_dir, "fitted_multi_ce.rds")

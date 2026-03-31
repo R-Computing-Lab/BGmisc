@@ -2,6 +2,7 @@
 
 # Development version:
 
+* Optimized sliceFamilies to be more abstract
 
 # BGmisc 1.7.0.0
 * Fixed bug in parList
