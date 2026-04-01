@@ -34,9 +34,7 @@ buildPedigreeModelCovariance <- function(
   Vam = FALSE,
   Ver = TRUE
 ) {
-  if (!requireNamespace("OpenMx", quietly = TRUE)) {
-    stop("OpenMx package is required for buildPedigreeModelCovariance function. Please install it.")
-  }
+  .require_openmx("buildPedigreeModelCovariance")
 
   # Coerce to list so both c() vectors and list() inputs work with [[ ]]
   vars <- as.list(vars)
@@ -123,9 +121,7 @@ buildOneFamilyGroup <- function(
   full_df_row,
   obs_ids
 ) {
-  if (!requireNamespace("OpenMx", quietly = TRUE)) {
-    stop("OpenMx package is required for buildOneFamilyGroup function. Please install it.")
-  }
+  .require_openmx("buildOneFamilyGroup")
 
   # Determine family size from first available matrix
   fsize <- NULL
@@ -252,9 +248,7 @@ buildFamilyGroups <- function(
   Dmgmat = NULL,
   prefix = "fam"
 ) {
-  if (!requireNamespace("OpenMx", quietly = TRUE)) {
-    stop("OpenMx package is required for buildFamilyGroups function. Please install it.")
-  }
+  .require_openmx("buildFamilyGroups")
 
   numfam <- nrow(dat)
   groups <- vector("list", numfam)
@@ -293,9 +287,7 @@ buildFamilyGroups <- function(
 
 buildPedigreeMx <- function(model_name, vars, group_models,
                             ci = FALSE) {
-  if (!requireNamespace("OpenMx", quietly = TRUE)) {
-    stop("OpenMx package is required for buildPedigreeMx function. Please install it.")
-  }
+  .require_openmx("buildPedigreeMx")
 
   group_names <- vapply(group_models, function(m) m$name, character(1))
 
@@ -392,9 +384,7 @@ fitPedigreeModel <- function(
   Amimat = NULL,
   Dmgmat = NULL
 ) {
-  if (!requireNamespace("OpenMx", quietly = TRUE)) {
-    stop("OpenMx package is required for fitPedigreeModel function. Please install it.")
-  }
+  .require_openmx("fitPedigreeModel")
 
   if (is.null(group_models)) {
     # generate them from data and relatedness matrices

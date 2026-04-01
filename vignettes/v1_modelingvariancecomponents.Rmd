@@ -46,7 +46,7 @@ Ensure that the following dependencies are installed before proceeding as they p
 - `OpenMx`
 
 
-```r
+```{r echo=TRUE, eval=FALSE}
 library(BGmisc)
 library(EasyMx)
 library(OpenMx)
@@ -202,4 +202,4 @@ dataset with individual IDs and parental links, (2) use BGmisc functions to
 compute the relevant relatedness matrices for the pedigree, (3) specify a
 variance component model (e.g., ACE, ADE, or custom structures) that uses
 these matrices, and (4) estimate the model parameters via maximum likelihood.
-Please see the vignette on "Modeling with pedigrees" for a detailed example of this process.
+Please see the vignettes on "Fitting Pedigree-Based Variance Component Models" for detailed examples of this process. 

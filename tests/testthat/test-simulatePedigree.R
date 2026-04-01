@@ -4,7 +4,7 @@ test_that("simulated pedigree generates expected data structure", {
   kpc <- 4
   sexR <- .50
   marR <- .7
-  beta_options <- c(F, T)
+  beta_options <- c(FALSE, TRUE)
   strict_tolerance <- 1e-8
   sex_tolerance <- .035
   base_length <- 57
@@ -49,7 +49,7 @@ test_that("simulated pedigree generates expected data structure when sexR is imb
   kpc <- 4
   sexR <- .55
   marR <- .7
-  beta_options <- c(F, T)
+  beta_options <- c(FALSE, TRUE)
   strict_tolerance <- 1e-8
   sex_tolerance <- .03
   base_length <- 154
@@ -96,7 +96,7 @@ test_that("simulated pedigree generates expected data structure when sexR is imb
   kpc <- 4
   sexR <- .45
   marR <- .7
-  beta_options <- c(F, T)
+  beta_options <- c(FALSE, TRUE)
   strict_tolerance <- 1e-8
   sex_tolerance <- .03
   # Optimized version needs wider tolerance for sex ratios on large pedigrees
@@ -158,11 +158,11 @@ test_that("simulated pedigree generates expected data structure but supply var n
   code_male <- "M"
   code_female <- "Fe"
   personID <- "Id"
-  beta_options <- c(F, T)
+  beta_options <- c(FALSE, TRUE)
   strict_tolerance <- 1e-8
   sex_tolerance <- .03
   sex_tolerance_opt <- .07
-  # beta_options <- T
+  # beta_options <- TRUE
   base_length <- 57
   base_length_tol <- 0.2 * base_length
   beta_match_base <- FALSE
@@ -221,9 +221,9 @@ test_that("simulatePedigree verbose prints updates", {
   kpc <- 4
   sexR <- .50
   marR <- .7
-  beta_options <- c(F, T)
+  beta_options <- c(FALSE, TRUE)
 
-  # beta_options <- T
+  # beta_options <- TRUE
   for (beta in beta_options) {
     set.seed(seed)
     message("Beta option Starting: ", beta)

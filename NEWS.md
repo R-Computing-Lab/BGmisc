@@ -2,6 +2,8 @@
 
 # Development version:
 
+* Optimized sliceFamilies to be more abstract
+* Created `.require_openmx()` to make it easier to use OpenMx functions without making OpenMx a dependency
 
 # BGmisc 1.7.0.0
 * Fixed bug in parList

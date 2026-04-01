@@ -61,7 +61,7 @@ dup_id_df <- ped_pheno %>%
 ped_growth <- ped_pheno %>%
   filter(!is.na(p0)) %>%
   select(
-    ID, Sexo, dadID, momID,
+    ID, sexo, dadID, momID,
     p0, p15, p30, p45, p60, p90
   ) %>%
   pivot_longer(
@@ -75,24 +75,26 @@ ped_growth <- ped_pheno %>%
 
 
 library(ggplot2)
-if (FALSE) {
+if (F) {
   pl <- ggplot(
     ped_growth %>% filter(ID %in% sample(unique(ped_growth$ID), 1000)),
     aes(x = day, y = weight, group = ID)
   ) +
     geom_line(alpha = 0.1) +
     geom_jitter(alpha = 0.05, width = 1, height = 0) +
-    geom_smooth(method = "loess", se = TRUE, color = "blue", group = 1) +
+    geom_smooth(method = "loess", se = TRUE, aes(group = sexo, color = sexo)) +
     labs(
       title = "Growth Trajectories of Individuals Over Time",
       x = "Day",
       y = "Weight"
     ) +
-    theme_minimal()
+    theme_minimal() +
+    # nicer colors
+    scale_color_discrete(palette = "Set1")
   ##
   pl
 }
 # data processing
 
 write.csv(ped_pheno, "data-raw/ped_pheno.csv", row.names = FALSE)
-usethis::use_data(ped_pheno, overwrite = TRUE, compress = "xz")
+# usethis::use_data(ped_pheno, overwrite = TRUE, compress = "xz")

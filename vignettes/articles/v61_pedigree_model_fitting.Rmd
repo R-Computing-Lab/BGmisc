@@ -7,22 +7,22 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
+```{r, include = FALSE, echo=FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
 options(rmarkdown.html_vignette.check_title = FALSE)
-#source('https://vipbg.vcu.edu/vipbg/OpenMx2/software/getOpenMx.R')
+# source('https://vipbg.vcu.edu/vipbg/OpenMx2/software/getOpenMx.R')
 
 library(BGmisc)
-
+library(ggpedigree) # for pedigree data)
+library(tidyverse)
 has_openmx <- requireNamespace("OpenMx", quietly = TRUE)
 
 if (has_openmx) {
   library(OpenMx)
-  mxOption(key="Number of Threads", value=imxGetNumThreads())
-
+  mxOption(key = "Number of Threads", value = imxGetNumThreads())
 } else {
   message(
     "OpenMx is not installed. Code will be shown but not executed.\n",
@@ -32,10 +32,19 @@ if (has_openmx) {
 
 bgmisc_testing_env <- Sys.getenv("BGMISC_TESTING", unset = "")
 bgmisc_testing <- tolower(bgmisc_testing_env) %in% c("1", "true", "yes")
-run_models <- has_openmx && interactive() #&& !bgmisc_testing
-rds_dir <- file.path( "inst/extdata/")
+run_models <- has_openmx && interactive() # && !bgmisc_testing
+rds_dir <- file.path("extdata/")
 rds_file_ace <- file.path(rds_dir, "fitted_multi_ace.rds")
 rds_file_mace <- file.path(rds_dir, "fitted_multi_mace.rds")
+rds_file_ce <- file.path(rds_dir, "fitted_multi_ce.rds")
+```
+
+```{r}
+run_models
+has_openmx
+interactive()
+bgmisc_testing
+bgmisc_testing_env
 ```
 
 # Introduction
@@ -62,12 +71,12 @@ ped_krsp <- redsquirrels_full |>
     lrs = lrs
   )
 
-cat(
-  "KRSP pedigree:", nrow(ped_krsp), "individuals,",
-  n_distinct(ped_krsp$famID), "grids\n"
-)
+
 summarizeFamilies(ped_krsp, famID = "famID")$family_summary |> arrange(desc(count))
 ```
+
+As you can see, there are `r nrow(ped_krsp)` squirells in `r n_distinct(ped_krsp$famID)` families in this dataset. However, but we are missing several phenotyped individuals (i.e., individuals with non-missing LRS). To fit a multigroup pedigree model, we need to subset to families that have a sufficient number of phenotyped individuals. Here we set a minimum family size of 10 phenotyped individuals, which leaves us with a reduced number of families to include in the analysis.
+
 
 ```{r}
 minim_family_size <- 10
@@ -79,26 +88,36 @@ ped_krsp_subset <- ped_krsp |>
 
 id_families <- unique(ped_krsp_subset$famID)
 n_families <- length(id_families)
+```
 
+We now have `r n_families` families with at least `r minim_family_size` phenotyped individuals each. Once we subset to the families with sufficient phenotyped individuals, we can prepare the relatedness matrices and phenotypic data for each family. We pre-allocate lists to store these matrices and data for each family, which will be used to build the OpenMx models.
+
+```{r}
 # Pre-allocate storage
 add_list <- vector("list", length(n_families))
 cn_list <- vector("list", length(n_families))
 mt_list <- vector("list", length(n_families))
 obs_ids_list <- vector("list", length(n_families))
 pheno_list <- vector("list", length(n_families))
+```
 
+Creating starting values for the variance components is important for model convergence. Here we set some reasonable starting values based on prior knowledge or expectations about the trait and the population. These starting values can be adjusted based on the specific dataset and trait being analyzed.
 
+```{r}
 # Starting values for variance components
 start_vars <- list(
-  ad2 = 0.3, # additive genetic
+  ad2 = 0.1, # additive genetic
   cn2 = 0.1, # common nuclear environment
   ce2 = 0, # common extended (not estimated here)
   mt2 = 0.1, # mitochondrial
   dd2 = 0, # dominance (not estimated here)
   am2 = 0, # A x Mt interaction (not estimated here)
-  ee2 = 0.5 # unique environment
+  ee2 = 0.7 # unique environment
 )
 ```
+
+Now we loop through each family, extract the pedigree and phenotypic data, and prepare the relatedness matrices (additive genetic, common nuclear environment, and mitochondrial) for each family. We also prepare the phenotypic data in the format required for OpenMx. Finally, we build the group models for ACE, MACE, and CE models for each family. The `buildOneFamilyGroup()` function is used to create the model specification for each family, and the `buildPedigreeMx()` function is used to combine these group models into a single multigroup model that can be fitted in OpenMx. As you can see, we are fitting three different models: ACE (additive genetic, common environment, unique environment), MACE (additive genetic, common environment, mitochondrial, unique environment), and CE (common environment, unique environment). This allows us to compare the models and assess the contribution of each variance component to the trait of interest (LRS) in these squirrels.
+
 ```{r, eval = has_openmx}
 for (i in seq_len(n_families)) {
   ped_i <- subset(ped_krsp_subset, famID == id_families[i])
@@ -121,19 +140,25 @@ for (i in seq_len(n_families)) {
   rownames(A_i) <- colnames(A_i) <- obs_ids_i
   rownames(Cn_i) <- colnames(Cn_i) <- obs_ids_i
   rownames(Mt_i) <- colnames(Mt_i) <- obs_ids_i
-  
+
   add_list[[i]] <- A_i
   cn_list[[i]] <- Cn_i
   mt_list[[i]] <- Mt_i
   obs_ids_list[[i]] <- obs_ids_i
   pheno_list[[i]] <- pheno_row_i
 }
-group_models_ce <- lapply(seq_len(n_families), function(i) {
+```
+
+For convenience, we build the group models for each family separately for the ACE, MACE, and CE models. This allows us to easily compare the models and assess the contribution of each variance component to the trait of interest (LRS) in these squirrels. The `buildOneFamilyGroup()` function is used to create the model specification for each family, and the `buildPedigreeMx()` function is used to combine these group models into a single multigroup model that can be fitted in OpenMx.
+
+
+```{r, eval = has_openmx}
+group_models_mace <- lapply(seq_len(n_families), function(i) {
   buildOneFamilyGroup(
     group_name  = paste0("ped", i),
-    Addmat      = NULL,
+    Addmat      = add_list[[i]],
     Nucmat      = cn_list[[i]],
-    Mtdmat      = NULL,
+    Mtdmat      = mt_list[[i]],
     full_df_row = pheno_list[[i]],
     obs_ids     = obs_ids_list[[i]]
   )
@@ -150,57 +175,71 @@ group_models_ace <- lapply(seq_len(n_families), function(i) {
   )
 })
 
-group_models_mace <- lapply(seq_len(n_families), function(i) {
+
+group_models_ce <- lapply(seq_len(n_families), function(i) {
   buildOneFamilyGroup(
     group_name  = paste0("ped", i),
-    Addmat      = add_list[[i]],
+    Addmat      = NULL,
     Nucmat      = cn_list[[i]],
-    Mtdmat      = mt_list[[i]],
+    Mtdmat      = NULL,
     full_df_row = pheno_list[[i]],
     obs_ids     = obs_ids_list[[i]]
   )
 })
+```
+
+The `lapply()` function is used to create a list of group models for each family, which are then combined into a single multigroup model using the buildPedigreeMx() function. The resulting models can then be fitted in OpenMx to estimate the variance components for each family and compare the ACE, MACE, and CE models.
 
 
-multi_model_ace <- buildPedigreeMx(
-  model_name   = "MultiPedigreeModel",
-  vars         = start_vars,
-  group_models = group_models_ace,
-  ci = TRUE
-)
 
+```{r, eval = has_openmx}
 multi_model_mace <- buildPedigreeMx(
-  model_name   = "MultiPedigreeModel",
-  vars         = start_vars,
+  model_name = "MultiPedigreeModel",
+  vars = start_vars,
   group_models = group_models_mace,
   ci = TRUE
 )
 
+multi_model_ace <- buildPedigreeMx(
+  model_name = "MultiPedigreeModel",
+  vars = start_vars,
+  group_models = group_models_ace,
+  ci = TRUE
+)
+
 multi_model_ce <- buildPedigreeMx(
-  model_name   = "MultiPedigreeModel",
-  vars         = start_vars,
+  model_name = "MultiPedigreeModel",
+  vars = start_vars,
   group_models = group_models_ce,
   ci = TRUE
 )
 ```
+
+
 ```{r, include = FALSE}
 fitted_multi_ace <- NULL # ensure variable exists for later use
 fitted_multi_mace <- NULL # ensure variable exists for later use
 fitted_multi_ce <- NULL # ensure variable exists for later use
 ```
-```{r, eval = run_models}
+
+
+```{r, eval = run_models && has_openmx, include = FALSE}
+# these models take a while to fit, so we save the fitted models as RDS files for later use. If the RDS files already exist, we can skip fitting the models and just load the fitted models from the RDS files.
+
 fitted_multi_ace <- mxRun(multi_model_ace,
-                          intervals= TRUE)
+  intervals = TRUE
+)
 saveRDS(fitted_multi_ace, "inst/extdata/fitted_multi_ace.rds")
 
-fitted_multi_mace <- mxRun(multi_model_mace, intervals= TRUE)
+fitted_multi_mace <- mxRun(multi_model_mace, intervals = TRUE)
 saveRDS(fitted_multi_mace, "inst/extdata/fitted_multi_mace.rds")
 
-fitted_multi_ce <- mxRun(multi_model_ce, intervals= TRUE)
+fitted_multi_ce <- mxRun(multi_model_ce, intervals = TRUE)
 saveRDS(fitted_multi_ce, "inst/extdata/fitted_multi_ce.rds")
 ```
 
-```{r, eval = FALSE, include = FALSE}
+```{r, eval = FALSE && has_openmx, include = FALSE}
+# If the models do not converge well, we can use mxTryHard() to attempt to find better-fitting solutions. This can be especially useful when fitting complex models with many families and variance components, as convergence can sometimes be challenging. The mxTryHard() function will try different optimization settings and starting values to improve convergence. We also save the results of mxTryHard() as RDS files for later use.
 tt_ace <- mxTryHard(fitted_multi_ace, intervals = TRUE)
 saveRDS(tt_ace, "inst/extdata/fitted_multi_ace_tryhard.rds")
 tt_mace <- mxTryHard(fitted_multi_mace, intervals = TRUE)
@@ -213,66 +252,70 @@ saveRDS(tt_ce, "inst/extdata/fitted_multi_ce_tryhard.rds")
 Note that fitting these models can take some time, especially with many families and large pedigrees. The `mxTryHard()` function can be used to attempt to find better-fitting solutions if the initial optimization does not converge well. In practice, you may want to experiment with different starting values or optimization settings to improve convergence.
 
 ```
-fitted_multi_ace <- mxRun(multi_model_ace)
 fitted_multi_mace <- mxRun(multi_model_mace)
+fitted_multi_ace <- mxRun(multi_model_ace)
 fitted_multi_ce <- mxRun(multi_model_ce)
 ```
 
-```{r, include = FALSE, eval = file.exists(rds_file_ace) && !run_models && file.exists(rds_file_mace) && file.exists(file.path(rds_dir, "fitted_multi_ce.rds"))}
+```{r, include = FALSE, eval = !run_models && has_openmx}
 fitted_multi_ace <- readRDS(rds_file_ace)
 fitted_multi_mace <- readRDS(rds_file_mace)
-fitted_multi_ce <- readRDS(file.path(rds_dir, "fitted_multi_ce.rds"))
+fitted_multi_ce <- readRDS(rds_file_ce)
+```
+
+
+As you can see, we have fit a multigroup pedigree model using `r n_families` families of several thousand squirrels. The model includes additive genetic variance (Vad), common nuclear environmental variance (Vcn), and unique environmental variance (Ver). The mitochondrial variance component (Vmt) was included in the MACE model but not estimated in the ACE model. The results show the proportion of total variance attributed to each component, which can be interpreted as heritability and environmental contributions to the phenotype of interest (LRS) in these
+squirrels.
+
+```{r, eval = has_openmx &&  !is.null(fitted_multi_mace), echo = TRUE}
+summary(fitted_multi_mace)
+summary(fitted_multi_mace)$CI
+total_var_mace <- sum(
+  fitted_multi_mace$ModelOne$Vad$values,
+  fitted_multi_mace$ModelOne$Vcn$values,
+  fitted_multi_mace$ModelOne$Vmt$values,
+  fitted_multi_mace$ModelOne$Ver$values
+)
+```
+
+
+```{r total-fam-results-mace, eval = has_openmx && !is.null(fitted_multi_ace)}
+cat("Additive genetic (Vad):", fitted_multi_mace$ModelOne$Vad$values / total_var_mace, "\n")
+cat("Common nuclear  (Vcn):", fitted_multi_mace$ModelOne$Vcn$values / total_var_mace, "\n")
+cat("Mitochondrial (Vmt):", fitted_multi_mace$ModelOne$Vmt$values / total_var_mace, "\n")
+cat("Unique environ. (Ver):", fitted_multi_mace$ModelOne$Ver$values / total_var_mace, "\n")
 ```
 
 
 
 
 ```{r, eval = has_openmx && !is.null(fitted_multi_ace)}
-summary(fitted_multi_ace,verbose=T)
+summary(fitted_multi_ace, verbose = T)
 summary(fitted_multi_ace)$CI
 
 
-
-total_var_ace <- sum(fitted_multi_ace$ModelOne$Vad$values, 
-                 fitted_multi_ace$ModelOne$Vcn$values,
-                 #fitted_multi_ace$ModelOne$Vmt$values, 
-                 fitted_multi_ace$ModelOne$Ver$values)
+total_var_ace <- sum(
+  fitted_multi_ace$ModelOne$Vad$values,
+  fitted_multi_ace$ModelOne$Vcn$values,
+  # fitted_multi_ace$ModelOne$Vmt$values,
+  fitted_multi_ace$ModelOne$Ver$values
+)
 ```
 
 
 ```{r total-fam-results, eval = has_openmx && !is.null(fitted_multi_ace)}
-cat("Additive genetic (Vad):", fitted_multi_ace$ModelOne$Vad$values/total_var_ace, "\n")
-cat("Common nuclear  (Vcn):", fitted_multi_ace$ModelOne$Vcn$values/total_var_ace, "\n")
-cat("Unique environ. (Ver):", fitted_multi_ace$ModelOne$Ver$values/total_var_ace, "\n")
-```
-
-As you can see, we have fit a multigroup pedigree model using `r n_families` families of several thousand squirrels. The model includes additive genetic variance (Vad), common nuclear environmental variance (Vcn), and unique environmental variance (Ver). The mitochondrial variance component (Vmt) was included in the MACE model but not estimated in the ACE model. The results show the proportion of total variance attributed to each component, which can be interpreted as heritability and environmental contributions to the phenotype of interest (LRS) in these
-squirrels.
-
-```{r, eval = has_openmx &&  !is.null(fitted_multi_mace)}
-summary(fitted_multi_mace)
-summary(fitted_multi_mace)$CI
-total_var_mace <- sum(fitted_multi_mace$ModelOne$Vad$values, 
-                 fitted_multi_mace$ModelOne$Vcn$values,
-                 fitted_multi_mace$ModelOne$Vmt$values, 
-                 fitted_multi_mace$ModelOne$Ver$values)
+cat("Additive genetic (Vad):", fitted_multi_ace$ModelOne$Vad$values / total_var_ace, "\n")
+cat("Common nuclear  (Vcn):", fitted_multi_ace$ModelOne$Vcn$values / total_var_ace, "\n")
+cat("Unique environ. (Ver):", fitted_multi_ace$ModelOne$Ver$values / total_var_ace, "\n")
 ```
 
 
-```{r total-fam-results-mace, eval = has_openmx && !is.null(fitted_multi_ace)}
-cat("Additive genetic (Vad):", fitted_multi_mace$ModelOne$Vad$values/total_var_mace, "\n")
-cat("Common nuclear  (Vcn):", fitted_multi_mace$ModelOne$Vcn$values/total_var_mace, "\n")
-cat("Mitochondrial (Vmt):", fitted_multi_mace$ModelOne$Vmt$values/total_var_mace, "\n")
-cat("Unique environ. (Ver):", fitted_multi_mace$ModelOne$Ver$values/total_var_mace, "\n")
-```
+
 Now we can compare the ACE and MACE models to see if including the mitochondrial component changes our estimates of heritability and environmental contributions. This can provide insights into the role of mitochondrial inheritance in the trait of interest (LRS) in these squirrels. In the original paper, the authors found that a maternally inherited component (which could be due to mitochondria or maternal effects) explained a significant portion of the variance in LRS,. 
 
 ```{r, eval = has_openmx && !is.null(fitted_multi_ace) && !is.null(fitted_multi_mace) && !is.null(fitted_multi_ce)}
-
 mxCompare(fitted_multi_mace, fitted_multi_ace)
 mxCompare(fitted_multi_ace, fitted_multi_ce)
-
-
 ```
 
 However, as you can see when we compare the ACE and MACE models, the inclusion of the mitochondrial component does not substantially change the estimates of additive genetic and common nuclear environmental variance, suggesting that the mitochondrial component may not be a major contributor to LRS in this dataset.
