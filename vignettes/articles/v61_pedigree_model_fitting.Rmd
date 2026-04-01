@@ -47,11 +47,11 @@ bgmisc_testing
 bgmisc_testing_env
 ```
 
-# Introduction
+
 
 This vignette extends the example from `vignette("v60_pedigree_model_fitting", package = "BGmisc")` to show how to fit models to multiple families simultaneously. The key functions are `buildOneFamilyGroup()` and `buildPedigreeMx()`, which translate pedigree data into OpenMx model specifications.
 
-## Scaling Up to Many Families
+# Scaling Up to Many Families
 
 
 Here we replicate several estimates of heritability across multiple families of red squirrels.  We use the `redsquirrels_full` dataset from the `ggpedigree` package, which contains pedigree and phenotypic data on red squirrels from the Kluane region of the Yukon, Canada.  The phenotype we analyze is lifetime reproductive success (LRS), which is a count of the number of offspring that survive to a certain age.
@@ -116,7 +116,7 @@ start_vars <- list(
 )
 ```
 
-### Model Building
+## Model Building
 
 Now we loop through each family, extract the pedigree and phenotypic data, and prepare the relatedness matrices (additive genetic, common nuclear environment, and mitochondrial) for each family. We also prepare the phenotypic data in the format required for OpenMx. Finally, we build the group models for ACE, MACE, and CE models for each family. The `buildOneFamilyGroup()` function is used to create the model specification for each family, and the `buildPedigreeMx()` function is used to combine these group models into a single multigroup model that can be fitted in OpenMx. As you can see, we are fitting three different models: ACE (additive genetic, common environment, unique environment), MACE (additive genetic, common environment, mitochondrial, unique environment), and CE (common environment, unique environment). This allows us to compare the models and assess the contribution of each variance component to the trait of interest (LRS) in these squirrels.
 
@@ -354,7 +354,7 @@ cat("Unique environ. (Ver):", fitted_multi_ce$ModelOne$Ver$values/ total_var_ce,
 ```
 
 
-### Model Comparison
+## Model Comparison
 
 All of these models are nested, with the CE model being the most constrained (only common environment and unique environment), the ACE model including additive genetic effects, and the MACE model including both additive genetic effects and mitochondrial effects.
 
