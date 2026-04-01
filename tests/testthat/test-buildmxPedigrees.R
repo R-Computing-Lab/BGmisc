@@ -236,6 +236,10 @@ test_that("fitPedigreeModel errors without OpenMx", {
     ),
     regexp = "OpenMx"
   )
+
+    expect_error(
+      .require_openmx()
+    )
 })
 
 test_that("fitPedigreeModel runs end-to-end with a trivial dataset", {

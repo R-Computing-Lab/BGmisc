@@ -223,7 +223,7 @@ fitted_multi_ce <- NULL # ensure variable exists for later use
 ```
 
 
-```{r, eval = run_models, include = FALSE}
+```{r, eval = run_models && has_openmx, include = FALSE}
 # these models take a while to fit, so we save the fitted models as RDS files for later use. If the RDS files already exist, we can skip fitting the models and just load the fitted models from the RDS files.
 
 fitted_multi_ace <- mxRun(multi_model_ace,
@@ -238,7 +238,7 @@ fitted_multi_ce <- mxRun(multi_model_ce, intervals = TRUE)
 saveRDS(fitted_multi_ce, "inst/extdata/fitted_multi_ce.rds")
 ```
 
-```{r, eval = FALSE, include = FALSE}
+```{r, eval = FALSE && has_openmx, include = FALSE}
 # If the models do not converge well, we can use mxTryHard() to attempt to find better-fitting solutions. This can be especially useful when fitting complex models with many families and variance components, as convergence can sometimes be challenging. The mxTryHard() function will try different optimization settings and starting values to improve convergence. We also save the results of mxTryHard() as RDS files for later use.
 tt_ace <- mxTryHard(fitted_multi_ace, intervals = TRUE)
 saveRDS(tt_ace, "inst/extdata/fitted_multi_ace_tryhard.rds")
@@ -257,7 +257,7 @@ fitted_multi_ace <- mxRun(multi_model_ace)
 fitted_multi_ce <- mxRun(multi_model_ce)
 ```
 
-```{r, include = FALSE, eval = !run_models}
+```{r, include = FALSE, eval = !run_models && has_openmx}
 fitted_multi_ace <- readRDS(rds_file_ace)
 fitted_multi_mace <- readRDS(rds_file_mace)
 fitted_multi_ce <- readRDS(rds_file_ce)
