@@ -22,6 +22,7 @@ sliceFamilies(
   data_directory = NULL,
   verbose = FALSE,
   error_handling = FALSE,
+  max_retries = 4,
   file_column_names = c("ID1", "ID2", "addRel", "mitRel", "cnuRel")
 )
 ```
@@ -86,8 +87,13 @@ sliceFamilies(
 
 - error_handling:
 
-  Logical. Should more aggressive error handing be attemptted? Default
-  is false
+  Logical. Should more aggressive error handling be attempted? Default
+  is FALSE
+
+- max_retries:
+
+  Integer. Number of retry attempts with halved chunk size when
+  error_handling is TRUE. Default is 2
 
 - file_column_names:
 
