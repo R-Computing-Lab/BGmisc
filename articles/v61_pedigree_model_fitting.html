@@ -72,18 +72,15 @@
 
     
     
-<div class="section level2">
-<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
-</h2>
 <p>This vignette extends the example from
 <code><a href="../articles/v60_pedigree_model_fitting.html">vignette("v60_pedigree_model_fitting", package = "BGmisc")</a></code>
 to show how to fit models to multiple families simultaneously. The key
 functions are <code><a href="../reference/buildOneFamilyGroup.html">buildOneFamilyGroup()</a></code> and
 <code><a href="../reference/buildPedigreeMx.html">buildPedigreeMx()</a></code>, which translate pedigree data into
 OpenMx model specifications.</p>
-<div class="section level3">
-<h3 id="scaling-up-to-many-families">Scaling Up to Many Families<a class="anchor" aria-label="anchor" href="#scaling-up-to-many-families"></a>
-</h3>
+<div class="section level2">
+<h2 id="scaling-up-to-many-families">Scaling Up to Many Families<a class="anchor" aria-label="anchor" href="#scaling-up-to-many-families"></a>
+</h2>
 <p>Here we replicate several estimates of heritability across multiple
 families of red squirrels. We use the <code>redsquirrels_full</code>
 dataset from the <code>ggpedigree</code> package, which contains
@@ -166,9 +163,9 @@ trait being analyzed.</p>
 <span>  am2 <span class="op">=</span> <span class="fl">0</span>, <span class="co"># A x Mt interaction (not estimated here)</span></span>
 <span>  ee2 <span class="op">=</span> <span class="fl">0.7</span> <span class="co"># unique environment</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<div class="section level4">
-<h4 id="model-building">Model Building<a class="anchor" aria-label="anchor" href="#model-building"></a>
-</h4>
+<div class="section level3">
+<h3 id="model-building">Model Building<a class="anchor" aria-label="anchor" href="#model-building"></a>
+</h3>
 <p>Now we loop through each family, extract the pedigree and phenotypic
 data, and prepare the relatedness matrices (additive genetic, common
 nuclear environment, and mitochondrial) for each family. We also prepare
@@ -281,7 +278,6 @@ family and compare the ACE, MACE, and CE models.</p>
 <span>  group_models <span class="op">=</span> <span class="va">group_models_ce</span>,</span>
 <span>  ci <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-</div>
 </div>
 <div class="section level3">
 <h3 id="model-fitting">Model Fitting<a class="anchor" aria-label="anchor" href="#model-fitting"></a>
@@ -521,9 +517,10 @@ these squirrels.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Unique environ. (Ver):"</span>, <span class="va">fitted_multi_ce</span><span class="op">$</span><span class="va">ModelOne</span><span class="op">$</span><span class="va">Ver</span><span class="op">$</span><span class="va">values</span><span class="op">/</span> <span class="va">total_var_ce</span>, <span class="st">"\n"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Unique environ. (Ver): 0.6932799</span></span></code></pre></div>
 </div>
-<div class="section level4">
-<h4 id="model-comparison">Model Comparison<a class="anchor" aria-label="anchor" href="#model-comparison"></a>
-</h4>
+</div>
+<div class="section level3">
+<h3 id="model-comparison">Model Comparison<a class="anchor" aria-label="anchor" href="#model-comparison"></a>
+</h3>
 <p>All of these models are nested, with the CE model being the most
 constrained (only common environment and unique environment), the ACE
 model including additive genetic effects, and the MACE model including
@@ -566,7 +563,6 @@ results in the context of the specific dataset and trait being analyzed,
 and to consider other factors such as sample size, pedigree structure,
 and potential confounding variables that could influence the estimates
 of variance components.</p>
-</div>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

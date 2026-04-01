@@ -1,7 +1,5 @@
 # Extended: Fitting Pedigree-Based Variance Component Models
 
-## Introduction
-
 This vignette extends the example from
 [`vignette("v60_pedigree_model_fitting", package = "BGmisc")`](https://r-computing-lab.github.io/BGmisc/articles/v60_pedigree_model_fitting.md)
 to show how to fit models to multiple families simultaneously. The key
@@ -11,7 +9,7 @@ and
 [`buildPedigreeMx()`](https://r-computing-lab.github.io/BGmisc/reference/buildPedigreeMx.md),
 which translate pedigree data into OpenMx model specifications.
 
-### Scaling Up to Many Families
+## Scaling Up to Many Families
 
 Here we replicate several estimates of heritability across multiple
 families of red squirrels. We use the `redsquirrels_full` dataset from
@@ -106,7 +104,7 @@ start_vars <- list(
 )
 ```
 
-#### Model Building
+### Model Building
 
 Now we loop through each family, extract the pedigree and phenotypic
 data, and prepare the relatedness matrices (additive genetic, common
@@ -482,7 +480,7 @@ cat("Unique environ. (Ver):", fitted_multi_ce$ModelOne$Ver$values/ total_var_ce,
 #> Unique environ. (Ver): 0.6932799
 ```
 
-#### Model Comparison
+### Model Comparison
 
 All of these models are nested, with the CE model being the most
 constrained (only common environment and unique environment), the ACE
