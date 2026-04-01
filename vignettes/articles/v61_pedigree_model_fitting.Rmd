@@ -39,7 +39,7 @@ rds_file_mace <- file.path(rds_dir, "fitted_multi_mace.rds")
 rds_file_ce <- file.path(rds_dir, "fitted_multi_ce.rds")
 ```
 
-```{r}
+```{r, include = FALSE}
 run_models
 has_openmx
 interactive()
@@ -51,7 +51,7 @@ bgmisc_testing_env
 
 This vignette extends the example from `vignette("v60_pedigree_model_fitting", package = "BGmisc")` to show how to fit models to multiple families simultaneously. The key functions are `buildOneFamilyGroup()` and `buildPedigreeMx()`, which translate pedigree data into OpenMx model specifications.
 
-# Scaling Up to Many Families
+## Scaling Up to Many Families
 
 
 Here we replicate several estimates of heritability across multiple families of red squirrels.  We use the `redsquirrels_full` dataset from the `ggpedigree` package, which contains pedigree and phenotypic data on red squirrels from the Kluane region of the Yukon, Canada.  The phenotype we analyze is lifetime reproductive success (LRS), which is a count of the number of offspring that survive to a certain age.
@@ -115,6 +115,8 @@ start_vars <- list(
   ee2 = 0.7 # unique environment
 )
 ```
+
+### Model Building
 
 Now we loop through each family, extract the pedigree and phenotypic data, and prepare the relatedness matrices (additive genetic, common nuclear environment, and mitochondrial) for each family. We also prepare the phenotypic data in the format required for OpenMx. Finally, we build the group models for ACE, MACE, and CE models for each family. The `buildOneFamilyGroup()` function is used to create the model specification for each family, and the `buildPedigreeMx()` function is used to combine these group models into a single multigroup model that can be fitted in OpenMx. As you can see, we are fitting three different models: ACE (additive genetic, common environment, unique environment), MACE (additive genetic, common environment, mitochondrial, unique environment), and CE (common environment, unique environment). This allows us to compare the models and assess the contribution of each variance component to the trait of interest (LRS) in these squirrels.
 
@@ -191,7 +193,6 @@ group_models_ce <- lapply(seq_len(n_families), function(i) {
 The `lapply()` function is used to create a list of group models for each family, which are then combined into a single multigroup model using the buildPedigreeMx() function. The resulting models can then be fitted in OpenMx to estimate the variance components for each family and compare the ACE, MACE, and CE models.
 
 
-
 ```{r, eval = has_openmx}
 multi_model_mace <- buildPedigreeMx(
   model_name = "MultiPedigreeModel",
@@ -215,6 +216,8 @@ multi_model_ce <- buildPedigreeMx(
 )
 ```
 
+
+## Model Fitting
 
 ```{r, include = FALSE}
 fitted_multi_ace <- NULL # ensure variable exists for later use
@@ -263,13 +266,17 @@ fitted_multi_mace <- readRDS(rds_file_mace)
 fitted_multi_ce <- readRDS(rds_file_ce)
 ```
 
+### MACE Model Results
 
 As you can see, we have fit a multigroup pedigree model using `r n_families` families of several thousand squirrels. The model includes additive genetic variance (Vad), common nuclear environmental variance (Vcn), and unique environmental variance (Ver). The mitochondrial variance component (Vmt) was included in the MACE model but not estimated in the ACE model. The results show the proportion of total variance attributed to each component, which can be interpreted as heritability and environmental contributions to the phenotype of interest (LRS) in these
 squirrels.
 
 ```{r, eval = has_openmx &&  !is.null(fitted_multi_mace), echo = TRUE}
 summary(fitted_multi_mace)
+
+
 summary(fitted_multi_mace)$CI
+
 total_var_mace <- sum(
   fitted_multi_mace$ModelOne$Vad$values,
   fitted_multi_mace$ModelOne$Vcn$values,
@@ -287,11 +294,21 @@ cat("Unique environ. (Ver):", fitted_multi_mace$ModelOne$Ver$values / total_var_
 ```
 
 
+As you can see, the MACE model includes an additional variance component for mitochondrial effects (Vmt), which allows us to assess the contribution of mitochondrial inheritance to the trait of interest (LRS) in these squirrels. The results show the proportion of total variance attributed to each component, which can be interpreted as heritability and environmental contributions to LRS in these squirrels. We can also compare the ACE and MACE models to see if including the mitochondrial component changes our estimates of heritability and environmental contributions.
+
+### ACE Model Results
+
+Now we can look at the results from the ACE model, which does not include the mitochondrial component. This allows us to compare the estimates of additive genetic and common nuclear environmental variance between the ACE and MACE models, and assess whether including the mitochondrial component changes our estimates of heritability and environmental contributions to LRS in these squirrels.
+
 
 
 ```{r, eval = has_openmx && !is.null(fitted_multi_ace)}
-summary(fitted_multi_ace, verbose = T)
-summary(fitted_multi_ace)$CI
+
+
+summary(fitted_multi_ace)
+summary(fitted_multi_ace, verbose = T)$CI
+
+#summary(fitted_multi_ace)$CI
 
 
 total_var_ace <- sum(
@@ -302,6 +319,7 @@ total_var_ace <- sum(
 )
 ```
 
+As you can see, the ACE model includes variance components for additive genetic effects (Vad), common nuclear environmental effects (Vcn), and unique environmental effects (Ver), but does not include a component for mitochondrial effects (Vmt). The results show the proportion of total variance attributed to each component, which can be interpreted as heritability and environmental contributions to LRS in these squirrels. We can compare these estimates to those from the MACE model to assess the contribution of mitochondrial inheritance to LRS in these squirrels.
 
 ```{r total-fam-results, eval = has_openmx && !is.null(fitted_multi_ace)}
 cat("Additive genetic (Vad):", fitted_multi_ace$ModelOne$Vad$values / total_var_ace, "\n")
@@ -310,18 +328,49 @@ cat("Unique environ. (Ver):", fitted_multi_ace$ModelOne$Ver$values / total_var_a
 ```
 
 
+### CE Model Results
+
+```{r, eval = has_openmx && !is.null(fitted_multi_ce)}
+
+summary(fitted_multi_ce)
+
+summary(fitted_multi_ce, verbose = T)$CI
+
+total_var_ce <- sum(
+  # fitted_multi_ce$ModelOne$Vad$values,
+  fitted_multi_ce$ModelOne$Vcn$values,
+  # fitted_multi_ce$ModelOne$Vmt$values,
+  fitted_multi_ce$ModelOne$Ver$values
+)
+```
+
+As you can see, the CE model includes variance components for common nuclear environmental effects (Vcn) and unique environmental effects (Ver), but does not include a component for additive genetic effects (Vad) or mitochondrial effects (Vmt). The results show the proportion of total variance attributed to each component, which can be interpreted as environmental contributions to LRS in these squirrels. We can compare these estimates to those from the ACE and MACE models to assess the contribution of additive genetic and mitochondrial inheritance to LRS in these squirrels.
+
+
+```{r total-fam-results-ce, eval = has_openmx && !is.null(fitted_multi_ce)}
+
+cat("Common nuclear  (Vcn):", fitted_multi_ce$ModelOne$Vcn$values / total_var_ce, "\n")
+cat("Unique environ. (Ver):", fitted_multi_ce$ModelOne$Ver$values/ total_var_ce, "\n")
+```
+
+
+### Model Comparison
+
+All of these models are nested, with the CE model being the most constrained (only common environment and unique environment), the ACE model including additive genetic effects, and the MACE model including both additive genetic effects and mitochondrial effects.
 
 Now we can compare the ACE and MACE models to see if including the mitochondrial component changes our estimates of heritability and environmental contributions. This can provide insights into the role of mitochondrial inheritance in the trait of interest (LRS) in these squirrels. In the original paper, the authors found that a maternally inherited component (which could be due to mitochondria or maternal effects) explained a significant portion of the variance in LRS,. 
 
-```{r, eval = has_openmx && !is.null(fitted_multi_ace) && !is.null(fitted_multi_mace) && !is.null(fitted_multi_ce)}
+```{r, eval = has_openmx && !is.null(fitted_multi_ace) && !is.null(fitted_multi_mace)}
 mxCompare(fitted_multi_mace, fitted_multi_ace)
-mxCompare(fitted_multi_ace, fitted_multi_ce)
+
 ```
 
 However, as you can see when we compare the ACE and MACE models, the inclusion of the mitochondrial component does not substantially change the estimates of additive genetic and common nuclear environmental variance, suggesting that the mitochondrial component may not be a major contributor to LRS in this dataset.
 
+```{r, eval = has_openmx && !is.null(fitted_multi_ace) && !is.null(fitted_multi_ce)}
 
+mxCompare(fitted_multi_ace, fitted_multi_ce)
+```
 
-
-
+When we compare the ACE and CE models, we see that the ACE model does not fit significantly better than the CE model. This suggests that the additive genetic component may not be a major contributor to LRS in this dataset, and that the variance in LRS may be primarily due to environmental factors. However, it's important to interpret these results in the context of the specific dataset and trait being analyzed, and to consider other factors such as sample size, pedigree structure, and potential confounding variables that could influence the estimates of variance components.
 
