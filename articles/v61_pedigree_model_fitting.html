@@ -309,18 +309,18 @@ squirrels.</p>
 <span><span class="co">#&gt;  </span></span>
 <span><span class="co">#&gt; free parameters:</span></span>
 <span><span class="co">#&gt;     name       matrix row  col     Estimate  Std.Error A lbound ubound</span></span>
-<span><span class="co">#&gt; 1    vad ModelOne.Vad   1    1 0.0000000001 0.30183118 !     0!       </span></span>
-<span><span class="co">#&gt; 2    vcn ModelOne.Vcn   1    1 4.1144290806 1.19868649    1e-10       </span></span>
-<span><span class="co">#&gt; 3    vmt ModelOne.Vmt   1    1 0.0000000001 0.09662163 !     0!       </span></span>
-<span><span class="co">#&gt; 4    ver ModelOne.Ver   1    1 9.2999051171 0.98364306    1e-10       </span></span>
-<span><span class="co">#&gt; 5 meanLI       ped1.M   1 X208 1.2569248071 0.11367465                </span></span>
+<span><span class="co">#&gt; 1    vad ModelOne.Vad   1    1 1.000002e-10 0.25474134 !     0!       </span></span>
+<span><span class="co">#&gt; 2    vcn ModelOne.Vcn   1    1 4.114429e+00 1.00195787    1e-10       </span></span>
+<span><span class="co">#&gt; 3    vmt ModelOne.Vmt   1    1 1.000013e-10 0.08568305 !     0!       </span></span>
+<span><span class="co">#&gt; 4    ver ModelOne.Ver   1    1 9.299905e+00 0.85729034    1e-10       </span></span>
+<span><span class="co">#&gt; 5 meanLI       ped1.M   1 X208 1.256922e+00 0.10894759                </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; confidence intervals:</span></span>
 <span><span class="co">#&gt;     lbound     estimate ubound note</span></span>
-<span><span class="co">#&gt; vad     NA 0.0000000001     NA  !!!</span></span>
-<span><span class="co">#&gt; vcn     NA 4.1144290806     NA  !!!</span></span>
-<span><span class="co">#&gt; vmt     NA 0.0000000001     NA  !!!</span></span>
-<span><span class="co">#&gt; ver     NA 9.2999051171     NA  !!!</span></span>
+<span><span class="co">#&gt; vad     NA 1.000002e-10     NA  !!!</span></span>
+<span><span class="co">#&gt; vcn     NA 4.114429e+00     NA  !!!</span></span>
+<span><span class="co">#&gt; vmt     NA 1.000013e-10     NA  !!!</span></span>
+<span><span class="co">#&gt; ver     NA 9.299905e+00     NA  !!!</span></span>
 <span><span class="co">#&gt;   To investigate missing CIs, run summary() again, with verbose=T, to see CI details. </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Model Statistics: </span></span>
@@ -335,19 +335,19 @@ squirrels.</p>
 <span><span class="co">#&gt; AIC:       9125.024               14475.02                 14480.48</span></span>
 <span><span class="co">#&gt; BIC:       6900.344               14479.19                 14463.86</span></span>
 <span><span class="co">#&gt; To get additional fit indices, see help(mxRefModels)</span></span>
-<span><span class="co">#&gt; timestamp: 2026-03-30 22:09:23 </span></span>
-<span><span class="co">#&gt; Wall clock time: 9521.762 secs </span></span>
+<span><span class="co">#&gt; timestamp: 2026-03-31 04:21:03 </span></span>
+<span><span class="co">#&gt; Wall clock time: 8471.433 secs </span></span>
 <span><span class="co">#&gt; optimizer:  SLSQP </span></span>
 <span><span class="co">#&gt; OpenMx version number: 2.22.11 </span></span>
 <span><span class="co">#&gt; Need help?  See help(mxSummary)</span></span>
 <span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fitted_multi_mace</span><span class="op">)</span><span class="op">$</span><span class="va">CI</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fitted_multi_mace</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">$</span><span class="va">CI</span></span>
 <span><span class="co">#&gt;     lbound     estimate ubound note</span></span>
-<span><span class="co">#&gt; vad     NA 0.0000000001     NA  !!!</span></span>
-<span><span class="co">#&gt; vcn     NA 4.1144290806     NA  !!!</span></span>
-<span><span class="co">#&gt; vmt     NA 0.0000000001     NA  !!!</span></span>
-<span><span class="co">#&gt; ver     NA 9.2999051171     NA  !!!</span></span>
+<span><span class="co">#&gt; vad     NA 1.000002e-10     NA  !!!</span></span>
+<span><span class="co">#&gt; vcn     NA 4.114429e+00     NA  !!!</span></span>
+<span><span class="co">#&gt; vmt     NA 1.000013e-10     NA  !!!</span></span>
+<span><span class="co">#&gt; ver     NA 9.299905e+00     NA  !!!</span></span>
 <span></span>
 <span><span class="va">total_var_mace</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span></span>
 <span>  <span class="va">fitted_multi_mace</span><span class="op">$</span><span class="va">ModelOne</span><span class="op">$</span><span class="va">Vad</span><span class="op">$</span><span class="va">values</span>,</span>
@@ -357,13 +357,13 @@ squirrels.</p>
 <span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Additive genetic (Vad):"</span>, <span class="va">fitted_multi_mace</span><span class="op">$</span><span class="va">ModelOne</span><span class="op">$</span><span class="va">Vad</span><span class="op">$</span><span class="va">values</span> <span class="op">/</span> <span class="va">total_var_mace</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Additive genetic (Vad): 7.454712e-12</span></span>
+<span><span class="co">#&gt; Additive genetic (Vad): 7.454725e-12</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Common nuclear  (Vcn):"</span>, <span class="va">fitted_multi_mace</span><span class="op">$</span><span class="va">ModelOne</span><span class="op">$</span><span class="va">Vcn</span><span class="op">$</span><span class="va">values</span> <span class="op">/</span> <span class="va">total_var_mace</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Common nuclear  (Vcn): 0.3067188</span></span>
+<span><span class="co">#&gt; Common nuclear  (Vcn): 0.3067189</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Mitochondrial (Vmt):"</span>, <span class="va">fitted_multi_mace</span><span class="op">$</span><span class="va">ModelOne</span><span class="op">$</span><span class="va">Vmt</span><span class="op">$</span><span class="va">values</span> <span class="op">/</span> <span class="va">total_var_mace</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Mitochondrial (Vmt): 7.454712e-12</span></span>
+<span><span class="co">#&gt; Mitochondrial (Vmt): 7.454812e-12</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Unique environ. (Ver):"</span>, <span class="va">fitted_multi_mace</span><span class="op">$</span><span class="va">ModelOne</span><span class="op">$</span><span class="va">Ver</span><span class="op">$</span><span class="va">values</span> <span class="op">/</span> <span class="va">total_var_mace</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Unique environ. (Ver): 0.6932812</span></span></code></pre></div>
+<span><span class="co">#&gt; Unique environ. (Ver): 0.6932811</span></span></code></pre></div>
 <p>As you can see, the MACE model includes an additional variance
 component for mitochondrial effects (Vmt), which allows us to assess the
 contribution of mitochondrial inheritance to the trait of interest (LRS)
@@ -484,8 +484,8 @@ these squirrels.</p>
 <span><span class="co">#&gt; AIC:       9121.024               14471.02                 14472.87</span></span>
 <span><span class="co">#&gt; BIC:       6894.678               14473.52                 14464.32</span></span>
 <span><span class="co">#&gt; To get additional fit indices, see help(mxRefModels)</span></span>
-<span><span class="co">#&gt; timestamp: 2026-03-31 05:14:48 </span></span>
-<span><span class="co">#&gt; Wall clock time: 2201.804 secs </span></span>
+<span><span class="co">#&gt; timestamp: 2026-03-31 05:48:04 </span></span>
+<span><span class="co">#&gt; Wall clock time: 1949.563 secs </span></span>
 <span><span class="co">#&gt; optimizer:  SLSQP </span></span>
 <span><span class="co">#&gt; OpenMx version number: 2.22.11 </span></span>
 <span><span class="co">#&gt; Need help?  See help(mxSummary)</span></span>
@@ -536,7 +536,7 @@ effects) explained a significant portion of the variance in LRS,.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/OpenMx/man/mxCompare.html" class="external-link">mxCompare</a></span><span class="op">(</span><span class="va">fitted_multi_mace</span>, <span class="va">fitted_multi_ace</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                 base         comparison ep minus2LL   df      AIC        diffLL</span></span>
 <span><span class="co">#&gt; 1 MultiPedigreeModel               &lt;NA&gt;  5 14465.02 2670 14475.02            NA</span></span>
-<span><span class="co">#&gt; 2 MultiPedigreeModel MultiPedigreeModel  4 14465.02 2671 14473.02 -6.135451e-09</span></span>
+<span><span class="co">#&gt; 2 MultiPedigreeModel MultiPedigreeModel  4 14465.02 2671 14473.02 -4.902176e-09</span></span>
 <span><span class="co">#&gt;   diffdf  p</span></span>
 <span><span class="co">#&gt; 1     NA NA</span></span>
 <span><span class="co">#&gt; 2      1  1</span></span></code></pre></div>

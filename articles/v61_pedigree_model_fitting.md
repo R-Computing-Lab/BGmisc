@@ -262,18 +262,18 @@ summary(fitted_multi_mace)
 #>  
 #> free parameters:
 #>     name       matrix row  col     Estimate  Std.Error A lbound ubound
-#> 1    vad ModelOne.Vad   1    1 0.0000000001 0.30183118 !     0!       
-#> 2    vcn ModelOne.Vcn   1    1 4.1144290806 1.19868649    1e-10       
-#> 3    vmt ModelOne.Vmt   1    1 0.0000000001 0.09662163 !     0!       
-#> 4    ver ModelOne.Ver   1    1 9.2999051171 0.98364306    1e-10       
-#> 5 meanLI       ped1.M   1 X208 1.2569248071 0.11367465                
+#> 1    vad ModelOne.Vad   1    1 1.000002e-10 0.25474134 !     0!       
+#> 2    vcn ModelOne.Vcn   1    1 4.114429e+00 1.00195787    1e-10       
+#> 3    vmt ModelOne.Vmt   1    1 1.000013e-10 0.08568305 !     0!       
+#> 4    ver ModelOne.Ver   1    1 9.299905e+00 0.85729034    1e-10       
+#> 5 meanLI       ped1.M   1 X208 1.256922e+00 0.10894759                
 #> 
 #> confidence intervals:
 #>     lbound     estimate ubound note
-#> vad     NA 0.0000000001     NA  !!!
-#> vcn     NA 4.1144290806     NA  !!!
-#> vmt     NA 0.0000000001     NA  !!!
-#> ver     NA 9.2999051171     NA  !!!
+#> vad     NA 1.000002e-10     NA  !!!
+#> vcn     NA 4.114429e+00     NA  !!!
+#> vmt     NA 1.000013e-10     NA  !!!
+#> ver     NA 9.299905e+00     NA  !!!
 #>   To investigate missing CIs, run summary() again, with verbose=T, to see CI details. 
 #> 
 #> Model Statistics: 
@@ -288,19 +288,19 @@ summary(fitted_multi_mace)
 #> AIC:       9125.024               14475.02                 14480.48
 #> BIC:       6900.344               14479.19                 14463.86
 #> To get additional fit indices, see help(mxRefModels)
-#> timestamp: 2026-03-30 22:09:23 
-#> Wall clock time: 9521.762 secs 
+#> timestamp: 2026-03-31 04:21:03 
+#> Wall clock time: 8471.433 secs 
 #> optimizer:  SLSQP 
 #> OpenMx version number: 2.22.11 
 #> Need help?  See help(mxSummary)
 
 
-summary(fitted_multi_mace)$CI
+summary(fitted_multi_mace, verbose = TRUE)$CI
 #>     lbound     estimate ubound note
-#> vad     NA 0.0000000001     NA  !!!
-#> vcn     NA 4.1144290806     NA  !!!
-#> vmt     NA 0.0000000001     NA  !!!
-#> ver     NA 9.2999051171     NA  !!!
+#> vad     NA 1.000002e-10     NA  !!!
+#> vcn     NA 4.114429e+00     NA  !!!
+#> vmt     NA 1.000013e-10     NA  !!!
+#> ver     NA 9.299905e+00     NA  !!!
 
 total_var_mace <- sum(
   fitted_multi_mace$ModelOne$Vad$values,
@@ -312,13 +312,13 @@ total_var_mace <- sum(
 
 ``` r
 cat("Additive genetic (Vad):", fitted_multi_mace$ModelOne$Vad$values / total_var_mace, "\n")
-#> Additive genetic (Vad): 7.454712e-12
+#> Additive genetic (Vad): 7.454725e-12
 cat("Common nuclear  (Vcn):", fitted_multi_mace$ModelOne$Vcn$values / total_var_mace, "\n")
-#> Common nuclear  (Vcn): 0.3067188
+#> Common nuclear  (Vcn): 0.3067189
 cat("Mitochondrial (Vmt):", fitted_multi_mace$ModelOne$Vmt$values / total_var_mace, "\n")
-#> Mitochondrial (Vmt): 7.454712e-12
+#> Mitochondrial (Vmt): 7.454812e-12
 cat("Unique environ. (Ver):", fitted_multi_mace$ModelOne$Ver$values / total_var_mace, "\n")
-#> Unique environ. (Ver): 0.6932812
+#> Unique environ. (Ver): 0.6932811
 ```
 
 As you can see, the MACE model includes an additional variance component
@@ -443,8 +443,8 @@ summary(fitted_multi_ce)
 #> AIC:       9121.024               14471.02                 14472.87
 #> BIC:       6894.678               14473.52                 14464.32
 #> To get additional fit indices, see help(mxRefModels)
-#> timestamp: 2026-03-31 05:14:48 
-#> Wall clock time: 2201.804 secs 
+#> timestamp: 2026-03-31 05:48:04 
+#> Wall clock time: 1949.563 secs 
 #> optimizer:  SLSQP 
 #> OpenMx version number: 2.22.11 
 #> Need help?  See help(mxSummary)
@@ -499,7 +499,7 @@ effects) explained a significant portion of the variance in LRS,.
 mxCompare(fitted_multi_mace, fitted_multi_ace)
 #>                 base         comparison ep minus2LL   df      AIC        diffLL
 #> 1 MultiPedigreeModel               <NA>  5 14465.02 2670 14475.02            NA
-#> 2 MultiPedigreeModel MultiPedigreeModel  4 14465.02 2671 14473.02 -6.135451e-09
+#> 2 MultiPedigreeModel MultiPedigreeModel  4 14465.02 2671 14473.02 -4.902176e-09
 #>   diffdf  p
 #> 1     NA NA
 #> 2      1  1
