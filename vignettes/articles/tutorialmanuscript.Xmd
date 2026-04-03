@@ -1,0 +1,112 @@
+---
+title: "From Twins to Pedigrees: A Tutorial for Extended Family Variance Component Modeling with BGmisc"
+shorttitle: "Extended Family Modeling with BGmisc"
+author:
+  - name: "S. Mason Garrison"
+    affiliation: "1"
+    corresponding: true
+    email: "garrissm@wfu.edu"
+abstract: |
+  Twin studies remain the dominant design in behavior genetics, yet most twin half-siblings, cousins, and multi-generational relatives whose distinct kinship coefficients jointly identify a richer set of variance components than any MZ/DZ comparison alone. We demonstrate how to fit extended pedigree models using the BGmisc package and OpenMx. 
+  We apply the extended pedigree model to mutiple datasets
+  of Youth (a large human panel study with researcher-linked kinship), the Kluane Red Squirrel Project
+  (a multi-generational animal field study), and a children-of-twins dataset.
+  dataset with genomic relatedness data. In each case, fitting the extended
+  pedigree model on data the researcher already possesses -- but typically
+  confounds become testable, and components inaccessible to twin designs emerge.
+  We provide reproducible code for each application and practical guidance on
+  identification, starting values, and the interpretation of results.
+  registries contain far more information than researchers typically use: full siblings,
+  across three empirically distinct settings: the National Longitudinal Survey
+  discards -- changes the substantive conclusions: heritability estimates shift,
+keywords: ["extended pedigree", "variance components", "heritability", "BGmisc", "OpenMx", "behavior genetics", "tutorial"]
+output:
+  rmarkdown::html_vignette:
+    toc: true
+    toc_depth: 3
+  pdf_document:
+    keep_tex: true
+bibliography: references.bib
+vignette: >
+  %\VignetteIndexEntry{Extended Family Modeling with BGmisc}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  markdown: 
+    wrap: 100
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE, comment = "#>",
+  echo = TRUE, message = FALSE, warning = FALSE,
+  fig.width = 7, fig.height = 4.5
+)
+
+options(rmarkdown.html_vignette.check_title = FALSE)
+```
+
+# Introduction
+
+In behavior geneticists quest to understanding the relative contributions of genetic and
+environmental factors to phenotypic variation, they have long relied on the classical twin design.
+By comparing the simiarly of monozygotic (MZ) twins -- who share essentially all their DNA -- to
+that of dizygotic (DZ) twins -- who share on average half their segregating alleles -- researchers
+can partition phenotypic variance into additive genetic ($a^2$), shared environmental ($c^2$), and
+nonshared environmental ($e^2$) components [@plomin2016; @neale2004]. The twin design is elegant
+precisely because it requires only two types of pairs to identify three parameters.
+
+Its simplicity, however, is also its limitation. The classical ACE model is just identified: two
+observed statistics (MZ and DZ intraclass correlations) and three unknown parameters, with zero
+degrees of freedom remaining to test model fit or estimate additional components. Dominance genetic
+variance ($d^2$), epistasis, and interactions between nuclear and mitochondria DNA are inestimable
+from twins alone. More practically: these data are often collected in the context of larger family
+studies, either intentionally (e.g., twin registries that also include siblings and parents) or as a
+byproduct of large panel studies (e.g., the National Longitudinal Survey of Youth, which includes
+researcher-linked kinship). In most cases, the additional relatives are excluded from analysis, and
+the twin design is applied to a subset of the data, even though these relatives carry independent
+information about the genetic and environmental architecture of the phenotype.
+
+The extended pedigree model, which we have introduced elsewhere (see ETC), leverages the full range
+of kinship coefficients in a pedigree to identify a richer set of variance components than the
+classical twin design. By including multiple types of relatives, researchers can estimate not only
+additive genetic variance but also dominance, shared environmental variance, and even more complex
+interactions. This tutorial demonstrates how to fit extended pedigree models using the BGmisc
+package and OpenMx, applying the model to multiple datasets across empirically distinct settings:
+the National Longitudinal Survey of Youth (a large human panel study with researcher-linked
+kinship), the Kluane Red Squirrel Project (a multi-generational animal field study), and a
+children-of-twins dataset. In each case, fitting the extended pedigree model on data the researcher
+already possesses -- but typically discards. We provide reproducible code for each application and
+practical guidance on identification, starting values, and the interpretation of results.
+
+The extended pedigree model addresses this gap directly. Rather than relying on a single MZ/DZ
+contrast, it leverages the full spectrum of pairwise kinship coefficients available in a family
+dataset: 1.0 for identical twins, 0.5 for parent-offspring and full siblings, 0.25 for half-siblings
+and grandparent-grandchild pairs, 0.125 for first cousins, and so on. Each distinct relatedness
+value provides independent leverage for disentangling genetic from environmental contributions. As
+the number of distinct kinship types increases, so does the number of identifiable variance
+components.
+
+Extended pedigree designs have been used in behavior genetics since at least the 1970s [@eaves1978; @fulker_multiple_1988], but they have remained a minority practice. Partially over concerns about model identification and power (Wilson, 1982, 1989), the complexity of fitting these models, and the relative costs of collecting twin data compared to extended family data. 
+
+<! -- https://onlinelibrary.wiley.com/doi/10.1002/bimj.4710310511 
+
+but also because the twin design has been so successful and widely adopted. The twin design is often seen as the "gold standard" in behavior genetics, and many researchers may be hesitant to deviate from this established approach. Additionally, many human datasets simply do not include the necessary family structure to fit extended pedigree models, which may limit their applicability in certain contexts.
+
+<the reasosn are numerous for why this is the case, but a key factor is that many human datasets simply do not include the necessary family structure to fit these models. And the twin design is often the default analytic approach, even when more complex family data are available.
+
+Deriving  
+
+In contrast, similar
+models are common in plant and animal breeding, where pedigree data is more routinely collected and
+analyzed.
+
+A persistent barrier has been the programming complexity of constructing relatedness matrices for
+arbitrary family structures, checking model identification, and assembling the resulting multi-group
+structural equation models. The `BGmisc` R package [@Garrison2024; @garrison_bgmisc_2025] was
+extended to address these challenges, providing tools for calculating relatedness matrices from
+pedigree data, checking model identification, and fitting extended pedigree models using OpenMx. The
+package is designed to be user-friendly and flexible, allowing researchers to easily incorporate a
+wide range of family structures into their analyses.
+
+# References
