@@ -244,12 +244,12 @@ saveRDS(fitted_multi_ce, "inst/extdata/fitted_multi_ce.rds")
 ```{r, eval = FALSE && has_openmx, include = FALSE}
 # If the models do not converge well, we can use mxTryHard() to attempt to find better-fitting solutions. This can be especially useful when fitting complex models with many families and variance components, as convergence can sometimes be challenging. The mxTryHard() function will try different optimization settings and starting values to improve convergence. We also save the results of mxTryHard() as RDS files for later use.
 tt_ace <- mxTryHard(fitted_multi_ace, intervals = TRUE)
-saveRDS(tt_ace, "inst/extdata/fitted_multi_ace_tryhard.rds")
+saveRDS(tt_ace, "extdata/fitted_multi_ace_tryhard.rds")
 tt_mace <- mxTryHard(fitted_multi_mace, intervals = TRUE)
-saveRDS(tt_mace, "inst/extdata/fitted_multi_mace_tryhard.rds")
+saveRDS(tt_mace, "extdata/fitted_multi_mace_tryhard.rds")
 
 tt_ce <- mxTryHard(fitted_multi_ce, intervals = TRUE)
-saveRDS(tt_ce, "inst/extdata/fitted_multi_ce_tryhard.rds")
+saveRDS(tt_ce, "extdata/fitted_multi_ce_tryhard.rds")
 ```
 
 Note that fitting these models can take some time, especially with many families and large pedigrees. The `mxTryHard()` function can be used to attempt to find better-fitting solutions if the initial optimization does not converge well. In practice, you may want to experiment with different starting values or optimization settings to improve convergence.
@@ -261,9 +261,30 @@ fitted_multi_ce <- mxRun(multi_model_ce)
 ```
 
 ```{r, include = FALSE, eval = !run_models && has_openmx}
-fitted_multi_ace <- readRDS(rds_file_ace)
-fitted_multi_mace <- readRDS(rds_file_mace)
-fitted_multi_ce <- readRDS(rds_file_ce)
+if( file.exists("extdata/fitted_multi_ace_tryhard.rds")){
+    fitted_multi_ace <- readRDS("extdata/fitted_multi_ace_tryhard.rds")
+  } else if (file.exists("vignettes/articles/extdata/fitted_multi_ace_tryhard.rds")) {
+  fitted_multi_ace <- readRDS("vignettes/articles/extdata/fitted_multi_ace_tryhard.rds")
+} else {
+  fitted_multi_ace <- readRDS(rds_file_ace)
+}
+
+if( exists("vignettes/articles/extdata/fitted_multi_mace_tryhard.rds") ) {
+  fitted_multi_mace <- readRDS("vignettes/articles/extdata/fitted_multi_mace_tryhard.rds")
+} else  if( file.exists("extdata/fitted_multi_mace_tryhard.rds") ) {
+  fitted_multi_mace <- readRDS("extdata/fitted_multi_mace_tryhard.rds")
+} else {
+  fitted_multi_mace <- readRDS(rds_file_mace)
+}
+if( file.exists("extdata/fitted_multi_ce_tryhard.rds") ) {
+  fitted_multi_ce <- readRDS("extdata/fitted_multi_ce_tryhard.rds")
+} else if ( file.exists("vignettes/articles/extdata/fitted_multi_ce_tryhard.rds") ) {
+  fitted_multi_ce <- readRDS("vignettes/articles/extdata/fitted_multi_ce_tryhard.rds")
+} else {
+  fitted_multi_ce <- readRDS(rds_file_ce)
+}
+
+
 ```
 
 ### MACE Model Results
@@ -275,7 +296,7 @@ squirrels.
 summary(fitted_multi_mace)
 
 
-summary(fitted_multi_mace)$CI
+summary(fitted_multi_mace, verbose = TRUE)$CI
 
 total_var_mace <- sum(
   fitted_multi_mace$ModelOne$Vad$values,

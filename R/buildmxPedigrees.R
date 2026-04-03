@@ -16,6 +16,10 @@
 #' @return An OpenMx model representing the pedigree with specified variance components.
 #' @export
 
+# condense matrix slots setting (should make it nicer
+# gcat expectation fit function that might be helpful. is optimized for large matrices
+# doable in python? SHOR author, "I don't exactly remember" is name of package scillm (linear mixed models)
+
 buildPedigreeModelCovariance <- function(
   vars = list(
     ad2 = 0.5,
