@@ -79,22 +79,45 @@ com2links <- function(
 
   # Extract individual IDs from the first available matrix.
   ids <- NULL
+  # Find the smallest matrix by ncol (avoids extracting IDs from large matrices).
+  mat_refs <- list()
+  if (!is.null(ad_ped_matrix)) mat_refs[["ad"]] <- ncol(ad_ped_matrix)
+  if (!is.null(mit_ped_matrix)) mat_refs[["mt"]] <- ncol(mit_ped_matrix)
+  if (!is.null(cn_ped_matrix)) mat_refs[["cn"]] <- ncol(cn_ped_matrix)
 
-
-  if (!is.null(cn_ped_matrix)) {
-    ids <- as.numeric(dimnames(cn_ped_matrix)[[1]])
-    nc <- ncol(cn_ped_matrix)
-  } else if (!is.null(ad_ped_matrix)) {
-    ids <- as.numeric(dimnames(ad_ped_matrix)[[1]])
-    nc <- ncol(ad_ped_matrix)
-  } else if (!is.null(mit_ped_matrix)) {
-    ids <- as.numeric(dimnames(mit_ped_matrix)[[1]])
-    nc <- ncol(mit_ped_matrix)
+  if (length(mat_refs) == 0L) {
+    stop("At least one relationship matrix must be provided.")
   }
 
-  if (is.null(ids)) {
-    stop("Could not extract IDs from the provided matrices.")
+  smallest <- names(which.min(unlist(mat_refs)))
+  guide_mat <- switch(smallest,
+    ad = ad_ped_matrix,
+    mt = mit_ped_matrix,
+    cn = cn_ped_matrix
+  )
+
+  # Extract IDs only from the smallest matrix.
+  guide_ids <- dimnames(guide_mat)[[1]]
+  if (is.null(guide_ids) || length(guide_ids) == 0L) {
+    stop("Could not extract IDs from the smallest matrix.")
   }
+  ids <- as.numeric(guide_ids)
+  nc <- length(ids)
+
+  # Subset only the larger matrices to match the smallest matrix's IDs and ordering.
+  if (!is.null(ad_ped_matrix) && ncol(ad_ped_matrix) > nc) {
+    if (verbose) message("Subsetting ad_ped_matrix from ", ncol(ad_ped_matrix), " to ", nc, " IDs.")
+    ad_ped_matrix <- ad_ped_matrix[guide_ids, guide_ids, drop = FALSE]
+  }
+  if (!is.null(mit_ped_matrix) && ncol(mit_ped_matrix) > nc) {
+    if (verbose) message("Subsetting mit_ped_matrix from ", ncol(mit_ped_matrix), " to ", nc, " IDs.")
+    mit_ped_matrix <- mit_ped_matrix[guide_ids, guide_ids, drop = FALSE]
+  }
+  if (!is.null(cn_ped_matrix) && ncol(cn_ped_matrix) > nc) {
+    if (verbose) message("Subsetting cn_ped_matrix from ", ncol(cn_ped_matrix), " to ", nc, " IDs.")
+    cn_ped_matrix <- cn_ped_matrix[guide_ids, guide_ids, drop = FALSE]
+  }
+
 
   # --- matrix_case construction and switch dispatch ---
   matrix_case <- paste(sort(c(

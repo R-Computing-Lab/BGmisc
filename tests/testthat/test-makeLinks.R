@@ -324,3 +324,82 @@ test_that("com2links garbage collection does not affect output, using two compon
 
   expect_equal(result_gc, result_no_gc)
 })
+
+
+test_that("com2links handles mismatched matrix dimensions by subsetting to smallest", {
+  data(hazard)
+  subset_ids <- hazard$ID[seq_len(ceiling(nrow(hazard) / 2))]
+
+  ad_small <- ped2add(hazard, sparse = TRUE, keep_ids = subset_ids)
+  mit_ped_matrix <- ped2mit(hazard, sparse = TRUE)
+  cn_ped_matrix <- ped2cn(hazard, sparse = TRUE)
+
+  # All three matrices, ad is smaller
+  result_mismatch <- com2links(
+    ad_ped_matrix = ad_small,
+    mit_ped_matrix = mit_ped_matrix,
+    cn_ped_matrix = cn_ped_matrix,
+    writetodisk = FALSE
+  )
+
+  # Reference: all three matrices built from the same subset
+  result_ref <- com2links(
+    ad_ped_matrix = ad_small,
+    mit_ped_matrix = ped2mit(hazard, sparse = TRUE, keep_ids = subset_ids),
+    cn_ped_matrix = ped2cn(hazard, sparse = TRUE, keep_ids = subset_ids),
+    writetodisk = FALSE
+  )
+
+  expect_equal(result_mismatch, result_ref)
+
+  # Only IDs from the smaller matrix should appear
+  all_output_ids <- unique(c(result_mismatch$ID1, result_mismatch$ID2))
+  expect_true(all(all_output_ids %in% as.numeric(dimnames(ad_small)[[1]])))
+})
+
+test_that("com2links mismatched dimensions with two matrices", {
+  data(hazard)
+  subset_ids <- hazard$ID[seq_len(ceiling(nrow(hazard) / 2))]
+
+  ad_ped_matrix <- ped2add(hazard, sparse = TRUE)
+  cn_small <- ped2cn(hazard, sparse = TRUE, keep_ids = subset_ids)
+
+  # cn is smaller than ad
+  result_mismatch <- com2links(
+    ad_ped_matrix = ad_ped_matrix,
+    cn_ped_matrix = cn_small,
+    writetodisk = FALSE
+  )
+
+  result_ref <- com2links(
+    ad_ped_matrix = ped2add(hazard, sparse = TRUE, keep_ids = subset_ids),
+    cn_ped_matrix = cn_small,
+    writetodisk = FALSE
+  )
+
+  expect_equal(result_mismatch, result_ref)
+})
+
+test_that("com2links mismatched dimensions with mit smaller", {
+  data(hazard)
+  subset_ids <- hazard$ID[seq_len(ceiling(nrow(hazard) / 2))]
+
+  ad_ped_matrix <- ped2add(hazard, sparse = TRUE)
+  mit_small <- ped2mit(hazard, sparse = TRUE, keep_ids = subset_ids)
+
+  result_mismatch <- com2links(
+    ad_ped_matrix = ad_ped_matrix,
+    mit_ped_matrix = mit_small,
+    writetodisk = FALSE
+  )
+
+  result_ref <- com2links(
+    ad_ped_matrix = ped2add(hazard, sparse = TRUE, keep_ids = subset_ids),
+    mit_ped_matrix = mit_small,
+    writetodisk = FALSE
+  )
+
+  expect_equal(result_mismatch, result_ref)
+  expect_true(all(unique(c(result_mismatch$ID1, result_mismatch$ID2)) %in% as.numeric(dimnames(mit_small)[[1]])))
+  expect_true(all(unique(c(result_mismatch$ID1, result_mismatch$ID2)) %in% as.numeric(dimnames(ad_ped_matrix)[[1]])))
+})
