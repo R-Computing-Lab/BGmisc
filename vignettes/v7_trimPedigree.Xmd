@@ -168,9 +168,9 @@ ggpedigree(
   ),
   config = list(
     overlay_include   = TRUE,
-    status_include    = T,
+    status_include    = TRUE,
     code_male         = 0,
-    sex_color_include = T,
+    sex_color_include = TRUE,
     overlay_mode    = "shape"
   )
 )

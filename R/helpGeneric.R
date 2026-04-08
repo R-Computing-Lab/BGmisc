@@ -103,3 +103,20 @@ resample <- function(x, ...) {
   }
   x[sample.int(length(x), ...)]
 }
+
+#' Check for OpenMx Package
+#'
+#' This function checks if the OpenMx package is installed and available for use. If the package is not installed, it throws an error with a message indicating that OpenMx is required and provides instructions for installation.
+#' @param fn An optional character string representing the function name that requires OpenMx. This is included in the error message for clarity if provided.
+#'
+#' @return Returns `TRUE` invisibly if OpenMx is available. If OpenMx is not installed, it throws an error.
+#' @keywords internal
+.require_openmx <- function(fn = NULL) {
+  if (!requireNamespace("OpenMx", quietly = TRUE)) {
+    msg <- "OpenMx is required for this functionality but is not installed."
+    if (!is.null(fn)) msg <- paste0(msg, " (", fn, ").")
+    msg <- paste0(msg, "\nInstall with: install.packages('OpenMx')")
+    stop(msg, call. = FALSE)
+  }
+  invisible(TRUE)
+}

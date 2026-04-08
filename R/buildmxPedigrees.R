@@ -16,6 +16,10 @@
 #' @return An OpenMx model representing the pedigree with specified variance components.
 #' @export
 
+# condense matrix slots setting (should make it nicer
+# gcat expectation fit function that might be helpful. is optimized for large matrices
+# doable in python? SHOR author, "I don't exactly remember" is name of package scillm (linear mixed models)
+
 buildPedigreeModelCovariance <- function(
   vars = list(
     ad2 = 0.5,
@@ -34,9 +38,7 @@ buildPedigreeModelCovariance <- function(
   Vam = FALSE,
   Ver = TRUE
 ) {
-  if (!requireNamespace("OpenMx", quietly = TRUE)) {
-    stop("OpenMx package is required for buildPedigreeModelCovariance function. Please install it.")
-  }
+  .require_openmx("buildPedigreeModelCovariance")
 
   # Coerce to list so both c() vectors and list() inputs work with [[ ]]
   vars <- as.list(vars)
@@ -123,9 +125,7 @@ buildOneFamilyGroup <- function(
   full_df_row,
   obs_ids
 ) {
-  if (!requireNamespace("OpenMx", quietly = TRUE)) {
-    stop("OpenMx package is required for buildOneFamilyGroup function. Please install it.")
-  }
+  .require_openmx("buildOneFamilyGroup")
 
   # Determine family size from first available matrix
   fsize <- NULL
@@ -252,9 +252,7 @@ buildFamilyGroups <- function(
   Dmgmat = NULL,
   prefix = "fam"
 ) {
-  if (!requireNamespace("OpenMx", quietly = TRUE)) {
-    stop("OpenMx package is required for buildFamilyGroups function. Please install it.")
-  }
+  .require_openmx("buildFamilyGroups")
 
   numfam <- nrow(dat)
   groups <- vector("list", numfam)
@@ -262,15 +260,15 @@ buildFamilyGroups <- function(
   for (afam in seq_len(numfam)) {
     full_df_row <- matrix(dat[afam, ], nrow = 1, dimnames = list(NULL, obs_ids))
     groups[[afam]] <- buildOneFamilyGroup(
-      group_name  = paste0(prefix, afam),
-      Addmat      = Addmat,
-      Nucmat      = Nucmat,
-      Extmat      = Extmat,
-      Mtdmat      = Mtdmat,
-      Amimat      = Amimat,
-      Dmgmat      = Dmgmat,
+      group_name = paste0(prefix, afam),
+      Addmat = Addmat,
+      Nucmat = Nucmat,
+      Extmat = Extmat,
+      Mtdmat = Mtdmat,
+      Amimat = Amimat,
+      Dmgmat = Dmgmat,
       full_df_row = full_df_row,
-      obs_ids  = obs_ids
+      obs_ids = obs_ids
     )
   }
 
@@ -287,13 +285,13 @@ buildFamilyGroups <- function(
 #' @param model_name Name of the overall pedigree model.
 #' @param vars A named list or vector of initial variance component values.
 #' @param group_models A list of OpenMx models for each family group.
+#' @param ci Logical. If TRUE, include confidence interval computations for the variance components. Default is FALSE
 #' @return An OpenMx pedigree model combining variance components and family groups.
 #' @export
 
-buildPedigreeMx <- function(model_name, vars, group_models) {
-  if (!requireNamespace("OpenMx", quietly = TRUE)) {
-    stop("OpenMx package is required for buildPedigreeMx function. Please install it.")
-  }
+buildPedigreeMx <- function(model_name, vars, group_models,
+                            ci = FALSE) {
+  .require_openmx("buildPedigreeMx")
 
   group_names <- vapply(group_models, function(m) m$name, character(1))
 
@@ -335,7 +333,12 @@ buildPedigreeMx <- function(model_name, vars, group_models) {
       Ver = isTRUE(flags$Ver)
     ),
     group_models,
-    OpenMx::mxFitFunctionMultigroup(group_names)
+    OpenMx::mxFitFunctionMultigroup(group_names),
+    ci = if (ci & any(flags$Vad, flags$Vdd, flags$Vcn, flags$Vce, flags$Vmt, flags$Vam, flags$Ver)) {
+      OpenMx::mxCI(c("vad", "vdd", "vcn", "vce", "vmt", "vam", "ver")[c(flags$Vad, flags$Vdd, flags$Vcn, flags$Vce, flags$Vmt, flags$Vam, flags$Ver)])
+    } else {
+      NULL
+    }
   )
 }
 
@@ -385,9 +388,7 @@ fitPedigreeModel <- function(
   Amimat = NULL,
   Dmgmat = NULL
 ) {
-  if (!requireNamespace("OpenMx", quietly = TRUE)) {
-    stop("OpenMx package is required for fitPedigreeModel function. Please install it.")
-  }
+  .require_openmx("fitPedigreeModel")
 
   if (is.null(group_models)) {
     # generate them from data and relatedness matrices
@@ -412,10 +413,10 @@ fitPedigreeModel <- function(
     vars = vars,
     group_models = group_models
   )
-  if (tryhard==TRUE) {
+  if (tryhard == TRUE) {
     fitted_model <- OpenMx::mxTryHard(pedigree_model, silent = TRUE, extraTries = 10, intervals = intervals)
   } else {
-    fitted_model <- OpenMx::mxRun(pedigree_model)
+    fitted_model <- OpenMx::mxRun(pedigree_model, intervals = intervals)
   }
   fitted_model
 }

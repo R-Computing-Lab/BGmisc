@@ -98,11 +98,11 @@ test_that("buildOneFamilyGroup errors when no relatedness matrix is provided", {
   dat <- make_dat2()
   expect_error(
     buildOneFamilyGroup(
-      group_name  = "fam1",
-      Addmat      = NULL, Nucmat = NULL, Extmat = NULL,
-      Mtdmat      = NULL, Amimat = NULL, Dmgmat = NULL,
+      group_name = "fam1",
+      Addmat = NULL, Nucmat = NULL, Extmat = NULL,
+      Mtdmat = NULL, Amimat = NULL, Dmgmat = NULL,
       full_df_row = dat,
-      obs_ids  = c("y1", "y2")
+      obs_ids = c("y1", "y2")
     ),
     regexp = "At least one relatedness matrix must be provided"
   )
@@ -114,10 +114,10 @@ test_that("buildOneFamilyGroup returns an mxModel with an additive matrix", {
   dat <- make_dat2()
   mod <- expect_no_error(
     buildOneFamilyGroup(
-      group_name  = "fam1",
-      Addmat      = Addmat,
+      group_name = "fam1",
+      Addmat = Addmat,
       full_df_row = dat,
-      obs_ids  = c("y1", "y2")
+      obs_ids = c("y1", "y2")
     )
   )
   expect_true(inherits(mod, "MxModel"))
@@ -131,10 +131,10 @@ test_that("buildOneFamilyGroup returns an mxModel with nuclear family matrix", {
   dat <- make_dat2()
   mod <- expect_no_error(
     buildOneFamilyGroup(
-      group_name  = "fam2",
-      Nucmat      = Nucmat,
+      group_name = "fam2",
+      Nucmat = Nucmat,
       full_df_row = dat,
-      obs_ids  = c("y1", "y2")
+      obs_ids = c("y1", "y2")
     )
   )
   expect_true(inherits(mod, "MxModel"))
@@ -148,10 +148,10 @@ test_that("buildOneFamilyGroup determines family size from any provided matrix",
   dat <- make_dat2()
   mod <- expect_no_error(
     buildOneFamilyGroup(
-      group_name  = "famExt",
-      Extmat      = Extmat,
+      group_name = "famExt",
+      Extmat = Extmat,
       full_df_row = dat,
-      obs_ids  = c("y1", "y2")
+      obs_ids = c("y1", "y2")
     )
   )
   # # Extmat signals "include Vce"; the algebra always uses U (unit matrix)
@@ -236,6 +236,10 @@ test_that("fitPedigreeModel errors without OpenMx", {
     ),
     regexp = "OpenMx"
   )
+
+    expect_error(
+      .require_openmx()
+    )
 })
 
 test_that("fitPedigreeModel runs end-to-end with a trivial dataset", {

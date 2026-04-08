@@ -67,10 +67,10 @@ findLeaves <- function(ped,
 
   pg <- ped2graph(ped, personID = personID, momID = momID, dadID = dadID)
 
-  indeg  <- igraph::degree(pg, mode = "in")
+  indeg <- igraph::degree(pg, mode = "in")
   outdeg <- igraph::degree(pg, mode = "out")
 
-  terminal_ids          <- if (include_terminal) names(outdeg)[outdeg == 0] else character(0)
+  terminal_ids <- if (include_terminal) names(outdeg)[outdeg == 0] else character(0)
   founder_singleton_ids <- if (include_founder_singletons) names(indeg)[indeg == 0 & outdeg == 1] else character(0)
 
   leaf_ids <- union(terminal_ids, founder_singleton_ids)
@@ -89,7 +89,7 @@ findLeaves <- function(ped,
       protected_ids <- names(phenotype_vals)[!is.na(phenotype_vals)]
     } else if (anyNA(keep_vals)) {
       # Protect anyone with missing phenotype data (and any other keep_vals)
-      non_na_vals   <- keep_vals[!is.na(keep_vals)]
+      non_na_vals <- keep_vals[!is.na(keep_vals)]
       protected_ids <- names(phenotype_vals)[
         is.na(phenotype_vals) | phenotype_vals %in% non_na_vals
       ]
@@ -98,8 +98,8 @@ findLeaves <- function(ped,
       protected_ids <- names(phenotype_vals)[phenotype_vals %in% keep_vals]
     }
 
-    n_before  <- length(leaf_ids)
-    leaf_ids  <- leaf_ids[!leaf_ids %in% protected_ids]
+    n_before <- length(leaf_ids)
+    leaf_ids <- leaf_ids[!leaf_ids %in% protected_ids]
 
     if (verbose == TRUE) {
       message(n_before - length(leaf_ids), " leaf node(s) protected by keep_var '", keep_var, "'.")
@@ -196,13 +196,13 @@ trimPedigree <- function(ped,
     leaf_ids <- findLeaves(
       ped,
       personID = personID,
-      momID    = momID,
-      dadID    = dadID,
-      include_terminal           = include_terminal,
+      momID = momID,
+      dadID = dadID,
+      include_terminal = include_terminal,
       include_founder_singletons = include_founder_singletons,
-      keep_var  = keep_var,
+      keep_var = keep_var,
       keep_vals = keep_vals,
-      verbose   = FALSE
+      verbose = FALSE
     )
 
     if (length(leaf_ids) == 0L) break
@@ -215,7 +215,7 @@ trimPedigree <- function(ped,
       break
     }
 
-    ped  <- ped[!as.character(ped[[personID]]) %in% leaf_ids, ]
+    ped <- ped[!as.character(ped[[personID]]) %in% leaf_ids, ]
     iter <- iter + 1L
 
     if (verbose == TRUE) {
@@ -230,10 +230,14 @@ trimPedigree <- function(ped,
 
   # Nullify dangling parent references introduced by removals
   if (momID %in% names(ped)) {
-    ped[[momID]][!as.character(ped[[momID]]) %in% as.character(ped[[personID]])] <- NA
+    mom_vec <- ped[[momID]]
+    mom_idx <- !is.na(mom_vec) & !as.character(mom_vec) %in% as.character(ped[[personID]])
+    ped[[momID]][mom_idx] <- NA
   }
   if (dadID %in% names(ped)) {
-    ped[[dadID]][!as.character(ped[[dadID]]) %in% as.character(ped[[personID]])] <- NA
+    dad_vec <- ped[[dadID]]
+    dad_idx <- !is.na(dad_vec) & !as.character(dad_vec) %in% as.character(ped[[personID]])
+    ped[[dadID]][dad_idx] <- NA
   }
 
   return(ped)

@@ -5,7 +5,6 @@ library(Matrix)
 library(tidyverse)
 
 
-
 # Run benchmarking for "loop" and "indexed" methods in ped2com()
 benchmark_results <- microbenchmark(
   reg = {

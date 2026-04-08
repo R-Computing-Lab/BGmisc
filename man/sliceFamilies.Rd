@@ -19,6 +19,7 @@ sliceFamilies(
   data_directory = NULL,
   verbose = FALSE,
   error_handling = FALSE,
+  max_retries = 4,
   file_column_names = c("ID1", "ID2", "addRel", "mitRel", "cnuRel")
 )
 }
@@ -49,7 +50,9 @@ sliceFamilies(
 
 \item{verbose}{Logical; whether to print progress messages (default FALSE)}
 
-\item{error_handling}{Logical. Should more aggressive error handing be attemptted? Default is false}
+\item{error_handling}{Logical. Should more aggressive error handling be attempted? Default is FALSE}
+
+\item{max_retries}{Integer. Number of retry attempts with halved chunk size when error_handling is TRUE. Default is 2}
 
 \item{file_column_names}{Names of the columns in the input file (default c("ID1", "ID2", "addRel", "mitRel", "cnuRel"))}
 }
