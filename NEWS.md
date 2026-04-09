@@ -5,7 +5,7 @@
 * Optimized sliceFamilies to be more abstract
 * Created `.require_openmx()` to make it easier to use OpenMx functions without making OpenMx a dependency
 * Smarter string ID handling for ped2id
-* fixed how different sized matrixes are handled by build links
+* Fixed how different-sized matrices are handled by `com2links()`
 
 # BGmisc 1.7.0.0
 * Fixed bug in parList
