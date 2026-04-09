@@ -83,17 +83,23 @@ if(keep_string==TRUE) {
 
   names(fam) <- c(personID, famID)
 
-  if(famID %in% names(ped)) {
-    if(overwrite) {
-    overwrite_message <-  "be overwritten."
-    ped[[famID]] <- NULL
+  if (famID %in% names(ped)) {
+    if (overwrite) {
+      overwrite_message <- "be overwritten."
+      ped[[famID]] <- NULL
     } else {
-    overwrite_message <-  "not be overwritten."
-   }
+      overwrite_message <- "not be overwritten."
+    }
 
-    warning(sprintf("The famID variable '%s' already exists in the pedigree. The existing variable will %s", famID, overwrite_message))
+    warning(sprintf(
+      "The famID variable '%s' already exists in the pedigree. The existing variable will %s",
+      famID, overwrite_message
+    ))
 
-   }
+    if (!overwrite) {
+      return(ped)
+    }
+  }
 
   ped2 <- merge(fam, ped,
     by = personID, all.x = FALSE, all.y = TRUE

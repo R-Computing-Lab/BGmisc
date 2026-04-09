@@ -42,6 +42,40 @@ test_that("ped2fam gets the right families for inbreeding data", {
   expect_equal(ds$famID, ds$newFamID)
 })
 
+test_that("ped2fam overwrite = TRUE warns and replaces existing famID", {
+  data(hazard)
+  # Add a fake existing famID column with wrong values
+  hazard$famID <- 999L
+
+  # Should warn that famID will be overwritten
+  expect_warning(
+    ds <- ped2fam(hazard, famID = "famID", overwrite = TRUE),
+    regexp = "already exists.*be overwritten"
+  )
+
+  # The result should have the correctly computed famID, not the placeholder
+  expect_false(all(ds$famID == 999L))
+  # No duplicate columns
+  expect_equal(sum(names(ds) == "famID"), 1L)
+})
+
+test_that("ped2fam overwrite = FALSE warns and preserves existing famID", {
+  data(hazard)
+  # Add a known existing famID column
+  hazard$famID <- 999L
+
+  # Should warn that famID will NOT be overwritten
+  expect_warning(
+    ds <- ped2fam(hazard, famID = "famID", overwrite = FALSE),
+    regexp = "already exists.*not be overwritten"
+  )
+
+  # The result should preserve the original famID values
+  expect_true(all(ds$famID == 999L))
+  # No duplicate columns
+  expect_equal(sum(names(ds) == "famID"), 1L)
+})
+
 test_that("ped2graph produces a graph for hazard data with mothers", {
   expect_silent(data(hazard))
   g <- ped2graph(hazard, adjacent = "mothers")
