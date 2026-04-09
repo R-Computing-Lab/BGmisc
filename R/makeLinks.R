@@ -101,7 +101,12 @@ com2links <- function(
   if (is.null(guide_ids) || length(guide_ids) == 0L) {
     stop("Could not extract IDs from the smallest matrix.")
   }
-  ids <- as.numeric(guide_ids)
+  ids <- suppressWarnings(as.numeric(guide_ids))
+  if (anyNA(ids)) {
+    warning(
+      "Matrix dimnames used as IDs should be strictly numeric for 'com2links()'. Found non-numeric or non-coercible IDs in the smallest matrix."
+    )
+  }
   nc <- length(ids)
 
   # Subset only the larger matrices to match the smallest matrix's IDs and ordering.
