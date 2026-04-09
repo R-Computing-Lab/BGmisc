@@ -89,6 +89,7 @@ if(keep_string==TRUE) {
     ped[[famID]] <- NULL
     } else {
     overwrite_message <-  "not be overwritten."
+    fam[[famID]] <- NULL
    }
 
     warning(sprintf("The famID variable '%s' already exists in the pedigree. The existing variable will %s", famID, overwrite_message))
