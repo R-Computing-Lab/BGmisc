@@ -65,7 +65,9 @@ studies, either intentionally (e.g., twin registries that also include siblings 
 byproduct of large panel studies (e.g., the National Longitudinal Survey of Youth, which includes
 researcher-linked kinship). In most cases, the additional relatives are excluded from analysis, and
 the twin design is applied to a subset of the data, even though these relatives carry independent
-information about the genetic and environmental architecture of the phenotype. For example, many twin registries also include triplets, siblings, children, and parents, all of whom provide additional information about the genetic and environmental architecture of the phenotype.
+information about the genetic and environmental architecture of the phenotype. For example, many
+twin registries also include triplets, siblings, children, and parents, all of whom provide
+additional information about the genetic and environmental architecture of the phenotype.
 <!-- cite https://helda.helsinki.fi/server/api/core/bitstreams/f0b6dc08-69df-449e-a8fe-e2c78abf7f60/content -->
 
 The extended pedigree model, which we have introduced elsewhere (see ETC), leverages the full range
@@ -88,19 +90,24 @@ value provides independent leverage for disentangling genetic from environmental
 the number of distinct kinship types increases, so does the number of identifiable variance
 components.
 
-Extended pedigree designs have been used in behavior genetics since at least the 1970s [@eaves1978; @fulker_multiple_1988], but they have remained a minority practice. Partially over concerns about model identification and power (Wilson, 1982, 1989), the complexity of fitting these models, and the relative costs of collecting twin data compared to extended family data.
+Extended pedigree designs have been used in behavior genetics since at least the 1970s [@eaves1978;
+@fulker_multiple_1988], but they have remained a minority practice. Partially over concerns about
+model identification and power [\@wilson1982](Wilson,%201982,%201989), the complexity of fitting
+these models, and the relative costs of collecting twin data compared to extended family data.
+[@hur2012; @hur2019]
 
-<!-- https://onlinelibrary.wiley.com/doi/10.1002/bimj.4710310511 -->
+but also because the twin design has been so successful and widely adopted. The twin design is often
+seen as the "gold standard" in behavior genetics, and many researchers may be hesitant to deviate
+from this established approach. Additionally, many human datasets simply do not include the
+necessary family structure to fit extended pedigree models, which may limit their applicability in
+certain contexts.
 
-but also because the twin design has been so successful and widely adopted. The twin design is often seen as the "gold standard" in behavior genetics, and many researchers may be hesitant to deviate from this established approach. Additionally, many human datasets simply do not include the necessary family structure to fit extended pedigree models, which may limit their applicability in certain contexts.
+\<the reasosn are numerous for why this is the case, but a key factor is that many human datasets
+simply do not include the necessary family structure to fit these models. And the twin design is
+often the default analytic approach, even when more complex family data are available.
 
-<the reasosn are numerous for why this is the case, but a key factor is that many human datasets simply do not include the necessary family structure to fit these models. And the twin design is often the default analytic approach, even when more complex family data are available.
-
-
-
-In contrast, similar
-models are common in plant and animal breeding, where pedigree data is more routinely collected and
-analyzed.
+In contrast, similar models are common in plant and animal breeding, where pedigree data is more
+routinely collected and analyzed.
 
 A persistent barrier has been the programming complexity of constructing relatedness matrices for
 arbitrary family structures, checking model identification, and assembling the resulting multi-group
