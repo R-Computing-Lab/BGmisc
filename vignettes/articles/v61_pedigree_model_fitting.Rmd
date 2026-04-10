@@ -131,14 +131,8 @@ for (i in seq_len(n_families)) {
   n_i <- nrow(A_i)
   id_order_i <- rownames(A_i)
 
-  pheno_vals <- ped_i$lrs[match(id_order_i, as.character(ped_i$ID))]
-
-  obs_ids_i <- make.names(id_order_i[!is.na(pheno_vals)])
-  pheno_row_i <- matrix(as.double(pheno_vals[!is.na(pheno_vals)]),
-    nrow = 1,
-    dimnames = list(NULL, obs_ids_i)
-  )
-
+  pheno_row_i <- alignPhenToMatrix(ped_i, "lrs", phenotypic_ids)
+  obs_ids_i <- colnames(pheno_row_i)
   rownames(A_i) <- colnames(A_i) <- obs_ids_i
   rownames(Cn_i) <- colnames(Cn_i) <- obs_ids_i
   rownames(Mt_i) <- colnames(Mt_i) <- obs_ids_i
