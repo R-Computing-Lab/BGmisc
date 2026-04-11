@@ -2,6 +2,7 @@
 
 export(SimPed)
 export(addPersonToPed)
+export(alignPhenToMatrix)
 export(buildFamilyGroups)
 export(buildOneFamilyGroup)
 export(buildPedigreeModelCovariance)
