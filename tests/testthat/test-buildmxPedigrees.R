@@ -237,9 +237,9 @@ test_that("fitPedigreeModel errors without OpenMx", {
     regexp = "OpenMx"
   )
 
-    expect_error(
-      .require_openmx()
-    )
+  expect_error(
+    .require_openmx()
+  )
 })
 
 test_that("fitPedigreeModel runs end-to-end with a trivial dataset", {
@@ -350,7 +350,8 @@ test_that("alignPhenToMatrix returns NA for IDs not present in the pedigree", {
   ped <- data.frame(ID = c(1L, 2L), pheno = c(1.0, 2.0))
   result <- alignPhenToMatrix(ped, phenotype = "pheno", keep_ids = c(1L, 99L))
   expect_equal(ncol(result), 2L)
-  expect_equal(result[1, 1], 1.0)
+  ref_mat <- matrix(c(1.0, NA), nrow = 1, dimnames = list(NULL, c("X1", "X99")))
+  expect_equal(result[1, 1], ref_mat[1, 1])
   expect_true(is.na(result[1, 2]))
 })
 
