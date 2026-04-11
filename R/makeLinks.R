@@ -339,6 +339,8 @@ process_one <- function(matrix, rel_name, ids, nc, rel_pairs_file, writetodisk,
           file = rel_pairs_file,
           row.names = FALSE, col.names = FALSE, append = TRUE, sep = ","
         )
+      } else {
+        if (verbose) cat("No related pairs to write.\n")
       }
     }
     if (gc == TRUE) {
