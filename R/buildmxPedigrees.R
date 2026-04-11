@@ -430,6 +430,8 @@ fitPedigreeModel <- function(
 #'  contains the phenotype values to be aligned.
 #' @param keep_ids A vector of IDs for which the phenotype values should be extracted and aligned. These IDs should correspond to the values in the \code{personID} of \code{ped}.
 #' @param personID A character string specifying the column name in \code{ped} that contains the individual IDs. Default is "ID".
+#' @export
+
 
 alignPhenToMatrix <- function(ped, phenotype, keep_ids, personID = "ID") {
   obs_ids <- make.names(as.character(keep_ids))
