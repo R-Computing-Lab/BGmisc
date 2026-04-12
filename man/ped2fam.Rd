@@ -11,6 +11,7 @@ ped2fam(
   dadID = "dadID",
   famID = "famID",
   twinID = "twinID",
+  overwrite = TRUE,
   ...
 )
 }
@@ -26,6 +27,8 @@ ped2fam(
 \item{famID}{character.  Name of the column to be created in ped for the family ID variable}
 
 \item{twinID}{character.  Name of the column in ped for the twin ID variable, if applicable}
+
+\item{overwrite}{logical.  If TRUE, will overwrite existing famID variable if it exists.  Default is TRUE.}
 
 \item{...}{additional arguments to be passed to \code{\link{ped2com}}}
 }

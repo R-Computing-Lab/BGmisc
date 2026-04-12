@@ -11,6 +11,7 @@
 #' @param dadID character.  Name of the column in ped for the father ID variable
 #' @param famID character.  Name of the column to be created in ped for the family ID variable
 #' @param twinID character.  Name of the column in ped for the twin ID variable, if applicable
+#' @param overwrite logical.  If TRUE, will overwrite existing famID variable if it exists.  Default is TRUE.
 #' @param ... additional arguments to be passed to \code{\link{ped2com}}
 #' @details
 #' The general idea of this function is to use person ID, mother ID, and father ID to
@@ -31,18 +32,20 @@
 ped2fam <- function(ped, personID = "ID",
                     momID = "momID", dadID = "dadID", famID = "famID",
                     twinID = "twinID",
+                    overwrite = TRUE,
                     ...) {
   # Call to wrapper function
   .ped2id(
     ped = ped, personID = personID, momID = momID, dadID = dadID, famID = famID, twinID = twinID,
-    type = "parents"
+    type = "parents",
+    overwrite = overwrite
   )
 }
 
 .ped2id <- function(ped,
                     personID = "ID", momID = "momID", dadID = "dadID",
                     famID = "famID", twinID = "twinID",
-                    type,
+                    type, overwrite = TRUE,
                     ...) {
   # Turn pedigree into family
   pg <- ped2graph(
@@ -55,16 +58,23 @@ ped2fam <- function(ped, personID = "ID",
 
   # Create famID data.frame
   # Convert IDs to numeric, with warning if coercion collapses IDs
+
   uniques <- suppressWarnings(unique(as.numeric(names(wcc$membership))))
+  keep_string <- FALSE
 
   if (length(uniques) == 1L && is.na(uniques)) {
     warning("After converting IDs to numeric, all IDs became NA. This indicates ID coercion collapsed IDs. Please ensure IDs aren't character or factor variables.")
-
+ keep_string <- TRUE
+     } else if (length(uniques) < length(wcc$membership)) {
+     warning("After converting IDs to numeric, some IDs became NA. This indicates ID coercion collapsed some IDs. Please ensure IDs aren't character or factor variables.")
+  keep_string <- TRUE
+}
+if(keep_string==TRUE) {
     fam <- data.frame(
       V1 = names(wcc$membership),
       V2 = wcc$membership
     )
-  } else {
+    } else {
     fam <- data.frame(
       V1 = as.numeric(names(wcc$membership)),
       V2 = wcc$membership
@@ -72,6 +82,20 @@ ped2fam <- function(ped, personID = "ID",
   }
 
   names(fam) <- c(personID, famID)
+
+  if(famID %in% names(ped)) {
+    if(overwrite) {
+    overwrite_message <-  "be overwritten."
+    ped[[famID]] <- NULL
+    } else {
+    overwrite_message <-  "not be overwritten."
+    fam[[famID]] <- NULL
+   }
+
+    warning(sprintf("The famID variable '%s' already exists in the pedigree. The existing variable will %s", famID, overwrite_message))
+
+   }
+
   ped2 <- merge(fam, ped,
     by = personID, all.x = FALSE, all.y = TRUE
   )

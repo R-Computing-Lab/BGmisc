@@ -237,9 +237,9 @@ test_that("fitPedigreeModel errors without OpenMx", {
     regexp = "OpenMx"
   )
 
-    expect_error(
-      .require_openmx()
-    )
+  expect_error(
+    .require_openmx()
+  )
 })
 
 test_that("fitPedigreeModel runs end-to-end with a trivial dataset", {
@@ -313,4 +313,61 @@ test_that("fitPedigreeModel errors when group_models and data are both NULL", {
     ),
     regexp = "Either 'group_models' or 'data' must be provided"
   )
+})
+
+# ─── alignPhenToMatrix ────────────────────────────────────────────────────────
+
+test_that("alignPhenToMatrix returns a 1-row matrix with correct values", {
+  ped <- data.frame(ID = c(1L, 2L, 3L), pheno = c(1.1, 2.2, 3.3))
+  result <- alignPhenToMatrix(ped, phenotype = "pheno", keep_ids = c(1L, 2L, 3L))
+  expect_true(is.matrix(result))
+  expect_equal(nrow(result), 1L)
+  expect_equal(ncol(result), 3L)
+  expect_equal(as.numeric(result), c(1.1, 2.2, 3.3))
+})
+
+test_that("alignPhenToMatrix subsets to only the requested IDs", {
+  ped <- data.frame(ID = c(1L, 2L, 3L, 4L), pheno = c(10.0, 20.0, 30.0, 40.0))
+  result <- alignPhenToMatrix(ped, phenotype = "pheno", keep_ids = c(2L, 4L))
+  expect_equal(ncol(result), 2L)
+  expect_equal(as.numeric(result), c(20.0, 40.0))
+})
+
+test_that("alignPhenToMatrix preserves the order of keep_ids", {
+  ped <- data.frame(ID = c(1L, 2L, 3L), pheno = c(10.0, 20.0, 30.0))
+  result <- alignPhenToMatrix(ped, phenotype = "pheno", keep_ids = c(3L, 1L, 2L))
+  expect_equal(as.numeric(result), c(30.0, 10.0, 20.0))
+})
+
+test_that("alignPhenToMatrix column names are valid R names", {
+  # IDs starting with a digit are not valid R names; make.names() should fix them
+  ped <- data.frame(ID = c("1a", "2b"), pheno = c(5.5, 6.6))
+  result <- alignPhenToMatrix(ped, phenotype = "pheno", keep_ids = c("1a", "2b"))
+  expect_true(all(make.names(colnames(result)) == colnames(result)))
+})
+
+test_that("alignPhenToMatrix returns NA for IDs not present in the pedigree", {
+  ped <- data.frame(ID = c(1L, 2L), pheno = c(1.0, 2.0))
+  result <- alignPhenToMatrix(ped, phenotype = "pheno", keep_ids = c(1L, 99L))
+  expect_equal(ncol(result), 2L)
+  ref_mat <- matrix(c(1.0, NA), nrow = 1, dimnames = list(NULL, c("X1", "X99")))
+  expect_equal(result[1, 1], ref_mat[1, 1])
+  expect_true(is.na(result[1, 2]))
+})
+
+test_that("alignPhenToMatrix respects a custom personID column", {
+  ped <- data.frame(personID = c("A", "B", "C"), score = c(7.0, 8.0, 9.0))
+  result <- alignPhenToMatrix(ped,
+    phenotype = "score",
+    keep_ids = c("B", "C"),
+    personID = "personID"
+  )
+  expect_equal(ncol(result), 2L)
+  expect_equal(as.numeric(result), c(8.0, 9.0))
+})
+
+test_that("alignPhenToMatrix coerces phenotype values to double", {
+  ped <- data.frame(ID = c(1L, 2L), pheno = c(1L, 2L)) # integer phenotype
+  result <- alignPhenToMatrix(ped, phenotype = "pheno", keep_ids = c(1L, 2L))
+  expect_true(is.double(result))
 })

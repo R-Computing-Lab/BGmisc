@@ -1,9 +1,12 @@
 # BGmisc NEWS
 
 # Development version:
-
+## BGmisc 1.7.0.1.1
 * Optimized sliceFamilies to be more abstract
 * Created `.require_openmx()` to make it easier to use OpenMx functions without making OpenMx a dependency
+* Smarter string ID handling for ped2id
+* Fixed how different-sized matrices are handled by `com2links()`
+* Added alignPhenToMatrix function to align phenotypic data to the order of the relatedness matrix
 
 # BGmisc 1.7.0.0
 * Fixed bug in parList
