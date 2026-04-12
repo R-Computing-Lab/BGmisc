@@ -11,6 +11,9 @@
 - [`addRowlessParents()`](https://r-computing-lab.github.io/BGmisc/reference/addRowlessParents.md)
   : Add addRowlessParents
 
+- [`alignPhenToMatrix()`](https://r-computing-lab.github.io/BGmisc/reference/alignPhenToMatrix.md)
+  : Align Phenotype Vector to Matrix Format for OpenMx
+
 - [`applyTagMappings()`](https://r-computing-lab.github.io/BGmisc/reference/applyTagMappings.md)
   : Apply Tag Mappings to a Line
 

@@ -14,6 +14,7 @@ ped2fam(
   dadID = "dadID",
   famID = "famID",
   twinID = "twinID",
+  overwrite = TRUE,
   ...
 )
 ```
@@ -45,6 +46,11 @@ ped2fam(
 
   character. Name of the column in ped for the twin ID variable, if
   applicable
+
+- overwrite:
+
+  logical. If TRUE, will overwrite existing famID variable if it exists.
+  Default is TRUE.
 
 - ...:
 
