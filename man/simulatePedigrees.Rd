@@ -53,7 +53,7 @@ current version.}
 \item{balancedMar}{Not fully developed yet. Always \code{TRUE} in the
 current version.}
 
-\item{verbose}{logical  If TRUE, message progress through stages of algorithm}
+\item{verbose}{logical. If TRUE, message progress through stages of algorithm}
 
 \item{personID}{character.  Name of the column in ped for the person ID variable}
 
