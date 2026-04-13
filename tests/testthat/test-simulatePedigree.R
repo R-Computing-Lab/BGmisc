@@ -319,9 +319,20 @@ test_that("simulatePedigrees with n_fam = 1 matches simulatePedigree structure",
   # Both should have the same number of rows and columns
   expect_equal(nrow(result_multi), nrow(result_single))
   expect_equal(ncol(result_multi), ncol(result_single))
+})
 
-  # The IDs should match
-  expect_equal(result_multi$ID, result_single$ID)
+test_that("simulatePedigrees returns sequential IDs starting at 1", {
+  set.seed(5)
+  results <- simulatePedigrees(n_fam = 3, kpc = 3, Ngen = 4, marR = 0.6)
+
+  # Person IDs should be exactly 1:nrow
+  expect_equal(results$ID, seq_len(nrow(results)))
+
+  # All parent/spouse references should be within the ID range (or NA)
+  valid_ids <- seq_len(nrow(results))
+  expect_true(all(is.na(results$momID) | results$momID %in% valid_ids))
+  expect_true(all(is.na(results$dadID) | results$dadID %in% valid_ids))
+  expect_true(all(is.na(results$spouseID) | results$spouseID %in% valid_ids))
 })
 
 test_that("simulatePedigrees works with beta = TRUE", {

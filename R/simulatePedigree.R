@@ -993,7 +993,9 @@ SimPed <- function(...) { # nolint: object_name_linter.
 #' @return A \code{data.frame} containing all simulated individuals from all
 #'   families combined, with the same columns as \code{\link{simulatePedigree}}.
 #'   The \code{fam} column uniquely identifies each family (e.g., "fam1",
-#'   "fam2", ...). Individual IDs are guaranteed to be unique across families.
+#'   "fam2", ...). Individual IDs are sequential integers starting at 1
+#'   (i.e., \code{1:nrow(result)}), and all parent/spouse ID references are
+#'   remapped to match.
 #' @export
 #' @examples
 #' set.seed(5)
@@ -1048,5 +1050,23 @@ simulatePedigrees <- function(n_fam = 2,
     ped_i$fam <- paste0("fam", i)
     ped_list[[i]] <- ped_i
   }
-  data.table::rbindlist(ped_list) |> as.data.frame()
+  combined <- data.table::rbindlist(ped_list) |> as.data.frame()
+
+  # Remap all ID columns to sequential integers (1, 2, 3, ...) in row order,
+  # so the final data frame has tidy consecutive IDs regardless of fam_shift offsets.
+  old_ids <- combined[[personID]]
+  id_map <- setNames(seq_along(old_ids), as.character(old_ids))
+
+  remap_col <- function(x) {
+    out <- id_map[as.character(x)]
+    out[is.na(x)] <- NA_integer_
+    as.integer(out)
+  }
+
+  combined[[personID]] <- as.integer(id_map[as.character(old_ids)])
+  combined[[momID]] <- remap_col(combined[[momID]])
+  combined[[dadID]] <- remap_col(combined[[dadID]])
+  combined[[spouseID]] <- remap_col(combined[[spouseID]])
+
+  combined
 }
