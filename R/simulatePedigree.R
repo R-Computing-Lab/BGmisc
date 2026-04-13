@@ -980,3 +980,69 @@ SimPed <- function(...) { # nolint: object_name_linter.
   warning("The 'SimPed' function is deprecated. Please use 'simulatePedigree' instead.")
   simulatePedigree(...)
 }
+
+#' Simulate Multiple Pedigrees
+#'
+#' This function simulates multiple "balanced" pedigrees and returns them
+#' combined into a single data frame. It is a convenience wrapper around
+#' \code{\link{simulatePedigree}} that makes it easy to simulate many families
+#' at once, with unique IDs across all families.
+#'
+#' @param n_fam Integer. Number of families to simulate. Default is 2.
+#' @inheritParams simulatePedigree
+#' @return A \code{data.frame} containing all simulated individuals from all
+#'   families combined, with the same columns as \code{\link{simulatePedigree}}.
+#'   The \code{fam} column uniquely identifies each family (e.g., "fam1",
+#'   "fam2", ...). Individual IDs are guaranteed to be unique across families.
+#' @export
+#' @examples
+#' set.seed(5)
+#' df_peds <- simulatePedigrees(
+#'   n_fam = 3,
+#'   kpc = 4,
+#'   Ngen = 4,
+#'   sexR = .5,
+#'   marR = .7
+#' )
+#' summary(df_peds)
+simulatePedigrees <- function(n_fam = 2,
+                              kpc = 3,
+                              Ngen = 4,
+                              sexR = .5,
+                              marR = 2 / 3,
+                              rd_kpc = FALSE,
+                              balancedSex = TRUE,
+                              balancedMar = TRUE,
+                              verbose = FALSE,
+                              personID = "ID",
+                              momID = "momID",
+                              dadID = "dadID",
+                              spouseID = "spouseID",
+                              code_male = "M",
+                              code_female = "F",
+                              beta = FALSE) {
+  ped_list <- vector("list", n_fam)
+  for (i in seq_len(n_fam)) {
+    ped_i <- simulatePedigree(
+      kpc = kpc,
+      Ngen = Ngen,
+      sexR = sexR,
+      marR = marR,
+      rd_kpc = rd_kpc,
+      balancedSex = balancedSex,
+      balancedMar = balancedMar,
+      verbose = verbose,
+      personID = personID,
+      momID = momID,
+      dadID = dadID,
+      spouseID = spouseID,
+      code_male = code_male,
+      code_female = code_female,
+      fam_shift = i,
+      beta = beta
+    )
+    ped_i$fam <- paste0("fam", i)
+    ped_list[[i]] <- ped_i
+  }
+  do.call(rbind, ped_list)
+}

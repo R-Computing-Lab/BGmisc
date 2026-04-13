@@ -289,3 +289,48 @@ test_that("simulatePedigree accepts string aliases for beta parameter", {
     "not yet implemented"
   )
 })
+
+test_that("simulatePedigrees returns combined data frame for multiple families", {
+  set.seed(5)
+  n_fam <- 3
+  results <- simulatePedigrees(n_fam = n_fam, kpc = 3, Ngen = 4, marR = 0.6)
+
+  # Should return a data frame
+  expect_s3_class(results, "data.frame")
+
+  # Should have exactly n_fam unique family IDs
+  fam_ids <- unique(results$fam)
+  expect_equal(length(fam_ids), n_fam)
+  expect_true(all(paste0("fam", seq_len(n_fam)) %in% fam_ids))
+
+  # All person IDs should be unique across families
+  expect_equal(length(unique(results$ID)), nrow(results))
+
+  # Should have standard pedigree columns
+  expect_true(all(c("fam", "ID", "gen", "dadID", "momID", "spouseID", "sex") %in% colnames(results)))
+})
+
+test_that("simulatePedigrees with n_fam = 1 matches simulatePedigree structure", {
+  set.seed(42)
+  result_multi <- simulatePedigrees(n_fam = 1, kpc = 3, Ngen = 4, marR = 0.6)
+
+  set.seed(42)
+  result_single <- simulatePedigree(kpc = 3, Ngen = 4, marR = 0.6, fam_shift = 1L)
+
+  # Both should have the same number of rows and columns
+  expect_equal(nrow(result_multi), nrow(result_single))
+  expect_equal(ncol(result_multi), ncol(result_single))
+
+  # The IDs should match
+  expect_equal(result_multi$ID, result_single$ID)
+})
+
+test_that("simulatePedigrees works with beta = TRUE", {
+  set.seed(5)
+  n_fam <- 2
+  results <- simulatePedigrees(n_fam = n_fam, kpc = 3, Ngen = 4, marR = 0.6, beta = TRUE)
+
+  expect_s3_class(results, "data.frame")
+  expect_equal(length(unique(results$fam)), n_fam)
+  expect_equal(length(unique(results$ID)), nrow(results))
+})
