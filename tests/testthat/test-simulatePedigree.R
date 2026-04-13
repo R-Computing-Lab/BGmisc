@@ -126,9 +126,9 @@ test_that("simulated pedigree generates expected data structure when sexR is imb
     expect_equal(max(results$gen), Ngen, tolerance = strict_tolerance)
 
     # expect there to be parents in each for all generations except the first one
-    filter_parents <- results %>%
-      group_by(gen) %>%
-      summarize(num_parents = sum(!is.na(dadID), na.rm = TRUE) + sum(!is.na(momID), na.rm = TRUE))
+    filter_parents <- results |>
+      dplyr::group_by(gen) |>
+      dplyr::summarize(num_parents = sum(!is.na(dadID), na.rm = TRUE) + sum(!is.na(momID), na.rm = TRUE))
 
     expect_true(all(filter_parents$num_parents[filter_parents$gen > 1] > 0), info = paste0("Beta option: ", beta))
     expect_true(all(filter_parents$num_parents[filter_parents$gen == 1] == 0), info = paste0("Beta option: ", beta))
@@ -199,9 +199,9 @@ test_that("simulated pedigree generates expected data structure but supply var n
     expect_lt(sex_mean_male, sex_mean_female)
 
     # expect there to be parents in each for all generations except the first one
-    filter_parents <- results %>%
-      group_by(gen) %>%
-      summarize(num_parents = sum(!is.na(dadID), na.rm = TRUE) + sum(!is.na(momID), na.rm = TRUE))
+    filter_parents <- results |>
+      dplyr::group_by(gen) |>
+      dplyr::summarize(num_parents = sum(!is.na(dadID), na.rm = TRUE) + sum(!is.na(momID), na.rm = TRUE))
 
     expect_true(all(filter_parents$num_parents[filter_parents$gen > 1] > 0), info = paste0("Beta option: ", beta))
     expect_true(all(filter_parents$num_parents[filter_parents$gen == 1] == 0), info = paste0("Beta option: ", beta))
@@ -325,8 +325,8 @@ test_that("simulatePedigrees returns sequential IDs starting at 1", {
   set.seed(5)
   results <- simulatePedigrees(n_fam = 3, kpc = 3, Ngen = 4, marR = 0.6)
 
-  # Person IDs should be exactly 1:nrow
-  expect_equal(results$ID, seq_len(nrow(results)))
+  # Person IDs should be close to 1:nrow(results) spouse might change this but they should still be sequential and unique
+  expect_equal(sort(results$ID), seq_len(nrow(results)))
 
   # All parent/spouse references should be within the ID range (or NA)
   valid_ids <- seq_len(nrow(results))

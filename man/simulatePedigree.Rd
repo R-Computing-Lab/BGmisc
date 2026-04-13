@@ -26,6 +26,7 @@ simulatePedigree(
   code_male = "M",
   code_female = "F",
   fam_shift = 1L,
+  remap_ids = FALSE,
   beta = FALSE
 )
 
@@ -75,6 +76,8 @@ current version.}
 
 \item{fam_shift}{An integer to shift the person ID. Default is 1L.
 This is useful when simulating multiple pedigrees to avoid ID conflicts.}
+
+\item{remap_ids}{logical. If TRUE, remap all ID columns to sequential integers (1, 2, 3, ...) in row order.}
 
 \item{beta}{logical or character. Controls which algorithm version to use:
 \itemize{

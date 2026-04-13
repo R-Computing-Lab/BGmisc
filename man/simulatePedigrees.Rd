@@ -20,6 +20,7 @@ simulatePedigrees(
   spouseID = "spouseID",
   code_male = "M",
   code_female = "F",
+  remap_ids = TRUE,
   beta = FALSE
 )
 }
@@ -53,7 +54,7 @@ current version.}
 \item{balancedMar}{Not fully developed yet. Always \code{TRUE} in the
 current version.}
 
-\item{verbose}{logical. If TRUE, message progress through stages of algorithm}
+\item{verbose}{logical  If TRUE, message progress through stages of algorithm}
 
 \item{personID}{character.  Name of the column in ped for the person ID variable}
 
@@ -61,11 +62,13 @@ current version.}
 
 \item{dadID}{character.  Name of the column in ped for the father ID variable}
 
-\item{spouseID}{The name of the column that will contain the spouse ID in the output data frame. Default is "spouseID".}
+\item{spouseID}{The name of the column that will contain the spouse ID in the output data frame. Default is "spID".}
 
 \item{code_male}{The value to use for males. Default is "M"}
 
 \item{code_female}{The value to use for females. Default is "F"}
+
+\item{remap_ids}{Logical. If TRUE (default), all ID columns (personID, momID, dadID, spouseID) will be remapped to sequential integers starting at 1 across the combined data frame. This ensures tidy consecutive IDs regardless of fam_shift offsets. If FALSE, IDs will retain their original values from each pedigree simulation, which may include gaps or non-sequential values due to fam_shift.}
 
 \item{beta}{logical or character. Controls which algorithm version to use:
 \itemize{
@@ -84,7 +87,9 @@ uses vectorized operations instead of loops, making it much faster for large ped
 A \code{data.frame} containing all simulated individuals from all
   families combined, with the same columns as \code{\link{simulatePedigree}}.
   The \code{fam} column uniquely identifies each family (e.g., "fam1",
-  "fam2", ...). Individual IDs are guaranteed to be unique across families.
+  "fam2", ...). Individual IDs are sequential integers starting at 1
+  (i.e., \code{1:nrow(result)}), and all parent/spouse ID references are
+  remapped to match.
 }
 \description{
 This function simulates multiple "balanced" pedigrees and returns them
