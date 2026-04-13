@@ -355,6 +355,15 @@ test_that("com2links handles mismatched matrix dimensions by subsetting to small
   # Only IDs from the smaller matrix should appear
   all_output_ids <- unique(c(result_mismatch$ID1, result_mismatch$ID2))
   expect_true(all(all_output_ids %in% as.numeric(dimnames(ad_small)[[1]])))
+  expect_true(all(all_output_ids %in% as.numeric(dimnames(mit_ped_matrix)[[1]])))
+  expect_true(all(all_output_ids %in% as.numeric(dimnames(cn_ped_matrix)[[1]])))
+
+  # Check that the number of unique IDs in the output matches the number of IDs in the smallest matrix
+  expect_equal(length(all_output_ids), length(subset_ids))
+
+  # check that full matrix has more unique IDs than the smaller matrix
+  expect_true(length(unique(c(dimnames(mit_ped_matrix)[[1]],
+                              dimnames(cn_ped_matrix)[[1]]))) > length(subset_ids))
 })
 
 test_that("com2links mismatched dimensions with two matrices", {
