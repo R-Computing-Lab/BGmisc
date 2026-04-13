@@ -13,7 +13,12 @@ buildOneFamilyGroup(
   Amimat = NULL,
   Dmgmat = NULL,
   full_df_row,
-  obs_ids
+  obs_ids,
+  type = c("continuous", "binary", "ordinal"),
+  nthresh = 1,
+  thresh_start = 0,
+  thresh_free = TRUE,
+  equate_thresholds = TRUE
 )
 }
 \arguments{
@@ -37,6 +42,12 @@ a common-extended-environment term using a unit matrix is included.}
 \item{obs_ids}{A character vector of individual IDs corresponding to the columns of
 \code{full_df_row} and the rows/columns of the relatedness matrices. Must be in the
 same order as the relatedness matrix rows.}
+
+\item{type}{Type of observed variable: "continuous", "binary", or "ordinal". Default is "continuous".}
+
+\item{nthresh}{For ordinal data, the number of thresholds. Default is 1}
+
+\item{thresh_start}{Starting value for thresholds if \code{type} is "ordinal". Default is 0.}
 }
 \value{
 An OpenMx model for the specified family group.

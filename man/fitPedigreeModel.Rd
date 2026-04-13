@@ -17,7 +17,12 @@ fitPedigreeModel(
   Extmat = NULL,
   Mtdmat = NULL,
   Amimat = NULL,
-  Dmgmat = NULL
+  Dmgmat = NULL,
+  type = c("continuous", "binary", "ordinal"),
+  nthresh = 1,
+  thresh_start = 0,
+  thresh_free = TRUE,
+  equate_thresholds = TRUE
 )
 }
 \arguments{

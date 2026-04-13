@@ -3,6 +3,7 @@
 export(SimPed)
 export(addPersonToPed)
 export(alignPhenToMatrix)
+export(alignPhenToOrdinal)
 export(buildFamilyGroups)
 export(buildOneFamilyGroup)
 export(buildPedigreeModelCovariance)

@@ -111,6 +111,9 @@ buildPedigreeModelCovariance <- function(
 #' @param obs_ids A character vector of individual IDs corresponding to the columns of
 #'   \code{full_df_row} and the rows/columns of the relatedness matrices. Must be in the
 #'   same order as the relatedness matrix rows.
+#' @param type Type of observed variable: "continuous", "binary", or "ordinal". Default is "continuous".
+#' @param nthresh For ordinal data, the number of thresholds. Default is 1
+#' @param thresh_start Starting value for thresholds if \code{type} is "ordinal". Default is 0.
 #' @return An OpenMx model for the specified family group.
 #' @export
 
@@ -123,10 +126,16 @@ buildOneFamilyGroup <- function(
   Amimat = NULL,
   Dmgmat = NULL,
   full_df_row,
-  obs_ids
+  obs_ids,
+  type = c("continuous", "binary", "ordinal"),
+  nthresh = 1,
+  thresh_start = 0,
+  thresh_free = TRUE,
+  equate_thresholds = TRUE
 ) {
   .require_openmx("buildOneFamilyGroup")
 
+  type <- match.arg(type)
   # Determine family size from first available matrix
   fsize <- NULL
   for (m in list(Addmat, Nucmat, Extmat, Mtdmat, Amimat, Dmgmat)) {
@@ -204,6 +213,8 @@ buildOneFamilyGroup <- function(
   algebra_str <- paste(algebra_terms, collapse = " + ")
 
   # Assemble the model via do.call so that the dynamic mat_list is unpacked
+
+  if (type == "continuous") {
   model_args <- c(
     list(name = group_name),
     mat_list,
@@ -221,7 +232,68 @@ buildOneFamilyGroup <- function(
     )
   )
 
-  do.call(OpenMx::mxModel, model_args)
+  return(do.call(OpenMx::mxModel, model_args))
+  } else if (type %in% c("binary", "ordinal")) {
+
+    if (type == "binary") {
+      nthresh <- 1L
+    } else {
+      nthresh <- as.integer(nthresh)
+    }
+
+
+    # Compute threshold starting values: accept a full vector or auto-space
+    if (length(thresh_start) == nthresh) {
+      thresh_values <- thresh_start
+    } else {
+      thresh_values <- thresh_start[1] + seq(-(nthresh - 1) / 2, (nthresh - 1) / 2, length.out = nthresh)
+    }
+
+    thresh_labels <- paste0("thresh", seq_len(nthresh))
+    if (equate_thresholds) {
+      thresh_labels <- paste0("thresh", seq_len(nthresh), "_eq")
+    }
+    model_args <- c(
+      list(name = group_name),
+      mat_list,
+      list(
+        OpenMx::mxData(observed = full_df_row, type = "raw", sort = FALSE),
+        OpenMx::mxMatrix("Full",
+                         nrow = 1, ncol = fsize, name = "M",
+                         free = FALSE, values = 0,
+                         dimnames = list(NULL, obs_ids)
+        ),
+        OpenMx::mxAlgebraFromString(algebra_str,
+                                    name = "Vraw", dimnames = list(obs_ids, obs_ids)
+        ),
+        OpenMx::mxAlgebra(
+          vec2diag(1 / sqrt(diag2vec(Vraw))),
+          name = "iSD"
+        ),
+        OpenMx::mxAlgebra(
+          iSD %*% Vraw %*% iSD,
+          name = "R",
+          dimnames = list(obs_ids, obs_ids)
+        ),
+        OpenMx::mxMatrix("Full",
+                         nrow = nthresh, ncol = fsize, name = "Th",
+                         free = thresh_free,
+                         values = thresh_values,
+                         labels = thresh_labels,
+                         dimnames = list(paste0("thr", seq_len(nthresh)), obs_ids)
+        ),
+        OpenMx::mxExpectationNormal(
+          covariance = "R",
+          means = "M",
+          thresholds = "Th",
+          dimnames = obs_ids
+        ),
+        OpenMx::mxFitFunctionML()
+      )
+    )
+
+    return(do.call(OpenMx::mxModel, model_args))
+  }
 }
 
 #' Build family group models
@@ -250,15 +322,28 @@ buildFamilyGroups <- function(
   Mtdmat = NULL,
   Amimat = NULL,
   Dmgmat = NULL,
-  prefix = "fam"
+  prefix = "fam",
+  type = c("continuous", "binary", "ordinal"),
+  nthresh = 1,
+  thresh_start = 0,
+  thresh_free = TRUE,
+  equate_thresholds = TRUE
+
 ) {
   .require_openmx("buildFamilyGroups")
 
   numfam <- nrow(dat)
   groups <- vector("list", numfam)
 
+  type <- match.arg(type)
+
   for (afam in seq_len(numfam)) {
-    full_df_row <- matrix(dat[afam, ], nrow = 1, dimnames = list(NULL, obs_ids))
+    if (type %in% c("binary", "ordinal")) {
+      # Preserve ordered-factor structure for threshold models
+      full_df_row <- dat[afam, , drop = FALSE]
+    } else {
+      full_df_row <- matrix(dat[afam, ], nrow = 1, dimnames = list(NULL, obs_ids))
+    }
     groups[[afam]] <- buildOneFamilyGroup(
       group_name = paste0(prefix, afam),
       Addmat = Addmat,
@@ -268,7 +353,12 @@ buildFamilyGroups <- function(
       Amimat = Amimat,
       Dmgmat = Dmgmat,
       full_df_row = full_df_row,
-      obs_ids = obs_ids
+      obs_ids = obs_ids,
+      type = type,
+      nthresh = nthresh,
+      thresh_start = thresh_start,
+      thresh_free = thresh_free,
+      equate_thresholds = equate_thresholds
     )
   }
 
@@ -310,7 +400,9 @@ buildPedigreeMx <- function(model_name, vars, group_models,
 
   # Collect all algebra formulas from group models
   all_formulas <- vapply(group_models, function(m) {
-    if (!is.null(m$V) && !is.null(m$V$formula)) {
+    if (!is.null(m$Vraw) && !is.null(m$Vraw$formula)) {
+      deparse(m$Vraw$formula, width.cutoff = 500L)
+    } else if (!is.null(m$V) && !is.null(m$V$formula)) {
       deparse(m$V$formula, width.cutoff = 500L)
     } else {
       ""
@@ -320,7 +412,19 @@ buildPedigreeMx <- function(model_name, vars, group_models,
 
   flags <- lapply(vc_map, function(pat) grepl(pat, all_formulas, fixed = TRUE))
 
-  OpenMx::mxModel(
+  # Auto-detect maxOrdinalPerBlock from the largest family group that
+
+  # uses thresholds, so users don't hit OpenMx's default 20-person limit
+  has_thresh <- vapply(group_models, function(m) !is.null(m$Th), logical(1))
+  if (any(has_thresh)) {
+    max_block <- max(vapply(group_models[has_thresh], function(m) {
+      ncol(m$Th$values)
+    }, integer(1)))
+  } else {
+    max_block <- NULL
+  }
+
+  mod <- OpenMx::mxModel(
     model_name,
     buildPedigreeModelCovariance(
       vars,
@@ -340,6 +444,12 @@ buildPedigreeMx <- function(model_name, vars, group_models,
       NULL
     }
   )
+
+  if (!is.null(max_block) && max_block > 20L) {
+    mod <- OpenMx::mxOption(mod, "maxOrdinalPerBlock", max_block)
+  }
+
+  mod
 }
 
 #' Fit an OpenMx pedigree model to observed data
@@ -386,7 +496,12 @@ fitPedigreeModel <- function(
   Extmat = NULL,
   Mtdmat = NULL,
   Amimat = NULL,
-  Dmgmat = NULL
+  Dmgmat = NULL,
+  type = c("continuous", "binary", "ordinal"),
+  nthresh = 1,
+  thresh_start = 0,
+  thresh_free = TRUE,
+  equate_thresholds = TRUE
 ) {
   .require_openmx("fitPedigreeModel")
 
@@ -404,7 +519,12 @@ fitPedigreeModel <- function(
       Extmat = Extmat,
       Mtdmat = Mtdmat,
       Amimat = Amimat,
-      Dmgmat = Dmgmat
+      Dmgmat = Dmgmat,
+      type = type,
+      nthresh = nthresh,
+      thresh_start = thresh_start,
+      thresh_free = thresh_free,
+      equate_thresholds = equate_thresholds
     )
   }
 
@@ -437,4 +557,32 @@ alignPhenToMatrix <- function(ped, phenotype, keep_ids, personID = "ID") {
   obs_ids <- make.names(as.character(keep_ids))
   pheno_vals <- ped[[phenotype]][match(as.character(keep_ids), as.character(ped[[personID]]))]
   matrix(as.double(pheno_vals), nrow = 1, dimnames = list(NULL, obs_ids))
+}
+
+#' Align Phenotype Vector to Ordered Factor Data Frame
+#'
+#' This function takes a pedigree data frame, a specified phenotype column, and a vector of IDs
+#' to keep, and returns a single-row data frame of ordered factors suitable for OpenMx threshold
+#' models (binary or ordinal).
+#'
+#' @param ped A data frame representing the pedigree.
+#' @param phenotype A character string specifying the phenotype column name.
+#' @param keep_ids A vector of IDs for which the phenotype values should be extracted.
+#' @param levels A vector of the ordered levels for the factor (e.g., \code{c(0, 1)} for binary).
+#' @param personID A character string specifying the ID column name. Default is "ID".
+#' @return A single-row data frame of ordered factors with columns named after \code{keep_ids}.
+#' @export
+alignPhenToOrdinal <- function(ped, phenotype, keep_ids, levels, personID = "ID") {
+  obs_ids <- make.names(as.character(keep_ids))
+  pheno_vals <- ped[[phenotype]][match(as.character(keep_ids), as.character(ped[[personID]]))]
+
+  out <- as.data.frame(
+    setNames(
+      lapply(pheno_vals, function(x) ordered(x, levels = levels)),
+      obs_ids
+    ),
+    stringsAsFactors = FALSE
+  )
+
+  out
 }

@@ -371,3 +371,345 @@ test_that("alignPhenToMatrix coerces phenotype values to double", {
   result <- alignPhenToMatrix(ped, phenotype = "pheno", keep_ids = c(1L, 2L))
   expect_true(is.double(result))
 })
+
+# ─── alignPhenToOrdinal ─────────────────────────────────────────────────────
+
+test_that("alignPhenToOrdinal returns a 1-row data.frame of ordered factors", {
+  ped <- data.frame(ID = c(1L, 2L, 3L), pheno = c(0, 1, 0))
+  result <- alignPhenToOrdinal(ped, phenotype = "pheno", keep_ids = c(1L, 2L, 3L), levels = c(0, 1))
+  expect_true(is.data.frame(result))
+  expect_equal(nrow(result), 1L)
+  expect_equal(ncol(result), 3L)
+  expect_true(all(vapply(result, is.ordered, logical(1))))
+})
+
+test_that("alignPhenToOrdinal preserves order of keep_ids", {
+  ped <- data.frame(ID = c(1L, 2L, 3L), pheno = c(0, 1, 0))
+  result <- alignPhenToOrdinal(ped, phenotype = "pheno", keep_ids = c(3L, 1L), levels = c(0, 1))
+  expect_equal(ncol(result), 2L)
+  expect_equal(as.character(result[[1]]), "0")
+  expect_equal(as.character(result[[2]]), "0")
+})
+
+test_that("alignPhenToOrdinal respects custom personID", {
+  ped <- data.frame(pid = c("A", "B"), trait = c(1, 0))
+  result <- alignPhenToOrdinal(ped, phenotype = "trait", keep_ids = c("A", "B"),
+                               levels = c(0, 1), personID = "pid")
+  expect_equal(as.character(result[[1]]), "1")
+  expect_equal(as.character(result[[2]]), "0")
+})
+
+test_that("alignPhenToOrdinal handles multi-level ordinal data", {
+  ped <- data.frame(ID = c(1L, 2L, 3L), severity = c("mild", "severe", "moderate"))
+  result <- alignPhenToOrdinal(ped, phenotype = "severity", keep_ids = c(1L, 2L, 3L),
+                               levels = c("mild", "moderate", "severe"))
+  expect_true(all(vapply(result, is.ordered, logical(1))))
+  expect_equal(levels(result[[1]]), c("mild", "moderate", "severe"))
+})
+
+test_that("alignPhenToOrdinal returns NA factor for missing IDs", {
+  ped <- data.frame(ID = c(1L, 2L), pheno = c(0, 1))
+  result <- alignPhenToOrdinal(ped, phenotype = "pheno", keep_ids = c(1L, 99L), levels = c(0, 1))
+  expect_true(is.na(result[[2]]))
+})
+
+# ─── buildOneFamilyGroup: binary ────────────────────────────────────────────
+
+# Helper: a 1-row binary data.frame for 2 people
+make_binary_dat2 <- function(obs_ids = c("y1", "y2")) {
+  data.frame(
+    y1 = ordered(1, levels = c(0, 1)),
+    y2 = ordered(0, levels = c(0, 1))
+  )
+}
+
+test_that("buildOneFamilyGroup builds a binary (threshold) model", {
+  skip_if_not_installed("OpenMx")
+  Addmat <- make_add2()
+  dat <- make_binary_dat2()
+  mod <- expect_no_error(
+    buildOneFamilyGroup(
+      group_name = "fam_bin",
+      Addmat = Addmat,
+      full_df_row = dat,
+      obs_ids = c("y1", "y2"),
+      type = "binary"
+    )
+  )
+  expect_true(inherits(mod, "MxModel"))
+  # Should have threshold matrix Th, correlation algebra R, and standardization iSD
+  expect_false(is.null(mod$Th))
+  expect_false(is.null(mod$R))
+  expect_false(is.null(mod$iSD))
+  # Binary: always 1 threshold row
+  expect_equal(nrow(mod$Th$values), 1L)
+})
+
+test_that("buildOneFamilyGroup binary model has fixed means at zero", {
+  skip_if_not_installed("OpenMx")
+  Addmat <- make_add2()
+  dat <- make_binary_dat2()
+  mod <- buildOneFamilyGroup(
+    group_name = "fam_bin_mean",
+    Addmat = Addmat,
+    full_df_row = dat,
+    obs_ids = c("y1", "y2"),
+    type = "binary"
+  )
+  # Means should be fixed (free = FALSE) and set to 0
+  expect_true(all(mod$M$free == FALSE))
+  expect_true(all(mod$M$values == 0))
+})
+
+test_that("buildOneFamilyGroup ordinal model supports multiple thresholds", {
+  skip_if_not_installed("OpenMx")
+  Addmat <- make_add2()
+  dat <- data.frame(
+    y1 = ordered(2, levels = c(0, 1, 2)),
+    y2 = ordered(1, levels = c(0, 1, 2))
+  )
+  mod <- expect_no_error(
+    buildOneFamilyGroup(
+      group_name = "fam_ord",
+      Addmat = Addmat,
+      full_df_row = dat,
+      obs_ids = c("y1", "y2"),
+      type = "ordinal",
+      nthresh = 2
+    )
+  )
+  expect_equal(nrow(mod$Th$values), 2L)
+  # Threshold values should be monotonically increasing
+  expect_true(mod$Th$values[1, 1] < mod$Th$values[2, 1])
+})
+
+test_that("buildOneFamilyGroup binary uses equated threshold labels by default", {
+  skip_if_not_installed("OpenMx")
+  Addmat <- make_add2()
+  dat <- make_binary_dat2()
+  mod <- buildOneFamilyGroup(
+    group_name = "fam_eq",
+    Addmat = Addmat,
+    full_df_row = dat,
+    obs_ids = c("y1", "y2"),
+    type = "binary"
+  )
+  # equate_thresholds = TRUE by default: labels should end with _eq
+  expect_true(all(grepl("_eq$", mod$Th$labels)))
+})
+
+test_that("buildOneFamilyGroup binary with equate_thresholds = FALSE uses non-equated labels", {
+  skip_if_not_installed("OpenMx")
+  Addmat <- make_add2()
+  dat <- make_binary_dat2()
+  mod <- buildOneFamilyGroup(
+    group_name = "fam_noeq",
+    Addmat = Addmat,
+    full_df_row = dat,
+    obs_ids = c("y1", "y2"),
+    type = "binary",
+    equate_thresholds = FALSE
+  )
+  expect_false(any(grepl("_eq$", mod$Th$labels)))
+})
+
+test_that("buildOneFamilyGroup binary accepts custom thresh_start", {
+  skip_if_not_installed("OpenMx")
+  Addmat <- make_add2()
+  dat <- make_binary_dat2()
+  mod <- buildOneFamilyGroup(
+    group_name = "fam_ts",
+    Addmat = Addmat,
+    full_df_row = dat,
+    obs_ids = c("y1", "y2"),
+    type = "binary",
+    thresh_start = 0.5
+  )
+  expect_equal(as.numeric(mod$Th$values[1, 1]), 0.5)
+})
+
+test_that("buildOneFamilyGroup ordinal accepts a vector of thresh_start values", {
+  skip_if_not_installed("OpenMx")
+  Addmat <- make_add2()
+  dat <- data.frame(
+    y1 = ordered(2, levels = c(0, 1, 2)),
+    y2 = ordered(0, levels = c(0, 1, 2))
+  )
+  mod <- buildOneFamilyGroup(
+    group_name = "fam_vec_ts",
+    Addmat = Addmat,
+    full_df_row = dat,
+    obs_ids = c("y1", "y2"),
+    type = "ordinal",
+    nthresh = 2,
+    thresh_start = c(-0.5, 0.5)
+  )
+  expect_equal(as.numeric(mod$Th$values[1, 1]), -0.5)
+  expect_equal(as.numeric(mod$Th$values[2, 1]), 0.5)
+})
+
+# ─── buildFamilyGroups: binary ──────────────────────────────────────────────
+
+test_that("buildFamilyGroups builds binary family groups from ordinal data frame", {
+  skip_if_not_installed("OpenMx")
+  Addmat <- make_add2()
+  dat <- data.frame(
+    y1 = ordered(c(1, 0), levels = c(0, 1)),
+    y2 = ordered(c(0, 1), levels = c(0, 1))
+  )
+  groups <- expect_no_error(
+    buildFamilyGroups(
+      dat = dat, obs_ids = c("y1", "y2"),
+      Addmat = Addmat, type = "binary"
+    )
+  )
+  expect_equal(length(groups), 2L)
+  # Each group should have threshold structure
+  expect_false(is.null(groups[[1]]$Th))
+  expect_false(is.null(groups[[2]]$Th))
+})
+
+# ─── fitPedigreeModel: binary end-to-end with real pedigree ─────────────────
+
+test_that("fitPedigreeModel fits a binary threshold model from hazard pedigree", {
+  skip_if_not_installed("OpenMx")
+
+  data(hazard, package = "BGmisc")
+
+  # Process both families: compute relatedness, align binary phenotype
+  fam_ids <- unique(hazard$famID)
+  group_models <- list()
+
+  for (i in seq_along(fam_ids)) {
+    fam_i <- subset(hazard, famID == fam_ids[i])
+
+    add_i <- ped2add(fam_i, sparse = FALSE,
+      famID = "famID", personID = "ID",
+      momID = "momID", dadID = "dadID", sex = "sex"
+    )
+    cn_i <- ped2cn(fam_i, sparse = FALSE,
+      famID = "famID", personID = "ID",
+      momID = "momID", dadID = "dadID", sex = "sex"
+    )
+
+    id_order <- rownames(add_i)
+    pheno_vals <- fam_i$DA2[match(id_order, as.character(fam_i$ID))]
+    observed <- !is.na(pheno_vals)
+
+    raw_obs_i <- id_order[observed]
+    obs_ids_i <- make.names(raw_obs_i)
+
+    # Subset matrices to observed individuals
+    add_obs <- add_i[raw_obs_i, raw_obs_i]
+    cn_obs <- cn_i[raw_obs_i, raw_obs_i]
+    rownames(add_obs) <- colnames(add_obs) <- obs_ids_i
+    rownames(cn_obs) <- colnames(cn_obs) <- obs_ids_i
+
+    # Build ordered-factor phenotype data for threshold model
+    pheno_df <- alignPhenToOrdinal(
+      fam_i, phenotype = "DA2", keep_ids = as.integer(raw_obs_i),
+      levels = c(0, 1), personID = "ID"
+    )
+
+    group_models[[i]] <- buildOneFamilyGroup(
+      group_name = paste0("fam", fam_ids[i]),
+      Addmat     = add_obs,
+      Nucmat     = cn_obs,
+      full_df_row = pheno_df,
+      obs_ids    = obs_ids_i,
+      type       = "binary"
+    )
+  }
+
+  vars <- list(
+    ad2 = 0.3, dd2 = 0, cn2 = 0.1, ce2 = 0,
+    mt2 = 0, am2 = 0, ee2 = 0.5
+  )
+
+  result <- expect_no_error(
+    fitPedigreeModel(
+      model_name   = "HazardBinary",
+      vars         = vars,
+      group_models = group_models,
+      tryhard      = TRUE
+    )
+  )
+  expect_true(inherits(result, "MxModel"))
+  # Variance components should be finite and positive
+  vad_est <- result$ModelOne$Vad$values[1, 1]
+  ver_est <- result$ModelOne$Ver$values[1, 1]
+  expect_true(is.finite(vad_est))
+  expect_true(is.finite(ver_est))
+  expect_true(vad_est > 0)
+  expect_true(ver_est > 0)
+})
+
+# ─── fitPedigreeModel: ordinal end-to-end with simulated pedigrees ─────────
+
+test_that("fitPedigreeModel fits an ordinal threshold model from simulated pedigrees", {
+  skip_if_not_installed("OpenMx")
+  skip_if_not_installed("mvtnorm")
+  set.seed(2024)
+
+  # Use small pedigrees (2 kids, 3 generations) so ordinal blocks stay
+  # under the maxOrdinalPerBlock limit and optimization converges
+  n_families <- 5
+  group_models <- list()
+
+  for (i in seq_len(n_families)) {
+    ped_i <- simulatePedigree(kpc = 2, Ngen = 3, marR = 0.5)
+
+    A_i <- as.matrix(ped2add(ped_i, sparse = FALSE))
+    Cn_i <- as.matrix(ped2cn(ped_i, sparse = FALSE))
+    n_i <- nrow(A_i)
+
+    # Simulate a latent liability and cut into 3 ordinal categories
+    V_i <- 0.4 * A_i + 0.1 * Cn_i + 0.5 * diag(1, n_i)
+    y_latent <- mvtnorm::rmvnorm(1, sigma = V_i)[1, ]
+    y_ord <- cut(y_latent, breaks = c(-Inf, -0.5, 0.5, Inf), labels = c(0, 1, 2))
+
+    ids_i <- make.names(rownames(A_i))
+    rownames(A_i) <- colnames(A_i) <- ids_i
+    rownames(Cn_i) <- colnames(Cn_i) <- ids_i
+
+    pheno_df <- as.data.frame(
+      setNames(
+        lapply(as.character(y_ord), function(x) ordered(x, levels = c(0, 1, 2))),
+        ids_i
+      ),
+      stringsAsFactors = FALSE
+    )
+
+    group_models[[i]] <- buildOneFamilyGroup(
+      group_name  = paste0("ped", i),
+      Addmat      = A_i,
+      Nucmat      = Cn_i,
+      full_df_row = pheno_df,
+      obs_ids     = ids_i,
+      type        = "ordinal",
+      nthresh     = 2
+    )
+  }
+
+  vars <- list(
+    ad2 = 0.3, dd2 = 0, cn2 = 0.1, ce2 = 0,
+    mt2 = 0, am2 = 0, ee2 = 0.5
+  )
+
+  result <- expect_no_error(
+    fitPedigreeModel(
+      model_name   = "OrdinalSimPedigree",
+      vars         = vars,
+      group_models = group_models,
+      tryhard      = TRUE
+    )
+  )
+  expect_true(inherits(result, "MxModel"))
+  # Estimated variance components should be finite and positive
+  vad_est <- result$ModelOne$Vad$values[1, 1]
+  ver_est <- result$ModelOne$Ver$values[1, 1]
+  expect_true(is.finite(vad_est))
+  expect_true(is.finite(ver_est))
+  expect_true(vad_est > 0)
+  expect_true(ver_est > 0)
+})
