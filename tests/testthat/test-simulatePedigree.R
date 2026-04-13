@@ -300,8 +300,7 @@ test_that("simulatePedigrees returns combined data frame for multiple families",
 
   # Should have exactly n_fam unique family IDs
   fam_ids <- unique(results$fam)
-  expect_equal(length(fam_ids), n_fam)
-  expect_true(all(paste0("fam", seq_len(n_fam)) %in% fam_ids))
+  expect_setequal(fam_ids, paste0("fam", seq_len(n_fam)))
 
   # All person IDs should be unique across families
   expect_equal(length(unique(results$ID)), nrow(results))
@@ -333,4 +332,10 @@ test_that("simulatePedigrees works with beta = TRUE", {
   expect_s3_class(results, "data.frame")
   expect_equal(length(unique(results$fam)), n_fam)
   expect_equal(length(unique(results$ID)), nrow(results))
+})
+
+test_that("simulatePedigrees validates n_fam input", {
+  expect_error(simulatePedigrees(n_fam = 0), "'n_fam' must be a positive integer")
+  expect_error(simulatePedigrees(n_fam = -1), "'n_fam' must be a positive integer")
+  expect_error(simulatePedigrees(n_fam = NA), "'n_fam' must be a positive integer")
 })

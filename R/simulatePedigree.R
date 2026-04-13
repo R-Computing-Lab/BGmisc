@@ -1021,6 +1021,10 @@ simulatePedigrees <- function(n_fam = 2,
                               code_male = "M",
                               code_female = "F",
                               beta = FALSE) {
+  n_fam <- as.integer(n_fam)
+  if (is.na(n_fam) || n_fam < 1L) {
+    stop("'n_fam' must be a positive integer.")
+  }
   ped_list <- vector("list", n_fam)
   for (i in seq_len(n_fam)) {
     ped_i <- simulatePedigree(
@@ -1044,5 +1048,5 @@ simulatePedigrees <- function(n_fam = 2,
     ped_i$fam <- paste0("fam", i)
     ped_list[[i]] <- ped_i
   }
-  do.call(rbind, ped_list)
+  data.table::rbindlist(ped_list) |> as.data.frame()
 }
