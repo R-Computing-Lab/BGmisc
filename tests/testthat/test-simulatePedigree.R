@@ -126,8 +126,7 @@ test_that("simulated pedigree generates expected data structure when sexR is imb
     expect_equal(max(results$gen), Ngen, tolerance = strict_tolerance)
 
     # expect there to be parents in each for all generations except the first one
-    filter_parents <- results |>
-      dplyr::group_by(gen) |>
+    filter_parents <- dplyr::group_by(results, gen) %>%
       dplyr::summarize(num_parents = sum(!is.na(dadID), na.rm = TRUE) + sum(!is.na(momID), na.rm = TRUE))
 
     expect_true(all(filter_parents$num_parents[filter_parents$gen > 1] > 0), info = paste0("Beta option: ", beta))
@@ -199,8 +198,7 @@ test_that("simulated pedigree generates expected data structure but supply var n
     expect_lt(sex_mean_male, sex_mean_female)
 
     # expect there to be parents in each for all generations except the first one
-    filter_parents <- results |>
-      dplyr::group_by(gen) |>
+    filter_parents <- dplyr::group_by(results, gen) %>%
       dplyr::summarize(num_parents = sum(!is.na(dadID), na.rm = TRUE) + sum(!is.na(momID), na.rm = TRUE))
 
     expect_true(all(filter_parents$num_parents[filter_parents$gen > 1] > 0), info = paste0("Beta option: ", beta))
