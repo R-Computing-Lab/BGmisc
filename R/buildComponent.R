@@ -138,6 +138,29 @@ ped2com <- function(ped, component,
     ped <- standardizeColnames(ped, verbose = config$verbose)
   }
 
+  # Normalize IDs to sequential integers for reliable internal computation.
+  # The id_map is used at the end to relabel the output matrix with original IDs.
+  # Include twinID and spID since they cross-reference person IDs.
+  # Exclude famID since family IDs are a separate namespace.
+  id_cols_to_normalize <- c("ID", "momID", "dadID")
+  if ("twinID" %in% colnames(ped)) id_cols_to_normalize <- c(id_cols_to_normalize, "twinID")
+  if ("spID" %in% colnames(ped)) id_cols_to_normalize <- c(id_cols_to_normalize, "spID")
+  ped <- normalizeIDs(ped,
+    id_cols = id_cols_to_normalize,
+    remap = TRUE, verbose = config$verbose
+  )
+  id_map <- attr(ped, "id_map")
+
+  # Translate keep_ids from original ID space to numeric space,
+  # preserving the original order for reordering the output matrix.
+  original_keep_ids <- config$keep_ids
+  if (!is.null(config$keep_ids)) {
+    orig_to_num <- stats::setNames(
+      as.character(id_map$numeric_id), id_map$original_id
+    )
+    config$keep_ids <- as.character(orig_to_num[as.character(config$keep_ids)])
+  }
+
   mz_row_pairs <- NULL
   mz_id_pairs <- NULL
 
@@ -244,6 +267,14 @@ ped2com <- function(ped, component,
     }
     if (config$sparse == FALSE) {
       isPar <- as.matrix(isPar)
+    }
+    # Relabel matrix dimnames from numeric surrogates back to original IDs
+    isPar <- relabelMatrix(isPar, id_map)
+    # Reorder to match original keep_ids order if applicable
+    if (!is.null(original_keep_ids)) {
+      orig_keep <- as.character(original_keep_ids)
+      orig_keep <- orig_keep[orig_keep %in% rownames(isPar)]
+      isPar <- isPar[orig_keep, orig_keep, drop = FALSE]
     }
     return(isPar)
   }
@@ -405,7 +436,7 @@ ped2com <- function(ped, component,
         message("No saved keep_ids found for tcrossprod checkpoint.  Expected at: ", checkpoint_files$tcrossprod_ids, "\n")
       }
     }
-    if (identical(saved_keep_ids, config$keep_ids)) {
+    if (identical(saved_keep_ids, original_keep_ids)) {
       if (config$verbose == TRUE) message("Resuming: Loading tcrossprod...\n")
       r <- readRDS(checkpoint_files$tcrossprod_checkpoint)
       use_tcrossprod_checkpoint <- TRUE
@@ -421,7 +452,7 @@ ped2com <- function(ped, component,
 
   if (use_tcrossprod_checkpoint == FALSE) {
     if (config$saveable == TRUE) {
-      saveRDS(config$keep_ids, file = checkpoint_files$tcrossprod_ids, compress = config$compress)
+      saveRDS(original_keep_ids, file = checkpoint_files$tcrossprod_ids, compress = config$compress)
     }
     r <- .computeTranspose(
       r2 = r2,
@@ -505,6 +536,17 @@ ped2com <- function(ped, component,
   if (config$flatten_diag == TRUE) {
     diag(r) <- 1
   }
+  # Relabel matrix dimnames from numeric surrogates back to original IDs
+  r <- relabelMatrix(r, id_map)
+  # Reorder to match original keep_ids order if applicable
+  if (!is.null(original_keep_ids)) {
+    orig_keep <- as.character(original_keep_ids)
+    orig_keep <- orig_keep[orig_keep %in% rownames(r)]
+    if (length(orig_keep) > 0 && length(orig_keep) == nrow(r)) {
+      r <- r[orig_keep, orig_keep, drop = FALSE]
+    }
+  }
+
   if (config$saveable == TRUE) {
     saveRDS(r, file = checkpoint_files$final_matrix, compress = config$compress)
   }

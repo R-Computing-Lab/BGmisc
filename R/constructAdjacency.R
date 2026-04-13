@@ -11,9 +11,10 @@
   # Loop through each individual in the pedigree
   # Build the adjacency matrix for parent-child relationships
   # Is person in column j the parent of the person in row i? .5 for yes, 0 for no.
-  ped$momID <- as.numeric(ped$momID)
-  ped$dadID <- as.numeric(ped$dadID)
-  ped$ID <- as.numeric(ped$ID)
+  # Ensure IDs are sequential integers
+  if (is.null(attr(ped, "id_map"))) {
+    ped <- normalizeIDs(ped, id_cols = c("ID", "momID", "dadID"), remap = TRUE, verbose = FALSE)
+  }
 
   for (i in (lastComputed + 1):config$nr) {
     x <- ped[i, , drop = FALSE]
@@ -21,7 +22,7 @@
     if (component %in% c("generation", "additive")) {
       # Code for 'generation' and 'additive' components
       # Checks if is mom of ID or is dad of ID
-      xID <- as.numeric(x["ID"])
+      xID <- x[["ID"]]
       sMom <- (xID == ped$momID)
       sDad <- (xID == ped$dadID)
       val <- sMom | sDad
@@ -29,14 +30,14 @@
     } else if (component %in% c("common nuclear")) {
       # Code for 'common nuclear' component
       # IDs have the Same mom and Same dad
-      sMom <- (as.numeric(x["momID"]) == ped$momID)
+      sMom <- (x[["momID"]] == ped$momID)
       sMom[is.na(sMom)] <- FALSE
-      sDad <- (as.numeric(x["dadID"]) == ped$dadID)
+      sDad <- (x[["dadID"]] == ped$dadID)
       sDad[is.na(sDad)] <- FALSE
       val <- sMom & sDad
     } else if (component %in% c("mitochondrial", "mtdna", "mitochondria")) {
       # Code for 'mitochondrial' component
-      val <- (as.numeric(x["ID"]) == ped$momID)
+      val <- (x[["ID"]] == ped$momID)
       val[is.na(val)] <- FALSE
     } else {
       stop("Unknown relatedness component requested")
@@ -75,11 +76,10 @@
   # Loop through each individual in the pedigree
   # Build the adjacency matrix for parent-child relationships
   # Is person in column j the parent of the person in row i? .5 for yes, 0 for no.
-
-  # Convert IDs
-  ped$ID <- as.numeric(ped$ID)
-  ped$momID <- as.numeric(ped$momID)
-  ped$dadID <- as.numeric(ped$dadID)
+  # Ensure IDs are sequential integers
+  if (is.null(attr(ped, "id_map"))) {
+    ped <- normalizeIDs(ped, id_cols = c("ID", "momID", "dadID"), remap = TRUE, verbose = FALSE)
+  }
 
   # parent-child lookup
   mom_index <- match(ped$momID, ped$ID, nomatch = 0)
@@ -142,10 +142,10 @@
   # Loop through each individual in the pedigree
   # Build the adjacency matrix for parent-child relationships
   # Is person in column j the parent of the person in row i? .5 for yes, 0 for no.
-  uniID <- ped$ID # live dangerously without sort(unique(ped$ID))
-  ped$ID <- as.numeric(factor(ped$ID, levels = uniID))
-  ped$momID <- as.numeric(factor(ped$momID, levels = uniID))
-  ped$dadID <- as.numeric(factor(ped$dadID, levels = uniID))
+  # Ensure IDs are sequential integers
+  if (is.null(attr(ped, "id_map"))) {
+    ped <- normalizeIDs(ped, id_cols = c("ID", "momID", "dadID"), remap = TRUE, verbose = FALSE)
+  }
 
   if (component %in% c("generation", "additive")) {
     mIDs <- stats::na.omit(data.frame(rID = ped$ID, cID = ped$momID))
@@ -229,7 +229,12 @@
                      checkpoint_files = NULL,
                      config,
                      compress = config$compress,
-                     ...) { # 1) Pairwise compare mother IDs
+                     ...) {
+  # Ensure IDs are sequential integers
+  if (is.null(attr(ped, "id_map"))) {
+    ped <- normalizeIDs(ped, id_cols = c("ID", "momID", "dadID"), remap = TRUE, verbose = FALSE)
+  }
+  # 1) Pairwise compare mother IDs
   if (adjBeta_method == 1) {
     # gets slow when data are bigger. much slower than indexed
     momMatch <- outer(ped$momID, ped$momID, FUN = "==")
@@ -445,6 +450,15 @@ computeParentAdjacency <- function(ped, component,
                                    ...) {
   if (!adjacency_method %in% c("loop", "indexed", "direct", "beta")) {
     stop("Invalid method specified. Choose from 'loop', 'direct', 'indexed', or 'beta'.")
+  }
+  # Ensure IDs are sequential integers for consistent adjacency computation.
+  # When called from ped2com, IDs are already normalized (this is a no-op).
+  # When called directly, this ensures correct behavior regardless of ID type.
+  if (is.null(attr(ped, "id_map"))) {
+    ped <- normalizeIDs(ped,
+      id_cols = c("ID", "momID", "dadID"),
+      remap = TRUE, verbose = FALSE
+    )
   }
   # For loop/indexed/direct: skip if already complete
   if (adjacency_method != "beta" && lastComputed >= config$nr) {
