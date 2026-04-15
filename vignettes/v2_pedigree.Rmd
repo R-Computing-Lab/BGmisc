@@ -97,7 +97,7 @@ df_ped_3$fam <- NULL
 df_ped_3$ID <- df_ped_3$ID / 100
 df_ped_3$dadID <- df_ped_3$dadID / 100
 df_ped_3$momID <- df_ped_3$momID / 100
-df_ped_3$spID <- df_ped_3$spID / 100
+df_ped_3$spouseID <- df_ped_3$spouseID / 100
 df_ped_4$famID <- 2
 df_ped_4$fam <- NULL
 

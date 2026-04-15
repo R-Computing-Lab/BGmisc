@@ -879,6 +879,7 @@ buildBtwnGenerations_opt <- function(df_Fam,
 #' @param ... Additional arguments to be passed to other functions.
 #' @inheritParams ped2fam
 #' @param spouseID The name of the column that will contain the spouse ID in the output data frame. Default is "spID".
+#' @param remap_ids logical. If TRUE, remap all ID columns to sequential integers (1, 2, 3, ...) in row order.
 #' @return A \code{data.frame} with each row representing a simulated individual. The columns are as follows:
 #' \itemize{
 #'   \item{fam: The family id of each simulated individual. It is 'fam1' in a single simulated pedigree.}
@@ -914,6 +915,7 @@ simulatePedigree <- function(kpc = 3,
                              code_male = "M",
                              code_female = "F",
                              fam_shift = 1L,
+                             remap_ids = FALSE,
                              beta = FALSE) {
   # SexRatio: ratio of male over female in the offspring setting; used in the between generation combinations
   # SexRatio <- sexR / (1 - sexR)
@@ -966,11 +968,24 @@ simulatePedigree <- function(kpc = 3,
   df_Fam <- df_Fam[, 1:7]
   df_Fam <- df_Fam[!(is.na(df_Fam$pat) & is.na(df_Fam$mat) & is.na(df_Fam$spID)), ]
 
-  colnames(df_Fam)[c(2, 4, 5)] <- c(personID, dadID, momID)
+  names(df_Fam) <-  c("fam", personID, "gen", dadID, momID, spouseID, "sex")
 
   # connect the detached members
   df_Fam[is.na(df_Fam[[momID]]) & is.na(df_Fam[[dadID]]) & df_Fam$gen > 1, ]
 
+
+  if(remap_ids) {
+    # Remap all ID columns to sequential integers (1, 2, 3, ...) in row order,
+    # so the final data frame has tidy consecutive IDs regardless of fam_shift offsets.
+    old_ids <- rbind( df_Fam[[personID]],  df_Fam[[momID]],  df_Fam[[dadID]],  df_Fam[[spouseID]])
+    old_ids <- unique(old_ids[!is.na(old_ids)])
+    id_map <- setNames(seq_along(old_ids), as.character(old_ids))
+
+    df_Fam[[personID]] <- as.integer(id_map[as.character( df_Fam[[personID]])])
+    df_Fam[[momID]] <- as.integer(id_map[as.character( df_Fam[[momID]])])
+    df_Fam[[dadID]] <- as.integer(id_map[as.character( df_Fam[[dadID]])])
+    df_Fam[[spouseID]] <- as.integer(id_map[as.character( df_Fam[[spouseID]])])
+  }
   df_Fam
 }
 
@@ -979,4 +994,94 @@ simulatePedigree <- function(kpc = 3,
 SimPed <- function(...) { # nolint: object_name_linter.
   warning("The 'SimPed' function is deprecated. Please use 'simulatePedigree' instead.")
   simulatePedigree(...)
+}
+
+#' Simulate Multiple Pedigrees
+#'
+#' This function simulates multiple "balanced" pedigrees and returns them
+#' combined into a single data frame. It is a convenience wrapper around
+#' \code{\link{simulatePedigree}} that makes it easy to simulate many families
+#' at once, with unique IDs across all families.
+#'
+#' @param n_fam Integer. Number of families to simulate. Default is 2.
+#' @param remap_ids Logical. If TRUE (default), all ID columns (personID, momID, dadID, spouseID) will be remapped to sequential integers starting at 1 across the combined data frame. This ensures tidy consecutive IDs regardless of fam_shift offsets. If FALSE, IDs will retain their original values from each pedigree simulation, which may include gaps or non-sequential values due to fam_shift.
+#' @inheritParams simulatePedigree
+#' @return A \code{data.frame} containing all simulated individuals from all
+#'   families combined, with the same columns as \code{\link{simulatePedigree}}.
+#'   The \code{fam} column uniquely identifies each family (e.g., "fam1",
+#'   "fam2", ...). Individual IDs are sequential integers starting at 1
+#'   (i.e., \code{1:nrow(result)}), and all parent/spouse ID references are
+#'   remapped to match.
+#' @export
+#' @examples
+#' set.seed(5)
+#' df_peds <- simulatePedigrees(
+#'   n_fam = 3,
+#'   kpc = 4,
+#'   Ngen = 4,
+#'   sexR = .5,
+#'   marR = .7
+#' )
+#' summary(df_peds)
+simulatePedigrees <- function(n_fam = 2,
+                              kpc = 3,
+                              Ngen = 4,
+                              sexR = .5,
+                              marR = 2 / 3,
+                              rd_kpc = FALSE,
+                              balancedSex = TRUE,
+                              balancedMar = TRUE,
+                              verbose = FALSE,
+                              personID = "ID",
+                              momID = "momID",
+                              dadID = "dadID",
+                              spouseID = "spouseID",
+                              code_male = "M",
+                              code_female = "F",
+                              remap_ids = TRUE,
+                              beta = FALSE
+                              ) {
+  n_fam <- as.integer(n_fam)
+  if (is.na(n_fam) || n_fam < 1L) {
+    stop("'n_fam' must be a positive integer.")
+  }
+  ped_list <- vector("list", n_fam)
+  for (i in seq_len(n_fam)) {
+    ped_i <- simulatePedigree(
+      kpc = kpc,
+      Ngen = Ngen,
+      sexR = sexR,
+      marR = marR,
+      rd_kpc = rd_kpc,
+      balancedSex = balancedSex,
+      balancedMar = balancedMar,
+      verbose = verbose,
+      personID = personID,
+      momID = momID,
+      dadID = dadID,
+      spouseID = spouseID,
+      code_male = code_male,
+      code_female = code_female,
+      fam_shift = i,
+      remap_ids = FALSE, # Keep original IDs for now; we'll remap after combining.
+      beta = beta
+    )
+    ped_i$fam <- paste0("fam", i)
+    ped_list[[i]] <- ped_i
+  }
+  combined <- data.table::rbindlist(ped_list) |> as.data.frame()
+  names(combined) <-  c("fam", personID, "gen", dadID, momID, spouseID, "sex")
+if(remap_ids) {
+  # Remap all ID columns to sequential integers (1, 2, 3, ...) in row order,
+  # so the final data frame has tidy consecutive IDs regardless of fam_shift offsets.
+  old_ids <- rbind(combined[[personID]], combined[[momID]], combined[[dadID]], combined[[spouseID]])
+  old_ids <- unique(old_ids[!is.na(old_ids)])
+  id_map <- setNames(seq_along(old_ids), as.character(old_ids))
+
+  combined[[personID]] <- as.integer(id_map[as.character(combined[[personID]])])
+  combined[[momID]] <- as.integer(id_map[as.character(combined[[momID]])])
+  combined[[dadID]] <- as.integer(id_map[as.character(combined[[dadID]])])
+  combined[[spouseID]] <- as.integer(id_map[as.character(combined[[spouseID]])])
+}
+  combined
 }
