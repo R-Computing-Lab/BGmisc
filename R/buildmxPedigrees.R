@@ -121,7 +121,8 @@ buildOneFamilyGroup <- function(
   Amimat = NULL,
   Dmgmat = NULL,
   full_df_row,
-  obs_ids
+  obs_ids,
+  condenseMatrixSlots = TRUE
 ) {
   .require_openmx("buildOneFamilyGroup")
 
@@ -142,8 +143,7 @@ buildOneFamilyGroup <- function(
   }
 
   # ------------------------------------------------------------------
-  # Build the list of mxMatrix objects and the algebra terms in lockstep
-  # so we never reference a matrix or variance component that doesn't exist.
+  # Build the list of mxMatrix objects and the algebra terms
   # Each entry: list(mat = input_matrix, mxname, algebra_term).
   # ------------------------------------------------------------------
   mat_spec <- list(
@@ -156,13 +156,21 @@ buildOneFamilyGroup <- function(
   )
   active <- Filter(function(s) !is.null(s$mat), mat_spec)
 
+if(condenseMatrixSlots) {
+    relmat_list <- lapply(active, function(s) {
+      condenseMatrixSlots(OpenMx::mxMatrix("Symm",
+                                           nrow = fsize, ncol = fsize,
+                                           values = as.matrix(s$mat), name = s$mxname
+      ))
+    })
+    } else {
   relmat_list <- lapply(active, function(s) {
     OpenMx::mxMatrix("Symm",
       nrow = fsize, ncol = fsize,
       values = as.matrix(s$mat), name = s$mxname
     )
   })
-
+}
   # add the identity matrix for the unique environment, which is always included as a term in the algebra
   mat_list <- c(
     list(OpenMx::mxMatrix("Iden", nrow = fsize, ncol = fsize, name = "I")),
@@ -214,6 +222,7 @@ buildOneFamilyGroup <- function(
 #' @param Amimat Additive by mitochondrial interaction relatedness matrix.
 #' @param Dmgmat Dominance genetic relatedness matrix.
 #' @param prefix A prefix for naming the family groups. Default is "fam".
+#' @
 #' @return A list of OpenMx models for each family group.
 #' @export
 
@@ -225,7 +234,8 @@ buildFamilyGroups <- function(
   Mtdmat = NULL,
   Amimat = NULL,
   Dmgmat = NULL,
-  prefix = "fam"
+  prefix = "fam",
+  condenseMatrixSlots = TRUE
 ) {
   .require_openmx("buildFamilyGroups")
 
@@ -243,7 +253,8 @@ buildFamilyGroups <- function(
       Amimat = Amimat,
       Dmgmat = Dmgmat,
       full_df_row = full_df_row,
-      obs_ids = obs_ids
+      obs_ids = obs_ids,
+      condenseMatrixSlots = condenseMatrixSlots
     )
   }
 
@@ -261,11 +272,15 @@ buildFamilyGroups <- function(
 #' @param vars A named list or vector of initial variance component values.
 #' @param group_models A list of OpenMx models for each family group.
 #' @param ci Logical. If TRUE, include confidence interval computations for the variance components. Default is FALSE
+#' @param condenseMatrixSlots Logical. If TRUE, use the mxCondenseMatrixSlots wrapper to optimize memory usage for large matrices. Default is FALSE.
 #' @return An OpenMx pedigree model combining variance components and family groups.
 #' @export
 
 buildPedigreeMx <- function(model_name, vars, group_models,
-                            ci = FALSE) {
+                            ci = FALSE,
+                            condenseMatrixSlots = TRUE
+
+                            ) {
   .require_openmx("buildPedigreeMx")
 
   group_names <- vapply(group_models, function(m) m$name, character(1))
@@ -295,7 +310,7 @@ buildPedigreeMx <- function(model_name, vars, group_models,
 
   flags <- lapply(vc_map, function(pat) grepl(pat, all_formulas, fixed = TRUE))
 
-  OpenMx::mxModel(
+ OpenMx::mxModel(
     model_name,
     buildPedigreeModelCovariance(
       vars,
@@ -339,6 +354,7 @@ buildPedigreeMx <- function(model_name, vars, group_models,
 #'   if FALSE, use \code{mxRun}.
 #' @param intervals Logical. If TRUE (default), compute confidence intervals for the parameters using \code{mxSE} and \code{mxCI}.
 #' @param extraTries Numeric. The number of extra optimization attempts to make when \code{tryhard} is TRUE. Default is 10.
+#' @param condenseMatrixSlots Logical. If TRUE, use the mxCondenseMatrixSlots wrapper to optimize memory usage for large matrices. Default is FALSE.
 #' @return A fitted OpenMx model.
 #' @export
 
@@ -363,7 +379,8 @@ fitPedigreeModel <- function(
   Dmgmat = NULL,
   tryhard = TRUE,
   intervals = TRUE,
-  extraTries = 10
+  extraTries = 10,
+  condenseMatrixSlots = TRUE
 ) {
   .require_openmx("fitPedigreeModel")
 
@@ -372,6 +389,8 @@ fitPedigreeModel <- function(
     if (is.null(data)) {
       stop("Either 'group_models' or 'data' must be provided.")
     }
+
+
     obs_ids <- colnames(data)
     group_models <- buildFamilyGroups(
       dat = data,
@@ -381,7 +400,8 @@ fitPedigreeModel <- function(
       Extmat = Extmat,
       Mtdmat = Mtdmat,
       Amimat = Amimat,
-      Dmgmat = Dmgmat
+      Dmgmat = Dmgmat,
+      condenseMatrixSlots = condenseMatrixSlots
     )
   }
 
@@ -389,7 +409,8 @@ fitPedigreeModel <- function(
     model_name = model_name,
     vars = vars,
     group_models = group_models,
-    ci = intervals
+    ci = intervals,
+    condenseMatrixSlots = FALSE # only need to condense once
   )
   if (tryhard == TRUE) {
     fitted_model <- OpenMx::mxTryHard(pedigree_model, silent = TRUE, extraTries = extraTries, intervals = intervals)
@@ -416,3 +437,24 @@ alignPhenToMatrix <- function(ped, phenotype, keep_ids, personID = "ID") {
   pheno_vals <- ped[[phenotype]][match(as.character(keep_ids), as.character(ped[[personID]]))]
   matrix(as.double(pheno_vals), nrow = 1, dimnames = list(NULL, obs_ids))
 }
+
+#' Condense Matrix Slots in an OpenMx Model
+#'
+#' This function takes an OpenMx model and applies the \code{mxCondenseMatrixSlots} wrapper to optimize memory usage for large matrices. This can be particularly beneficial when working with large pedigree models that include multiple relatedness matrices.
+#' @param model An OpenMx model object for which to condense matrix slots. If
+#' NULL, the function returns NULL.
+#' @return An OpenMx model with condensed matrix slots, or NULL if the input model
+#' is NULL.
+
+
+condenseMatrixSlots <- function(model) {
+  .require_openmx("condenseMatrixSlots")
+  if(is.null(model)) return(NULL)
+  #  no applicable method for `@` applied to an object of class "matrix"
+#  if (is.matrix(model)) {
+ #   return(model)
+ # }
+  OpenMx::imxConDecMatrixSlots(model)
+}
+
+
