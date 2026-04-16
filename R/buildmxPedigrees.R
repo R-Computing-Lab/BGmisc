@@ -13,6 +13,7 @@
 #' @param Vmt Logical. Include mitochondrial genetic variance component. Default is TRUE.
 #' @param Vam Logical. Include additive by mitochondrial interaction variance component. Default is FALSE.
 #' @param Ver Logical. Include unique environmental variance component. Default is TRUE.
+#'
 #' @return An OpenMx model representing the pedigree with specified variance components.
 #' @export
 
@@ -36,57 +37,52 @@ buildPedigreeModelCovariance <- function(
   Vce = TRUE,
   Vmt = TRUE,
   Vam = FALSE,
-  Ver = TRUE
+  Ver = TRUE,
+  lbound = 1e-10
 ) {
   .require_openmx("buildPedigreeModelCovariance")
 
   # Coerce to list so both c() vectors and list() inputs work with [[ ]]
   vars <- as.list(vars)
 
-  # Build the list of mxMatrix components conditionally
-  mat_list <- list()
-  if (Vad) {
-    mat_list <- c(mat_list, list(OpenMx::mxMatrix(
-      type = "Full", nrow = 1, ncol = 1, free = TRUE,
-      values = vars[["ad2"]], labels = "vad", name = "Vad", lbound = 1e-10
-    )))
-  }
-  if (Vdd) {
-    mat_list <- c(mat_list, list(OpenMx::mxMatrix(
-      type = "Full", nrow = 1, ncol = 1, free = TRUE,
-      values = vars[["dd2"]], labels = "vdd", name = "Vdd", lbound = 1e-10
-    )))
-  }
-  if (Vcn) {
-    mat_list <- c(mat_list, list(OpenMx::mxMatrix(
-      type = "Full", nrow = 1, ncol = 1, free = TRUE,
-      values = vars[["cn2"]], labels = "vcn", name = "Vcn", lbound = 1e-10
-    )))
-  }
-  if (Vce) {
-    mat_list <- c(mat_list, list(OpenMx::mxMatrix(
-      type = "Full", nrow = 1, ncol = 1, free = TRUE,
-      values = vars[["ce2"]], labels = "vce", name = "Vce", lbound = 1e-10
-    )))
-  }
-  if (Vmt) {
-    mat_list <- c(mat_list, list(OpenMx::mxMatrix(
-      type = "Full", nrow = 1, ncol = 1, free = TRUE,
-      values = vars[["mt2"]], labels = "vmt", name = "Vmt", lbound = 1e-10
-    )))
-  }
-  if (Vam) {
-    mat_list <- c(mat_list, list(OpenMx::mxMatrix(
-      type = "Full", nrow = 1, ncol = 1, free = TRUE,
-      values = vars[["am2"]], labels = "vam", name = "Vam", lbound = 1e-10
-    )))
-  }
-  if (Ver) {
-    mat_list <- c(mat_list, list(OpenMx::mxMatrix(
-      type = "Full", nrow = 1, ncol = 1, free = TRUE,
-      values = vars[["ee2"]], labels = "ver", name = "Ver", lbound = 1e-10
-    )))
-  }
+  # Declare all possible variance components as (name, label, vars_key) triples,
+  # then filter to only those that are enabled. This avoids the repeated
+  # c(mat_list, list(...)) accumulation pattern and makes the component table
+  # easy to extend.
+  vc_spec <- list(
+    list(flag = Vad, name = "Vad", label = "vad",
+         key = "ad2",
+         lbound = lbound
+         ),
+    list(flag = Vdd, name = "Vdd", label = "vdd", key = "dd2",
+         lbound = lbound
+         ),
+    list(flag = Vcn, name = "Vcn", label = "vcn", key = "cn2",
+         lbound = lbound
+         ),
+    list(flag = Vce, name = "Vce", label = "vce", key = "ce2",
+         lbound = lbound
+         ),
+    list(flag = Vmt, name = "Vmt", label = "vmt", key = "mt2",
+         lbound = lbound
+         ),
+    list(flag = Vam, name = "Vam", label = "vam", key = "am2",
+         lbound = lbound
+         ),
+    list(flag = Ver, name = "Ver", label = "ver", key = "ee2",
+         lbound = lbound
+         )
+  )
+
+  mat_list <- lapply(
+    Filter(function(s) isTRUE(s$flag), vc_spec),
+    function(s) {
+      OpenMx::mxMatrix(
+        type = "Full", nrow = 1, ncol = 1, free = TRUE,
+        values = vars[[s$key]], labels = s$label, name = s$name, lbound = s$lbound
+      )
+    }
+  )
 
   do.call(OpenMx::mxModel, c(list("ModelOne"), mat_list))
 }
@@ -102,8 +98,10 @@ buildPedigreeModelCovariance <- function(
 #' @param group_name Name of the family group.
 #' @param Addmat Additive genetic relatedness matrix (from \code{\link{ped2add}}).
 #' @param Nucmat Nuclear family shared environment relatedness matrix (from \code{\link{ped2cn}}).
-#' @param Extmat Extended family shared environment indicator. When non-NULL,
-#'   a common-extended-environment term using a unit matrix is included.
+#' @param Extmat Common extended family environment relatedness matrix. When non-NULL,
+#'   a Vce term scaled by this matrix is added to the covariance. If a non-matrix
+#'   value (e.g. \code{TRUE}) is supplied, a unit matrix (all members share equally)
+#'   is created automatically.
 #' @param Mtdmat Mitochondrial genetic relatedness matrix (from \code{\link{ped2mit}}).
 #' @param Amimat Additive by mitochondrial interaction relatedness matrix.
 #' @param Dmgmat Dominance genetic relatedness matrix.
@@ -137,68 +135,43 @@ buildOneFamilyGroup <- function(
   }
   if (is.null(fsize)) stop("At least one relatedness matrix must be provided.")
 
+  # If Extmat is requested but not supplied as a matrix, create a unit matrix
+  # (all members share the extended environment equally).
+  if (!is.null(Extmat) && !is.matrix(Extmat)) {
+    Extmat <- matrix(1, nrow = fsize, ncol = fsize)
+  }
+
   # ------------------------------------------------------------------
   # Build the list of mxMatrix objects and the algebra terms in lockstep
   # so we never reference a matrix or variance component that doesn't exist.
+  # Each entry: list(mat = input_matrix, mxname, algebra_term).
   # ------------------------------------------------------------------
-  mat_list <- list(
-    OpenMx::mxMatrix("Iden", nrow = fsize, ncol = fsize, name = "I"),
-    OpenMx::mxMatrix("Unit", nrow = fsize, ncol = fsize, name = "U")
+  mat_spec <- list(
+    list(mat = Addmat, mxname = "A",  term = "(A  %x% ModelOne.Vad)"),
+    list(mat = Dmgmat, mxname = "D",  term = "(D  %x% ModelOne.Vdd)"),
+    list(mat = Nucmat, mxname = "Cn", term = "(Cn %x% ModelOne.Vcn)"),
+    list(mat = Extmat, mxname = "Ce", term = "(Ce %x% ModelOne.Vce)"),
+    list(mat = Amimat, mxname = "Am", term = "(Am %x% ModelOne.Vam)"),
+    list(mat = Mtdmat, mxname = "Mt", term = "(Mt %x% ModelOne.Vmt)")
+  )
+  active <- Filter(function(s) !is.null(s$mat), mat_spec)
+
+  relmat_list <- lapply(active, function(s) {
+    OpenMx::mxMatrix("Symm",
+      nrow = fsize, ncol = fsize,
+      values = as.matrix(s$mat), name = s$mxname
+    )
+  })
+
+  # add the identity matrix for the unique environment, which is always included as a term in the algebra
+  mat_list <- c(
+    list(OpenMx::mxMatrix("Iden", nrow = fsize, ncol = fsize, name = "I")),
+    relmat_list
   )
 
-  algebra_terms <- character(0)
+  algebra_terms <- vapply(active, `[[`, character(1), "term")
 
-  if (!is.null(Addmat)) {
-    mat_list <- c(mat_list, list(
-      OpenMx::mxMatrix("Symm",
-        nrow = fsize, ncol = fsize,
-        values = as.matrix(Addmat), name = "A"
-      )
-    ))
-    algebra_terms <- c(algebra_terms, "(A %x% ModelOne.Vad)")
-  }
-  if (!is.null(Dmgmat)) {
-    mat_list <- c(mat_list, list(
-      OpenMx::mxMatrix("Symm",
-        nrow = fsize, ncol = fsize,
-        values = as.matrix(Dmgmat), name = "D"
-      )
-    ))
-    algebra_terms <- c(algebra_terms, "(D %x% ModelOne.Vdd)")
-  }
-  if (!is.null(Nucmat)) {
-    mat_list <- c(mat_list, list(
-      OpenMx::mxMatrix("Symm",
-        nrow = fsize, ncol = fsize,
-        values = as.matrix(Nucmat), name = "Cn"
-      )
-    ))
-    algebra_terms <- c(algebra_terms, "(Cn %x% ModelOne.Vcn)")
-  }
-  if (!is.null(Extmat)) {
-    # Extmat signals "include Vce"; the algebra always uses U (unit matrix)
-    algebra_terms <- c(algebra_terms, "(U %x% ModelOne.Vce)")
-  }
-  if (!is.null(Amimat)) {
-    mat_list <- c(mat_list, list(
-      OpenMx::mxMatrix("Symm",
-        nrow = fsize, ncol = fsize,
-        values = as.matrix(Amimat), name = "Am"
-      )
-    ))
-    algebra_terms <- c(algebra_terms, "(Am %x% ModelOne.Vam)")
-  }
-  if (!is.null(Mtdmat)) {
-    mat_list <- c(mat_list, list(
-      OpenMx::mxMatrix("Symm",
-        nrow = fsize, ncol = fsize,
-        values = as.matrix(Mtdmat), name = "Mt"
-      )
-    ))
-    algebra_terms <- c(algebra_terms, "(Mt %x% ModelOne.Vmt)")
-  }
-
-  # Unique environment is always included
+    # Unique environment is always included
   algebra_terms <- c(algebra_terms, "(I %x% ModelOne.Ver)")
 
   algebra_str <- paste(algebra_terms, collapse = " + ")
@@ -234,7 +207,9 @@ buildOneFamilyGroup <- function(
 #'   and the rows/columns of the relatedness matrices.
 #' @param Addmat Additive genetic relatedness matrix.
 #' @param Nucmat Nuclear family shared environment relatedness matrix.
-#' @param Extmat Extended family shared environment relatedness matrix.
+#' @param Extmat Common extended family environment relatedness matrix. When non-NULL,
+#'   a Vce term scaled by this matrix is added to the covariance. If a non-matrix
+#'   value (e.g. \code{TRUE}) is supplied, a unit matrix is created automatically.
 #' @param Mtdmat Mitochondrial genetic relatedness matrix.
 #' @param Amimat Additive by mitochondrial interaction relatedness matrix.
 #' @param Dmgmat Dominance genetic relatedness matrix.
@@ -354,7 +329,6 @@ buildPedigreeMx <- function(model_name, vars, group_models,
 #' @param group_models Optional list of pre-built OpenMx family group models
 #'   (from \code{\link{buildOneFamilyGroup}}). If NULL, they are generated from \code{data}
 #'   using the provided relatedness matrices.
-#' @param intervals Logical. If TRUE (default), compute confidence intervals for the parameters using \code{mxSE} and \code{mxCI}.
 #' @param Addmat Additive genetic relatedness matrix. Required when \code{group_models} is NULL.
 #' @param Nucmat Common nuclear environment relatedness matrix. Optional.
 #' @param Extmat Common extended environment relatedness matrix. Optional.
@@ -363,6 +337,8 @@ buildPedigreeMx <- function(model_name, vars, group_models,
 #' @param Dmgmat Dominance genetic relatedness matrix. Optional.
 #' @param tryhard Logical. If TRUE (default), use \code{mxTryHard} for robust optimization;
 #'   if FALSE, use \code{mxRun}.
+#' @param intervals Logical. If TRUE (default), compute confidence intervals for the parameters using \code{mxSE} and \code{mxCI}.
+#' @param extraTries Numeric. The number of extra optimization attempts to make when \code{tryhard} is TRUE. Default is 10.
 #' @return A fitted OpenMx model.
 #' @export
 
@@ -379,14 +355,15 @@ fitPedigreeModel <- function(
   ),
   data = NULL,
   group_models = NULL,
-  tryhard = TRUE,
-  intervals = TRUE,
   Addmat = NULL,
   Nucmat = NULL,
   Extmat = NULL,
   Mtdmat = NULL,
   Amimat = NULL,
-  Dmgmat = NULL
+  Dmgmat = NULL,
+  tryhard = TRUE,
+  intervals = TRUE,
+  extraTries = 10
 ) {
   .require_openmx("fitPedigreeModel")
 
@@ -411,10 +388,11 @@ fitPedigreeModel <- function(
   pedigree_model <- buildPedigreeMx(
     model_name = model_name,
     vars = vars,
-    group_models = group_models
+    group_models = group_models,
+    ci = intervals
   )
   if (tryhard == TRUE) {
-    fitted_model <- OpenMx::mxTryHard(pedigree_model, silent = TRUE, extraTries = 10, intervals = intervals)
+    fitted_model <- OpenMx::mxTryHard(pedigree_model, silent = TRUE, extraTries = extraTries, intervals = intervals)
   } else {
     fitted_model <- OpenMx::mxRun(pedigree_model, intervals = intervals)
   }

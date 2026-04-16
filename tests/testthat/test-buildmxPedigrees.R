@@ -154,8 +154,8 @@ test_that("buildOneFamilyGroup determines family size from any provided matrix",
       obs_ids = c("y1", "y2")
     )
   )
-  # # Extmat signals "include Vce"; the algebra always uses U (unit matrix)
-  expect_false(is.null(mod$U))
+  # Extmat values are used directly as matrix Ce in the model
+  expect_false(is.null(mod$Ce))
 })
 
 # ─── buildFamilyGroups ───────────────────────────────────────────────────────

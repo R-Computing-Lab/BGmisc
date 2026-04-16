@@ -8,6 +8,7 @@
 * Fixed how different-sized matrices are handled by `com2links()`
 * Added alignPhenToMatrix function to align phenotypic data to the order of the relatedness matrix
 * Added `simulatePedigrees()` function to easily simulate multiple families at once and return them as a single combined data frame
+* Refactor openmx wrapper functions
 
 # BGmisc 1.7.0.0
 * Fixed bug in parList
