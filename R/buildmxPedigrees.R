@@ -13,7 +13,7 @@
 #' @param Vmt Logical. Include mitochondrial genetic variance component. Default is TRUE.
 #' @param Vam Logical. Include additive by mitochondrial interaction variance component. Default is FALSE.
 #' @param Ver Logical. Include unique environmental variance component. Default is TRUE.
-#' @param lbound Numeric.
+#' @param lbound Numeric. A lower bound for the variance components to ensure they remain positive during optimization. Default is 1e-10
 #' @return An OpenMx model representing the pedigree with specified variance components.
 #' @export
 
@@ -109,6 +109,7 @@ buildPedigreeModelCovariance <- function(
 #' @param obs_ids A character vector of individual IDs corresponding to the columns of
 #'   \code{full_df_row} and the rows/columns of the relatedness matrices. Must be in the
 #'   same order as the relatedness matrix rows.
+#' @param condenseMatrixSlots Logical. If TRUE, use the mxCondenseMatrixSlots wrapper to optimize memory usage for large matrices. Default is TRUE.
 #' @return An OpenMx model for the specified family group.
 #' @export
 
@@ -209,24 +210,16 @@ if(condenseMatrixSlots) {
 #'
 #' This function constructs OpenMx models for multiple family groups based on
 #' provided relatedness matrices and observed data.
-#'
+#' @inheritParams buildOneFamilyGroup
 #' @param dat A data frame where each row represents a family group and columns correspond to observed variables.
 #' @param obs_ids A character vector of individual IDs corresponding to the columns of \code{dat}
 #'   and the rows/columns of the relatedness matrices.
-#' @param Addmat Additive genetic relatedness matrix.
-#' @param Nucmat Nuclear family shared environment relatedness matrix.
-#' @param Extmat Common extended family environment relatedness matrix. When non-NULL,
-#'   a Vce term scaled by this matrix is added to the covariance. If a non-matrix
-#'   value (e.g. \code{TRUE}) is supplied, a unit matrix is created automatically.
-#' @param Mtdmat Mitochondrial genetic relatedness matrix.
-#' @param Amimat Additive by mitochondrial interaction relatedness matrix.
-#' @param Dmgmat Dominance genetic relatedness matrix.
 #' @param prefix A prefix for naming the family groups. Default is "fam".
 #' @return A list of OpenMx models for each family group.
 #' @export
 
 buildFamilyGroups <- function(
-  dat, obs_ids,
+    dat, obs_ids,
   Addmat = NULL,
   Nucmat = NULL,
   Extmat = NULL,
@@ -266,12 +259,11 @@ buildFamilyGroups <- function(
 #' component parameters and family group models. It auto-detects which
 #' variance components are referenced in the group algebras and creates
 #' only those parameters.
-#'
+#' @inheritParams buildOneFamilyGroup
 #' @param model_name Name of the overall pedigree model.
 #' @param vars A named list or vector of initial variance component values.
 #' @param group_models A list of OpenMx models for each family group.
 #' @param ci Logical. If TRUE, include confidence interval computations for the variance components. Default is FALSE
-#' @param condenseMatrixSlots Logical. If TRUE, use the mxCondenseMatrixSlots wrapper to optimize memory usage for large matrices. Default is FALSE.
 #' @return An OpenMx pedigree model combining variance components and family groups.
 #' @export
 
@@ -335,7 +327,7 @@ buildPedigreeMx <- function(model_name, vars, group_models,
 #'
 #' This function constructs and fits an OpenMx model for a pedigree using
 #' specified variance components and family group models.
-#'
+#' @inheritParams buildPedigreeMx
 #' @param model_name Character. Name for the overall OpenMx model. Default is "PedigreeModel".
 #' @param vars A named list or vector of initial variance component values.
 #' @param data A matrix or data frame of observed data, where each row is a family
@@ -343,17 +335,10 @@ buildPedigreeMx <- function(model_name, vars, group_models,
 #' @param group_models Optional list of pre-built OpenMx family group models
 #'   (from \code{\link{buildOneFamilyGroup}}). If NULL, they are generated from \code{data}
 #'   using the provided relatedness matrices.
-#' @param Addmat Additive genetic relatedness matrix. Required when \code{group_models} is NULL.
-#' @param Nucmat Common nuclear environment relatedness matrix. Optional.
-#' @param Extmat Common extended environment relatedness matrix. Optional.
-#' @param Mtdmat Mitochondrial relatedness matrix. Optional.
-#' @param Amimat Additive-by-mitochondrial interaction matrix. Optional.
-#' @param Dmgmat Dominance genetic relatedness matrix. Optional.
 #' @param tryhard Logical. If TRUE (default), use \code{mxTryHard} for robust optimization;
 #'   if FALSE, use \code{mxRun}.
 #' @param intervals Logical. If TRUE (default), compute confidence intervals for the parameters using \code{mxSE} and \code{mxCI}.
 #' @param extraTries Numeric. The number of extra optimization attempts to make when \code{tryhard} is TRUE. Default is 10.
-#' @param condenseMatrixSlots Logical. If TRUE, use the mxCondenseMatrixSlots wrapper to optimize memory usage for large matrices. Default is FALSE.
 #' @return A fitted OpenMx model.
 #' @export
 

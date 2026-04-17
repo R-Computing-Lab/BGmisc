@@ -36,6 +36,8 @@ Default values are provided.}
 \item{Vam}{Logical. Include additive by mitochondrial interaction variance component. Default is FALSE.}
 
 \item{Ver}{Logical. Include unique environmental variance component. Default is TRUE.}
+
+\item{lbound}{Numeric. A lower bound for the variance components to ensure they remain positive during optimization. Default is 1e-10}
 }
 \value{
 An OpenMx model representing the pedigree with specified variance components.

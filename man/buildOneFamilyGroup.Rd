@@ -40,6 +40,8 @@ is created automatically.}
 \item{obs_ids}{A character vector of individual IDs corresponding to the columns of
 \code{full_df_row} and the rows/columns of the relatedness matrices. Must be in the
 same order as the relatedness matrix rows.}
+
+\item{condenseMatrixSlots}{Logical. If TRUE, use the mxCondenseMatrixSlots wrapper to optimize memory usage for large matrices. Default is TRUE.}
 }
 \value{
 An OpenMx model for the specified family group.

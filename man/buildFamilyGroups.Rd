@@ -23,21 +23,24 @@ buildFamilyGroups(
 \item{obs_ids}{A character vector of individual IDs corresponding to the columns of \code{dat}
 and the rows/columns of the relatedness matrices.}
 
-\item{Addmat}{Additive genetic relatedness matrix.}
+\item{Addmat}{Additive genetic relatedness matrix (from \code{\link{ped2add}}).}
 
-\item{Nucmat}{Nuclear family shared environment relatedness matrix.}
+\item{Nucmat}{Nuclear family shared environment relatedness matrix (from \code{\link{ped2cn}}).}
 
 \item{Extmat}{Common extended family environment relatedness matrix. When non-NULL,
 a Vce term scaled by this matrix is added to the covariance. If a non-matrix
-value (e.g. \code{TRUE}) is supplied, a unit matrix is created automatically.}
+value (e.g. \code{TRUE}) is supplied, a unit matrix (all members share equally)
+is created automatically.}
 
-\item{Mtdmat}{Mitochondrial genetic relatedness matrix.}
+\item{Mtdmat}{Mitochondrial genetic relatedness matrix (from \code{\link{ped2mit}}).}
 
 \item{Amimat}{Additive by mitochondrial interaction relatedness matrix.}
 
 \item{Dmgmat}{Dominance genetic relatedness matrix.}
 
 \item{prefix}{A prefix for naming the family groups. Default is "fam".}
+
+\item{condenseMatrixSlots}{Logical. If TRUE, use the mxCondenseMatrixSlots wrapper to optimize memory usage for large matrices. Default is TRUE.}
 }
 \value{
 A list of OpenMx models for each family group.

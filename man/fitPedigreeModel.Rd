@@ -34,18 +34,6 @@ and columns correspond to individuals. Only used when \code{group_models} is NUL
 (from \code{\link{buildOneFamilyGroup}}). If NULL, they are generated from \code{data}
 using the provided relatedness matrices.}
 
-\item{Addmat}{Additive genetic relatedness matrix. Required when \code{group_models} is NULL.}
-
-\item{Nucmat}{Common nuclear environment relatedness matrix. Optional.}
-
-\item{Extmat}{Common extended environment relatedness matrix. Optional.}
-
-\item{Mtdmat}{Mitochondrial relatedness matrix. Optional.}
-
-\item{Amimat}{Additive-by-mitochondrial interaction matrix. Optional.}
-
-\item{Dmgmat}{Dominance genetic relatedness matrix. Optional.}
-
 \item{tryhard}{Logical. If TRUE (default), use \code{mxTryHard} for robust optimization;
 if FALSE, use \code{mxRun}.}
 
@@ -53,7 +41,7 @@ if FALSE, use \code{mxRun}.}
 
 \item{extraTries}{Numeric. The number of extra optimization attempts to make when \code{tryhard} is TRUE. Default is 10.}
 
-\item{condenseMatrixSlots}{Logical. If TRUE, use the mxCondenseMatrixSlots wrapper to optimize memory usage for large matrices. Default is FALSE.}
+\item{condenseMatrixSlots}{Logical. If TRUE, use the mxCondenseMatrixSlots wrapper to optimize memory usage for large matrices. Default is TRUE.}
 }
 \value{
 A fitted OpenMx model.

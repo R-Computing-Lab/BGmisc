@@ -21,7 +21,7 @@ buildPedigreeMx(
 
 \item{ci}{Logical. If TRUE, include confidence interval computations for the variance components. Default is FALSE}
 
-\item{condenseMatrixSlots}{Logical. If TRUE, use the mxCondenseMatrixSlots wrapper to optimize memory usage for large matrices. Default is FALSE.}
+\item{condenseMatrixSlots}{Logical. If TRUE, use the mxCondenseMatrixSlots wrapper to optimize memory usage for large matrices. Default is TRUE.}
 }
 \value{
 An OpenMx pedigree model combining variance components and family groups.
