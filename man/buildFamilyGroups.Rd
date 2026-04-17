@@ -13,7 +13,8 @@ buildFamilyGroups(
   Mtdmat = NULL,
   Amimat = NULL,
   Dmgmat = NULL,
-  prefix = "fam"
+  prefix = "fam",
+  condenseMatrixSlots = TRUE
 )
 }
 \arguments{
@@ -26,7 +27,9 @@ and the rows/columns of the relatedness matrices.}
 
 \item{Nucmat}{Nuclear family shared environment relatedness matrix.}
 
-\item{Extmat}{Extended family shared environment relatedness matrix.}
+\item{Extmat}{Common extended family environment relatedness matrix. When non-NULL,
+a Vce term scaled by this matrix is added to the covariance. If a non-matrix
+value (e.g. \code{TRUE}) is supplied, a unit matrix is created automatically.}
 
 \item{Mtdmat}{Mitochondrial genetic relatedness matrix.}
 

@@ -13,7 +13,7 @@
 #' @param Vmt Logical. Include mitochondrial genetic variance component. Default is TRUE.
 #' @param Vam Logical. Include additive by mitochondrial interaction variance component. Default is FALSE.
 #' @param Ver Logical. Include unique environmental variance component. Default is TRUE.
-#'
+#' @param lbound Numeric.
 #' @return An OpenMx model representing the pedigree with specified variance components.
 #' @export
 
@@ -222,7 +222,6 @@ if(condenseMatrixSlots) {
 #' @param Amimat Additive by mitochondrial interaction relatedness matrix.
 #' @param Dmgmat Dominance genetic relatedness matrix.
 #' @param prefix A prefix for naming the family groups. Default is "fam".
-#' @
 #' @return A list of OpenMx models for each family group.
 #' @export
 

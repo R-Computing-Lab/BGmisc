@@ -13,7 +13,8 @@ buildPedigreeModelCovariance(
   Vce = TRUE,
   Vmt = TRUE,
   Vam = FALSE,
-  Ver = TRUE
+  Ver = TRUE,
+  lbound = 1e-10
 )
 }
 \arguments{

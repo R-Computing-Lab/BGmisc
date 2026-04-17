@@ -10,14 +10,16 @@ fitPedigreeModel(
     0.6),
   data = NULL,
   group_models = NULL,
-  tryhard = TRUE,
-  intervals = TRUE,
   Addmat = NULL,
   Nucmat = NULL,
   Extmat = NULL,
   Mtdmat = NULL,
   Amimat = NULL,
-  Dmgmat = NULL
+  Dmgmat = NULL,
+  tryhard = TRUE,
+  intervals = TRUE,
+  extraTries = 10,
+  condenseMatrixSlots = TRUE
 )
 }
 \arguments{
@@ -32,11 +34,6 @@ and columns correspond to individuals. Only used when \code{group_models} is NUL
 (from \code{\link{buildOneFamilyGroup}}). If NULL, they are generated from \code{data}
 using the provided relatedness matrices.}
 
-\item{tryhard}{Logical. If TRUE (default), use \code{mxTryHard} for robust optimization;
-if FALSE, use \code{mxRun}.}
-
-\item{intervals}{Logical. If TRUE (default), compute confidence intervals for the parameters using \code{mxSE} and \code{mxCI}.}
-
 \item{Addmat}{Additive genetic relatedness matrix. Required when \code{group_models} is NULL.}
 
 \item{Nucmat}{Common nuclear environment relatedness matrix. Optional.}
@@ -48,6 +45,15 @@ if FALSE, use \code{mxRun}.}
 \item{Amimat}{Additive-by-mitochondrial interaction matrix. Optional.}
 
 \item{Dmgmat}{Dominance genetic relatedness matrix. Optional.}
+
+\item{tryhard}{Logical. If TRUE (default), use \code{mxTryHard} for robust optimization;
+if FALSE, use \code{mxRun}.}
+
+\item{intervals}{Logical. If TRUE (default), compute confidence intervals for the parameters using \code{mxSE} and \code{mxCI}.}
+
+\item{extraTries}{Numeric. The number of extra optimization attempts to make when \code{tryhard} is TRUE. Default is 10.}
+
+\item{condenseMatrixSlots}{Logical. If TRUE, use the mxCondenseMatrixSlots wrapper to optimize memory usage for large matrices. Default is FALSE.}
 }
 \value{
 A fitted OpenMx model.
