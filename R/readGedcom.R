@@ -187,15 +187,20 @@ splitIndividuals <- function(lines, verbose = FALSE) {
   if (length(indi_idx) == 0) {
     return(list())
   }
+  record_idx <- grep("@ (INDI|FAM|SOUR|REPO|OBJE|SUBM|SUBN|NOTE)\\b| TRLR\\b", lines)
+
 
   blocks <- list()
   for (i in seq_along(indi_idx)) {
     start <- indi_idx[i]
-    end <- if (i < length(indi_idx)){
-      indi_idx[i + 1] - 1 }
-    else {
-    length(lines)
-      }
+
+    next_record <- record_idx[record_idx > start]
+
+    end <- if (length(next_record) > 0) {
+      next_record[1] - 1
+    } else {
+      length(lines)
+    }
     block <- lines[start:end]
     blocks[[length(blocks) + 1]] <- block
   }

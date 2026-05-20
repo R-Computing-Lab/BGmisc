@@ -1,6 +1,8 @@
 # BGmisc NEWS
 
 # Development version:
+* Fixed bug in gedcom reader that resulted in document records being added to the final person in the pedigree
+
 ## BGmisc 1.7.0.1.1
 * Optimized sliceFamilies to be more abstract
 * Created `.require_openmx()` to make it easier to use OpenMx functions without making OpenMx a dependency

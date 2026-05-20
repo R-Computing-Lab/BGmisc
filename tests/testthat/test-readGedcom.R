@@ -1,26 +1,67 @@
+big_gedcom_content <- c(
+  "0 HEAD",
+  "1 GEDC",
+  "2 VERS 5.5",
+  "2 FORM LINEAGE-LINKED",
+  "1 CHAR UTF-8",
+  "1 LANG English",
+  "0 @I1@ INDI",
+  "1 NAME John /Doe/",
+  "1 SEX M",
+  "1 BIRT",
+  "2 DATE 1 JAN 1900",
+  "2 PLAC Someplace",
+  "0 @I2@ INDI",
+  "1 NAME Jane /Smith/",
+  "1 SEX F",
+  "1 BIRT",
+  "2 DATE 2 FEB 1910",
+  "2 PLAC Anotherplace",
+  "1 NCHI 2",
+  "0 @S829105961@ SOUR",
+  "1 TITL U.S., Find a Grave® Index, 1600s-Current",
+  "1 NAME record",
+  "1 AUTH Ancestry.com",
+  "1 PUBL Ancestry.com Operations, Inc.",
+  "2 DATE 2012",
+  "2 PLAC Lehi, UT, USA",
+  "1 _APID 1,60525::0",
+  "1 REPO @R706186613@"
+)
+
+johnjane_gedcom_content <- c(
+  "0 @I1@ INDI",
+  "1 NAME John /Doe/",
+  "1 GIVN John",
+  "1 SEX M",
+  "0 @I2@ INDI",
+  "1 NAME Jane /Smith/",
+  "1 GIVN Jane",
+  "1 SEX F"
+)
+
+JD_gedcom_content <- johnjane_gedcom_content[c(1,2,4)]
+
+FAMC_gedcom_content <- c(
+  JD_gedcom_content,
+  "1 FAMC @F1@",
+  "1 FAMS @F2@"
+)
+
+deat_gedcom_content <- c(
+  JD_gedcom_content,
+  "1 DEAT",
+  "2 DATE 31 DEC 2000",
+  "2 PLAC Lastplace",
+  "2 CAUS Old age",
+  "2 LATI 12.3456",
+  "2 LONG -65.4321"
+)
+
+
 test_that("readGedcom reads and parses a GEDCOM file correctly", {
   # Create a temporary GEDCOM file for testing
-  gedcom_content <- c(
-    "0 HEAD",
-    "1 GEDC",
-    "2 VERS 5.5",
-    "2 FORM LINEAGE-LINKED",
-    "1 CHAR UTF-8",
-    "1 LANG English",
-    "0 @I1@ INDI",
-    "1 NAME John /Doe/",
-    "1 SEX M",
-    "1 BIRT",
-    "2 DATE 1 JAN 1900",
-    "2 PLAC Someplace",
-    "0 @I2@ INDI",
-    "1 NAME Jane /Smith/",
-    "1 SEX F",
-    "1 BIRT",
-    "2 DATE 2 FEB 1910",
-    "2 PLAC Anotherplace",
-    "1 NCHI 2"
-  )
+  gedcom_content <- big_gedcom_content
   temp_file <- tempfile(fileext = ".ged")
   writeLines(gedcom_content, temp_file)
 
@@ -34,19 +75,24 @@ test_that("readGedcom reads and parses a GEDCOM file correctly", {
   expect_true("sex" %in% colnames(df))
   expect_true("birth_date" %in% colnames(df))
   expect_true("birth_place" %in% colnames(df))
-
+  expect_true("attribute_children" %in% colnames(df))
   # Check the contents of the data frame
   expect_equal(nrow(df), 2)
   expect_equal(df$name_given[1], "John")
   expect_equal(df$name_surn[1], "Doe")
+  expect_equal(df$name[1], "John Doe/")
   expect_equal(df$sex[1], "M")
   expect_equal(df$birth_date[1], "1 JAN 1900")
   expect_equal(df$birth_place[1], "Someplace")
+  expect_equal(df$attribute_children[1], NA_character_)
   expect_equal(df$name_given[2], "Jane")
   expect_equal(df$name_surn[2], "Smith")
+  expect_equal(df$name[2], "Jane Smith/")
   expect_equal(df$sex[2], "F")
   expect_equal(df$birth_date[2], "2 FEB 1910")
   expect_equal(df$birth_place[2], "Anotherplace")
+  expect_equal(df$attribute_children[2], "2")
+  expect_null(df$attribute_title)
 
   # Clean up temporary file
   unlink(temp_file)
@@ -54,16 +100,7 @@ test_that("readGedcom reads and parses a GEDCOM file correctly", {
 
 test_that("readGedcom combines duplicate columns correctly", {
   # Create a temporary GEDCOM file for testing
-  gedcom_content <- c(
-    "0 @I1@ INDI",
-    "1 NAME John /Doe/",
-    "1 GIVN John",
-    "1 SEX M",
-    "0 @I2@ INDI",
-    "1 NAME Jane /Smith/",
-    "1 GIVN Jane",
-    "1 SEX F"
-  )
+  gedcom_content <- johnjane_gedcom_content
   temp_file <- tempfile(fileext = ".ged")
   writeLines(gedcom_content, temp_file)
 
@@ -85,11 +122,8 @@ test_that("readGedcom combines duplicate columns correctly", {
 
 test_that("readGedcom removes empty columns correctly", {
   # Create a temporary GEDCOM file for testing
-  gedcom_content <- c(
-    "0 @I1@ INDI",
-    "1 NAME John /Doe/",
-    "1 SEX M"
-  )
+  gedcom_content <-JD_gedcom_content
+
   temp_file <- tempfile(fileext = ".ged")
   writeLines(gedcom_content, temp_file)
 
@@ -106,13 +140,7 @@ test_that("readGedcom removes empty columns correctly", {
 
 test_that("readGedcom handles skinny option correctly", {
   # Create a temporary GEDCOM file for testing
-  gedcom_content <- c(
-    "0 @I1@ INDI",
-    "1 NAME John /Doe/",
-    "1 SEX M",
-    "1 FAMC @F1@",
-    "1 FAMS @F2@"
-  )
+  gedcom_content <- FAMC_gedcom_content
   temp_file <- tempfile(fileext = ".ged")
   writeLines(gedcom_content, temp_file)
 
@@ -181,17 +209,7 @@ test_that("if file does not exist, readGedcom throws an error", {
 
 test_that("readGedcom parses death event correctly", {
   # Test that a GEDCOM file with a death event is parsed correctly.
-  gedcom_content <- c(
-    "0 @I1@ INDI",
-    "1 NAME John /Doe/",
-    "1 SEX M",
-    "1 DEAT",
-    "2 DATE 31 DEC 2000",
-    "2 PLAC Lastplace",
-    "2 CAUS Old age",
-    "2 LATI 12.3456",
-    "2 LONG -65.4321"
-  )
+  gedcom_content <- deat_gedcom_content
   temp_file <- tempfile(fileext = ".ged")
   writeLines(gedcom_content, temp_file)
 
