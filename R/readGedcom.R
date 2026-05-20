@@ -191,7 +191,11 @@ splitIndividuals <- function(lines, verbose = FALSE) {
   blocks <- list()
   for (i in seq_along(indi_idx)) {
     start <- indi_idx[i]
-    end <- if (i < length(indi_idx)) indi_idx[i + 1] - 1 else length(lines)
+    end <- if (i < length(indi_idx)){
+      indi_idx[i + 1] - 1 }
+    else {
+    length(lines)
+      }
     block <- lines[start:end]
     blocks[[length(blocks) + 1]] <- block
   }
@@ -523,7 +527,7 @@ postProcessGedcom <- function(df_temp,
     if (verbose == TRUE) message("Processing parents")
     df_temp <- processParents(df_temp, datasource = "gedcom")
   }
-  if (combine_cols) {
+  if (combine_cols == TRUE) {
     df_temp <- collapseNames(verbose = verbose, df_temp = df_temp)
   }
   if (remove_empty_cols == TRUE) {

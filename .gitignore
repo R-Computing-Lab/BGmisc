@@ -55,3 +55,4 @@ revdep/
 /.claude
 vignettes/understanding_relatedness.Rmd
 vignettes/understanding_relatedness.Xmd
+.positai
