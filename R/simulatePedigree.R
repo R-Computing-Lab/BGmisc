@@ -229,7 +229,7 @@ simulatePedigrees <- function(n_fam = 2,
     ped_i$fam <- paste0("fam", i)
     ped_list[[i]] <- ped_i
   }
-  combined <- data.table::rbindlist(ped_list) |> as.data.frame()
+  combined <- as.data.frame(data.table::rbindlist(ped_list))
   names(combined) <-  c("fam", personID, "gen", dadID, momID, spouseID, "sex")
 if(remap_ids) {
   # Remap all ID columns to sequential integers (1, 2, 3, ...) in row order,
