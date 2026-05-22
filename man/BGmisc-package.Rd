@@ -22,6 +22,7 @@ Useful links:
 
 Authors:
 \itemize{
+  \item S. Mason Garrison \email{garrissm@wfu.edu} (\href{https://orcid.org/0000-0002-4804-6003}{ORCID})
   \item Michael D. Hunter (\href{https://orcid.org/0000-0002-3651-6709}{ORCID})
   \item Xuanyu Lyu (\href{https://orcid.org/0000-0002-2841-5529}{ORCID})
   \item Jonathan D. Trattner \email{code@jdtrat.com} (\href{https://orcid.org/0000-0002-1097-7603}{ORCID})

@@ -34,6 +34,21 @@ and columns correspond to individuals. Only used when \code{group_models} is NUL
 (from \code{\link{buildOneFamilyGroup}}). If NULL, they are generated from \code{data}
 using the provided relatedness matrices.}
 
+\item{Addmat}{Additive genetic relatedness matrix (from \code{\link{ped2add}}).}
+
+\item{Nucmat}{Nuclear family shared environment relatedness matrix (from \code{\link{ped2cn}}).}
+
+\item{Extmat}{Common extended family environment relatedness matrix. When non-NULL,
+a Vce term scaled by this matrix is added to the covariance. If a non-matrix
+value (e.g. \code{TRUE}) is supplied, a unit matrix (all members share equally)
+is created automatically.}
+
+\item{Mtdmat}{Mitochondrial genetic relatedness matrix (from \code{\link{ped2mit}}).}
+
+\item{Amimat}{Additive by mitochondrial interaction relatedness matrix.}
+
+\item{Dmgmat}{Dominance genetic relatedness matrix.}
+
 \item{tryhard}{Logical. If TRUE (default), use \code{mxTryHard} for robust optimization;
 if FALSE, use \code{mxRun}.}
 

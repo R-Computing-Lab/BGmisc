@@ -1,9 +1,8 @@
 # BGmisc NEWS
 
 # Development version:
-* Fixed bug in gedcom reader that resulted in document records being added to the final person in the pedigree
-
 ## BGmisc 1.7.0.1.1
+* Fixed bug in gedcom reader that resulted in document records being added to the final person in the pedigree
 * Optimized sliceFamilies to be more abstract
 * Created `.require_openmx()` to make it easier to use OpenMx functions without making OpenMx a dependency
 * Smarter string ID handling for ped2id
@@ -45,7 +44,7 @@
 * Tweaked how sex coding is handled to allow for unknown sex
 
 # BGmisc 1.5.1
-## CRAN submission
+* CRAN submission
 * partially refactored summarizePedigree to be more modular
 * added compression control to ped2com
 * Minor copy editing

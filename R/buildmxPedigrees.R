@@ -328,6 +328,7 @@ buildPedigreeMx <- function(model_name, vars, group_models,
 #' This function constructs and fits an OpenMx model for a pedigree using
 #' specified variance components and family group models.
 #' @inheritParams buildPedigreeMx
+#' @inheritParams buildOneFamilyGroup
 #' @param model_name Character. Name for the overall OpenMx model. Default is "PedigreeModel".
 #' @param vars A named list or vector of initial variance component values.
 #' @param data A matrix or data frame of observed data, where each row is a family
