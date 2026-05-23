@@ -204,3 +204,64 @@ ped2ce <- function(ped, personID = "ID",
     matrix(1, nrow = nrow(ped), ncol = nrow(ped), dimnames = list(ped[[personID]], ped[[personID]]))
   }
 }
+
+#' Add a focal-person additive relatedness column to a pedigree
+#' @inheritParams ped2focal
+#' @inherit ped2focal details
+#' @seealso \code{\link{ped2focal}}
+#' @export
+ped2addFocal <- function(
+  ped,
+  focal_id,
+  personID  = "ID",
+  col_name  = NULL,
+  max_gen   = 25,
+  sparse    = TRUE,
+  verbose   = FALSE,
+  gc        = FALSE,
+  flatten_diag         = FALSE,
+  standardize_colnames = TRUE,
+  transpose_method     = "tcrossprod",
+  chunk_size           = 1000L,
+  keep_ids             = NULL,
+  adjacency_method     = "direct",
+  saveable   = FALSE,
+  resume     = FALSE,
+  save_rate  = 5,
+  save_rate_gen     = save_rate,
+  save_rate_parlist = 100000 * save_rate,
+  save_path  = "checkpoint/",
+  compress   = TRUE,
+  mz_twins   = FALSE,
+  mz_method  = "addtwins",
+  force_symmetric = TRUE,
+  ...
+) {
+  ped2focal(
+    ped                  = ped,
+    component            = "additive",
+    focal_id             = focal_id,
+    personID             = personID,
+    col_name             = col_name,
+    max_gen              = max_gen,
+    sparse               = sparse,
+    verbose              = verbose,
+    gc                   = gc,
+    flatten_diag         = flatten_diag,
+    standardize_colnames = standardize_colnames,
+    transpose_method     = transpose_method,
+    chunk_size           = chunk_size,
+    keep_ids             = keep_ids,
+    adjacency_method     = adjacency_method,
+    saveable             = saveable,
+    resume               = resume,
+    save_rate_gen        = save_rate_gen,
+    save_rate_parlist    = save_rate_parlist,
+    save_path            = save_path,
+    compress             = compress,
+    mz_twins             = mz_twins,
+    mz_method            = mz_method,
+    force_symmetric      = force_symmetric,
+    ...
+  )
+}
