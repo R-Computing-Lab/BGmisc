@@ -65,7 +65,9 @@ ped2focal <- function(
   }
 
   if (is.null(col_name)) {
-    col_name <- paste0(component, "Rel_", focal_id)
+    # can we remove spaces and special characters from component to make cleaner column names? Yes, we can use gsub to replace non-alphanumeric characters with underscores.
+    clean_component <- gsub("[^[:alnum:]]+", "_", component)
+    col_name <- paste0(clean_component, "Rel_", focal_id)
   }
 
   mat <- ped2com(

@@ -11,6 +11,8 @@
 * Added alignPhenToMatrix function to align phenotypic data to the order of the relatedness matrix
 * Added `simulatePedigrees()` function to easily simulate multiple families at once and return them as a single combined data frame
 * Refactor openmx wrapper functions
+* Added `ped2focal()` core function and component-specific wrappers (`ped2addFocal()`, `ped2mitFocal()`/`ped2mtFocal()`, `ped2cnFocal()`) to compute relatedness between all pedigree members and a single focal individual, appending the result as a new column on the pedigree data frame. Individuals excluded via `keep_ids` are coded as `NA`; all others receive their computed value with genuine zeros made explicit.
+* Optimized `countPatternRows()` in the GEDCOM reader to use `fixed = TRUE` string matching and a pre-extracted column vector, reducing redundant work across 31 pattern passes
 
 # BGmisc 1.7.0.0
 * Fixed bug in parList
