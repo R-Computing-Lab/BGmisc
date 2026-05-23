@@ -333,6 +333,7 @@ test_that("sliceFamilies uses file.path correctly for output paths (no trailing 
     biggest = TRUE,
     chunk_size = 100,
     max_lines = 100,
+    mtdna = FALSE,
     input_file = "input.csv",
     data_directory = "pathtest/output", # no trailing slash
     progress_csv = "path_progress.csv",
@@ -346,6 +347,6 @@ test_that("sliceFamilies uses file.path correctly for output paths (no trailing 
   expect_gt(length(files), 0)
 
   # No files should be created at the parent level with mangled names
-  parent_files <- list.files("pathtest", pattern = "^df_mt")
+  parent_files <- list.files("pathtest", pattern = "^df_")
   expect_equal(length(parent_files), 0)
 })
