@@ -149,7 +149,6 @@ royal92_cleaned <- royal92 %>%
     # if only year is given, assign 15th June as the date
     birth_date = standardize_partial_date(birth_date),
     death_date = standardize_partial_date(death_date),
-
     # convert to Date format
     birth_date = parse_gedcom_date(birth_date),
     death_date = parse_gedcom_date(death_date),
@@ -189,14 +188,6 @@ royal92_cleaned <- royal92 %>%
 
 royal92 <- royal92_cleaned %>%
   select(-approximated_dob, -approximated_dod)
-# "22 AUG 1485"
-# if missing momID or dadID, assign the next available ID
-
-# df_NA <- df %>%
-#  mutate(
-#    momID = if_else(is.na(momID), max(id) + 1, momID),
-#    dadID = if_else(is.na(dadID), max(id) + 2, dadID)
-#  )
 
 checkis_acyclic <- checkPedigreeNetwork(royal92,
   personID = "personID",

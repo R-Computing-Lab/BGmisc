@@ -565,7 +565,9 @@ postProcessGedcom <- function(df_temp,
   }
   if (skinny == TRUE) {
     if (verbose == TRUE) message("Slimming down the data frame")
+    # Remove columns that are entirely NA
     df_temp <- df_temp[, colSums(is.na(df_temp)) < nrow(df_temp)]
+    # Remove raw family relationship columns
     df_temp$FAMC <- NULL
     df_temp$FAMS <- NULL
   }
