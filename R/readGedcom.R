@@ -137,9 +137,12 @@ readGedcom <- function(file_path,
     birth = c("birth_date", "birth_lat", "birth_long", "birth_place"),
     death = c("death_caus", "death_date", "death_lat", "death_long", "death_place"),
     attributes = c(
-      "attribute_caste", "attribute_children", "attribute_description", "attribute_education",
-      "attribute_idnumber", "attribute_marriages", "attribute_nationality", "attribute_occupation",
-      "attribute_property", "attribute_religion", "attribute_residence", "attribute_ssn",
+      "attribute_caste", "attribute_children",
+      "attribute_description", "attribute_education",
+      "attribute_idnumber", "attribute_marriages",
+      "attribute_nationality", "attribute_occupation",
+      "attribute_property", "attribute_religion",
+      "attribute_residence", "attribute_ssn",
       "attribute_title"
     ),
     relationships = c("FAMC", "FAMS")
@@ -449,14 +452,16 @@ extract_info <- function(line, type) {
 #' @param file A data frame with a column \code{X1} containing GEDCOM lines.
 #' @return A list with counts of specific GEDCOM tag occurrences.
 countPatternRows <- function(file) {
-  pattern_counts <- sapply(
+  x <- file$X1
+  pattern_counts <- vapply(
     c(
       "@ INDI", " NAME", " GIVN", " NPFX", " NICK", " SURN", " NSFX", " _MARNM",
       " BIRT", " DEAT", " SEX", " CAST", " DSCR", " EDUC", " IDNO", " NATI",
       " NCHI", " NMR", " OCCU", " PROP", " RELI", " RESI", " SSN", " TITL",
       " FAMC", " FAMS", " PLAC", " LATI", " LONG", " DATE", " CAUS"
     ),
-    function(pat) sum(grepl(pat, file$X1))
+    function(pat) sum(grepl(pat, x, fixed = TRUE)),
+    integer(1L)
   )
   num_rows <- list(
     num_indi_rows = pattern_counts["@ INDI"],

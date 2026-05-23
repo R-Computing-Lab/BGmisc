@@ -2,8 +2,9 @@
 
 # Development version:
 ## BGmisc 1.7.0.1.1
+* Optimized gedcom reader, com2links for speed and memory usage, with a focus on large pedigrees
 * Fixed bug in gedcom reader that resulted in document records being added to the final person in the pedigree
-* Optimized sliceFamilies to be more abstract
+* Optimized sliceFamilies to be more abstract, and no longer require mtdna
 * Created `.require_openmx()` to make it easier to use OpenMx functions without making OpenMx a dependency
 * Smarter string ID handling for ped2id
 * Fixed how different-sized matrices are handled by `com2links()`
@@ -22,7 +23,7 @@
 * Allow confidence intervals for pedigree mx wrappers
 
 # BGmisc 1.6.0.1
-## CRAN submission
+* CRAN submission
 * Add OpenMx pedigree model builders and docs
 * Added vignette for OpenMx pedigree model builders
 * Add option for MZ twins in the additive genetic matrix

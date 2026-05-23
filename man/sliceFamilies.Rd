@@ -12,6 +12,7 @@ sliceFamilies(
   chunk_size = 2e+07,
   max_lines = 1e+13,
   addRel_ceiling = 1.5,
+  mtdna = TRUE,
   input_file = NULL,
   folder_prefix = "data",
   progress_csv = "progress.csv",
@@ -37,6 +38,8 @@ sliceFamilies(
 \item{max_lines}{Max number of lines to process from input file (default 1e13)}
 
 \item{addRel_ceiling}{Numeric. Maximum relatedness value to bin to. Default is 1.5}
+
+\item{mtdna}{Logical. Whether to separate bins by mitochondrial relatedness (mitRel) value. Default is TRUE}
 
 \item{input_file}{Path to the input CSV file. If NULL, defaults to a specific file based on `biggest` flag.}
 
