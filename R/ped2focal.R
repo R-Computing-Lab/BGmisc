@@ -106,14 +106,14 @@ ped2focal <- function(
     )
   }
   ped_ids <- as.character(ped[[personID]])
-  if(is.matrix(mat)|| # or is sparse matrix
-     class(mat) %in% c("dgCMatrix", "dsCMatrix", "dgTMatrix", "dsTMatrix")){
-  focal_col <- mat[, focal_key]
-  idx <- match(ped_ids, rownames(mat))
+  if (is.matrix(mat) || # or is sparse matrix
+    class(mat) %in% c("dgCMatrix", "dsCMatrix", "dgTMatrix", "dsTMatrix")) {
+    focal_col <- mat[, focal_key]
+    idx <- match(ped_ids, rownames(mat))
   } else if (is.list(mat)) {
     focal_col <- mat[[focal_key]]
     idx <- match(ped_ids, rownames(mat))
-  } else if(is.vector(mat)) {
+  } else if (is.vector(mat)) {
     focal_col <- mat
     idx <- match(ped_ids, names(mat))
   } else {

@@ -292,8 +292,10 @@ ped2com <- function(ped, component,
   # up to ancestor j; NA = j is not an ancestor of i; diagonal = 0 (self).
   # Only allocated for the "distance" component; other components ignore it.
   if (config$component == "distance") {
-    ancDist <- matrix(NA_integer_, nrow = config$nr, ncol = config$nr,
-                      dimnames = list(ped$ID, ped$ID))
+    ancDist <- matrix(NA_integer_,
+      nrow = config$nr, ncol = config$nr,
+      dimnames = list(ped$ID, ped$ID)
+    )
     diag(ancDist) <- 0L
   }
 
@@ -319,8 +321,8 @@ ped2com <- function(ped, component,
     # so the step count for these entries is count + 1.
     if (config$component == "distance") {
       Ak_t <- methods::as(newIsPar, "TsparseMatrix")
-      ri   <- Ak_t@i + 1L   # 0-based → 1-based row (child)
-      ci   <- Ak_t@j + 1L   # 0-based → 1-based col (ancestor)
+      ri <- Ak_t@i + 1L # 0-based → 1-based row (child)
+      ci <- Ak_t@j + 1L # 0-based → 1-based col (ancestor)
       if (length(ri) > 0L) {
         fresh <- is.na(ancDist[cbind(ri, ci)])
         if (any(fresh)) {
@@ -370,7 +372,7 @@ ped2com <- function(ped, component,
     if (!is.null(config$keep_ids)) {
       keep_idx <- match(as.character(config$keep_ids), rownames(ancDist))
       keep_idx <- keep_idx[!is.na(keep_idx)]
-      ancDist  <- ancDist[keep_idx, , drop = FALSE]
+      ancDist <- ancDist[keep_idx, , drop = FALSE]
     }
     return(ancDist)
   } else {

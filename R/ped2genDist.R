@@ -20,35 +20,34 @@
 #'   pairs.
 #' @keywords internal
 .pairDistFromAnc <- function(ancDist, method) {
-  n   <- nrow(ancDist)
+  n <- nrow(ancDist)
   ids <- rownames(ancDist)
 
   if (method %in% c("path", "mrca_min")) {
-    D       <- matrix(Inf, n, n, dimnames = list(ids, ids))
+    D <- matrix(Inf, n, n, dimnames = list(ids, ids))
     diag(D) <- 0
 
     for (c in seq_len(n)) {
-      d_c     <- ancDist[, c]
+      d_c <- ancDist[, c]
       has_anc <- which(!is.na(d_c))
       if (length(has_anc) < 2L) next
-      sub     <- as.numeric(d_c[has_anc])
+      sub <- as.numeric(d_c[has_anc])
       D[has_anc, has_anc] <- pmin(
         D[has_anc, has_anc],
         outer(sub, sub, "+")
       )
     }
     D[D == Inf] <- NA_real_
-
   } else if (method == "mrca_max") {
-    D       <- matrix(-Inf, n, n, dimnames = list(ids, ids))
+    D <- matrix(-Inf, n, n, dimnames = list(ids, ids))
     diag(D) <- 0
     any_com <- matrix(FALSE, n, n)
 
     for (c in seq_len(n)) {
-      d_c     <- ancDist[, c]
+      d_c <- ancDist[, c]
       has_anc <- which(!is.na(d_c))
       if (length(has_anc) < 2L) next
-      sub     <- as.numeric(d_c[has_anc])
+      sub <- as.numeric(d_c[has_anc])
       D[has_anc, has_anc] <- pmax(
         D[has_anc, has_anc],
         outer(sub, sub, "+")
@@ -56,9 +55,8 @@
       any_com[has_anc, has_anc] <- TRUE
     }
     diag(any_com) <- TRUE
-    D[!any_com]   <- NA_real_
-    D[D == -Inf]  <- NA_real_
-
+    D[!any_com] <- NA_real_
+    D[D == -Inf] <- NA_real_
   } else {
     # mrca_all - aggregation strategy across ALL common ancestors is
     # domain-specific (sum? mean? something else?).
@@ -105,11 +103,11 @@
 #' @seealso \code{\link{ped2genDist}}, \code{\link{ped2genDistFocal}}
 #' @export
 getGenDist <- function(ped, id1, id2,
-                       method   = c("rank", "path", "mrca_min", "mrca_max", "mrca_all"),
+                       method = c("rank", "path", "mrca_min", "mrca_max", "mrca_all"),
                        personID = "ID",
-                       momID    = "momID",
-                       dadID    = "dadID",
-                       max_gen  = 25L,
+                       momID = "momID",
+                       dadID = "dadID",
+                       max_gen = 25L,
                        ...) {
   method <- match.arg(method)
 
@@ -126,7 +124,7 @@ getGenDist <- function(ped, id1, id2,
   }
 
   ancDist <- ped2com(ped, component = "distance", max_gen = max_gen, sparse = FALSE, ...)
-  D       <- .pairDistFromAnc(ancDist, method)
+  D <- .pairDistFromAnc(ancDist, method)
   D[as.character(id1), as.character(id2)]
 }
 
@@ -148,13 +146,13 @@ getGenDist <- function(ped, id1, id2,
 #' @seealso \code{\link{getGenDist}}, \code{\link{ped2genDist}}
 #' @export
 ped2genDistFocal <- function(ped, focal_id,
-                              method   = c("rank", "path", "mrca_min", "mrca_max", "mrca_all"),
-                              col_name = NULL,
-                              personID = "ID",
-                              momID    = "momID",
-                              dadID    = "dadID",
-                              max_gen  = 25L,
-                              ...) {
+                             method = c("rank", "path", "mrca_min", "mrca_max", "mrca_all"),
+                             col_name = NULL,
+                             personID = "ID",
+                             momID = "momID",
+                             dadID = "dadID",
+                             max_gen = 25L,
+                             ...) {
   method <- match.arg(method)
 
   if (!focal_id %in% ped[[personID]]) {
@@ -166,17 +164,17 @@ ped2genDistFocal <- function(ped, focal_id,
   }
 
   if (method == "rank") {
-    gen             <- ped2gen(ped, sparse = FALSE)
-    gen             <- setNames(gen, as.character(ped[[personID]]))
-    focal_key       <- as.character(focal_id)
+    gen <- ped2gen(ped, sparse = FALSE)
+    gen <- setNames(gen, as.character(ped[[personID]]))
+    focal_key <- as.character(focal_id)
     ped[[col_name]] <- abs(gen - gen[focal_key])
     return(ped)
   }
 
-  ancDist         <- ped2com(ped, component = "distance", max_gen = max_gen, sparse = FALSE, ...)
-  D               <- .pairDistFromAnc(ancDist, method)
-  focal_key       <- as.character(focal_id)
-  ped_ids         <- as.character(ped[[personID]])
+  ancDist <- ped2com(ped, component = "distance", max_gen = max_gen, sparse = FALSE, ...)
+  D <- .pairDistFromAnc(ancDist, method)
+  focal_key <- as.character(focal_id)
+  ped_ids <- as.character(ped[[personID]])
   ped[[col_name]] <- D[ped_ids, focal_key]
 
   ped
@@ -202,13 +200,13 @@ ped2genDistFocal <- function(ped, focal_id,
 #' @seealso \code{\link{getGenDist}}, \code{\link{ped2genDistFocal}}
 #' @export
 ped2genDist <- function(ped,
-                        method   = c("rank", "path", "mrca_min", "mrca_max", "mrca_all"),
+                        method = c("rank", "path", "mrca_min", "mrca_max", "mrca_all"),
                         personID = "ID",
-                        momID    = "momID",
-                        dadID    = "dadID",
-                        max_gen  = 25L,
+                        momID = "momID",
+                        dadID = "dadID",
+                        max_gen = 25L,
                         ...) {
-  method  <- match.arg(method)
+  method <- match.arg(method)
   ped_ids <- as.character(ped[[personID]])
 
   if (method == "rank") {

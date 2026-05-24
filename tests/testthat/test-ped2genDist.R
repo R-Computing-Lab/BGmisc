@@ -4,16 +4,16 @@
 
 test_that("ped2genDist path results are identical across adjacency methods", {
   data(hazard)
-  mat_direct  <- ped2genDist(hazard, method = "path", adjacency_method = "direct")
+  mat_direct <- ped2genDist(hazard, method = "path", adjacency_method = "direct")
   mat_indexed <- ped2genDist(hazard, method = "path", adjacency_method = "indexed")
-  mat_loop    <- ped2genDist(hazard, method = "path", adjacency_method = "loop")
-  expect_equal(mat_direct,  mat_indexed)
-  expect_equal(mat_direct,  mat_loop)
+  mat_loop <- ped2genDist(hazard, method = "path", adjacency_method = "loop")
+  expect_equal(mat_direct, mat_indexed)
+  expect_equal(mat_direct, mat_loop)
 })
 
 test_that("ped2genDist mrca_min results are identical across adjacency methods", {
   data(hazard)
-  mat_direct  <- ped2genDist(hazard, method = "mrca_min", adjacency_method = "direct")
+  mat_direct <- ped2genDist(hazard, method = "mrca_min", adjacency_method = "direct")
   mat_indexed <- ped2genDist(hazard, method = "mrca_min", adjacency_method = "indexed")
   ped2gen(hazard)
   expect_equal(mat_direct, mat_indexed)
@@ -86,27 +86,29 @@ test_that("getGenDist mrca_min: siblings is 2", {
 
 test_that("getGenDist mrca_min equals path for non-inbred pedigree", {
   data(hazard)
-  ids <- hazard$ID[1:min(10, nrow(hazard))]
+  ids <- hazard$ID[seq_len(min(10, nrow(hazard)))]
   for (id1 in ids) {
     for (id2 in ids) {
       d_path <- getGenDist(hazard, id1, id2, method = "path")
       d_mrca <- getGenDist(hazard, id1, id2, method = "mrca_min")
       expect_equal(d_path, d_mrca,
-                   label = paste("path vs mrca_min for IDs", id1, id2))
+        label = paste("path vs mrca_min for IDs", id1, id2)
+      )
     }
   }
 })
 
 test_that("getGenDist mrca_max >= mrca_min", {
   data(hazard)
-  ids <- hazard$ID[1:min(10, nrow(hazard))]
+  ids <- hazard$ID[seq_len(min(10, nrow(hazard)))]
   for (id1 in ids) {
     for (id2 in ids) {
       d_min <- getGenDist(hazard, id1, id2, method = "mrca_min")
       d_max <- getGenDist(hazard, id1, id2, method = "mrca_max")
       if (!is.na(d_min) && !is.na(d_max)) {
         expect_true(d_max >= d_min,
-                    label = paste("mrca_max >= mrca_min for IDs", id1, id2))
+          label = paste("mrca_max >= mrca_min for IDs", id1, id2)
+        )
       }
     }
   }
@@ -145,8 +147,10 @@ test_that("getGenDist works with inbreeding dataset", {
 test_that("getGenDist works with character IDs via potter dataset", {
   data(potter)
   # potter uses personID column
-  d <- getGenDist(potter, id1 = 1, id2 = 2,
-                  method = "rank", personID = "personID")
+  d <- getGenDist(potter,
+    id1 = 1, id2 = 2,
+    method = "rank", personID = "personID"
+  )
   expect_true(is.numeric(d) || is.na(d))
 })
 
@@ -174,8 +178,10 @@ test_that("ped2genDistFocal default column name encodes method and focal_id", {
 
 test_that("ped2genDistFocal respects custom col_name", {
   data(hazard)
-  result <- ped2genDistFocal(hazard, focal_id = 1, method = "rank",
-                              col_name = "my_gen_dist")
+  result <- ped2genDistFocal(hazard,
+    focal_id = 1, method = "rank",
+    col_name = "my_gen_dist"
+  )
   expect_true("my_gen_dist" %in% colnames(result))
   expect_false("genDist_rank_1" %in% colnames(result))
 })
@@ -212,7 +218,8 @@ test_that("ped2genDistFocal values match getGenDist for every individual", {
     id <- result$ID[i]
     expected <- getGenDist(hazard, id1 = focal, id2 = id, method = "path")
     expect_equal(result[[col_name]][i], expected,
-                 label = paste("path focal=1 row", i, "ID", id))
+      label = paste("path focal=1 row", i, "ID", id)
+    )
   }
 })
 
@@ -226,7 +233,8 @@ test_that("ped2genDistFocal mrca_min values match getGenDist", {
     id <- result$ID[i]
     expected <- getGenDist(hazard, id1 = focal, id2 = id, method = "mrca_min")
     expect_equal(result[[col_name]][i], expected,
-                 label = paste("mrca_min focal=1 row", i, "ID", id))
+      label = paste("mrca_min focal=1 row", i, "ID", id)
+    )
   }
 })
 
@@ -234,17 +242,18 @@ test_that("ped2genDistFocal alignment holds when pedigree rows are shuffled", {
   data(hazard)
   focal <- hazard$ID[nrow(hazard)]
   hazard_shuffled <- hazard[sample(nrow(hazard)), ]
-  result_orig  <- ped2genDistFocal(hazard,          focal_id = focal, method = "rank")
+  result_orig <- ped2genDistFocal(hazard, focal_id = focal, method = "rank")
   result_shuff <- ped2genDistFocal(hazard_shuffled, focal_id = focal, method = "rank")
   col_name <- paste0("genDist_rank_", focal)
 
   # After matching by ID the values should agree
   for (i in seq_len(nrow(hazard_shuffled))) {
     id <- as.character(hazard_shuffled$ID[i])
-    orig_val  <- result_orig[[col_name]][result_orig$ID == hazard_shuffled$ID[i]]
+    orig_val <- result_orig[[col_name]][result_orig$ID == hazard_shuffled$ID[i]]
     shuff_val <- result_shuff[[col_name]][i]
     expect_equal(shuff_val, orig_val,
-                 label = paste("shuffled row", i, "ID", id))
+      label = paste("shuffled row", i, "ID", id)
+    )
   }
 })
 
@@ -259,8 +268,10 @@ test_that("ped2genDistFocal works on inbreeding dataset", {
 
 test_that("ped2genDistFocal works on potter dataset with custom personID", {
   data(potter)
-  result <- ped2genDistFocal(potter, focal_id = 1, method = "rank",
-                              personID = "personID")
+  result <- ped2genDistFocal(potter,
+    focal_id = 1, method = "rank",
+    personID = "personID"
+  )
   expect_true(is.data.frame(result))
   expect_true("genDist_rank_1" %in% colnames(result))
   expect_equal(nrow(result), nrow(potter))
@@ -319,12 +330,13 @@ test_that("ped2genDist values match getGenDist for every pair", {
   mat <- ped2genDist(hazard, method = "path")
   ped_ids <- as.character(hazard$ID)
   # Spot check a subset of pairs to keep test time reasonable
-  check_ids <- ped_ids[1:min(8, length(ped_ids))]
+  check_ids <- ped_ids[seq_len(min(8, length(ped_ids)))]
   for (id1 in check_ids) {
     for (id2 in check_ids) {
       expected <- getGenDist(hazard, id1, id2, method = "path")
       expect_equal(mat[id1, id2], expected,
-                   label = paste("path matrix cell", id1, id2))
+        label = paste("path matrix cell", id1, id2)
+      )
     }
   }
 })
@@ -349,8 +361,10 @@ test_that("ped2genDist works on inbreeding dataset", {
 
 test_that("ped2genDist works on potter dataset with custom column names", {
   data(potter)
-  mat <- ped2genDist(potter, method = "rank",
-                     personID = "personID", momID = "momID", dadID = "dadID")
+  mat <- ped2genDist(potter,
+    method = "rank",
+    personID = "personID", momID = "momID", dadID = "dadID"
+  )
   expect_true(is.matrix(mat))
   expect_equal(nrow(mat), nrow(potter))
   expect_true(all(diag(mat) == 0))
