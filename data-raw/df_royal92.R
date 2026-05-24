@@ -147,11 +147,8 @@ royal92_cleaned <- royal92 %>%
     birth_date = strip_date_qualifier(birth_date),
     death_date = strip_date_qualifier(death_date),
     # if only year is given, assign 15th June as the date
-    birth_date = standardize_partial_date(birth_date),
-    death_date = standardize_partial_date(death_date),
-    # convert to Date format
-    birth_date = parse_gedcom_date(birth_date),
-    death_date = parse_gedcom_date(death_date),
+    birth_date = parse_gedcom_date(standardize_partial_date(birth_date)),
+    death_date = parse_gedcom_date(standardize_partial_date(death_date)),
     twinID = case_when(
      personID == 223 ~ 222,
      personID == 222 ~ 223,
