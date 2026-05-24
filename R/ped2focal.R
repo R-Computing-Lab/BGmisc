@@ -96,16 +96,30 @@ ped2focal <- function(
   )
 
   focal_key <- as.character(focal_id)
-  if (!focal_key %in% colnames(mat)) {
+  focal_key_pres <- focal_key %in% colnames(mat) || focal_key %in% names(mat)
+
+
+  if (!focal_key_pres) {
     stop(
       "focal_id '", focal_id, "' was not found in the computed relatedness matrix. ",
       "Check that standardize_colnames and personID are consistent."
     )
   }
-
-  focal_col <- mat[, focal_key]
   ped_ids <- as.character(ped[[personID]])
+  if(is.matrix(mat)|| # or is sparse matrix
+     class(mat) %in% c("dgCMatrix", "dsCMatrix", "dgTMatrix", "dsTMatrix")){
+  focal_col <- mat[, focal_key]
   idx <- match(ped_ids, rownames(mat))
+  } else if (is.list(mat)) {
+    focal_col <- mat[[focal_key]]
+    idx <- match(ped_ids, rownames(mat))
+  } else if(is.vector(mat)) {
+    focal_col <- mat
+    idx <- match(ped_ids, names(mat))
+  } else {
+    stop("Unexpected type for relatedness matrix: ", class(mat))
+  }
+
   ped[[col_name]] <- unname(focal_col[idx])
 
   # Step 1: fill all NAs with 0 — individuals in the pedigree but not in the

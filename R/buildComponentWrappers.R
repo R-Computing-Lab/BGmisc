@@ -135,7 +135,7 @@ ped2cn <- function(ped, max_gen = 25, sparse = TRUE, verbose = FALSE,
     ...
   )
 }
-#' Take a pedigree and turn it into a generation relatedness matrix
+#' Take a pedigree and turn it into a generation relatedness matrix. It computes the rank of the generation matrix, which is the number of generations separating two individuals
 #' @inheritParams ped2com
 #' @inherit ped2com details
 #' @export
@@ -357,6 +357,63 @@ ped2cnFocal <- function(
   ped2focal(
     ped                  = ped,
     component            = "common nuclear",
+    focal_id             = focal_id,
+    personID             = personID,
+    col_name             = col_name,
+    max_gen              = max_gen,
+    sparse               = sparse,
+    verbose              = verbose,
+    gc                   = gc,
+    flatten_diag         = flatten_diag,
+    standardize_colnames = standardize_colnames,
+    transpose_method     = transpose_method,
+    chunk_size           = chunk_size,
+    keep_ids             = keep_ids,
+    adjacency_method     = adjacency_method,
+    saveable             = saveable,
+    resume               = resume,
+    save_rate_gen        = save_rate_gen,
+    save_rate_parlist    = save_rate_parlist,
+    save_path            = save_path,
+    compress             = compress,
+    force_symmetric      = force_symmetric,
+    ...
+  )
+}
+#' Add a focal-person generation relatedness column to a pedigree. It computes the rank of the generation matrix, which is the number of generations separating two individuals
+#' @inheritParams ped2focal
+#' @inherit ped2focal details
+#' @seealso \code{\link{ped2focal}}
+#' @export
+
+ped2genFocal <- function(
+  ped,
+  focal_id,
+  personID = "ID",
+  col_name = NULL,
+  max_gen = 25,
+  sparse = TRUE,
+  verbose = FALSE,
+  gc = FALSE,
+  flatten_diag = FALSE,
+  standardize_colnames = TRUE,
+  transpose_method = "tcrossprod",
+  chunk_size = 1000L,
+  keep_ids = NULL,
+  adjacency_method = "direct",
+  saveable = FALSE,
+  resume = FALSE,
+  save_rate = 5,
+  save_rate_gen = save_rate,
+  save_rate_parlist = 100000 * save_rate,
+  save_path = "checkpoint/",
+  compress = TRUE,
+  force_symmetric = FALSE,
+  ...
+) {
+  ped2focal(
+    ped                  = ped,
+    component            = "generation",
     focal_id             = focal_id,
     personID             = personID,
     col_name             = col_name,

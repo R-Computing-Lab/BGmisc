@@ -106,7 +106,8 @@ ped2com <- function(ped, component,
       "additive",
       "common nuclear",
       "mitochondrial",
-      "mtdna", "mitochondria"
+      "mtdna", "mitochondria",
+      "distance"
     )
   )
 
@@ -287,6 +288,15 @@ ped2com <- function(ped, component,
   }
   maxCount <- config$max_gen + 1
 
+  # Ancestor distance matrix: ancDist[i, j] = min parent-child steps from i
+  # up to ancestor j; NA = j is not an ancestor of i; diagonal = 0 (self).
+  # Only allocated for the "distance" component; other components ignore it.
+  if (config$component == "distance") {
+    ancDist <- matrix(NA_integer_, nrow = config$nr, ncol = config$nr,
+                      dimnames = list(ped$ID, ped$ID))
+    diag(ancDist) <- 0L
+  }
+
   if (config$verbose == TRUE) {
     cat("About to do RAM path tracing\n")
   }
@@ -304,6 +314,21 @@ ped2com <- function(ped, component,
   while (mtSum != 0 && count < maxCount) {
     r <- r + newIsPar
     gen <- gen + (Matrix::rowSums(newIsPar) > 0)
+
+    # Record first-hit ancestor distances.  At this point newIsPar = A^(count+1),
+    # so the step count for these entries is count + 1.
+    if (config$component == "distance") {
+      Ak_t <- methods::as(newIsPar, "TsparseMatrix")
+      ri   <- Ak_t@i + 1L   # 0-based → 1-based row (child)
+      ci   <- Ak_t@j + 1L   # 0-based → 1-based col (ancestor)
+      if (length(ri) > 0L) {
+        fresh <- is.na(ancDist[cbind(ri, ci)])
+        if (any(fresh)) {
+          ancDist[cbind(ri[fresh], ci[fresh])] <- count + 1L
+        }
+      }
+    }
+
     newIsPar <- newIsPar %*% isPar
     mtSum <- sum(newIsPar)
     count <- count + 1
@@ -341,6 +366,13 @@ ped2com <- function(ped, component,
       verbose_message = "Subsetting generation component to %d target individuals\n"
     )
     return(gen)
+  } else if (config$component == "distance") { # no need to do the rest
+    if (!is.null(config$keep_ids)) {
+      keep_idx <- match(as.character(config$keep_ids), rownames(ancDist))
+      keep_idx <- keep_idx[!is.na(keep_idx)]
+      ancDist  <- ancDist[keep_idx, , drop = FALSE]
+    }
+    return(ancDist)
   } else {
     if (config$verbose == TRUE) {
       cat("Completed RAM path tracing\n")
@@ -662,7 +694,7 @@ initializeCheckpoint <- function(config = list(
 #' @inheritParams ped2com
 .assignParentValue <- function(component) {
   # Set parent values depending on the component type
-  if (component %in% c("generation", "additive")) {
+  if (component %in% c("generation", "additive", "distance")) {
     parVal <- .5
   } else if (component %in%
     c("common nuclear", "mitochondrial", "mtdna", "mitochondria")) {

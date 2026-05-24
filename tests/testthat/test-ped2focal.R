@@ -269,3 +269,21 @@ test_that("ped2addFocal works with potter using personID column", {
     mat["1", "1"]
   )
 })
+
+# ped2genFocal
+
+test_that("ped2genFocal values are correctly aligned to pedigree rows", {
+  data(hazard)
+  focal <- 1
+  result <- ped2genFocal(hazard, focal_id = focal)
+  mat <- ped2gen(hazard, sparse = FALSE)
+  col_name <- paste0("generationRel_", focal)
+
+  expect_true(col_name %in% colnames(result))
+  for (i in seq_len(nrow(result))) {
+    id <- as.character(result$ID[i])
+    expect_equal(result[[col_name]][i], unname(mat[id]),
+      label = paste("genFocal row", i, "ID", id)
+    )
+  }
+})
