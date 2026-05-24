@@ -27,7 +27,7 @@
 #' `i + 4`, and `LONG` at `i + 5`. Missing elements leave the corresponding
 #' output fields as `NA`.
 #'
- #' Attribute tags such as `OCCU`, `EDUC`, `RELI`, `CAST`, `NCHI`, `NMR`, `NATI`,
+#' Attribute tags such as `OCCU`, `EDUC`, `RELI`, `CAST`, `NCHI`, `NMR`, `NATI`,
 #' `RESI`, `PROP`, `SSN`, `TITL`, `DSCR`, and `IDNO` are parsed directly into
 #' dedicated columns prefixed with `attribute_`.
 #'
@@ -559,7 +559,7 @@ postProcessGedcom <- function(df_temp,
   if (combine_cols == TRUE) {
     df_temp <- collapseNames(verbose = verbose, df_temp = df_temp)
   }
-  if (remove_empty_cols == TRUE||skinny == TRUE) {
+  if (remove_empty_cols == TRUE || skinny == TRUE) {
     if (verbose == TRUE) message("Removing empty columns")
     df_temp <- df_temp[, colSums(is.na(df_temp)) < nrow(df_temp)]
   }

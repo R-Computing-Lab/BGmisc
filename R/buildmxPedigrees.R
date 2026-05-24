@@ -50,28 +50,35 @@ buildPedigreeModelCovariance <- function(
   # c(mat_list, list(...)) accumulation pattern and makes the component table
   # easy to extend.
   vc_spec <- list(
-    list(flag = Vad, name = "Vad", label = "vad",
-         key = "ad2",
-         lbound = lbound
-         ),
-    list(flag = Vdd, name = "Vdd", label = "vdd", key = "dd2",
-         lbound = lbound
-         ),
-    list(flag = Vcn, name = "Vcn", label = "vcn", key = "cn2",
-         lbound = lbound
-         ),
-    list(flag = Vce, name = "Vce", label = "vce", key = "ce2",
-         lbound = lbound
-         ),
-    list(flag = Vmt, name = "Vmt", label = "vmt", key = "mt2",
-         lbound = lbound
-         ),
-    list(flag = Vam, name = "Vam", label = "vam", key = "am2",
-         lbound = lbound
-         ),
-    list(flag = Ver, name = "Ver", label = "ver", key = "ee2",
-         lbound = lbound
-         )
+    list(
+      flag = Vad, name = "Vad", label = "vad",
+      key = "ad2",
+      lbound = lbound
+    ),
+    list(
+      flag = Vdd, name = "Vdd", label = "vdd", key = "dd2",
+      lbound = lbound
+    ),
+    list(
+      flag = Vcn, name = "Vcn", label = "vcn", key = "cn2",
+      lbound = lbound
+    ),
+    list(
+      flag = Vce, name = "Vce", label = "vce", key = "ce2",
+      lbound = lbound
+    ),
+    list(
+      flag = Vmt, name = "Vmt", label = "vmt", key = "mt2",
+      lbound = lbound
+    ),
+    list(
+      flag = Vam, name = "Vam", label = "vam", key = "am2",
+      lbound = lbound
+    ),
+    list(
+      flag = Ver, name = "Ver", label = "ver", key = "ee2",
+      lbound = lbound
+    )
   )
 
   mat_list <- lapply(
@@ -148,8 +155,8 @@ buildOneFamilyGroup <- function(
   # Each entry: list(mat = input_matrix, mxname, algebra_term).
   # ------------------------------------------------------------------
   mat_spec <- list(
-    list(mat = Addmat, mxname = "A",  term = "(A  %x% ModelOne.Vad)"),
-    list(mat = Dmgmat, mxname = "D",  term = "(D  %x% ModelOne.Vdd)"),
+    list(mat = Addmat, mxname = "A", term = "(A  %x% ModelOne.Vad)"),
+    list(mat = Dmgmat, mxname = "D", term = "(D  %x% ModelOne.Vdd)"),
     list(mat = Nucmat, mxname = "Cn", term = "(Cn %x% ModelOne.Vcn)"),
     list(mat = Extmat, mxname = "Ce", term = "(Ce %x% ModelOne.Vce)"),
     list(mat = Amimat, mxname = "Am", term = "(Am %x% ModelOne.Vam)"),
@@ -157,21 +164,21 @@ buildOneFamilyGroup <- function(
   )
   active <- Filter(function(s) !is.null(s$mat), mat_spec)
 
-if(condenseMatrixSlots) {
+  if (condenseMatrixSlots) {
     relmat_list <- lapply(active, function(s) {
       condenseMatrixSlots(OpenMx::mxMatrix("Symm",
-                                           nrow = fsize, ncol = fsize,
-                                           values = as.matrix(s$mat), name = s$mxname
+        nrow = fsize, ncol = fsize,
+        values = as.matrix(s$mat), name = s$mxname
       ))
     })
-    } else {
-  relmat_list <- lapply(active, function(s) {
-    OpenMx::mxMatrix("Symm",
-      nrow = fsize, ncol = fsize,
-      values = as.matrix(s$mat), name = s$mxname
-    )
-  })
-}
+  } else {
+    relmat_list <- lapply(active, function(s) {
+      OpenMx::mxMatrix("Symm",
+        nrow = fsize, ncol = fsize,
+        values = as.matrix(s$mat), name = s$mxname
+      )
+    })
+  }
   # add the identity matrix for the unique environment, which is always included as a term in the algebra
   mat_list <- c(
     list(OpenMx::mxMatrix("Iden", nrow = fsize, ncol = fsize, name = "I")),
@@ -180,7 +187,7 @@ if(condenseMatrixSlots) {
 
   algebra_terms <- vapply(active, `[[`, character(1), "term")
 
-    # Unique environment is always included
+  # Unique environment is always included
   algebra_terms <- c(algebra_terms, "(I %x% ModelOne.Ver)")
 
   algebra_str <- paste(algebra_terms, collapse = " + ")
@@ -219,7 +226,7 @@ if(condenseMatrixSlots) {
 #' @export
 
 buildFamilyGroups <- function(
-    dat, obs_ids,
+  dat, obs_ids,
   Addmat = NULL,
   Nucmat = NULL,
   Extmat = NULL,
@@ -269,9 +276,7 @@ buildFamilyGroups <- function(
 
 buildPedigreeMx <- function(model_name, vars, group_models,
                             ci = FALSE,
-                            condenseMatrixSlots = TRUE
-
-                            ) {
+                            condenseMatrixSlots = TRUE) {
   .require_openmx("buildPedigreeMx")
 
   group_names <- vapply(group_models, function(m) m$name, character(1))
@@ -301,7 +306,7 @@ buildPedigreeMx <- function(model_name, vars, group_models,
 
   flags <- lapply(vc_map, function(pat) grepl(pat, all_formulas, fixed = TRUE))
 
- OpenMx::mxModel(
+  OpenMx::mxModel(
     model_name,
     buildPedigreeModelCovariance(
       vars,
@@ -434,12 +439,12 @@ alignPhenToMatrix <- function(ped, phenotype, keep_ids, personID = "ID") {
 
 condenseMatrixSlots <- function(model) {
   .require_openmx("condenseMatrixSlots")
-  if(is.null(model)) return(NULL)
+  if (is.null(model)) {
+    return(NULL)
+  }
   #  no applicable method for `@` applied to an object of class "matrix"
-#  if (is.matrix(model)) {
- #   return(model)
- # }
+  #  if (is.matrix(model)) {
+  #   return(model)
+  # }
   OpenMx::imxConDecMatrixSlots(model)
 }
-
-

@@ -38,7 +38,7 @@ parse_gedcom_date <- function(x) {
 
 
 ## Create dataframe
-royal92 <- df_raw <- readGedcom("data-raw/royal92.ged")  %>%
+royal92 <- df_raw <- readGedcom("data-raw/royal92.ged") %>%
   addPersonToPed(
     personID = 1147,
     name = "Henry de Montfort",
@@ -46,13 +46,14 @@ royal92 <- df_raw <- readGedcom("data-raw/royal92.ged")  %>%
     momID = 1370,
     dadID = 873,
     overwrite = TRUE
-  )  %>%  addPersonToPed(
+  ) %>%
+  addPersonToPed(
     personID = 3011,
     name = "Simon de Montfort the Younger",
     sex = "M",
     momID = 1370,
     dadID = 873
-  )  %>%
+  ) %>%
   addPersonToPed(
     personID = 2848,
     name = "Michael of Greece and Denmark",
@@ -68,19 +69,19 @@ royal92 <- df_raw <- readGedcom("data-raw/royal92.ged")  %>%
 
 date_overrides <- tribble(
   ~personID, ~birth_date_override, ~death_date_override,
-  220,  "27 MAR 1819", "27 MAR 1819",
-  812,  "16 JUN 1908", "11 DEC 1996",
+  220, "27 MAR 1819", "27 MAR 1819",
+  812, "16 JUN 1908", "11 DEC 1996",
   1147, "15 NOV 1238", "4 AUG 1265",
-  1149, "7 OCT 1816",  "12 APR 1817",
+  1149, "7 OCT 1816", "12 APR 1817",
   1298, "27 APR 1779", "15 JUN 1831",
   2456, "15 JUN 1070", "14 FEB 1117",
   2846, "25 DEC 1902", "25 FEB 1953",
-  2848, "7 JAN 1939",  "28 JUL 2024",
+  2848, "7 JAN 1939", "28 JUL 2024",
   2939, "17 JUL 1838", "14 NOV 1886",
   2941, "12 JUN 1811", "5 JUN 1846",
   2942, "24 MAY 1772", "20 APR 1819",
-  2948, "2 MAY 1841",  "22 NOV 1906",
-  2950, "2 SEP 1746",  "11 JAN 1812",
+  2948, "2 MAY 1841", "22 NOV 1906",
+  2950, "2 SEP 1746", "11 JAN 1812",
   2955, "16 JUN 1803", "22 JUL 1844",
   2985, "26 APR 1924", "14 DEC 1997",
   3011, "15 APR 1240", "15 JUN 1271"
@@ -89,24 +90,24 @@ date_overrides <- tribble(
 
 name_overrides <- tribble(
   ~personID, ~name_override,
-  12,   "Alexandra of Denmark (Alix)",
-  27,   "Victoria Eugenie (Ena)",
-  39,   "Alexandra Fedorovna (Alix)",
-  41,   "Dagmar (Marie) of Denmark",
-  84,   "Elizabeth (Ella)",
-  85,   "Mary (May)",
-  136,  "Mary Adelaide (Fat Mary)",
-  155,  "Michael (Mischa) Alexandrovich Romanov",
-  220,  "Charlotte Augusta Louisa Hanover",
-  785,  "Richard Curzon-Howe",
-  788,  "James Hamilton",
-  812,  "Marian Louisa Montagu-Douglas-Scott",
+  12, "Alexandra of Denmark (Alix)",
+  27, "Victoria Eugenie (Ena)",
+  39, "Alexandra Fedorovna (Alix)",
+  41, "Dagmar (Marie) of Denmark",
+  84, "Elizabeth (Ella)",
+  85, "Mary (May)",
+  136, "Mary Adelaide (Fat Mary)",
+  155, "Michael (Mischa) Alexandrovich Romanov",
+  220, "Charlotte Augusta Louisa Hanover",
+  785, "Richard Curzon-Howe",
+  788, "James Hamilton",
+  812, "Marian Louisa Montagu-Douglas-Scott",
   1197, "Karl Theodor (Gackl)",
   1200, "Sophie Charlotte Auguste",
   1442, "Ferdinand Philippe Marie d'Orléans",
   1594, "John IV (the Conqueror) of Montfort",
   1709, "Henry Somerset",
-  2846,  "Françoise of Orléans",
+  2846, "Françoise of Orléans",
   2851, "Ernest Frederick III of Saxe-Hildburghausen",
   2944, "William Scott of Buccleuch Montagu-Douglas",
   2946, "Herbert Montagu Douglas Scott",
@@ -117,7 +118,6 @@ name_overrides <- tribble(
   2992, "Charlotte Legge",
   2993, "Henry Legge"
 )
-
 
 
 royal92 <- ped2fam(royal92, personID = "personID") %>%
@@ -150,37 +150,38 @@ royal92_cleaned <- royal92 %>%
     birth_date = parse_gedcom_date(standardize_partial_date(birth_date)),
     death_date = parse_gedcom_date(standardize_partial_date(death_date)),
     twinID = case_when(
-     personID == 223 ~ 222,
-     personID == 222 ~ 223,
-     personID == 1116 ~ 1117,
-     personID == 1117 ~ 1116,
-     personID == 1155 ~ 1156,
-     personID == 1156 ~ 1155,
-     TRUE ~ NA_real_
-  ),
-  attribute_title = str_replace_all(attribute_title, text_cleanup_regex) %>%
+      personID == 223 ~ 222,
+      personID == 222 ~ 223,
+      personID == 1116 ~ 1117,
+      personID == 1117 ~ 1116,
+      personID == 1155 ~ 1156,
+      personID == 1156 ~ 1155,
+      TRUE ~ NA_real_
+    ),
+    attribute_title = str_replace_all(attribute_title, text_cleanup_regex) %>%
       str_squish(),
-  sex = case_when(
-    personID %in% c(1098,
-                    1753,
-                    1755,
-                    1756,
-                    1803,
-                    2033,
-                    2509,
-                    2990,
-                    2991,
-                    2993
-                    ) ~ "M",
-    personID %in% c(1149,
-                    2992
-                    ) ~ "F",
-    TRUE ~ sex
-  ),
-  name = str_replace_all(name, text_cleanup_regex) %>%
-    str_squish()
+    sex = case_when(
+      personID %in% c(
+        1098,
+        1753,
+        1755,
+        1756,
+        1803,
+        2033,
+        2509,
+        2990,
+        2991,
+        2993
+      ) ~ "M",
+      personID %in% c(
+        1149,
+        2992
+      ) ~ "F",
+      TRUE ~ sex
+    ),
+    name = str_replace_all(name, text_cleanup_regex) %>%
+      str_squish()
   )
-
 
 
 royal92 <- royal92_cleaned %>%

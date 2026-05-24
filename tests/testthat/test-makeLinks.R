@@ -362,8 +362,10 @@ test_that("com2links handles mismatched matrix dimensions by subsetting to small
   expect_equal(length(all_output_ids), length(subset_ids))
 
   # check that full matrix has more unique IDs than the smaller matrix
-  expect_true(length(unique(c(dimnames(mit_ped_matrix)[[1]],
-                              dimnames(cn_ped_matrix)[[1]]))) > length(subset_ids))
+  expect_true(length(unique(c(
+    dimnames(mit_ped_matrix)[[1]],
+    dimnames(cn_ped_matrix)[[1]]
+  ))) > length(subset_ids))
 })
 
 test_that("com2links mismatched dimensions with two matrices", {

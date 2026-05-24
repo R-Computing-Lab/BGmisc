@@ -42,7 +42,6 @@ pheno <- pheno %>%
   )
 
 
-
 ped_pheno <- ped %>%
   full_join(pheno, by = c("ID", "dadID", "momID"))
 
@@ -71,7 +70,6 @@ ped_growth <- ped_pheno %>%
   mutate(day = as.numeric(str_remove(day, "p")))
 
 # growth graph over time p0, p15, p30, p45, p60, p90, where 0 is day 0, 15 is day 15, etc.
-
 
 
 library(ggplot2)

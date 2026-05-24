@@ -255,30 +255,28 @@ fitted_multi_ce <- mxRun(multi_model_ce)
 ```
 
 ```{r, include = FALSE, eval = !run_models && has_openmx}
-if( file.exists("extdata/fitted_multi_ace_tryhard.rds")){
-    fitted_multi_ace <- readRDS("extdata/fitted_multi_ace_tryhard.rds")
-  } else if (file.exists("vignettes/articles/extdata/fitted_multi_ace_tryhard.rds")) {
+if (file.exists("extdata/fitted_multi_ace_tryhard.rds")) {
+  fitted_multi_ace <- readRDS("extdata/fitted_multi_ace_tryhard.rds")
+} else if (file.exists("vignettes/articles/extdata/fitted_multi_ace_tryhard.rds")) {
   fitted_multi_ace <- readRDS("vignettes/articles/extdata/fitted_multi_ace_tryhard.rds")
 } else {
   fitted_multi_ace <- readRDS(rds_file_ace)
 }
 
-if( exists("vignettes/articles/extdata/fitted_multi_mace_tryhard.rds") ) {
+if (exists("vignettes/articles/extdata/fitted_multi_mace_tryhard.rds")) {
   fitted_multi_mace <- readRDS("vignettes/articles/extdata/fitted_multi_mace_tryhard.rds")
-} else  if( file.exists("extdata/fitted_multi_mace_tryhard.rds") ) {
+} else if (file.exists("extdata/fitted_multi_mace_tryhard.rds")) {
   fitted_multi_mace <- readRDS("extdata/fitted_multi_mace_tryhard.rds")
 } else {
   fitted_multi_mace <- readRDS(rds_file_mace)
 }
-if( file.exists("extdata/fitted_multi_ce_tryhard.rds") ) {
+if (file.exists("extdata/fitted_multi_ce_tryhard.rds")) {
   fitted_multi_ce <- readRDS("extdata/fitted_multi_ce_tryhard.rds")
-} else if ( file.exists("vignettes/articles/extdata/fitted_multi_ce_tryhard.rds") ) {
+} else if (file.exists("vignettes/articles/extdata/fitted_multi_ce_tryhard.rds")) {
   fitted_multi_ce <- readRDS("vignettes/articles/extdata/fitted_multi_ce_tryhard.rds")
 } else {
   fitted_multi_ce <- readRDS(rds_file_ce)
 }
-
-
 ```
 
 ### MACE Model Results
@@ -318,12 +316,10 @@ Now we can look at the results from the ACE model, which does not include the mi
 
 
 ```{r, eval = has_openmx && !is.null(fitted_multi_ace)}
-
-
 summary(fitted_multi_ace)
 summary(fitted_multi_ace, verbose = T)$CI
 
-#summary(fitted_multi_ace)$CI
+# summary(fitted_multi_ace)$CI
 
 
 total_var_ace <- sum(
@@ -346,7 +342,6 @@ cat("Unique environ. (Ver):", fitted_multi_ace$ModelOne$Ver$values / total_var_a
 ### CE Model Results
 
 ```{r, eval = has_openmx && !is.null(fitted_multi_ce)}
-
 summary(fitted_multi_ce)
 
 summary(fitted_multi_ce, verbose = T)$CI
@@ -363,9 +358,8 @@ As you can see, the CE model includes variance components for common nuclear env
 
 
 ```{r total-fam-results-ce, eval = has_openmx && !is.null(fitted_multi_ce)}
-
 cat("Common nuclear  (Vcn):", fitted_multi_ce$ModelOne$Vcn$values / total_var_ce, "\n")
-cat("Unique environ. (Ver):", fitted_multi_ce$ModelOne$Ver$values/ total_var_ce, "\n")
+cat("Unique environ. (Ver):", fitted_multi_ce$ModelOne$Ver$values / total_var_ce, "\n")
 ```
 
 
@@ -377,13 +371,11 @@ Now we can compare the ACE and MACE models to see if including the mitochondrial
 
 ```{r, eval = has_openmx && !is.null(fitted_multi_ace) && !is.null(fitted_multi_mace)}
 mxCompare(fitted_multi_mace, fitted_multi_ace)
-
 ```
 
 However, as you can see when we compare the ACE and MACE models, the inclusion of the mitochondrial component does not substantially change the estimates of additive genetic and common nuclear environmental variance, suggesting that the mitochondrial component may not be a major contributor to LRS in this dataset.
 
 ```{r, eval = has_openmx && !is.null(fitted_multi_ace) && !is.null(fitted_multi_ce)}
-
 mxCompare(fitted_multi_ace, fitted_multi_ce)
 ```
 

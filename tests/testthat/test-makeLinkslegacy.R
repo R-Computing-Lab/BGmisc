@@ -40,7 +40,7 @@ test_that("com2links legacy works", {
 
   expect_true(is.data.frame(result_beta))
   expect_true(all(c("ID1", "ID2", "addRel", "mitRel", "cnuRel")
-                  %in% colnames(result_beta)))
+  %in% colnames(result_beta)))
 
   result <- .com2links.legacy(
     ad_ped_matrix = ad_ped_matrix,

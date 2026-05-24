@@ -434,12 +434,27 @@ process_all_three <- function(
     if (length(u) > 0) {
       ID1 <- ids[u]
       tds <- data.frame(ID1 = ID1, ID2 = ID2)
-      tds[[name1]] <- if (!is.null(v1)) { idx <- match(u, v1$i); ifelse(is.na(idx), 0, v1$x[idx]) } else 0
-      tds[[name2]] <- if (!is.null(v2)) { idx <- match(u, v2$i); ifelse(is.na(idx), 0, v2$x[idx]) } else 0
-      tds[[name3]] <- if (!is.null(v3)) { idx <- match(u, v3$i); ifelse(is.na(idx), 0, v3$x[idx]) } else 0
-   #   tds[[name1]] <- if (!is.null(v1)) ifelse(u %in% v1$i, v1$x[match(u, v1$i)], 0) else 0
-   #   tds[[name2]] <- if (!is.null(v2)) ifelse(u %in% v2$i, v2$x[match(u, v2$i)], 0) else 0
-   #   tds[[name3]] <- if (!is.null(v3)) ifelse(u %in% v3$i, v3$x[match(u, v3$i)], 0) else 0
+      tds[[name1]] <- if (!is.null(v1)) {
+        idx <- match(u, v1$i)
+        ifelse(is.na(idx), 0, v1$x[idx])
+      } else {
+        0
+      }
+      tds[[name2]] <- if (!is.null(v2)) {
+        idx <- match(u, v2$i)
+        ifelse(is.na(idx), 0, v2$x[idx])
+      } else {
+        0
+      }
+      tds[[name3]] <- if (!is.null(v3)) {
+        idx <- match(u, v3$i)
+        ifelse(is.na(idx), 0, v3$x[idx])
+      } else {
+        0
+      }
+      #   tds[[name1]] <- if (!is.null(v1)) ifelse(u %in% v1$i, v1$x[match(u, v1$i)], 0) else 0
+      #   tds[[name2]] <- if (!is.null(v2)) ifelse(u %in% v2$i, v2$x[match(u, v2$i)], 0) else 0
+      #   tds[[name3]] <- if (!is.null(v3)) ifelse(u %in% v3$i, v3$x[match(u, v3$i)], 0) else 0
 
       if (drop_upper_triangular) {
         tds <- tds[tds$ID1 <= tds$ID2, ]
@@ -534,10 +549,20 @@ process_two <- function(
     if (length(u) > 0) {
       ID1 <- ids[u]
       tds <- data.frame(ID1 = ID1, ID2 = ID2)
-      tds[[name1]] <- if (!is.null(v1)) { idx <- match(u, v1$i); ifelse(is.na(idx), 0, v1$x[idx]) } else 0
-      tds[[name2]] <- if (!is.null(v2)) { idx <- match(u, v2$i); ifelse(is.na(idx), 0, v2$x[idx]) } else 0
-    #  tds[[name1]] <- if (!is.null(v1)) ifelse(u %in% v1$i, v1$x[match(u, v1$i)], 0) else 0
-    #  tds[[name2]] <- if (!is.null(v2)) ifelse(u %in% v2$i, v2$x[match(u, v2$i)], 0) else 0
+      tds[[name1]] <- if (!is.null(v1)) {
+        idx <- match(u, v1$i)
+        ifelse(is.na(idx), 0, v1$x[idx])
+      } else {
+        0
+      }
+      tds[[name2]] <- if (!is.null(v2)) {
+        idx <- match(u, v2$i)
+        ifelse(is.na(idx), 0, v2$x[idx])
+      } else {
+        0
+      }
+      #  tds[[name1]] <- if (!is.null(v1)) ifelse(u %in% v1$i, v1$x[match(u, v1$i)], 0) else 0
+      #  tds[[name2]] <- if (!is.null(v2)) ifelse(u %in% v2$i, v2$x[match(u, v2$i)], 0) else 0
 
       if (drop_upper_triangular) {
         tds <- tds[tds$ID1 <= tds$ID2, ]

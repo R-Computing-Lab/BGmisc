@@ -36,27 +36,27 @@ ped2focal <- function(
   ped,
   component,
   focal_id,
-  personID  = "ID",
-  col_name  = NULL,
-  max_gen   = 25,
-  sparse    = TRUE,
-  verbose   = FALSE,
-  gc        = FALSE,
-  flatten_diag         = FALSE,
+  personID = "ID",
+  col_name = NULL,
+  max_gen = 25,
+  sparse = TRUE,
+  verbose = FALSE,
+  gc = FALSE,
+  flatten_diag = FALSE,
   standardize_colnames = TRUE,
-  transpose_method     = "tcrossprod",
-  chunk_size           = 1000L,
-  keep_ids             = NULL,
-  adjacency_method     = "direct",
-  saveable   = FALSE,
-  resume     = FALSE,
-  save_rate  = 5,
-  save_rate_gen     = save_rate,
+  transpose_method = "tcrossprod",
+  chunk_size = 1000L,
+  keep_ids = NULL,
+  adjacency_method = "direct",
+  saveable = FALSE,
+  resume = FALSE,
+  save_rate = 5,
+  save_rate_gen = save_rate,
   save_rate_parlist = 100000 * save_rate,
-  save_path  = "checkpoint/",
-  compress   = TRUE,
-  mz_twins   = FALSE,
-  mz_method  = "addtwins",
+  save_path = "checkpoint/",
+  compress = TRUE,
+  mz_twins = FALSE,
+  mz_method = "addtwins",
   force_symmetric = TRUE,
   ...
 ) {
@@ -103,9 +103,9 @@ ped2focal <- function(
     )
   }
 
-  focal_col  <- mat[, focal_key]
-  ped_ids    <- as.character(ped[[personID]])
-  idx        <- match(ped_ids, rownames(mat))
+  focal_col <- mat[, focal_key]
+  ped_ids <- as.character(ped[[personID]])
+  idx <- match(ped_ids, rownames(mat))
   ped[[col_name]] <- unname(focal_col[idx])
 
   # Step 1: fill all NAs with 0 — individuals in the pedigree but not in the

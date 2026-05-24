@@ -34,7 +34,7 @@ test_that("ped2addFocal focal person self-relatedness is preserved from matrix d
   data(hazard)
 
   result <- ped2addFocal(hazard, focal_id = 1)
-  mat    <- ped2add(hazard, sparse = FALSE)
+  mat <- ped2add(hazard, sparse = FALSE)
   expect_equal(
     result$additiveRel_1[result$ID == 1],
     mat["1", "1"]
@@ -61,9 +61,9 @@ test_that("ped2addFocal unrelated individuals get zero when no keep_ids supplied
 
 test_that("ped2addFocal values are correctly aligned to pedigree rows", {
   data(hazard)
-  focal    <- hazard$ID[sample(nrow(hazard), 1)]  # choose random focal to maximize chance of misalignment if it occurs
-  result   <- ped2addFocal(hazard, focal_id = focal)
-  mat      <- ped2add(hazard, sparse = FALSE)
+  focal <- hazard$ID[sample(nrow(hazard), 1)] # choose random focal to maximize chance of misalignment if it occurs
+  result <- ped2addFocal(hazard, focal_id = focal)
+  mat <- ped2add(hazard, sparse = FALSE)
   col_name <- paste0("additiveRel_", focal)
 
   # For every row in the pedigree, confirm the focal column value matches
@@ -80,9 +80,9 @@ test_that("ped2addFocal values are correctly aligned to pedigree rows", {
 
 test_that("ped2focal mitochondrial values are correctly aligned to pedigree rows", {
   data(hazard)
-  focal    <- hazard$ID[sample(nrow(hazard), 1)]  # choose random focal to maximize chance of misalignment if it occurs
-  result   <- ped2focal(hazard, component = "mitochondrial", focal_id = focal)
-  mat      <- ped2mit(hazard, sparse = FALSE)
+  focal <- hazard$ID[sample(nrow(hazard), 1)] # choose random focal to maximize chance of misalignment if it occurs
+  result <- ped2focal(hazard, component = "mitochondrial", focal_id = focal)
+  mat <- ped2mit(hazard, sparse = FALSE)
   col_name <- paste0("mitochondrialRel_", focal)
 
   for (i in seq_len(nrow(result))) {
@@ -97,11 +97,11 @@ test_that("ped2focal mitochondrial values are correctly aligned to pedigree rows
 
 test_that("ped2addFocal alignment holds when pedigree rows are shuffled", {
   data(hazard)
-  focal      <- hazard$ID[nrow(hazard)]  # choose focal from last row to maximize chance of misalignment if it occurs
+  focal <- hazard$ID[nrow(hazard)] # choose focal from last row to maximize chance of misalignment if it occurs
   hazard_shuffled <- hazard[sample(nrow(hazard)), ]
-  result     <- ped2addFocal(hazard_shuffled, focal_id = focal)
-  mat        <- ped2add(hazard, sparse = FALSE)
-  col_name   <- paste0("additiveRel_", focal)
+  result <- ped2addFocal(hazard_shuffled, focal_id = focal)
+  mat <- ped2add(hazard, sparse = FALSE)
+  col_name <- paste0("additiveRel_", focal)
 
   for (i in seq_len(nrow(result))) {
     id <- as.character(result$ID[i])
@@ -116,7 +116,7 @@ test_that("ped2addFocal alignment holds when pedigree rows are shuffled", {
 test_that("ped2addFocal excluded individuals get NA when keep_ids supplied", {
   data(hazard)
   kept_ids <- hazard$ID[1:10]
-  result   <- ped2addFocal(hazard, focal_id = 1, keep_ids = kept_ids)
+  result <- ped2addFocal(hazard, focal_id = 1, keep_ids = kept_ids)
 
   excluded_rows <- !result$ID %in% kept_ids
   expect_true(all(is.na(result$additiveRel_1[excluded_rows])))
@@ -125,7 +125,7 @@ test_that("ped2addFocal excluded individuals get NA when keep_ids supplied", {
 test_that("ped2addFocal included individuals are not NA when keep_ids supplied", {
   data(hazard)
   kept_ids <- hazard$ID[1:10]
-  result   <- ped2addFocal(hazard, focal_id = 1, keep_ids = kept_ids)
+  result <- ped2addFocal(hazard, focal_id = 1, keep_ids = kept_ids)
 
   included_rows <- result$ID %in% kept_ids
   exclude_rows <- !included_rows
@@ -153,9 +153,9 @@ test_that("ped2focal errors when focal_id not in pedigree", {
 
 test_that("ped2addFocal values are correctly aligned to pedigree rows for inbreeding dataset", {
   data(inbreeding)
-  focal    <- 1
-  result   <- ped2addFocal(inbreeding, focal_id = focal)
-  mat      <- ped2add(inbreeding, sparse = FALSE)
+  focal <- 1
+  result <- ped2addFocal(inbreeding, focal_id = focal)
+  mat <- ped2add(inbreeding, sparse = FALSE)
   col_name <- paste0("additiveRel_", focal)
 
   for (i in seq_len(nrow(result))) {
@@ -170,9 +170,9 @@ test_that("ped2addFocal values are correctly aligned to pedigree rows for inbree
 
 test_that("ped2focal mitochondrial values are correctly aligned for inbreeding dataset", {
   data(inbreeding)
-  focal    <- 1
-  result   <- ped2focal(inbreeding, component = "mitochondrial", focal_id = focal)
-  mat      <- ped2mit(inbreeding, sparse = FALSE)
+  focal <- 1
+  result <- ped2focal(inbreeding, component = "mitochondrial", focal_id = focal)
+  mat <- ped2mit(inbreeding, sparse = FALSE)
   col_name <- paste0("mitochondrialRel_", focal)
 
   for (i in seq_len(nrow(result))) {
@@ -187,11 +187,11 @@ test_that("ped2focal mitochondrial values are correctly aligned for inbreeding d
 
 test_that("ped2addFocal alignment holds when inbreeding pedigree rows are shuffled", {
   data(inbreeding)
-  focal             <- inbreeding$ID[nrow(inbreeding)]
+  focal <- inbreeding$ID[nrow(inbreeding)]
   inbreeding_shuffled <- inbreeding[sample(nrow(inbreeding)), ]
-  result            <- ped2addFocal(inbreeding_shuffled, focal_id = focal)
-  mat               <- ped2add(inbreeding, sparse = FALSE)
-  col_name          <- paste0("additiveRel_", focal)
+  result <- ped2addFocal(inbreeding_shuffled, focal_id = focal)
+  mat <- ped2add(inbreeding, sparse = FALSE)
+  col_name <- paste0("additiveRel_", focal)
 
   for (i in seq_len(nrow(result))) {
     id <- as.character(result$ID[i])
@@ -205,52 +205,55 @@ test_that("ped2addFocal alignment holds when inbreeding pedigree rows are shuffl
 
 test_that("ped2mitFocal values are correctly aligned to pedigree rows", {
   data(hazard)
-  focal    <- 1
-  result   <- ped2mitFocal(hazard, focal_id = focal)
-  mat      <- ped2mit(hazard, sparse = FALSE)
+  focal <- 1
+  result <- ped2mitFocal(hazard, focal_id = focal)
+  mat <- ped2mit(hazard, sparse = FALSE)
   col_name <- paste0("mitochondrialRel_", focal)
 
   expect_true(col_name %in% colnames(result))
   for (i in seq_len(nrow(result))) {
     id <- as.character(result$ID[i])
     expect_equal(result[[col_name]][i], mat[id, as.character(focal)],
-                 label = paste("mitFocal row", i, "ID", id))
+      label = paste("mitFocal row", i, "ID", id)
+    )
   }
 })
 
 test_that("ped2mtFocal is an alias for ped2mitFocal", {
   data(hazard)
   result_mit <- ped2mitFocal(hazard, focal_id = 1)
-  result_mt  <- ped2mtFocal(hazard, focal_id = 1)
+  result_mt <- ped2mtFocal(hazard, focal_id = 1)
   expect_equal(result_mit, result_mt)
 })
 
 test_that("ped2cnFocal values are correctly aligned to pedigree rows", {
   data(hazard)
-  focal    <- 1
-  result   <- ped2cnFocal(hazard, focal_id = focal)
-  mat      <- ped2cn(hazard, sparse = FALSE)
+  focal <- 1
+  result <- ped2cnFocal(hazard, focal_id = focal)
+  mat <- ped2cn(hazard, sparse = FALSE)
   col_name <- paste0("common_nuclearRel_", focal)
 
   expect_true(col_name %in% colnames(result))
   for (i in seq_len(nrow(result))) {
     id <- as.character(result$ID[i])
     expect_equal(result[[col_name]][i], mat[id, as.character(focal)],
-                 label = paste("cnFocal row", i, "ID", id))
+      label = paste("cnFocal row", i, "ID", id)
+    )
   }
 })
 
 test_that("ped2cnFocal alignment holds for inbreeding dataset", {
   data(inbreeding)
-  focal     <- 1
+  focal <- 1
   result_cn <- ped2cnFocal(inbreeding, focal_id = focal)
-  mat_cn    <- ped2cn(inbreeding, sparse = FALSE)
-  col_cn    <- paste0("common_nuclearRel_", focal)
+  mat_cn <- ped2cn(inbreeding, sparse = FALSE)
+  col_cn <- paste0("common_nuclearRel_", focal)
 
   for (i in seq_len(nrow(result_cn))) {
     id <- as.character(result_cn$ID[i])
     expect_equal(result_cn[[col_cn]][i], mat_cn[id, as.character(focal)],
-                 label = paste("inbreeding cnFocal row", i, "ID", id))
+      label = paste("inbreeding cnFocal row", i, "ID", id)
+    )
   }
 })
 

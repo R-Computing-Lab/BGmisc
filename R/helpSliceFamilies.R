@@ -63,21 +63,21 @@
 # @param verbose Print file names if TRUE
 # @keywords internal
 .write_bin_data <- function(data, range_min, range_max,
-                            mit_val=NULL,
+                            mit_val = NULL,
                             data_directory, verbose = FALSE) {
   if (!is.null(mit_val)) {
-  range_data <- data[
-    base::round(data$addRel, 6) >= range_min &
-      base::round(data$addRel, 6) < range_max &
-      data$mitRel == mit_val,
-  ]
-  file_path <- file.path(data_directory, paste0("df_mt", mit_val, "_r", range_min, "-r", range_max, ".csv"))
+    range_data <- data[
+      base::round(data$addRel, 6) >= range_min &
+        base::round(data$addRel, 6) < range_max &
+        data$mitRel == mit_val,
+    ]
+    file_path <- file.path(data_directory, paste0("df_mt", mit_val, "_r", range_min, "-r", range_max, ".csv"))
   } else {
     range_data <- data[
       base::round(data$addRel, 6) >= range_min &
         base::round(data$addRel, 6) < range_max
     ]
-   file_path <- file.path(data_directory, paste0("df_r", range_min, "-r", range_max, ".csv"))
+    file_path <- file.path(data_directory, paste0("df_r", range_min, "-r", range_max, ".csv"))
   }
 
   if (base::nrow(range_data) > 0) {

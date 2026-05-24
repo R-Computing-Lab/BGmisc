@@ -40,7 +40,7 @@ johnjane_gedcom_content <- c(
   "1 SEX F"
 )
 
-JD_gedcom_content <- johnjane_gedcom_content[c(1,2,4)]
+JD_gedcom_content <- johnjane_gedcom_content[c(1, 2, 4)]
 
 FAMC_gedcom_content <- c(
   JD_gedcom_content,
@@ -122,7 +122,7 @@ test_that("readGedcom combines duplicate columns correctly", {
 
 test_that("readGedcom removes empty columns correctly", {
   # Create a temporary GEDCOM file for testing
-  gedcom_content <-JD_gedcom_content
+  gedcom_content <- JD_gedcom_content
 
   temp_file <- tempfile(fileext = ".ged")
   writeLines(gedcom_content, temp_file)

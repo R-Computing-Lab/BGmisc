@@ -135,23 +135,23 @@ simulatePedigree <- function(kpc = 3,
   df_Fam <- df_Fam[, 1:7]
   df_Fam <- df_Fam[!(is.na(df_Fam$pat) & is.na(df_Fam$mat) & is.na(df_Fam$spID)), ]
 
-  names(df_Fam) <-  c("fam", personID, "gen", dadID, momID, spouseID, "sex")
+  names(df_Fam) <- c("fam", personID, "gen", dadID, momID, spouseID, "sex")
 
   # connect the detached members
   df_Fam[is.na(df_Fam[[momID]]) & is.na(df_Fam[[dadID]]) & df_Fam$gen > 1, ]
 
 
-  if(remap_ids) {
+  if (remap_ids) {
     # Remap all ID columns to sequential integers (1, 2, 3, ...) in row order,
     # so the final data frame has tidy consecutive IDs regardless of fam_shift offsets.
-    old_ids <- rbind( df_Fam[[personID]],  df_Fam[[momID]],  df_Fam[[dadID]],  df_Fam[[spouseID]])
+    old_ids <- rbind(df_Fam[[personID]], df_Fam[[momID]], df_Fam[[dadID]], df_Fam[[spouseID]])
     old_ids <- unique(old_ids[!is.na(old_ids)])
     id_map <- setNames(seq_along(old_ids), as.character(old_ids))
 
-    df_Fam[[personID]] <- as.integer(id_map[as.character( df_Fam[[personID]])])
-    df_Fam[[momID]] <- as.integer(id_map[as.character( df_Fam[[momID]])])
-    df_Fam[[dadID]] <- as.integer(id_map[as.character( df_Fam[[dadID]])])
-    df_Fam[[spouseID]] <- as.integer(id_map[as.character( df_Fam[[spouseID]])])
+    df_Fam[[personID]] <- as.integer(id_map[as.character(df_Fam[[personID]])])
+    df_Fam[[momID]] <- as.integer(id_map[as.character(df_Fam[[momID]])])
+    df_Fam[[dadID]] <- as.integer(id_map[as.character(df_Fam[[dadID]])])
+    df_Fam[[spouseID]] <- as.integer(id_map[as.character(df_Fam[[spouseID]])])
   }
   df_Fam
 }
@@ -199,8 +199,7 @@ simulatePedigrees <- function(n_fam = 2,
                               code_male = "M",
                               code_female = "F",
                               remap_ids = TRUE,
-                              beta = FALSE
-                              ) {
+                              beta = FALSE) {
   n_fam <- as.integer(n_fam)
   if (is.na(n_fam) || n_fam < 1L) {
     stop("'n_fam' must be a positive integer.")
@@ -230,18 +229,18 @@ simulatePedigrees <- function(n_fam = 2,
     ped_list[[i]] <- ped_i
   }
   combined <- as.data.frame(data.table::rbindlist(ped_list))
-  names(combined) <-  c("fam", personID, "gen", dadID, momID, spouseID, "sex")
-if(remap_ids) {
-  # Remap all ID columns to sequential integers (1, 2, 3, ...) in row order,
-  # so the final data frame has tidy consecutive IDs regardless of fam_shift offsets.
-  old_ids <- rbind(combined[[personID]], combined[[momID]], combined[[dadID]], combined[[spouseID]])
-  old_ids <- unique(old_ids[!is.na(old_ids)])
-  id_map <- setNames(seq_along(old_ids), as.character(old_ids))
+  names(combined) <- c("fam", personID, "gen", dadID, momID, spouseID, "sex")
+  if (remap_ids) {
+    # Remap all ID columns to sequential integers (1, 2, 3, ...) in row order,
+    # so the final data frame has tidy consecutive IDs regardless of fam_shift offsets.
+    old_ids <- rbind(combined[[personID]], combined[[momID]], combined[[dadID]], combined[[spouseID]])
+    old_ids <- unique(old_ids[!is.na(old_ids)])
+    id_map <- setNames(seq_along(old_ids), as.character(old_ids))
 
-  combined[[personID]] <- as.integer(id_map[as.character(combined[[personID]])])
-  combined[[momID]] <- as.integer(id_map[as.character(combined[[momID]])])
-  combined[[dadID]] <- as.integer(id_map[as.character(combined[[dadID]])])
-  combined[[spouseID]] <- as.integer(id_map[as.character(combined[[spouseID]])])
-}
+    combined[[personID]] <- as.integer(id_map[as.character(combined[[personID]])])
+    combined[[momID]] <- as.integer(id_map[as.character(combined[[momID]])])
+    combined[[dadID]] <- as.integer(id_map[as.character(combined[[dadID]])])
+    combined[[spouseID]] <- as.integer(id_map[as.character(combined[[spouseID]])])
+  }
   combined
 }
