@@ -208,7 +208,7 @@ splitIndividuals <- function(lines, verbose = FALSE) {
   if (length(indi_idx) == 0) {
     return(list())
   }
-  record_idx <- grep("@ (INDI|FAM|SOUR|REPO|OBJE|SUBM|SUBN|NOTE|_MTCAT)\\b| TRLR\\b", lines)
+  record_idx <- grep("@ (INDI|FAM|SOUR|REPO|OBJE|SUB[MN]|NOTE|_MTCAT)\\b| TRLR\\b", lines)
 
 
   blocks <- list()
