@@ -31,8 +31,7 @@ getGenDist(
     (fewest combined steps to reach a shared ancestor).}
   \item{\code{"mrca_max"}}{Total steps via the most distant common ancestor
     (most combined steps to reach a shared ancestor).}
-  \item{\code{"mrca_all"}}{Aggregated distance across all common ancestors
-    — aggregation strategy to be defined.}
+  \item{\code{"mrca_all"}}{Aggregated distance across all common ancestors}
 }}
 
 \item{personID}{Character. ID column name. Default \code{"ID"}.}

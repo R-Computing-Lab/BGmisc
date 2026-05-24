@@ -23,7 +23,7 @@ A symmetric numeric \code{n x n} matrix; \code{NA} for unrelated
 \description{
 Given the \code{n x n} ancestor distance matrix returned by
 \code{ped2com(component = "distance")}, computes a pairwise distance matrix
-\code{D} where \code{D[i, j]} summarises the relationship between individuals
+\code{D} where \code{D[i, j]} summarizes the relationship between individuals
 \code{i} and \code{j} through their common ancestors.
 }
 \details{

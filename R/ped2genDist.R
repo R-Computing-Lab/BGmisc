@@ -1,10 +1,8 @@
-# ── Internal helper ───────────────────────────────────────────────────────────
-
 #' Reduce an ancestor distance matrix to a pairwise generational distance matrix
 #'
 #' Given the \code{n x n} ancestor distance matrix returned by
 #' \code{ped2com(component = "distance")}, computes a pairwise distance matrix
-#' \code{D} where \code{D[i, j]} summarises the relationship between individuals
+#' \code{D} where \code{D[i, j]} summarizes the relationship between individuals
 #' \code{i} and \code{j} through their common ancestors.
 #'
 #' For each potential common ancestor column \code{c}, the combined step count
@@ -62,21 +60,19 @@
     D[D == -Inf]  <- NA_real_
 
   } else {
-    # mrca_all — aggregation strategy across ALL common ancestors is
+    # mrca_all - aggregation strategy across ALL common ancestors is
     # domain-specific (sum? mean? something else?).
     # TODO: define aggregation and replace this stop().
     # Options to consider:
-    #   sum(total_steps)  — total path weight through every shared ancestor
-    #   mean(total_steps) — average distance across all shared ancestors
+    #   sum(total_steps)  - total path weight through every shared ancestor
+    #   mean(total_steps) - average distance across all shared ancestors
     # Your domain knowledge of what "all paths" should mean for pedigree
     # analysis goes here. For inbred pedigrees this will differ substantially.
-    stop("mrca_all aggregation not yet implemented — please define the aggregation strategy.")
+    stop("mrca_all aggregation not yet implemented - please define the aggregation strategy.")
   }
 
   D
 }
-
-# ── User-facing functions ─────────────────────────────────────────────────────
 
 #' Compute the generational distance between two individuals
 #'
@@ -96,8 +92,7 @@
 #'       (fewest combined steps to reach a shared ancestor).}
 #'     \item{\code{"mrca_max"}}{Total steps via the most distant common ancestor
 #'       (most combined steps to reach a shared ancestor).}
-#'     \item{\code{"mrca_all"}}{Aggregated distance across all common ancestors
-#'       — aggregation strategy to be defined.}
+#'     \item{\code{"mrca_all"}}{Aggregated distance across all common ancestors}
 #'   }
 #' @param personID Character. ID column name. Default \code{"ID"}.
 #' @param momID    Character. Mother ID column name. Default \code{"momID"}.
