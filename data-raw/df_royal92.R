@@ -206,6 +206,7 @@ royal92_cleaned <- royal92 %>%
     death_date = parse_gedcom_date(standardize_partial_date(death_date)),
     attribute_title = case_when(
       personID == 2943 ~ "Duke of Buccleuch",
+      personID == 146 ~ "Countess of Strathmore and Kinghorne",
       TRUE ~ attribute_title
     ),
     twinID = case_when(
