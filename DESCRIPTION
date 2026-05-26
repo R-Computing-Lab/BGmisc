@@ -1,6 +1,6 @@
 Package: BGmisc
 Title: An R Package for Extended Behavior Genetics Analysis
-Version: 1.7.0.1.1
+Version: 1.8.0
 Authors@R: c(
     person("S. Mason", "Garrison", , "garrissm@wfu.edu", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-4804-6003")),
@@ -60,4 +60,4 @@ Encoding: UTF-8
 Language: en-US
 LazyData: true
 Config/roxygen2/version: 8.0.0
-RoxygenNote: 7.3.3
+RoxygenNote: 8.0.0

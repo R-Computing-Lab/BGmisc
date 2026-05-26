@@ -1,7 +1,5 @@
 # BGmisc NEWS
-
-# Development version:
-## BGmisc 1.7.0.1.1
+## BGmisc 1.8.0
 * Optimized gedcom reader, com2links for speed and memory usage, with a focus on large pedigrees
 * Fixed bug in gedcom reader that resulted in document records being added to the final person in the pedigree
 * Optimized sliceFamilies to be more abstract, and no longer require mtdna
@@ -11,7 +9,7 @@
 * Added alignPhenToMatrix function to align phenotypic data to the order of the relatedness matrix
 * Added `simulatePedigrees()` function to easily simulate multiple families at once and return them as a single combined data frame
 * Refactor openmx wrapper functions
-* Added `ped2focal()` core function and component-specific wrappers (`ped2addFocal()`, `ped2mitFocal()`/`ped2mtFocal()`, `ped2cnFocal()`, ped2genFocal) to compute relatedness between all pedigree members and a single focal individual, appending the result as a new column on the pedigree data frame. `ped2focal()` is a general function that can be used with any relatedness method, while the component-specific wrappers provide convenient shortcuts for common use cases. Note that Individuals excluded via `keep_ids` are coded as `NA`; all others receive their computed value with genuine zeros made explicit.
+* Added `ped2focal()` core function and component-specific wrappers (`ped2addFocal()`, `ped2mitFocal()`/`ped2mtFocal()`, `ped2cnFocal()`, `ped2genFocal`) to compute relatedness between all pedigree members and a single focal individual, appending the result as a new column on the pedigree data frame. `ped2focal()` is a general function that can be used with any relatedness method, while the component-specific wrappers provide convenient shortcuts for common use cases. Note that Individuals excluded via `keep_ids` are coded as `NA`; all others receive their computed value with genuine zeros made explicit.
 * Added `getGenDist()`, `ped2genDistFocal()`, and `ped2genDist()` for computing generational distance between individuals. Supports five methods: `rank` (absolute generation-number difference via `ped2gen`), `path` (minimum parent-child steps through any shared ancestor), `mrca_min` (total steps via the most recent common ancestor), `mrca_max` (total steps via the most distant common ancestor), and `mrca_all` (aggregation across all common ancestors — strategy to be defined). Output forms cover single pairs, a focal column appended to the pedigree, and a full n×n pairwise matrix.
 * Optimized `countPatternRows()` in the GEDCOM reader to use `fixed = TRUE` string matching and a pre-extracted column vector, reducing redundant work across 31 pattern passes
 
@@ -55,7 +53,7 @@
 
 
 # BGmisc 1.5.0
-## CRAN submission
+* CRAN submission
 * Removed ASOIAF dataset from BGmisc, now in ggpedigree
 * Enhancing potter family tree
 * updated tests to handle the transition of ASOIAF data to ggpedigree
@@ -86,7 +84,7 @@
 # BGmisc 1.4.2
 * Added twinIDs for potter and asoiaf pedigrees
 * Added twinID to simulatePedigree function, and extended to include MZ, DZ, and SS twins.
-* Added a few more tests for simulatePedigree
+* Added additional tests for simulatePedigree
 * Added function to easily add new person to a pedigree
 * Updated ASOIAF pedigree to reduce missing parents
 * Added a few more tests for simulatePedigree helpers
