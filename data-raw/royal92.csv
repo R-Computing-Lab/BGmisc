@@ -152,54 +152,54 @@ personID,famID,momID,dadID,name,sex,birth_date,death_date,attribute_title,twinID
 151,1,45,44,Serge Alexandrovich Romanov,M,1857-05-11,1905-02-17,Grand Duke,NA
 152,1,45,44,Paul Alexandrovich Romanov,M,1860-10-03,1919-01-28,Grand Duke,NA
 153,1,41,40,George Alexandrovich Romanov,M,1871-05-09,1899-07-10,Grand Duke,NA
-154,1,41,40,Xenia Romanov,F,1875-06-15,1960-04-20,Grand Duchess,NA
+154,1,41,40,Xenia Romanov,F,1875-04-06,1960-04-20,Grand Duchess,NA
 155,1,41,40,Michael (Mischa) Alexandrovich Romanov,M,1878-12-04,1918-06-13,Grand Duke,NA
-156,1,41,40,Olga Alexandrovna Romanov,F,1882-06-01,1960-11-24,Grand Duchess,NA
-157,1,NA,2682,Marie Pavlovna,F,1854-06-15,1920-06-15,Grand Duchess,NA
-158,1,157,149,Cyril Vladimirovitch Romanov,M,1876-06-15,1938-06-15,Grand Duke,NA
-159,1,157,149,Boris Romanov,M,1877-06-15,1943-06-15,Grand Duke,NA
-160,1,157,149,Andrei (Andrew) Vladimirovich Romanov,M,1879-06-15,1956-06-15,Grand Duke,NA
-161,8,NA,2926,Mathilde (Maria) Krzesinska,F,1872-06-15,1971-06-15,NA,NA
-162,1,556,553,Frederick William III,M,1770-06-15,1840-06-15,King of Prussia,NA
-163,1,228,227,Alexandra of Greece,F,1870-06-15,1891-06-15,Princess,NA
-164,1,163,152,Dmitri Pavlovich Romanov,M,1891-06-15,1941-06-15,Grand Duke,NA
-165,1,354,353,Nicholas Romanov,M,1850-06-15,1918-06-15,NA,NA
+156,1,41,40,Olga Alexandrovna Romanov,F,1882-06-13,1960-11-24,Grand Duchess,NA
+157,1,NA,2682,Marie Pavlovna,F,1854-05-14,1920-09-06,Grand Duchess,NA
+158,1,157,149,Cyril Vladimirovitch Romanov,M,1876-10-12,1938-10-12,Grand Duke,NA
+159,1,157,149,Boris Romanov,M,1877-11-24,1943-11-09,Grand Duke,NA
+160,1,157,149,Andrei (Andrew) Vladimirovich Romanov,M,1879-05-14,1956-10-30,Grand Duke,NA
+161,8,NA,2926,Mathilde (Maria) Krzesinska,F,1872-08-31,1971-12-06,NA,NA
+162,1,556,553,Frederick William III,M,1770-08-03,1840-06-07,King of Prussia,NA
+163,1,228,227,Alexandra of Greece,F,1870-08-30,1891-09-24,Princess,NA
+164,1,163,152,Dmitri Pavlovich Romanov,M,1891-09-18,1942-03-05,Grand Duke,NA
+165,1,354,353,Nicholas Romanov,M,1850-02-14,1918-01-26,NA,NA
 166,1,154,2675,Irina,F,1895-07-15,1970-02-26,NA,NA
 167,9,NA,NA,Felix Yussoupov,M,1887-03-23,1967-09-27,NA,NA
 168,1,170,169,Sarah Margaret Ferguson,F,1959-10-15,NA,Duchess of York,NA
-169,1,812,811,Ronald Ivor Ferguson,M,1931-06-15,NA,Major,NA
-170,1,821,820,Susan Mary Wright,F,1937-06-15,NA,NA,NA
+169,1,812,811,Ronald Ivor Ferguson,M,1931-10-10,2003-03-16,Major,NA
+170,1,821,820,Susan Mary Wright,F,1937-06-09,1998-09-19,NA,NA
 171,2,NA,NA,Teackle Wallis Warfield,M,NA,NA,NA,NA
 172,2,NA,NA,Alice Montague,F,NA,NA,NA,NA
-173,1,146,145,Violet Hyacinth Bowes-Lyon,F,1882-06-15,1893-06-15,NA,NA
-174,1,146,145,Mary Frances Bowes-Lyon,F,1883-06-15,1961-06-15,NA,NA
-175,1,146,145,Patrick Bowes-Lyon,M,1884-06-15,1949-06-15,NA,NA
-176,1,146,145,John Herbert Bowes-Lyon,M,1886-06-15,1930-06-15,NA,NA
-177,1,146,145,Alexander Francis Bowes-Lyon,M,1887-06-15,1911-06-15,NA,NA
-178,1,146,145,Fergus Bowes-Lyon,M,1889-06-15,1915-06-15,NA,NA
-179,1,146,145,Rose Bowes-Lyon,F,1890-06-15,1967-06-15,NA,NA
-180,1,146,145,Michael Claude Bowes-Lyon,M,1893-06-15,1953-06-15,NA,NA
-181,1,146,145,David Bowes-Lyon,M,1902-05-02,1961-06-15,Sir,NA
+173,1,146,145,Violet Hyacinth Bowes-Lyon,F,1882-04-17,1893-10-17,NA,NA
+174,1,146,145,Mary Frances Bowes-Lyon,F,1883-08-30,1961-02-08,NA,NA
+175,1,146,145,Patrick Bowes-Lyon,M,1884-09-22,1949-05-25,NA,NA
+176,1,146,145,John Herbert Bowes-Lyon,M,1886-04-01,1930-02-07,NA,NA
+177,1,146,145,Alexander Francis Bowes-Lyon,M,1887-04-14,1911-10-19,NA,NA
+178,1,146,145,Fergus Bowes-Lyon,M,1889-04-18,1915-09-27,NA,NA
+179,1,146,145,Rose Bowes-Lyon,F,1890-05-06,1967-11-17,NA,NA
+180,1,146,145,Michael Claude Bowes-Lyon,M,1893-10-01,1953-05-01,NA,NA
+181,1,146,145,David Bowes-Lyon,M,1902-05-02,1961-09-13,Sir,NA
 182,1,185,184,Claude Bowes-Lyon,M,1824-07-21,1904-02-16,Earl,NA
-183,1,365,364,Frances Dora Smith,F,1833-06-15,1922-06-15,NA,NA
+183,1,365,364,Frances Dora Smith,F,1832-07-29,1922-02-05,NA,NA
 184,1,188,187,Thomas Lyon-Bowes,M,1773-06-15,1846-06-15,NA,NA
 185,1,NA,NA,Mary Carpenter,F,NA,NA,NA,NA
 186,1,185,184,Thomas George Lyon-Bowes,M,1822-06-15,1865-06-15,NA,NA
-187,1,NA,NA,John Lyon,M,1737-06-15,1776-06-15,NA,NA
-188,1,NA,NA,Mary Eleanor Bowes,F,1749-06-15,1800-06-15,NA,NA
-189,1,188,187,John Lyon Bowes,M,1769-06-15,1820-06-15,NA,NA
+187,1,NA,NA,John Lyon,M,1737-07-17,1776-03-07,NA,NA
+188,1,NA,NA,Mary Eleanor Bowes,F,1749-02-24,1800-04-28,NA,NA
+189,1,188,187,John Lyon Bowes,M,1769-04-14,1820-07-03,NA,NA
 190,10,NA,NA,Andrew Robinson Stoney,M,NA,NA,NA,NA
-191,11,NA,NA,Elphinstone,M,1869-06-15,1955-06-15,Lord,NA
-192,12,NA,NA,Dorothy Beatrix Osborne,F,1888-06-15,1946-06-15,Lady,NA
+191,11,NA,NA,Elphinstone,M,1869-07-27,1955-11-28,Lord,NA
+192,12,NA,NA,Dorothy Beatrix Osborne,F,1888-12-03,1946-06-18,Lady,NA
 193,1,NA,NA,Fenella Stuart-Forbes Trefusis Hepburn,F,1889-06-15,1966-06-15,Hon,NA
 194,13,NA,NA,Christian Norah Dawson-Damer,F,1890-06-15,1959-06-15,Lady,NA
-195,14,NA,NA,Granville,M,1880-06-15,1953-06-15,Lord,NA
+195,14,NA,NA,Granville,M,1880-07-11,1953-06-25,Lord,NA
 196,15,NA,NA,Elizabeth Cator,F,1899-06-15,1959-06-15,NA,NA
 197,16,NA,NA,Rachel Clay,F,1907-06-15,NA,Lady,NA
-198,1,NA,NA,Jeanne d'Albret of France,F,NA,NA,NA,NA
+198,1,NA,NA,Jeanne d'Albret of France,F,1528-11-16,1572-06-09,NA,NA
 199,1,NA,NA,Frederick Charles of Prussia,M,NA,NA,Prince,NA
 200,1,NA,NA,Maria Anna of Anhalt,F,NA,NA,NA,NA
-201,17,NA,NA,John Campbell,M,1845-06-15,1914-06-15,Duke of Argyll,NA
+201,17,NA,NA,John Campbell,M,1845-08-06,1914-05-02,Duke of Argyll,NA
 202,1,131,130,Frederick Hanover,M,1763-08-16,1827-01-05,Duke of York,NA
 203,1,131,130,William IV Henry Hanover,M,1765-08-21,1837-06-20,King of England,NA
 204,1,131,130,Charlotte Augusta Matilda Hanover,F,1766-09-29,1828-10-06,Princess Royal,NA
@@ -209,7 +209,7 @@ personID,famID,momID,dadID,name,sex,birth_date,death_date,attribute_title,twinID
 208,1,363,362,Caroline Louisa Burnaby,F,1832-06-15,1918-06-15,NA,NA
 209,1,131,130,Augusta Sophia Hanover,F,1768-11-08,1840-09-22,NA,NA
 210,1,131,130,Elizabeth Hanover,F,1770-05-22,1840-01-10,NA,NA
-211,19,NA,NA,Frederick VI of Hesse-Homburg,M,1769-06-15,1829-06-15,Landgrave,NA
+211,19,NA,NA,Frederick VI of Hesse-Homburg,M,1769-07-30,1829-04-02,Landgrave,NA
 212,1,131,130,Ernest Augustus I Hanover,M,1771-06-05,1851-11-18,King of Hanover,NA
 213,1,131,130,Augustus Frederick Hanover,M,1773-01-27,1843-04-21,Duke of Sussex,NA
 214,1,131,130,Mary Hanover,F,1776-04-25,1857-04-30,NA,NA
@@ -222,13 +222,13 @@ personID,famID,momID,dadID,name,sex,birth_date,death_date,attribute_title,twinID
 221,1,219,203,Elizabeth Georgiana Adelaide Hanover,F,1820-12-10,1821-03-04,NA,NA
 222,1,219,203,Twin-Boy 1,M,1822-04-23,1822-04-23,NA,223
 223,1,219,203,Twin-Boy 2,M,1822-04-23,1822-04-23,NA,222
-224,1,348,347,Marie,F,1852-06-15,1923-06-15,NA,NA
+224,1,348,347,Marie,F,1852-02-15,1923-06-20,NA,NA
 225,1,346,345,Christian IX,M,1818-04-08,1906-01-29,King of Denmark,NA
 226,1,299,298,Louise of Hesse-Cassel,F,1817-09-07,1898-09-29,Princess,NA
 227,1,226,225,William George I of the Hellenes Oldenburg,M,1845-12-24,1913-03-18,King of Greece,NA
-228,1,354,353,Olga Constantinovna,F,1851-06-15,1926-06-15,Princess,NA
-229,1,228,227,Nicholas of Greece,M,1872-06-15,1938-06-15,Prince,NA
-230,1,76,405,Child 6,M,1913-06-15,NA,NA,NA
+228,1,354,353,Olga Constantinovna,F,1851-09-03,1926-06-18,Princess,NA
+229,1,228,227,Nicholas of Greece,M,1872-01-22,1938-02-08,Prince,NA
+230,1,76,405,Child 6,M,1913-05-04,2007-10-02,NA,NA
 231,1,76,405,Child 5,M,NA,NA,NA,NA
 232,1,76,405,Paul I Oldenburg,M,1901-12-14,1964-03-06,King of Greece,NA
 233,1,76,405,Helen of Greece,F,1896-05-02,1982-11-28,Princess,NA
@@ -238,66 +238,66 @@ personID,famID,momID,dadID,name,sex,birth_date,death_date,attribute_title,twinID
 237,1,1362,229,Child 3,M,NA,NA,NA,NA
 238,1,38,100,Louise Alexandra Mountbatten,F,1889-07-13,1965-03-07,Princess,NA
 239,1,367,366,Edward John VIII Spencer,M,1924-01-24,1992-03-29,Earl of Spencer,NA
-240,1,93,239,Sarah Spencer,F,1955-06-15,NA,Hon.,NA
-241,1,93,239,Jane Spencer,F,1957-06-15,NA,Hon.,NA
-242,1,93,239,Charles Spencer,M,1964-06-15,NA,Vicount Althorp,NA
-243,21,806,2984,Raine of Dartmouth McCorquodale,F,NA,NA,Countess,NA
-244,1,33,68,George Earl of Harewood Lascelles,M,1923-06-15,NA,Viscount,NA
+240,1,93,239,Sarah Spencer,F,1955-03-19,NA,Hon.,NA
+241,1,93,239,Jane Spencer,F,1957-02-11,NA,Hon.,NA
+242,1,93,239,Charles Spencer,M,1964-05-20,NA,Vicount Althorp,NA
+243,21,806,2984,Raine of Dartmouth McCorquodale,F,1929-09-09,2016-10-21,Countess,NA
+244,1,33,68,George Earl of Harewood Lascelles,M,1923-02-07,2011-07-11,Viscount,NA
 245,1,1705,2511,Louise Marie d'Orleans,F,1812-04-03,1850-10-11,NA,NA
-246,1,NA,NA,Ludwig IX of Hesse-Darmstadt,M,NA,NA,Landgrave,NA
-247,1,1068,1067,Frederick I of Wurttemberg,M,1754-06-15,1816-06-15,King,NA
+246,1,NA,NA,Ludwig IX of Hesse-Darmstadt,M,1719-12-15,1790-04-06,Landgrave,NA
+247,1,1068,1067,Frederick I of Wurttemberg,M,1754-11-06,1816-10-30,King,NA
 248,1,496,564,Frederica of Mecklenburg-Strelitz,F,1778-03-02,1841-06-29,Duchess,NA
 249,1,248,212,George V Hanover,M,1819-05-27,1878-06-12,King of Hanover,NA
 250,1,NA,NA,Mary of Saxe-Altenburg,F,1818-04-14,1907-01-09,Princess,NA
-251,1,250,249,Ernest Augustus of Cumberland Hanover,M,1845-06-15,1923-06-15,Duke,NA
-252,1,250,249,Frederica Hanover,F,1848-06-15,1926-06-15,NA,NA
-253,1,250,249,Mary Hanover,F,1849-06-15,1904-06-15,NA,NA
-254,1,226,225,Thyra of Denmark,F,1853-06-15,1933-06-15,Princess,NA
-255,1,254,251,Marie Louise Hanover,F,1879-06-15,1948-06-15,NA,NA
-256,1,254,251,George William Hanover,M,1880-06-15,1912-06-15,NA,NA
-257,1,254,251,Alexandra Hanover,F,1882-06-15,1963-06-15,NA,NA
-258,1,254,251,Olga Hanover,F,1884-06-15,1958-06-15,NA,NA
-259,1,254,251,Christian Hanover,M,1885-06-15,1901-06-15,NA,NA
-260,1,NA,NA,Rene of Bourbon-Parma,M,NA,NA,Prince,NA
-261,22,NA,NA,Alfons Pawel-Rammingen,M,1843-06-15,1932-06-15,Baron von,NA
-262,1,134,132,George of Cambridge,M,1819-06-15,1904-06-15,Duke,NA
-263,1,NA,NA,Sarah (Louisa) Fairbrother,F,NA,1890-06-15,NA,NA
-264,1,263,262,George FitzGeorge,M,1843-06-15,1907-06-15,NA,NA
-265,1,263,262,Adolphus,M,1846-06-15,1922-06-15,NA,NA
-266,1,263,262,Agustus,M,1847-06-15,1933-06-15,NA,NA
+251,1,250,249,Ernest Augustus of Cumberland Hanover,M,1845-09-21,1923-11-14,Duke,NA
+252,1,250,249,Frederica Hanover,F,1848-01-09,1926-10-16,NA,NA
+253,1,250,249,Mary Hanover,F,1849-12-03,1904-06-04,NA,NA
+254,1,226,225,Thyra of Denmark,F,1853-09-29,1933-02-26,Princess,NA
+255,1,254,251,Marie Louise Hanover,F,1879-10-11,1948-01-31,NA,NA
+256,1,254,251,George William Hanover,M,1880-10-28,1912-05-20,NA,NA
+257,1,254,251,Alexandra Hanover,F,1882-09-29,1963-08-30,NA,NA
+258,1,254,251,Olga Hanover,F,1884-07-11,1958-09-21,NA,NA
+259,1,254,251,Christian Hanover,M,1885-07-04,1901-09-03,NA,NA
+260,1,NA,NA,Rene of Bourbon-Parma,M,1894-10-17,1962-07-30,Prince,NA
+261,22,NA,NA,Alfons Pawel-Rammingen,M,1843-07-27,1932-11-20,Baron von,NA
+262,1,134,132,George of Cambridge,M,1819-03-26,1904-03-17,Duke,NA
+263,1,NA,NA,Sarah (Louisa) Fairbrother,F,1816-10-31,1890-01-12,NA,NA
+264,1,263,262,George FitzGeorge,M,1843-08-24,1907-09-02,NA,NA
+265,1,263,262,Adolphus,M,1846-01-30,1922-12-17,NA,NA
+266,1,263,262,Agustus,M,1847-06-12,1933-10-30,NA,NA
 267,1,NA,NA,Rosa Baring,F,NA,NA,NA,NA
 268,1,267,264,Son 1,M,NA,NA,NA,NA
 269,1,267,264,Dau. 1,F,NA,NA,NA,NA
 270,1,267,264,Dau. 2,F,NA,NA,NA,NA
-271,1,NA,NA,Frederick William,M,1819-06-15,1904-06-15,Grand Duke,NA
-272,1,135,271,Adolphus Frederick V,M,1848-06-15,1914-06-15,Grand Duke,NA
-273,1,NA,NA,Elisabeth of Anhalt,F,1857-06-15,1933-06-15,Princess,NA
+271,1,NA,NA,Frederick William,M,1819-10-17,1904-05-30,Grand Duke,NA
+272,1,135,271,Adolphus Frederick V,M,1848-07-22,1914-06-11,Grand Duke,NA
+273,1,NA,NA,Elisabeth of Anhalt,F,1857-09-07,1933-07-20,Princess,NA
 274,1,273,272,Son 1,M,NA,NA,NA,NA
 275,1,273,272,Son 2,M,NA,NA,NA,NA
 276,1,273,272,Dau. 1,F,NA,NA,NA,NA
 277,1,273,272,Dau. 2,F,NA,NA,NA,NA
-278,1,136,137,Adolphus 2nd,M,1868-06-15,1927-06-15,Duke of Teck,NA
-279,1,136,137,Francis,M,1870-06-15,1910-06-15,Prince,NA
-280,1,136,137,Alexander George of Teck,M,1874-06-15,1957-06-15,Earl of Athlone,NA
-281,1,NA,NA,Margaret Grosvenor,F,1873-06-15,1929-06-15,Lady,NA
+278,1,136,137,Adolphus 2nd,M,1868-08-13,1927-10-24,Duke of Teck,NA
+279,1,136,137,Francis,M,1870-01-09,1910-10-22,Prince,NA
+280,1,136,137,Alexander George of Teck,M,1874-04-14,1957-01-16,Earl of Athlone,NA
+281,1,NA,NA,Margaret Grosvenor,F,1873-04-08,1929-03-27,Lady,NA
 282,1,281,278,George of Cambridge,M,1895-10-11,1981-04-16,Marquess,NA
 283,1,281,278,Son 2,M,NA,NA,NA,NA
-284,1,281,278,Mary,F,1897-06-15,NA,Lady,NA
-285,1,281,278,Helena,F,1899-06-15,1969-06-15,Lady,NA
+284,1,281,278,Mary,F,1897-06-12,1987-06-23,Lady,NA
+285,1,281,278,Helena,F,1899-10-23,1969-12-22,Lady,NA
 286,1,1262,1261,Edward II,M,1284-04-25,1327-09-21,King of England,NA
-287,1,24,280,Rupert,M,NA,1928-06-15,Vicount Trematon,NA
+287,1,24,280,Rupert,M,1907-04-24,1928-04-15,Vicount Trematon,NA
 288,1,24,280,Son 2,M,NA,NA,NA,NA
 289,1,24,280,May Cambridge,F,1906-01-23,1994-05-29,Lady,NA
 290,1,762,336,William Frederick of Gloucester,M,1776-06-15,1834-06-15,Duke,NA
-291,1,33,68,Gerald Lascelles,M,1924-06-15,NA,Hon.,NA
-292,1,2983,2982,Marion (Maria) Donata Stein,F,1926-06-15,NA,Countess,NA
-293,1,292,244,David Lascelles,M,1950-06-15,NA,Viscount,NA
-294,1,292,244,James Lascelles,M,1953-06-15,NA,Hon.,NA
-295,1,292,244,Jeremy Lascelles,M,1955-06-15,NA,Hon.,NA
-296,1,NA,NA,Angela Dowding,F,1919-06-15,NA,NA,NA
-297,1,296,291,Henry Lascelles,M,1953-06-15,NA,NA,NA
-298,1,302,301,William of Hesse-Cassel,M,1787-06-15,1867-06-15,Landgrave,NA
-299,1,1644,1643,Louise Charlotte of Denmark,F,1789-06-15,1864-06-15,Princess,NA
+291,1,33,68,Gerald Lascelles,M,1924-08-21,1998-02-27,Hon.,NA
+292,1,2983,2982,Marion (Maria) Donata Stein,F,1926-10-18,2014-03-06,Countess,NA
+293,1,292,244,David Lascelles,M,1950-10-21,NA,Viscount,NA
+294,1,292,244,James Lascelles,M,1953-10-05,NA,Hon.,NA
+295,1,292,244,Jeremy Lascelles,M,1955-02-14,NA,Hon.,NA
+296,1,NA,NA,Angela Dowding,F,1919-04-20,2007-02-28,NA,NA
+297,1,296,291,Henry Lascelles,M,1953-05-19,NA,NA,NA
+298,1,302,301,William of Hesse-Cassel,M,1787-12-24,1867-09-05,Landgrave,NA
+299,1,1644,1643,Louise Charlotte of Denmark,F,1789-10-30,1864-03-28,Princess,NA
 300,1,299,298,Other issue,M,NA,NA,NA,NA
 301,1,330,1604,Frederick of Hesse-Cassel,M,1747-06-15,1837-06-15,Landgrave,NA
 302,1,NA,NA,Caroline of Nassau-Usingen,F,1762-06-15,1823-06-15,Princess,NA

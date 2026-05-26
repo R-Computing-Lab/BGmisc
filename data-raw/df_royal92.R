@@ -171,13 +171,91 @@ date_overrides <- tribble(
   151, "11 MAY 1857", "17 FEB 1905", # Serge Alexandrovich Romanov
   152, "3 OCT 1860", "28 JAN 1919", # Paul Alexandrovich Romanov
   153, "9 MAY 1871", "10 JUL 1899", # George Alexandrovich Romanov
+  154, "6 APR 1875", "20 APR 1960", # Xenia Alexandrovna Romanov, Gregorian/New Style; Old Style birth = 25 MAR 1875
   155, "4 DEC 1878", "13 JUN 1918", # Michael (Mischa) Alexandrovich Romanov, New Style
+  156, "13 JUN 1882", "24 NOV 1960", # Olga Alexandrovna Romanov, Gregorian/New Style; Old Style birth = 1 JUN 1882
+  157, "14 MAY 1854", "6 SEP 1920", # Maria Pavlovna the Elder, Gregorian/New Style; Old Style birth = 2 MAY 1854
+  158, "12 OCT 1876", "12 OCT 1938", # Kirill Vladimirovich Romanov, Gregorian/New Style; Old Style birth = 30 SEP 1876
+  159, "24 NOV 1877", "9 NOV 1943", # Boris Vladimirovich Romanov, Gregorian/New Style
+  160, "14 MAY 1879", "30 OCT 1956", # Andrei Vladimirovich Romanov, Gregorian/New Style; Old Style birth = 2 MAY 1879
+  161, "31 AUG 1872", "6 DEC 1971", # Mathilde Kschessinska, Gregorian/New Style; Old Style birth = 19 AUG 1872
+  162, "3 AUG 1770", "7 JUN 1840", # Frederick William III of Prussia
+  163, "30 AUG 1870", "24 SEP 1891", # Alexandra of Greece and Denmark
+  164, "18 SEP 1891", "5 MAR 1942", # Dmitri Pavlovich Romanov, Gregorian/New Style
+  165, "14 FEB 1850", "26 JAN 1918", # Nicholas Konstantinovich Romanov, Gregorian/New Style
   166, "15 JUL 1895", "26 FEB 1970", # Irina
   167, "23 MAR 1887", "27 SEP 1967", # Felix Yussoupov
+  169, "10 OCT 1931", "16 MAR 2003", # Ronald Ivor Ferguson
+  170, "9 JUN 1937", "19 SEP 1998", # Susan Mary Wright / Susan Barrantes
+  173, "17 APR 1882", "17 OCT 1893", # Violet Hyacinth Bowes-Lyon
+  174, "30 AUG 1883", "8 FEB 1961", # Mary Frances Bowes-Lyon / Lady Elphinstone
+  175, "22 SEP 1884", "25 MAY 1949", # Patrick Bowes-Lyon, 15th Earl of Strathmore and Kinghorne
+  176, "1 APR 1886", "7 FEB 1930", # John Herbert Bowes-Lyon
+  177, "14 APR 1887", "19 OCT 1911", # Alexander Francis Bowes-Lyon
+  178, "18 APR 1889", "27 SEP 1915", # Fergus Bowes-Lyon; some sources give 26 SEP 1915
+  179, "6 MAY 1890", "17 NOV 1967", # Rose Constance Bowes-Lyon / Countess Granville
+  180, "1 OCT 1893", "1 MAY 1953", # Michael Claude Hamilton Bowes-Lyon
+  181, "2 MAY 1902", "13 SEP 1961", # David Bowes-Lyon
   182, "21 JUL 1824", "16 FEB 1904", # Claude Bowes-Lyon
+  183, "29 JUL 1832", "5 FEB 1922", # Frances Dora Smith / Countess of Strathmore and Kinghorne
+  187, "17 JUL 1737", "7 MAR 1776", # John Lyon, 9th Earl of Strathmore and Kinghorne
+  188, "24 FEB 1749", "28 APR 1800", # Mary Eleanor Bowes
+  189, "14 APR 1769", "3 JUL 1820", # John Bowes, 10th Earl of Strathmore and Kinghorne
+  191, "27 JUL 1869", "28 NOV 1955", # Sidney Elphinstone, 16th Lord Elphinstone
+  192, "3 DEC 1888", "18 JUN 1946", # Dorothy Beatrix Godolphin Osborne
+  195, "11 JUL 1880", "25 JUN 1953", # William Spencer Leveson-Gower, 4th Earl Granville
+  198, "16 NOV 1528", "9 JUN 1572", # Jeanne d'Albret of France
+  201, "6 AUG 1845", "2 MAY 1914", # John Campbell, 9th Duke of Argyll
+  211, "30 JUL 1769", "2 APR 1829", # Frederick VI of Hesse-Homburg
   220, "27 MAR 1819", "27 MAR 1819", # Charlotte Augusta Louisa Hanover
+  224, "15 FEB 1852", "20 JUN 1923", # Princess Marie of Battenberg / Princess of Erbach-Schönberg
+  228, "3 SEP 1851", "18 JUN 1926", # Olga Constantinovna of Russia, Gregorian/New Style
+  229, "22 JAN 1872", "8 FEB 1938", # Nicholas of Greece and Denmark, Gregorian/New Style
+  230, "4 MAY 1913", "2 OCT 2007", # Princess Katherine of Greece and Denmark; row is currently labeled Child 6
+  240, "19 MAR 1955", NA_character_, # Sarah Spencer / Lady Sarah McCorquodale; living
+  241, "11 FEB 1957", NA_character_, # Jane Spencer / Lady Jane Fellowes; living
+  242, "20 MAY 1964", NA_character_, # Charles Spencer, 9th Earl Spencer; living
+  243, "9 SEP 1929", "21 OCT 2016", # Raine McCorquodale / Countess Spencer
+  244, "7 FEB 1923", "11 JUL 2011", # George Lascelles, 7th Earl of Harewood
+  246, "15 DEC 1719", "6 APR 1790", # Louis IX, Landgrave of Hesse-Darmstadt
+  247, "6 NOV 1754", "30 OCT 1816", # Frederick I of Württemberg
+  251, "21 SEP 1845", "14 NOV 1923", # Ernest Augustus, Crown Prince of Hanover
+  252, "9 JAN 1848", "16 OCT 1926", # Frederica of Hanover
+  253, "3 DEC 1849", "4 JUN 1904", # Mary of Hanover
+  254, "29 SEP 1853", "26 FEB 1933", # Thyra of Denmark
+  255, "11 OCT 1879", "31 JAN 1948", # Marie Louise of Hanover
+  256, "28 OCT 1880", "20 MAY 1912", # George William of Hanover
+  257, "29 SEP 1882", "30 AUG 1963", # Alexandra of Hanover
+  258, "11 JUL 1884", "21 SEP 1958", # Olga of Hanover
+  259, "4 JUL 1885", "3 SEP 1901", # Christian of Hanover
+  260, "17 OCT 1894", "30 JUL 1962", # René of Bourbon-Parma
+  261, "27 JUL 1843", "20 NOV 1932", # Alfons Pawel-Rammingen
+  262, "26 MAR 1819", "17 MAR 1904", # George, Duke of Cambridge
+  263, "31 OCT 1816", "12 JAN 1890", # Sarah Louisa Fairbrother
+  264, "24 AUG 1843", "2 SEP 1907", # George FitzGeorge
+  265, "30 JAN 1846", "17 DEC 1922", # Adolphus FitzGeorge
+  266, "12 JUN 1847", "30 OCT 1933", # Augustus FitzGeorge
+  271, "17 OCT 1819", "30 MAY 1904", # Frederick William, Grand Duke of Mecklenburg-Strelitz
+  272, "22 JUL 1848", "11 JUN 1914", # Adolphus Frederick V, Grand Duke of Mecklenburg-Strelitz
+  273, "7 SEP 1857", "20 JUL 1933", # Elisabeth of Anhalt
+  278, "13 AUG 1868", "24 OCT 1927", # Adolphus Cambridge, 1st Marquess of Cambridge
+  279, "9 JAN 1870", "22 OCT 1910", # Francis of Teck
+  280, "14 APR 1874", "16 JAN 1957", # Alexander Cambridge, 1st Earl of Athlone
+  281, "8 APR 1873", "27 MAR 1929", # Margaret Grosvenor / Marchioness of Cambridge
   282, "11 OCT 1895", "16 APR 1981", # George of Cambridge
+  284, "12 JUN 1897", "23 JUN 1987", # Mary Cambridge / Duchess of Beaufort
+  285, "23 OCT 1899", "22 DEC 1969", # Helena Cambridge
+  287, "24 APR 1907", "15 APR 1928", # Rupert Cambridge, Viscount Trematon; note conflict: RoyalFamilyTree gives 24 AUG 1907
   289, "23 JAN 1906", "29 MAY 1994", # May Cambridge
+  291, "21 AUG 1924", "27 FEB 1998", # Gerald David Lascelles
+  292, "18 OCT 1926", "6 MAR 2014", # Marion Stein / Countess of Harewood
+  293, "21 OCT 1950", NA_character_, # David Lascelles, 8th Earl of Harewood; living
+  294, "5 OCT 1953", NA_character_, # James Edward Lascelles; living
+  295, "14 FEB 1955", NA_character_, # Robert Jeremy Hugh Lascelles; living
+  296, "20 APR 1919", "28 FEB 2007", # Angela Dowding / Angela Lascelles
+  297, "19 MAY 1953", NA_character_, # Henry Ulick Lascelles; living
+  298, "24 DEC 1787", "5 SEP 1867", # William of Hesse-Kassel
+  299, "30 OCT 1789", "28 MAR 1864", # Louise Charlotte of Denmark
   369, "2 OCT 1908", "6 JUL 1993", # Ruth Sylvia Gill
   393, "15 JUN 1843", "30 JUN 1898", # Barbara Smith Marr
   409, "17 MAY 1886", "28 FEB 1941", # Alfonso XIII
