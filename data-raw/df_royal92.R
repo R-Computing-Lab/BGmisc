@@ -1222,6 +1222,161 @@ date_overrides <- tribble(
   1792, "874", "17 JUL 924", # Edward the Elder; approximate birth year
   1794, "923", "23 NOV 955", # Eadred; approximate birth year
   1799, "894", "27 OCT 939", # Æthelstan; approximate birth year
+  1801, "877", "927", # Sihtric Cáech / Sihtric of Northumbria; approximate birth year, death year; identity/title wording should be checked because row title says King of Denmark
+  1802, "878", "920", # Ælfflæd, wife of Edward the Elder; approximate birth and death years
+  1803, "904", "16 OCT 922", # Æthelweard, son of Edward the Elder; approximate birth year
+  1804, "902", "933", # Edwin, son of Edward the Elder; approximate year-level dates
+  1806, "902", "26 DEC 955", # Eadgifu / Edgiva of Kent; approximate birth year
+  1808, "910", "26 JAN 937", # Eadhild / Edhilda, daughter of Edward the Elder; approximate birth year
+  1809, "910", "26 JAN 946", # Eadgyth / Edith of England, wife of Otto I; approximate birth year
+  1811, "17 SEP 879", "7 OCT 929", # Charles III the Simple, King of West Francia
+  1812, "898", "16 JUN 956", # Hugh the Great; approximate birth year
+  1813, "23 NOV 912", "7 MAY 973", # Otto I the Great
+  1814, "932", "7 FEB 999", # Boleslaus II, Duke of Bohemia; birth year only
+  1815, "20 OCT 1496", "12 APR 1550", # Claude, Duke of Guise
+  1817, "11 SEP 1476", "22 SEP 1531", # Louise of Savoy; replaces year-placeholder dates
+  1827, "1 FEB 1426", "21 MAY 1481", # Christian I of Denmark
+  1828, "1430", "25 NOV 1495", # Dorothea of Brandenburg / Queen of Denmark; birth year only
+  1830, "1303", "12 AUG 1332", # Robert Bruce of Liddesdale; approximate birth year; killed at Dupplin Moor
+  1831, "1253", "9 NOV 1292", # Margaret/Marjorie of Carrick; approximate birth year; row name may be variant
+  1832, "1243", "4 APR 1304", # Robert de Brus, 6th Lord of Annandale; approximate birth year, death before/around 4 APR 1304
+  1833, "8 NOV 1226", "10 JUL 1264", # Isabel de Clare; death date sometimes given as after 10 JUL 1264
+  1834, "1180", "25 OCT 1230", # Gilbert de Clare, Earl of Gloucester; approximate birth year
+  1835, "1210", "31 MAR 1295", # Robert de Brus, 5th Lord of Annandale; approximate birth year
+  1836, "1199", "1251", # Isobel/Isabella of Huntingdon; approximate year-level dates
+  1837, "1144", "17 JUN 1219", # David of Scotland, Earl of Huntingdon; approximate birth year
+  1838, "1171", "6 JAN 1233", # Matilda of Chester; approximate birth year
+  1839, "1147", "30 JUN 1181", # Hugh de Kevelioc, Earl of Chester; approximate birth year
+  1842, "1194", "1228", # Margaret of Huntingdon; approximate year-level dates
+  1843, "1180", "1234", # Alan of Galloway; approximate year-level dates
+  1844, "1210", "28 JAN 1290", # Dervorguilla of Galloway; approximate birth year
+  1845, "1208", "25 OCT 1268", # John de Balliol; approximate birth year
+  1846, "1249", "25 NOV 1314", # John Balliol, King of Scots; approximate birth year
+  1847, "1253", "1292", # Isabel de Warenne; approximate year-level dates; identity inferred from Balliol/Warenne placement
+  1848, "1231", "27 SEP 1304", # John de Warenne, 6th Earl of Surrey; approximate birth year
+  1849, "1283", "15 JAN 1364", # Edward Balliol; approximate birth year and mid-month death date
+  1850, "1012", "1 SEP 1067", # Baldwin V of Flanders; approximate birth year
+  1853, "25 OCT 1102", "28 JUL 1128", # William Clito of Flanders
+  1854, "1112", "1165", # Sibyl of Anjou; approximate year-level dates
+  1855, "1092", "13 NOV 1143", # Fulk V of Anjou; approximate birth year
+  1857, "1162", "1183", # Rainier of Montferrat; approximate year-level dates
+  1859, "1060", "25 JAN 1100", # Godfrey of Bouillon / Lower Lorraine; approximate birth year
+  1860, "1090", "25 NOV 1120", # Matilda of Blois; approximate birth year
+  1866, "1 JUN 1134", "27 JUL 1158", # Geoffrey VI of Anjou; exact date completion
+  1867, "22 JUL 1136", "30 JAN 1164", # William, Count of Poitou; exact date completion
+  1868, "1099", "9 APR 1137", # William X of Aquitaine; birth year only
+  1869, "1120", "18 SEP 1180", # Louis VII of France; birth year commonly 1120
+  1870, "1071", "11 MAY 1138", # William de Warenne, 2nd Earl of Surrey; approximate birth year
+  1871, "1099", "17 JAN 1168", # Thierry/Theodore of Flanders; approximate birth year
+  1872, "21 APR 1132", "27 JUN 1194", # Sancho VI of Navarre
+  1873, "1184", "10 AUG 1241", # Eleanor of Brittany; approximate birth year
+  1874, "1138", "20 FEB 1171", # Conan IV of Brittany; approximate birth year
+  1875, "1170", "26 OCT 1232", # Ranulf de Blondeville, Earl of Chester; approximate birth year
+  1876, "1155", "13 APR 1213", # Guy of Thouars; approximate birth year
+  1877, "23 NOV 1116", "23 NOV 1183", # William FitzRobert, Earl of Gloucester
+  1878, "1100", "14 SEP 1144", # Geoffrey de Mandeville; approximate birth year
+  1879, "1170", "12 MAY 1243", # Hubert de Burgh; approximate birth year
+  1880, "1183", "5 JUN 1249", # Hugh X of Lusignan / Hugh de la Marche; approximate birth year
+  1881, "1198", "19 AUG 1245", # Raymond Berengar IV of Provence; approximate birth year
+  1882, "2 NOV 1235", "13 MAR 1271", # Henry of Almain
+  1883, "1146", "14 MAY 1219", # William Marshal, Earl of Pembroke; approximate birth year
+  1884, "1198", "19 AUG 1245", # Raymond Berengar IV of Provence; duplicate/variant row likely; approximate birth year
+  1886, "24 AUG 1198", "6 JUL 1249", # Alexander II of Scotland
+  1887, "26 DEC 1249", "25 SEP 1300", # Edmund, Earl of Cornwall
+  1888, "1252", "1296", # Richard of Cornwall; approximate year-level dates
+  1890, "4 AUG 1222", "15 JUL 1262", # Richard de Clare, Earl of Gloucester
+  1891, "15 AUG 1171", "24 SEP 1230", # Alfonso IX of León; row title says Castile but identity appears Alfonso IX
+  1893, "1191", "26 MAR 1242", # William de Forz, Count of Aumale/Albemarle; approximate birth year
+  1894, "25 SEP 1216", "8 FEB 1250", # Robert I, Count of Artois
+  1896, "1212", "30 OCT 1248", # Yolande of Dreux; approximate birth year
+  1897, "1241", "12 NOV 1282", # Robert IV, Count of Dreux; approximate birth year
+  1903, "1268", "29 NOV 1314", # Philip IV the Fair; birth year only retained
+  1904, "11 NOV 1328", "26 FEB 1360", # Roger Mortimer, 2nd Earl of March
+  1905, "1302", "16 DEC 1331", # Edmund Mortimer; approximate birth year
+  1906, "25 APR 1287", "29 NOV 1330", # Roger Mortimer, 1st Earl of March
+  1907, "1251", "17 JUL 1304", # Edmund Mortimer, 2nd Baron Mortimer; approximate birth year
+  1908, "1231", "27 OCT 1282", # Roger Mortimer, 1st Baron Mortimer; approximate birth year
+  1909, "1224", "23 MAR 1301", # Maud de Braose; approximate birth year
+  1910, "1190", "6 AUG 1246", # Ralph de Mortimer; approximate birth year
+  1911, "1206", "1251", # Gwladus Ddu; approximate year-level dates
+  1912, "1178", "9 JUN 1228", # Reginald de Braose; approximate birth year
+  1913, "1173", "11 APR 1240", # Llywelyn the Great; approximate birth year
+  1914, "20 JUN 1760", "26 SEP 1842", # Richard Wellesley, 1st Marquess Wellesley
+  1915, "19 JUL 1735", "22 MAY 1781", # Garret Wesley/Wellesley, 1st Earl of Mornington
+  1916, "23 JUN 1742", "10 SEP 1831", # Anne Hill / Countess of Mornington
+  1917, "1 MAY 1769", "14 SEP 1852", # Arthur Wellesley, 1st Duke of Wellington
+  1918, "24 DEC 1738", "19 JUN 1770", # Arthur Hill-Trevor, Viscount Dungannon
+  1919, "1144", "9 AUG 1211", # William de Braose; approximate birth year
+  1920, "1112", "1192", # William de Braose; approximate year-level dates
+  1921, "1130", "1170", # Bertha of Hereford / de Gloucester; approximate year-level dates
+  1922, "1097", "24 DEC 1143", # Miles of Gloucester, Earl of Hereford; approximate birth year
+  1923, "1092", "1143", # Sibyl de Neufmarché; approximate year-level dates
+  1924, "1050", "1125", # Bernard de Neufmarché; approximate year-level dates
+  1927, "1059", "1136", # Nest ferch Gruffydd; approximate year-level dates
+  1928, "1010", "5 AUG 1063", # Gruffydd ap Llywelyn; approximate birth year
+  1929, "28 OCT 1016", "5 OCT 1056", # Henry III, Holy Roman Emperor
+  1930, "980", "1023", # Llywelyn ap Seisyll; approximate year-level dates
+  1931, "982", "1058", # Angharad ferch Maredudd; approximate year-level dates
+  1932, "978", "1023", # Cynfyn ap Gwerstan; approximate year-level dates
+  1933, "1025", "1075", # Bleddyn ap Cynfyn; approximate year-level dates
+  1934, "938", "999", # Maredudd ab Owain; approximate year-level dates
+  1935, "913", "987", # Owain ap Hywel Dda; approximate year-level dates
+  1936, "880", "950", # Hywel Dda; approximate year-level dates
+  1937, "854", "909", # Cadell ap Rhodri; approximate year-level dates
+  1938, "820", "878", # Rhodri Mawr; approximate year-level dates
+  1939, "857", "916", # Anarawd ap Rhodri; approximate year-level dates
+  1940, "883", "942", # Idwal Foel; approximate year-level dates
+  1942, "920", "979", # Iago ab Idwal; approximate year-level dates
+  1943, "920", "988", # Ieuaf ab Idwal; approximate year-level dates
+  1945, "950", "985", # Hywel ap Ieuaf; approximate year-level dates
+  1946, "950", "986", # Cadwallon ap Ieuaf; approximate year-level dates
+  1948, "975", "996", # Idwal ap Meurig; approximate year-level dates
+  1949, "1000", "1039", # Iago ap Idwal; approximate year-level dates
+  1951, "1055", "1137", # Gruffydd ap Cynan; approximate year-level dates
+  1952, "1100", "28 NOV 1170", # Owain Gwynedd; approximate birth year
+  1953, "1145", "1174", # Iorwerth Drwyndwn; approximate year-level dates
+  1955, "1145", "1203", # Dafydd ab Owain Gwynedd; approximate year-level dates
+  1957, "1198", "1 MAR 1244", # Gruffydd ap Llywelyn Fawr; approximate birth year
+  1958, "1212", "25 FEB 1246", # Dafydd ap Llywelyn; approximate birth year
+  1959, "1212", "1256", # Angharad ferch Llywelyn; approximate year-level dates
+  1960, "1282", "7 JUN 1337", # Gwenllian ferch Llywelyn; approximate birth year
+  1961, "1223", "11 DEC 1282", # Llywelyn ap Gruffudd; approximate birth year
+  1964, "849", "26 OCT 899", # Alfred the Great; birth year sometimes given 847-849, selected 849
+  1965, "852", "5 DEC 902", # Ealhswith of Mercia; approximate birth year
+  1966, "795", "13 JAN 858", # Æthelwulf of Wessex; approximate birth year
+  1968, "825", "852", # Æthelstan of Kent; approximate year-level dates
+  1969, "834", "20 DEC 860", # Æthelbald of Wessex; approximate birth year
+  1970, "843", "870", # Judith of Flanders; approximate year-level dates
+  1971, "835", "865", # Æthelberht of Wessex; approximate year-level dates
+  1972, "847", "15 APR 871", # Æthelred I of Wessex; approximate birth year and mid-month death date
+  1973, "771", "839", # Egbert of Wessex; approximate birth year
+  1975, "825", "852", # Æthelstan of Kent; approximate year-level dates; likely duplicate/variant to personID 1968
+  1977, "838", "888", # Æthelswith of Mercia; approximate year-level dates
+  1978, "860", "898", # Æthelhelm, son of Æthelred I; approximate year-level dates
+  1979, "868", "13 DEC 902", # Æthelwold ætheling; approximate birth year
+  1980, "830", "874", # Burgred of Mercia; approximate year-level dates
+  1982, "880", "16 OCT 922", # Æthelweard, son of Alfred; approximate birth year
+  1985, "870", "12 JUN 918", # Æthelflæd, Lady of the Mercians; approximate birth year
+  1986, "875", "896", # Æthelgifu of Shaftesbury; approximate year-level dates
+  1987, "877", "7 JUN 929", # Ælfthryth of Wessex; approximate birth year
+  1988, "865", "10 SEP 918", # Baldwin II of Flanders; approximate birth year
+  1989, "845", "911", # Æthelred, Lord of the Mercians; approximate year-level dates
+  1991, "467", "534", # Cerdic of Wessex; approximate year-level dates
+  1992, "500", "560", # Cynric of Wessex; approximate year-level dates
+  1993, "540", "593", # Ceawlin of Wessex; approximate year-level dates
+  2022, "570", "597", # Ceolric of Wessex; approximate year-level dates
+  2023, "560", "611", # Ceolwulf of Wessex; approximate year-level dates
+  2024, "600", "642", # Cynegils of Wessex; approximate birth year
+  2025, "620", "676", # Æscwine of Wessex; approximate year-level dates
+  2029, "600", "636", # Cwichelm of Wessex; approximate year-level dates
+  2030, "615", "672", # Cenwealh of Wessex; approximate birth year
+  2031, "625", "685", # Centwine of Wessex; approximate year-level dates
+  2035, "630", "674", # Seaxburh / Sexburh of Wessex; approximate year-level dates
+  2036, "604", "5 AUG 642", # Oswald of Northumbria; approximate birth year
+  2042, "659", "20 APR 689", # Cædwalla of Wessex; approximate birth year
+  2043, "660", "687", # Mul of Kent; approximate year-level dates
+  2046, "670", "726", # Ine of Wessex; approximate year-level dates
+  2050, "672", "718", # Ingild of Wessex; approximate year-level dates
   2456, "1070", "14 FEB 1117", # Bertrada de Montfort
   2509, "6 AUG 1775", "3 JUN 1844", # of Angouleme
   2510, "24 JAN 1778", "14 FEB 1820", # of Berry
@@ -1241,6 +1396,18 @@ date_overrides <- tribble(
 # notes:
 # 1051 likely duplicates the Andreas of Leiningen already represented at personID == 911.
 #1125 likely duplicates Jean of Luxembourg already represented at personID == 586.
+
+# Non-date cautions surfaced while auditing:
+
+#  1801: the row title says “King of Denmark,” but the likely identity is Sihtric Cáech/Sihtric of Northumbria or Dublin. I included the date data and noted the title/identity caution in the comment.
+
+#1847: likely Isabel de Warenne based on the Balliol/Warenne placement, but the row’s given name alone is underspecified. I included the date data and flagged the inference.
+
+#1884: appears to duplicate or variant-match 1881 Raymond Berengar IV of Provence. I included the date data and flagged it.
+
+#1891: the row title says “King of Castile,” but Alfonso IX is King of León. I included the date data and flagged the title mismatch.
+
+#1975: likely duplicates or variant-matches 1968 Æthelstan of Kent. I included the date data and flagged it.
 
 
 name_overrides <- tribble(

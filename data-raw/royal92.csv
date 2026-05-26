@@ -1801,21 +1801,21 @@ personID,famID,momID,dadID,name,sex,birth_date,death_date,attribute_title,twinID
 1800,1,1798,1792,Daughter,F,NA,NA,NA,NA
 1801,183,NA,NA,Sihtric of Northumberland,M,NA,NA,King of Denmark,NA
 1802,1,NA,NA,Elfleda,F,NA,NA,NA,NA
-1803,1,1802,1792,Ethelwerd,M,NA,NA,NA,NA
+1803,1,1802,1792,Ethelwerd,M,NA,922-10-16,NA,NA
 1804,1,1802,1792,Edwin,M,NA,NA,NA,NA
 1805,1,1802,1792,Elfleda,F,NA,NA,NA,NA
-1806,1,1802,1792,Edgiva,F,NA,NA,NA,NA
+1806,1,1802,1792,Edgiva,F,NA,955-12-26,NA,NA
 1807,1,1802,1792,Ethelhilda,F,NA,NA,NA,NA
-1808,1,1802,1792,Edhilda,F,NA,NA,NA,NA
-1809,1,1802,1792,Eadgyth (Edith),F,NA,NA,NA,NA
+1808,1,1802,1792,Edhilda,F,NA,937-01-26,NA,NA
+1809,1,1802,1792,Eadgyth (Edith),F,NA,946-01-26,NA,NA
 1810,1,1802,1792,Elgiva,F,NA,NA,NA,NA
-1811,184,NA,NA,Charles the Simple,M,NA,NA,King of France,NA
-1812,185,NA,NA,Hugh the Great,M,NA,NA,Count of Paris,NA
-1813,186,NA,NA,Otho I the Great,M,NA,NA,King of Germany,NA
-1814,187,NA,NA,Boleslaw II,M,NA,NA,Duke of Bohemia,NA
-1815,1,NA,NA,Claude,M,NA,NA,Duke of Guise,NA
+1811,184,NA,NA,Charles the Simple,M,879-09-17,929-10-07,King of France,NA
+1812,185,NA,NA,Hugh the Great,M,NA,956-06-16,Count of Paris,NA
+1813,186,NA,NA,Otho I the Great,M,912-11-23,973-05-07,King of Germany,NA
+1814,187,NA,NA,Boleslaw II,M,NA,999-02-07,Duke of Bohemia,NA
+1815,1,NA,NA,Claude,M,1496-10-20,1550-04-12,Duke of Guise,NA
 1816,60,1817,2524,Francis I,M,1494-09-12,1547-03-31,King of France,NA
-1817,60,NA,NA,Louise of Savoy,F,1476-06-15,1531-06-15,NA,NA
+1817,60,NA,NA,Louise of Savoy,F,1476-09-11,1531-09-22,NA,NA
 1818,1,NA,NA,Donald,M,NA,NA,Earl of Mar,NA
 1819,1,NA,NA,Adam of Rowallan Mure,M,NA,NA,Sir,NA
 1820,120,NA,NA,Hugh,M,NA,NA,Earl of Ross,NA
@@ -1825,113 +1825,113 @@ personID,famID,momID,dadID,name,sex,birth_date,death_date,attribute_title,twinID
 1824,190,NA,NA,James Sandilands,M,NA,NA,Sir,NA
 1825,1,NA,NA,John Drummond,M,NA,NA,Sir,NA
 1826,1,NA,NA,Arnold,M,NA,NA,Duke of Gueldres,NA
-1827,1,NA,NA,Christian I,M,1426-06-15,1481-06-15,King of Denmark,NA
-1828,1,NA,2694,Dorothea,F,1430-06-15,1495-06-15,NA,NA
+1827,1,NA,NA,Christian I,M,1426-02-01,1481-05-21,King of Denmark,NA
+1828,1,NA,2694,Dorothea,F,1430-06-15,1495-11-25,NA,NA
 1829,1,NA,NA,Unknown,F,NA,NA,NA,NA
-1830,1,1833,1832,Robert Bruce,M,NA,1304-06-15,NA,NA
-1831,1,NA,NA,Margaret of Carrick,F,NA,NA,Countess,NA
-1832,1,1836,1835,Robert Bruce,M,NA,1295-06-15,NA,NA
-1833,1,NA,1834,Isobel,F,NA,1254-06-15,NA,NA
-1834,1,NA,NA,Gilbert De Clare of Gloucester,M,NA,NA,Earl,NA
-1835,1,NA,NA,Robert of Annandale Bruce,M,NA,NA,Lord,NA
-1836,1,1838,1837,Isobel,F,NA,1251-06-15,NA,NA
-1837,1,2229,2228,David of Huntingdon,M,NA,1219-06-15,Earl,NA
-1838,1,NA,1839,Matilda,F,NA,1233-06-15,NA,NA
-1839,1,NA,NA,Hugh Keveliock,M,NA,NA,Earl of Chester,NA
+1830,1,1833,1832,Robert Bruce,M,1303-06-15,1332-08-12,NA,NA
+1831,1,NA,NA,Margaret of Carrick,F,1253-06-15,1292-11-09,Countess,NA
+1832,1,1836,1835,Robert Bruce,M,1243-06-15,1304-04-04,NA,NA
+1833,1,NA,1834,Isobel,F,1226-11-08,1264-07-10,NA,NA
+1834,1,NA,NA,Gilbert De Clare of Gloucester,M,1180-06-15,1230-10-25,Earl,NA
+1835,1,NA,NA,Robert of Annandale Bruce,M,1210-06-15,1295-03-31,Lord,NA
+1836,1,1838,1837,Isobel,F,1199-06-15,1251-06-15,NA,NA
+1837,1,2229,2228,David of Huntingdon,M,1144-06-15,1219-06-17,Earl,NA
+1838,1,NA,1839,Matilda,F,1171-06-15,1233-01-06,NA,NA
+1839,1,NA,NA,Hugh Keveliock,M,1147-06-15,1181-06-30,Earl of Chester,NA
 1840,191,NA,NA,John Logie,M,NA,NA,Sir,NA
 1841,119,NA,NA,Malcolm Drummond,M,NA,NA,Sir,NA
-1842,1,1838,1837,Margaret,F,NA,1228-06-15,NA,NA
-1843,1,NA,NA,Alan,M,NA,NA,Lord of Galloway,NA
-1844,1,1842,1843,Devorguilla,F,NA,1290-06-15,NA,NA
-1845,1,NA,NA,John Balliol,M,NA,NA,NA,NA
-1846,1,1844,1845,John Balliol,M,NA,1313-06-15,NA,NA
-1847,1,NA,1848,Isobel,F,NA,NA,NA,NA
-1848,1,NA,NA,John de Warenne,M,NA,NA,Earl of Surrey,NA
-1849,1,1847,1846,Edward Balliol,M,NA,1363-06-15,NA,NA
-1850,1,NA,NA,Baldwin V of Flanders,M,NA,NA,Count,NA
+1842,1,1838,1837,Margaret,F,1194-06-15,1228-06-15,NA,NA
+1843,1,NA,NA,Alan,M,1180-06-15,1234-06-15,Lord of Galloway,NA
+1844,1,1842,1843,Devorguilla,F,1210-06-15,1290-01-28,NA,NA
+1845,1,NA,NA,John Balliol,M,1208-06-15,1268-10-25,NA,NA
+1846,1,1844,1845,John Balliol,M,1249-06-15,1314-11-25,NA,NA
+1847,1,NA,1848,Isobel,F,1253-06-15,1292-06-15,NA,NA
+1848,1,NA,NA,John de Warenne,M,1231-06-15,1304-09-27,Earl of Surrey,NA
+1849,1,1847,1846,Edward Balliol,M,1283-06-15,1364-01-15,NA,NA
+1850,1,NA,NA,Baldwin V of Flanders,M,1012-06-15,1067-09-01,Count,NA
 1851,1,NA,1852,Sybilla,F,NA,NA,NA,NA
 1852,1,NA,NA,Geoffrey of Conversano,M,NA,NA,Count,NA
-1853,1,1851,1382,William Clito of Flanders,M,NA,1128-06-15,Count,NA
-1854,192,NA,1855,Sybil,F,NA,NA,NA,NA
-1855,192,NA,NA,Fulke,M,NA,NA,Count of Anjou,NA
+1853,1,1851,1382,William Clito of Flanders,M,1102-10-25,1128-07-28,Count,NA
+1854,192,NA,1855,Sybil,F,1112-06-15,1165-06-15,NA,NA
+1855,192,NA,NA,Fulke,M,1092-06-15,1143-11-13,Count of Anjou,NA
 1856,193,NA,1857,Adelicia,F,NA,NA,NA,NA
-1857,193,NA,NA,Reiner of Montferrat,M,NA,NA,Marquis,NA
+1857,193,NA,NA,Reiner of Montferrat,M,1162-06-15,1183-06-15,Marquis,NA
 1858,192,NA,1855,Isabella,F,NA,NA,NA,NA
-1859,108,NA,NA,Geoffrey Lower Lorraine,M,NA,NA,Duke,NA
-1860,1,1388,1517,Matilda,F,NA,1120-06-15,NA,NA
+1859,108,NA,NA,Geoffrey Lower Lorraine,M,1060-06-15,1100-01-25,Duke,NA
+1860,1,1388,1517,Matilda,F,1090-06-15,1120-11-25,NA,NA
 1861,1,1388,1517,William,M,NA,NA,NA,NA
 1862,194,NA,1863,Agnes,F,NA,NA,NA,NA
 1863,194,NA,NA,Giles de Sulli,M,NA,NA,NA,NA
 1864,195,NA,1865,Maud,F,NA,NA,NA,NA
 1865,195,NA,NA,Ingelbert of Carinthia,M,NA,NA,Duke,NA
-1866,1,1395,1405,Geoffrey VI of Anjou,M,1134-06-15,1158-06-15,Count of Nantes,NA
-1867,1,1395,1405,William,M,1136-06-15,1164-06-15,Count of Poitou,NA
-1868,1,NA,NA,William X of Aquitaine,M,1099-06-15,1137-06-15,Duke,NA
-1869,1,2453,2452,Louis VII the Younger,M,1121-06-15,1180-09-18,King of France,NA
-1870,126,NA,NA,William de Warenne,M,NA,NA,Earl of Surrey,NA
-1871,125,NA,NA,Theodore of Flanders,M,NA,NA,Count,NA
-1872,123,NA,NA,Sancho VI,M,NA,NA,King of Navarre,NA
-1873,1,1506,1377,Eleanor,F,NA,1241-06-15,NA,NA
-1874,1,NA,NA,Conan of Brittany,M,NA,NA,Duke,NA
-1875,196,NA,NA,Ranulph,M,NA,NA,Earl of Chester,NA
-1876,197,NA,NA,Guy of Thouars,M,NA,NA,Viscount,NA
-1877,107,NA,NA,William of Gloucester,M,NA,NA,Earl,NA
-1878,198,NA,NA,Geoffrey de Mandeville,M,NA,NA,NA,NA
-1879,199,NA,NA,Hubert de Burgh,M,NA,NA,NA,NA
-1880,200,NA,NA,Hugh de la Marche le Brun,M,NA,NA,Count,NA
-1881,1,NA,NA,Raymond of Provence,M,NA,NA,Count,NA
-1882,1,596,1367,Henry,M,NA,1271-06-15,NA,NA
-1883,1,NA,NA,William of Pembroke Marshal,M,NA,NA,Earl,NA
-1884,1,NA,NA,Raymond of Provence Berengar,M,NA,NA,Count,NA
+1866,1,1395,1405,Geoffrey VI of Anjou,M,1134-06-01,1158-07-27,Count of Nantes,NA
+1867,1,1395,1405,William,M,1136-07-22,1164-01-30,Count of Poitou,NA
+1868,1,NA,NA,William X of Aquitaine,M,1099-06-15,1137-04-09,Duke,NA
+1869,1,2453,2452,Louis VII the Younger,M,1120-06-15,1180-09-18,King of France,NA
+1870,126,NA,NA,William de Warenne,M,1071-06-15,1138-05-11,Earl of Surrey,NA
+1871,125,NA,NA,Theodore of Flanders,M,1099-06-15,1168-01-17,Count,NA
+1872,123,NA,NA,Sancho VI,M,1132-04-21,1194-06-27,King of Navarre,NA
+1873,1,1506,1377,Eleanor,F,1184-06-15,1241-08-10,NA,NA
+1874,1,NA,NA,Conan of Brittany,M,1138-06-15,1171-02-20,Duke,NA
+1875,196,NA,NA,Ranulph,M,1170-06-15,1232-10-26,Earl of Chester,NA
+1876,197,NA,NA,Guy of Thouars,M,1155-06-15,1213-04-13,Viscount,NA
+1877,107,NA,NA,William of Gloucester,M,1116-11-23,1183-11-23,Earl,NA
+1878,198,NA,NA,Geoffrey de Mandeville,M,1100-06-15,1144-09-14,NA,NA
+1879,199,NA,NA,Hubert de Burgh,M,1170-06-15,1243-05-12,NA,NA
+1880,200,NA,NA,Hugh de la Marche le Brun,M,1183-06-15,1249-06-05,Count,NA
+1881,1,NA,NA,Raymond of Provence,M,1198-06-15,1245-08-19,Count,NA
+1882,1,596,1367,Henry,M,1235-11-02,1271-03-13,NA,NA
+1883,1,NA,NA,William of Pembroke Marshal,M,1146-06-15,1219-05-14,Earl,NA
+1884,1,NA,NA,Raymond of Provence Berengar,M,1198-06-15,1245-08-19,Count,NA
 1885,133,NA,NA,William de Fauquemont of Montjoye,M,NA,NA,Count,NA
-1886,1,2232,2231,Alexander II,M,1198-06-15,1249-06-15,King of Scotland,NA
-1887,1,1582,1367,Edmund,M,NA,1300-06-15,Earl of Cornwall,NA
-1888,1,1582,1367,Richard,M,NA,1296-06-15,NA,NA
+1886,1,2232,2231,Alexander II,M,1198-08-24,1249-07-06,King of Scotland,NA
+1887,1,1582,1367,Edmund,M,1249-12-26,1300-09-25,Earl of Cornwall,NA
+1888,1,1582,1367,Richard,M,1252-06-15,1296-06-15,NA,NA
 1889,201,NA,1890,Margaret,F,NA,NA,NA,NA
-1890,201,NA,NA,Richard De Clare of Gloucester,M,NA,NA,Earl,NA
-1891,1,NA,NA,Alfonso IX,M,NA,1230-06-15,King of Castile,NA
+1890,201,NA,NA,Richard De Clare of Gloucester,M,1222-08-04,1262-07-15,Earl,NA
+1891,1,NA,NA,Alfonso IX,M,1171-08-15,1230-09-24,King of Castile,NA
 1892,202,NA,NA,Lucienne of Rochefort,F,NA,NA,NA,NA
-1893,136,NA,NA,William of Albemarle de Forz,M,NA,NA,Count,NA
-1894,1,1742,1741,Robert,M,NA,NA,Count of Artois,NA
+1893,136,NA,NA,William of Albemarle de Forz,M,1191-06-15,1242-03-26,Count,NA
+1894,1,1742,1741,Robert,M,1216-09-25,1250-02-08,Count of Artois,NA
 1895,1,NA,NA,Unknown,F,NA,NA,NA,NA
-1896,203,NA,1897,Yolande,F,NA,NA,NA,NA
-1897,203,NA,NA,Robert IV,M,NA,NA,Count of Dreux,NA
+1896,203,NA,1897,Yolande,F,1212-06-15,1248-10-30,NA,NA
+1897,203,NA,NA,Robert IV,M,1241-06-15,1282-11-12,Count of Dreux,NA
 1898,1,NA,NA,Roger of Harwich Hayles,M,NA,NA,Sir,NA
 1899,142,NA,NA,Piers De Braose,M,NA,NA,NA,NA
 1900,204,NA,NA,Ralph Cobham,M,NA,NA,Sir,NA
 1901,1,NA,NA,John,M,NA,NA,Lord Wake,NA
 1902,205,NA,NA,John Comyn,M,NA,NA,NA,NA
 1903,1,2485,1739,Philip IV the Fair,M,1268-06-15,1314-11-29,King of France,NA
-1904,1,NA,1905,Roger Mortimer,M,NA,1360-06-15,Earl of March II,NA
-1905,1,NA,1906,Edmund Mortimer,M,NA,NA,Sir,NA
-1906,1,NA,1907,Roger Mortimer,M,NA,1330-06-15,Earl of March I,NA
-1907,1,1909,1908,Edmund Mortimer,M,NA,NA,Lord Mortimer I,NA
-1908,1,1911,1910,Roger Mortimer,M,NA,NA,NA,NA
-1909,1,2216,1919,Maud,F,NA,NA,NA,NA
-1910,1,NA,NA,Ralph Mortimer,M,NA,NA,NA,NA
-1911,1,1956,1913,Gwladus DDU,F,NA,NA,NA,NA
-1912,1,1921,1920,Reginald De Braose,M,NA,NA,NA,NA
-1913,1,NA,1953,Llywelyn Fawr the Great,M,NA,NA,Prince of Wales,NA
-1914,1,1916,1915,Richard Wellesley,M,NA,1842-06-15,Marquess,NA
-1915,1,NA,NA,Garret of Mornington Wellesley,M,NA,NA,Earl,NA
-1916,1,NA,1918,Anne Hill,F,NA,1831-06-15,Hon.,NA
-1917,1,1916,1915,Arthur of Wellington Wellesley,M,NA,NA,Duke,NA
-1918,1,NA,2186,Arthur Dungannon Hill,M,NA,NA,Viscount,NA
-1919,1,NA,1912,William De Braose,M,NA,NA,NA,NA
-1920,1,NA,NA,William De Braose,M,NA,NA,NA,NA
-1921,1,1923,1922,Bertha,F,NA,NA,NA,NA
-1922,1,NA,NA,Miles of Gloucester,M,NA,NA,Earl of Hereford,NA
-1923,1,1925,1924,Sybil,F,NA,NA,NA,NA
-1924,1,NA,NA,Bernard of Neufmarche,M,NA,NA,NA,NA
+1904,1,NA,1905,Roger Mortimer,M,1328-11-11,1360-02-26,Earl of March II,NA
+1905,1,NA,1906,Edmund Mortimer,M,1302-06-15,1331-12-16,Sir,NA
+1906,1,NA,1907,Roger Mortimer,M,1287-04-25,1330-11-29,Earl of March I,NA
+1907,1,1909,1908,Edmund Mortimer,M,1251-06-15,1304-07-17,Lord Mortimer I,NA
+1908,1,1911,1910,Roger Mortimer,M,1231-06-15,1282-10-27,NA,NA
+1909,1,2216,1919,Maud,F,1224-06-15,1301-03-23,NA,NA
+1910,1,NA,NA,Ralph Mortimer,M,1190-06-15,1246-08-06,NA,NA
+1911,1,1956,1913,Gwladus DDU,F,1206-06-15,1251-06-15,NA,NA
+1912,1,1921,1920,Reginald De Braose,M,1178-06-15,1228-06-09,NA,NA
+1913,1,NA,1953,Llywelyn Fawr the Great,M,1173-06-15,1240-04-11,Prince of Wales,NA
+1914,1,1916,1915,Richard Wellesley,M,1760-06-20,1842-09-26,Marquess,NA
+1915,1,NA,NA,Garret of Mornington Wellesley,M,1735-07-19,1781-05-22,Earl,NA
+1916,1,NA,1918,Anne Hill,F,1742-06-23,1831-09-10,Hon.,NA
+1917,1,1916,1915,Arthur of Wellington Wellesley,M,1769-05-01,1852-09-14,Duke,NA
+1918,1,NA,2186,Arthur Dungannon Hill,M,1738-12-24,1770-06-19,Viscount,NA
+1919,1,NA,1912,William De Braose,M,1144-06-15,1211-08-09,NA,NA
+1920,1,NA,NA,William De Braose,M,1112-06-15,1192-06-15,NA,NA
+1921,1,1923,1922,Bertha,F,1130-06-15,1170-06-15,NA,NA
+1922,1,NA,NA,Miles of Gloucester,M,1097-06-15,1143-12-24,Earl of Hereford,NA
+1923,1,1925,1924,Sybil,F,1092-06-15,1143-06-15,NA,NA
+1924,1,NA,NA,Bernard of Neufmarche,M,1050-06-15,1125-06-15,NA,NA
 1925,1,1927,1926,Nest,F,NA,NA,NA,NA
 1926,1,NA,NA,Osbern Fitz Richard,M,NA,NA,NA,NA
-1927,1,1539,1928,Nest,F,NA,NA,NA,NA
-1928,1,1931,1930,Gruffydd Ap Llywelyn,M,NA,NA,NA,NA
-1929,1,NA,NA,Henry III,M,1017-06-15,1056-06-15,King of Germany,NA
-1930,1,NA,NA,Llywelyn Ap Seisyll,M,NA,NA,NA,NA
-1931,1,NA,1934,Angharad,F,NA,NA,NA,NA
-1932,1,NA,NA,Cynfyn of Powys,M,NA,NA,NA,NA
-1933,1,1931,1932,Bleddyn,M,NA,NA,NA,NA
+1927,1,1539,1928,Nest,F,1059-06-15,1136-06-15,NA,NA
+1928,1,1931,1930,Gruffydd Ap Llywelyn,M,1010-06-15,1063-08-05,NA,NA
+1929,1,NA,NA,Henry III,M,1016-10-28,1056-10-05,King of Germany,NA
+1930,1,NA,NA,Llywelyn Ap Seisyll,M,NA,1023-06-15,NA,NA
+1931,1,NA,1934,Angharad,F,NA,1058-06-15,NA,NA
+1932,1,NA,NA,Cynfyn of Powys,M,NA,1023-06-15,NA,NA
+1933,1,1931,1932,Bleddyn,M,1025-06-15,1075-06-15,NA,NA
 1934,1,NA,1935,Maredudd,M,NA,NA,NA,NA
 1935,1,NA,1936,Owain,M,NA,NA,NA,NA
 1936,1,NA,1937,Hywel Dda (the Good),M,NA,NA,NA,NA
@@ -1947,46 +1947,46 @@ personID,famID,momID,dadID,name,sex,birth_date,death_date,attribute_title,twinID
 1946,1,NA,1943,Cadwallon,M,NA,NA,NA,NA
 1947,1,NA,1945,Cynan,M,NA,NA,NA,NA
 1948,1,NA,1944,Idwal,M,NA,NA,NA,NA
-1949,1,NA,1948,Iago,M,NA,NA,NA,NA
+1949,1,NA,1948,Iago,M,1000-06-15,1039-06-15,NA,NA
 1950,1,NA,1949,Cynan,M,NA,NA,NA,NA
-1951,1,NA,1950,Gruffydd Ap Cynan,M,NA,NA,NA,NA
-1952,1,NA,1951,Owain Gwynedd,M,NA,NA,NA,NA
-1953,1,1954,1952,Iorwerth Drwyndwn,M,NA,NA,NA,NA
+1951,1,NA,1950,Gruffydd Ap Cynan,M,1055-06-15,1137-06-15,NA,NA
+1952,1,NA,1951,Owain Gwynedd,M,1100-06-15,1170-11-28,NA,NA
+1953,1,1954,1952,Iorwerth Drwyndwn,M,1145-06-15,1174-06-15,NA,NA
 1954,1,NA,NA,Unknown,F,NA,NA,NA,NA
-1955,1,1954,1952,Dafydd,M,NA,NA,NA,NA
+1955,1,1954,1952,Dafydd,M,1145-06-15,1203-06-15,NA,NA
 1956,1,NA,NA,Unknown,F,NA,NA,NA,NA
-1957,1,1956,1913,Gruffydd,M,NA,NA,NA,NA
-1958,1,1956,1913,Dafydd,M,NA,NA,NA,NA
-1959,1,1956,1913,Angharad,F,NA,NA,NA,NA
-1960,1,NA,1961,Gwenllian,F,NA,NA,NA,NA
-1961,1,NA,1957,Llywelyn Ap Gruffydd,M,NA,NA,NA,NA
+1957,1,1956,1913,Gruffydd,M,1198-06-15,1244-03-01,NA,NA
+1958,1,1956,1913,Dafydd,M,1212-06-15,1246-02-25,NA,NA
+1959,1,1956,1913,Angharad,F,1212-06-15,1256-06-15,NA,NA
+1960,1,NA,1961,Gwenllian,F,1282-06-15,1337-06-07,NA,NA
+1961,1,NA,1957,Llywelyn Ap Gruffydd,M,1223-06-15,1282-12-11,NA,NA
 1962,1,193,176,Kathryn,F,NA,NA,NA,NA
 1963,1,193,176,Norissa,F,NA,NA,NA,NA
-1964,1,1967,1966,Alfred the Great,M,NA,NA,King West Saxons,NA
-1965,1,NA,1981,Ealhswith,F,NA,NA,NA,NA
-1966,1,1974,1973,Ethelwulf,M,NA,NA,King of Wessex,NA
+1964,1,1967,1966,Alfred the Great,M,NA,899-10-26,King West Saxons,NA
+1965,1,NA,1981,Ealhswith,F,NA,902-12-05,NA,NA
+1966,1,1974,1973,Ethelwulf,M,NA,858-01-13,King of Wessex,NA
 1967,1,NA,1976,Osburh,F,NA,NA,NA,NA
 1968,1,1967,1966,Athelstan,M,NA,NA,NA,NA
-1969,1,1967,1966,Ethelbald,M,NA,NA,King of Wessex,NA
+1969,1,1967,1966,Ethelbald,M,NA,860-12-20,King of Wessex,NA
 1970,206,NA,NA,Judith,F,NA,NA,NA,NA
 1971,1,1967,1966,Ethelbert,M,NA,NA,King of Wessex,NA
-1972,1,1967,1966,Ethelred I,M,NA,NA,King of Wessex,NA
+1972,1,1967,1966,Ethelred I,M,NA,871-04-15,King of Wessex,NA
 1973,1,NA,2054,Egbert,M,NA,NA,King of Wessex,NA
 1974,1,NA,NA,Redburh,F,NA,NA,NA,NA
 1975,1,1974,1973,Athelstan,M,NA,NA,NA,NA
 1976,1,NA,NA,Oslac,M,NA,NA,NA,NA
 1977,1,1967,1966,Ethelswith,F,NA,NA,NA,NA
 1978,1,NA,1972,Ethelhelm,M,NA,NA,NA,NA
-1979,1,NA,1972,Ethelwald,M,NA,NA,King of York,NA
+1979,1,NA,1972,Ethelwald,M,NA,902-12-13,King of York,NA
 1980,207,NA,NA,Burghred,M,NA,NA,King of Mercia,NA
 1981,1,NA,NA,Ethelred Mucel,M,NA,NA,Ealdorman,NA
-1982,1,1965,1964,Ethelwerd,M,NA,NA,NA,NA
+1982,1,1965,1964,Ethelwerd,M,NA,922-10-16,NA,NA
 1983,1,NA,1982,Elfwine,M,NA,NA,NA,NA
 1984,1,NA,1982,Ethelwine,M,NA,NA,NA,NA
-1985,1,1965,1964,Ethelfleda,F,NA,NA,Lady of Mercia,NA
+1985,1,1965,1964,Ethelfleda,F,NA,918-06-12,Lady of Mercia,NA
 1986,1,1965,1964,Ethelgiva of Shaftesbury,F,NA,NA,Abbess,NA
-1987,1,1965,1964,Elfrida,F,NA,NA,NA,NA
-1988,208,NA,NA,Baldwin II of Flanders,M,NA,NA,Count,NA
+1987,1,1965,1964,Elfrida,F,NA,929-06-07,NA,NA
+1988,208,NA,NA,Baldwin II of Flanders,M,NA,918-09-10,Count,NA
 1989,209,NA,NA,Ethelred of Mercia,M,NA,NA,Ealdorman,NA
 1990,1,1768,1929,Henry IV,M,1050-11-11,1106-08-07,Emperor,NA
 1991,1,NA,1995,Cerdic,M,NA,NA,King of Wessex,NA
@@ -2034,13 +2034,13 @@ personID,famID,momID,dadID,name,sex,birth_date,death_date,attribute_title,twinID
 2033,1,NA,2029,Cuthred,M,NA,NA,NA,NA
 2034,210,NA,NA,Unknown,F,NA,NA,NA,NA
 2035,211,NA,NA,Sexburh,F,NA,NA,Queen of Wessex,NA
-2036,212,NA,NA,Oswald of Northumbria,M,NA,NA,King,NA
+2036,212,NA,NA,Oswald of Northumbria,M,NA,642-08-05,King,NA
 2037,1,NA,1993,Cuthwine,M,NA,NA,NA,NA
 2038,1,NA,2037,Chad,M,NA,NA,NA,NA
 2039,1,NA,2037,Cynebald,M,NA,NA,NA,NA
 2040,1,NA,2037,Cuthwulf (Cutha),M,NA,NA,NA,NA
 2041,1,NA,2038,Cenbert,M,NA,NA,NA,NA
-2042,1,NA,2041,Cedwalla,M,NA,NA,King of Wessex,NA
+2042,1,NA,2041,Cedwalla,M,NA,689-04-20,King of Wessex,NA
 2043,1,NA,2041,Mul,M,NA,NA,King of Kent,NA
 2044,1,NA,2045,Oswald Atheling,M,NA,NA,NA,NA
 2045,1,NA,2039,Ethelbald,M,NA,NA,NA,NA
