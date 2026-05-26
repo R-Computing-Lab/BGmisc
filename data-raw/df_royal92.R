@@ -1377,6 +1377,208 @@ date_overrides <- tribble(
   2043, "660", "687", # Mul of Kent; approximate year-level dates
   2046, "670", "726", # Ine of Wessex; approximate year-level dates
   2050, "672", "718", # Ingild of Wessex; approximate year-level dates
+  2051, "670", "31 AUG 725", # Cuthburh of Wimborne; approximate birth year
+  2053, "630", "14 DEC 705", # Aldfrith of Northumbria; approximate birth year; death year varies 704/705, selected 705
+  2054, "758", "784", # Ealhmund of Kent; approximate birth year and death year
+  2057, "1307", "26 SEP 1345", # William II of Hainault; birth year only
+  2058, "1314", "26 DEC 1360", # Thomas Holland, 1st Earl of Kent; approximate birth year
+  2059, "17 SEP 1312", "6 JUN 1333", # William de Burgh, 3rd Earl of Ulster
+  2060, "1320", "4 AUG 1378", # Galeazzo II Visconti; identity inferred from Violante Visconti context
+  2061, "1358", "16 DEC 1378", # Otto III of Montferrat; approximate birth year; identity inferred from Violante Visconti context
+  2062, "30 AUG 1334", "23 MAR 1369", # Peter/Pedro of Castile
+  2063, "1310", "1380", # Payne Roet of Guienne; approximate year-level dates
+  2064, "1340", "13 NOV 1371", # Hugh Swynford; approximate birth year
+  2065, "1350", "10 MAY 1403", # Katherine Swynford; likely duplicate/identity match to Catherine Swynford branch
+  2066, "4 OCT 1379", "25 DEC 1406", # Henry III of Castile
+  2067, "24 AUG 1358", "9 OCT 1390", # John I of Castile
+  2068, "13 JAN 1334", "29 MAY 1379", # Henry II of Castile
+  2069, "25 MAR 1342", "16 JAN 1373", # Humphrey de Bohun, Earl of Hereford; date source sometimes gives 1341/1342
+  2070, "2 MAR 1378", "21 JUL 1403", # Edmund Stafford, Earl of Stafford
+  2071, "15 AUG 1402", "10 JUL 1460", # Humphrey Stafford, Duke of Buckingham
+  2074, "1370", "24 SEP 1435", # Isabeau/Isabelle of Bavaria; approximate birth year
+  2079, "1409", "1449", # Margaret Beaufort, Countess of Devon; approximate year-level dates
+  2080, "1414", "3 FEB 1458", # Thomas Courtenay, Earl of Devon; approximate birth year
+  2081, "15 SEP 1408", "6 MAR 1467", # Eleanor Beauchamp; approximate mid-month birth date
+  2082, "25 JAN 1382", "30 APR 1439", # Richard Beauchamp, Earl of Warwick
+  2083, "26 JAN 1436", "15 MAY 1464", # Henry Beaufort, Duke of Somerset
+  2084, "1438", "6 MAY 1471", # Edmund Beaufort, Duke of Somerset; approximate birth year
+  2085, "1455", "4 MAY 1471", # John Beaufort; approximate birth year; identity inferred from Beaufort sibling cluster
+  2086, "1431", "16 AUG 1501", # Eleanor Beaufort; approximate birth year
+  2087, "1433", "11 AUG 1518", # Joan Beaufort; approximate birth year; identity inferred from Beaufort sibling cluster
+  2088, "1435", "1496", # Anne Beaufort; approximate year-level dates; identity inferred from Beaufort sibling cluster
+  2089, "1437", "1474", # Margaret Beaufort; approximate year-level dates; identity inferred from Beaufort sibling cluster
+  2090, "1450", "1473", # Elizabeth Beaufort; approximate year-level dates; identity inferred from Beaufort sibling cluster
+  2091, "24 NOV 1420", "1 MAY 1461", # James Butler, Earl of Wiltshire and Ormond
+  2092, "1430", "1493", # Robert Spencer; approximate year-level dates
+  2093, "1435", "1486", # Robert St Lawrence, Lord Howth; approximate year-level dates
+  2095, "1378", "13 AUG 1444", # William Paston; approximate birth year
+  2096, "1425", "22 MAY 1458", # Humphrey Stafford, Earl of Stafford; approximate birth year
+  2099, "1477", "12 MAR 1539", # Thomas Boleyn, Earl of Wiltshire; approximate birth year
+  2100, "6 NOV 1479", "12 APR 1555", # Joanna of Castile / Juana the Mad
+  2101, "1505", "25 OCT 1557", # William Cavendish; approximate birth year
+  2102, "30 SEP 1599", "24 APR 1674", # Frances Devereux / Duchess of Somerset
+  2103, "10 NOV 1565", "25 FEB 1601", # Robert Devereux, Earl of Essex
+  2104, "1517", "2 JAN 1570", # Henry Clifford, Earl of Cumberland; approximate birth year
+  2105, "1519", "30 NOV 1586", # Adrian Stokes; approximate birth year; death year differs from current placeholder
+  2106, "25 AUG 1540", "26 JAN 1568", # Catherine Grey
+  2107, "20 APR 1545", "20 APR 1578", # Mary Grey
+  2108, "22 MAY 1539", "6 APR 1621", # Edward Seymour, Earl of Hertford
+  2109, "21 SEP 1561", "21 JUL 1612", # Edward Beauchamp Seymour
+  2110, "11 FEB 1563", "8 AUG 1600", # Thomas Seymour; son of Edward Seymour and Katherine Grey
+  2114, "1 JAN 1614", "7 JAN 1629", # Frederick Henry of the Palatinate
+  2115, "16 SEP 1627", "16 DEC 1650", # Philip of the Palatinate
+  2116, "26 DEC 1618", "11 FEB 1680", # Elisabeth of the Palatinate / Abbess of Herford
+  2117, "18 APR 1622", "11 FEB 1709", # Louise Hollandine of the Palatinate / Abbess of Maubuisson
+  2118, "17 JUL 1626", "18 SEP 1651", # Henriette Marie of the Palatinate
+  2119, "19 DEC 1628", "14 JAN 1631", # Charlotte of the Palatinate
+  2120, "13 FEB 1602", "21 SEP 1637", # William V of Hesse-Kassel; identity inferred from Palatinate/Hesse context
+  2121, "30 JUL 1601", "6 MAY 1659", # Amalie Elisabeth of Hanau-Münzenberg; identity inferred from Hesse context
+  2122, "14 JUL 1622", "4 FEB 1652", # Sigismund Rákóczi of Transylvania
+  2127, "18 FEB 1609", "9 DEC 1674", # Edward Hyde, 1st Earl of Clarendon
+  2128, "27 AUG 1669", "26 AUG 1728", # Anne Marie d'Orléans
+  2129, "14 MAY 1666", "31 OCT 1732", # Victor Amadeus II of Savoy
+  2130, "6 NOV 1661", "1 NOV 1700", # Charles II of Spain
+  2131, "8 APR 1605", "17 SEP 1665", # Philip IV of Spain
+  2132, "14 APR 1578", "31 MAR 1621", # Philip III of Spain
+  2133, "15 OCT 1527", "12 JUL 1545", # Maria Manuela of Portugal; identity inferred from Spanish Habsburg context
+  2134, "2 APR 1545", "3 OCT 1568", # Elisabeth of Valois / Elizabeth of France
+  2135, "2 NOV 1549", "26 OCT 1580", # Anna of Austria, Queen of Spain
+  2136, "8 JUL 1545", "24 JUL 1568", # Don Carlos of Spain
+  2137, "2 NOV 1667", "19 DEC 1737", # James Louis Sobieski
+  2139, "6 JUL 1722", "5 DEC 1757", # Gustav Adolf of Stolberg-Gedern
+  2140, "26 JAN 1624", "28 AUG 1705", # George William of Brunswick-Lüneburg / Celle
+  2141, "3 JAN 1639", "5 FEB 1722", # Éléonore d'Olbreuse / Duchess of Celle; row name is generic
+  2142, "28 JUL 1676", "23 MAR 1732", # Frederick II of Saxe-Gotha-Altenburg
+  2143, "13 OCT 1679", "11 OCT 1740", # Magdalena Augusta of Anhalt-Zerbst
+  2144, "1706", "12 JAN 1784", # Edward Walpole; approximate birth year
+  2145, "4 MAR 1715", "28 APR 1763", # James Waldegrave, 2nd Earl Waldegrave
+  2146, "29 MAY 1773", "29 NOV 1844", # Sophia of Gloucester; identity inferred from Gloucester/Walpole context
+  2147, "23 FEB 1708", "5 JUN 1752", # Charles Louis Frederick of Mecklenburg-Strelitz
+  2148, "4 AUG 1713", "29 JUN 1761", # Elisabeth Albertine of Saxe-Hildburghausen
+  2149, "3 OCT 1941", "29 MAR 1956", # Alfonso of Spain; likely duplicate/identity match to personID 594
+  2150, "13 SEP 1794", "12 APR 1860", # Ernest I of Hohenlohe-Langenburg
+  2152, "11 OCT 1957", NA_character_, # Katharine Fraser; living
+  2155, "9 AUG 1914", "26 APR 1943", # Alastair Arthur of Connaught, 2nd Duke of Connaught
+  2157, "4 MAY 1889", "17 JAN 1977", # Janet Bryce; approximate identity from Ogilvy/Bryce context
+  2158, "6 NOV 1892", "8 APR 1938", # George Mountbatten, 2nd Marquess of Milford Haven; likely duplicate/identity match to personID 102
+  2159, "9 MAR 1963", NA_character_, # Ivar Mountbatten; living
+  2160, "13 SEP 1867", "3 JUL 1939", # Wilfrid Ashley, 1st Baron Mount Temple
+  2166, "1205", "1257", # Maelgwn Fychan; approximate birth year and death year
+  2168, "1210", "1265", # Maredudd ap Owain; approximate birth year and death year
+  2169, "1240", "1275", # Owain ap Maredudd; approximate birth year and death year
+  2170, "1270", "1309", # Llywelyn ap Owain; approximate birth year and death year
+  2171, "1300", "1343", # Thomas ap Llywelyn; approximate birth year and death year
+  2173, "1310", "19 SEP 1367", # Tudur Fychan ap Goronwy; approximate birth year
+  2174, "1370", "1406", # Maredudd ap Tudur / Meredith Tudor; approximate year-level dates
+  2175, "1275", "1331", # Goronwy ap Tudur Hen; approximate birth year and death year
+  2176, "1245", "1311", # Tudur Hen / Tudor ap Goronwy; approximate year-level dates
+  2178, "1170", "1246", # Ednyfed Fychan; approximate year-level dates
+  2179, "1200", "7 JUN 1236", # Gwenllian ferch Llywelyn; approximate birth year
+  2180, "1132", "28 APR 1197", # Rhys ap Gruffydd / Lord Rhys; approximate birth year
+  2181, "1090", "1137", # Gruffydd ap Rhys; approximate year-level dates
+  2182, "1040", "1093", # Rhys ap Tewdwr; approximate year-level dates
+  2189, "1609", "10 DEC 1702", # Michael Boyle; identity inferred from O'Brien/Boyle context
+  2191, "1594", "1624", # Dermot O'Brien, 5th Baron Inchiquin; approximate birth year
+  2192, "1569", "20 APR 1597", # Murrough O'Brien, 4th Baron Inchiquin; approximate birth year
+  2193, "1550", "20 APR 1573", # Murrough O'Brien, 3rd Baron Inchiquin; approximate birth year
+  2194, "1500", "1 MAY 1557", # Dermod O'Brien, 2nd Baron Inchiquin; approximate birth year
+  2195, "1485", "7 NOV 1551", # Murrough O'Brien, King of Thomond; approximate birth year
+  2196, "1450", "1528", # Turlough Don O'Brien; approximate birth year and death year
+  2197, "1400", "1466", # Teige An Chomard O'Brien; approximate year-level dates
+  2198, "1360", "1459", # Turlough Bog O'Brien; approximate year-level dates
+  2199, "1320", "1400", # Brian Catha an Aenaigh O'Brien; approximate year-level dates
+  2200, "1280", "1369", # Mahon Moinmoy O'Brien; approximate year-level dates
+  2202, "1250", "1306", # Turlough O'Brien, King of Thomond; approximate birth year and death year
+  2203, "1210", "1259", # Teige Caeluisce O'Brien; approximate year-level dates
+  2204, "1195", "1268", # Conor Na Suidane O'Brien; approximate year-level dates
+  2205, "1170", "1242", # Donough Cairbreach O'Brien; approximate year-level dates
+  2206, "1137", "1194", # Domnall Mór O'Brien; approximate birth year
+  2208, "1088", "1167", # Turlough O'Brien; approximate year-level dates
+  2210, "1009", "14 JUL 1086", # Turlough O'Brien / Toirdelbach Ua Briain; approximate birth year
+  2211, "985", "1023", # Tadc mac Briain / Teige; approximate birth year and death year
+  2212, "941", "23 APR 1014", # Brian Boru; approximate birth year
+  2213, "1030", "1080", # Dearbforgail; approximate year-level dates
+  2214, "1000", "7 FEB 1072", # Diarmait mac Maíl na mBó; approximate birth year
+  2215, "1025", "1070", # Murchad mac Diarmata; approximate year-level dates; row death differs and identity should be checked
+  2216, "1145", "1188", # Aoife/Eva MacMurrough; approximate year-level dates
+  2217, "1146", "14 MAY 1219", # William Marshal, Earl of Pembroke; approximate birth year
+  2218, "1172", "1220", # Isabel de Clare, Countess of Pembroke; approximate year-level dates
+  2219, "1130", "20 APR 1176", # Richard de Clare / Strongbow; approximate birth year
+  2220, "1145", "1188", # Aoife/Eva MacMurrough; approximate year-level dates
+  2221, "1110", "1 MAY 1171", # Dermot MacMurrough / Diarmait Mac Murchada; approximate birth year
+  2222, "1080", "1126", # Énna Mac Murchada; approximate birth year and death year
+  2224, "1092", "1143", # Sibyl de Neufmarché; approximate year-level dates
+  2225, "1021", "1069", # Ingibiorg Finnsdottir; approximate year-level dates
+  2226, "1005", "1065", # Finn Arnesson; approximate year-level dates
+  2227, "1074", "23 APR 1130", # Matilda of Huntingdon; approximate birth year; death sometimes given 1130/1131
+  2228, "1114", "12 JUN 1152", # Henry of Scotland, Earl of Huntingdon
+  2229, "1120", "1178", # Ada de Warenne; approximate year-level dates
+  2230, "23 APR 1141", "9 DEC 1165", # Malcolm IV of Scotland
+  2231, "1142", "4 DEC 1214", # William I the Lion of Scotland; approximate birth year
+  2232, "1170", "11 FEB 1234", # Ermengarde de Beaumont; approximate birth year
+  2233, "1218", "1285", # Marie de Coucy; approximate year-level dates
+  2234, "28 FEB 1261", "9 APR 1283", # Margaret of Scotland, Queen of Norway
+  2235, "1268", "15 JUL 1299", # Eric II of Norway; approximate birth year
+  2236, "9 APR 1283", "26 SEP 1290", # Margaret, Maid of Norway; birth between MAR and 9 APR 1283, selected latest date
+  2237, "1060", "12 NOV 1094", # Duncan II of Scotland; approximate birth year
+  2239, "1001", "14 AUG 1040", # Duncan I of Scotland; approximate birth year
+  2241, "1033", "1099", # Donald III Bane of Scotland; approximate year-level dates
+  2242, "975", "1045", # Crínán of Dunkeld; approximate year-level dates
+  2243, "984", "1045", # Bethóc of Scotland; approximate year-level dates
+  2244, "1000", "1032", # Gille Coemgáin of Moray; approximate year-level dates
+  2245, "1005", "1060", # Gruoch of Scotland; approximate year-level dates
+  2246, "1032", "17 MAR 1058", # Lulach of Scotland; approximate birth year
+  2247, "1005", "15 AUG 1057", # Macbeth of Scotland; approximate birth year
+  2248, "954", "25 NOV 1034", # Malcolm II of Scotland; approximate birth year
+  2249, "932", "995", # Kenneth II of Scotland; approximate year-level dates
+  2250, "900", "954", # Malcolm I of Scotland; approximate year-level dates
+  2251, "862", "900", # Donald II of Scotland; approximate year-level dates
+  2252, "879", "952", # Constantine II of Scotland; approximate year-level dates
+  2253, "930", "967", # Dub / Duff of Scotland; approximate year-level dates
+  2254, "966", "25 MAR 1005", # Kenneth III of Scotland; approximate birth year
+  2255, "980", "1058", # Boite mac Cináeda / Beoedhe; approximate year-level dates
+  2256, "970", "997", # Causantín mac Cuilén / Constantine; approximate year-level dates
+  2257, "945", "971", # Cuilén / Colin of Scotland; approximate year-level dates
+  2258, "910", "962", # Indulf of Scotland; approximate year-level dates
+  2260, "840", "878", # Áed of Scotland; approximate year-level dates
+  2261, "810", "13 FEB 858", # Kenneth I MacAlpin; approximate birth year
+  2263, "830", "878", # Run of Strathclyde; approximate year-level dates
+  2264, "860", "889", # Eochaid of Scotland; approximate year-level dates
+  2265, "778", "834", # Alpin of Scotland; approximate year-level dates
+  2266, "812", "13 APR 862", # Donald I of Scotland; approximate birth year
+  2267, "10 OCT 1332", "1 JAN 1387", # Charles II of Navarre
+  2268, "1348", "6 JUL 1403", # Reynold Cobham; approximate birth year
+  2269, "17 JAN 1342", "27 APR 1404", # Philip the Bold, Duke of Burgundy; identity inferred from Burgundy row
+  2270, "1390", "31 AUG 1433", # Peter of Luxembourg, Count of Saint-Pol; approximate birth year
+  2271, "1405", "12 AUG 1469", # Richard Woodville, Earl Rivers; approximate birth year
+  2272, "16 JAN 1409", "10 JUL 1480", # René of Anjou
+  2273, "1384", "2 AUG 1415", # Thomas Grey of Heton; approximate birth year
+  2274, "27 JAN 1546", "18 JUL 1608", # Joachim Frederick of Brandenburg
+  2275, "1462", "18 DEC 1505", # Richard Pole; approximate birth year
+  2276, "27 SEP 1442", "1492", # John de la Pole, Duke of Suffolk; death year only
+  2277, "1350", "25 APR 1397", # Thomas Holland, 2nd Earl of Kent; approximate birth year
+  2278, "1370", "14 MAR 1421", # Edward Charleton, Lord Cherleton; approximate birth year
+  2279, "2 MAR 1378", "21 JUL 1403", # Edmund Stafford, Earl of Stafford; duplicate/identity match to personID 2070 likely
+  2280, "11 APR 1374", "20 JUL 1398", # Roger Mortimer, 4th Earl of March
+  2281, "1375", "1405", # Eleanor Mortimer; approximate year-level dates
+  2282, "1357", "5 DEC 1419", # Edward Courtenay; approximate birth year; identity should be checked against Courtenay branch
+  2283, "6 NOV 1391", "18 JAN 1425", # Edmund Mortimer, 5th Earl of March
+  2284, "12 FEB 1371", "20 APR 1417", # Elizabeth Mortimer
+  2285, "21 NOV 1375", "24 SEP 1401", # Philippa Mortimer
+  2286, "20 MAY 1364", "21 JUL 1403", # Henry Percy / Hotspur
+  2287, "1351", "28 MAR 1421", # Thomas de Camoys; approximate birth year
+  2288, "29 AUG 1347", "16 APR 1375", # John Hastings, Earl of Pembroke; duplicate/identity match to personID 1417 likely
+  2289, "1346", "21 SEP 1397", # Richard FitzAlan, Earl of Arundel; approximate birth year
+  2290, "1350", "7 MAR 1429", # Thomas Poynings, Lord St John; approximate birth year; identity should be checked
+  2291, "14 MAY 1316", "29 NOV 1378", # Charles IV, Holy Roman Emperor
+  2292, "1352", "16 JAN 1400", # John Holland, Duke of Exeter; approximate birth year
+  2293, "1364", "11 DEC 1443", # John Cornwall, Lord Fanhope; approximate birth year
+  2294, "1374", "28 NOV 1416", # Constance of York; approximate birth year; identity inferred from Despenser context
+  2295, "22 SEP 1373", "13 JAN 1400", # Thomas Despenser, Earl of Gloucester
+  2296, "1367", "17 JUL 1431", # Philippa de Mohun; approximate birth year; identity inferred from York/Exeter context
+  2298, "1350", "18 NOV 1442", # John Golafre; approximate birth year
+  2299, "25 MAR 1414", "22 MAY 1455", # Thomas Clifford, Lord Clifford
+  2300, "17 NOV 1493", "2 MAR 1543", # John Neville, Lord Latimer; likely duplicate/identity match to personID 863
   2456, "1070", "14 FEB 1117", # Bertrada de Montfort
   2509, "6 AUG 1775", "3 JUN 1844", # of Angouleme
   2510, "24 JAN 1778", "14 FEB 1820", # of Berry
@@ -1410,6 +1612,21 @@ date_overrides <- tribble(
 #1975: likely duplicates or variant-matches 1968 Æthelstan of Kent. I included the date data and flagged it.
 
 
+#2065 likely duplicates the Catherine Swynford branch already represented elsewhere.
+
+#2149 likely duplicates Alfonso of Spain already represented at personID == 594.
+
+#2158 likely duplicates George Mountbatten already represented at personID == 102.
+
+#2215 has a current death-year pattern that may not match the most likely identification as Murchad mac Diarmata; I included the date data and flagged the identity concern.
+
+#2269 is listed only as “of Burgundy,” but the most likely identity in context is Philip the Bold, Duke of Burgundy. I included the date data and flagged that inference.
+
+#2279 likely duplicates Edmund Stafford already represented at personID == 2070.
+
+#2288 likely duplicates John Hastings already represented at personID == 1417.
+
+#2300 likely duplicates John Neville, Lord Latimer already represented at personID == 863.
 name_overrides <- tribble(
   ~personID, ~name_override,
   12, "Alexandra of Denmark (Alix)",

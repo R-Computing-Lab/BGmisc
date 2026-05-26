@@ -2049,256 +2049,256 @@ personID,famID,momID,dadID,name,sex,birth_date,death_date,attribute_title,twinID
 2048,1,NA,2040,Ceolwald,M,NA,NA,NA,NA
 2049,213,NA,NA,Ethelburh,F,NA,NA,NA,NA
 2050,1,NA,2047,Ingild,M,NA,NA,NA,NA
-2051,1,NA,2047,Cwenburh of Wimborne,F,NA,NA,Abbess,NA
+2051,1,NA,2047,Cwenburh of Wimborne,F,NA,725-08-31,Abbess,NA
 2052,1,NA,2047,Cuthburh,F,NA,NA,NA,NA
-2053,214,NA,NA,Aldfrid of Northumbria,M,NA,NA,King,NA
+2053,214,NA,NA,Aldfrid of Northumbria,M,NA,705-12-14,King,NA
 2054,1,NA,2055,Ealhmund of Kent,M,NA,NA,Under-King,NA
 2055,1,NA,2056,Eaba,M,NA,NA,NA,NA
 2056,1,NA,2050,Eoppa,M,NA,NA,NA,NA
-2057,1,NA,NA,William of Hainault,M,NA,NA,Count,NA
-2058,1,NA,NA,Thomas Holland,M,NA,NA,Earl of Kent,NA
-2059,1,NA,NA,William de Burgh,M,NA,NA,Earl of Ulster,NA
-2060,103,NA,NA,Galeazzo Visconti,M,NA,NA,Duke of Milan,NA
-2061,215,NA,NA,Otho of Montferrat,M,NA,NA,Marquis,NA
-2062,1,NA,NA,Pedro III of Castile,M,NA,NA,King,NA
-2063,1,NA,NA,Payne of Guienne Roet,M,NA,NA,Sir,NA
-2064,216,NA,NA,Hugh Swynford,M,NA,NA,Sir,NA
-2065,1,1416,1236,Katherine,F,NA,NA,NA,NA
-2066,217,NA,2067,Henry III,M,1379-06-15,1406-06-15,King of Castile,NA
-2067,217,NA,2068,John I (Juan),M,1358-06-15,1390-06-15,King of Castile,NA
-2068,217,NA,NA,Henry II (Enrique),M,1333-06-15,1379-06-15,King of Castile,NA
-2069,1,NA,NA,Humphrey of Hereford De Bohun,M,NA,NA,Earl,NA
-2070,218,NA,NA,Edmund of Stafford,M,NA,NA,Earl,NA
-2071,1,1343,1242,Humphrey of Buckingham,M,NA,NA,Earl,NA
+2057,1,NA,NA,William of Hainault,M,1307-06-15,1345-09-26,Count,NA
+2058,1,NA,NA,Thomas Holland,M,1314-06-15,1360-12-26,Earl of Kent,NA
+2059,1,NA,NA,William de Burgh,M,1312-09-17,1333-06-06,Earl of Ulster,NA
+2060,103,NA,NA,Galeazzo Visconti,M,1320-06-15,1378-08-04,Duke of Milan,NA
+2061,215,NA,NA,Otho of Montferrat,M,1358-06-15,1378-12-16,Marquis,NA
+2062,1,NA,NA,Pedro III of Castile,M,1334-08-30,1369-03-23,King,NA
+2063,1,NA,NA,Payne of Guienne Roet,M,1310-06-15,1380-06-15,Sir,NA
+2064,216,NA,NA,Hugh Swynford,M,1340-06-15,1371-11-13,Sir,NA
+2065,1,1416,1236,Katherine,F,1350-06-15,1403-05-10,NA,NA
+2066,217,NA,2067,Henry III,M,1379-10-04,1406-12-25,King of Castile,NA
+2067,217,NA,2068,John I (Juan),M,1358-08-24,1390-10-09,King of Castile,NA
+2068,217,NA,NA,Henry II (Enrique),M,1334-01-13,1379-05-29,King of Castile,NA
+2069,1,NA,NA,Humphrey of Hereford De Bohun,M,1342-03-25,1373-01-16,Earl,NA
+2070,218,NA,NA,Edmund of Stafford,M,1378-03-02,1403-07-21,Earl,NA
+2071,1,1343,1242,Humphrey of Buckingham,M,1402-08-15,1460-07-10,Earl,NA
 2072,1,1343,1242,Joan,F,NA,NA,NA,NA
 2073,1,1343,1242,Isabel,F,NA,NA,NA,NA
-2074,1,NA,NA,Isabelle of Bavaria,F,1371-06-15,1435-06-15,NA,NA
+2074,1,NA,NA,Isabelle of Bavaria,F,1370-06-15,1435-09-24,NA,NA
 2075,1,2500,2499,Charles VI the Beloved,M,1368-12-03,1422-10-22,King of France,NA
 2076,219,NA,NA,Robert Ferrers,M,NA,NA,Sir,NA
 2077,220,NA,2078,Margaret,F,NA,NA,NA,NA
 2078,220,NA,NA,Thomas Neville,M,NA,NA,Sir,NA
-2079,1,1595,1329,Margaret Beaufort,F,NA,NA,NA,NA
-2080,221,NA,NA,Thomas Courtenay,M,NA,NA,Earl of Devon V,NA
-2081,1,NA,2082,Eleanor Beauchamp,F,NA,NA,NA,NA
-2082,1,NA,NA,Richard Beauchamp,M,NA,NA,Earl of Warwick,NA
-2083,1,2081,1335,Henry Beaufort,M,NA,1463-06-15,Duke Sommerset,NA
-2084,1,2081,1335,Edmund Beaufort,M,NA,1471-06-15,Duke Sommerset,NA
-2085,1,2081,1335,John Beaufort,M,NA,1471-06-15,NA,NA
-2086,1,2081,1335,Eleanor Beaufort,F,NA,NA,NA,NA
-2087,1,2081,1335,Joan Beaufort,F,NA,NA,NA,NA
-2088,1,2081,1335,Anne Beaufort,F,NA,NA,NA,NA
-2089,1,2081,1335,Margaret Beaufort,F,NA,NA,NA,NA
-2090,1,2081,1335,Elizabeth Beaufort,F,NA,NA,NA,NA
-2091,222,NA,NA,James of Wiltshire Butler,M,NA,NA,Earl,NA
-2092,223,NA,NA,Robert Spencer,M,NA,NA,Sir,NA
-2093,224,NA,NA,Robert St. Lawrence,M,NA,NA,Lord Howth,NA
+2079,1,1595,1329,Margaret Beaufort,F,1409-06-15,1449-06-15,NA,NA
+2080,221,NA,NA,Thomas Courtenay,M,1414-06-15,1458-02-03,Earl of Devon V,NA
+2081,1,NA,2082,Eleanor Beauchamp,F,1408-09-15,1467-03-06,NA,NA
+2082,1,NA,NA,Richard Beauchamp,M,1382-01-25,1439-04-30,Earl of Warwick,NA
+2083,1,2081,1335,Henry Beaufort,M,1436-01-26,1464-05-15,Duke Sommerset,NA
+2084,1,2081,1335,Edmund Beaufort,M,1438-06-15,1471-05-06,Duke Sommerset,NA
+2085,1,2081,1335,John Beaufort,M,1455-06-15,1471-05-04,NA,NA
+2086,1,2081,1335,Eleanor Beaufort,F,1431-06-15,1501-08-16,NA,NA
+2087,1,2081,1335,Joan Beaufort,F,1433-06-15,1518-08-11,NA,NA
+2088,1,2081,1335,Anne Beaufort,F,1435-06-15,1496-06-15,NA,NA
+2089,1,2081,1335,Margaret Beaufort,F,1437-06-15,1474-06-15,NA,NA
+2090,1,2081,1335,Elizabeth Beaufort,F,1450-06-15,1473-06-15,NA,NA
+2091,222,NA,NA,James of Wiltshire Butler,M,1420-11-24,1461-05-01,Earl,NA
+2092,223,NA,NA,Robert Spencer,M,1430-06-15,1493-06-15,Sir,NA
+2093,224,NA,NA,Robert St. Lawrence,M,1435-06-15,1486-06-15,Lord Howth,NA
 2094,225,NA,NA,Richard Fry,M,NA,NA,NA,NA
-2095,226,NA,NA,William Paston,M,NA,NA,NA,NA
-2096,227,NA,NA,Humphrey,M,NA,NA,Earl of Stafford,NA
+2095,226,NA,NA,William Paston,M,1378-06-15,1444-08-13,NA,NA
+2096,227,NA,NA,Humphrey,M,1425-06-15,1458-05-22,Earl of Stafford,NA
 2097,228,NA,NA,Richard Darell,M,NA,NA,Sir,NA
 2098,229,NA,NA,Henry Fitz Lewes,M,NA,NA,Sir,NA
-2099,1,NA,NA,Thomas of Wiltshire Boleyn,M,NA,1536-06-15,Earl,NA
-2100,1,841,840,Joanna the Mad (Juana),F,1479-06-15,1555-06-15,NA,NA
-2101,1,NA,NA,William Cavendish,M,NA,NA,Sir,NA
-2102,230,NA,2103,Frances Devereux,F,NA,1674-06-15,NA,NA
-2103,230,NA,NA,Robert Devereux,M,NA,NA,Earl of Essex,NA
-2104,1,NA,NA,Henry of Cumberland Clifford,M,NA,1569-06-15,Earl,NA
-2105,231,NA,NA,Adrian Stokes,M,NA,1581-06-15,NA,NA
-2106,1,1427,1430,Catherine Grey,F,NA,1568-06-15,Lady,NA
-2107,1,1427,1430,Mary Grey,F,NA,1578-06-15,Lady,NA
-2108,1,2393,2392,Edward Seymour,M,NA,NA,Earl of Hertford,NA
-2109,1,2106,2108,Edward Beauchamp Seymour,M,NA,1612-06-15,Lord,NA
-2110,1,2106,2108,Thomas Seymour,M,NA,1600-06-15,NA,NA
+2099,1,NA,NA,Thomas of Wiltshire Boleyn,M,1477-06-15,1539-03-12,Earl,NA
+2100,1,841,840,Joanna the Mad (Juana),F,1479-11-06,1555-04-12,NA,NA
+2101,1,NA,NA,William Cavendish,M,1505-06-15,1557-10-25,Sir,NA
+2102,230,NA,2103,Frances Devereux,F,1599-09-30,1674-04-24,NA,NA
+2103,230,NA,NA,Robert Devereux,M,1565-11-10,1601-02-25,Earl of Essex,NA
+2104,1,NA,NA,Henry of Cumberland Clifford,M,1517-06-15,1570-01-02,Earl,NA
+2105,231,NA,NA,Adrian Stokes,M,1519-06-15,1586-11-30,NA,NA
+2106,1,1427,1430,Catherine Grey,F,1540-08-25,1568-01-26,Lady,NA
+2107,1,1427,1430,Mary Grey,F,1545-04-20,1578-04-20,Lady,NA
+2108,1,2393,2392,Edward Seymour,M,1539-05-22,1621-04-06,Earl of Hertford,NA
+2109,1,2106,2108,Edward Beauchamp Seymour,M,1561-09-21,1612-07-21,Lord,NA
+2110,1,2106,2108,Thomas Seymour,M,1563-02-11,1600-08-08,NA,NA
 2111,232,NA,NA,Isabel Onley,F,NA,NA,NA,NA
 2112,1,NA,2113,Honora Rogers,F,NA,NA,NA,NA
 2113,1,NA,NA,Richard Rogers,M,NA,NA,Sir,NA
-2114,1,728,735,Frederick Henry,M,1614-06-15,1629-06-15,NA,NA
-2115,1,728,735,Philip,M,NA,1650-06-15,NA,NA
-2116,1,728,735,Elizabeth of Hervorden,F,NA,1680-06-15,Abbess,NA
-2117,1,728,735,Louisa Hollandine of Maubisson,F,NA,1709-06-15,Abbess,NA
-2118,1,728,735,Henrietta Maria,F,NA,1651-06-15,NA,NA
-2119,1,728,735,Charlotte,F,NA,1631-06-15,NA,NA
-2120,1,NA,NA,William of Hesse Landgrave,M,NA,NA,NA,NA
-2121,233,NA,NA,Anne,F,NA,NA,NA,NA
-2122,234,NA,NA,Sigismund of Transylvania Ragotski,M,NA,NA,Prince,NA
+2114,1,728,735,Frederick Henry,M,1614-01-01,1629-01-07,NA,NA
+2115,1,728,735,Philip,M,1627-09-16,1650-12-16,NA,NA
+2116,1,728,735,Elizabeth of Hervorden,F,1618-12-26,1680-02-11,Abbess,NA
+2117,1,728,735,Louisa Hollandine of Maubisson,F,1622-04-18,1709-02-11,Abbess,NA
+2118,1,728,735,Henrietta Maria,F,1626-07-17,1651-09-18,NA,NA
+2119,1,728,735,Charlotte,F,1628-12-19,1631-01-14,NA,NA
+2120,1,NA,NA,William of Hesse Landgrave,M,1602-02-13,1637-09-21,NA,NA
+2121,233,NA,NA,Anne,F,1601-07-30,1659-05-06,NA,NA
+2122,234,NA,NA,Sigismund of Transylvania Ragotski,M,1622-07-14,1652-02-04,Prince,NA
 2123,1,736,758,Frederick Augustus,M,NA,1690-06-15,NA,NA
 2124,1,736,758,Maximilian William,M,NA,1726-06-15,NA,NA
 2125,1,736,758,Charles Philip,M,NA,1690-06-15,NA,NA
 2126,1,736,758,Christian,M,NA,1703-06-15,NA,NA
-2127,1,NA,NA,Edward Hyde,M,NA,NA,Earl of Claredon,NA
-2128,1,749,751,Anna Maria,F,1669-06-15,1728-06-15,NA,NA
-2129,235,NA,NA,Victor Amadeus II,M,1666-06-15,1732-06-15,Duke of Savoy,NA
-2130,1,2416,2131,Charles II,M,1661-06-15,1700-06-15,King of Spain,NA
-2131,1,1017,2132,Philip IV,M,1605-06-15,1665-06-15,King of Spain,NA
-2132,1,2135,870,Philip III,M,1578-06-15,1621-06-15,King of Spain,NA
-2133,1,NA,NA,Maria of Portugal,F,NA,NA,NA,NA
-2134,236,NA,NA,Elizabeth of France,F,1545-06-15,1568-06-15,Princess,NA
-2135,1,NA,NA,Anne of Austria,F,1549-06-15,1580-06-15,NA,NA
-2136,1,2133,870,Don Carlos,M,NA,NA,NA,NA
-2137,1,NA,2138,James Louis Sobieski,M,NA,NA,Prince,NA
+2127,1,NA,NA,Edward Hyde,M,1609-02-18,1674-12-09,Earl of Claredon,NA
+2128,1,749,751,Anna Maria,F,1669-08-27,1728-08-26,NA,NA
+2129,235,NA,NA,Victor Amadeus II,M,1666-05-14,1732-10-31,Duke of Savoy,NA
+2130,1,2416,2131,Charles II,M,1661-11-06,1700-11-01,King of Spain,NA
+2131,1,1017,2132,Philip IV,M,1605-04-08,1665-09-17,King of Spain,NA
+2132,1,2135,870,Philip III,M,1578-04-14,1621-03-31,King of Spain,NA
+2133,1,NA,NA,Maria of Portugal,F,1527-10-15,1545-07-12,NA,NA
+2134,236,NA,NA,Elizabeth of France,F,1545-04-02,1568-10-03,Princess,NA
+2135,1,NA,NA,Anne of Austria,F,1549-11-02,1580-10-26,NA,NA
+2136,1,2133,870,Don Carlos,M,1545-07-08,1568-07-24,NA,NA
+2137,1,NA,2138,James Louis Sobieski,M,1667-11-02,1737-12-19,Prince,NA
 2138,1,NA,NA,John III Sobieski,M,1624-06-09,1696-06-17,King of Poland,NA
-2139,50,NA,NA,Gustavus Adolphus of Stolberg-Ged.,M,NA,NA,Prince,NA
-2140,1,NA,NA,George William of Brunswick,M,NA,1726-06-15,Duke,NA
-2141,1,NA,NA,Celle,F,NA,NA,NA,NA
-2142,1,NA,NA,Frederick II of Saxe-Gotha,M,NA,NA,Duke,NA
-2143,1,NA,NA,Magdalena Augusta of Anhalt-Zerbst,F,NA,NA,NA,NA
-2144,1,NA,NA,Edward Walpole,M,NA,NA,Hon. Sir,NA
-2145,237,NA,NA,James Waldegrave 2nd,M,NA,NA,Earl,NA
-2146,1,762,336,Sophia,F,NA,1844-06-15,NA,NA
-2147,1,NA,NA,Charles Louis Frederick,M,NA,NA,Duke,NA
-2148,1,NA,NA,Elizabeth of Saxe-Hildburghausen Albertin,F,NA,NA,NA,NA
-2149,238,NA,NA,Alfonso,M,NA,NA,Infante of Spain,NA
-2150,239,NA,NA,Ernest of Hohenlohe-Langenburg,M,NA,NA,Prince,NA
+2139,50,NA,NA,Gustavus Adolphus of Stolberg-Ged.,M,1722-07-06,1757-12-05,Prince,NA
+2140,1,NA,NA,George William of Brunswick,M,1624-01-26,1705-08-28,Duke,NA
+2141,1,NA,NA,Celle,F,1639-01-03,1722-02-05,NA,NA
+2142,1,NA,NA,Frederick II of Saxe-Gotha,M,1676-07-28,1732-03-23,Duke,NA
+2143,1,NA,NA,Magdalena Augusta of Anhalt-Zerbst,F,1679-10-13,1740-10-11,NA,NA
+2144,1,NA,NA,Edward Walpole,M,1706-06-15,1784-01-12,Hon. Sir,NA
+2145,237,NA,NA,James Waldegrave 2nd,M,1715-03-04,1763-04-28,Earl,NA
+2146,1,762,336,Sophia,F,1773-05-29,1844-11-29,NA,NA
+2147,1,NA,NA,Charles Louis Frederick,M,1708-02-23,1752-06-05,Duke,NA
+2148,1,NA,NA,Elizabeth of Saxe-Hildburghausen Albertin,F,1713-08-04,1761-06-29,NA,NA
+2149,238,NA,NA,Alfonso,M,1941-10-03,1956-03-29,Infante of Spain,NA
+2150,239,NA,NA,Ernest of Hohenlohe-Langenburg,M,1794-09-13,1860-04-12,Prince,NA
 2151,1,NA,NA,of Dalhousie XIII,M,NA,NA,Earl,NA
-2152,1,1707,1706,Katharine Fraser,F,1957-06-15,NA,NA,NA
+2152,1,1707,1706,Katharine Fraser,F,1957-10-11,NA,NA,NA
 2153,1,1707,1706,Alice,F,1961-06-15,NA,NA,NA
 2154,1,1707,1706,Elizabeth,F,1963-06-15,NA,NA,NA
-2155,1,125,122,Alistair Arthur of Connaught 2nd,M,NA,1943-06-15,Duke,NA
+2155,1,125,122,Alistair Arthur of Connaught 2nd,M,1914-08-09,1943-04-26,Duke,NA
 2156,1,NA,NA,Romaine,F,NA,NA,NA,NA
-2157,240,NA,NA,Janet Bryce,F,NA,NA,NA,NA
-2158,1,2156,504,George of Milford Haven,M,NA,NA,Marquess,NA
-2159,1,2156,504,Ivar,M,NA,NA,Lord,NA
-2160,1,NA,NA,of Mount Temple,M,NA,NA,Lord,NA
+2157,240,NA,NA,Janet Bryce,F,1889-05-04,1977-01-17,NA,NA
+2158,1,2156,504,George of Milford Haven,M,1892-11-06,1938-04-08,Marquess,NA
+2159,1,2156,504,Ivar,M,1963-03-09,NA,Lord,NA
+2160,1,NA,NA,of Mount Temple,M,1867-09-13,1939-07-03,Lord,NA
 2161,1,NA,NA,of Lodesborough,M,NA,NA,Earl,NA
 2162,241,NA,NA,J. Keyes-O'Malley Hamilton,M,NA,NA,Capt.,NA
 2163,1,NA,NA,Michael Kelly Bryan,M,NA,NA,NA,NA
 2164,242,NA,NA,William Kemp,M,NA,NA,NA,NA
 2165,1,509,2163,Robin Alexander,M,NA,NA,NA,NA
-2166,1,NA,NA,Maelgwn Fychan,M,NA,1257-06-15,NA,NA
+2166,1,NA,NA,Maelgwn Fychan,M,1205-06-15,1257-06-15,NA,NA
 2167,1,1959,2166,Eleanor,F,NA,NA,NA,NA
-2168,1,NA,NA,Maredudd Ap Owain,M,NA,1265-06-15,NA,NA
-2169,1,2167,2168,Owain,M,NA,1275-06-15,NA,NA
-2170,1,NA,2169,Llywelyn,M,NA,1309-06-15,NA,NA
-2171,1,NA,2170,Thomas,M,NA,1343-06-15,NA,NA
+2168,1,NA,NA,Maredudd Ap Owain,M,1210-06-15,1265-06-15,NA,NA
+2169,1,2167,2168,Owain,M,1240-06-15,1275-06-15,NA,NA
+2170,1,NA,2169,Llywelyn,M,1270-06-15,1309-06-15,NA,NA
+2171,1,NA,2170,Thomas,M,1300-06-15,1343-06-15,NA,NA
 2172,1,NA,2171,Margaret,F,NA,NA,NA,NA
-2173,1,NA,2175,Tudor Fychan of Pemmynydd,M,NA,NA,NA,NA
-2174,1,2172,2173,Maredudd (Meredith) Tudor,M,NA,NA,NA,NA
-2175,1,NA,2176,Goronwy Ap Tudor,M,NA,1331-06-15,NA,NA
-2176,1,NA,2177,Tudor Hen,M,NA,1311-06-15,NA,NA
+2173,1,NA,2175,Tudor Fychan of Pemmynydd,M,1310-06-15,1367-09-19,NA,NA
+2174,1,2172,2173,Maredudd (Meredith) Tudor,M,1370-06-15,1406-06-15,NA,NA
+2175,1,NA,2176,Goronwy Ap Tudor,M,1275-06-15,1331-06-15,NA,NA
+2176,1,NA,2177,Tudor Hen,M,1245-06-15,1311-06-15,NA,NA
 2177,1,2179,2178,Goronwy,M,NA,NA,NA,NA
-2178,1,NA,NA,Ednyfed Fychan,M,NA,NA,NA,NA
-2179,1,NA,2180,Gwenllian,F,NA,1236-06-15,NA,NA
-2180,1,NA,2181,Rhys Ap Gruffydd,M,NA,1197-06-15,Lord Rhys,NA
-2181,1,NA,2182,Gruffydd,M,NA,1137-06-15,NA,NA
-2182,1,NA,2183,Rhys Ap Twedwr,M,NA,NA,Prince S. Wales,NA
+2178,1,NA,NA,Ednyfed Fychan,M,1170-06-15,1246-06-15,NA,NA
+2179,1,NA,2180,Gwenllian,F,1200-06-15,1236-06-07,NA,NA
+2180,1,NA,2181,Rhys Ap Gruffydd,M,1132-06-15,1197-04-28,Lord Rhys,NA
+2181,1,NA,2182,Gruffydd,M,1090-06-15,1137-06-15,NA,NA
+2182,1,NA,2183,Rhys Ap Twedwr,M,1040-06-15,1093-06-15,Prince S. Wales,NA
 2183,1,NA,2184,Tewdwr Mawr the Great,M,NA,NA,NA,NA
 2184,1,NA,2185,Cadell,M,NA,NA,NA,NA
 2185,1,NA,1935,Einion,M,NA,NA,NA,NA
 2186,1,2188,2187,Michael of Hillsborough Hill,M,NA,NA,NA,NA
 2187,1,NA,NA,William Hill,M,NA,NA,NA,NA
 2188,1,2190,2189,Eleanor Boyle,F,NA,NA,NA,NA
-2189,1,NA,NA,Michael Boyle,M,NA,NA,Dr.,NA
+2189,1,NA,NA,Michael Boyle,M,1609-06-15,1702-12-10,Dr.,NA
 2190,1,NA,2191,Mary O'Brien,F,NA,NA,NA,NA
-2191,1,NA,2192,Dermont O'Brien,M,NA,1624-06-15,Lord Inchiquin V,NA
-2192,1,NA,2193,Murrough O'Brien,M,NA,1597-06-15,Lord Inchiquin 4,NA
-2193,1,NA,2194,Murrough O'Brien,M,NA,1573-06-15,Lord Inchiquin 3,NA
-2194,1,NA,2195,Dermod O'Brien,M,NA,1557-06-15,Lord Inchiquin 2,NA
-2195,1,NA,2196,Murrough,M,NA,1551-06-15,King of Thomond,NA
-2196,1,NA,2197,Turlough Don,M,NA,NA,King of Thomond,NA
-2197,1,NA,2198,Teige An Chomard,M,NA,NA,King of Thomond,NA
-2198,1,NA,2199,Turlough Bog the Soft,M,NA,NA,King of Thomond,NA
-2199,1,NA,2200,Brian Catha An Eanaigh,M,NA,NA,King of Thomond,NA
-2200,1,NA,2201,Mahon Moinmoy,M,NA,NA,King of Thomond,NA
+2191,1,NA,2192,Dermont O'Brien,M,1594-06-15,1624-06-15,Lord Inchiquin V,NA
+2192,1,NA,2193,Murrough O'Brien,M,1569-06-15,1597-04-20,Lord Inchiquin 4,NA
+2193,1,NA,2194,Murrough O'Brien,M,1550-06-15,1573-04-20,Lord Inchiquin 3,NA
+2194,1,NA,2195,Dermod O'Brien,M,1500-06-15,1557-05-01,Lord Inchiquin 2,NA
+2195,1,NA,2196,Murrough,M,1485-06-15,1551-11-07,King of Thomond,NA
+2196,1,NA,2197,Turlough Don,M,1450-06-15,1528-06-15,King of Thomond,NA
+2197,1,NA,2198,Teige An Chomard,M,1400-06-15,1466-06-15,King of Thomond,NA
+2198,1,NA,2199,Turlough Bog the Soft,M,1360-06-15,1459-06-15,King of Thomond,NA
+2199,1,NA,2200,Brian Catha An Eanaigh,M,1320-06-15,1400-06-15,King of Thomond,NA
+2200,1,NA,2201,Mahon Moinmoy,M,1280-06-15,1369-06-15,King of Thomond,NA
 2201,1,NA,2202,Mortogh,M,NA,NA,King of Thomond,NA
-2202,1,NA,2203,Turlough,M,NA,1306-06-15,King of Thomond,NA
-2203,1,NA,2204,Teige Caeluisce,M,NA,NA,King of Thomond,NA
-2204,1,NA,2205,Conor Na Suidane,M,NA,NA,King of Thomond,NA
-2205,1,2207,2206,Donough Cairbreach,M,NA,NA,King of Thomond,NA
-2206,1,NA,2208,Donnell More,M,NA,1194-06-15,King of Thomond,NA
+2202,1,NA,2203,Turlough,M,1250-06-15,1306-06-15,King of Thomond,NA
+2203,1,NA,2204,Teige Caeluisce,M,1210-06-15,1259-06-15,King of Thomond,NA
+2204,1,NA,2205,Conor Na Suidane,M,1195-06-15,1268-06-15,King of Thomond,NA
+2205,1,2207,2206,Donough Cairbreach,M,1170-06-15,1242-06-15,King of Thomond,NA
+2206,1,NA,2208,Donnell More,M,1137-06-15,1194-06-15,King of Thomond,NA
 2207,1,NA,2221,Urlachan,F,NA,NA,NA,NA
-2208,1,NA,2209,Turlough,M,NA,NA,King of Thomond,NA
+2208,1,NA,2209,Turlough,M,1088-06-15,1167-06-15,King of Thomond,NA
 2209,1,NA,2210,Dermot,M,NA,NA,King of Munster,NA
-2210,1,NA,2211,Turough,M,NA,NA,King of Munster,NA
+2210,1,NA,2211,Turough,M,1009-06-15,1086-07-14,King of Munster,NA
 2211,1,NA,2212,Teige (Terence),M,NA,1023-06-15,NA,NA
-2212,1,NA,NA,Brian Boru,M,NA,NA,King of Ireland,NA
-2213,1,NA,2212,Dearbforgail,F,NA,1080-06-15,NA,NA
-2214,1,NA,NA,Dermot MacMailnamo,M,NA,1072-06-15,King of Ireland,NA
-2215,1,2213,2214,Murchad,M,NA,1090-06-15,King of Leinster,NA
-2216,1,2218,2217,Eva,F,NA,NA,NA,NA
-2217,1,NA,NA,William Marshal,M,NA,NA,Earl of Pembroke,NA
-2218,1,2220,2219,Isabel,F,NA,NA,NA,NA
-2219,1,NA,NA,Richard (Strongbow),M,NA,NA,Earl of Pembroke,NA
-2220,1,NA,2221,Aoife (Eva),F,NA,NA,NA,NA
-2221,1,NA,2222,Dermot MacMurrough,M,NA,1171-06-15,King of Leinster,NA
-2222,1,NA,2223,Enna,M,NA,1126-06-15,King of Leinster,NA
+2212,1,NA,NA,Brian Boru,M,NA,1014-04-23,King of Ireland,NA
+2213,1,NA,2212,Dearbforgail,F,1030-06-15,1080-06-15,NA,NA
+2214,1,NA,NA,Dermot MacMailnamo,M,1000-06-15,1072-02-07,King of Ireland,NA
+2215,1,2213,2214,Murchad,M,1025-06-15,1070-06-15,King of Leinster,NA
+2216,1,2218,2217,Eva,F,1145-06-15,1188-06-15,NA,NA
+2217,1,NA,NA,William Marshal,M,1146-06-15,1219-05-14,Earl of Pembroke,NA
+2218,1,2220,2219,Isabel,F,1172-06-15,1220-06-15,NA,NA
+2219,1,NA,NA,Richard (Strongbow),M,1130-06-15,1176-04-20,Earl of Pembroke,NA
+2220,1,NA,2221,Aoife (Eva),F,1145-06-15,1188-06-15,NA,NA
+2221,1,NA,2222,Dermot MacMurrough,M,1110-06-15,1171-05-01,King of Leinster,NA
+2222,1,NA,2223,Enna,M,1080-06-15,1126-06-15,King of Leinster,NA
 2223,1,NA,2215,Donchad,M,NA,1126-06-15,King of Leinster,NA
-2224,1,1392,1391,Sybil,F,NA,NA,NA,NA
-2225,1,NA,2226,Ingibiorg,F,NA,NA,NA,NA
-2226,1,NA,NA,Finn Arnasson,M,NA,NA,NA,NA
-2227,1,NA,NA,Matilda,F,NA,1131-06-15,NA,NA
-2228,1,2227,1515,Henry of Huntingdon,M,NA,1152-06-15,Earl,NA
-2229,1,NA,NA,Ada,F,NA,NA,NA,NA
-2230,1,2229,2228,Malcolm IV the Maiden,M,NA,NA,King of Scotland,NA
-2231,1,2229,2228,Willaim I the Lion,M,NA,NA,King of Scotland,NA
-2232,1,NA,NA,Ermengarde,F,NA,1234-06-15,NA,NA
-2233,1,NA,NA,Mary of Coucy,F,NA,NA,NA,NA
-2234,1,1283,1585,Margaret,F,NA,1283-06-15,NA,NA
-2235,1,NA,NA,Eric Magnusson,M,NA,NA,King of Norway,NA
-2236,1,2234,2235,Margaret Maid of Norway,F,1282-06-15,1290-06-15,NA,NA
-2237,1,2225,1511,Duncan II May-Nov,M,NA,NA,King of Scotland,NA
+2224,1,1392,1391,Sybil,F,1092-06-15,1143-06-15,NA,NA
+2225,1,NA,2226,Ingibiorg,F,1021-06-15,1069-06-15,NA,NA
+2226,1,NA,NA,Finn Arnasson,M,1005-06-15,1065-06-15,NA,NA
+2227,1,NA,NA,Matilda,F,1074-06-15,1130-04-23,NA,NA
+2228,1,2227,1515,Henry of Huntingdon,M,1114-06-15,1152-06-12,Earl,NA
+2229,1,NA,NA,Ada,F,1120-06-15,1178-06-15,NA,NA
+2230,1,2229,2228,Malcolm IV the Maiden,M,1141-04-23,1165-12-09,King of Scotland,NA
+2231,1,2229,2228,Willaim I the Lion,M,1142-06-15,1214-12-04,King of Scotland,NA
+2232,1,NA,NA,Ermengarde,F,1170-06-15,1234-02-11,NA,NA
+2233,1,NA,NA,Mary of Coucy,F,1218-06-15,1285-06-15,NA,NA
+2234,1,1283,1585,Margaret,F,1261-02-28,1283-04-09,NA,NA
+2235,1,NA,NA,Eric Magnusson,M,1268-06-15,1299-07-15,King of Norway,NA
+2236,1,2234,2235,Margaret Maid of Norway,F,1283-04-09,1290-09-26,NA,NA
+2237,1,2225,1511,Duncan II May-Nov,M,1060-06-15,1094-11-12,King of Scotland,NA
 2238,243,NA,NA,Ethelreda,F,NA,NA,NA,NA
-2239,1,2243,2242,Duncan I,M,NA,NA,NA,NA
+2239,1,2243,2242,Duncan I,M,1001-06-15,1040-08-14,NA,NA
 2240,1,NA,NA,Sybil,F,NA,NA,NA,NA
-2241,1,2240,2239,Donald III Bane,M,NA,NA,King of Scotland,NA
-2242,1,NA,NA,Crinan,M,NA,NA,NA,NA
-2243,1,NA,2248,Bethoc,F,NA,NA,NA,NA
-2244,1,NA,NA,Gillacomgan,M,NA,NA,NA,NA
-2245,1,NA,2255,Gruoch,F,NA,NA,NA,NA
-2246,1,2245,2244,Lulach,M,NA,NA,King of Scotland,NA
-2247,244,NA,NA,Macbeth,M,NA,1057-06-15,King of Scotland,NA
-2248,1,NA,2249,Malcolm II,M,NA,NA,King of Scotland,NA
+2241,1,2240,2239,Donald III Bane,M,1033-06-15,1099-06-15,King of Scotland,NA
+2242,1,NA,NA,Crinan,M,NA,1045-06-15,NA,NA
+2243,1,NA,2248,Bethoc,F,NA,1045-06-15,NA,NA
+2244,1,NA,NA,Gillacomgan,M,1000-06-15,1032-06-15,NA,NA
+2245,1,NA,2255,Gruoch,F,1005-06-15,1060-06-15,NA,NA
+2246,1,2245,2244,Lulach,M,1032-06-15,1058-03-17,King of Scotland,NA
+2247,244,NA,NA,Macbeth,M,1005-06-15,1057-08-15,King of Scotland,NA
+2248,1,NA,2249,Malcolm II,M,NA,1034-11-25,King of Scotland,NA
 2249,1,NA,2250,Kenneth II,M,NA,NA,King of Scotland,NA
 2250,1,NA,2251,Malcolm I,M,NA,NA,King of Scotland,NA
 2251,1,NA,2252,Donald II,M,NA,NA,King of Scotland,NA
 2252,1,NA,2261,Constantine II,M,NA,NA,King of Scotland,NA
 2253,1,NA,2250,Duff,M,NA,NA,King of Scotland,NA
-2254,1,NA,2253,Kenneth III,M,NA,NA,King of Scotland,NA
-2255,1,NA,2254,Beoedhe,M,NA,NA,NA,NA
+2254,1,NA,2253,Kenneth III,M,NA,1005-03-25,King of Scotland,NA
+2255,1,NA,2254,Beoedhe,M,NA,1058-06-15,NA,NA
 2256,1,NA,2257,Constantine IV,M,NA,NA,King of Scotland,NA
 2257,1,NA,2258,Colin,M,NA,NA,King of Scotland,NA
 2258,1,NA,2259,Indulf,M,NA,NA,King of Scotland,NA
 2259,1,NA,2260,Constantine III,M,NA,NA,King of Scotland,NA
 2260,1,NA,2261,Aedh,M,NA,NA,King of Scotland,NA
-2261,1,NA,2265,Kenneth I MacAlpin,M,NA,NA,King of Scotland,NA
+2261,1,NA,2265,Kenneth I MacAlpin,M,NA,858-02-13,King of Scotland,NA
 2262,1,NA,2261,Unknown Dau.,F,NA,NA,NA,NA
 2263,1,NA,NA,Run of Strathclyde,M,NA,NA,King,NA
 2264,1,2262,2263,Eocha,M,NA,NA,King of Scotland,NA
 2265,1,NA,NA,Alpin,M,NA,NA,King of Scotland,NA
-2266,1,NA,2265,Donald I,M,NA,NA,King of Scotland,NA
-2267,149,NA,NA,Charles II,M,NA,NA,King of Navarre,NA
-2268,146,NA,NA,Reynald Cobham,M,NA,NA,Sir,NA
-2269,144,NA,NA,of Burgandy,M,NA,NA,Duke,NA
-2270,1,NA,NA,Peter of Luxemburg,M,NA,NA,Count St. Pol,NA
-2271,1,NA,NA,Richard Woodville,M,NA,NA,Earl Rivers,NA
-2272,1,NA,NA,Rene,M,NA,NA,Count of Anjou,NA
-2273,245,NA,NA,Thomas of Heton Grey,M,NA,NA,Sir,NA
-2274,1,NA,NA,Joachim Frederick of Brandenburg,M,NA,NA,Elector,NA
-2275,246,NA,NA,Richard Pole,M,NA,NA,Sir,NA
-2276,247,NA,NA,John De La Pole,M,NA,NA,Duke of Suffolk,NA
-2277,1,NA,NA,Thomas Holland,M,NA,NA,Earl of Kent,NA
-2278,248,NA,NA,Edward,M,NA,NA,Lord Cherleton,NA
-2279,117,NA,NA,Edmund,M,NA,NA,Earl of Stafford,NA
-2280,1,1345,1344,Roger Mortimer,M,NA,1409-06-15,NA,NA
-2281,1,1345,1344,Eleanor Mortimer,F,NA,NA,NA,NA
-2282,249,NA,NA,Edward Courtenay,M,NA,NA,Sir,NA
-2283,1,1348,1349,Edmund Mortimer,M,NA,1409-06-15,NA,NA
-2284,1,1348,1349,Elizabeth Mortimer,F,NA,NA,NA,NA
-2285,1,1348,1349,Philippa Mortimer,F,NA,1401-06-15,NA,NA
-2286,250,NA,NA,Henry (Hotspur) Percy,M,NA,NA,NA,NA
-2287,251,NA,NA,Thomas,M,NA,NA,Lord Camoys,NA
-2288,252,NA,NA,John Hastings,M,NA,NA,Earl of Pembroke,NA
-2289,253,NA,NA,Richard Fitzalan,M,NA,NA,Earl of Arundel,NA
-2290,254,NA,NA,Thomas of Basing Poynings,M,NA,NA,Lord St. John,NA
-2291,110,NA,NA,Charles IV,M,1316-06-15,1378-06-15,Emperor,NA
-2292,255,NA,NA,John Holland,M,NA,NA,Duke of Exeter,NA
-2293,256,NA,NA,John Cornwall,M,NA,NA,Lord Fanhope,NA
-2294,1,1337,1237,Constance,F,NA,NA,NA,NA
-2295,257,NA,NA,Thomas of Gloucester Despencer,M,NA,NA,Earl,NA
-2296,258,NA,NA,Philippa,F,NA,NA,NA,NA
+2266,1,NA,2265,Donald I,M,NA,862-04-13,King of Scotland,NA
+2267,149,NA,NA,Charles II,M,1332-10-10,1387-01-01,King of Navarre,NA
+2268,146,NA,NA,Reynald Cobham,M,1348-06-15,1403-07-06,Sir,NA
+2269,144,NA,NA,of Burgandy,M,1342-01-17,1404-04-27,Duke,NA
+2270,1,NA,NA,Peter of Luxemburg,M,1390-06-15,1433-08-31,Count St. Pol,NA
+2271,1,NA,NA,Richard Woodville,M,1405-06-15,1469-08-12,Earl Rivers,NA
+2272,1,NA,NA,Rene,M,1409-01-16,1480-07-10,Count of Anjou,NA
+2273,245,NA,NA,Thomas of Heton Grey,M,1384-06-15,1415-08-02,Sir,NA
+2274,1,NA,NA,Joachim Frederick of Brandenburg,M,1546-01-27,1608-07-18,Elector,NA
+2275,246,NA,NA,Richard Pole,M,1462-06-15,1505-12-18,Sir,NA
+2276,247,NA,NA,John De La Pole,M,1442-09-27,1492-06-15,Duke of Suffolk,NA
+2277,1,NA,NA,Thomas Holland,M,1350-06-15,1397-04-25,Earl of Kent,NA
+2278,248,NA,NA,Edward,M,1370-06-15,1421-03-14,Lord Cherleton,NA
+2279,117,NA,NA,Edmund,M,1378-03-02,1403-07-21,Earl of Stafford,NA
+2280,1,1345,1344,Roger Mortimer,M,1374-04-11,1398-07-20,NA,NA
+2281,1,1345,1344,Eleanor Mortimer,F,1375-06-15,1405-06-15,NA,NA
+2282,249,NA,NA,Edward Courtenay,M,1357-06-15,1419-12-05,Sir,NA
+2283,1,1348,1349,Edmund Mortimer,M,1391-11-06,1425-01-18,NA,NA
+2284,1,1348,1349,Elizabeth Mortimer,F,1371-02-12,1417-04-20,NA,NA
+2285,1,1348,1349,Philippa Mortimer,F,1375-11-21,1401-09-24,NA,NA
+2286,250,NA,NA,Henry (Hotspur) Percy,M,1364-05-20,1403-07-21,NA,NA
+2287,251,NA,NA,Thomas,M,1351-06-15,1421-03-28,Lord Camoys,NA
+2288,252,NA,NA,John Hastings,M,1347-08-29,1375-04-16,Earl of Pembroke,NA
+2289,253,NA,NA,Richard Fitzalan,M,1346-06-15,1397-09-21,Earl of Arundel,NA
+2290,254,NA,NA,Thomas of Basing Poynings,M,1350-06-15,1429-03-07,Lord St. John,NA
+2291,110,NA,NA,Charles IV,M,1316-05-14,1378-11-29,Emperor,NA
+2292,255,NA,NA,John Holland,M,1352-06-15,1400-01-16,Duke of Exeter,NA
+2293,256,NA,NA,John Cornwall,M,1364-06-15,1443-12-11,Lord Fanhope,NA
+2294,1,1337,1237,Constance,F,1374-06-15,1416-11-28,NA,NA
+2295,257,NA,NA,Thomas of Gloucester Despencer,M,1373-09-22,1400-01-13,Earl,NA
+2296,258,NA,NA,Philippa,F,1367-06-15,1431-07-17,NA,NA
 2297,259,NA,NA,Fitzwater,M,NA,NA,Lord,NA
-2298,260,NA,NA,John Golafre,M,NA,NA,Sir,NA
-2299,116,NA,NA,Thomas Clifford,M,NA,NA,Lord,NA
-2300,261,NA,NA,John,M,NA,NA,Lord Latymer,NA
+2298,260,NA,NA,John Golafre,M,1350-06-15,1442-11-18,Sir,NA
+2299,116,NA,NA,Thomas Clifford,M,1414-03-25,1455-05-22,Lord,NA
+2300,261,NA,NA,John,M,1493-11-17,1543-03-02,Lord Latymer,NA
 2301,1,2304,2303,Hugh Seymour,M,1759-06-15,1801-06-15,Admiral,NA
 2302,1,NA,NA,Anne Horatia Waldegrave,F,NA,1801-06-15,Lady,NA
 2303,1,NA,NA,Francis of Hertford I Seymour,M,1718-06-15,1794-06-15,Marquess,NA
