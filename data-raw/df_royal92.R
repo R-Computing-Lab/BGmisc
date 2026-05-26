@@ -698,13 +698,188 @@ date_overrides <- tribble(
   1048, "1 JUN 1985", NA_character_, # Christian Heinrich of Hanover; living
   1049, "12 DEC 1962", "29 NOV 1988", # Isabella von Thurn und Valsassina; source conflict: another source gives 8 SEP 1962, selected 12 DEC 1962
   1050, "13 FEB 1988", NA_character_, # Otto Heinrich of Hanover; living
+  1051, "27 NOV 1955", NA_character_, # Andreas of Leiningen; living; likely duplicate/identity match to personID 911
+  1052, "3 JUL 1933", "29 DEC 2022", # Maximilian / Max, Margrave of Baden
+  1053, "9 APR 1882", "17 NOV 1945", # Frederick Francis IV of Mecklenburg-Schwerin
+  1054, "16 APR 1940", NA_character_, # Margrethe II of Denmark; living
+  1058, "15 SEP 1895", "28 JUN 1977", # Elena (Magda) Lupescu; dates already exact in CSV, retained for explicit override
+  1059, "28 MAR 1910", "7 NOV 2000", # Ingrid Victoria of Sweden / Queen Ingrid of Denmark
+  1060, "20 MAY 1967", NA_character_, # Pavlos of Greece / Crown Prince Pavlos; living
+  1061, "1 OCT 1969", NA_character_, # Nikolaos of Greece and Denmark; living
+  1064, "11 MAY 1942", NA_character_, # Irene of Greece and Denmark; living
+  1065, "7 APR 1871", "4 APR 1918", # Petros Manos
+  1067, "21 JAN 1732", "23 DEC 1797", # Frederick Eugene of Württemberg
+  1068, "18 DEC 1736", "9 MAR 1798", # Friederike Dorothea Sophia of Brandenburg-Schwedt
+  1069, "3 DEC 1764", "27 SEP 1788", # Augusta of Brunswick-Wolfenbüttel
+  1070, "27 SEP 1781", "25 JUN 1864", # William I of Württemberg
+  1071, "21 FEB 1783", "29 NOV 1835", # Catherine of Württemberg
+  1072, "24 DEC 1783", "3 OCT 1784", # Sophia Dorothea of Württemberg
+  1073, "19 JAN 1785", "16 APR 1852", # Paul of Württemberg
+  1074, "8 FEB 1792", "9 FEB 1873", # Charlotte of Bavaria
+  1075, "21 MAY 1788", "9 JAN 1819", # Catherine Pavlovna of Russia, Gregorian/New Style; Old Style birth = 10 MAY 1788
+  1076, "30 OCT 1816", "4 JAN 1887", # Marie of Württemberg
+  1078, "4 SEP 1800", "10 MAR 1873", # Pauline of Württemberg
+  1079, "24 AUG 1821", "6 DEC 1898", # Catherine of Württemberg
+  1080, "6 MAR 1823", "6 OCT 1891", # Charles I of Württemberg
+  1081, "4 OCT 1826", "3 DEC 1898", # Augusta of Württemberg
+  1082, "11 SEP 1822", "30 OCT 1892", # Olga Nikolaevna of Russia, Gregorian/New Style; Old Style birth = 30 AUG 1822
+  1083, "4 AUG 1825", "31 AUG 1901", # Hermann of Saxe-Weimar-Eisenach
+  1084, "17 JUN 1787", "12 DEC 1847", # Charlotte of Saxe-Hildburghausen
+  1085, "9 JAN 1807", "2 FEB 1873", # Charlotte of Württemberg
+  1086, "21 FEB 1808", "9 MAY 1870", # Frederick of Württemberg
+  1087, "7 MAR 1809", "28 MAY 1810", # Paul of Württemberg
+  1088, "25 FEB 1810", "7 JUL 1856", # Pauline of Württemberg
+  1089, "24 JAN 1813", "12 JAN 1885", # August of Württemberg
+  1090, "25 FEB 1848", "2 OCT 1921", # William II of Württemberg
+  1091, "23 MAY 1857", "30 APR 1882", # Marie of Waldeck and Pyrmont
+  1092, "19 DEC 1877", "7 MAY 1965", # Pauline of Württemberg
+  1093, "28 JUL 1880", "28 DEC 1880", # Ulrich of Württemberg
+  1094, "27 JUN 1872", "18 JUN 1945", # Frederick, Prince of Wied
+  1095, "10 OCT 1864", "16 JUL 1946", # Charlotte of Schaumburg-Lippe
+  1096, "18 AUG 1903", "9 JUN 1978", # Nicholas Hohenzollern / Prince Nicholas of Romania
   1097, "5 JAN 1909", "21 JAN 1991", # Ileana Hohenzollern
+  1098, "3 JAN 1913", "2 NOV 1916", # Mircea Hohenzollern / Prince Mircea of Romania
+  1099, "22 SEP 1835", "8 JUN 1905", # Leopold of Hohenzollern
+  1100, "17 FEB 1845", "27 DEC 1913", # Antonia of Portugal
+  1101, "7 MAR 1864", "22 OCT 1927", # William of Hohenzollern
+  1102, "1 SEP 1868", "21 FEB 1919", # Charles Anthony / Karl Anton of Hohenzollern
+  1103, "18 OCT 1872", "6 JAN 1958", # Josephine of Belgium / Joséphine Caroline
+  1104, "7 SEP 1811", "2 JUN 1885", # Charles Anthony / Karl Anton of Hohenzollern-Sigmaringen
+  1105, "21 OCT 1813", "19 JUN 1900", # Josephine of Baden
+  1106, "15 JUL 1837", "17 JUL 1859", # Stephanie of Hohenzollern-Sigmaringen / Queen of Portugal
+  1108, "7 OCT 1841", "6 AUG 1866", # Anthony / Anton of Hohenzollern
+  1109, "25 JUN 1843", "2 DEC 1904", # Frederick of Hohenzollern
+  1110, "17 NOV 1845", "26 NOV 1912", # Marie of Hohenzollern-Sigmaringen / Countess of Flanders
+  1111, "16 SEP 1837", "11 NOV 1861", # Pedro V of Portugal
+  1114, "24 MAR 1837", "17 NOV 1905", # Philip of Flanders
+  1115, "3 JUN 1869", "23 JAN 1891", # Prince Baudouin of Belgium
+  1116, "30 NOV 1870", "28 MAR 1948", # Princess Henriette of Belgium; twin of Josephine
+  1117, "30 NOV 1870", "18 JAN 1871", # Princess Josephine of Belgium; twin of Henriette
+  1120, "10 OCT 1903", "1 JUN 1983", # Charles of Belgium, Regent
   1121, "4 AUG 1906", "27 JAN 2001", # Marie Jose
+  1122, "15 SEP 1904", "18 MAR 1983", # Umberto II of Italy
+  1123, "11 OCT 1927", "10 JAN 2005", # Josephine-Charlotte of Belgium
+  1124, "6 JUN 1934", NA_character_, # Albert II of Belgium; living
+  1125, "5 JAN 1921", "23 APR 2019", # Jean of Luxembourg; duplicate/identity match to personID 586 likely
+  1126, "11 JUN 1928", "5 DEC 2014", # Fabiola de Mora y Aragón
+  1127, "11 SEP 1937", NA_character_, # Paola Ruffo di Calabria; living
+  1128, "15 APR 1960", NA_character_, # Philippe of Belgium; living
+  1129, "5 JUN 1962", NA_character_, # Astrid of Belgium; living
+  1130, "19 OCT 1963", NA_character_, # Laurent of Belgium; living
+  1131, "16 DEC 1955", NA_character_, # Lorenz of Austria-Este; living
+  1132, "28 NOV 1916", "7 JUN 2002", # Mary Lilian Baels / Princess Lilian of Belgium
+  1133, "18 JUL 1942", "29 NOV 2009", # Alexandre of Belgium
+  1134, "6 FEB 1951", NA_character_, # Marie-Christine of Belgium; living
+  1135, "30 SEP 1956", NA_character_, # Marie-Esméralda of Belgium; living
+  1139, "21 JUN 1788", "13 MAY 1851", # Auguste of Bavaria
+  1140, "9 OCT 1790", "24 JAN 1794", # Amalie of Bavaria
+  1141, "7 JUL 1795", "16 AUG 1875", # Charles / Karl Theodor of Bavaria
   1147, "15 NOV 1238", "4 AUG 1265", # Henry de Montfort
   1149, "7 OCT 1816", "12 APR 1817", # Theodolinde
+  1150, "12 MAR 1821", "12 DEC 1912", # Luitpold, Prince Regent of Bavaria
+  1151, "19 MAR 1823", "28 OCT 1914", # Adelgunde of Bavaria
+  1152, "10 JUN 1825", "2 APR 1864", # Hildegard of Bavaria
+  1153, "19 JUL 1828", "21 SEP 1875", # Adalbert of Bavaria
+  1154, "28 OCT 1800", "12 FEB 1803", # Maximilian of Bavaria
+  1155, "13 NOV 1801", "14 DEC 1873", # Elisabeth Ludovika of Bavaria; twin of Amalie
+  1156, "13 NOV 1801", "8 NOV 1877", # Amalie Auguste of Bavaria; twin of Elisabeth
+  1157, "27 JAN 1805", "13 SEP 1877", # Maria Anna of Bavaria
+  1158, "30 AUG 1808", "25 JAN 1892", # Ludovika / Louise of Bavaria
+  1159, "21 JUL 1810", "4 FEB 1821", # Maximiliana of Bavaria
+  1160, "23 NOV 1707", "13 MAY 1708", # Frederick Louis of Prussia
+  1161, "16 AUG 1710", "21 JUL 1711", # Frederick William of Prussia
+  1163, "5 MAY 1713", "10 JUN 1714", # Charlotte Albertine of Prussia
+  1164, "28 SEP 1714", "4 FEB 1784", # Frederica Louise of Prussia
+  1165, "13 MAR 1716", "17 FEB 1801", # Philippine Charlotte of Prussia
+  1166, "2 MAY 1717", "31 AUG 1719", # Louis Charles William of Prussia
+  1167, "25 JAN 1719", "13 NOV 1765", # Sophia Dorothea Marie of Prussia
+  1168, "24 JUL 1720", "16 JUL 1782", # Louise Ulrika of Prussia / Queen of Sweden
+  1169, "9 NOV 1723", "30 MAR 1787", # Anna Amalia of Prussia
+  1170, "18 JAN 1726", "3 AUG 1802", # Henry of Prussia
+  1171, "23 MAY 1730", "2 MAY 1813", # Ferdinand of Prussia
+  1172, "28 MAR 1846", "19 APR 1902", # Heinrich XXII Reuss
+  1174, "29 SEP 1680", "23 DEC 1705", # Louise Dorothea Sophie of Prussia
+  1175, "28 APR 1676", "5 APR 1751", # Frederick I of Sweden
+  1177, "4 OCT 1685", "31 JAN 1686", # Frederick Augustus of Brandenburg
+  1179, "1 APR 1825", "26 APR 1864", # Augusta Ferdinande of Austria-Tuscany
+  1180, "9 FEB 1846", "28 SEP 1930", # Leopold of Bavaria
+  1181, "12 NOV 1850", "19 SEP 1925", # Therese of Bavaria
+  1182, "6 JUL 1852", "12 NOV 1907", # Arnulf / Amulf of Bavaria
+  1183, "8 MAY 1901", "27 AUG 1914", # Luitpold of Bavaria
+  1184, "21 SEP 1902", "21 APR 1903", # Irmingard of Bavaria
+  1185, "30 MAY 1909", "26 JUN 1912", # Rudolf of Bavaria
+  1186, "7 OCT 1899", "31 JUL 1954", # Antoinette of Luxembourg
+  1187, "28 MAR 1922", "14 FEB 1958", # Heinrich / Henry of Bavaria
+  1188, "29 MAY 1923", "23 OCT 2010", # Irmingard of Bavaria
+  1189, "16 SEP 1924", "4 MAY 2013", # Editha of Bavaria
+  1190, "24 MAR 1926", "5 MAY 2002", # Hilda of Bavaria
+  1191, "10 MAY 1927", "19 APR 2019", # Gabriele of Bavaria
+  1192, "20 JUN 1935", "28 MAY 2021", # Sophie of Bavaria
+  1193, "4 DEC 1808", "15 NOV 1888", # Maximilian Joseph, Duke in Bavaria
+  1194, "21 JUN 1831", "6 NOV 1920", # Ludwig Wilhelm, Duke in Bavaria
+  1195, "4 APR 1834", "16 MAY 1890", # Helene in Bavaria
+  1196, "24 DEC 1837", "10 SEP 1898", # Elisabeth in Bavaria / Empress Elisabeth of Austria
   1197, "9 AUG 1839", "30 NOV 1909", # Karl Theodor (Gackl)
+  1198, "4 OCT 1841", "19 JAN 1925", # Marie Sophie in Bavaria
+  1199, "30 SEP 1843", "18 JUN 1925", # Mathilde Ludovika in Bavaria
+  1200, "22 FEB 1847", "4 MAY 1897", # Sophie Charlotte Auguste in Bavaria; source conflict on 22/23 FEB 1847
+  1201, "7 DEC 1849", "12 JUN 1893", # Maximilian Emanuel in Bavaria
+  1202, "19 MAR 1857", "11 MAR 1943", # Maria Josepha of Portugal
+  1203, "25 SEP 1901", "28 JAN 1936", # Alexander Zoubkoff
+  1204, "5 AUG 1939", NA_character_, # Irene of the Netherlands; living
+  1205, "19 JAN 1943", NA_character_, # Margriet of the Netherlands; living
+  1206, "18 FEB 1947", "16 AUG 2019", # Christina of the Netherlands
+  1207, "6 SEP 1926", "6 OCT 2002", # Claus van Amsberg / Prince Claus of the Netherlands
+  1208, "27 APR 1967", NA_character_, # Willem-Alexander of the Netherlands; living
+  1209, "25 SEP 1968", "12 AUG 2013", # Johan Friso of Orange-Nassau
+  1210, "11 OCT 1969", NA_character_, # Constantijn of the Netherlands; living
+  1211, "1 SEP 1890", "19 DEC 1953", # Claus Felix von Amsberg
+  1212, "26 JAN 1902", "13 JUN 1996", # Gösta von dem Bussche-Haddenhausen
+  1213, "28 FEB 1823", "15 APR 1883", # Frederick Francis II of Mecklenburg-Schwerin
+  1214, "29 JAN 1850", "22 APR 1922", # Marie of Schwarzburg-Rudolstadt
+  1215, "22 APR 1518", "17 NOV 1562", # Antoine de Bourbon of France
+  1216, "18 AUG 1831", "27 OCT 1888", # Helene of Nassau
+  1222, "1369", "4 JUN 1394", # Mary de Bohun; approximate birth year, sources give 1369/70
+  1224, "1388", "22 MAR 1421", # Thomas of Lancaster, Duke of Clarence; birth year approximate
+  1226, "3 OCT 1390", "23 FEB 1447", # Humphrey of Gloucester
+  1227, "25 FEB 1392", "22 MAY 1409", # Blanche of Lancaster
+  1228, "4 JUN 1394", "5 JAN 1430", # Philippa of Lancaster
+  1232, "16 JUN 1332", "5 OCT 1379", # Isabella of England, daughter of Edward III
+  1233, "1335", "2 SEP 1348", # Joan of England; approximate birth year
+  1236, "6 MAR 1340", "3 FEB 1399", # John of Gaunt
+  1238, "1342", "1342", # Blanche of the Tower; year-level infant dates
+  1239, "10 OCT 1344", "1361", # Mary of Waltham; death year approximate
+  1241, "24 JUN 1348", "5 SEP 1348", # William of Windsor
+  1243, "25 MAR 1342", "12 SEP 1368", # Blanche of Lancaster; death year sometimes given as 1368/1369
+  1244, "10 OCT 1830", "9 APR 1904", # Isabella II of Spain
+  1245, "13 MAY 1822", "17 APR 1902", # Francisco de Asís de Borbón
+  1246, "14 OCT 1784", "29 SEP 1833", # Ferdinand VII of Spain
+  1249, "7 DEC 1545", "10 FEB 1567", # Henry Stuart, Lord Darnley
+  1250, "1534", "14 APR 1578", # James Hepburn, 4th Earl of Bothwell; approximate birth year
+  1251, "22 NOV 1515", "11 JUN 1560", # Mary of Guise
+  1252, "10 JUL 1451", "11 JUN 1488", # James III of Scotland; birth year sometimes given as 1451/1452
+  1253, "1259", "29 JUL 1326", # Richard de Burgh, 2nd Earl of Ulster; approximate birth year
+  1254, "11 JUN 1430", "3 NOV 1456", # Edmund Tudor, Earl of Richmond
+  1255, "31 MAY 1443", "29 JUN 1509", # Margaret Beaufort
+  1259, "1295", "12 OCT 1343", # Rainald II of Guelders; approximate birth year
+  1260, "24 NOV 1394", "5 JAN 1465", # Charles of Orléans
+  1262, "1241", "28 NOV 1290", # Eleanor of Castile; approximate birth year
+  1268, "1272", "23 APR 1307", # Joan of Acre; approximate birth year, born April 1272
+  1270, "15 MAR 1275", "11 MAR 1333", # Margaret of England, Duchess of Brabant; death often given as after 11 MAR 1333
+  1271, "1 MAY 1276", "27 JUN 1278", # Berengaria of England
+  1274, "7 AUG 1282", "5 MAY 1316", # Elizabeth of Rhuddlan
+  1277, "1279", "14 FEB 1318", # Marguerite of France; approximate birth year
+  1278, "1 JUN 1300", "4 AUG 1338", # Thomas of Brotherton
+  1279, "5 AUG 1301", "19 MAR 1330", # Edmund of Woodstock
+  1282, "1223", "24 JUN 1291", # Eleanor of Provence; approximate birth year
+  1291, "13 MAY 1734", "31 OCT 1783", # John Spencer
+  1292, "12 MAR 1716", "21 AUG 1780", # Georgiana Caroline Carteret
+  1294, "1 OCT 1754", "24 MAR 1801", # Paul I Romanov, Gregorian/New Style; Old Style = 20 SEP 1754, 12 MAR 1801
+  1295, "25 OCT 1759", "5 NOV 1828", # Maria Feodorovna of Württemberg; Gregorian/New Style death, Old Style death = 24 OCT 1828
+  1296, "23 DEC 1777", "1 DEC 1825", # Alexander I Romanov, Gregorian/New Style; Old Style = 12 DEC 1777, 19 NOV 1825
   1297, "24 JAN 1779", "16 MAY 1826", # Elizabeth Alexeievna (Louise of Baden), New Style
   1298, "8 MAY 1779", "27 JUN 1831", # Konstantin Pavlovich Romanov,New Style
+  1300, "21 FEB 1728", "17 JUL 1762", # Peter III Romanov, Gregorian/New Style death; Old Style death = 6 JUL 1762
   1304, "29 DEC 1709", "5 JAN 1762", # Elizabeth Petrovna Romanov
   1358, "5 DEC 1905", "27 DEC 1981", # Natalie Romanov
   1373, "17 AUG 1153", "1156",  #William IX, count of Poitiers
@@ -733,6 +908,10 @@ date_overrides <- tribble(
   2985, "26 APR 1924", "14 DEC 1997", # Gerald Legge
   3011, "15 APR 1240", "1271" # Simon de Montfort the Younger
 )
+
+# notes:
+# 1051 likely duplicates the Andreas of Leiningen already represented at personID == 911.
+#1125 likely duplicates Jean of Luxembourg already represented at personID == 586.
 
 
 name_overrides <- tribble(
