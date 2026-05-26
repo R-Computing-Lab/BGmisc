@@ -880,10 +880,173 @@ date_overrides <- tribble(
   1297, "24 JAN 1779", "16 MAY 1826", # Elizabeth Alexeievna (Louise of Baden), New Style
   1298, "8 MAY 1779", "27 JUN 1831", # Konstantin Pavlovich Romanov,New Style
   1300, "21 FEB 1728", "17 JUL 1762", # Peter III Romanov, Gregorian/New Style death; Old Style death = 6 JUL 1762
+  1301, "9 JUN 1672", "8 FEB 1725", # Peter I the Great Romanov, Gregorian/New Style; Old Style = 30 MAY 1672, 28 JAN 1725
+  1302, "15 APR 1684", "17 MAY 1727", # Catherine I, Gregorian/New Style; Old Style = 5 APR 1684, 6 MAY 1727
+  1303, "7 FEB 1708", "15 MAR 1728", # Anna Petrovna Romanov, Gregorian/New Style; Old Style = 27 JAN 1708, 4 MAR 1728
   1304, "29 DEC 1709", "5 JAN 1762", # Elizabeth Petrovna Romanov
+  1305, "9 AUG 1669", "7 SEP 1731", # Yevdokiya Lopukhina, Gregorian/New Style; Old Style = 30 JUL 1669, 27 AUG 1731
+  1306, "28 FEB 1690", "7 JUL 1718", # Alexei Petrovich Romanov, Gregorian/New Style; Old Style = 18 FEB 1690, 26 JUN 1718
+  1308, "23 OCT 1715", "30 JAN 1730", # Peter II Romanov, Gregorian/New Style; Old Style = 12 OCT 1715, 19 JAN 1730; some sources give death as 29 JAN 1730
+  1309, "19 MAR 1629", "8 FEB 1676", # Alexis I Michaylovich Romanov, Gregorian/New Style; Old Style = 9 MAR 1629, 29 JAN 1676
+  1310, "11 APR 1624", "13 MAR 1669", # Maria Miloslavskaya, Gregorian/New Style; Old Style = 1 APR 1624, 3 MAR 1669
+  1311, "9 JUN 1661", "7 MAY 1682", # Feodor III (Theodore) Romanov, Gregorian/New Style; Old Style = 30 MAY 1661, 27 APR 1682
+  1312, "22 JUL 1596", "23 JUL 1645", # Mikhail III Feodorovich Romanov, Gregorian/New Style; Old Style = 12 JUL 1596, 13 JUL 1645
+  1313, "1608", "18 AUG 1645", # Eudoxia Streshneva; birth year only; Gregorian/New Style death
+  1314, "1 SEP 1651", "4 FEB 1694", # Natalia Naryshkina, Gregorian/New Style; Old Style = 22 AUG 1651, 25 JAN 1694
+  1316, "6 SEP 1666", "8 FEB 1696", # Ivan V Romanov, Gregorian/New Style; Old Style = 27 AUG 1666, 29 JAN 1696
+  1318, "7 FEB 1693", "28 OCT 1740", # Anna Ioannovna Romanov, Gregorian/New Style; Old Style = 28 JAN 1693, 17 OCT 1740
+  1319, "29 OCT 1691", "14 JUN 1733", # Catherine Ivanovna of Mecklenburg / Yekaterina Ivanovna, Gregorian/New Style
+  1321, "18 DEC 1718", "18 MAR 1746", # Anna Leopoldovna of Brunswick, Gregorian/New Style; Old Style = 7 DEC 1718, 7 MAR 1746
+  1323, "23 AUG 1740", "16 JUL 1764", # Ivan VI Romanov, Gregorian/New Style; Old Style = 12 AUG 1740, 5 JUL 1764
+  1324, "1655", "1669", # Ivan Alexeyevich Romanov; year-level dates only
+  1325, "27 SEP 1657", "14 JUL 1704", # Sophia Alekseyevna Romanov, Gregorian/New Style; Old Style = 17 SEP 1657, 3 JUL 1704
+  1327, "1415", "30 MAY 1472", # Jacquetta of Luxembourg; birth year approximate, often 1415/1416
+  1328, "1350", "10 MAY 1403", # Catherine Swynford Roet; birth year approximate
+  1329, "1373", "16 MAR 1410", # John Beaufort, 1st Earl of Somerset; birth year approximate
+  1330, "1375", "11 APR 1447", # Henry Beaufort, Cardinal; birth year approximate
+  1331, "1377", "13 NOV 1440", # Joan Beaufort; birth year approximate
+  1333, "26 NOV 1401", "25 NOV 1418", # Henry Beaufort, 2nd Earl of Somerset
+  1334, "25 MAR 1404", "27 MAY 1444", # John Beaufort, Duke of Somerset
+  1335, "1406", "22 MAY 1455", # Edmund Beaufort, Duke of Somerset; birth year approximate
+  1336, "1410", "8 AUG 1482", # Margaret Beauchamp; birth year approximate
+  1337, "1355", "23 DEC 1392", # Isabella of Castile, Duchess of York; approximate birth year; death date varies in secondary sources
+  1338, "1373", "25 OCT 1415", # Edward of Norwich, Duke of York; approximate birth year
+  1339, "13 JUL 1426", "20 SEP 1492", # Anne Beauchamp, 16th Countess of Warwick
+  1340, "5 SEP 1451", "22 DEC 1476", # Isabel Neville
+  1342, "1400", "31 DEC 1460", # Richard Neville, Earl of Salisbury; birth year approximate
+  1343, "1366", "3 OCT 1399", # Eleanor de Bohun; birth year approximate
+  1344, "11 APR 1374", "20 JUL 1398", # Roger Mortimer, 4th Earl of March
+  1345, "1386", "18 OCT 1405", # Eleanor Holland; birth year approximate
+  1346, "6 NOV 1391", "18 JAN 1425", # Edmund Mortimer, 5th Earl of March
+  1347, "1354", "NOV 1386", # Violante Visconti; year-level birth and month-level death
+  1348, "16 AUG 1355", "5 JAN 1382", # Philippa of Ulster / Philippa of Clarence
+  1349, "1 FEB 1352", "27 DEC 1381", # Edmund Mortimer, 3rd Earl of March
+  1351, "1435", "29 JUL 1504", # Thomas Stanley, 1st Earl of Derby; birth year approximate
+  1352, "1400", "2 FEB 1461", # Owen Tudor; birth year approximate
+  1353, "NOV 1431", "21 DEC 1495", # Jasper Tudor; month-level birth date
+  1354, "27 JUN 1880", "26 JAN 1952", # Natalia Sheremetevskaya, Gregorian/New Style; Old Style birth = 15 JUN 1880
+  1355, "18 APR 1890", "13 DEC 1958", # Maria Pavlovna Romanov, Gregorian/New Style; Old Style birth = 6 APR 1890
+  1357, "9 JAN 1897", "18 JUL 1918", # Vladimir Paley / Vladimir Romanov, Gregorian/New Style; Old Style birth = 28 DEC 1896
   1358, "5 DEC 1905", "27 DEC 1981", # Natalie Romanov
+  1359, "21 DEC 1903", "15 NOV 1990", # Irina Paley / Irina Romanov, Gregorian/New Style; Old Style birth = 8 DEC 1903
+  1360, "6 AUG 1910", "21 JUL 1931", # George Mikhailovich, Count Brasov, Gregorian/New Style; Old Style birth = 24 JUL 1910
+  1361, "21 NOV 1868", "11 MAR 1924", # Peter of Oldenburg, Gregorian/New Style; Old Style birth = 9 NOV 1868
+  1362, "29 JAN 1882", "13 MAR 1957", # Helen Vladimirovna of Russia Romanov, Gregorian/New Style; Old Style birth = 17 JAN 1882
+  1366, "1188", "31 MAY 1246", # Isabella of Angouleme; birth year approximate
+  1367, "5 JAN 1209", "2 APR 1272", # Richard, Earl of Cornwall
+  1369, "1214", "1 DEC 1241", # Isabella of England; birth year approximate
+  1370, "1215", "13 APR 1275", # Eleanor of England; birth year approximate
+  1372, "1122", "1 APR 1204", # Eleanor of Aquitaine; birth year approximate
   1373, "17 AUG 1153", "1156",  #William IX, count of Poitiers
+  1375, "1156", "28 JUN 1189", # Matilda (Maud), Duchess of Saxony; birth year approximate
+  1376, "8 SEP 1157", "6 APR 1199", # Richard I Coeur de Lion
+  1379, "OCT 1165", "4 SEP 1199", # Joan Plantagenet; month-level birth date
+  1380, "1028", "9 SEP 1087", # William I the Conqueror; birth year approximate
+  1381, "1031", "2 NOV 1083", # Matilda of Flanders; birth year approximate
+  1382, "1054", "3 FEB 1134", # Robert Curthose; birth year approximate
+  1383, "1055", "1075", # Richard of Normandy; year-level dates approximate
+  1384, "1056", "2 AUG 1100", # William II Rufus; birth year approximate
+  1385, "1056", "30 JUL 1126", # Cecilia of Normandy / Abbess of Holy Trinity; birth year approximate
+  1388, "1067", "8 MAR 1137", # Adela of Normandy; birth year approximate
+  1390, "1066", "13 AUG 1090", # Constance of Normandy; birth year approximate
+  1391, "1068", "1 DEC 1135", # Henry I Beauclerc; birth year approximate
+  1392, "1080", "1 MAY 1118", # Matilda (Edith) of Scotland; birth year approximate
+  1393, "1090", "31 OCT 1147", # Robert of Gloucester; birth year approximate
+  1394, "5 AUG 1103", "25 NOV 1120", # William Adelin, Duke of Normandy
+  1395, "7 FEB 1102", "10 SEP 1167", # Empress Matilda
+  1396, "1103", "23 APR 1151", # Adeliza of Louvain; birth year approximate
+  1397, "1092", "25 OCT 1154", # Stephen, King of England; birth year approximate
+  1398, "1105", "3 MAY 1152", # Matilda of Boulogne; birth year approximate
+  1400, "1130", "17 AUG 1153", # Eustace IV of Boulogne; birth year approximate
+  1402, "1137", "11 OCT 1159", # William of Boulogne; birth year approximate
+  1403, "1136", "1182", # Mary of Boulogne; approximate year-level dates
+  1404, "11 AUG 1086", "23 MAY 1125", # Henry V, Holy Roman Emperor
+  1405, "24 AUG 1113", "7 SEP 1151", # Geoffrey V Plantagenet
+  1406, "4 JAN 1904", "25 NOV 1971", # Audrey Emery / Princess Romanovsky-Ilyinsky
+  1407, "27 JAN 1928", "10 FEB 2004", # Paul Romanovsky-Ilyinsky
+  1408, "17 JUN 1884", "5 JUN 1965", # Prince Wilhelm of Sweden
   1409, "8 MAY 1909", "21 DEC 2004", # Lennart Gustaf Nicholas
+  1412, "6 JAN 1367", "14 FEB 1400", # Richard II of England
+  1415, "1340", "18 FEB 1397", # Enguerrand VII de Coucy; birth year approximate
+  1416, "1354", "24 MAR 1394", # Constance of Castile; birth year approximate
+  1417, "29 AUG 1347", "16 APR 1375", # John Hastings, 2nd Earl of Pembroke
+  1418, "6 JUL 1332", "10 DEC 1363", # Elizabeth de Burgh, Duchess of Clarence
+  1419, "30 APR 1700", "18 JUN 1739", # Charles Frederick of Schleswig-Holstein-Gottorp
+  1423, "23 JUN 1703", "24 JUN 1768", # Maria Leszczynska / Marie Leczinska
+  1426, "11 MAR 1516", "8 MAR 1534", # Henry Brandon, Earl of Lincoln
+  1427, "16 JUL 1517", "20 NOV 1559", # Frances Brandon
+  1428, "1519", "27 SEP 1547", # Eleanor Brandon; birth year approximate
+  1429, "10 AUG 1520", "7 JUL 1537", # Madeleine of France
+  1430, "17 JAN 1517", "23 FEB 1554", # Henry Grey, Duke of Suffolk
+  1431, "8 OCT 1515", "9 MAR 1578", # Margaret Douglas
+  1432, "21 SEP 1516", "4 SEP 1571", # Matthew Stuart, 4th Earl of Lennox
+  1433, "1555", "APR 1576", # Charles Stuart, Earl of Lennox; approximate birth year and month-level death date
+  1434, "1555", "21 JAN 1582", # Elizabeth Cavendish; birth year approximate
+  1435, "10 NOV 1575", "25 SEP 1615", # Arabella Stuart
+  1436, "1588", "24 OCT 1660", # William Seymour, Duke of Somerset; birth year approximate
+  1439, "21 AUG 1858", "30 JAN 1889", # Rudolf, Crown Prince of Austria
+  1442, "12 JUL 1844", "29 JUN 1910", # Ferdinand Philippe Marie d'Orléans, Duc d'Alençon
+  1447, "11 JUL 1274", "7 JUN 1329", # Robert I Bruce
+  1449, "1296", "2 MAR 1316", # Marjorie Bruce; birth year approximate
+  1450, "1284", "27 OCT 1327", # Elizabeth de Burgh; birth year approximate
+  1451, "5 MAR 1324", "22 FEB 1371", # David II Bruce
+  1454, "1296", "9 APR 1327", # Walter Stewart, 6th High Steward; birth year approximate
+  1455, "2 MAR 1316", "19 APR 1390", # Robert II of Scotland
+  1457, "14 AUG 1337", "4 APR 1406", # Robert III of Scotland
+  1459, "1340", "3 SEP 1420", # Robert Stewart, Duke of Albany; birth year approximate
+  1461, "1350", "1401", # Annabella Drummond; approximate year-level dates
+  1462, "24 OCT 1378", "26 MAR 1402", # David Stewart, Duke of Rothesay
+  1463, "1394", "21 FEB 1437", # James I of Scotland; birth date late July 1394
+  1465, "1404", "15 JUL 1445", # Joan Beaufort, Queen of Scots; birth year approximate
+  1466, "16 OCT 1430", "3 AUG 1460", # James II of Scotland
+  1467, "1434", "1 DEC 1463", # Mary of Guelders; birth year approximate
+  1468, "2 FEB 1455", "20 FEB 1513", # John, King of Denmark
+  1469, "23 JUN 1456", "14 JUL 1486", # Margaret of Denmark
+  1470, "1454", "7 AUG 1485", # Alexander Stewart, Duke of Albany; birth year approximate
+  1471, "1456", "1479", # John Stewart, Earl of Mar and Garioch; year-level dates approximate
+  1472, "1453", "MAY 1488", # Mary Stewart, Countess of Arran; approximate birth year and month-level death date
+  1474, "1415", "6 NOV 1479", # James Hamilton, 1st Lord Hamilton; birth year approximate
+  1476, "1475", "1529", # James Hamilton, 1st Earl of Arran; year-level dates approximate
+  1478, "1490", "4 SEP 1526", # John Stewart, 3rd Earl of Lennox; birth year approximate
+  1482, "1542", "26 MAY 1583", # Esme Stuart, 1st Duke of Lennox; birth year approximate
+  1484, "1484", "2 JUN 1536", # John Stewart, Duke of Albany; birth year approximate
+  1488, "1440", "15 SEP 1512", # John Stewart, 1st Earl of Atholl; birth year approximate; death year/source conflict with 1513
+  1492, "1516", "22 JAN 1575", # James Hamilton, Duke of Châtellerault; birth year approximate
+  1494, "1537", "1609", # James Hamilton, 3rd Earl of Arran; year-level dates approximate
+  1495, "1248", "2 MAY 1302", # Blanche of Artois; birth year approximate
+  1496, "1278", "22 MAR 1322", # Thomas of Lancaster; birth year approximate
+  1497, "1281", "22 SEP 1345", # Henry of Lancaster; birth year approximate
+  1498, "2 FEB 1282", "3 DEC 1322", # Maud Chaworth
+  1499, "1310", "23 MAR 1361", # Henry of Grosmont, Duke of Lancaster; birth year approximate
+  1501, "31 MAR 1360", "19 JUL 1415", # Philippa of Lancaster
+  1502, "21 FEB 1363", "24 NOV 1426", # Elizabeth of Lancaster
+  1503, "11 APR 1357", "14 AUG 1433", # John I of Portugal
+  1506, "1161", "5 SEP 1201", # Constance of Brittany; birth year approximate
+  1507, "29 MAR 1187", "3 APR 1203", # Arthur, Duke of Brittany
+  1508, "1165", "23 DEC 1230", # Berengaria of Navarre; birth year approximate
+  1509, "1129", "6 AUG 1195", # Henry the Lion; birth year approximate
+  1510, "1158", "18 SEP 1197", # Margaret of France; birth year approximate
+  1511, "1031", "13 NOV 1093", # Malcolm III Canmore; birth year approximate
+  1512, "1045", "16 NOV 1093", # St Margaret of Scotland; birth year approximate
+  1513, "1074", "8 JAN 1107", # Edgar of Scotland; birth year approximate
+  1514, "1078", "23 APR 1124", # Alexander I the Fierce; birth year approximate
+  1515, "1084", "24 MAY 1153", # David I the Saint; birth year approximate
+  1517, "1045", "19 MAY 1102", # Stephen Henry, Count of Blois; birth year approximate
+  1518, "1090", "8 JAN 1152", # Theobald, Count of Blois; birth year approximate
+  1520, "11 NOV 1155", "5 OCT 1214", # Alfonso VIII of Castile
+  1525, "1000", "3 JUL 1035", # Robert the Devil / Robert I of Normandy; birth year approximate
+  1527, "23 AUG 963", "28 AUG 1026", # Richard II of Normandy
+  1529, "997", "6 AUG 1027", # Richard III of Normandy; birth year approximate
+  1530, "28 AUG 933", "20 NOV 996", # Richard I the Fearless of Normandy
+  1532, "984", "6 MAR 1052", # Emma of Normandy; birth year approximate
+  1533, "966", "23 APR 1016", # Ethelred II the Unready; birth year approximate
+  1535, "1025", "18 DEC 1075", # Edith (Eadgyth) of Wessex; birth year approximate
+  1538, "1022", "14 OCT 1066", # Harold II; birth year approximate
+  1541, "1053", "19 MAY 1125", # Vladimir of Kiev Monomakh; birth year approximate
+  1543, "990", "30 NOV 1016", # Edmund II Ironside; birth year approximate
+  1545, "1016", "19 APR 1057", # Edward Atheling / Edward the Exile; birth year approximate
+  1548, "995", "12 NOV 1035", # Canute II the Great; birth year approximate
+  1550, "1016", "17 MAR 1040", # Harold I Harefoot; birth year approximate
   1562, "24 JAN 1897", "8 MAY 1981", # Andrew
   1563, "23 DEC 1898", "30 NOV 1968", # Theodore
   1564, "17 JAN 1900", "12 SEP 1974", # Nikita
