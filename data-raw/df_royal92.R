@@ -1579,9 +1579,214 @@ date_overrides <- tribble(
   2298, "1350", "18 NOV 1442", # John Golafre; approximate birth year
   2299, "25 MAR 1414", "22 MAY 1455", # Thomas Clifford, Lord Clifford
   2300, "17 NOV 1493", "2 MAR 1543", # John Neville, Lord Latimer; likely duplicate/identity match to personID 863
+  2301, "29 APR 1759", "11 SEP 1801", # Hugh Seymour / Vice-Admiral Lord Hugh Seymour
+  2302, "8 NOV 1762", "12 JUN 1801", # Anne Horatia Waldegrave; date source should be cross-checked if stricter certainty needed
+  2303, "5 JUL 1718", "14 JUN 1794", # Francis Seymour-Conway, 1st Marquess of Hertford
+  2304, "1726", "10 NOV 1782", # Isabella FitzRoy; birth year only
+  2305, "25 OCT 1683", "6 MAY 1757", # Charles FitzRoy, 2nd Duke of Grafton
+  2306, "27 AUG 1690", "9 AUG 1726", # Henrietta Somerset / Duchess of Grafton
+  2307, "28 SEP 1663", "9 OCT 1690", # Henry FitzRoy, 1st Duke of Grafton
+  2308, "1668", "7 FEB 1723", # Isabella Bennet / Countess of Arlington; approximate birth year
+  2309, "14 AUG 1513", "28 OCT 1571", # William Parr, Marquess of Northampton
+  2310, "1504", "22 AUG 1553", # John Dudley, Duke of Northumberland; approximate birth year
+  2311, "1508", "15 JAN 1555", # Jane Guildford / Duchess of Northumberland; approximate birth year
+  2312, "1527", "21 OCT 1554", # John Dudley, Earl of Warwick; approximate birth year
+  2313, "1530", "21 FEB 1590", # Ambrose Dudley, Earl of Warwick; approximate birth year
+  2314, "1531", "1557", # Henry Dudley; approximate year-level dates
+  2315, "24 JUN 1532", "4 SEP 1588", # Robert Dudley, Earl of Leicester
+  2316, "1531", "1555", # Jane Dudley; approximate year-level dates; identity should be checked within Dudley sibling cluster
+  2317, "1530", "9 AUG 1586", # Mary Dudley / Lady Sidney; approximate birth year
+  2318, "1543", "14 AUG 1620", # Catherine Dudley / Countess of Huntingdon; approximate birth year
+  2319, "1538", "17 FEB 1588", # Anne Seymour / Countess of Warwick; approximate birth year
+  2321, "1500", "26 MAY 1552", # Anne Whorwood; approximate birth year
+  2322, "1520", "1563", # Elizabeth Talboys; approximate year-level dates
+  2323, "1548", "9 FEB 1604", # Anne Russell / Countess of Warwick; approximate birth year
+  2325, "1540", "9 JAN 1564", # Margaret Audley; approximate birth year
+  2326, "10 MAR 1538", "2 JUN 1572", # Thomas Howard, 4th Duke of Norfolk; source conflict on 1536/1538, selected Britannica date
+  2328, "20 JUL 1529", "5 MAY 1586", # Henry Sidney
+  2329, "1535", "14 DEC 1595", # Henry Hastings, 3rd Earl of Huntingdon; approximate birth year
+  2330, "7 JUN 1532", "8 SEP 1560", # Amy Robsart
+  2331, "8 NOV 1543", "25 DEC 1634", # Lettice Knollys
+  2332, "1534", "19 JAN 1601", # Henry Herbert, 2nd Earl of Pembroke; identity inferred from Tudor/Dudley cluster
+  2333, "1524", "3 SEP 1571", # Thomas Keyes; approximate birth year
+  2334, "1540", "29 SEP 1596", # Margaret Clifford / Countess of Derby; approximate birth year
+  2335, "SEP 1531", "25 SEP 1593", # Henry Stanley, 4th Earl of Derby; month-level birth date
+  2336, "21 MAR 1557", "19 APR 1630", # Anne Dacre; identity inferred from Howard/Arundel cluster
+  2337, "1480", "3 APR 1538", # Elizabeth Howard / Lady Boleyn; approximate birth year
+  2338, "1504", "17 MAY 1536", # George Boleyn, Viscount Rochford; approximate birth year
+  2339, "1499", "19 JUL 1543", # Mary Boleyn; approximate birth year
+  2340, "1495", "22 JUN 1528", # William Carey; approximate birth year
+  2341, "1443", "21 MAY 1524", # Thomas Howard, 2nd Duke of Norfolk; approximate birth year
+  2342, "1445", "4 APR 1497", # Elizabeth Tilney; approximate birth year
+  2343, "1473", "25 AUG 1554", # Thomas Howard, 3rd Duke of Norfolk; approximate birth year
+  2344, "2 NOV 1475", "23 NOV 1511", # Anne of York
+  2345, "1497", "30 NOV 1558", # Elizabeth Stafford / Duchess of Norfolk; approximate birth year
+  2347, "1477", "15 MAY 1545", # Agnes Tilney; approximate birth year and mid-month death date
+  2348, "1510", "12 JAN 1573", # William Howard, 1st Baron Howard of Effingham; approximate birth year
+  2350, "1510", "18 SEP 1534", # Elizabeth Howard; identity inferred from Howard/Sussex branch
+  2353, "10 MAY 1509", "24 OCT 1572", # Edward Stanley, 3rd Earl of Derby
+  2354, "1507", "17 FEB 1557", # Henry Radcliffe, 2nd Earl of Sussex; approximate birth year
+  2355, "1517", "19 JAN 1547", # Henry Howard, Earl of Surrey; birth year sometimes given 1516/1517, selected 1517
+  2356, "1519", "7 DEC 1557", # Mary Howard / Duchess of Richmond and Somerset; approximate birth year
+  2357, "1520", "28 JAN 1582", # Thomas Howard, Viscount Bindon; approximate birth year
+  2358, "1517", "30 JUN 1577", # Frances de Vere; approximate birth year
+  2359, "10 MAR 1538", "2 JUN 1572", # Thomas Howard, 4th Duke of Norfolk; likely duplicate/identity match to personID 2326
+  2360, "25 FEB 1540", "15 JUN 1614", # Henry Howard, 1st Earl of Northampton
+  2361, "1538", "7 APR 1596", # Catherine Howard; approximate birth year; identity inferred from Howard sibling cluster
+  2362, "1537", "1593", # Jane Howard; approximate year-level dates
+  2363, "1547", "17 MAR 1591", # Margaret Howard; approximate birth year
+  2364, "15 JUN 1519", "23 JUL 1536", # Henry FitzRoy, Duke of Richmond and Somerset
+  2366, "1540", "25 AUG 1557", # Mary FitzAlan / Duchess of Norfolk; approximate birth year
+  2367, "28 JUN 1557", "19 OCT 1595", # Philip Howard, Earl of Arundel
+  2368, "21 MAR 1557", "19 APR 1630", # Anne Dacre / Countess of Arundel
+  2369, "7 JUL 1585", "4 OCT 1646", # Thomas Howard, Earl of Arundel
+  2370, "1585", "3 JUN 1654", # Aletheia Talbot; approximate birth year
+  2371, "1540", "9 JAN 1564", # Margaret Audley; likely duplicate/identity match to personID 2325
+  2372, "24 AUG 1561", "28 MAY 1626", # Thomas Howard, 1st Earl of Suffolk
+  2373, "4 JUL 1563", "7 APR 1578", # Mary Dacre; identity inferred from Suffolk/Howard branch
+  2374, "1564", "25 DEC 1633", # Catherine Knyvett / Countess of Suffolk; approximate birth year
+  2375, "13 AUG 1584", "3 JUN 1640", # Theophilus Howard, 2nd Earl of Suffolk
+  2376, "8 OCT 1587", "16 JUL 1669", # Thomas Howard, 1st Earl of Berkshire
+  2378, "1588", "1672", # Catherine Howard; approximate year-level dates; identity inferred from Suffolk sibling cluster
+  2383, "16 DEC 1592", "25 DEC 1676", # William Cavendish, Duke of Newcastle; row title currently Earl
+  2384, "28 MAR 1591", "3 DEC 1668", # William Cecil, 2nd Earl of Salisbury; row title says Berkshire, likely title/name mismatch
+  2385, "11 JAN 1591", "14 SEP 1646", # Robert Devereux, 3rd Earl of Essex
+  2386, "1587", "17 JUL 1645", # Robert Carr, Earl of Somerset; approximate birth year
+  2387, "19 DEC 1563", "7 OCT 1640", # William Howard; identity inferred from Howard sibling cluster
+  2389, "31 MAY 1590", "23 AUG 1632", # Frances Howard / Countess of Essex and Somerset; current death appears inconsistent, identity should be checked
+  2390, "1578", "8 OCT 1639", # Frances Howard / Duchess of Richmond and Lennox; approximate birth year
+  2391, "29 SEP 1574", "16 FEB 1624", # Ludovic Stuart, Duke of Lennox and Richmond
+  2392, "1500", "22 JAN 1552", # Edward Seymour, Duke of Somerset; approximate birth year
+  2393, "1510", "16 APR 1587", # Anne Stanhope / Duchess of Somerset; approximate birth year
+  2394, "4 MAR 1526", "23 JUL 1596", # Henry Carey, Baron Hunsdon
+  2395, "1507", "1535", # Catherine Fillol; approximate year-level dates
+  2396, "21 SEP 1586", "1618", # Edward Seymour, Lord Beauchamp; identity inferred from Beauchamp/Seymour branch
+  2397, "1590", "12 JUL 1664", # Francis Seymour, 1st Baron Seymour of Trowbridge; approximate birth year
+  2398, "1594", "1620", # Honora Seymour; approximate year-level dates
+  2402, "1652", "1700", # Catherine Lee; approximate year-level dates; identity should be checked if stricter certainty needed
+  2403, "1524", "15 JAN 1569", # Catherine Carey / Lady Knollys; approximate birth year
+  2405, "1511", "19 JUL 1596", # Francis Knollys; approximate birth year
+  2406, "1541", "1582", # Henry Knollys; approximate year-level dates
+  2407, "1544", "25 MAY 1632", # William Knollys, Earl of Banbury; approximate birth year
+  2410, "1549", "1606", # Margaret Cave; approximate year-level dates
+  2411, "16 SEP 1541", "22 SEP 1576", # Walter Devereux, 1st Earl of Essex
+  2412, "1555", "18 MAR 1601", # Christopher Blount; approximate birth year
+  2414, "1525", "16 NOV 1585", # Gerald FitzGerald, Lord Offaly / 11th Earl of Kildare; title/name should be checked
+  2415, "31 MAR 1651", "26 MAY 1685", # Charles II, Elector Palatine; row name is generic Charles
+  2416, "24 DEC 1634", "16 MAY 1696", # Mariana of Austria / Queen of Spain
+  2417, "18 AUG 1606", "13 MAY 1646", # Maria Anna of Spain / Holy Roman Empress
+  2418, "13 JUL 1608", "2 APR 1657", # Ferdinand III, Holy Roman Emperor
+  2419, "9 JUL 1578", "15 FEB 1637", # Ferdinand II, Holy Roman Emperor
+  2420, "9 JUN 1640", "5 MAY 1705", # Leopold I, Holy Roman Emperor
+  2421, "12 JUL 1651", "12 MAR 1673", # Margaret Theresa of Spain / Holy Roman Empress
+  2422, "6 JAN 1655", "19 JAN 1720", # Eleonore Magdalene of Neuburg / Holy Roman Empress
+  2423, "1 NOV 1661", "14 APR 1711", # Louis de France / Grand Dauphin
+  2424, "19 DEC 1683", "9 JUL 1746", # Philip V of Spain
+  2425, "25 OCT 1692", "11 JUL 1766", # Elisabeth Farnese / Isabella Elizabeth Farnese
+  2426, "16 AUG 1682", "18 FEB 1712", # Louis, Duke of Burgundy
+  2427, "18 JAN 1669", "24 DEC 1692", # Maria Antonia of Austria / Electress of Bavaria
+  2428, "11 JUL 1662", "26 FEB 1726", # Maximilian II Emanuel of Bavaria
+  2429, "28 OCT 1692", "6 FEB 1699", # Joseph Ferdinand of Bavaria
+  2430, "26 JUL 1678", "17 APR 1711", # Joseph I, Holy Roman Emperor
+  2431, "1 OCT 1685", "20 OCT 1740", # Charles VI, Holy Roman Emperor
+  2432, "13 MAY 1717", "29 NOV 1780", # Maria Theresa / Empress
+  2433, "8 DEC 1708", "18 AUG 1765", # Francis I Stephen, Holy Roman Emperor
+  2434, "13 MAR 1741", "20 FEB 1790", # Joseph II, Holy Roman Emperor
+  2435, "3 SEP 1781", "21 FEB 1824", # Eugène de Beauharnais, Duke of Leuchtenberg
+  2436, "21 JUN 1788", "13 MAY 1851", # Augusta of Bavaria / Duchess of Leuchtenberg
+  2437, "17 DEC 1802", "8 MAR 1878", # Franz Karl of Austria; likely duplicate/identity match to personID 639
+  2439, "13 APR 1519", "5 JAN 1589", # Catherine de Medici
+  2440, "13 OCT 1499", "20 JUL 1524", # Claude of France
+  2441, "11 APR 1492", "21 DEC 1549", # Margaret of Navarre
+  2442, "6 MAR 1405", "20 JUL 1454", # John II of Castile
+  2443, "1428", "15 AUG 1496", # Isabella of Portugal / Queen of Castile; approximate birth year
+  2444, "22 JAN 1901", "21 OCT 1990", # Walter Sommerlath
+  2445, "25 MAY 1906", "9 MAR 1997", # Alice Soares de Toledo / Alice de Toledo
+  2448, "15 JUL 1750", "9 DEC 1806", # Francis Frederick of Saxe-Coburg-Saalfeld
+  2449, "23 AUG 1836", "19 SEP 1902", # Maria Henrietta of Austria / Queen of the Belgians
+  2450, "9 MAR 1776", "13 JAN 1847", # Joseph of Austria, Palatine of Hungary
+  2452, "1 DEC 1081", "1 AUG 1137", # Louis VI the Fat of France
+  2453, "1092", "18 NOV 1154", # Adelaide of Savoy / Maurienne; approximate birth year
+  2454, "23 MAY 1052", "29 JUL 1108", # Philip I of France
+  2455, "1055", "15 OCT 1093", # Bertha of Holland; approximate birth year
   2456, "1070", "14 FEB 1117", # Bertrada de Montfort
+  2457, "4 MAY 1008", "4 AUG 1060", # Henry I of France
+  2458, "27 MAR 972", "20 JUL 1031", # Robert II the Pious of France
+  2459, "986", "25 JUL 1032", # Constance of Arles; approximate birth year
+  2460, "1007", "17 SEP 1025", # Hugh Magnus of France; birth year only
+  2462, "964", "16 JAN 1010", # Bertha of Burgundy; approximate birth year
+  2463, "941", "24 OCT 996", # Hugh Capet; approximate birth year
+  2465, "1293", "3 JAN 1322", # Philip V the Tall of France; approximate birth year
+  2467, "1120", "7 MAY 1166", # William I of Sicily; approximate birth year
+  2468, "22 DEC 1095", "26 FEB 1154", # Roger II of Sicily
+  2469, "1116", "1131", # Philip of France, son of Louis VI; approximate year-level dates
+  2470, "1123", "11 OCT 1188", # Robert I, Count of Dreux; approximate birth year
+  2471, "1126", "10 APR 1183", # Peter I of Courtenay; approximate birth year
+  2472, "1121", "13 NOV 1175", # Henry of France, bishop; approximate birth year
+  2474, "1124", "16 AUG 1176", # Constance of Toulouse; approximate birth year
+  2475, "1141", "4 OCT 1160", # Constance of Castile; approximate birth year
+  2476, "1140", "4 JUN 1206", # Adela of Champagne; approximate birth year
+  2477, "5 APR 1170", "15 MAR 1190", # Isabella of Hainault
+  2478, "1174", "29 JUL 1236", # Ingeborg of Denmark; approximate birth year
+  2479, "1180", "29 JUL 1201", # Agnes of Merania; approximate birth year
+  2480, "1200", "19 JAN 1234", # Philip Hurepel of France; approximate birth year
+  2481, "11 NOV 1220", "21 AUG 1271", # Alphonse of Poitiers
+  2482, "1221", "20 DEC 1295", # Margaret of Provence; approximate birth year
+  2483, "1198", "19 AUG 1245", # Raymond Berengar IV of Provence; approximate birth year
+  2484, "21 MAR 1227", "7 JAN 1285", # Charles of Anjou
+  2485, "13 MAY 1254", "12 JAN 1321", # Marie of Brabant / Queen of France
+  2486, "14 JAN 1273", "2 APR 1305", # Joan I of Navarre
+  2487, "1293", "12 OCT 1328", # Clemence of Hungary; approximate birth year
+  2488, "1288", "16 JUL 1342", # Charles I of Hungary; approximate birth year
+  2489, "1254", "5 MAY 1309", # Charles II of Naples; approximate birth year
+  2490, "1293", "12 DEC 1349", # Joan II of Burgundy; approximate birth year
+  2491, "1296", "29 APR 1326", # Blanche of Burgundy; approximate birth year
+  2492, "1304", "26 MAR 1324", # Marie of Luxembourg; approximate birth year
+  2493, "1310", "4 MAR 1371", # Joan of Évreux; approximate birth year
+  2494, "17 NOV 1293", "22 AUG 1350", # Philip VI of France
+  2495, "12 MAR 1270", "16 DEC 1325", # Charles of Valois
+  2496, "24 JUN 1293", "12 SEP 1348", # Joan the Lame / Joan of Burgundy
+  2497, "1331", "5 OCT 1398", # Blanche of Navarre; approximate birth year
+  2500, "3 FEB 1338", "6 FEB 1378", # Joan of Bourbon
+  2501, "13 MAR 1372", "23 NOV 1407", # Louis I, Duke of Orléans; row label says Louis of Beaumont / Count of Valois, likely identity mismatch
+  2502, "4 FEB 1378", "15 NOV 1388", # Catherine of France; approximate mid-month death date
+  2504, "20 OCT 1677", "23 FEB 1766", # Stanisław Leszczyński / Stanislaw Leczinski
+  2505, "14 MAY 1553", "27 MAR 1615", # Margaret of Valois
+  2507, "31 AUG 1686", "5 MAY 1714", # Charles, Duke of Berry
+  2508, "23 SEP 1759", "7 MAR 1802", # Clotilde of France / Queen of Sardinia; row name says Savoy
   2509, "6 AUG 1775", "3 JUN 1844", # of Angouleme
   2510, "24 JAN 1778", "14 FEB 1820", # of Berry
+  2511, "6 OCT 1773", "26 AUG 1850", # Louis Philippe I of France
+  2512, "8 NOV 1777", "17 DEC 1860", # Désirée Clary / Queen Desideria of Sweden
+  2513, "13 APR 1747", "6 NOV 1793", # Louis Philippe Joseph d’Orléans / Philippe Égalité
+  2514, "13 MAR 1753", "23 JUN 1821", # Louise Marie Adélaïde de Bourbon-Penthièvre
+  2515, "12 MAY 1725", "18 NOV 1785", # Louis Philippe I, Duke of Orléans
+  2516, "4 AUG 1703", "4 FEB 1752", # Louis d’Orléans, Duke of Orléans
+  2517, "2 AUG 1674", "2 DEC 1723", # Philippe II, Duke of Orléans / Regent
+  2518, "17 JAN 1342", "27 APR 1404", # Philip the Bold, Duke of Burgundy
+  2519, "20 MAY 1315", "11 SEP 1349", # Bonne of Luxembourg
+  2520, "1294", "7 MAR 1342", # Joan of Valois, Countess of Hainaut; approximate birth year
+  2521, "1287", "16 AUG 1342", # Robert III of Artois; approximate birth year; row title says Duke of Richmond
+  2524, "1459", "1 JAN 1496", # Charles of Valois, Count of Angoulême; approximate birth year
+  2525, "26 JUN 1399", "30 APR 1467", # John of Valois, Count of Angoulême
+  2530, "11 JUL 1844", "16 AUG 1921", # Peter I of Serbia
+  2531, "23 DEC 1864", "16 MAR 1890", # Zorka of Montenegro
+  2532, "8 SEP 1887", "17 OCT 1972", # George Karađorđević / George Karageorgeovitch
+  2533, "1011", "21 MAR 1076", # Robert I, Duke of Burgundy; approximate birth year
+  2534, "1057", "18 OCT 1101", # Hugh the Great of Vermandois; approximate birth year
+  2535, "1030", "1075", # Anne of Kiev; approximate dates; current CSV dates differ and should be treated as uncertain
+  2536, "1024", "1044", # Matilda of Frisia / Germany; approximate year-level dates
+  2538, "14 OCT 1404", "29 NOV 1463", # Mary / Marie of Anjou
+  2539, "11 AUG 1384", "14 NOV 1442", # Yolande of Aragon
+  2541, "25 DEC 1424", "16 AUG 1445", # Margaret of Scotland, Dauphine of France
+  2542, "11 NOV 1441", "1 DEC 1483", # Charlotte of Savoy
+  2544, "3 APR 1461", "14 NOV 1522", # Anne of France
+  2545, "25 JAN 1477", "9 JAN 1514", # Anne of Brittany; duplicate/identity match to personID 2548 likely
+  2546, "22 SEP 1515", "16 JUL 1557", # Anne of Cleves
+  2547, "23 APR 1464", "4 FEB 1505", # Joan of Valois
+  2548, "25 JAN 1477", "9 JAN 1514", # Anne of Brittany
+  2549, "10 AUG 1549", "30 SEP 1602", # Catherine of Brandenburg-Küstrin
+  2550, "758", "30 APR 783", # Hildegard of Vinzgau / wife of Charlemagne; approximate birth year
   2846, "25 DEC 1902", "25 FEB 1953", # Françoise of Orléans
   2848, "7 JAN 1939", "28 JUL 2024", # Michael of Greece and Denmark
   2939, "17 JUL 1838", "14 NOV 1886", # Harriet Marsham
@@ -1627,6 +1832,22 @@ date_overrides <- tribble(
 #2288 likely duplicates John Hastings already represented at personID == 1417.
 
 #2300 likely duplicates John Neville, Lord Latimer already represented at personID == 863.
+
+
+# 2359 likely duplicates Thomas Howard, 4th Duke of Norfolk, already represented at personID == 2326.
+
+# 2371 likely duplicates Margaret Audley already represented at personID == 2325.
+
+# 2384 has a title/name mismatch. The row name fits William Cecil, 2nd Earl of Salisbury, but the current title says Berkshire.
+
+# 2389 may be the Frances Howard involved in the Essex/Somerset marriage context, but the current death-year placeholder appears inconsistent with that identification.
+
+# 2437 likely duplicates Franz Karl of Austria already represented elsewhere in the file.
+
+# 2501 appears to be Louis I, Duke of Orléans, but the row label says Louis of Beaumont / Count of Valois, so that identity/name should be reviewed separately.
+
+# 2545 and 2548 appear to duplicate Anne of Brittany.
+
 name_overrides <- tribble(
   ~personID, ~name_override,
   12, "Alexandra of Denmark (Alix)",
