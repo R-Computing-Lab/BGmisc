@@ -109,7 +109,6 @@ buildBtwnGenerations_base <- function(df_Fam,
     # Generation 1 individuals are founders and are treated as "parents" by design.
     # They do not have assigned mother/father, so we just set flags and continue.
     # -------------------------------------------------------------------------
-
     if (i == 1) {
       rows_i <- gen_rows[[as.character(i)]]
       df_Ngen <- df_Fam[rows_i, , drop = FALSE]
@@ -145,14 +144,11 @@ buildBtwnGenerations_base <- function(df_Fam,
       N_LinkedFemale <- round(N_LinkedMem * (1 - sexR))
       N_LinkedMale <- N_LinkedMem - N_LinkedFemale
 
-
       # -------------------------------------------------------------------------
       # Step B: Prepare generation i data, assign couple IDs, and mark potential children
       # -------------------------------------------------------------------------
-
       # get the df for the i the generation
       df_Ngen <- df_Fam[rows_i, , drop = FALSE]
-
 
       # Reset per-generation fields that will be recomputed.
       df_Ngen$ifparent <- FALSE
@@ -170,8 +166,6 @@ buildBtwnGenerations_base <- function(df_Fam,
           "Step 2.1: mark a group of potential sons and daughters in the i th generation"
         )
       }
-
-
       # count the number of couples in the i th gen
       if (verbose == TRUE) {
         countCouple <- (nrow(df_Ngen) - sum(is.na(df_Ngen$spID))) * .5
@@ -274,8 +268,6 @@ buildBtwnGenerations_base <- function(df_Fam,
           "Step 2.3: connect the i and i-1 th generation"
         )
       }
-
-
       if (i == 1) {
         next
       } else {
