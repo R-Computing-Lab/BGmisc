@@ -49,13 +49,13 @@ personID,famID,momID,dadID,name,sex,birth_date,death_date,attribute_title,twinID
 48,1,39,37,Maria Nicholovna Romanov,F,NA,1918-07-18,Grand Duchess,NA
 49,1,39,37,Anastasia Nicholovna Romanov,F,NA,1918-07-18,Grand Duchess,NA
 50,1,39,37,Alexis Nicolaievich Romanov,M,1904-08-12,1918-07-18,Tsarevich,NA
-51,1,146,145,Elizabeth Angela Marguerite Bowes-Lyon,F,1900-08-04,NA,Lady,NA
+51,1,146,145,Elizabeth Angela Marguerite Bowes-Lyon,F,1900-08-04,2002-03-30,Lady,NA
 52,1,51,32,Elizabeth II Alexandra Mary Windsor,F,1926-04-21,2022-09-08,Queen of England,NA
-53,1,51,32,Margaret Rose Windsor,F,1930-08-21,NA,Princess,NA
-54,1,NA,NA,Anthony Charles Robert Armstrong-Jones,M,1930-03-07,NA,Earl of Snowdon,NA
+53,1,51,32,Margaret Rose Windsor,F,1930-08-21,2002-02-09,Princess,NA
+54,1,NA,NA,Anthony Charles Robert Armstrong-Jones,M,1930-04-07,2017-01-13,Earl of Snowdon,NA
 55,1,53,54,David Albert Charles Armstrong-Jones,M,1961-11-03,NA,Vicount Linley,NA
 56,1,53,54,Sarah Frances Elizabeth Armstrong-Jones,F,1964-05-01,NA,Lady,NA
-57,1,101,104,Philip Mountbatten,M,1921-06-10,NA,Prince,NA
+57,1,101,104,Philip Mountbatten,M,1921-06-10,2021-04-09,Prince,NA
 58,1,52,57,Charles Philip Arthur Windsor,M,1948-11-14,NA,Prince,NA
 59,1,52,57,Anne Elizabeth Alice Windsor,F,1950-08-15,NA,Princess,NA
 60,1,52,57,Andrew Albert Christian Windsor,M,1960-02-19,NA,Duke of York,NA
@@ -63,7 +63,7 @@ personID,famID,momID,dadID,name,sex,birth_date,death_date,attribute_title,twinID
 62,1,NA,2968,Mark Anthony Peter Phillips,M,1948-09-22,NA,Captain,NA
 63,1,59,62,Peter Mark Andrew Phillips,M,1977-11-15,NA,NA,NA
 64,1,59,62,Zara Anne Elizabeth Phillips,F,1981-05-15,NA,NA,NA
-65,1,93,239,Diana Frances Spencer,F,1961-07-01,NA,Lady,NA
+65,1,93,239,Diana Frances Spencer,F,1961-07-01,1997-08-31,Lady,NA
 66,1,1362,229,Marina of Greece,F,1906-11-30,1968-06-15,Princess,NA
 67,1,66,35,Edward George Nicholas Windsor,M,1935-09-09,NA,Duke of Kent,NA
 68,1,NA,NA,Henry George Charles Lascelles,M,1882-06-15,1947-06-15,Viscount,NA
@@ -78,9 +78,9 @@ personID,famID,momID,dadID,name,sex,birth_date,death_date,attribute_title,twinID
 77,1,3,20,Charlotte of Saxe-Meiningen,F,1860-06-15,1919-06-15,Duchess,NA
 78,1,3,20,Margarete of Hesse,F,1872-06-15,1954-06-15,Princess,NA
 79,1,5,22,Irene of Hesse,F,1866-06-15,1953-06-15,Princess,NA
-80,1,79,72,Waldemar,M,1889-06-15,1945-06-15,NA,NA
-81,1,79,72,Henry,M,1900-06-15,1904-06-15,NA,NA
-82,1,79,72,Child #3,M,NA,NA,NA,NA
+80,1,79,72,Waldemar,M,1889-03-20,1945-05-02,NA,NA
+81,1,79,72,Henry,M,1900-01-09,1904-02-26,NA,NA
+82,1,79,72,Sigismund of Prussia,M,1896-11-27,1978-11-14,NA,NA
 83,1,5,22,Ernest Louis of Hesse,M,1868-06-15,1937-06-15,Grand Duke,NA
 84,1,5,22,Elizabeth (Ella),F,1864-06-15,1918-07-17,Grand Duchess,NA
 85,1,5,22,Mary (May),F,1874-06-15,1878-06-15,NA,NA
@@ -415,7 +415,7 @@ personID,famID,momID,dadID,name,sex,birth_date,death_date,attribute_title,twinID
 414,1,410,162,Charles,M,1801-06-15,1883-06-15,NA,NA
 415,28,NA,NA,Charles,M,1766-06-15,1806-06-15,NA,NA
 416,1,410,162,Ferdinand,M,1804-06-15,1806-06-15,NA,NA
-417,29,2610,2609,Charlemagne,M,742-04-02,NA,King of Franks,NA
+417,29,2610,2609,Charlemagne,M,748-04-02,814-01-28,King of Franks,NA
 418,1,410,162,Albert of Prussia,M,1809-06-15,1872-06-15,Prince,NA
 419,30,NA,NA,Hermine of Reuss,F,1887-12-17,1947-08-07,Princess,NA
 420,1,402,21,William,M,1882-05-06,1951-07-20,Crown Prince,NA
@@ -1371,7 +1371,7 @@ personID,famID,momID,dadID,name,sex,birth_date,death_date,attribute_title,twinID
 1370,1,1366,1364,Eleanor,F,1215-06-15,1275-04-13,NA,NA
 1371,1,1395,1405,Henry II Curtmantle,M,1133-03-25,1189-07-06,King of England,NA
 1372,1,NA,1868,Eleanor of Aquitaine,F,1122-06-15,1204-04-01,Duchess,NA
-1373,1,1372,1371,William,M,1152-08-17,NA,NA,NA
+1373,1,1372,1371,William IX,M,1153-08-17,1156-06-15,Count of Poitiers,NA
 1374,1,1372,1371,Henry the Young King,M,1155-02-28,1183-06-11,King of England,NA
 1375,1,1372,1371,Matilda (Maud),F,1156-06-15,1189-06-28,NA,NA
 1376,1,1372,1371,Richard I Coeur de Lion,M,1157-06-15,1199-04-06,King of England,NA

@@ -71,7 +71,15 @@ date_overrides <- tribble(
   ~personID, ~birth_date_override, ~death_date_override,
   24, "25 FEB 1883", "3 JAN 1981", # Alice of Athlone
   41, "26 NOV 1847", "13 OCT 1928", # Dagmar (Marie) of Denmark
+  51, "4 AUG 1900", "30 MAR 2002", #Elizabeth Angela Marguerite Bowes-Lyon
   52, "21 APR 1926", "8 SEP 2022", # Elizabeth II Alexandra Mary Windsor
+  53, "21 AUG 1930", "9 FEB 2002", # Margaret Rose Windsor
+  54, "7 APR 1930", "13 JAN 2017", # Antony Armstrong-Jones
+  57, "10 JUN 1921", "9 APR 2021", #Philip Mountbatten
+  65, "1 JUL 1961", "31 AUG 1997", # Diana Frances Spencer
+  80, "20 MAR 1889", "2 MAY 1945", # Waldemar
+  81, "9 JAN 1900", "26 FEB 1904", # Prince Henry
+  82, "27 NOV 1896", "14 NOV 1978", # Sigismund of Prussia
   151, "11 MAY 1857", "17 FEB 1905", # Serge Alexandrovich Romanov
   152, "3 OCT 1860", "28 JAN 1919", # Paul Alexandrovich Romanov
   153, "9 MAY 1871", "10 JUL 1899", # George Alexandrovich Romanov
@@ -83,6 +91,7 @@ date_overrides <- tribble(
   289, "23 JAN 1906", "29 MAY 1994", # May Cambridge
   369, "2 OCT 1908", "6 JUL 1993", # Ruth Sylvia Gill
   393, "15 JUN 1843", "30 JUN 1898", # Barbara Smith Marr
+  417, "2 APR 748", "28 JAN 814", # Charlemagne
   420, "6 MAY 1882", "20 JUL 1951", # William
   421, "7 JUL 1883", "8 DEC 1942", # Eitel Frederick
   447, "7 JUN 1907", "4 FEB 2002", # Sigvard Oscar Fredrik
@@ -99,6 +108,7 @@ date_overrides <- tribble(
   1298, "27 APR 1779", "15 JUN 1831", # Konstantin Romanov
   1304, "29 DEC 1709", "5 JAN 1762", # Elizabeth Petrovna Romanov
   1358, "5 DEC 1905", "27 DEC 1981", # Natalie Romanov
+  1373, "17 AUG 1153", "15 JUN 1156",  #William IX, count of Poitiers
   1409, "8 MAY 1909", "21 DEC 2004", # Lennart Gustaf Nicholas
   1562, "24 JAN 1897", "8 MAY 1981", # Andrew
   1563, "23 DEC 1898", "30 NOV 1968", # Theodore
@@ -131,6 +141,7 @@ name_overrides <- tribble(
   27, "Victoria Eugenie (Ena)",
   39, "Alexandra Fedorovna (Alix)",
   41, "Dagmar (Marie) of Denmark",
+  82, "Sigismund of Prussia",
   84, "Elizabeth (Ella)",
   85, "Mary (May)",
   136, "Mary Adelaide (Fat Mary)",
@@ -151,6 +162,7 @@ name_overrides <- tribble(
   1419, "Charles Frederick of Schleswig-Holstein-Gottorp",
   1197, "Karl Theodor (Gackl)",
   1200, "Sophie Charlotte Auguste",
+  1373, "William IX",
   1442, "Ferdinand Philippe Marie d'Orléans",
   1594, "John IV (the Conqueror) of Montfort",
   1644, "Sophia Frederica of Mecklenburg-Schwerin",
@@ -205,8 +217,9 @@ royal92_cleaned <- royal92 %>%
     birth_date = parse_gedcom_date(standardize_partial_date(birth_date)),
     death_date = parse_gedcom_date(standardize_partial_date(death_date)),
     attribute_title = case_when(
-      personID == 2943 ~ "Duke of Buccleuch",
       personID == 146 ~ "Countess of Strathmore and Kinghorne",
+      personID == 1373 ~ "Count of Poitiers",
+      personID == 2943 ~ "Duke of Buccleuch",
       TRUE ~ attribute_title
     ),
     twinID = case_when(
