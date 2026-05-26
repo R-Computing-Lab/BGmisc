@@ -40,6 +40,22 @@ parse_gedcom_date <- function(x) {
 ## Create dataframe
 royal92 <- df_raw <- readGedcom("data-raw/royal92.ged") %>%
   addPersonToPed(
+    personID = 914, # overwriting duplicate
+    name = "Elizabeth Alexandrovna of Russia",
+    sex = "F",
+    momID = 1297,
+    dadID = 1296,
+    overwrite = TRUE
+  ) %>%
+  addPersonToPed(
+    personID = 915,
+    name = "Ferdinand I of Bulgaria",
+    sex = "M",
+    momID = 1043,
+    dadID = 911,
+    overwrite = TRUE
+  ) %>%
+  addPersonToPed(
     personID = 1147,
     name = "Henry de Montfort",
     sex = "M",
@@ -69,14 +85,6 @@ royal92 <- df_raw <- readGedcom("data-raw/royal92.ged") %>%
     sex = "M",
     momID = 1370,
     dadID = 873
-  ) %>%
-  addPersonToPed(
-    personID = 3012,
-    name = "Elizabeth Alexandrovna of Russia",
-    sex = "F",
-    momID = 1297,
-    dadID = 1296,
-    overwrite = FALSE
   )
 
 
@@ -583,9 +591,113 @@ date_overrides <- tribble(
   898, "17 NOV 1755", "16 SEP 1824", # Louis XVIII of France
   899, "23 DEC 1953", NA_character_, # Maria Vladimirovna of Russia; living
   900, "3 SEP 1943", NA_character_, # Franz Wilhelm of Prussia; living
+  901, "13 MAR 1981", NA_character_, # George Mikhailovich Romanov; living
+  902, "13 FEB 1898", "2 AUG 1946", # Karl, Prince of Leiningen
+  903, "18 OCT 1926", "30 OCT 1991", # Emich Kyrill, Prince of Leiningen
+  904, "2 JAN 1928", "28 SEP 1990", # Karl Vladimir Ernst Heinrich of Leiningen
+  905, "9 MAY 1932", "16 JUN 1996", # Margarita Ileana of Leiningen; death date should be checked against sources if stricter certainty needed
+  906, "2 JAN 1936", "12 FEB 2021", # Mechtilde Alexandra of Leiningen
+  907, "18 JUN 1938", "29 AUG 1999", # Friedrich Wilhelm of Leiningen; source conflict: some line-of-succession summaries show 1998, genealogical memorial sources show 1999
+  908, "2 FEB 1928", "26 JAN 2016", # Eilika of Oldenburg
+  909, "19 JUN 1951", NA_character_, # Melita of Leiningen; living
+  910, "12 JUN 1952", NA_character_, # Karl Emich of Leiningen; living
+  911, "27 NOV 1955", NA_character_, # Andreas, Prince of Leiningen; living
+  912, "1 OCT 1958", "23 SEP 2017", # Stephanie of Leiningen
+  914, "15 NOV 1806", "12 MAY 1808", # Elizabeth Alexandrovna of Russia
+  915, "8 AUG 1982", NA_character_, # Ferdinand, Hereditary Prince of Leiningen; living
+  917, "20 FEB 1963", NA_character_, # Ulf-Karl Bauscher; living
+  918, "31 OCT 1965", NA_character_, # Berthold Alexander Eric Bauscher; living
+  919, "2 FEB 1971", NA_character_, # Johann Karl Joachim Fritz Markwart Bauscher; living
+  920, "22 SEP 1601", "20 JAN 1666", # Anne of Austria
+  921, "9 FEB 1939", "29 SEP 2015", # Friedrich Wilhelm of Prussia
+  922, "22 MAR 1940", "3 APR 2014", # Michael of Prussia
+  923, "28 MAY 1942", NA_character_, # Marie-Cécile of Prussia; living
   924, "25 AUG 1944", "11 JUL 1977", # Louis Ferdinand of Prussia, 1944-1977
   930, "30 JAN 1978", NA_character_, # Cornelie-Cécile of Prussia
+  925, "14 MAR 1946", NA_character_, # Christian-Sigismund of Prussia; living
+  929, "10 JUN 1976", NA_character_, # Georg Friedrich, Prince of Prussia; living
+  932, "5 MAR 1967", NA_character_, # Michaela of Prussia; living; CSV sex currently M but name/source indicate female
+  933, "13 JAN 1970", NA_character_, # Nataly of Prussia; living
+  937, "16 AUG 1979", NA_character_, # Friedrich of Prussia; living
+  938, "2 MAY 1982", NA_character_, # Viktoria-Luise of Prussia; living
+  939, "26 JUN 1984", NA_character_, # Joachim of Prussia; living
+  941, "23 NOV 1975", NA_character_, # Emily Lascelles / Emily Shard; living
+  942, "19 SEP 1978", NA_character_, # Benjamin Lascelles; living
+  943, "13 MAY 1980", NA_character_, # Alexander Edgar Lascelles; living
+  944, "19 NOV 1982", NA_character_, # Edward David Lascelles; living
+  946, "1 OCT 1973", NA_character_, # Sophie Amber Lascelles; living
+  947, "6 NOV 1977", NA_character_, # Rowan Nash Lascelles; living
+  951, "26 MAR 1662", "12 FEB 1689", # Marie Louise d'Orléans
+  952, "3 APR 1893", "14 DEC 1945", # Maud Carnegie / Princess Maud, Countess of Southesk
   953, "23 SEP 1893", "16 FEB 1992", # Charles of Southesk
+  954, "23 SEP 1929", "22 JUN 2015", # James Carnegie, 3rd Duke of Fife
+  958, "9 JUN 1930", "16 SEP 2012", # Ragnhild Alexandra of Norway
+  959, "12 FEB 1932", NA_character_, # Astrid Maud Ingeborg of Norway / Princess Astrid, Mrs Ferner; living
+  960, "22 JUL 1927", "24 JAN 2015", # Johan Martin Ferner
+  961, "22 JUL 1962", NA_character_, # Cathrine Ferner; living
+  962, "27 SEP 1963", NA_character_, # Benedikte Ferner; living
+  963, "15 MAR 1965", NA_character_, # Alexander Ferner; living
+  964, "30 MAR 1969", NA_character_, # Elisabeth Ferner; living
+  965, "22 OCT 1972", NA_character_, # Carl-Christian Ferner; living
+  966, "28 JAN 1923", "9 MAR 2021", # Erling Lorentzen
+  967, "23 AUG 1954", NA_character_, # Haakon Lorentzen; living
+  968, "27 FEB 1957", NA_character_, # Ingeborg Lorentzen; living
+  969, "8 MAY 1968", NA_character_, # Ragnhild Alexandra Lorentzen; living
+  970, "18 SEP 1923", "1 AUG 2016", # Anne of Bourbon-Parma / Queen Anne of Romania
+  972, "26 MAR 1949", NA_character_, # Margareta of Romania; living
+  973, "15 NOV 1950", NA_character_, # Elena of Romania; living
+  974, "28 FEB 1953", NA_character_, # Irina of Romania; living
+  975, "29 OCT 1957", NA_character_, # Sophie of Romania; living
+  976, "13 JUL 1964", NA_character_, # Maria of Romania; living
+  977, "8 DEC 1942", "2 FEB 2002", # Robin Medforth-Mills
+  978, "1 APR 1985", NA_character_, # Nicholas Medforth-Mills; living
+  979, "3 AUG 1945", NA_character_, # John Kreuger; living or death not found in this pass
+  987, "22 NOV 1428", "14 APR 1471", # Richard Neville, 16th Earl of Warwick
+  988, "21 SEP 1411", "30 DEC 1460", # Richard of York, 3rd Duke of York
+  989, "3 MAY 1415", "31 MAY 1495", # Cecily Neville
+  990, "1364", "21 OCT 1425", # Ralph Neville, 1st Earl of Westmorland; approximate birth year
+  992, "17 MAY 1443", "30 DEC 1460", # Edmund, Earl of Rutland
+  993, "21 OCT 1449", "18 FEB 1478", # George Plantagenet, Duke of Clarence
+  994, "10 AUG 1439", "14 JAN 1476", # Anne of York, Duchess of Exeter
+  995, "22 APR 1444", "1503", # Elizabeth of York, Duchess of Suffolk; death year only
+  996, "3 MAY 1446", "23 NOV 1503", # Margaret of York, Duchess of Burgundy
+  998, "1437", "8 JUN 1492", # Elizabeth Woodville; approximate birth year
+  999, "11 AUG 1467", "23 MAY 1482", # Mary of York
+  1005, "1477", "1479", # George Plantagenet, Duke of Bedford; year-level dates only
+  1007, "10 NOV 1480", "1517", # Bridget of York; death year only
+  1008, "1450", "9 FEB 1499", # John Welles, 1st Viscount Welles; approximate birth year
+  1010, "10 DEC 1472", "19 NOV 1481", # Anne Mowbray
+  1011, "1473", "25 AUG 1554", # Thomas Howard, 3rd Duke of Norfolk; birth year approximate
+  1012, "1475", "9 JUN 1511", # William Courtenay, 1st Earl of Devon; birth year approximate
+  1013, "1432", "17 FEB 1461", # John Grey of Groby; birth year approximate
+  1017, "25 DEC 1584", "3 OCT 1611", # Margaret of Austria, Queen of Spain
+  1018, "25 FEB 1475", "28 NOV 1499", # Edward Plantagenet, 17th Earl of Warwick
+  1019, "14 AUG 1473", "27 MAY 1541", # Margaret Pole, Countess of Salisbury
+  1021, "1440", "8 NOV 1483", # Thomas St Leger; birth year approximate
+  1022, "10 NOV 1433", "5 JAN 1477", # Charles the Bold
+  1023, "20 JUL 1385", "5 AUG 1415", # Richard of Conisburgh, Earl of Cambridge
+  1024, "27 DEC 1388", "22 SEP 1411", # Anne Mortimer
+  1025, "1409", "2 OCT 1484", # Isabel Plantagenet; birth year only
+  1026, "1404", "4 APR 1483", # Henry Bourchier, 1st Earl of Essex; birth year approximate
+  1029, "1 FEB 1808", "6 DEC 1870", # Louise of Prussia
+  1030, "18 MAR 1914", "9 DEC 1987", # Ernst August, Prince of Hanover
+  1031, "25 MAR 1915", "8 JAN 2006", # George William of Hanover
+  1033, "1 SEP 1919", "10 DEC 1981", # Christian Oscar of Hanover
+  1034, "11 MAR 1923", "12 JUL 1997", # Welf Henry of Hanover
+  1035, "8 AUG 1929", "4 JUN 2015", # Monika of Solms-Laubach / Princess of Hanover
+  1036, "23 OCT 1937", "1 JUN 2015", # Alexandra of Ysenburg and Büdingen / Princess of Hanover
+  1037, "26 JUN 1914", "24 NOV 2001", # Sophie of Greece and Denmark; likely duplicate/identity match to personID 476
+  1038, "19 DEC 1925", "6 FEB 1980", # Ortrud of Schleswig-Holstein
+  1039, "26 NOV 1952", NA_character_, # Marie of Hanover / Countess Marie of Hochberg; living
+  1040, "26 FEB 1954", NA_character_, # Ernst August of Hanover; living
+  1042, "17 FEB 1958", NA_character_, # Olga of Hanover; living
+  1043, "18 FEB 1959", NA_character_, # Alexandra of Hanover / Princess of Leiningen; living; duplicate of personID 914 in OG likely
+  1044, "29 APR 1961", NA_character_, # Heinrich Julius of Hanover; living
+  1046, "2 JUN 1955", NA_character_, # Chantal Hochuli; living
+  1047, "19 JUL 1983", NA_character_, # Ernst August of Hanover, born 1983; living
+  1048, "1 JUN 1985", NA_character_, # Christian Heinrich of Hanover; living
+  1049, "12 DEC 1962", "29 NOV 1988", # Isabella von Thurn und Valsassina; source conflict: another source gives 8 SEP 1962, selected 12 DEC 1962
+  1050, "13 FEB 1988", NA_character_, # Otto Heinrich of Hanover; living
   1097, "5 JAN 1909", "21 JAN 1991", # Ileana Hohenzollern
   1121, "4 AUG 1906", "27 JAN 2001", # Marie Jose
   1147, "15 NOV 1238", "4 AUG 1265", # Henry de Montfort
@@ -619,8 +731,7 @@ date_overrides <- tribble(
   2955, "16 JUN 1803", "22 JUL 1844", # Anne Amelia Keppel
   2956, "14 MAY 1772", "30 OCT 1849", # William Charles Keppel, 4th Earl of Albemarle
   2985, "26 APR 1924", "14 DEC 1997", # Gerald Legge
-  3011, "15 APR 1240", "1271", # Simon de Montfort the Younger
-  3012, "15 NOV 1806", "12 MAY 1808" # Elizabeth Alexandrovna of Russia
+  3011, "15 APR 1240", "1271" # Simon de Montfort the Younger
 )
 
 
@@ -646,6 +757,7 @@ name_overrides <- tribble(
   785, "Richard Curzon-Howe",
   788, "James Hamilton",
   812, "Marian Louisa Montagu-Douglas-Scott",
+  932, "Michaela of Prussia",
   1137, "Augusta Wilhelmine of Hesse-Darmstadt",
   1176, "Sophia Louise of Mecklenburg-Schwerin",
   1197, "Karl Theodor (Gackl)",
@@ -711,10 +823,12 @@ royal92_cleaned <- royal92 %>%
     attribute_title = case_when(
       personID == 146 ~ "Countess of Strathmore and Kinghorne",
       personID == 359 ~ "Reverend",
+      personID == 914 ~ "Grand Duchess of Russia",
+      personID == 932 ~ "Princess of Prussia",
       personID == 1373 ~ "Count of Poitiers",
       personID == 2943 ~ "Duke of Buccleuch",
       personID == 2956 ~ "Earl of Albemarle",
-      personID == 3012 ~ "Grand Duchess of Russia",
+
       TRUE ~ attribute_title
     ),
     twinID = case_when(
@@ -742,6 +856,7 @@ royal92_cleaned <- royal92 %>%
         2993
       ) ~ "M",
       personID %in% c(
+        932,
         1149,
         2992
       ) ~ "F",

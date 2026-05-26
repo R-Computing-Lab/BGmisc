@@ -899,85 +899,85 @@ personID,famID,momID,dadID,name,sex,birth_date,death_date,attribute_title,twinID
 898,1,587,894,Louis XVIII,M,1755-11-17,1824-09-16,King of France,NA
 899,1,589,588,Maria of Russia,F,1953-12-23,NA,Grand Duchess,NA
 900,1,NA,NA,Franz Wilhelm of Prussia,M,1943-09-03,NA,Prince,NA
-901,1,899,900,George of Russia,M,1981-06-15,NA,Grand Duke,NA
-902,1,NA,NA,Karl of Leiningen,M,1898-06-15,1946-06-15,Prince,NA
-903,1,895,902,Emich of Leiningen,M,1926-06-15,NA,Prince,NA
-904,1,895,902,Karl of Leiningen,M,1928-06-15,NA,Prince,NA
-905,1,895,902,Margarita,F,1932-06-15,NA,Princess,NA
-906,1,895,902,Mechtilde,F,1936-06-15,NA,Princess,NA
-907,1,895,902,Friedrich of Leiningen,M,1938-06-15,NA,Prince,NA
-908,1,NA,NA,Eilika of Oldenberg,F,NA,NA,Duchess,NA
-909,1,908,903,Melita,F,1951-06-15,NA,Princess,NA
-910,1,908,903,Karl,M,1952-06-15,NA,Prince,NA
-911,1,908,903,Andreas,M,1955-06-15,NA,Prince,NA
-912,1,908,903,Stephanie,F,1958-06-15,NA,Princess,NA
+901,1,899,900,George of Russia,M,1981-03-13,NA,Grand Duke,NA
+902,1,NA,NA,Karl of Leiningen,M,1898-02-13,1946-08-02,Prince,NA
+903,1,895,902,Emich of Leiningen,M,1926-10-18,1991-10-30,Prince,NA
+904,1,895,902,Karl of Leiningen,M,1928-01-02,1990-09-28,Prince,NA
+905,1,895,902,Margarita,F,1932-05-09,1996-06-16,Princess,NA
+906,1,895,902,Mechtilde,F,1936-01-02,2021-02-12,Princess,NA
+907,1,895,902,Friedrich of Leiningen,M,1938-06-18,1999-08-29,Prince,NA
+908,1,NA,NA,Eilika of Oldenberg,F,1928-02-02,2016-01-26,Duchess,NA
+909,1,908,903,Melita,F,1951-06-19,NA,Princess,NA
+910,1,908,903,Karl,M,1952-06-12,NA,Prince,NA
+911,1,908,903,Andreas,M,1955-11-27,NA,Prince,NA
+912,1,908,903,Stephanie,F,1958-10-01,2017-09-23,Princess,NA
 913,68,NA,NA,Margarite of Hohenloche-Ochringen,F,NA,NA,Princess,NA
-914,1,NA,NA,Alexandra of Hanover,F,NA,NA,Princess,NA
-915,1,914,911,Ferdinand,M,1982-06-15,NA,Prince,NA
+914,1,1297,1296,Elizabeth Alexandrovna of Russia,F,1806-11-15,1808-05-12,Grand Duchess of Russia,NA
+915,1,1043,911,Ferdinand I of Bulgaria,M,1982-08-08,NA,Prince,NA
 916,1,NA,NA,Karl Bauscher,M,NA,NA,NA,NA
-917,1,906,916,Ulf Bauscher,M,1963-06-15,NA,NA,NA
-918,1,906,916,Berthold Bauscher,M,1965-06-15,NA,NA,NA
-919,1,906,916,Johan Bauscher,M,1971-06-15,NA,NA,NA
-920,1,1017,2132,Anne of Austria,F,1601-06-15,1666-06-15,NA,NA
-921,1,528,520,Friedrich Wilhelm of Prussia,M,1939-06-15,NA,Prince,NA
-922,1,528,520,Michael of Prussia,M,1939-06-15,NA,Prince,NA
-923,1,528,520,Marie-Cecile of Prussia,F,1942-06-15,NA,Princess,NA
+917,1,906,916,Ulf Bauscher,M,1963-02-20,NA,NA,NA
+918,1,906,916,Berthold Bauscher,M,1965-10-31,NA,NA,NA
+919,1,906,916,Johan Bauscher,M,1971-02-02,NA,NA,NA
+920,1,1017,2132,Anne of Austria,F,1601-09-22,1666-01-20,NA,NA
+921,1,528,520,Friedrich Wilhelm of Prussia,M,1939-02-09,2015-09-29,Prince,NA
+922,1,528,520,Michael of Prussia,M,1940-03-22,2014-04-03,Prince,NA
+923,1,528,520,Marie-Cecile of Prussia,F,1942-05-28,NA,Princess,NA
 924,1,528,520,Louis Ferdinand of Prussia,M,1944-08-25,1977-07-11,Prince,NA
-925,1,528,520,Christian Sigismund of Prussia,M,1946-06-15,NA,Prince,NA
+925,1,528,520,Christian Sigismund of Prussia,M,1946-03-14,NA,Prince,NA
 926,1,NA,NA,Nina zu Reventlow,F,NA,NA,Countess,NA
 927,1,926,925,Daughter,F,NA,NA,NA,NA
 928,1,NA,NA,Donata of Castell-Rudenhausen,F,NA,NA,NA,NA
-929,1,928,924,Georg Friedrich,M,1976-06-15,NA,Prince,NA
+929,1,928,924,Georg Friedrich,M,1976-06-10,NA,Prince,NA
 930,1,928,924,Corneilie-Cecile,F,1978-01-30,NA,Princess,NA
 931,1,NA,NA,Jutta Jorn,F,NA,NA,NA,NA
-932,1,931,922,Micaela,M,1967-06-15,NA,Prince,NA
-933,1,931,922,Nataly,F,1970-06-15,NA,Princess,NA
+932,1,931,922,Michaela of Prussia,F,1967-03-05,NA,Princess of Prussia,NA
+933,1,931,922,Nataly,F,1970-01-13,NA,Princess,NA
 934,1,NA,NA,Waltraud Freydag,F,NA,NA,NA,NA
 935,1,934,921,Philip,M,1968-06-15,NA,Prince,NA
 936,1,NA,NA,Ehrengard von Reden,F,NA,NA,NA,NA
-937,1,936,921,Friedrich,M,1979-06-15,NA,Prince,NA
-938,1,936,921,Viktoria,F,1982-06-15,NA,Princess,NA
-939,1,936,921,Joachim,M,1984-06-15,NA,Prince,NA
+937,1,936,921,Friedrich,M,1979-08-16,NA,Prince,NA
+938,1,936,921,Viktoria,F,1982-05-02,NA,Princess,NA
+939,1,936,921,Joachim,M,1984-06-26,NA,Prince,NA
 940,1,NA,NA,Margaret Messenger,F,NA,NA,NA,NA
-941,1,940,293,Emily,F,1976-06-15,NA,Hon.,NA
-942,1,940,293,Benjamin,M,1978-06-15,NA,Hon.,NA
-943,1,940,293,Alexander Lascelles,M,1980-06-15,NA,Hon.,NA
-944,1,940,293,Edward Lascelles,M,1982-06-15,NA,NA,NA
+941,1,940,293,Emily,F,1975-11-23,NA,Hon.,NA
+942,1,940,293,Benjamin,M,1978-09-19,NA,Hon.,NA
+943,1,940,293,Alexander Lascelles,M,1980-05-13,NA,Hon.,NA
+944,1,940,293,Edward Lascelles,M,1982-11-19,NA,NA,NA
 945,1,NA,NA,Fredericka Ann Duhrrson,F,NA,NA,NA,NA
-946,1,945,294,Sophie Lascelles,F,1973-06-15,NA,NA,NA
-947,1,945,294,Rowan Lascelles,M,1977-06-15,NA,NA,NA
+946,1,945,294,Sophie Lascelles,F,1973-10-01,NA,NA,NA
+947,1,945,294,Rowan Lascelles,M,1977-11-06,NA,NA,NA
 948,1,NA,NA,Julie Bayliss,F,NA,NA,NA,NA
 949,1,948,295,Thomas Lascelles,M,1982-06-15,NA,NA,NA
 950,1,948,295,Ellen Lascelles,F,1984-06-15,NA,NA,NA
-951,1,749,751,Marie Louise,F,1662-06-15,1689-06-15,NA,NA
-952,1,15,105,Maud Carnegie,F,1893-06-15,1945-06-15,Lady,NA
+951,1,749,751,Marie Louise,F,1662-03-26,1689-02-12,NA,NA
+952,1,15,105,Maud Carnegie,F,1893-04-03,1945-12-14,Lady,NA
 953,1,NA,NA,Charles of Southesk,M,1893-09-23,1992-02-16,Earl XI,NA
-954,1,952,953,James George Alexander Carnegie,M,1929-06-15,NA,Duke of Fife,NA
+954,1,952,953,James George Alexander Carnegie,M,1929-09-23,2015-06-22,Duke of Fife,NA
 955,1,NA,NA,Caroline Dewar,F,NA,NA,Hon.,NA
 956,1,955,954,Alexandra Carnegie,F,1959-06-15,NA,Lady,NA
 957,1,955,954,David Charles Carnegie,M,1961-06-15,NA,Earl of Macduff,NA
-958,1,451,450,Ragnhild Alexandra,F,1930-06-15,NA,Princess,NA
-959,1,451,450,Astrid Maud Ingeborg,F,1932-06-15,NA,Princess,NA
-960,1,NA,NA,Johan Martin Ferner,M,1927-06-15,NA,NA,NA
-961,1,959,960,Cathrine Ferner,F,1962-06-15,NA,NA,NA
-962,1,959,960,Benedickte Ferner,M,1963-06-15,NA,NA,NA
-963,1,959,960,Alexander Ferner,M,1965-06-15,NA,NA,NA
-964,1,959,960,Elisabeth Ferner,F,1969-06-15,NA,NA,NA
-965,1,959,960,Carl Christian Ferner,M,1972-06-15,NA,NA,NA
-966,1,NA,NA,Erling Lorentzen,M,NA,NA,NA,NA
-967,1,958,966,Haakon Lorentzen,M,NA,NA,NA,NA
-968,1,958,966,Ingeborg Lorentzen,F,NA,NA,NA,NA
-969,1,958,966,Ragnhild Alexandra Lorentzen,F,1968-06-15,NA,NA,NA
-970,69,NA,NA,Anne of Bourbon-Parma,F,NA,NA,Princess,NA
+958,1,451,450,Ragnhild Alexandra,F,1930-06-09,2012-09-16,Princess,NA
+959,1,451,450,Astrid Maud Ingeborg,F,1932-02-12,NA,Princess,NA
+960,1,NA,NA,Johan Martin Ferner,M,1927-07-22,2015-01-24,NA,NA
+961,1,959,960,Cathrine Ferner,F,1962-07-22,NA,NA,NA
+962,1,959,960,Benedickte Ferner,M,1963-09-27,NA,NA,NA
+963,1,959,960,Alexander Ferner,M,1965-03-15,NA,NA,NA
+964,1,959,960,Elisabeth Ferner,F,1969-03-30,NA,NA,NA
+965,1,959,960,Carl Christian Ferner,M,1972-10-22,NA,NA,NA
+966,1,NA,NA,Erling Lorentzen,M,1923-01-28,2021-03-09,NA,NA
+967,1,958,966,Haakon Lorentzen,M,1954-08-23,NA,NA,NA
+968,1,958,966,Ingeborg Lorentzen,F,1957-02-27,NA,NA,NA
+969,1,958,966,Ragnhild Alexandra Lorentzen,F,1968-05-08,NA,NA,NA
+970,69,NA,NA,Anne of Bourbon-Parma,F,1923-09-18,2016-08-01,Princess,NA
 971,1,1056,1055,Joana Maria Valentina Lambrino,F,1898-10-03,1953-03-11,NA,NA
-972,1,469,468,Margarita of Romania,F,1949-06-15,NA,Princess,NA
-973,1,469,468,Helen of Romania,F,1950-06-15,NA,Princess,NA
-974,1,469,468,Irina,F,1953-06-15,NA,Princess,NA
-975,1,469,468,Sophie,F,1957-06-15,NA,Princess,NA
-976,1,469,468,Maria,F,1964-06-15,NA,Princess,NA
-977,1,NA,NA,Robin Medforth-Mills,M,NA,NA,Professor,NA
-978,1,973,977,Nicholas Medforth-Mills,M,1985-06-15,NA,NA,NA
-979,1,NA,NA,John Kreuger,M,NA,NA,NA,NA
+972,1,469,468,Margarita of Romania,F,1949-03-26,NA,Princess,NA
+973,1,469,468,Helen of Romania,F,1950-11-15,NA,Princess,NA
+974,1,469,468,Irina,F,1953-02-28,NA,Princess,NA
+975,1,469,468,Sophie,F,1957-10-29,NA,Princess,NA
+976,1,469,468,Maria,F,1964-07-13,NA,Princess,NA
+977,1,NA,NA,Robin Medforth-Mills,M,1942-12-08,2002-02-02,Professor,NA
+978,1,973,977,Nicholas Medforth-Mills,M,1985-04-01,NA,NA,NA
+979,1,NA,NA,John Kreuger,M,1945-08-03,NA,NA,NA
 980,1,974,979,Michael Kreuger,M,1985-06-15,NA,NA,NA
 981,1,NA,NA,William Worsley,M,NA,NA,Sir,NA
 982,1,316,291,Martin Lascelles,M,1963-06-15,NA,NA,NA
@@ -985,70 +985,70 @@ personID,famID,momID,dadID,name,sex,birth_date,death_date,attribute_title,twinID
 984,1,989,988,Richard III,M,1452-10-02,1485-08-22,King of England,NA
 985,1,1339,987,Anne Nevill,F,1456-06-11,1485-03-16,Lady,NA
 986,1,985,984,Edward,M,NA,1484-04-09,Prince of Wales,NA
-987,1,NA,1342,Richard Neville,M,NA,1471-06-15,Earl of Warwick,NA
-988,1,1024,1023,Richard Plantagenet,M,NA,1460-06-15,Duke of York,NA
-989,1,1331,990,Cicely Nevill,F,NA,1495-06-15,Lady,NA
-990,1,NA,NA,Ralph of Westmoreland 1st,M,NA,NA,Earl,NA
+987,1,NA,1342,Richard Neville,M,1428-11-22,1471-04-14,Earl of Warwick,NA
+988,1,1024,1023,Richard Plantagenet,M,1411-09-21,1460-12-30,Duke of York,NA
+989,1,1331,990,Cicely Nevill,F,1415-05-03,1495-05-31,Lady,NA
+990,1,NA,NA,Ralph of Westmoreland 1st,M,1364-06-15,1425-10-21,Earl,NA
 991,1,989,988,Edward IV,M,1442-04-28,1483-04-09,King of England,NA
-992,1,989,988,Edmund,M,NA,1460-06-15,Earl of Rutland,NA
-993,1,989,988,George,M,NA,NA,Duke of Clarence,NA
-994,1,989,988,Anne,F,NA,1476-06-15,NA,NA
-995,1,989,988,Elizabeth,F,NA,1503-06-15,NA,NA
-996,1,989,988,Margaret,F,NA,NA,NA,NA
+992,1,989,988,Edmund,M,1443-05-17,1460-12-30,Earl of Rutland,NA
+993,1,989,988,George,M,1449-10-21,1478-02-18,Duke of Clarence,NA
+994,1,989,988,Anne,F,1439-08-10,1476-01-14,NA,NA
+995,1,989,988,Elizabeth,F,1444-04-22,1503-06-15,NA,NA
+996,1,989,988,Margaret,F,1446-05-03,1503-11-23,NA,NA
 997,1,989,988,Ursula,F,NA,NA,NA,NA
 998,1,1327,2271,Elizabeth Woodville,F,1437-06-15,1492-06-08,NA,NA
-999,1,998,991,Mary,F,NA,1482-05-23,NA,NA
+999,1,998,991,Mary,F,1467-08-11,1482-05-23,NA,NA
 1000,1,998,991,Cicely,F,1469-03-20,1507-08-24,NA,NA
 1001,1,998,991,Edward V,M,1470-11-04,1483-06-15,King of England,NA
 1002,1,998,991,Margaret,F,1472-04-10,1472-12-11,NA,NA
 1003,1,998,991,Richard,M,1473-08-17,1483-06-15,Duke of York,NA
 1004,1,998,991,Anne,F,1475-11-02,1511-11-23,NA,NA
-1005,1,998,991,George,M,NA,NA,Duke of Bedford,NA
+1005,1,998,991,George,M,1477-06-15,1479-06-15,Duke of Bedford,NA
 1006,1,998,991,Catherine,F,1479-08-14,1527-11-15,NA,NA
 1007,1,998,991,Bridget,F,1480-11-10,1517-06-15,NA,NA
-1008,71,NA,NA,John 1st Welles,M,NA,1499-02-09,Viscount Welles,NA
+1008,71,NA,NA,John 1st Welles,M,1450-06-15,1499-02-09,Viscount Welles,NA
 1009,72,NA,NA,Thomas of Isle of Wight Kyme,M,NA,NA,NA,NA
-1010,73,NA,NA,Anne Mowbray,F,NA,1481-11-19,Lady,NA
-1011,74,NA,NA,Thomas 3rd Howard,M,NA,NA,Duke of Norfolk,NA
-1012,75,NA,NA,William Courtenay,M,NA,NA,Earl of Devon,NA
-1013,1,NA,NA,John Grey,M,NA,1461-02-17,Sir,NA
+1010,73,NA,NA,Anne Mowbray,F,1472-12-10,1481-11-19,Lady,NA
+1011,74,NA,NA,Thomas 3rd Howard,M,1473-06-15,1554-08-25,Duke of Norfolk,NA
+1012,75,NA,NA,William Courtenay,M,1475-06-15,1511-06-09,Earl of Devon,NA
+1013,1,NA,NA,John Grey,M,1432-06-15,1461-02-17,Sir,NA
 1014,1,998,1013,Son Grey,M,1461-06-15,NA,NA,NA
 1015,1,998,1013,Son 2 Grey,M,1461-06-15,NA,NA,NA
 1016,1,1218,1217,Edward,M,1453-10-13,1471-05-04,Prince of Wales,NA
-1017,1,NA,2884,Margaret of Austria,F,1584-06-15,1611-06-15,NA,NA
-1018,1,1340,993,Edward,M,NA,1499-06-15,Earl of Warwick,NA
-1019,1,1340,993,Margaret of Salisbury,F,1469-06-15,1541-06-15,Countess,NA
+1017,1,NA,2884,Margaret of Austria,F,1584-12-25,1611-10-03,NA,NA
+1018,1,1340,993,Edward,M,1475-02-25,1499-11-28,Earl of Warwick,NA
+1019,1,1340,993,Margaret of Salisbury,F,1473-08-14,1541-05-27,Countess,NA
 1020,76,NA,NA,Henry,M,NA,NA,Duke of Exeter,NA
-1021,77,NA,NA,Thomas St. Leger,M,NA,NA,Sir,NA
-1022,78,NA,NA,Charles the Bold,M,NA,NA,Duke of Burgundy,NA
-1023,1,1337,1237,Richard of Cambridge Plantagenet,M,NA,1415-06-15,Earl,NA
-1024,1,1345,1344,Anne Mortimer,F,NA,NA,Lady,NA
-1025,1,1024,1023,Isabel Plantagenet,F,NA,1484-06-15,NA,NA
-1026,1,1603,1602,Henry 1st Bourchier,M,NA,NA,Earl of Essex,NA
+1021,77,NA,NA,Thomas St. Leger,M,1440-06-15,1483-11-08,Sir,NA
+1022,78,NA,NA,Charles the Bold,M,1433-11-10,1477-01-05,Duke of Burgundy,NA
+1023,1,1337,1237,Richard of Cambridge Plantagenet,M,1385-07-20,1415-08-05,Earl,NA
+1024,1,1345,1344,Anne Mortimer,F,1388-12-27,1411-09-22,Lady,NA
+1025,1,1024,1023,Isabel Plantagenet,F,1409-06-15,1484-10-02,NA,NA
+1026,1,1603,1602,Henry 1st Bourchier,M,1404-06-15,1483-04-04,Earl of Essex,NA
 1027,1,1614,1613,Charles XV,M,1826-05-03,1872-08-19,King of Sweden,NA
 1028,1,1029,653,Louise,F,1828-08-05,1871-03-30,NA,NA
-1029,1,410,162,Louisa of Prussia,F,1808-06-15,1870-06-15,NA,NA
-1030,1,426,552,Ernest Augustus of Hanover Hanover,M,1914-06-15,1987-06-15,Prince,NA
-1031,1,426,552,George William Hanover,M,1915-06-15,NA,NA,NA
+1029,1,410,162,Louisa of Prussia,F,1808-02-01,1870-12-06,NA,NA
+1030,1,426,552,Ernest Augustus of Hanover Hanover,M,1914-03-18,1987-12-09,Prince,NA
+1031,1,426,552,George William Hanover,M,1915-03-25,2006-01-08,NA,NA
 1032,1,NA,NA,Mireille Dutry,F,1946-06-15,NA,NA,NA
-1033,1,426,552,Christian Hanover,M,1919-06-15,1981-06-15,NA,NA
-1034,1,426,552,Guelph Henry Hanover,M,1923-06-15,NA,NA,NA
-1035,1,426,552,Monika of Solms-Laubach Hanover,F,1929-06-15,NA,NA,NA
-1036,79,NA,NA,Alexandra of Ysenburg and Budingen,F,1938-06-15,NA,NA,NA
-1037,1,NA,NA,Sophie of Greece,F,1914-06-15,NA,NA,NA
-1038,1,NA,NA,Ortrud of Schleswig-Holstein,F,1925-06-15,1980-06-15,NA,NA
-1039,1,1038,1030,Marie Hanover,F,1952-06-15,NA,NA,NA
-1040,1,1038,1030,Ernest Augustus of Hanover Hanover,M,1954-06-15,NA,Prince,NA
+1033,1,426,552,Christian Hanover,M,1919-09-01,1981-12-10,NA,NA
+1034,1,426,552,Guelph Henry Hanover,M,1923-03-11,1997-07-12,NA,NA
+1035,1,426,552,Monika of Solms-Laubach Hanover,F,1929-08-08,2015-06-04,NA,NA
+1036,79,NA,NA,Alexandra of Ysenburg and Budingen,F,1937-10-23,2015-06-01,NA,NA
+1037,1,NA,NA,Sophie of Greece,F,1914-06-26,2001-11-24,NA,NA
+1038,1,NA,NA,Ortrud of Schleswig-Holstein,F,1925-12-19,1980-02-06,NA,NA
+1039,1,1038,1030,Marie Hanover,F,1952-11-26,NA,NA,NA
+1040,1,1038,1030,Ernest Augustus of Hanover Hanover,M,1954-02-26,NA,Prince,NA
 1041,1,1038,1030,Ludwig Rudolph Hanover,M,1955-11-28,1989-11-29,Prince,NA
-1042,1,1038,1030,Olga Hanover,F,1958-06-15,NA,NA,NA
-1043,1,1038,1030,Alexandra Hanover,F,1959-06-15,NA,NA,NA
-1044,1,1038,1030,Heinrich Julius Hanover,M,1961-06-15,NA,NA,NA
+1042,1,1038,1030,Olga Hanover,F,1958-02-17,NA,NA,NA
+1043,1,1038,1030,Alexandra Hanover,F,1959-02-18,NA,NA,NA
+1044,1,1038,1030,Heinrich Julius Hanover,M,1961-04-29,NA,NA,NA
 1045,80,NA,NA,Michael von Hochberg,M,NA,NA,Count,NA
-1046,1,NA,NA,Chantal Hochuli,F,NA,NA,NA,NA
-1047,1,1046,1040,Ernest Augustus Hanover,M,1983-06-15,NA,NA,NA
-1048,1,1046,1040,Christian Heinrich Hanover,M,1985-06-15,NA,NA,NA
-1049,1,NA,NA,Isabella Valsassina von Thurn,F,1962-06-15,1989-11-29,Countess,NA
-1050,1,1049,1041,Otto Hanover,M,1988-06-15,NA,NA,NA
+1046,1,NA,NA,Chantal Hochuli,F,1955-06-02,NA,NA,NA
+1047,1,1046,1040,Ernest Augustus Hanover,M,1983-07-19,NA,NA,NA
+1048,1,1046,1040,Christian Heinrich Hanover,M,1985-06-01,NA,NA,NA
+1049,1,NA,NA,Isabella Valsassina von Thurn,F,1962-12-12,1988-11-29,Countess,NA
+1050,1,1049,1041,Otto Hanover,M,1988-02-13,NA,NA,NA
 1051,81,NA,NA,Andreas of Leiningen,M,NA,NA,Prince,NA
 1052,82,NA,NA,Max of Baden,M,NA,NA,Prince,NA
 1053,83,NA,NA,Frederick Francis IV of Mecklenburg,M,NA,NA,Grand Duke,NA
@@ -3010,4 +3010,3 @@ personID,famID,momID,dadID,name,sex,birth_date,death_date,attribute_title,twinID
 3009,21,2996,2995,Cartland,F,NA,1911-06-15,NA,NA
 3010,21,806,2986,Glen McCorquodale,M,1939-12-31,NA,NA,NA
 3011,1,1370,873,Simon de Montfort the Younger,M,1240-04-15,1271-06-15,NA,NA
-3012,1,1297,1296,Elizabeth Alexandrovna of Russia,F,1806-11-15,1808-05-12,Grand Duchess of Russia,NA
