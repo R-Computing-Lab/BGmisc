@@ -1047,15 +1047,181 @@ date_overrides <- tribble(
   1545, "1016", "19 APR 1057", # Edward Atheling / Edward the Exile; birth year approximate
   1548, "995", "12 NOV 1035", # Canute II the Great; birth year approximate
   1550, "1016", "17 MAR 1040", # Harold I Harefoot; birth year approximate
+  1551, "1016", "1035", # Sweyn Knutsson / Svein of Norway; approximate year-level dates
+  1552, "1018", "8 JUN 1042", # Hardicanute / Harthacnut; approximate birth year
+  1553, "1001", "1066", # Herluin of Conteville; approximate year-level dates
+  1554, "1035", "15 FEB 1097", # Odo of Bayeux; approximate birth year and approximate mid-month death date
+  1555, "1031", "8 DEC 1095", # Robert, Count of Mortain; approximate birth year
+  1556, "1063", "13 OCT 1119", # Alan IV of Brittany Fergant; approximate birth year
+  1557, "1153", "11 NOV 1189", # William II the Good of Sicily; birth month uncertain in source summaries
+  1558, "27 OCT 1156", "2 AUG 1222", # Raymond VI of Toulouse
+  1559, "5 NOV 1881", "11 AUG 1958", # Nicholas / Nikolai Kulikovsky
+  1560, "25 AUG 1917", "8 APR 1993", # Tikhon Nikolaevich Kulikovsky
+  1561, "23 APR 1919", "11 SEP 1984", # Guri / Goury Nikolaevich Kulikovsky
   1562, "24 JAN 1897", "8 MAY 1981", # Andrew
   1563, "23 DEC 1898", "30 NOV 1968", # Theodore
   1564, "17 JAN 1900", "12 SEP 1974", # Nikita
   1565, "15 AUG 1901", "7 JUL 1980", # Dimitri
   1566, "24 NOV 1902", "31 JUL 1978", # Rostislav
   1567, "7 JUL 1907", "24 JUN 1989", # Vassily
+  1568, "7 JUN 1869", "2 MAY 1870", # Alexander Alexandrovich Romanov, Gregorian/New Style; Old Style birth = 26 MAY 1869
+  1569, "14 NOV 1847", "15 FEB 1922", # Catherine Dolgorukova / Princess Yurievskaya; source convention for birth date should be retained as checked
+  1570, "12 MAY 1872", "13 SEP 1913", # George Alexandrovich Yurievsky / Romanov, Gregorian/New Style
+  1571, "8 NOV 1873", "10 AUG 1925", # Olga Alexandrovna Yurievskaya / Romanov, Gregorian/New Style
+  1572, "20 SEP 1878", "22 DEC 1959", # Catherine Alexandrovna Yurievskaya / Romanov, Gregorian/New Style
   1573, "10 MAY 1883", "28 MAY 1957", # Alexandra Zarnekau
   1581, "3 NOV 1890", "29 SEP 1978", # Serge Obelensky
+  1574, "21 DEC 1900", "29 FEB 1988", # Alexander Alexandrovich Yurievsky; date source should be cross-checked if stricter certainty needed
+  1575, "13 FEB 1871", "31 MAY 1948", # George Nikolaus von Merenberg / Count von Merenberg
+  1576, "16 OCT 1897", "11 JAN 1965", # George Michael von Merenberg; exact dates from genealogical summaries
+  1577, "3 OCT 1898", "15 SEP 1983", # Olga von Merenberg; exact dates from genealogical summaries
+  1578, "1870", "1910", # Alexander V. Bariatinsky; year-level dates only
+  1579, "1902", "1931", # Andrei Bariatinsky; year-level dates only
+  1580, "1905", NA_character_, # Alexander Bariatinsky; birth year only; death not resolved in this pass
+  1582, "1228", "9 NOV 1261", # Sanchia of Provence; approximate birth year
+  1583, "1254", "17 OCT 1277", # Beatrix of Falkenburg; approximate birth year
+  1584, "26 DEC 1194", "13 DEC 1250", # Frederick II of Germany / Holy Roman Emperor
+  1585, "4 SEP 1241", "19 MAR 1286", # Alexander III of Scotland; Britannica notes death as 18/19 MAR 1286, selected 19 MAR
+  1586, "1217", "8 OCT 1286", # John of Dreux / John I of Brittany, Earl of Richmond; approximate birth year
+  1587, "20 JAN 1259", "10 NOV 1274", # Aveline de Forz
+  1588, "2 SEP 1243", "7 DEC 1295", # Gilbert de Clare, Earl of Gloucester
+  1589, "1270", "5 APR 1325", # Ralph de Monthermer; approximate birth year; corrects death-year placeholder
+  1590, "27 SEP 1275", "27 OCT 1312", # John II, Duke of Brabant
+  1591, "1284", "10 NOV 1299", # John I, Count of Holland; approximate birth year
+  1592, "1276", "16 MAR 1322", # Humphrey de Bohun, Earl of Hereford; approximate birth year
+  1593, "1290", "24 MAY 1326", # Mary de Ros; approximate birth year
+  1594, "1339", "1 NOV 1399", # John IV (the Conqueror) of Montfort / Duke of Brittany; approximate birth year
+  1595, "1385", "31 DEC 1439", # Margaret Holland; approximate birth year
+  1596, "30 SEP 1404", "14 NOV 1432", # Anne of Burgundy
+  1597, "16 JUL 1401", "8 OCT 1436", # Jacqueline of Holland
+  1598, "1400", "7 JUL 1452", # Eleanor de Cobham; approximate birth year
+  1599, "23 JAN 1378", "30 DEC 1436", # Ludwig III, Elector Palatine
+  1600, "1382", "24 SEP 1459", # Eric X of Pomerania / Eric of Pomerania; birth year varies 1381/1382, selected 1382
+  1601, "1368", "10 JUN 1437", # Joan of Navarre; approximate birth year; corrects death date
+  1602, "1374", "28 MAY 1420", # William Bourchier, Count of Eu; approximate birth year
+  1603, "30 APR 1383", "16 OCT 1438", # Anne of Gloucester
+  1604, "14 AUG 1720", "31 OCT 1785", # Frederick II of Hesse-Cassel
+  1605, "8 NOV 1715", "13 JAN 1797", # Elizabeth Christine of Brunswick-Wolfenbüttel
+  1606, "29 MAY 1680", "2 SEP 1735", # Ferdinand Albert II of Brunswick
+  1608, "1109", "12 OCT 1176", # William d'Aubigny, Earl of Arundel; approximate birth year
+  1609, "11 JUN 1934", "13 FEB 2018", # Henri de Laborde de Monpezat / Prince Henrik of Denmark
+  1610, "26 MAY 1968", NA_character_, # Frederik X of Denmark; living
+  1611, "7 JUN 1969", NA_character_, # Joachim of Denmark; living
+  1613, "4 JUL 1799", "8 JUL 1859", # Oscar I of Sweden; corrects death date
+  1614, "14 MAR 1807", "7 JUN 1876", # Josephine de Beauharnais / Josephine of Leuchtenberg
+  1615, "26 JAN 1763", "8 MAR 1844", # Charles XIV John of Sweden
+  1616, "8 NOV 1777", "17 DEC 1860", # Désirée Clary / Queen Desideria of Sweden
+  1617, "28 JAN 1768", "3 DEC 1839", # Frederick VI of Denmark
+  1618, "28 OCT 1767", "21 MAR 1852", # Marie of Hesse-Cassel
+  1619, "4 SEP 1729", "10 OCT 1796", # Juliana Maria of Brunswick-Wolfenbüttel
+  1636, "1498", "13 MAY 1568", # Sophie / Sophia of Pomerania; approximate birth year
+  1637, "7 JUL 1745", "3 JUN 1747", # Christian of Denmark
+  1638, "3 JUL 1746", "21 AUG 1813", # Sophia Magdalena of Denmark
+  1639, "10 JUL 1747", "14 JAN 1820", # Caroline of Denmark / Wilhelmina Caroline
+  1640, "20 JAN 1750", "12 JAN 1831", # Louise of Denmark
+  1641, "19 DEC 1744", "17 AUG 1836", # Charles of Hesse-Cassel
+  1642, "22 SEP 1791", "23 SEP 1791", # Christian of Denmark; infant
+  1643, "11 OCT 1753", "7 DEC 1805", # Frederick of Denmark
+  1644, "24 AUG 1758", "29 NOV 1794", # Sophia Frederica of Mecklenburg-Schwerin
+  1646, "22 NOV 1792", "29 JUN 1863", # Ferdinand of Denmark
+  1648, "28 SEP 1796", "9 MAR 1881", # Caroline Amalie of Schleswig-Holstein-Sonderburg-Augustenburg
+  1653, "7 JUL 1771", "13 JAN 1843", # Louise Augusta of Denmark
+  1654, "28 SEP 1765", "14 JUN 1814", # Frederick Christian II of Schleswig-Holstein-Sonderburg-Augustenburg
+  1655, "19 NOV 1792", "12 OCT 1793", # Marie Louise of Denmark
+  1656, "28 OCT 1793", "31 MAR 1881", # Caroline of Denmark
+  1657, "21 AUG 1795", "7 DEC 1795", # Louise of Denmark; infant
+  1658, "1 SEP 1797", "5 SEP 1797", # Christian of Denmark; infant
+  1659, "21 JAN 1802", "23 FEB 1802", # Louise Juliane of Denmark; infant
+  1660, "3 JUN 1805", "14 JUL 1805", # Frederica Maria of Denmark; infant
+  1661, "30 SEP 1813", "24 OCT 1878", # Charles of Schleswig-Holstein-Sonderburg-Glücksburg
+  1662, "6 JUL 1832", "19 JUN 1867", # Maximilian of Austria / Emperor Maximilian of Mexico
+  1663, "27 OCT 1858", "14 JAN 1939", # Valdemar of Denmark
+  1664, "8 OCT 1876", "30 MAR 1949", # Harald of Denmark
+  1665, "14 MAR 1880", "2 NOV 1945", # Thyra of Denmark
+  1666, "4 MAR 1887", "5 OCT 1944", # Gustav of Denmark
+  1667, "23 MAY 1890", "11 OCT 1961", # Dagmar of Denmark
   1668, "30 NOV 1893", "21 NOV 1978", # Jorgen Castenskiold
+  1669, "1 JUN 1888", "30 JUN 1962", # Helena Adelaide of Schleswig-Holstein
+  1670, "27 APR 1912", "12 DEC 1995", # Caroline-Mathilde of Denmark
+  1671, "27 JUL 1900", "14 JUN 1976", # Knud, Hereditary Prince of Denmark
+  1672, "29 APR 1944", NA_character_, # Benedikte of Denmark; living
+  1673, "29 OCT 1934", "13 MAR 2017", # Richard of Sayn-Wittgenstein-Berleburg
+  1674, "8 MAY 1935", "19 JUN 2018", # Elizabeth of Denmark / Princess Elisabeth
+  1675, "17 FEB 1940", NA_character_, # Ingolf of Rosenborg; living
+  1676, "22 OCT 1942", "21 MAY 2013", # Christian of Rosenborg
+  1677, "3 OCT 1947", "2 JAN 2014", # Anne Dorte Maltoft-Nielsen / Countess of Rosenborg
+  1681, "28 MAR 1800", "21 MAR 1806", # Charlotte of the Netherlands
+  1682, "9 MAY 1810", "29 MAY 1883", # Marianne of the Netherlands
+  1683, "6 JUL 1836", "23 JAN 1846", # William of the Netherlands
+  1684, "5 JUL 1841", "22 JUN 1910", # Marie of the Netherlands
+  1685, "22 AUG 1845", "22 OCT 1907", # William of Wied
+  1686, "8 APR 1930", "18 AUG 2010", # Carlos Hugo of Bourbon-Parma
+  1687, "30 APR 1939", NA_character_, # Pieter van Vollenhoven; living
+  1688, "1 AUG 1946", NA_character_, # Jorge Guillermo; living or death not found in this pass
+  1689, "2 AUG 1818", "20 FEB 1848", # Alexander of the Netherlands
+  1690, "13 JUN 1820", "13 JAN 1879", # Henry of the Netherlands
+  1691, "21 MAY 1822", "22 OCT 1822", # Ernest Casimir of the Netherlands; infant
+  1692, "8 APR 1824", "23 MAR 1897", # Sophie of the Netherlands
+  1693, "24 JUN 1818", "5 JAN 1901", # Charles Alexander of Saxe-Weimar
+  1694, "18 OCT 1654", "22 MAR 1686", # John Frederick of Brandenburg-Ansbach
+  1697, "24 JUL 1833", "16 MAY 1834", # Leopold of Belgium; infant son of Leopold I
+  1699, "7 JUN 1840", "19 JAN 1927", # Marie Charlotte of Belgium / Carlota of Mexico
+  1700, "22 OCT 1781", "4 JUN 1789", # Louis Joseph, Dauphin of France
+  1702, "9 JUL 1786", "19 JUN 1787", # Sophie Beatrix / Sophie Hélène Béatrice of France
+  1703, "19 DEC 1778", "19 OCT 1851", # Marie Thérèse of Angoulême
+  1704, "769", "811", # Pepin the Hunchback; year-level dates approximate
+  1705, "26 APR 1782", "24 MAR 1866", # Marie Amelie of Bourbon / Queen of France
+  1706, "21 DEC 1919", "20 DEC 2000", # Alexander Ramsay of Mar
+  1707, "18 OCT 1930", NA_character_, # Flora Fraser; living
+  1709, "4 APR 1900", "4 FEB 1984", # Henry Somerset, Duke of Beaufort
+  1710, "22 DEC 1879", "11 OCT 1932", # John Evelyn Gibbs / J. E. Gibbs
+  1711, "8 MAR 1900", "24 JAN 1993", # Henry Abel Smith
+  1712, "12 JAN 1960", "12 JAN 1960", # John Spencer; infant
+  1714, "29 FEB 1904", "4 JUN 1979", # James Hamilton, Duke of Abercorn
+  1716, "9 SEP 1764", "28 AUG 1819", # Charles Lennox, Duke of Richmond
+  1717, "29 NOV 1737", "25 MAR 1805", # George Henry Lennox
+  1718, "30 NOV 1739", "1830", # Louisa Kerr; death year only
+  1719, "18 MAY 1701", "8 AUG 1750", # Charles Lennox, 2nd Duke of Richmond
+  1720, "29 JUL 1672", "27 MAY 1723", # Charles Lennox, 1st Duke of Richmond
+  1721, "24 JUN 1703", "20 OCT 1789", # Anne Lennox / Countess of Albemarle
+  1722, "6 JUL 1766", "20 OCT 1839", # John Russell, Duke of Bedford
+  1723, "15 NOV 1739", "2 NOV 1768", # Elizabeth Keppel / Marchioness of Tavistock
+  1724, "1740", "1778", # Caroline Darcy / Marchioness of Lothian; year-level dates approximate
+  1725, "1688", "1751", # Frederica Schomberg / Countess of Holderness; year-level dates
+  1726, "30 JUN 1641", "5 JUL 1719", # Meinhardt Schomberg, Duke of Schomberg
+  1728, "4 DEC 1764", "30 JUN 1839", # Richard Bingham, Earl of Lucan
+  1729, "22 SEP 1735", "29 MAR 1799", # Charles Bingham, Earl of Lucan
+  1730, "1799", "10 APR 1851", # Elizabeth Poyntz; approximate birth year
+  1731, "27 OCT 1835", "13 AUG 1910", # John Poyntz Spencer, 5th Earl Spencer
+  1732, "28 SEP 1835", "31 OCT 1903", # Charlotte Seymour / Countess Spencer
+  1733, "11 JUN 1889", "18 JUL 1981", # Delia Peel; date source should be cross-checked if stricter certainty needed
+  1734, "29 SEP 1899", "7 FEB 1955", # Lavinia Annaly / Lady Lavinia Spencer
+  1735, "13 MAY 1708", "19 JUN 1746", # John Spencer of Althorp
+  1736, "3 JUN 1743", "27 FEB 1821", # William IX of Hesse-Cassel
+  1737, "21 JUN 1818", "22 AUG 1893", # Ernest II of Saxe-Coburg-Saalfeld
+  1742, "4 MAR 1188", "27 NOV 1252", # Blanche of Castile; source conflict with Britannica death as 12 NOV 1252, selected 27 NOV
+  1743, "18 JUN 1294", "1 FEB 1328", # Charles IV the Fair
+  1746, "1199", "30 MAY 1252", # Ferdinand III of Castile; approximate birth year
+  1747, "1 JUN 1180", "8 NOV 1246", # Berengaria of Castile
+  1748, "1134", "31 AUG 1158", # Sancho III of Castile; approximate birth year
+  1749, "23 NOV 1221", "4 APR 1284", # Alfonso X the Wise
+  1751, "12 MAY 1258", "25 APR 1295", # Sancho IV of Castile
+  1753, "986", "25 JUN 1014", # Athelstan Ætheling; approximate birth year
+  1754, "1001", "1005", # Egbert / Ecgberht, son of Æthelred II; approximate year-level dates
+  1756, "1003", "1017", # Edwy / Eadwig, son of Æthelred II; approximate year-level dates
+  1763, "975", "15 AUG 1038", # Stephen I of Hungary; approximate birth year
+  1767, "1005", "5 FEB 1036", # Alfred Aetheling; approximate birth year
+  1768, "1020", "18 JUL 1038", # Gunhilda of Denmark; approximate birth year
+  1776, "17 APR 963", "3 FEB 1014", # Sweyn Forkbeard
+  1778, "930", "25 MAY 992", # Mieszko I of Poland; approximate birth year
+  1779, "943", "8 JUL 975", # Edgar the Peaceful; birth year approximate 943/944
+  1780, "945", "17 NOV 1000", # Ælfthryth / Elfrida; approximate birth year
+  1782, "962", "18 MAR 978", # Edward the Martyr; approximate birth year
+  1786, "921", "26 MAY 946", # Edmund I the Elder; approximate birth year
+  1788, "940", "1 OCT 959", # Eadwig / Edwy; approximate birth year
+  1792, "874", "17 JUL 924", # Edward the Elder; approximate birth year
+  1794, "923", "23 NOV 955", # Eadred; approximate birth year
+  1799, "894", "27 OCT 939", # Æthelstan; approximate birth year
   2456, "1070", "14 FEB 1117", # Bertrada de Montfort
   2509, "6 AUG 1775", "3 JUN 1844", # of Angouleme
   2510, "24 JAN 1778", "14 FEB 1820", # of Berry
