@@ -1950,16 +1950,131 @@ date_overrides <- tribble(
   2780, "10 APR 1916", "22 DEC 2019", # Dagmar Bernadotte af Wisborg; date source should be cross-checked if stricter certainty needed
   2781, "12 JUL 1921", "3 NOV 2018", # Oscar Bernadotte af Wisborg; date source should be cross-checked if stricter certainty needed
   2782, "10 JAN 1926", NA_character_, # Catharina Bernadotte af Wisborg; living or death not found in this pass
+  2829, "25 JUN 1899", "4 JAN 1977", # Margaretha of Sweden / Princess Axel of Denmark
+  2830, "12 AUG 1888", "14 JUL 1964", # Axel of Denmark
+  2831, "7 FEB 1904", "15 APR 1991", # Elsa von Rosen; date source should be cross-checked if stricter certainty needed
+  2832, "8 OCT 1938", NA_character_, # Madeleine Bernadotte af Wisborg / Countess Madeleine; living
+  2839, "2 JUL 1882", "21 SEP 1962", # Marie Bonaparte / Princess George of Greece and Denmark; row currently Mary
+  2840, "19 MAY 1858", "14 APR 1924", # Roland Bonaparte
+  2841, "4 OCT 1904", "13 MAR 1990", # Irene Ovtchinnikova / Irina Ovtchinnikova; transliteration varies
+  2842, "10 FEB 1910", "13 FEB 1989", # Princess Eugenie of Greece and Denmark
+  2843, "23 JAN 1911", "19 NOV 1976", # Dominik Radziwill / Dominik Radziwiłł; transliteration varies
+  2845, "20 JAN 1878", "29 AUG 1923", # Princess Anastasia of Greece and Denmark / Nonnie May Stewart
   2846, "25 DEC 1902", "25 FEB 1953", # Françoise of Orléans
+  2847, "1 NOV 1881", "7 FEB 1965", # Perikles Ioannidis / Perikles Joannides; transliteration varies
   2848, "7 JAN 1939", "28 JUL 2024", # Michael of Greece and Denmark
+  2849, "17 JUL 1940", NA_character_, # Marina Karella; living
+  2850, "19 OCT 1726", "8 AUG 1756", # Louise of Denmark and Norway / Duchess of Saxe-Hildburghausen
+  2851, "10 JUN 1727", "23 SEP 1780", # Ernest Frederick III of Saxe-Hildburghausen
+  2852, "24 JAN 1746", "29 MAR 1792", # Gustav III of Sweden
+  2853, "3 JUN 1743", "27 FEB 1821", # William I, Elector of Hesse-Cassel
+  2856, "1 SEP 1647", "1 JUL 1717", # Anne Sophie of Denmark
+  2857, "11 APR 1649", "30 OCT 1704", # Frederica Amalia of Denmark
+  2858, "11 SEP 1656", "26 JUL 1693", # Ulrika Eleonora of Denmark / Queen of Sweden
+  2859, "24 NOV 1655", "5 APR 1697", # Charles XI of Sweden
+  2860, "30 DEC 1578", "27 MAR 1624", # Ulrik of Denmark / Ulrich of Denmark
+  2861, "8 APR 1580", "5 FEB 1639", # Augusta of Denmark
+  2862, "5 AUG 1581", "26 NOV 1641", # Hedwig of Denmark
+  2863, "26 FEB 1416", "5 JAN 1448", # Christopher III of Denmark, Norway, and Sweden
+  2864, "25 DEC 1461", "8 DEC 1521", # Christina of Saxony / Queen of Denmark
+  2867, "15 MAR 1476", "15 JAN 1504", # James Stewart, Duke of Ross; approximate mid-month dates selected from month-level source dates
+  2868, "15 DEC 1479", "11 MAR 1503", # John Stewart, Earl of Mar and Garioch; approximate mid-month birth date selected from month-level source date
+  2869, "1280", "14 OCT 1318", # Edward Bruce, Earl of Carrick; approximate birth year
+  2870, "1284", "9 FEB 1307", # Thomas Bruce; approximate birth year
+  2871, "1285", "9 FEB 1307", # Alexander Bruce; approximate birth year
+  2872, "1279", "15 SEP 1306", # Nigel Bruce / Niall Bruce; approximate birth year and approximate mid-month death date selected from month-level death date
+  2873, "1272", "1358", # Isabel Bruce; approximate year-level dates
+  2874, "27 APR 1806", "22 AUG 1878", # Maria Christina of the Two Sicilies
+  2875, "14 DEC 1784", "21 MAY 1806", # Maria Antonia of Naples and Sicily / Princess of Asturias
+  2876, "19 MAY 1797", "26 DEC 1818", # Maria Isabel of Portugal / Queen of Spain
+  2877, "6 DEC 1803", "18 MAY 1829", # Maria Josepha Amalia of Saxony / Queen of Spain
+  2878, "11 NOV 1748", "20 JAN 1819", # Charles IV of Spain; some sources give death as 19 JAN 1819
+  2879, "9 DEC 1751", "2 JAN 1819", # Maria Luisa of Parma / Queen of Spain
+  2880, "20 JAN 1716", "14 DEC 1788", # Charles III of Spain
+  2881, "24 NOV 1724", "27 SEP 1760", # Maria Amalia of Saxony / Queen of Spain
+  2882, "28 NOV 1660", "20 APR 1690", # Maria Anna Victoria of Bavaria / Dauphine of France
+  2883, "17 SEP 1688", "14 FEB 1714", # Maria Luisa of Savoy / Queen of Spain
+  2884, "3 JUN 1540", "10 JUL 1590", # Charles II of Inner Austria / Duke of Styria
+  2885, "22 JUL 1478", "25 SEP 1506", # Philip I the Handsome / King of Castile
+  2886, "1488", "15 OCT 1536", # Germaine of Foix / of Narbonne; approximate birth year
+  2887, "2 OCT 1470", "23 AUG 1498", # Isabella of Aragon / Queen of Portugal
+  2888, "29 JUN 1482", "7 MAR 1517", # Maria of Aragon / Queen of Portugal
+  2889, "30 JUN 1478", "4 OCT 1497", # John, Prince of Asturias
+  2890, "18 MAY 1475", "13 JUL 1491", # Afonso, Prince of Portugal
+  2891, "31 MAY 1469", "13 DEC 1521", # Manuel I of Portugal
+  2892, "10 JAN 1480", "1 DEC 1530", # Margaret of Austria / Duchess of Savoy
+  2893, "10 APR 1480", "10 SEP 1504", # Philibert II, Duke of Savoy
+  2894, "15 NOV 1498", "25 FEB 1558", # Eleanor of Austria
+  2895, "22 JAN 1724", "13 MAY 1779", # Henry XXIV Reuss-Ebersdorf
+  2896, "20 AUG 1727", "22 APR 1796", # Caroline Ernestine of Erbach-Schönberg
+  2897, "8 MAR 1724", "8 SEP 1800", # Ernest Frederick of Saxe-Coburg-Saalfeld
+  2898, "13 JAN 1724", "17 MAY 1802", # Sophie Antoinette of Brunswick-Wolfenbüttel; source/date style varies
+  2899, "26 OCT 1802", "14 NOV 1866", # Miguel I of Portugal / Michael of Portugal
+  2900, "18 JAN 1872", "1 FEB 1931", # Emmanuel d'Orléans, Duke of Vendôme
+  2901, "18 FEB 1858", "1 MAR 1924", # Louise of Belgium
+  2902, "21 MAY 1864", "23 AUG 1945", # Stéphanie of Belgium
+  2903, "30 JUL 1872", "8 MAR 1955", # Clémentine of Belgium
+  2904, "18 JUL 1862", "3 MAY 1926", # Victor, Prince Napoléon
+  2905, "21 AUG 1858", "30 JAN 1889", # Rudolf, Crown Prince of Austria
+  2906, "24 AUG 1863", "29 JUL 1946", # Elemér Lónyay
+  2907, "28 MAR 1844", "3 JUL 1921", # Philipp of Saxe-Coburg and Gotha
+  2909, "6 DEC 1820", "20 DEC 1904", # Alexandrine of Baden
+  2910, "2 JUL 1797", "25 SEP 1862", # Maria Antonia Koháry
+  2911, "14 JUN 1753", "6 APR 1830", # Louis I of Hesse-Darmstadt
+  2912, "15 FEB 1761", "24 OCT 1829", # Louise of Hesse-Darmstadt
+  2913, "10 FEB 1606", "27 DEC 1663", # Marie Christine of France / Duchess of Savoy
+  2914, "15 OCT 1605", "4 JUN 1627", # Marie de Bourbon, Duchess of Montpensier
+  2915, "29 MAY 1627", "5 APR 1693", # Anne Marie Louise d'Orléans, Duchess of Montpensier
+  2916, "27 MAY 1652", "8 DEC 1722", # Elizabeth Charlotte of the Palatinate / Duchess of Orléans
+  2917, "13 SEP 1676", "23 DEC 1744", # Élisabeth Charlotte d'Orléans / Duchess of Lorraine
+  2918, "11 SEP 1679", "27 MAR 1729", # Leopold, Duke of Lorraine
+  2919, "4 MAY 1677", "1 FEB 1749", # Françoise Marie de Bourbon
+  2920, "6 DEC 1685", "12 FEB 1712", # Marie Adélaïde of Savoy
+  2921, "20 AUG 1695", "21 JUL 1719", # Marie Louise Élisabeth d'Orléans, Duchess of Berry; row death placeholder appears to use wrong year
+  2930, "19 FEB 1978", NA_character_, # Andrew Ferguson; living
+  2931, "9 AUG 1980", NA_character_, # Alice Ferguson; living
+  2932, "15 APR 1986", NA_character_, # Elizabeth / Eliza Ferguson; living
+  2933, "16 JUL 1880", "21 MAR 1947", # Mervyn Powerscourt Wingfield, 8th Viscount Powerscourt
+  2934, "13 OCT 1836", "5 JUN 1904", # Mervyn Wingfield, 7th Viscount Powerscourt
+  2935, "4 DEC 1844", "7 AUG 1931", # Julia Coke / Lady Powerscourt
+  2936, "9 OCT 1870", "24 FEB 1947", # Henry FitzHerbert Wright; date source should be cross-checked if stricter certainty needed
+  2937, "18 NOV 1873", "29 SEP 1955", # Muriel Fletcher; date source should be cross-checked if stricter certainty needed
+  2938, "14 MAY 1833", "14 NOV 1879", # Henry Fletcher; date source should be cross-checked if stricter certainty needed
   2939, "17 JUL 1838", "14 NOV 1886", # Harriet Marsham
+  2940, "30 JUL 1808", "3 SEP 1874", # Charles Marsham, 3rd Earl of Romney
   2941, "12 JUN 1811", "5 JUN 1846", # Margaret-Scott Montagu-Douglas-
   2942, "24 MAY 1772", "20 APR 1819", # Charles of Buccleuch Montagu-Douglas
+  2943, "25 NOV 1806", "16 APR 1884", # Walter Scott-Montagu-Douglas, 5th Duke of Buccleuch
+  2944, "9 SEP 1831", "5 NOV 1914", # William Scott-Montagu-Douglas, 6th Duke of Buccleuch
+  2945, "26 AUG 1836", "16 MAR 1912", # Louisa Hamilton / Duchess of Buccleuch
+  2946, "30 NOV 1872", "17 JUN 1944", # Herbert Montagu Douglas Scott
   2948, "2 MAY 1841", "22 NOV 1906", # Henry Robert Brand
+  2949, "24 DEC 1814", "14 MAR 1892", # Henry Brand, 1st Viscount Hampden
   2950, "2 SEP 1746", "11 JAN 1812", # Henry of Buccleuch Scott
+  2951, "19 FEB 1721", "1 APR 1750", # Francis Scott, Earl of Dalkeith
+  2952, "11 JAN 1695", "22 APR 1751", # Francis Scott, 2nd Duke of Buccleuch
+  2953, "26 DEC 1822", "24 JAN 1909", # Thomas William Coke, 2nd Earl of Leicester; current death year appears wrong
+  2954, "6 MAY 1754", "30 JUN 1842", # Thomas William Coke, 1st Earl of Leicester
   2955, "16 JUN 1803", "22 JUL 1844", # Anne Amelia Keppel
   2956, "14 MAY 1772", "30 OCT 1849", # William Charles Keppel, 4th Earl of Albemarle
+  2957, "1101", "25 NOV 1120", # Richard of Lincoln / Richard, son of Henry I; approximate birth year, died in White Ship disaster
+  2962, "20 APR 1965", NA_character_, # Victoria Lockwood / Catherine Victoria Aitken; living
+  2963, "28 DEC 1990", NA_character_, # Kitty Spencer / Lady Kitty Spencer; living
+  2964, "11 JUN 1903", "16 OCT 1997", # Olga of Greece and Denmark / Princess Paul of Yugoslavia
+  2965, "27 APR 1893", "14 SEP 1976", # Paul of Yugoslavia / Prince Paul of Yugoslavia
+  2967, "24 MAY 1904", "11 JAN 1955", # Elizabeth of Greece and Denmark
+  2969, "28 MAY 1957", NA_character_, # Sylvana Tomaselli; living
+  2973, "28 AUG 1779", "14 MAR 1824", # Antoinette of Saxe-Coburg-Saalfeld
+  2974, "19 AUG 1778", "8 JUL 1835", # Sophie of Saxe-Coburg-Saalfeld
+  2975, "23 SEP 1781", "15 AUG 1860", # Juliane of Saxe-Coburg-Saalfeld / Anna Feodorovna
+  2976, "27 SEP 1763", "4 JUL 1814", # Emich Carl of Leiningen
+  2984, "20 APR 1898", "12 NOV 1964", # Alexander / Sachie McCorquodale; date source should be cross-checked if stricter certainty needed
   2985, "26 APR 1924", "14 DEC 1997", # Gerald Legge
+  2995, "3 JAN 1876", "27 MAY 1917", # Bertram Cartland / Bertie Cartland; died in WWI
+  2997, "3 JAN 1907", "30 MAY 1940", # Ronald Cartland
+  2998, "4 JAN 1912", "29 MAY 1940", # Anthony Cartland
+  3009, "1911", "1911", # Cartland infant; year-level birth and death only; exact date not resolved in this pass
+  3010, "31 DEC 1939", NA_character_, # Glen McCorquodale; living or death not found in this pass
   3011, "15 APR 1240", "1271" # Simon de Montfort the Younger
 )
 
@@ -2015,7 +2130,17 @@ date_overrides <- tribble(
 # 2688: likely duplicate/identity match to Peter I of Serbia at personID == 2530.
 
 # 2689, 2690: likely duplicate/identity matches to the Württemberg/Brandenburg-Schwedt parents already represented at personID == 1067 and 1068.
+# 2839 is listed as Mary, but the row clearly matches Marie Bonaparte through the father Roland Bonaparte and the marriage to Prince George of Greece.
 
+# 2867, 2868, and 2872 required approximate mid-month values because the available date information was month-level. I used parse-compatible dates and marked them as approximate.
+
+# 2878 Charles IV has a one-day death-date discrepancy. I used 20 JAN 1819, while noting that some sources give 19 JAN 1819.
+
+# 2921 appears to be Marie Louise Élisabeth d’Orléans, Duchess of Berry. The current row’s death-year placeholder appears to be wrong, so I used 21 JUL 1719.
+
+# 2964, 2965, and 2967 resolve the Greek/Yugoslav branch: Olga of Greece and Denmark, Prince Paul of Yugoslavia, and Elizabeth of Greece and Denmark.
+
+# 3009 is only identifiable as an infant Cartland row in this pass, so I used year-level dates only rather than fabricating precision.
 
 name_overrides <- tribble(
   ~personID, ~name_override,
