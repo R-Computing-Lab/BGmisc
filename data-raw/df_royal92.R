@@ -256,14 +256,196 @@ date_overrides <- tribble(
   297, "19 MAY 1953", NA_character_, # Henry Ulick Lascelles; living
   298, "24 DEC 1787", "5 SEP 1867", # William of Hesse-Kassel
   299, "30 OCT 1789", "28 MAR 1864", # Louise Charlotte of Denmark
+  301, "11 SEP 1747", "20 MAY 1837", # Frederick of Hesse-Cassel
+  302, "4 APR 1762", "17 AUG 1823", # Caroline of Nassau-Usingen
+  303, "9 SEP 1804", "4 JUL 1885", # Alexander of Wurttemberg
+  304, "21 SEP 1812", "1 OCT 1841", # Claudine Rhédey
+  305, "11 FEB 1836", "18 NOV 1894", # Claudine of Teck
+  306, "12 NOV 1838", "20 JUL 1893", # Amelie of Teck
+  307, "13 APR 1835", "13 APR 1897", # Paul von Hugel
+  310, "14 APR 1867", "29 OCT 1900", # Christian Victor
+  311, "26 FEB 1869", "27 APR 1931", # Albert of Schleswig-Holstein
+  312, "3 MAY 1870", "13 MAR 1948", # Helena Victoria
+  314, "24 NOV 1926", "4 MAY 2018", # Patricia Tuckwell
+  315, "5 JUL 1964", NA_character_, # Mark Lascelles; living
+  316, "23 APR 1924", "14 JAN 2006", # Elizabeth Collingwood Colvin
+  322, "1 MAR 1683", "20 NOV 1737", # Caroline of Ansbach
+  345, "4 JAN 1785", "17 FEB 1831", # Frederick William of Schleswig-Holstein-Sonderburg-Glücksburg
+  346, "28 SEP 1789", "13 MAR 1867", # Louise Caroline of Hesse-Cassel
+  347, "15 JUL 1823", "15 DEC 1888", # Alexander of Hesse and the Rhine
+  348, "24 NOV 1825", "19 SEP 1895", # Julia of Battenberg von Hauke
+  349, "26 DEC 1777", "16 JUN 1848", # Louis II of Hesse and the Rhine
+  350, "21 SEP 1788", "27 JAN 1836", # Wilhelmina of Baden
+  351, "26 OCT 1775", "29 NOV 1830", # John Maurice von Hauke
+  352, "1790", "27 AUG 1831", # Sophie la Fontaine; approximate birth year
+  353, "21 SEP 1827", "25 JAN 1892", # Constantine Nikolaievitch of Russia, Gregorian/New Style; Old Style = 9 SEP 1827, 13 JAN 1892
+  354, "8 JUL 1830", "6 JUL 1911", # Elizabeth Alexandra of Saxe-Altenburg / Alexandra Iosifovna
+  355, "27 AUG 1789", "25 NOV 1868", # Joseph of Saxe-Altenburg
+  356, "28 JUN 1799", "28 NOV 1848", # Amalie of Wurttemberg
+  357, "23 APR 1809", "20 MAR 1877", # Charles of Hesse
+  358, "18 JUN 1815", "21 MAR 1885", # Elizabeth of Prussia
+  359, "8 NOV 1817", "17 AUG 1865", # Charles William Frederick Cavendish-Bentinck
+  360, "3 OCT 1780", "28 APR 1826", # William Charles Augustus Cavendish-Bentinck
+  361, "1788", "19 MAR 1875", # Anne Wellesley; approximate birth year
+  366, "23 MAY 1892", "9 JUN 1975", # Albert Edward John Spencer
+  367, "16 AUG 1897", "4 DEC 1972", # Cynthia Elinor Beatrix Hamilton
+  368, "15 MAY 1885", "8 JUL 1955", # Edmund Maurice Burke Roche
   369, "2 OCT 1908", "6 JUL 1993", # Ruth Sylvia Gill
+  370, "28 JUL 1851", "30 OCT 1920", # James Boothby Burke Roche
+  371, "27 OCT 1857", "26 JAN 1947", # Frances Ellen Work
+  372, "10 FEB 1819", "16 MAR 1911", # Frank Work
+  378, "9 AUG 1815", "17 SEP 1874", # Edmund Burke Roche
+  379, "1821", "26 APR 1897", # Elizabeth Caroline Boothby; birth year only
+  384, "30 NOV 1869", "12 SEP 1953", # James Hamilton, 3rd Duke of Abercorn
+  385, "26 FEB 1869", "18 JAN 1958", # Rosalind Cecilia Caroline Bingham
+  386, "24 AUG 1838", "3 JAN 1913", # James Hamilton, 2nd Duke of Abercorn
+  387, "23 JUL 1848", "10 MAY 1929", # Mary Anna Curzon-Howe
+  388, "8 MAY 1830", "5 JUN 1914", # George Bingham, 4th Earl of Lucan
+  389, "13 APR 1838", "5 OCT 1910", # Cecilia Catherine Gordon-Lennox
   393, "15 JUN 1843", "30 JUN 1898", # Barbara Smith Marr
+  396, "30 OCT 1857", "26 SEP 1922", # Charles Robert Spencer
+  397, "14 DEC 1868", "4 JUL 1906", # Margaret Baring
+  398, "14 APR 1798", "27 DEC 1857", # Frederick Spencer
+  399, "27 JAN 1825", "29 OCT 1877", # Adelaide Horatia Elizabeth Seymour
+  400, "13 APR 1828", "17 JUL 1897", # Edward Charles Baring
+  401, "18 JUN 1839", "16 OCT 1892", # Louisa Emily Charlotte Bulteel
+  403, "1 APR 1851", "16 JAN 1928", # Bernard of Saxe-Meiningen
+  404, "20 JUL 1859", "9 JUL 1916", # Adolphus of Schaumburg-Lippe
+  406, "1 MAY 1868", "28 MAY 1940", # Frederick Charles of Hesse
+  408, "4 JUL 1890", "16 JUL 1956", # Irene Denison
   409, "17 MAY 1886", "28 FEB 1941", # Alfonso XIII
+  410, "10 MAR 1776", "19 JUL 1810", # Louise of Mecklenburg-Strelitz
+  413, "13 OCT 1799", "30 MAR 1800", # Frederica of Prussia
+  414, "29 JUN 1801", "21 JAN 1883", # Charles of Prussia
+  416, "13 DEC 1804", "1 APR 1806", # Ferdinand of Prussia
   417, "2 APR 748", "28 JAN 814", # Charlemagne
+  418, "4 OCT 1809", "14 OCT 1872", # Albert of Prussia
   420, "6 MAY 1882", "20 JUL 1951", # William
   421, "7 JUL 1883", "8 DEC 1942", # Eitel Frederick
+  422, "14 JUL 1884", "22 SEP 1948", # Adalbert of Prussia
+  423, "29 JAN 1887", "25 MAR 1949", # Augustus William of Prussia
+  424, "27 JUL 1888", "27 JAN 1958", # Oscar of Prussia
+  425, "17 DEC 1890", "18 JUL 1920", # Joachim of Prussia
+  426, "13 SEP 1892", "11 DEC 1980", # Victoria Louise of Prussia
+  427, "30 SEP 1811", "7 JAN 1890", # Augusta of Saxe-Weimar
+  428, "3 DEC 1838", "23 APR 1923", # Louise of Prussia / Grand Duchess of Baden
+  429, "9 SEP 1826", "28 SEP 1907", # Frederick of Baden
+  430, "10 MAY 1907", "6 SEP 1938", # Alphonso of Cavadonga
+  431, "23 JUN 1908", "20 MAR 1975", # Don Jaime / Infante Jaime, Duke of Segovia
+  432, "20 JUN 1913", "1 APR 1993", # Don Juan of Spain / Count of Barcelona
+  433, "22 JUN 1909", "22 NOV 2002", # Beatrice of Spain
+  434, "23 DEC 1910", "2 JAN 2000", # Maria de las Mercedes of Bourbon
+  435, "5 JAN 1938", NA_character_, # Juan Carlos I; living
+  436, "6 JAN 1900", "22 JUN 1961", # Marie (Mignon) Hohenzollern / Maria of Romania
+  440, "16 DEC 1888", "9 OCT 1934", # Alexander I of Yugoslavia
+  441, "2 NOV 1938", NA_character_, # Sophia of Greece / Queen Sofia of Spain; living
+  442, "20 DEC 1963", NA_character_, # Helen / Infanta Elena; living
+  443, "13 JUN 1965", NA_character_, # Christine / Infanta Cristina; living
+  444, "30 JAN 1968", NA_character_, # Philip of Asturias / Felipe VI; living
+  445, "22 APR 1906", "26 JAN 1947", # Gustav Adolf
+  446, "20 APR 1889", "20 SEP 1918", # Erik of Vastmanland
   447, "7 JUN 1907", "4 FEB 2002", # Sigvard Oscar Fredrik
+  448, "28 FEB 1912", "5 JAN 1997", # Bertil Gustaf Oscar
+  449, "31 OCT 1916", "5 MAY 2012", # Carl Johan Arthur
+  451, "28 MAR 1901", "5 APR 1954", # Martha of Sweden / Crown Princess Märtha of Norway
+  453, "4 JUL 1937", NA_character_, # Sonja Haraldsen / Queen Sonja of Norway; living
+  454, "22 SEP 1971", NA_character_, # Märtha Louise of Norway; living
+  455, "20 JUL 1973", NA_character_, # Haakon Magnus of Norway; living
+  460, "17 SEP 1871", "16 NOV 1937", # Eleonore of Solms-Hohensolms-Lich
+  461, "8 NOV 1906", "16 NOV 1937", # Georg Donatus of Hesse
+  462, "20 NOV 1908", "30 MAY 1968", # Louis of Hesse and by Rhine
+  463, "22 JUN 1911", "16 NOV 1937", # Cecilie of Greece and Denmark
+  464, "18 MAR 1913", "26 JAN 1997", # Margaret Campbell-Geddes
+  465, "10 AUG 1888", "21 JAN 1940", # Christopher of Greece and Denmark, Gregorian/New Style; Old Style birth = 29 JUL 1888
+  466, "24 JUN 1869", "25 NOV 1957", # George of Greece and Denmark
+  467, "7 APR 1880", "2 NOV 1880", # Olga of Greece and Denmark
+  474, "25 MAR 1921", "30 JAN 1993", # Alexandra of Greece / Queen of Yugoslavia
+  475, "6 SEP 1923", "3 NOV 1970", # Peter II of Yugoslavia
+  476, "26 JUN 1914", "24 NOV 2001", # Sophie of Greece and Denmark
+  477, "24 MAR 1897", "11 MAY 1960", # Gottfried of Hohenlohe-Langenburg
+  479, "24 FEB 1906", "27 OCT 1963", # Berthold, Margrave of Baden
+  481, "14 MAY 1901", "7 OCT 1943", # Christoph of Hesse
+  482, "25 MAR 1915", "8 JAN 2006", # George William of Hanover
+  484, "30 AUG 1756", "20 SEP 1817", # Duke Ludwig of Württemberg
+  485, "22 APR 1780", "2 JAN 1857", # Henriette of Nassau-Weilburg
+  486, "5 APR 1857", "17 NOV 1893", # Alexander of Battenberg / Alexander I of Bulgaria
+  487, "24 SEP 1861", "31 JUL 1924", # Francis Joseph of Battenberg
+  488, "17 AUG 1840", "29 JAN 1908", # Gustav Ernst of Erbach-Schönberg
+  489, "18 APR 1865", "20 JUL 1951", # Johanna Loisinger
+  490, "18 AUG 1874", "22 APR 1971", # Anna of Montenegro
+  491, "30 AUG 1842", "10 JUL 1849", # Alexandra Alexandrovna Romanov, Gregorian/New Style; Old Style = 18 AUG 1842, 28 JUN 1849
+  492, "20 SEP 1843", "24 APR 1865", # Nicholas Alexandrovich Romanov, Gregorian/New Style; Old Style = 8 SEP 1843, 12 APR 1865
+  493, "9 JUN 1806", "13 JUN 1877", # Louis III of Hesse
+  494, "28 NOV 1901", "21 FEB 1960", # Edwina Ashley / Countess Mountbatten of Burma
+  495, "30 AUG 1813", "25 MAY 1862", # Mathilde of Bavaria
+  496, "20 AUG 1752", "22 MAY 1782", # Frederica of Hesse-Darmstadt
+  497, "28 NOV 1838", "16 SEP 1900", # Henry of Hesse and by Rhine
+  498, "16 NOV 1845", "24 MAY 1900", # William of Hesse and by Rhine
+  499, "25 MAY 1843", "16 APR 1865", # Anna of Hesse and by Rhine
+  500, "14 FEB 1924", "13 JUN 2017", # Patricia Mountbatten / Countess Mountbatten of Burma
+  501, "19 APR 1929", NA_character_, # Pamela Mountbatten / Lady Pamela Hicks; living
+  502, "28 MAR 1896", "22 JAN 1963", # Nadejda de Torby / Marchioness of Milford Haven
+  503, "16 DEC 1917", "15 MAY 1988", # Tatiana Elizabeth Mountbatten
+  504, "12 MAY 1919", "14 APR 1970", # David Mountbatten, 3rd Marquess of Milford Haven
+  505, "9 NOV 1924", "23 SEP 2005", # John Ulick Knatchbull, 7th Baron Brabourne
+  507, "25 MAR 1929", "29 MAR 1998", # David Nightingale Hicks
+  509, "13 JAN 1920", "1 SEP 1982", # Iris Mountbatten
+  510, "30 AUG 1800", "5 JUN 1873", # Auguste von Harrach
+  513, "29 AUG 1820", "5 MAR 1879", # Rosalie von Rauch / Countess of Hohenau
+  515, "15 SEP 1800", "7 MAR 1842", # Paul Frederick, Grand Duke of Mecklenburg-Schwerin
+  516, "3 FEB 1808", "18 JAN 1877", # Marie of Saxe-Weimar-Eisenach
+  517, "9 MAR 1721", "30 MAR 1774", # Caroline of Zweibrücken
+  518, "20 SEP 1886", "6 MAY 1954", # Cecilie of Mecklenburg-Schwerin
+  519, "4 JUL 1906", "26 MAY 1940", # Wilhelm of Prussia
   520, "9 NOV 1907", "26 SEP 1994", # Louis Ferdinand of Prussia
+  521, "30 SEP 1909", "8 APR 1950", # Hubertus of Prussia
+  522, "19 DEC 1911", "20 APR 1966", # Frederick of Prussia
+  523, "7 APR 1915", "2 OCT 1980", # Alexandrine of Prussia
+  524, "5 SEP 1917", "21 APR 1975", # Cecilie of Prussia
+  525, "10 SEP 1907", "7 MAY 1972", # Dorothea von Salviati
+  528, "9 MAY 1909", "8 SEP 1967", # Kira Kirillovna of Russia
+  530, "24 JAN 1547", "11 APR 1578", # Joanna of Austria
+  531, "25 MAR 1541", "19 OCT 1587", # Francesco I de' Medici, Grand Duke of Tuscany
+  532, "1160", "12 FEB 1218", # Alice de Courtenay; approximate birth year
+  533, "1160", "16 JUN 1202", # Aymer of Angoulême; approximate birth year
+  537, "20 AUG 1920", "10 OCT 2009", # Magdalene Reuss
+  540, "30 JUL 1920", "8 MAR 1995", # Brigid Guinness
+  547, "2 FEB 1879", "29 MAR 1964", # Sophie Charlotte of Oldenburg
+  548, "16 AUG 1891", "25 APR 1971", # Adelheid of Saxe-Meiningen
+  549, "21 APR 1887", "15 APR 1957", # Alexandra Victoria of Schleswig-Holstein-Sonderburg-Glücksburg
+  550, "27 JAN 1888", "17 SEP 1973", # Ina Marie von Bassewitz
+  551, "10 JUN 1898", "22 MAY 1983", # Marie Auguste of Anhalt
+  552, "17 NOV 1887", "30 JAN 1953", # Ernest Augustus of Brunswick
+  557, "1 MAY 1772", "31 DEC 1773", # Christine of Prussia
+  558, "5 NOV 1773", "28 DEC 1796", # Louis Charles of Prussia
+  561, "1 MAY 1780", "19 FEB 1841", # Augusta of Prussia
+  562, "30 DEC 1781", "12 JUL 1846", # Henry Charles of Prussia; row name currently Charles
+  563, "3 JUL 1783", "28 SEP 1851", # William of Prussia
+  564, "10 OCT 1741", "6 NOV 1816", # Charles II, Grand Duke of Mecklenburg-Strelitz
+  566, "28 JUL 1777", "20 NOV 1847", # William II of Hesse
+  568, "9 AUG 1722", "12 JUN 1758", # Augustus William of Prussia
+  569, "29 JAN 1722", "13 JAN 1780", # Louise of Brunswick-Wolfenbüttel
+  570, "30 DEC 1747", "26 MAY 1767", # Frederick Henry Charles of Prussia
+  571, "7 AUG 1751", "9 JUN 1820", # Wilhelmina of Prussia
+  572, "30 OCT 1758", "15 FEB 1759", # George Charles Emil of Prussia
+  573, "8 MAR 1748", "9 APR 1806", # William V of Orange
+  574, "16 JAN 1735", "28 NOV 1788", # Charles Christian of Nassau-Weilburg
+  575, "28 FEB 1743", "6 MAY 1787", # Caroline of Orange-Nassau
+  576, "25 OCT 1768", "9 JAN 1816", # Friedrich Wilhelm of Nassau-Weilburg
+  578, "14 JUN 1792", "20 AUG 1839", # Wilhelm, Duke of Nassau
+  580, "24 JUL 1817", "17 NOV 1905", # Adolphe of Luxembourg
+  582, "22 APR 1852", "25 FEB 1912", # Guillaume IV of Luxembourg
+  584, "23 JAN 1896", "9 JUL 1985", # Charlotte of Luxembourg
+  586, "5 JAN 1921", "23 APR 2019", # Jean of Luxembourg
+  589, "6 OCT 1914", "23 MAY 2010", # Leonide Bagration-Moukhransky, Gregorian/New Style; Old Style birth = 23 SEP 1914
+  590, "24 APR 1608", "2 FEB 1660", # Gaston, Duke of Orléans
+  591, "23 JUN 1908", "20 MAR 1975", # James / Jaime, Duke of Segovia
+  592, "30 JUL 1936", "8 JAN 2020", # Dona Maria of Bourbon / Infanta Pilar of Spain
+  593, "6 MAR 1939", NA_character_, # Margarita of Bourbon / Duchess of Soria; living
+  594, "3 OCT 1941", "29 MAR 1956", # Alfonso of Bourbon / Infante Alfonso of Spain
+  595, "1 NOV 1797", "30 MAR 1855", # Maria Dorothea of Württemberg
+  597, "27 FEB 1861", "24 OCT 1951", # Charles of Sweden / Prince Carl, Duke of Västergötland
+  598, "2 AUG 1878", "12 MAR 1958", # Ingeborg of Denmark
   659, "30 APR 1909", "20 MAR 2004", # Juliana of Netherlands
   683, "28 NOV 1857", "25 NOV 1885", # Alfonso XII
   691, "3 MAY 1905", "8 JUL 1996", # Albrecht (Albert)
@@ -322,8 +504,10 @@ name_overrides <- tribble(
   136, "Mary Adelaide (Fat Mary)",
   155, "Michael (Mischa) Alexandrovich Romanov",
   220, "Charlotte Augusta Louisa Hanover",
+  304, "Claudine Rhédey de Kis-Rhéde",
   345, "Frederick William of Schleswig-Holstein-Sonderburg-Glücksburg",
   354, "Elizabeth Alexandra of Saxe-Altenburg",
+  359, "Charles William Frederick Cavendish-Bentinck",
   402, "Augusta Victoria of Schleswig-Holstein-Sonderburg-Augustenburg",
   549, "Alexandra Victoria of Schleswig-Holstein-Sonderburg-Glücksburg",
   760, "Louise Eleonore of Hohenlohe-Langenburg",
@@ -394,6 +578,7 @@ royal92_cleaned <- royal92 %>%
     death_date = parse_gedcom_date(standardize_partial_date(death_date)),
     attribute_title = case_when(
       personID == 146 ~ "Countess of Strathmore and Kinghorne",
+      personID == 359 ~ "Reverend",
       personID == 1373 ~ "Count of Poitiers",
       personID == 2943 ~ "Duke of Buccleuch",
       personID == 2956 ~ "Earl of Albemarle",
