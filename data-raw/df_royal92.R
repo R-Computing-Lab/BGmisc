@@ -1787,6 +1787,169 @@ date_overrides <- tribble(
   2548, "25 JAN 1477", "9 JAN 1514", # Anne of Brittany
   2549, "10 AUG 1549", "30 SEP 1602", # Catherine of Brandenburg-Küstrin
   2550, "758", "30 APR 783", # Hildegard of Vinzgau / wife of Charlemagne; approximate birth year
+  2551, "772", "4 DEC 811", # Charles the Younger; approximate birth year
+  2552, "777", "8 JUL 810", # Pepin / Pippin of Italy; birth year approximate
+  2553, "16 APR 778", "20 JUN 840", # Louis I the Pious of Aquitaine
+  2554, "779", "11 MAR 824", # Bertha, daughter of Charlemagne; approximate birth year; death date/source should be treated as uncertain
+  2555, "765", "10 AUG 794", # Fastrada; approximate birth year
+  2556, "776", "4 JUN 800", # Luitgard; approximate birth year
+  2558, "778", "3 OCT 818", # Ermengarde of Hesbaye; approximate birth year
+  2559, "797", "19 APR 843", # Judith of Bavaria; approximate birth year
+  2560, "795", "29 SEP 855", # Lothair I; approximate birth year
+  2561, "797", "13 DEC 838", # Pepin I of Aquitaine; approximate birth year
+  2563, "806", "28 AUG 876", # Louis II the German; approximate birth year
+  2564, "13 JUN 823", "6 OCT 877", # Charles II the Bald
+  2565, "797", "17 APR 818", # Bernard of Italy; approximate birth year
+  2566, "805", "20 MAR 851", # Ermengarde of Tours; approximate birth year
+  2567, "825", "12 AUG 875", # Louis II the Younger / Louis II of Italy; approximate birth year
+  2568, "835", "8 AUG 869", # Lothair II of Lorraine; approximate birth year
+  2569, "845", "25 JAN 863", # Charles of Provence; approximate birth year
+  2570, "823", "864", # Pepin II of Aquitaine; approximate birth year and death year
+  2571, "808", "31 JAN 876", # Emma of Bavaria; approximate birth year
+  2572, "830", "22 MAR 880", # Carloman of Bavaria; approximate birth year
+  2573, "830", "20 JAN 882", # Louis the Younger; approximate birth year
+  2574, "13 JUN 839", "13 JAN 888", # Charles III the Fat
+  2575, "27 SEP 823", "6 OCT 869", # Ermentrude of Orléans
+  2576, "1 NOV 846", "10 APR 879", # Louis II the Stammerer
+  2577, "847", "29 SEP 866", # Charles of Aquitaine / Charles the Child; approximate birth year
+  2578, "849", "876", # Carloman, son of Charles the Bald; approximate year-level dates
+  2579, "843", "870", # Judith of Flanders; approximate year-level dates
+  2580, "826", "2 NOV 880", # Ansgarde of Burgundy; approximate birth year
+  2581, "864", "5 AUG 882", # Louis III of France; approximate birth year
+  2582, "866", "6 DEC 884", # Carloman II of France; approximate birth year
+  2583, "850", "10 NOV 901", # Adelaide of Paris / Adelaide Judith; approximate birth year
+  2584, "17 SEP 879", "7 OCT 929", # Charles III the Simple
+  2585, "902", "26 DEC 955", # Eadgifu of England; approximate birth year
+  2586, "830", "896", # Engelberga / Engeberge; approximate year-level dates
+  2587, "852", "22 JUN 896", # Ermengarde of Provence; approximate birth year
+  2588, "841", "11 JAN 887", # Boso of Provence; approximate birth year
+  2589, "880", "5 JUN 928", # Louis III the Blind; approximate birth year
+  2590, "835", "875", # Theutberga of Valois; approximate year-level dates
+  2591, "835", "9 APR 868", # Waldrada; approximate birth year
+  2593, "850", "8 DEC 899", # Arnulf of Carinthia; approximate birth year
+  2594, "873", "903", # Oda of Bavaria; approximate birth year and death after/about 903
+  2595, "893", "24 SEP 911", # Louis the Child; death date varies 20/24 SEP 911, selected 24 SEP
+  2596, "870", "13 AUG 900", # Zwentibold; approximate birth year
+  2597, "850", "24 DEC 903", # Hedwiga of Babenberg; approximate birth year
+  2598, "851", "30 NOV 912", # Otto of Saxony / Otto the Illustrious; approximate birth year
+  2599, "876", "2 JUL 936", # Henry the Fowler; approximate birth year
+  2600, "892", "14 MAR 968", # Matilda of Ringelheim; approximate birth year
+  2601, "925", "11 OCT 965", # Bruno of Cologne; approximate birth year
+  2602, "23 NOV 912", "7 MAY 973", # Otto I the Great
+  2603, "913", "5 MAY 984", # Gerberga of Saxony; approximate birth year
+  2604, "10 SEP 920", "10 SEP 954", # Louis IV d’Outre-Mer
+  2605, "941", "2 MAR 986", # Lothair of France; approximate birth year
+  2606, "953", "993", # Charles of Lower Lorraine; approximate year-level dates
+  2607, "966", "22 MAY 987", # Louis V of France; approximate birth year
+  2609, "714", "24 SEP 768", # Pepin the Short; approximate birth year
+  2610, "710", "12 JUL 783", # Bertrada of Laon; approximate birth year
+  2611, "28 JUN 751", "4 DEC 771", # Carloman I
+  2612, "750", "780", # Gerberga of the Lombards; approximate year-level dates
+  2613, "688", "22 OCT 741", # Charles Martel; approximate birth year
+  2614, "19 JAN 1757", "16 NOV 1831", # Augusta Reuss-Ebersdorf
+  2615, "5 JUN 1554", "22 JAN 1592", # Elisabeth of Austria / Queen of France
+  2617, "30 APR 1553", "29 JAN 1601", # Louise of Lorraine
+  2618, "1247", "28 JAN 1271", # Isabella of Aragon / Queen of France; approximate birth year
+  2619, "1290", "14 AUG 1315", # Margaret of Burgundy; approximate birth year
+  2620, "8 MAY 1326", "29 SEP 1360", # Joan of Boulogne
+  2624, "28 FEB 1823", "15 APR 1883", # Frederick Francis II of Mecklenburg-Schwerin; duplicate/identity match to personID 1213 likely
+  2629, "25 OCT 1931", "16 NOV 1937", # Ludwig of Hesse and by Rhine
+  2630, "14 APR 1933", "16 NOV 1937", # Alexander of Hesse and by Rhine
+  2631, "20 SEP 1936", "14 JUN 1939", # Johanna of Hesse and by Rhine
+  2632, "21 JUN 1879", "8 JAN 1954", # Auckland Campbell Geddes, 1st Baron Geddes
+  2633, "24 JUN 1860", "26 JUN 1878", # Maria de las Mercedes of Orléans / Queen of Spain
+  2634, "11 SEP 1880", "17 OCT 1904", # María de las Mercedes, Princess of Asturias
+  2635, "12 NOV 1882", "23 SEP 1912", # María Teresa of Spain
+  2636, "10 NOV 1870", "11 NOV 1949", # Carlos of Bourbon-Two Sicilies
+  2637, "24 FEB 1882", "18 APR 1958", # Louise of Orléans / Princess of Bourbon-Two Sicilies
+  2638, "23 DEC 1934", "9 MAR 1991", # Luis Gómez-Acebo / Viscount de la Torre
+  2639, "9 OCT 1943", NA_character_, # Carlos Zurita y Delgado; living
+  2640, "5 MAR 1906", "23 MAY 1994", # Edelmira Sampedro y Robato; identity inferred from Alfonso de Borbón/Covadonga marriage context
+  2642, "12 DEC 1911", "23 DEC 1996", # María Cristina of Spain / Countess Marone-Cinzano
+  2643, "24 OCT 1914", "13 AUG 1934", # Gonzalo of Spain
+  2644, "15 MAR 1895", "23 OCT 1968", # Enrico Eugenio Antonio Marone-Cinzano / Henry C. Marone
+  2645, "7 DEC 1911", "12 MAY 1986", # Alessandro Torlonia, Prince of Civitella-Cesi
+  2646, "8 NOV 1913", "2 MAY 2012", # Emmanuelle de Dampierre
+  2648, "10 MAY 1884", "5 APR 1958", # Ferdinand of Bavaria
+  2649, "22 OCT 1859", "23 NOV 1949", # Ludwig Ferdinand of Bavaria
+  2650, "23 JUN 1862", "4 DEC 1946", # María de la Paz of Spain
+  2651, "27 SEP 1801", "1 JUL 1875", # Adolf of Schwarzburg-Rudolstadt
+  2652, "18 NOV 1826", "22 MAR 1914", # Mathilde of Schönburg-Waldenburg
+  2653, "28 NOV 1770", "15 OCT 1819", # Frederica Louisa Wilhelmina of Orange-Nassau
+  2654, "23 FEB 1803", "21 APR 1892", # Alexandrine of Prussia / Grand Duchess of Mecklenburg-Schwerin
+  2655, "28 FEB 1774", "6 JAN 1799", # Frederick of Orange-Nassau
+  2656, "20 MAY 1830", "1 MAY 1872", # Amalia of Saxe-Weimar-Eisenach
+  2657, "14 SEP 1855", "20 JUN 1888", # Marie of Prussia / Princess Henry of the Netherlands
+  2660, "1553", "1 OCT 1633", # Feodor Nikitich Romanov / Patriarch Filaret; approximate birth year
+  2661, "1560", "26 JAN 1631", # Xenia Shestova; approximate birth year
+  2665, "8 AUG 1831", "25 APR 1891", # Nicholas Nikolaevich Romanov, Gregorian/New Style; Old Style = 27 JUL 1831, 13 APR 1891
+  2666, "25 OCT 1832", "18 DEC 1909", # Michael Nikolaevich Romanov, Gregorian/New Style; Old Style = 13 OCT 1832, 5 DEC 1909
+  2668, "20 SEP 1839", "12 APR 1891", # Olga Feodorovna / Cecily of Baden
+  2669, "26 APR 1859", "28 JAN 1919", # Nicholas Mikhailovich Romanov, Gregorian/New Style; Old Style birth = 14 APR 1859
+  2670, "16 OCT 1861", "26 APR 1929", # Michael Mikhailovich Romanov, Gregorian/New Style; Old Style birth = 4 OCT 1861
+  2671, "22 AUG 1858", "15 JUN 1915", # Constantine Konstantinovich Romanov, Gregorian/New Style; Old Style = 10 AUG 1858, 2 JUN 1915
+  2672, "7 OCT 1869", "18 JUL 1918", # Sergei Mikhailovich Romanov, Gregorian/New Style; Old Style birth = 25 SEP 1869
+  2673, "3 MAR 1876", "14 DEC 1940", # Maria Georgievna of Greece and Denmark
+  2674, "23 AUG 1863", "28 JAN 1919", # George Mikhailovich Romanov, Gregorian/New Style; Old Style birth = 11 AUG 1863
+  2675, "13 APR 1866", "26 FEB 1933", # Alexander Mikhailovich Romanov, Gregorian/New Style; Old Style birth = 1 APR 1866
+  2677, "13 JUN 1860", "28 JAN 1919", # Dmitri Konstantinovich Romanov, Gregorian/New Style; Old Style birth = 1 JUN 1860
+  2679, "25 JAN 1865", "24 MAR 1927", # Elizabeth Mavrikievna / Elisabeth of Saxe-Altenburg
+  2680, "24 OCT 1829", "13 MAY 1907", # Maurice of Saxe-Altenburg
+  2682, "28 FEB 1823", "15 APR 1883", # Frederick Francis II of Mecklenburg-Schwerin; duplicate/identity match to personID 1213 likely
+  2683, "16 JUL 1884", "29 SEP 1957", # George Bagration-Mukhranski / Georgi Bagration-Mukhrani
+  2684, "5 JUL 1886", "18 JUL 1918", # Ivan Konstantinovich Romanov, Gregorian/New Style; Old Style birth = 23 JUN 1886
+  2685, "1 JAN 1891", "18 JUL 1918", # Konstantin Konstantinovich Romanov, Gregorian/New Style; Old Style birth = 20 DEC 1890
+  2686, "10 JUN 1894", "18 JUL 1918", # Igor Konstantinovich Romanov, Gregorian/New Style; Old Style birth = 29 MAY 1894
+  2687, "4 NOV 1884", "16 OCT 1962", # Helen of Serbia / Jelena Petrovic-Njegos
+  2688, "11 JUL 1844", "16 AUG 1921", # Peter I of Serbia; duplicate/identity match to personID 2530 likely
+  2689, "21 JAN 1732", "23 DEC 1797", # Frederick Eugene of Württemberg; duplicate/identity match to personID 1067 likely
+  2690, "18 DEC 1736", "9 MAR 1798", # Friederike Dorothea Sophia of Brandenburg-Schwedt; duplicate/identity match to personID 1068 likely
+  2691, "29 NOV 1690", "16 MAR 1747", # Christian August of Anhalt-Zerbst
+  2692, "24 OCT 1712", "30 MAY 1760", # Johanna Elisabeth of Holstein-Gottorp
+  2693, "3 DEC 1908", "15 OCT 1980", # Peter of Greece and Denmark
+  2695, "19 MAR 1851", "10 APR 1897", # Frederick Francis III of Mecklenburg-Schwerin
+  2696, "28 JUL 1860", "11 MAR 1922", # Anastasia Mikhailovna Romanov, Gregorian/New Style; Old Style birth = 16 JUL 1860
+  2697, "3 DEC 1875", "23 APR 1906", # Louise Caroline Reuss of Greiz
+  2698, "30 JAN 1868", "12 DEC 1945", # Frederick of Schaumburg-Lippe
+  2699, "3 JUL 1910", "17 MAR 1975", # Feodora of Denmark
+  2700, "12 DEC 1914", "26 APR 1962", # Alexandrine-Louise of Denmark
+  2701, "24 FEB 1919", "26 DEC 1991", # Gorm of Denmark
+  2702, "10 MAR 1923", "19 DEC 1990", # Oluf of Rosenborg
+  2706, "25 JAN 1947", "10 JAN 1981", # Welf Ernst of Hanover
+  2707, "9 DEC 1949", NA_character_, # Georg of Hanover; living
+  2708, "15 OCT 1954", NA_character_, # Frederica of Hanover; living
+  2711, "10 OCT 1965", NA_character_, # Caroline-Louise of Hanover; living
+  2712, "3 JUN 1971", NA_character_, # Mireille of Hanover; living
+  2713, "6 JUN 1924", "31 MAY 2008", # John Kenneth Ambler
+  2717, "31 JUL 1932", "2 MAR 2016", # Johann Georg of Hohenzollern
+  2721, "31 MAY 1934", "11 APR 2017", # Nils August Otto Carl Niclas Silfverschiöld
+  2725, "7 APR 1941", NA_character_, # Tord Gösta Magnuson; living
+  2730, "15 JUL 1924", "16 MAY 2025", # Marianne Bernadotte / Marianne Lindberg
+  2731, "30 AUG 1915", "10 MAR 2013", # Lilian May Davies / Princess Lilian of Sweden
+  2732, "12 JUL 1911", "30 JUL 2007", # Erika Patzek; date source should be cross-checked if stricter certainty needed
+  2733, "12 MAY 1909", "21 MAY 2004", # Sonia Robbert; date source should be cross-checked if stricter certainty needed
+  2735, "12 MAY 1923", "12 SEP 2016", # Gunnila Wachtmeister; date source should be cross-checked if stricter certainty needed
+  2736, "7 JUL 1911", "9 SEP 1991", # Karin Emma Louise Nissvandt; date source should be cross-checked if stricter certainty needed
+  2738, "10 JAN 1911", "27 JUN 2003", # Carl Gustaf Oscar Bernadotte / Carl Jr.
+  2739, "22 APR 1932", "4 NOV 2014", # Kristine Rivelsrud
+  2740, "21 AUG 1944", NA_character_, # Michael Bernadotte af Wisborg; living
+  2745, "21 JAN 1933", NA_character_, # Birgitta Bernadotte af Wisborg; living
+  2746, "2 NOV 1935", "24 MAY 1988", # Marie Louise Bernadotte af Wisborg; death date should be cross-checked if stricter certainty needed
+  2747, "9 JAN 1941", "1 SEP 2021", # Jan Bernadotte af Wisborg; death date should be cross-checked if stricter certainty needed
+  2748, "28 SEP 1944", NA_character_, # Cecilia Bernadotte af Wisborg; living
+  2770, "15 NOV 1859", "4 OCT 1953", # Oscar Bernadotte / Count of Wisborg
+  2771, "1 AUG 1865", "17 AUG 1947", # Prince Eugen of Sweden, Duke of Närke
+  2772, "24 OCT 1858", "16 OCT 1946", # Ebba Munck af Fulkila
+  2773, "28 FEB 1889", "19 JUN 1974", # Maria Bernadotte af Wisborg
+  2774, "27 MAY 1890", "23 APR 1977", # Carl Oscar Bernadotte af Wisborg
+  2775, "17 MAY 1892", "21 JUN 1936", # Ebba Sophia Bernadotte af Wisborg
+  2776, "3 AUG 1893", "17 JUL 1996", # Elsa Victoria Bernadotte af Wisborg
+  2777, "2 JAN 1895", "17 SEP 1948", # Folke Bernadotte af Wisborg
+  2778, "20 DEC 1808", "30 MAR 1882", # Carl Jacob Munck af Fulkila; identity inferred from Ebba Munck parent row
+  2779, "4 OCT 1893", "8 OCT 1978", # Marianne de Geer af Leufsta; date source should be cross-checked if stricter certainty needed
+  2780, "10 APR 1916", "22 DEC 2019", # Dagmar Bernadotte af Wisborg; date source should be cross-checked if stricter certainty needed
+  2781, "12 JUL 1921", "3 NOV 2018", # Oscar Bernadotte af Wisborg; date source should be cross-checked if stricter certainty needed
+  2782, "10 JAN 1926", NA_character_, # Catharina Bernadotte af Wisborg; living or death not found in this pass
   2846, "25 DEC 1902", "25 FEB 1953", # Françoise of Orléans
   2848, "7 JAN 1939", "28 JUL 2024", # Michael of Greece and Denmark
   2939, "17 JUL 1838", "14 NOV 1886", # Harriet Marsham
@@ -1847,6 +2010,12 @@ date_overrides <- tribble(
 # 2501 appears to be Louis I, Duke of Orléans, but the row label says Louis of Beaumont / Count of Valois, so that identity/name should be reviewed separately.
 
 # 2545 and 2548 appear to duplicate Anne of Brittany.
+# 2624, 2682: likely duplicate/identity matches to Frederick Francis II of Mecklenburg-Schwerin at personID == 1213.
+
+# 2688: likely duplicate/identity match to Peter I of Serbia at personID == 2530.
+
+# 2689, 2690: likely duplicate/identity matches to the Württemberg/Brandenburg-Schwedt parents already represented at personID == 1067 and 1068.
+
 
 name_overrides <- tribble(
   ~personID, ~name_override,
