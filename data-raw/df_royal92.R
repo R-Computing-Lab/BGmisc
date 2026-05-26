@@ -446,11 +446,143 @@ date_overrides <- tribble(
   595, "1 NOV 1797", "30 MAR 1855", # Maria Dorothea of Württemberg
   597, "27 FEB 1861", "24 OCT 1951", # Charles of Sweden / Prince Carl, Duke of Västergötland
   598, "2 AUG 1878", "12 MAR 1958", # Ingeborg of Denmark
+  601, "7 SEP 1930", "31 JUL 1993", # Baudouin I of the Belgians; death date completed
+  602, "18 JAN 1908", "28 NOV 1972", # Sibylla of Saxe-Coburg and Gotha
+  609, "10 JUL 1965", NA_character_, # Alexia of Greece and Denmark; living
+  611, "17 NOV 1627", "7 AUG 1693", # John George II of Anhalt-Dessau
+  613, "3 JUL 1676", "7 APR 1747", # Leopold I of Anhalt-Dessau
+  614, "26 AUG 1666", "18 APR 1726", # Henriette Amalie of Anhalt-Dessau
+  615, "18 JAN 1657", "25 MAR 1696", # Henry Casimir II of Nassau-Dietz
+  616, "14 AUG 1687", "14 JUL 1711", # John William Friso
+  617, "7 FEB 1688", "9 APR 1765", # Marie Louise of Hesse-Kassel
+  618, "1 SEP 1711", "22 OCT 1751", # William IV of Orange
+  619, "23 OCT 1710", "18 SEP 1777", # Anna Charlotte Amalia of Nassau-Dietz / Charlotte Amalia
+  620, "7 OCT 1703", "26 MAR 1732", # Frederick, Hereditary Prince of Baden-Durlach
+  621, "22 NOV 1728", "10 JUN 1811", # Charles Frederick, Grand Duke of Baden
+  623, "14 FEB 1755", "16 DEC 1801", # Charles Louis, Hereditary Prince of Baden
+  625, "8 JUL 1786", "8 DEC 1818", # Charles, Grand Duke of Baden
+  628, "11 OCT 1817", "17 OCT 1888", # Marie Amelie of Baden
+  629, "19 FEB 1811", "15 JUL 1863", # William Hamilton, 11th Duke of Hamilton
+  630, "11 DEC 1850", "14 MAY 1922", # Mary Victoria Hamilton
+  631, "13 NOV 1848", "26 JUN 1922", # Albert I of Monaco
+  632, "12 JUL 1870", "9 MAY 1949", # Louis II of Monaco
+  634, "30 SEP 1898", "16 NOV 1977", # Charlotte, Duchess of Valentinois; some sources give 15 NOV 1977
+  635, "24 OCT 1895", "10 NOV 1964", # Pierre de Polignac
+  636, "31 MAY 1923", "6 APR 2005", # Rainier III of Monaco
+  638, "27 JAN 1805", "28 MAY 1872", # Sophie of Bavaria
+  639, "17 DEC 1802", "8 MAR 1878", # Franz Karl of Austria
+  640, "21 APR 1865", "1 NOV 1906", # Otto Franz of Austria
+  641, "7 JUL 1878", "13 MAR 1960", # Elisabeth Amalie of Austria
+  643, "17 AUG 1887", "1 APR 1922", # Karl I of Austria
+  645, "20 NOV 1912", "4 JUL 2011", # Otto von Habsburg
+  646, "30 JUL 1833", "19 MAY 1896", # Karl Ludwig of Austria
+  648, "17 JUN 1869", "17 MAR 1955", # Aloys of Liechtenstein
+  649, "16 AUG 1906", "13 NOV 1989", # Franz Joseph II of Liechtenstein
+  650, "8 MAR 1748", "9 APR 1806", # William V of Orange
+  651, "7 AUG 1751", "9 JUN 1820", # Wilhelmina of Prussia
+  653, "28 FEB 1797", "8 SEP 1881", # Frederick of the Netherlands
   659, "30 APR 1909", "20 MAR 2004", # Juliana of Netherlands
+  660, "29 JUN 1911", "1 DEC 2004", # Bernhard of Lippe-Biesterfeld
+  663, "25 DEC 1700", "16 DEC 1751", # Leopold II of Anhalt-Dessau
+  673, "15 AUG 1873", "27 MAY 1924", # Gyula Apponyi de Nagy-Appony
+  675, "6 AUG 1915", "22 OCT 2002", # Geraldine of Albania
+  676, "8 OCT 1895", "9 APR 1961", # Zog I of Albania
+  677, "5 APR 1939", "30 NOV 2011", # Leka I of Albania
+  678, "5 SEP 1771", "30 APR 1847", # Archduke Charles of Austria, Duke of Teschen
+  679, "30 OCT 1797", "29 DEC 1829", # Henrietta of Nassau-Weilburg
+  680, "29 JUL 1818", "20 NOV 1874", # Karl Ferdinand of Austria
+  682, "21 JUL 1858", "6 FEB 1929", # Maria Cristina of Austria; some sources give 9 FEB 1929
   683, "28 NOV 1857", "25 NOV 1885", # Alfonso XII
+  684, "9 MAR 1776", "13 JAN 1847", # Archduke Joseph of Austria, Palatine of Hungary
+  685, "17 JAN 1831", "14 FEB 1903", # Elisabeth Franziska of Austria
+  686, "20 JUL 1821", "15 DEC 1849", # Ferdinand Karl Viktor of Austria-Este
+  689, "18 MAY 1869", "2 AUG 1955", # Rupprecht of Bavaria
+  690, "9 OCT 1878", "24 OCT 1912", # Marie Gabrielle in Bavaria
   691, "3 MAY 1905", "8 JUL 1996", # Albrecht (Albert)
+  716, "10 JAN 1675", "3 OCT 1675", # Catherine Laura Stuart; birth date added
+  729, "24 DEC 1598", "1600", # Margaret Stuart; approximate death year
+  735, "26 AUG 1596", "29 NOV 1632", # Frederick V of the Palatinate
+  736, "14 OCT 1630", "8 JUN 1714", # Sophia of Hanover; sources vary 13/14 OCT 1630
+  741, "26 APR 1575", "3 JUL 1642", # Marie de Medici; birth year varies in sources, selected 1575
+  750, "27 MAY 1626", "6 NOV 1650", # William II of Orange
+  751, "21 SEP 1640", "9 JUN 1701", # Philippe I, Duke of Orléans
+  753, "19 MAR 1604", "6 NOV 1656", # John IV of Portugal
+  754, "13 OCT 1613", "27 FEB 1666", # Luisa Maria de Guzmán
+  755, "2 FEB 1634", "16 JUL 1662", # Alfonso IV d'Este, Duke of Modena
+  756, "27 MAY 1639", "19 JUL 1687", # Laura Martinozzi
+  758, "20 NOV 1629", "23 JAN 1698", # Ernest Augustus of Brunswick / Elector of Hanover
+  759, "11 OCT 1761", "24 DEC 1803", # George I of Saxe-Meiningen
+  760, "11 AUG 1763", "30 APR 1837", # Louise Eleonore of Hohenlohe-Langenburg
+  762, "10 JUL 1736", "22 AUG 1807", # Maria Walpole / Countess Waldegrave / Duchess of Gloucester
+  763, "24 JAN 1743", "28 DEC 1808", # Anne Horton / Anne Luttrell, Duchess of Cumberland
+  765, "22 DEC 1617", "28 AUG 1680", # Charles I Louis, Elector Palatine
+  766, "17 DEC 1619", "29 NOV 1682", # Rupert of the Rhine / Duke of Cumberland
+  767, "16 JAN 1621", "1652", # Maurice of the Palatinate; death year approximate, lost at sea
+  768, "5 OCT 1625", "10 MAR 1663", # Edward, Count Palatine of Simmern
+  769, "20 NOV 1627", "16 MAR 1686", # Charlotte of Hesse-Kassel
+  770, "7 SEP 1674", "14 AUG 1728", # Ernest Augustus, Duke of York and Albany
+  777, "1793", "10 SEP 1843", # John Crocker Bulteel; birth year approximate
+  779, "22 NOV 1791", "23 NOV 1851", # Horace Beauchamp Seymour
+  781, "1 SEP 1758", "10 NOV 1834", # George John Spencer, 2nd Earl Spencer
+  782, "27 JUL 1762", "8 JUN 1831", # Lavinia Bingham / Countess Spencer
+  783, "18 JAN 1777", "13 APR 1848", # Henry Baring
+  785, "11 DEC 1796", "12 MAY 1870", # Richard Curzon-Howe, 1st Earl Howe
+  787, "8 JUL 1812", "31 MAR 1905", # Louisa Jane Russell
+  788, "21 JAN 1811", "31 OCT 1885", # James Hamilton, 1st Duke of Abercorn
+  789, "16 APR 1800", "10 NOV 1888", # George Charles Bingham, 3rd Earl of Lucan
+  790, "29 JUN 1809", "1 APR 1877", # Anne Brudenell / Countess of Lucan
+  791, "6 JUN 1796", "12 MAR 1874", # Caroline Paget / Duchess of Richmond
+  792, "3 AUG 1791", "21 OCT 1860", # Charles Lennox, 5th Duke of Richmond
+  803, "30 MAR 1864", "19 OCT 1935", # John Charles Montagu Douglas Scott, 7th Duke of Buccleuch
+  804, "23 APR 1925", "23 MAR 2006", # Peter Shand Kydd
+  806, "9 JUL 1901", "21 MAY 2000", # Barbara Cartland
+  807, "11 DEC 1941", "29 JUL 2024", # Robert Fellowes, Baron Fellowes
+  808, "19 JUL 1980", NA_character_, # Laura Jane Fellowes; living
+  809, "4 OCT 1951", NA_character_, # Neil McCorquodale; living
+  811, "13 SEP 1899", "7 AUG 1966", # Andrew Henry Ferguson
   812, "16 JUN 1908", "11 DEC 1996", # Marian Louisa Montagu-Douglas-Scott
+  823, "1939", "10 AUG 1990", # Hector Barrantes; birth year approximate
+  828, "28 JUN 1491", "28 JAN 1547", # Henry VIII Tudor
+  832, "2 FEB 1503", "10 FEB 1503", # Katherine Tudor; death date corrected from year placeholder
+  833, "16 DEC 1485", "7 JAN 1536", # Catherine of Aragon
+  834, "17 MAR 1473", "9 SEP 1513", # James IV of Scotland
+  835, "10 APR 1512", "14 DEC 1542", # James V of Scotland
+  836, "1489", "22 JAN 1557", # Archibald Douglas, 6th Earl of Angus; birth year approximate
+  839, "1484", "22 AUG 1545", # Charles Brandon, 1st Duke of Suffolk; birth year approximate
+  840, "10 MAR 1452", "23 JAN 1516", # Ferdinand II of Aragon / Ferdinand V of Castile
+  841, "22 APR 1451", "26 NOV 1504", # Isabella I of Castile
+  848, "1501", "19 MAY 1536", # Anne Boleyn; birth year uncertain, commonly c.1501 or c.1507
+  851, "1508", "24 OCT 1537", # Jane Seymour; birth year uncertain, commonly c.1508/1509
+  856, "1524", "13 FEB 1542", # Catherine Howard; birth year uncertain, often c.1521/1524
+  857, "1478", "19 MAR 1539", # Edmund Howard; birth year approximate
+  863, "17 NOV 1493", "2 MAR 1543", # John Neville, 3rd Baron Latimer
+  864, "1508", "20 MAR 1549", # Thomas Seymour, Baron Seymour; birth year approximate
+  865, "1483", "12 NOV 1517", # Thomas Parr of Kendal; birth year approximate
+  866, "6 APR 1492", "20 AUG 1531", # Maud Green
+  868, "1537", "12 FEB 1554", # Jane Grey; birth year approximate
+  869, "1535", "12 FEB 1554", # Guildford Dudley; birth year approximate
+  871, "24 FEB 1500", "21 SEP 1558", # Charles V, Holy Roman Emperor
+  872, "24 OCT 1503", "1 MAY 1539", # Isabella of Portugal
+  873, "1208", "4 AUG 1265", # Simon de Montfort, 6th Earl of Leicester; birth year approximate
+  874, "19 JAN 1928", "12 JUL 2000", # Tomislav of Yugoslavia
+  875, "28 JUN 1929", "7 MAY 1990", # Andrej of Yugoslavia
+  876, "1190", "6 APR 1231", # William Marshal, 2nd Earl of Pembroke; birth year approximate
+  877, "17 JUL 1945", NA_character_, # Alexander, Crown Prince of Yugoslavia; living
+  878, "13 DEC 1946", NA_character_, # Maria da Gloria of Orléans-Braganza; living
+  879, "5 FEB 1980", NA_character_, # Peter of Yugoslavia; living
+  880, "15 JAN 1982", NA_character_, # Philip of Yugoslavia; living
+  881, "15 JAN 1982", NA_character_, # Alexander of Yugoslavia; living
+  883, "15 MAR 1958", NA_character_, # Nikolas / Nikola of Yugoslavia; living
+  884, "28 NOV 1959", NA_character_, # Katarina of Yugoslavia; living
+  887, "10 JAN 1933", "21 NOV 2011", # Christina of Hesse
+  889, "4 FEB 1960", NA_character_, # Christopher of Yugoslavia; living
+  890, "18 JUL 1930", "24 SEP 2005", # Kira Melita of Leiningen
+  895, "2 FEB 1907", "25 OCT 1951", # Maria Kirillovna of Russia; born in Coburg, no Old Style normalization applied
+  896, "22 NOV 1602", "6 OCT 1644", # Elizabeth of France / Elisabeth of Bourbon
   897, "9 OCT 1757", "6 NOV 1836", # Charles X
+  898, "17 NOV 1755", "16 SEP 1824", # Louis XVIII of France
+  899, "23 DEC 1953", NA_character_, # Maria Vladimirovna of Russia; living
+  900, "3 SEP 1943", NA_character_, # Franz Wilhelm of Prussia; living
   924, "25 AUG 1944", "11 JUL 1977", # Louis Ferdinand of Prussia, 1944-1977
   930, "30 JAN 1978", NA_character_, # Cornelie-Cécile of Prussia
   953, "23 SEP 1893", "16 FEB 1992", # Charles of Southesk
