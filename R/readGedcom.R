@@ -173,7 +173,7 @@ readGedcom <- function(file_path,
   if (verbose == TRUE) message("File has ", nrow(df_temp), " people")
 
   # Run post-processing if requested.
-  if (post_process) {
+  if (post_process == TRUE) {
     if (verbose == TRUE) message("Post-processing data frame")
     df_temp <- postProcessGedcom(
       df_temp = df_temp,
@@ -229,16 +229,6 @@ splitIndividuals <- function(lines, verbose = FALSE) {
   blocks
 }
 
-#' Initialize an Empty Individual Record
-#'
-#' @description Creates a named list with all GEDCOM initialized to NA_character_.
-#'
-#' @param all_var_names A character vector of variable names.
-#' @return A named list representing an empty individual record.
-#' @importFrom stats setNames
-initializeRecord <- function(all_var_names) {
-  stats::setNames(as.list(rep(NA_character_, length(all_var_names))), all_var_names)
-}
 
 #' Parse a GEDCOM Individual Block
 #'
@@ -363,7 +353,7 @@ parseIndividualBlock <- function(block, pattern_rows, all_var_names, verbose = F
 #' @param record A named list representing the individual's record.
 #' @return The updated record with parsed name information.
 parseNameLine <- function(line, record) {
-  record$name <- extract_info(line, "NAME")
+  record$name <- extractInfo(line, "NAME")
   record$name_given <- stringr::str_extract(record$name, ".*(?= /)")
   record$name_surn <- stringr::str_extract(record$name, "(?<=/).*(?=/)")
   record$name <- stringr::str_squish(stringr::str_replace(record$name, "/", " "))
@@ -385,16 +375,16 @@ parseNameLine <- function(line, record) {
 processEventLine <- function(event, block, i, record, pattern_rows) {
   n_lines <- length(block)
   if (event == "birth") {
-    if (i + 1 <= n_lines) record$birth_date <- extract_info(block[i + 1], "DATE")
-    if (i + 2 <= n_lines) record$birth_place <- extract_info(block[i + 2], "PLAC")
-    if (i + 4 <= n_lines) record$birth_lat <- extract_info(block[i + 4], "LATI")
-    if (i + 5 <= n_lines) record$birth_long <- extract_info(block[i + 5], "LONG")
+    if (i + 1 <= n_lines) record$birth_date <- extractInfo(block[i + 1], "DATE")
+    if (i + 2 <= n_lines) record$birth_place <- extractInfo(block[i + 2], "PLAC")
+    if (i + 4 <= n_lines) record$birth_lat <- extractInfo(block[i + 4], "LATI")
+    if (i + 5 <= n_lines) record$birth_long <- extractInfo(block[i + 5], "LONG")
   } else if (event == "death") {
-    if (i + 1 <= n_lines) record$death_date <- extract_info(block[i + 1], "DATE")
-    if (i + 2 <= n_lines) record$death_place <- extract_info(block[i + 2], "PLAC")
-    if (i + 3 <= n_lines) record$death_caus <- extract_info(block[i + 3], "CAUS")
-    if (i + 4 <= n_lines) record$death_lat <- extract_info(block[i + 4], "LATI")
-    if (i + 5 <= n_lines) record$death_long <- extract_info(block[i + 5], "LONG")
+    if (i + 1 <= n_lines) record$death_date <- extractInfo(block[i + 1], "DATE")
+    if (i + 2 <= n_lines) record$death_place <- extractInfo(block[i + 2], "PLAC")
+    if (i + 3 <= n_lines) record$death_caus <- extractInfo(block[i + 3], "CAUS")
+    if (i + 4 <= n_lines) record$death_lat <- extractInfo(block[i + 4], "LATI")
+    if (i + 5 <= n_lines) record$death_long <- extractInfo(block[i + 5], "LONG")
   }
   record
 }
@@ -417,7 +407,7 @@ processEventLine <- function(event, block, i, record, pattern_rows) {
 applyTagMappings <- function(line, record, pattern_rows, tag_mappings) {
   for (mapping in tag_mappings) {
     extractor <- if (is.null(mapping$extractor)) NULL else mapping$extractor
-    result <- process_tag(mapping$tag, mapping$field, pattern_rows, line, record,
+    result <- processTag(mapping$tag, mapping$field, pattern_rows, line, record,
       extractor = extractor, mode = mapping$mode
     )
     record <- result$vars
@@ -439,7 +429,7 @@ applyTagMappings <- function(line, record, pattern_rows, tag_mappings) {
 #' @param type A character string representing the type of information to extract.
 #' @return A character string with the extracted information.
 #' @keywords internal
-extract_info <- function(line, type) {
+extractInfo <- function(line, type) {
   stringr::str_squish(stringr::str_extract(line, paste0("(?<=", type, " ).+")))
 }
 
@@ -512,7 +502,7 @@ countPatternRows <- function(file) {
 #' @param vars The current list of variables to update.
 #' @return A list with updated `vars` and a `matched` flag.
 #' @keywords internal
-process_tag <- function(tag, field_name, pattern_rows, line, vars,
+processTag <- function(tag, field_name, pattern_rows, line, vars,
                         extractor = NULL, mode = "replace") {
   count_name <- paste0("num_", tolower(tag), "_rows")
   matched <- FALSE
@@ -520,7 +510,7 @@ process_tag <- function(tag, field_name, pattern_rows, line, vars,
     pattern_rows[[count_name]] > 0 &&
     grepl(paste0(" ", tag), line)) {
     value <- if (is.null(extractor)) {
-      extract_info(line, tag)
+      extractInfo(line, tag)
     } else {
       extractor(line)
     }
@@ -580,7 +570,7 @@ postProcessGedcom <- function(df_temp,
 #' @param datasource Character string indicating the data source ("gedcom" or "wiki").
 #' @return The updated data frame with parent IDs added.
 processParents <- function(df_temp, datasource) {
-  if (datasource == "gedcom") {
+  if (datasource %in% c("gedcom", "ged")) {
     required_cols <- c("FAMC", "sex", "FAMS")
   } else if (datasource == "wiki") {
     required_cols <- c("personID")
@@ -667,50 +657,7 @@ mapFAMC2parents <- function(df_temp, family_to_parents) {
   df_temp
 }
 
-#' collapse Names
-#'
-#' This function combines the `name_given` and `name_given_pieces` columns in a data frame. If both columns have non-missing values that differ, a warning is issued and the original `name_given` is retained. If one column is missing, the other is used. The same logic applies to the `name_surn` and `name_surn_pieces` columns.
-#'
-#' @inheritParams readGedcom
-#' @param df_temp A data frame containing the columns to be combined.
-#' @return A data frame with the combined columns.
-collapseNames <- function(verbose, df_temp) {
-  if (verbose == TRUE) message("Combining Duplicate Columns")
 
-  if (!all(is.na(df_temp$name_given_pieces)) || !all(is.na(df_temp$name_given))) {
-    result <- combine_columns(df_temp$name_given, df_temp$name_given_pieces)
-    df_temp$name_given <- result$combined
-    if (!result$retain_col2) df_temp$name_given_pieces <- NULL
-  }
-
-  if (!all(is.na(df_temp$name_surn_pieces)) || !all(is.na(df_temp$name_surn))) {
-    result <- combine_columns(df_temp$name_surn, df_temp$name_surn_pieces)
-    df_temp$name_surn <- result$combined
-    if (!result$retain_col2) df_temp$name_surn_pieces <- NULL
-  }
-  df_temp
-}
-
-#' Combine Columns
-#'
-#' This function combines two columns, handling conflicts and merging non-conflicting data.
-#' @param col1 The first column to combine.
-#' @param col2 The second column to combine.
-#' @return A list with the combined column and a flag indicating if the second column should be retained.
-#' @keywords internal
-# Helper function to check for conflicts and merge columns
-combine_columns <- function(col1, col2) {
-  col1_lower <- stringr::str_to_lower(col1)
-  col2_lower <- stringr::str_to_lower(col2)
-  conflicts <- !is.na(col1_lower) & !is.na(col2_lower) & col1_lower != col2_lower
-  if (any(conflicts)) {
-    warning("Columns have conflicting values. They were not merged.")
-    list(combined = col1, retain_col2 = TRUE)
-  } else {
-    combined <- ifelse(is.na(col1), col2, col1)
-    list(combined = combined, retain_col2 = FALSE)
-  }
-}
 
 # --- Exported Aliases ---
 #' @rdname readGedcom
