@@ -67,7 +67,7 @@ personID,famID,momID,dadID,name,sex,birth_date,death_date,attribute_title,twinID
 66,1,1362,229,Marina of Greece,F,1906-12-13,1968-08-27,Princess,NA
 67,1,66,35,Edward George Nicholas Windsor,M,1935-09-09,NA,Duke of Kent,NA
 68,1,NA,NA,Henry George Charles Lascelles,M,1882-09-09,1947-05-24,Viscount,NA
-69,1,1607,803,Alice Christabel Montagu-Douglas,F,1901-12-25,NA,Lady,NA
+69,1,1607,803,Alice Christabel Montagu-Douglas,F,1901-12-25,2004-10-29,Lady,NA
 70,2,172,171,Bessiewallis Warfield,F,1896-06-19,1986-04-24,NA,NA
 71,1,605,604,Charles Haakon VII,M,1872-08-03,1957-09-21,King of Norway,NA
 72,1,3,20,Henry of Prussia,M,1862-08-14,1929-04-20,Prince,NA
@@ -87,11 +87,11 @@ personID,famID,momID,dadID,name,sex,birth_date,death_date,attribute_title,twinID
 86,1,5,22,Frederick,M,1870-10-07,1873-05-29,NA,NA
 87,1,69,34,William Henry Andrew Windsor,M,1941-12-18,1972-08-28,Prince,NA
 88,1,69,34,Richard Alexander Walter Windsor,M,1944-08-26,NA,Prince,NA
-89,1,NA,NA,Birgitte of Denmark von Deurs,F,1947-06-15,NA,Duchess,NA
+89,1,NA,NA,Birgitte of Denmark von Deurs,F,1946-06-20,NA,Duchess,NA
 90,1,89,88,Alexander Patrick Gregers,M,1974-10-24,NA,Earl of Ulster,NA
-91,3,NA,NA,Earl Winfield Spencer,M,NA,NA,Jr.,NA
-92,4,NA,NA,Ernest Simpson,M,NA,NA,NA,NA
-93,1,369,368,Frances Burke Roche,F,1936-06-15,NA,Hon.,NA
+91,3,NA,NA,Earl Winfield Spencer,M,1888-09-20,1950-05-29,Jr.,NA
+92,4,NA,NA,Ernest Simpson,M,1897-05-06,1958-11-30,NA,NA
+93,1,369,368,Frances Burke Roche,F,1936-01-20,2004-06-03,Hon.,NA
 94,1,45,44,Marie Alexandrovna,F,1853-10-17,1920-10-25,Grand Duchess,NA
 95,1,94,6,Alfred,M,1874-10-15,1899-02-06,Prince,NA
 96,1,94,6,Marie of Saxe-Coburg and Gotha,F,1875-10-29,1938-07-10,Queen of Romania,NA
@@ -106,49 +106,49 @@ personID,famID,momID,dadID,name,sex,birth_date,death_date,attribute_title,twinID
 105,1,NA,NA,Alexander Duff,M,1849-11-10,1912-01-29,Duke of Fife,NA
 106,1,66,35,Alexandra Windsor,F,1936-12-25,NA,Princess,NA
 107,1,66,35,Michael Windsor,M,1942-07-04,NA,Prince,NA
-108,1,NA,NA,Angus Ogilvy,M,1928-06-15,NA,Hon.,NA
+108,1,NA,NA,Angus Ogilvy,M,1928-09-14,2004-12-26,Hon.,NA
 109,1,106,108,James Robert Bruce Ogilvy,M,1964-02-29,NA,NA,NA
 110,1,106,108,Marina Victoria Alexandra Ogilvy,F,1966-07-31,NA,NA,NA
-111,1,NA,981,Katharine Worsley,F,1933-06-15,NA,Duchess of Kent,NA
+111,1,NA,981,Katharine Worsley,F,1933-02-22,2025-09-04,Duchess of Kent,NA
 112,1,111,67,George Philip of St. Andrews Windsor,M,1962-06-26,NA,Earl,NA
 113,1,111,67,Helen Marina Lucy Windsor,F,1964-04-28,NA,Lady,NA
 114,1,111,67,Nicholas Charles Edward Windsor,M,1970-07-25,NA,Lord,NA
 115,1,65,58,William Arthur Philip Windsor,M,1982-06-21,NA,Prince,NA
 116,1,65,58,Henry Charles Albert Windsor,M,1984-09-15,NA,Prince,NA
-117,1,NA,NA,(Frederick) Christian Charles,M,1831-06-15,1917-06-15,Prince,NA
-118,1,7,117,Marie Louise,F,1872-06-15,1956-06-15,Princess,NA
-119,5,NA,NA,Aribert of Anhalt,M,1864-06-15,1933-06-15,NA,NA
+117,1,NA,NA,(Frederick) Christian Charles,M,1831-01-22,1917-10-28,Prince,NA
+118,1,7,117,Marie Louise,F,1872-08-12,1956-12-08,Princess,NA
+119,5,NA,NA,Aribert of Anhalt,M,1866-06-18,1933-12-24,NA,NA
 120,1,200,199,Louise Margaret of Prussia,F,1860-06-25,1917-03-14,Duchess,NA
 121,1,120,9,Margaret of Sweden,F,1882-01-15,1920-05-01,Crown Princess,NA
-122,1,120,9,Arthur of Connaught,M,1883-06-15,1938-06-15,Duke,NA
-123,1,120,9,Patricia,F,1886-06-15,1974-06-15,Lady Ramsay,NA
+122,1,120,9,Arthur of Connaught,M,1883-01-13,1938-09-12,Duke,NA
+123,1,120,9,Patricia,F,1886-03-17,1974-01-12,Lady Ramsay,NA
 124,1,457,456,Gustav VI Adolf,M,1882-11-11,1973-09-15,King of Sweden,NA
-125,1,15,105,Alexandra,F,1891-06-15,1959-02-26,Duchess of Fife,NA
-126,1,NA,2151,Alexander Ramsay,M,1881-06-15,1972-06-15,Admiral Sir,NA
-127,1,2486,1903,Isabella of France,F,1292-06-15,1358-08-22,NA,NA
+125,1,15,105,Alexandra,F,1891-05-17,1959-02-26,Duchess of Fife,NA
+126,1,NA,2151,Alexander Ramsay,M,1881-05-29,1972-10-08,Admiral Sir,NA
+127,1,2486,1903,Isabella of France,F,1295-06-15,1358-08-22,NA,NA
 128,6,NA,NA,Issue Unknown,M,NA,NA,NA,NA
-129,1,23,10,Charles Edward,M,1884-06-15,1954-06-15,Duke,NA
+129,1,23,10,Charles Edward,M,1884-07-19,1954-03-06,Duke,NA
 130,1,332,323,George III Hanover,M,1738-06-04,1820-01-29,King of England,NA
 131,1,2148,2147,(Sophia) Charlotte,F,1744-05-19,1818-11-17,NA,NA
-132,1,131,130,Adolphus of Cambridge Hanover,M,1774-06-15,1850-06-15,Duke,NA
+132,1,131,130,Adolphus of Cambridge Hanover,M,1774-02-24,1850-07-08,Duke,NA
 133,1,131,130,Edward Augustus Hanover,M,1767-11-02,1820-01-23,Duke of Kent,NA
-134,1,302,301,Augusta of Hesse-Cassel,F,1797-06-15,1889-06-15,Princess,NA
-135,1,134,132,Augusta Caroline,F,1822-06-15,1916-06-15,NA,NA
+134,1,302,301,Augusta of Hesse-Cassel,F,1797-07-25,1889-04-06,Princess,NA
+135,1,134,132,Augusta Caroline,F,1822-07-19,1916-12-05,NA,NA
 136,1,134,132,Mary Adelaide (Fat Mary),F,1833-11-27,1897-10-27,NA,NA
-137,1,304,303,Francis,M,1837-06-15,1900-06-15,Duke of Teck,NA
+137,1,304,303,Francis,M,1837-08-28,1900-01-21,Duke of Teck,NA
 138,1,2614,2448,Victoria Mary Louisa,F,1786-08-17,1861-03-16,NA,NA
-139,1,2614,2448,Ernest I of Saxe-Coburg-Saalfeld,M,1784-06-15,1844-01-29,Duke,NA
-140,1,NA,NA,Louise of Saxe-Coburg-Altenburg,F,1800-06-15,1831-06-15,NA,NA
+139,1,2614,2448,Ernest I of Saxe-Coburg-Saalfeld,M,1784-01-02,1844-01-29,Duke,NA
+140,1,NA,NA,Louise of Saxe-Coburg-Altenburg,F,1800-12-21,1831-08-30,NA,NA
 141,1,131,130,George IV Hanover,M,1762-08-12,1830-06-26,King of England,NA
-142,7,NA,NA,Maria Anne Fitzherbert,F,1756-06-15,1837-06-15,NA,NA
-143,1,333,1363,Caroline Amelia of Brunswick,F,1768-06-15,1821-06-15,NA,NA
+142,7,NA,NA,Maria Anne Fitzherbert,F,1756-07-26,1837-03-27,NA,NA
+143,1,333,1363,Caroline Amelia of Brunswick,F,1768-05-17,1821-08-07,NA,NA
 144,1,143,141,Charlotte Augusta Hanover,F,1796-01-07,1817-11-06,Princess,NA
-145,1,183,182,Claude George Bowes-Lyon,M,1855-06-15,1944-06-15,Earl of Strath.,NA
-146,1,208,207,Cecilia Nina Cavendish-Bentin,F,1862-06-15,1938-06-15,Countess of Strathmore and Kinghorne,NA
-147,1,101,104,Margarita Mountbatten,F,1905-06-15,1981-06-15,NA,NA
-148,1,101,104,Theodora Mountbatten,F,1906-06-15,1960-06-15,NA,NA
-149,1,45,44,Vladimir Romanov,M,1847-06-15,1909-06-15,Grand Duke,NA
-150,1,45,44,Alexis Romanov,M,1850-06-15,1908-06-15,Grand Duke,NA
+145,1,183,182,Claude George Bowes-Lyon,M,1855-03-14,1944-11-07,Earl of Strath.,NA
+146,1,208,207,Cecilia Nina Cavendish-Bentin,F,1862-09-11,1938-06-23,Countess of Strathmore and Kinghorne,NA
+147,1,101,104,Margarita Mountbatten,F,1905-04-18,1981-04-24,NA,NA
+148,1,101,104,Theodora Mountbatten,F,1906-05-30,1969-10-16,NA,NA
+149,1,45,44,Vladimir Romanov,M,1847-04-22,1909-02-17,Grand Duke,NA
+150,1,45,44,Alexis Romanov,M,1850-01-14,1908-11-27,Grand Duke,NA
 151,1,45,44,Serge Alexandrovich Romanov,M,1857-05-11,1905-02-17,Grand Duke,NA
 152,1,45,44,Paul Alexandrovich Romanov,M,1860-10-03,1919-01-28,Grand Duke,NA
 153,1,41,40,George Alexandrovich Romanov,M,1871-05-09,1899-07-10,Grand Duke,NA

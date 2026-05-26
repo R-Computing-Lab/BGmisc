@@ -111,6 +111,7 @@ date_overrides <- tribble(
   65, "1 JUL 1961", "31 AUG 1997", # Diana Frances Spencer
   66, "13 DEC 1906", "27 AUG 1968", # Marina of Greece, Gregorian/New Style; Old Style birth = 30 NOV 1906
   68, "9 SEP 1882", "24 MAY 1947", # Henry George Charles Lascelles
+  69, "25 DEC 1901", "29 OCT 2004", # Alice Christabel Montagu-Douglas-Scott, Duchess of Gloucester
   70, "19 JUN 1896", "24 APR 1986", # Bessie Wallis Warfield
   71, "3 AUG 1872", "21 SEP 1957", # Charles Haakon VII
   72, "14 AUG 1862", "20 APR 1929", # Henry of Prussia
@@ -127,6 +128,10 @@ date_overrides <- tribble(
   84, "1 NOV 1864", "18 JUL 1918", # Elizabeth (Ella)
   85, "24 MAY 1874", "16 NOV 1878", # Mary (May) of Hesse
   86, "7 OCT 1870", "29 MAY 1873", # Frederick of Hesse and by Rhine
+  89, "20 JUN 1946", NA_character_, # Birgitte of Denmark von Deurs; exact birth date, living
+  91, "20 SEP 1888", "29 MAY 1950", # Earl Winfield Spencer Jr.
+  92, "6 MAY 1897", "30 NOV 1958", # Ernest Aldrich Simpson
+  93, "20 JAN 1936", "3 JUN 2004", # Frances Burke Roche / Frances Shand Kydd
   95, "15 OCT 1874", "6 FEB 1899", # Alfred, Hereditary Prince of Saxe-Coburg and Gotha
   97, "25 NOV 1876", "2 MAR 1936", # Victoria Melita of Edinburgh
   98, "1 SEP 1878", "16 APR 1942", # Alexandra of Saxe-Coburg and Gotha
@@ -137,7 +142,32 @@ date_overrides <- tribble(
   103, "25 JUN 1900", "27 AUG 1979", # Louis Mountbatten of Burma
   104, "2 FEB 1882", "3 DEC 1944", # Andrew of Greece
   105, "10 NOV 1849", "29 JAN 1912", # Alexander Duff
+  108, "14 SEP 1928", "26 DEC 2004", # Angus Ogilvy
+  111, "22 FEB 1933", "4 SEP 2025", # Katharine Worsley, Duchess of Kent
+  117, "22 JAN 1831", "28 OCT 1917", # Frederick Christian Charles of Schleswig-Holstein
+  118, "12 AUG 1872", "8 DEC 1956", # Marie Louise of Schleswig-Holstein
+  119, "18 JUN 1866", "24 DEC 1933", # Aribert of Anhalt
+  122, "13 JAN 1883", "12 SEP 1938", # Arthur of Connaught
+  123, "17 MAR 1886", "12 JAN 1974", # Patricia of Connaught
+  125, "17 MAY 1891", "26 FEB 1959", # Alexandra, 2nd Duchess of Fife
+  126, "29 MAY 1881", "8 OCT 1972", # Alexander Ramsay
+  127, "1295", "22 AUG 1358", # Isabella of France; birth year uncertain, sources vary ca. 1292/1295/1296; death date varies by one day, 22 AUG vs 23 AUG 1358
+  129, "19 JUL 1884", "6 MAR 1954", # Charles Edward, Duke of Saxe-Coburg and Gotha
+  132, "24 FEB 1774", "8 JUL 1850", # Adolphus, Duke of Cambridge
+  134, "25 JUL 1797", "6 APR 1889", # Augusta of Hesse-Kassel
+  135, "19 JUL 1822", "5 DEC 1916", # Augusta Caroline of Cambridge
   136, "27 NOV 1833", "27 OCT 1897", # Mary Adelaide of Cambridge
+  137, "28 AUG 1837", "21 JAN 1900", # Francis, Duke of Teck
+  139, "2 JAN 1784", "29 JAN 1844", # Ernest I of Saxe-Coburg and Gotha
+  140, "21 DEC 1800", "30 AUG 1831", # Louise of Saxe-Gotha-Altenburg
+  142, "26 JUL 1756", "27 MAR 1837", # Maria Anne Fitzherbert
+  143, "17 MAY 1768", "7 AUG 1821", # Caroline Amelia of Brunswick
+  145, "14 MAR 1855", "7 NOV 1944", # Claude George Bowes-Lyon
+  146, "11 SEP 1862", "23 JUN 1938", # Cecilia Nina Cavendish-Bentinck
+  147, "18 APR 1905", "24 APR 1981", # Margarita of Greece and Denmark
+  148, "30 MAY 1906", "16 OCT 1969", # Theodora of Greece and Denmark
+  149, "22 APR 1847", "17 FEB 1909", # Vladimir Alexandrovich Romanov, Gregorian/New Style; Old Style birth = 10 APR 1847
+  150, "14 JAN 1850", "27 NOV 1908", # Alexei Alexandrovich Romanov, Gregorian/New Style; Old Style = 2 JAN 1850, 14 NOV 1908
   151, "11 MAY 1857", "17 FEB 1905", # Serge Alexandrovich Romanov
   152, "3 OCT 1860", "28 JAN 1919", # Paul Alexandrovich Romanov
   153, "9 MAY 1871", "10 JUL 1899", # George Alexandrovich Romanov
