@@ -17,33 +17,33 @@ personID,famID,momID,dadID,name,sex,birth_date,death_date,attribute_title,twinID
 16,1,12,4,Victoria Alexandra Olga,F,1868-07-06,1935-12-03,NA,NA
 17,1,12,4,Maude Charlotte Mary,F,1869-11-26,1938-11-20,Princess,NA
 18,1,12,4,John Alexander,M,1871-04-06,1871-04-07,NA,NA
-19,1,NA,NA,George Victor of Waldeck,M,1831-06-15,1889-06-15,Prince,NA
+19,1,NA,NA,George Victor of Waldeck,M,1831-01-14,1893-05-12,Prince,NA
 20,1,427,412,Frederick III,M,1831-10-18,1888-06-15,German Emperor,NA
 21,1,3,20,William II,M,1859-01-27,1941-06-04,German Emperor,NA
-22,1,358,357,Louis IV of Hesse,M,1837-06-15,1892-06-15,Grand Duke,NA
+22,1,358,357,Louis IV of Hesse,M,1837-09-12,1892-03-13,Grand Duke,NA
 23,1,1216,19,Helena Frederica of Waldeck,F,1861-02-17,1922-09-01,Princess,NA
 24,1,23,10,Alice of Athlone,F,1883-02-25,1981-01-03,Princess,NA
-25,1,348,347,Henry Maurice of Battenberg,M,1858-06-15,1896-06-15,Prince,NA
-26,1,11,25,Alexander of Carisbrooke,M,1886-06-15,1960-02-23,Marquess,NA
-27,1,11,25,Victoria Eugenie (Ena),F,1887-06-15,1969-06-15,Queen of Spain,NA
-28,1,11,25,Leopold,M,1889-06-15,1922-06-15,NA,NA
-29,1,11,25,Maurice,M,1891-06-15,1914-06-15,Prince,NA
+25,1,348,347,Henry Maurice of Battenberg,M,1858-10-05,1896-01-20,Prince,NA
+26,1,11,25,Alexander of Carisbrooke,M,1886-11-23,1960-02-23,Marquess,NA
+27,1,11,25,Victoria Eugenie (Ena),F,1887-10-24,1969-04-15,Queen of Spain,NA
+28,1,11,25,Leopold,M,1889-05-21,1922-04-23,NA,NA
+29,1,11,25,Maurice,M,1891-10-03,1914-10-27,Prince,NA
 30,1,136,137,Mary of Teck (May),F,1867-05-26,1953-03-24,Queen,NA
 31,1,30,14,Edward VIII Windsor,M,1894-06-23,1972-05-28,Duke of Windsor,NA
 32,1,30,14,George VI Windsor,M,1895-12-14,1952-02-06,King of England,NA
 33,1,30,14,Mary Windsor,F,1897-04-25,1965-03-28,Princess Royal,NA
-34,1,30,14,Henry William Frederick Windsor,M,1900-03-31,1974-06-15,Duke,NA
+34,1,30,14,Henry William Frederick Windsor,M,1900-03-31,1974-06-10,Duke,NA
 35,1,30,14,George Edward Alexander Windsor,M,1902-12-20,1942-08-25,Duke of Kent,NA
 36,1,30,14,John Charles Francis Windsor,M,1905-07-12,1919-01-18,Prince,NA
 37,1,41,40,Nicholas II Alexandrovich Romanov,M,1868-05-18,1918-07-16,Tsar of Russia,NA
-38,1,5,22,Victoria Alberta of Hesse,F,1863-06-15,1950-06-15,Princess,NA
+38,1,5,22,Victoria Alberta of Hesse,F,1863-04-05,1950-09-24,Princess,NA
 39,1,5,22,Alexandra Fedorovna (Alix),F,1872-06-06,1918-07-16,Tsarina,NA
-40,1,45,44,Alexander III Alexandrovich Romanov,M,1845-06-15,1894-11-01,Tsar of Russia,NA
+40,1,45,44,Alexander III Alexandrovich Romanov,M,1845-03-10,1894-11-01,Tsar of Russia,NA
 41,1,226,225,Dagmar (Marie) of Denmark,F,1847-11-26,1928-10-13,Tsarina,NA
-42,1,1295,1294,Nicholas I Romanov,M,1796-06-15,1855-06-15,Tsar of Russia,NA
-43,1,410,162,Charlotte of Prussia,F,1798-06-15,1860-06-15,Princess,NA
-44,1,43,42,Alexander II Nicholoevich Romanov,M,1818-06-15,1881-03-13,Tsar of Russia,NA
-45,1,350,349,Marie of Hesse-Darmstadt,F,1824-06-15,1880-06-15,NA,NA
+42,1,1295,1294,Nicholas I Romanov,M,1796-07-06,1855-03-02,Tsar of Russia,NA
+43,1,410,162,Charlotte of Prussia,F,1798-07-13,1860-11-01,Princess,NA
+44,1,43,42,Alexander II Nicholoevich Romanov,M,1818-04-29,1881-03-13,Tsar of Russia,NA
+45,1,350,349,Marie of Hesse-Darmstadt,F,1824-08-08,1880-06-03,NA,NA
 46,1,39,37,Olga Nicholovna Romanov,F,NA,1918-07-18,Grand Duchess,NA
 47,1,39,37,Tatiana Nicholovna,F,NA,1918-07-18,Grand Duchess,NA
 48,1,39,37,Maria Nicholovna Romanov,F,NA,1918-07-18,Grand Duchess,NA
@@ -64,27 +64,27 @@ personID,famID,momID,dadID,name,sex,birth_date,death_date,attribute_title,twinID
 63,1,59,62,Peter Mark Andrew Phillips,M,1977-11-15,NA,NA,NA
 64,1,59,62,Zara Anne Elizabeth Phillips,F,1981-05-15,NA,NA,NA
 65,1,93,239,Diana Frances Spencer,F,1961-07-01,1997-08-31,Lady,NA
-66,1,1362,229,Marina of Greece,F,1906-11-30,1968-06-15,Princess,NA
+66,1,1362,229,Marina of Greece,F,1906-12-13,1968-08-27,Princess,NA
 67,1,66,35,Edward George Nicholas Windsor,M,1935-09-09,NA,Duke of Kent,NA
-68,1,NA,NA,Henry George Charles Lascelles,M,1882-06-15,1947-06-15,Viscount,NA
+68,1,NA,NA,Henry George Charles Lascelles,M,1882-09-09,1947-05-24,Viscount,NA
 69,1,1607,803,Alice Christabel Montagu-Douglas,F,1901-12-25,NA,Lady,NA
-70,2,172,171,Bessiewallis Warfield,F,1896-06-15,1986-04-24,NA,NA
-71,1,605,604,Charles Haakon VII,M,1872-06-15,1957-06-15,King of Norway,NA
-72,1,3,20,Henry of Prussia,M,1862-06-15,1929-06-15,Prince,NA
-73,1,3,20,Sigismund,M,1864-06-15,1866-06-15,NA,NA
-74,1,3,20,Victoria,F,1866-06-15,1929-06-15,Princess,NA
-75,1,3,20,Waldemar,M,1868-06-15,1879-06-15,NA,NA
+70,2,172,171,Bessiewallis Warfield,F,1896-06-19,1986-04-24,NA,NA
+71,1,605,604,Charles Haakon VII,M,1872-08-03,1957-09-21,King of Norway,NA
+72,1,3,20,Henry of Prussia,M,1862-08-14,1929-04-20,Prince,NA
+73,1,3,20,Sigismund,M,1864-09-15,1866-06-18,NA,NA
+74,1,3,20,Victoria,F,1866-04-12,1929-11-13,Princess,NA
+75,1,3,20,Waldemar,M,1868-02-10,1879-03-27,NA,NA
 76,1,3,20,Sophie of Prussia,F,1870-06-14,1932-01-13,Queen of Greece,NA
-77,1,3,20,Charlotte of Saxe-Meiningen,F,1860-06-15,1919-06-15,Duchess,NA
-78,1,3,20,Margarete of Hesse,F,1872-06-15,1954-06-15,Princess,NA
-79,1,5,22,Irene of Hesse,F,1866-06-15,1953-06-15,Princess,NA
+77,1,3,20,Charlotte of Saxe-Meiningen,F,1860-07-24,1919-10-01,Duchess,NA
+78,1,3,20,Margarete of Hesse,F,1872-04-22,1954-01-22,Princess,NA
+79,1,5,22,Irene of Hesse,F,1866-07-11,1953-11-11,Princess,NA
 80,1,79,72,Waldemar,M,1889-03-20,1945-05-02,NA,NA
 81,1,79,72,Henry,M,1900-01-09,1904-02-26,NA,NA
 82,1,79,72,Sigismund of Prussia,M,1896-11-27,1978-11-14,NA,NA
-83,1,5,22,Ernest Louis of Hesse,M,1868-06-15,1937-06-15,Grand Duke,NA
-84,1,5,22,Elizabeth (Ella),F,1864-06-15,1918-07-17,Grand Duchess,NA
-85,1,5,22,Mary (May),F,1874-06-15,1878-06-15,NA,NA
-86,1,5,22,Frederick,M,1870-06-15,1873-06-15,NA,NA
+83,1,5,22,Ernest Louis of Hesse,M,1868-11-25,1937-10-09,Grand Duke,NA
+84,1,5,22,Elizabeth (Ella),F,1864-11-01,1918-07-18,Grand Duchess,NA
+85,1,5,22,Mary (May),F,1874-05-24,1878-11-16,NA,NA
+86,1,5,22,Frederick,M,1870-10-07,1873-05-29,NA,NA
 87,1,69,34,William Henry Andrew Windsor,M,1941-12-18,1972-08-28,Prince,NA
 88,1,69,34,Richard Alexander Walter Windsor,M,1944-08-26,NA,Prince,NA
 89,1,NA,NA,Birgitte of Denmark von Deurs,F,1947-06-15,NA,Duchess,NA
@@ -93,17 +93,17 @@ personID,famID,momID,dadID,name,sex,birth_date,death_date,attribute_title,twinID
 92,4,NA,NA,Ernest Simpson,M,NA,NA,NA,NA
 93,1,369,368,Frances Burke Roche,F,1936-06-15,NA,Hon.,NA
 94,1,45,44,Marie Alexandrovna,F,1853-10-17,1920-10-25,Grand Duchess,NA
-95,1,94,6,Alfred,M,1874-06-15,1899-06-15,Prince,NA
+95,1,94,6,Alfred,M,1874-10-15,1899-02-06,Prince,NA
 96,1,94,6,Marie of Saxe-Coburg and Gotha,F,1875-10-29,1938-07-10,Queen of Romania,NA
-97,1,94,6,Victoria Melita of Edinburgh,F,1876-06-15,1936-06-15,Grand Duchess,NA
-98,1,94,6,Alexandra,F,1878-06-15,1942-06-15,Princess,NA
-99,1,94,6,Beatrice,F,1884-06-15,1966-06-15,Princess,NA
-100,1,348,347,Louis of Battenberg,M,1854-06-15,1921-06-15,Prince,NA
-101,1,38,100,Alice of Battenberg,F,1885-06-15,1969-06-15,Princess,NA
-102,1,38,100,George Mountbatten,M,1892-06-15,1938-06-15,Marquess,NA
-103,1,38,100,Louis of Burma Mountbatten,M,1900-06-15,1979-08-27,Earl Mountbatten,NA
-104,1,228,227,Andrew of Greece,M,1882-06-15,1944-06-15,Prince,NA
-105,1,NA,NA,Alexander Duff,M,1849-06-15,1912-06-15,Duke of Fife,NA
+97,1,94,6,Victoria Melita of Edinburgh,F,1876-11-25,1936-03-02,Grand Duchess,NA
+98,1,94,6,Alexandra,F,1878-09-01,1942-04-16,Princess,NA
+99,1,94,6,Beatrice,F,1884-04-20,1966-07-13,Princess,NA
+100,1,348,347,Louis of Battenberg,M,1854-05-24,1921-09-11,Prince,NA
+101,1,38,100,Alice of Battenberg,F,1885-02-25,1969-12-05,Princess,NA
+102,1,38,100,George Mountbatten,M,1892-11-06,1938-04-08,Marquess,NA
+103,1,38,100,Louis of Burma Mountbatten,M,1900-06-25,1979-08-27,Earl Mountbatten,NA
+104,1,228,227,Andrew of Greece,M,1882-02-02,1944-12-03,Prince,NA
+105,1,NA,NA,Alexander Duff,M,1849-11-10,1912-01-29,Duke of Fife,NA
 106,1,66,35,Alexandra Windsor,F,1936-12-25,NA,Princess,NA
 107,1,66,35,Michael Windsor,M,1942-07-04,NA,Prince,NA
 108,1,NA,NA,Angus Ogilvy,M,1928-06-15,NA,Hon.,NA
@@ -134,7 +134,7 @@ personID,famID,momID,dadID,name,sex,birth_date,death_date,attribute_title,twinID
 133,1,131,130,Edward Augustus Hanover,M,1767-11-02,1820-01-23,Duke of Kent,NA
 134,1,302,301,Augusta of Hesse-Cassel,F,1797-06-15,1889-06-15,Princess,NA
 135,1,134,132,Augusta Caroline,F,1822-06-15,1916-06-15,NA,NA
-136,1,134,132,Mary Adelaide (Fat Mary),F,1833-06-15,1897-06-15,NA,NA
+136,1,134,132,Mary Adelaide (Fat Mary),F,1833-11-27,1897-10-27,NA,NA
 137,1,304,303,Francis,M,1837-06-15,1900-06-15,Duke of Teck,NA
 138,1,2614,2448,Victoria Mary Louisa,F,1786-08-17,1861-03-16,NA,NA
 139,1,2614,2448,Ernest I of Saxe-Coburg-Saalfeld,M,1784-06-15,1844-01-29,Duke,NA
@@ -153,7 +153,7 @@ personID,famID,momID,dadID,name,sex,birth_date,death_date,attribute_title,twinID
 152,1,45,44,Paul Alexandrovich Romanov,M,1860-10-03,1919-01-28,Grand Duke,NA
 153,1,41,40,George Alexandrovich Romanov,M,1871-05-09,1899-07-10,Grand Duke,NA
 154,1,41,40,Xenia Romanov,F,1875-06-15,1960-04-20,Grand Duchess,NA
-155,1,41,40,Michael (Mischa) Alexandrovich Romanov,M,1878-06-15,1918-07-10,Grand Duke,NA
+155,1,41,40,Michael (Mischa) Alexandrovich Romanov,M,1878-12-04,1918-06-13,Grand Duke,NA
 156,1,41,40,Olga Alexandrovna Romanov,F,1882-06-01,1960-11-24,Grand Duchess,NA
 157,1,NA,2682,Marie Pavlovna,F,1854-06-15,1920-06-15,Grand Duchess,NA
 158,1,157,149,Cyril Vladimirovitch Romanov,M,1876-06-15,1938-06-15,Grand Duke,NA
@@ -407,7 +407,7 @@ personID,famID,momID,dadID,name,sex,birth_date,death_date,attribute_title,twinID
 406,26,NA,NA,Frederick Charles of Hesse,M,1868-06-15,1940-06-15,NA,NA
 407,27,NA,NA,Victoria of Schleswig-Holstein,F,NA,NA,Princess,NA
 408,1,NA,2161,Irene Denison,F,1890-06-15,1956-07-16,Lady,NA
-409,1,682,683,Alfonso XIII,M,1886-06-15,1941-06-15,King of Spain,NA
+409,1,682,683,Alfonso XIII,M,1886-05-17,1941-02-28,King of Spain,NA
 410,1,NA,NA,Louise of Mecklenburg-Strelitz,F,1776-06-15,1810-06-15,NA,NA
 411,1,410,162,Frederick William IV,M,1795-10-15,1861-01-02,King of Prussia,NA
 412,1,410,162,William I of Germany,M,1797-03-22,1888-03-09,Emperor,NA
@@ -681,7 +681,7 @@ personID,famID,momID,dadID,name,sex,birth_date,death_date,attribute_title,twinID
 680,1,679,678,Karl Ferdinand,M,NA,NA,NA,NA
 681,1,NA,NA,Unknown,F,NA,NA,NA,NA
 682,1,681,680,Maria Cristina of Austria,F,1858-06-15,1929-06-15,Queen of Spain,NA
-683,1,1244,1245,Alfonso XII,M,1857-06-15,1885-06-15,King of Spain,NA
+683,1,1244,1245,Alfonso XII,M,1857-11-28,1885-11-25,King of Spain,NA
 684,1,NA,NA,Joseph of Austria,M,NA,NA,Archduke,NA
 685,1,595,684,Elisabeth of Austria,F,NA,NA,Archduchess,NA
 686,1,NA,NA,Ferdinand of Austria-Este,M,NA,NA,Archduke,NA
@@ -922,13 +922,13 @@ personID,famID,momID,dadID,name,sex,birth_date,death_date,attribute_title,twinID
 921,1,528,520,Friedrich Wilhelm of Prussia,M,1939-06-15,NA,Prince,NA
 922,1,528,520,Michael of Prussia,M,1939-06-15,NA,Prince,NA
 923,1,528,520,Marie-Cecile of Prussia,F,1942-06-15,NA,Princess,NA
-924,1,528,520,Louis Ferdinand of Prussia,M,1944-06-15,1977-06-15,Prince,NA
+924,1,528,520,Louis Ferdinand of Prussia,M,1944-08-25,1977-07-11,Prince,NA
 925,1,528,520,Christian Sigismund of Prussia,M,1946-06-15,NA,Prince,NA
 926,1,NA,NA,Nina zu Reventlow,F,NA,NA,Countess,NA
 927,1,926,925,Daughter,F,NA,NA,NA,NA
 928,1,NA,NA,Donata of Castell-Rudenhausen,F,NA,NA,NA,NA
 929,1,928,924,Georg Friedrich,M,1976-06-15,NA,Prince,NA
-930,1,928,924,Corneilie-Cecile,F,1978-06-15,NA,Princess,NA
+930,1,928,924,Corneilie-Cecile,F,1978-01-30,NA,Princess,NA
 931,1,NA,NA,Jutta Jorn,F,NA,NA,NA,NA
 932,1,931,922,Micaela,M,1967-06-15,NA,Prince,NA
 933,1,931,922,Nataly,F,1970-06-15,NA,Princess,NA
@@ -1195,7 +1195,7 @@ personID,famID,momID,dadID,name,sex,birth_date,death_date,attribute_title,twinID
 1194,1,1158,1193,Ludwig,M,1831-06-15,1920-06-15,NA,NA
 1195,1,1158,1193,Helene,F,1834-06-15,1858-06-15,NA,NA
 1196,1,1158,1193,Elizabeth,F,1837-06-15,1898-06-15,Empress,NA
-1197,1,1158,1193,Karl Theodor (Gackl),M,1839-06-15,1909-06-15,NA,NA
+1197,1,1158,1193,Karl Theodor (Gackl),M,1839-08-09,1909-11-30,NA,NA
 1198,1,1158,1193,Maria,F,1841-06-15,1925-06-15,NA,NA
 1199,1,1158,1193,Mathilde,F,1843-06-15,1925-06-15,NA,NA
 1200,1,1158,1193,Sophie Charlotte Auguste,F,1847-06-15,1897-06-15,NA,NA
@@ -1295,8 +1295,8 @@ personID,famID,momID,dadID,name,sex,birth_date,death_date,attribute_title,twinID
 1294,1,1299,1300,Paul I Romanov,M,1754-06-15,1801-06-15,Emperor,NA
 1295,1,2690,2689,Maria Feodorovna of Wurttemberg,F,1759-06-15,1828-06-15,NA,NA
 1296,1,1295,1294,Alexander I Romanov,M,1777-06-15,1825-06-15,Tsar of Russia,NA
-1297,1,NA,NA,Yelizaveta Alekseyevna of Baden,F,NA,NA,NA,NA
-1298,1,1297,1296,Konstantin Romanov,M,1779-04-27,1831-06-15,NA,NA
+1297,1,NA,NA,Elizabeth Alexeievna (Louise of Baden),F,1779-01-24,1826-05-16,NA,NA
+1298,1,1295,1294,Konstantin Pavlovich Romanov,M,1779-05-08,1831-06-27,NA,NA
 1299,1,2692,2691,Catherine II the Great,F,1729-05-02,1796-11-17,Empress,NA
 1300,1,1303,1419,Peter III Romanov,M,1728-06-15,1762-07-17,Emperor Russia,NA
 1301,1,1314,1309,Peter I the Great Romanov,M,1672-06-15,1725-06-15,Emperor,NA
@@ -1666,7 +1666,7 @@ personID,famID,momID,dadID,name,sex,birth_date,death_date,attribute_title,twinID
 1665,1,605,604,Thyra,F,1880-06-15,1945-06-15,NA,NA
 1666,1,605,604,Gustav,M,1887-06-15,1944-06-15,NA,NA
 1667,1,605,604,Dagmar,F,1890-06-15,1961-06-15,NA,NA
-1668,159,NA,NA,Jorgen Castenskiold,M,1893-06-15,1978-06-15,NA,NA
+1668,159,NA,NA,Jorgen Castenskiold,M,1893-11-30,1978-11-21,NA,NA
 1669,1,NA,NA,Helene of Schleswig-Holstein,F,1888-06-15,1962-06-15,NA,NA
 1670,1,1669,1664,Caroline Mathilde,F,1912-06-15,NA,NA,NA
 1671,1,607,606,Knud,M,1900-06-15,1976-06-15,Her. Prince,NA
@@ -2954,7 +2954,7 @@ personID,famID,momID,dadID,name,sex,birth_date,death_date,attribute_title,twinID
 2953,1,2955,2954,Thomas of Leicester Coke,M,1822-06-15,1902-06-15,Earl,NA
 2954,1,NA,NA,Thomas of Leicester Coke,M,1754-06-15,1842-06-15,Earl,NA
 2955,1,NA,2956,Anne Amelia Keppel,F,1803-06-16,1844-07-22,Lady,NA
-2956,1,NA,NA,William of Albemarle Keppel,M,1724-06-15,1772-06-15,Earl,NA
+2956,1,NA,NA,William Charles Keppel,M,1772-05-14,1849-10-30,Earl of Albemarle,NA
 2957,1,1392,1391,Richard,M,NA,1120-06-15,NA,NA
 2958,1,168,60,Eugenie Victoria Helena Windsor,F,1990-03-23,NA,Princess,NA
 2959,1,822,825,Ayesha Makim,F,1986-06-15,NA,NA,NA
@@ -3010,3 +3010,4 @@ personID,famID,momID,dadID,name,sex,birth_date,death_date,attribute_title,twinID
 3009,21,2996,2995,Cartland,F,NA,1911-06-15,NA,NA
 3010,21,806,2986,Glen McCorquodale,M,1939-12-31,NA,NA,NA
 3011,1,1370,873,Simon de Montfort the Younger,M,1240-04-15,1271-06-15,NA,NA
+3012,1,1297,1296,Elizabeth Alexandrovna of Russia,F,1806-11-15,1808-05-12,Grand Duchess of Russia,NA
