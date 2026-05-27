@@ -49,9 +49,10 @@
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/checkWithinRowDuplicates.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/collapseNames.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/com2links.html</loc></url>
-<url><loc>https://r-computing-lab.github.io/BGmisc/reference/combine_columns.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/combineColumns.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/comp2vech.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/computeParentAdjacency.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/condenseMatrixSlots.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/convertGrid2LongTree.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/countPatternRows.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/createGenDataFrame.html</loc></url>
@@ -78,6 +79,7 @@
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/dot-loadOrComputeParList.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/dot-mapFAMC2parents.legacy.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/dot-mapFAMS2parents.legacy.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/dot-pairDistFromAnc.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/dot-postProcessGedcom.legacy.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/dot-processParents.legacy.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/dot-process_tag.legacy.html</loc></url>
@@ -87,8 +89,8 @@
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/dropIdenticalDuplicateIDs.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/dropLink.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/efunc.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/extractInfo.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/extractMemberTable.html</loc></url>
-<url><loc>https://r-computing-lab.github.io/BGmisc/reference/extract_info.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/findBiggest.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/findFooest.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/findFounder.html</loc></url>
@@ -98,6 +100,7 @@
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/fitComponentModel.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/fitPedigreeModel.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/fuseTwins.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/getGenDist.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/getGridNeighbors.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/getWikiTreeSummary.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/hazard.html</loc></url>
@@ -122,14 +125,21 @@
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/parseNameLine.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/parseTreeRelationships.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/ped2add.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/ped2addFocal.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/ped2ce.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/ped2cn.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/ped2cnFocal.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/ped2com.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/ped2fam.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/ped2focal.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/ped2gen.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/ped2genDist.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/ped2genDistFocal.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/ped2genFocal.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/ped2graph.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/ped2maternal.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/ped2mit.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/ped2mitFocal.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/ped2paternal.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/populateParents.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/postProcessGedcom.html</loc></url>
@@ -137,8 +147,8 @@
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/prepSummarizePedigrees.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/processEventLine.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/processParents.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/processTag.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/process_one.html</loc></url>
-<url><loc>https://r-computing-lab.github.io/BGmisc/reference/process_tag.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/readGedcom.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/readWikifamilytree.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/recodeSex.html</loc></url>
@@ -150,6 +160,7 @@
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/rmvn.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/royal92.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/simulatePedigree.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/simulatePedigrees.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/sliceFamilies.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/splitIndividuals.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/standardizeColnames.html</loc></url>

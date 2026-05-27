@@ -28,6 +28,7 @@ checking that the provided matrix is symmetric.
 ## Examples
 
 ``` r
+
 vech(matrix(c(1, 0.5, 0.5, 1), nrow = 2, ncol = 2))
 #> [1] 1.0 0.5 1.0
 ```

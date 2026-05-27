@@ -22,6 +22,7 @@ as they provide us with behavior genetic data and models:
 - `OpenMx`
 
 ``` r
+
 library(BGmisc)
 library(EasyMx)
 library(OpenMx)
@@ -42,6 +43,7 @@ function is often used in conjunction with the identification process.
 In this example, we apply it to a list of matrices:
 
 ``` r
+
 comp2vech(list(
   matrix(c(1, .5, .5, 1), 2, 2),
   matrix(1, 2, 2)
@@ -62,6 +64,7 @@ parameters.
 Here’s an example using the classical twin model *with only MZ twins*:
 
 ``` r
+
 identifyComponentModel(
   A = list(matrix(1, 2, 2)),
   C = list(matrix(1, 2, 2)),
@@ -81,6 +84,7 @@ additional group so that we have sufficient information. Let us add the
 rest of the classical twin model, in this case DZ twins.
 
 ``` r
+
 identifyComponentModel(
   A = list(matrix(c(1, .5, .5, 1), 2, 2), matrix(1, 2, 2)),
   C = list(matrix(1, 2, 2), matrix(1, 2, 2)),
@@ -98,6 +102,7 @@ As you can see the model is identified, now that we’ve added another
 group. Let us confirm by fitting a model. First we prepare the data.
 
 ``` r
+
 library(dplyr)
 
 
@@ -117,6 +122,7 @@ mzData <- mzdzData %>% filter(zyg == 1)
 Let us fit the data with MZ twins by themselves.
 
 ``` r
+
 if (!requireNamespace("EasyMx", quietly = TRUE)) {
   print("Please install EasyMx to run the model fitting examples.")
 } else {
@@ -153,8 +159,8 @@ if (!requireNamespace("EasyMx", quietly = TRUE)) {
 #> AIC:      -5917.148              -3685.148                -3685.078
 #> BIC:     -10747.543              -3667.773                -3680.471
 #> To get additional fit indices, see help(mxRefModels)
-#> timestamp: 2026-04-12 00:19:59 
-#> Wall clock time: 0.1207776 secs 
+#> timestamp: 2026-05-27 03:06:35 
+#> Wall clock time: 0.06718659 secs 
 #> optimizer:  SLSQP 
 #> OpenMx version number: 2.22.11 
 #> Need help?  See help(mxSummary)
@@ -165,6 +171,7 @@ But when we add another group, so that the model is identified, the
 model now fits.
 
 ``` r
+
 if (!requireNamespace("EasyMx", quietly = TRUE)) {
   print("Please install EasyMx to run the model fitting examples.")
 } else {
@@ -201,8 +208,8 @@ if (!requireNamespace("EasyMx", quietly = TRUE)) {
 #> AIC:      -9113.092              -5499.092                -5499.048
 #> BIC:     -17811.437              -5479.794                -5492.498
 #> To get additional fit indices, see help(mxRefModels)
-#> timestamp: 2026-04-12 00:20:00 
-#> Wall clock time: 0.0496738 secs 
+#> timestamp: 2026-05-27 03:06:35 
+#> Wall clock time: 0.2071309 secs 
 #> optimizer:  SLSQP 
 #> OpenMx version number: 2.22.11 
 #> Need help?  See help(mxSummary)

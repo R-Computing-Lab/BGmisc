@@ -21,6 +21,7 @@ We begin by loading the required libraries and examining the structure
 of the built-in `ASOIAF` pedigree.
 
 ``` r
+
 library(BGmisc)
 library(tidyverse)
 library(ggpedigree)
@@ -32,6 +33,7 @@ and parent identifiers for a subset of characters drawn from the *A Song
 of Ice and Fire* canon.
 
 ``` r
+
 head(ASOIAF)
 ```
 
@@ -58,6 +60,7 @@ calculationss and visualization. We use
 to inspect the sex variable, repairing inconsistencies programmatically.
 
 ``` r
+
 df_got <- checkSex(ASOIAF,
   code_male = 1,
   code_female = 0,
@@ -93,6 +96,7 @@ this case:
   than full (dense) formats.
 
 ``` r
+
 add <- ped2com(df_got,
   isChild_method = "partialparent",
   component = "additive",
@@ -122,6 +126,7 @@ coefficients.
 To verify the matrices, we can plot their sparsity patterns:
 
 ``` r
+
 par(mfrow = c(1, 3))
 ggRelatednessMatrix(as.matrix(add),
   config = list(
@@ -139,6 +144,7 @@ ggRelatednessMatrix(as.matrix(add),
 ![](v5_ASOIAF_files/figure-html/unnamed-chunk-5-1.png)
 
 ``` r
+
 ggRelatednessMatrix(as.matrix(cn),
   config = list(
     matrix_color_palette = c("white", "lightblue", "blue"),
@@ -155,6 +161,7 @@ ggRelatednessMatrix(as.matrix(cn),
 ![](v5_ASOIAF_files/figure-html/unnamed-chunk-5-2.png)
 
 ``` r
+
 ggRelatednessMatrix(as.matrix(mt),
   config = list(
     matrix_color_palette = c("white", "lightgreen", "darkgreen"),
@@ -171,6 +178,7 @@ ggRelatednessMatrix(as.matrix(mt),
 ![](v5_ASOIAF_files/figure-html/unnamed-chunk-5-3.png)
 
 ``` r
+
 par(mfrow = c(1, 1))
 ```
 
@@ -184,6 +192,7 @@ pair of individuals, including their additive and common nuclear
 coefficients.
 
 ``` r
+
 df_links <- com2links(
   writetodisk = FALSE,
   ad_ped_matrix = add, cn_ped_matrix = cn, mit_ped_matrix = mt,
@@ -205,6 +214,7 @@ correspond to Jon Snow and Daenerys Targaryen. First, we retrieve their
 individual IDs:
 
 ``` r
+
 # Find the IDs of Jon Snow and Daenerys Targaryen
 
 jon_id <- df_got %>%
@@ -220,6 +230,7 @@ We can then filter the pairwise relatedness table to isolate the dyad of
 interest:
 
 ``` r
+
 jon_dany_row <- df_links %>%
   filter(ID1 == jon_id | ID2 == jon_id) %>%
   filter(ID1 %in% dany_id | ID2 %in% dany_id) %>% # round to nearest 4th decimal
@@ -244,6 +255,7 @@ Rhaenyra Targaryen and Damemon Targaryen, we can see how the relatedness
 coefficients vary across different characters in the dataset.
 
 ``` r
+
 rhaenyra_id <- df_got %>%
   filter(name == "Rhaenyra Targaryen") %>%
   pull(ID)
@@ -287,6 +299,7 @@ but a missing other. For those cases, we assign a placeholder ID to the
 missing parent.
 
 ``` r
+
 df_repaired <- checkParentIDs(df_got, # %>% filter(famID == 1),
   addphantoms = TRUE,
   repair = TRUE,
@@ -311,6 +324,7 @@ incomplete. Now we can check the repaired pedigree for unique IDs and
 parent-child relationships.
 
 ``` r
+
 checkIDs <- checkIDs(df_repaired, verbose = TRUE)
 ```
 
@@ -326,10 +340,12 @@ checkIDs <- checkIDs(df_repaired, verbose = TRUE)
     ## TRUE0NULL0000FALSENULLNULLNULL
 
 ``` r
+
 # checkIDs
 ```
 
 ``` r
+
 # Check for unique IDs and parent-child relationships
 checkPedigreeNetwork <- checkPedigreeNetwork(df_repaired,
   personID = "ID",
@@ -346,6 +362,7 @@ checkPedigreeNetwork <- checkPedigreeNetwork(df_repaired,
     ## No cyclic relationships detected.
 
 ``` r
+
 checkPedigreeNetwork
 ```
 
@@ -383,6 +400,7 @@ pedigrees, allowing for easy integration with other `ggplot2` functions
 relative to kinship2’s pedigree plotting functions.
 
 ``` r
+
 library(ggpedigree)
 
 df_repaired_renamed <- df_repaired %>% rename(
@@ -420,6 +438,7 @@ plt
 ![](v5_ASOIAF_files/figure-html/unnamed-chunk-14-1.png)
 
 ``` r
+
 # reduce file size for CRAN
 # if (interactive()) {
 # If running interactively, use plotly::partial_bundle

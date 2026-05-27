@@ -102,6 +102,9 @@
 - [`computeParentAdjacency()`](https://r-computing-lab.github.io/BGmisc/reference/computeParentAdjacency.md)
   : Compute Parent Adjacency Matrix with Multiple Approaches
 
+- [`condenseMatrixSlots()`](https://r-computing-lab.github.io/BGmisc/reference/condenseMatrixSlots.md)
+  : Condense Matrix Slots in an OpenMx Model
+
 - [`countPatternRows()`](https://r-computing-lab.github.io/BGmisc/reference/countPatternRows.md)
   : Count GEDCOM Pattern Rows
 
@@ -177,6 +180,9 @@
   are redirected to the first twin. This allows for correct relatedness
   calculations without diagonal or downstream artifacts.
 
+- [`getGenDist()`](https://r-computing-lab.github.io/BGmisc/reference/getGenDist.md)
+  : Compute the generational distance between two individuals
+
 - [`hazard`](https://r-computing-lab.github.io/BGmisc/reference/hazard.md)
   : Simulated pedigree with two extended families and an age-related
   hazard
@@ -216,6 +222,9 @@
   : Take a pedigree and turn it into an additive genetics relatedness
   matrix
 
+- [`ped2addFocal()`](https://r-computing-lab.github.io/BGmisc/reference/ped2addFocal.md)
+  : Add a focal-person additive relatedness column to a pedigree
+
 - [`ped2ce()`](https://r-computing-lab.github.io/BGmisc/reference/ped2ce.md)
   : Take a pedigree and turn it into an extended environmental
   relatedness matrix
@@ -224,14 +233,33 @@
   : Take a pedigree and turn it into a common nuclear environmental
   matrix
 
+- [`ped2cnFocal()`](https://r-computing-lab.github.io/BGmisc/reference/ped2cnFocal.md)
+  : Add a focal-person common nuclear relatedness column to a pedigree
+
 - [`ped2com()`](https://r-computing-lab.github.io/BGmisc/reference/ped2com.md)
   : Take a pedigree and turn it into a relatedness matrix
 
 - [`ped2fam()`](https://r-computing-lab.github.io/BGmisc/reference/ped2fam.md)
   : Segment Pedigree into Extended Families
 
+- [`ped2focal()`](https://r-computing-lab.github.io/BGmisc/reference/ped2focal.md)
+  : Compute relatedness between all individuals and a focal person
+
 - [`ped2gen()`](https://r-computing-lab.github.io/BGmisc/reference/ped2gen.md)
-  : Take a pedigree and turn it into a generation relatedness matrix
+  : Take a pedigree and turn it into a generation relatedness matrix. It
+  computes the rank of the generation matrix, which is the number of
+  generations separating two individuals
+
+- [`ped2genDist()`](https://r-computing-lab.github.io/BGmisc/reference/ped2genDist.md)
+  : Compute a full pairwise generational distance matrix
+
+- [`ped2genDistFocal()`](https://r-computing-lab.github.io/BGmisc/reference/ped2genDistFocal.md)
+  : Compute generational distances from a focal individual to all others
+
+- [`ped2genFocal()`](https://r-computing-lab.github.io/BGmisc/reference/ped2genFocal.md)
+  : Add a focal-person generation relatedness column to a pedigree. It
+  computes the rank of the generation matrix, which is the number of
+  generations separating two individuals
 
 - [`ped2graph()`](https://r-computing-lab.github.io/BGmisc/reference/ped2graph.md)
   : Turn a pedigree into a graph
@@ -241,6 +269,9 @@
 
 - [`ped2mit()`](https://r-computing-lab.github.io/BGmisc/reference/ped2mit.md)
   : Take a pedigree and turn it into a mitochondrial relatedness matrix
+
+- [`ped2mitFocal()`](https://r-computing-lab.github.io/BGmisc/reference/ped2mitFocal.md)
+  : Add a focal-person mitochondrial relatedness column to a pedigree
 
 - [`ped2paternal()`](https://r-computing-lab.github.io/BGmisc/reference/ped2paternal.md)
   : Add a paternal line ID variable to a pedigree
@@ -294,6 +325,9 @@
   based on a group of parameters: 1) k - Kids per couple; 2) G - Number
   of generations; 3) p - Proportion of males in offspring; 4) r - Mating
   rate.
+
+- [`simulatePedigrees()`](https://r-computing-lab.github.io/BGmisc/reference/simulatePedigrees.md)
+  : Simulate Multiple Pedigrees
 
 - [`sliceFamilies()`](https://r-computing-lab.github.io/BGmisc/reference/sliceFamilies.md)
   : sliceFamilies

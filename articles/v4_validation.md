@@ -29,6 +29,7 @@ We’ll begin with the Potter family dataset, cleaned and reformatted with
 [`ped2fam()`](https://r-computing-lab.github.io/BGmisc/reference/ped2fam.md):
 
 ``` r
+
 library(BGmisc)
 
 # Load our example dataset
@@ -103,6 +104,7 @@ merging family records). Then, we’ll add a complete duplicate of Dudley
 Dursley (as might happen during data entry).
 
 ``` r
+
 # Create our problematic dataset
 df_duplicates <- df
 # Sibling ID conflict
@@ -119,6 +121,7 @@ If we look at the data using standard tools, the problems aren’t
 immediately obvious:
 
 ``` r
+
 library(tidyverse)
 
 summarizeFamilies(df_duplicates,
@@ -162,6 +165,7 @@ But
 detects the problems clearly:
 
 ``` r
+
 # Identify duplicates
 result <- checkIDs(df_duplicates)
 print(result)
@@ -203,6 +207,7 @@ As we can see from this output, there are 4 non-unique IDs in the
 dataset, specifically 2, 6. Let’s take a peek at the duplicates:
 
 ``` r
+
 # Let's examine the problematic entries
 df_duplicates %>%
   filter(personID %in% result$non_unique_ids) %>%
@@ -226,6 +231,7 @@ Yep, these are definitely the duplicates.
 Some ID issues can be fixed automatically. Let’s try the repair option:
 
 ``` r
+
 df_repair <- checkIDs(df, repair = TRUE)
 
 df_repair %>%
@@ -294,6 +300,7 @@ their own ID, leading to within-row duplicates. The checkIDs function
 can also identify these errors:
 
 ``` r
+
 # Create a sample dataset with within-person duplicate parent IDs
 
 df_within <- ped2fam(potter, famID = "newFamID", personID = "personID")
@@ -348,6 +355,7 @@ the meantime, you can manually inspect and then correct these errors in
 your dataset.
 
 ``` r
+
 # Find the problematic entry
 
 df_within[df_within$momID %in% result$is_own_mother_ids, ]
@@ -384,6 +392,7 @@ coding across the dataset
 Let’s examine how it works:
 
 ``` r
+
 # Validate sex coding
 
 results <- checkSex(potter,
@@ -439,6 +448,7 @@ print(results)
 When inconsistencies are found, you can attempt automatic repair:
 
 ``` r
+
 # Repair sex coding
 df_fix <- checkSex(potter,
   code_male = 1,

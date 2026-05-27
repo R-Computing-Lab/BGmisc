@@ -24,6 +24,7 @@ simulatePedigree(
   code_male = "M",
   code_female = "F",
   fam_shift = 1L,
+  remap_ids = FALSE,
   beta = FALSE
 )
 
@@ -107,6 +108,11 @@ SimPed(...)
   An integer to shift the person ID. Default is 1L. This is useful when
   simulating multiple pedigrees to avoid ID conflicts.
 
+- remap_ids:
+
+  logical. If TRUE, remap all ID columns to sequential integers (1, 2,
+  3, ...) in row order.
+
 - beta:
 
   logical or character. Controls which algorithm version to use:
@@ -165,20 +171,20 @@ df_ped <- simulatePedigree(
   marR = .7
 )
 summary(df_ped)
-#>      fam                  ID             gen            dadID      
-#>  Length:57          Min.   :10101   Min.   :1.000   Min.   :10102  
-#>  Class :character   1st Qu.:10306   1st Qu.:3.000   1st Qu.:10204  
-#>  Mode  :character   Median :10320   Median :3.000   Median :10307  
-#>                     Mean   :10342   Mean   :3.298   Mean   :10263  
-#>                     3rd Qu.:10416   3rd Qu.:4.000   3rd Qu.:10311  
-#>                     Max.   :10432   Max.   :4.000   Max.   :10320  
-#>                                                     NA's   :13     
-#>      momID            spID           sex           
-#>  Min.   :10101   Min.   :10101   Length:57         
-#>  1st Qu.:10202   1st Qu.:10205   Class :character  
-#>  Median :10306   Median :10306   Mode  :character  
-#>  Mean   :10263   Mean   :10266                     
-#>  3rd Qu.:10316   3rd Qu.:10311                     
-#>  Max.   :10318   Max.   :10320                     
-#>  NA's   :13      NA's   :33                        
+#>         fam           ID             gen            dadID           momID      
+#>  Length   :57   Min.   :10101   Min.   :1.000   Min.   :10102   Min.   :10101  
+#>  N.unique : 1   1st Qu.:10306   1st Qu.:3.000   1st Qu.:10204   1st Qu.:10202  
+#>  N.blank  : 0   Median :10320   Median :3.000   Median :10307   Median :10306  
+#>  Min.nchar: 5   Mean   :10342   Mean   :3.298   Mean   :10263   Mean   :10263  
+#>  Max.nchar: 5   3rd Qu.:10416   3rd Qu.:4.000   3rd Qu.:10311   3rd Qu.:10316  
+#>                 Max.   :10432   Max.   :4.000   Max.   :10320   Max.   :10318  
+#>                                                 NAs    :13      NAs    :13     
+#>     spouseID            sex    
+#>  Min.   :10101   Length   :57  
+#>  1st Qu.:10205   N.unique : 2  
+#>  Median :10306   N.blank  : 0  
+#>  Mean   :10266   Min.nchar: 1  
+#>  3rd Qu.:10311   Max.nchar: 1  
+#>  Max.   :10320                 
+#>  NAs    :33                    
 ```

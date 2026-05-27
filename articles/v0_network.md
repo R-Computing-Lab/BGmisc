@@ -20,6 +20,7 @@ structure inherent in pedigrees:
 ### Loading Required Libraries and Data
 
 ``` r
+
 library(BGmisc)
 data(potter)
 ```
@@ -44,6 +45,7 @@ we’ve renamed the family ID variable to `oldfam` to avoid confusion with
 the new family ID variable we will create.
 
 ``` r
+
 df_potter <- potter
 names(df_potter)[names(df_potter) == "famID"] <- "oldfam"
 
@@ -67,6 +69,7 @@ you can use the
 function.
 
 ``` r
+
 add <- ped2add(potter, sparse = FALSE)
 ```
 
@@ -75,6 +78,7 @@ It returns a square, symmetric matrix that has as many rows and columns
 as there are IDs.
 
 ``` r
+
 add[1:7, 1:7]
 #>     1    2    3    4   5     6     7
 #> 1 1.0 0.50 0.00 0.00 0.0 0.500 0.000
@@ -92,6 +96,7 @@ shares 0.5 of their nuclear DNA with person 6 (Dudley Dursley), shares
 0.5 of their nuclear DNA with person 2 (Marjorie Dursley).
 
 ``` r
+
 table(add)
 #> add
 #>      0 0.0625  0.125   0.25    0.5      1 
@@ -104,6 +109,7 @@ more efficient to compute this relatedness separately for each extended
 family.
 
 ``` r
+
 add_list <- lapply(
   unique(potter$famID),
   function(d) {
@@ -125,6 +131,7 @@ Here we calculate the mitochondrial relatedness between all pairs of
 individuals in the `potter` dataset.
 
 ``` r
+
 mit <- ped2mit(potter, sparse = FALSE)
 mit[1:7, 1:7]
 #>   1 2 3 4 5 6 7
@@ -150,6 +157,7 @@ Here we calculate the relatedness between all pairs of individuals in
 the `potter` dataset through sharing both parents.
 
 ``` r
+
 commonNuclear <- ped2cn(potter, sparse = FALSE)
 commonNuclear[1:7, 1:7]
 #>   1 2 3 4 5 6 7
@@ -173,6 +181,7 @@ Here we calculate the relatedness between all pairs of individuals in
 the `potter` dataset through sharing an extended family.
 
 ``` r
+
 extendedFamilyEnvironment <- ped2ce(potter, sparse = FALSE)
 extendedFamilyEnvironment[1:7, 1:7]
 #>      [,1] [,2] [,3] [,4] [,5] [,6] [,7]
@@ -219,6 +228,7 @@ However, this subset does not plot the relationship between spouses
 there are not children to connect the two individuals together yet.
 
 ``` r
+
 subset_rows <- c(1:5, 31:36)
 subset_potter <- potter[subset_rows, ]
 ```

@@ -8,7 +8,13 @@ only those parameters.
 ## Usage
 
 ``` r
-buildPedigreeMx(model_name, vars, group_models, ci = FALSE)
+buildPedigreeMx(
+  model_name,
+  vars,
+  group_models,
+  ci = FALSE,
+  condenseMatrixSlots = TRUE
+)
 ```
 
 ## Arguments
@@ -29,6 +35,11 @@ buildPedigreeMx(model_name, vars, group_models, ci = FALSE)
 
   Logical. If TRUE, include confidence interval computations for the
   variance components. Default is FALSE
+
+- condenseMatrixSlots:
+
+  Logical. If TRUE, use the mxCondenseMatrixSlots wrapper to optimize
+  memory usage for large matrices. Default is TRUE.
 
 ## Value
 

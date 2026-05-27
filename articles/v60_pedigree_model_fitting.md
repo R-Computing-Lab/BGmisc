@@ -36,6 +36,7 @@ complex models using squirrel data from the Kluane Red Squirrel Project.
 ### Prerequisites
 
 ``` r
+
 library(BGmisc)
 
 has_openmx <- requireNamespace("OpenMx", quietly = TRUE)
@@ -94,7 +95,7 @@ etc. to the `ped2*` functions.
 Each matrix returned by
 [`ped2add()`](https://r-computing-lab.github.io/BGmisc/reference/ped2add.md),
 [`ped2cn()`](https://r-computing-lab.github.io/BGmisc/reference/ped2cn.md),
-etc. is square ($n \times n$), symmetric, and **labeled**: `rownames`
+etc. is square ($`n \times n`$), symmetric, and **labeled**: `rownames`
 and `colnames` are the individual IDs. These labels are the link between
 phenotype data and the model.
 
@@ -128,6 +129,7 @@ is written out explicitly — no helper functions, no loops — so you can
 see exactly what happens.
 
 ``` r
+
 data(hazard)
 
 # Two families: famID 1 and famID 2
@@ -140,6 +142,7 @@ table(hazard$famID)
 ### Step 1: Subset to one family and inspect
 
 ``` r
+
 fam1 <- subset(hazard, famID == 1)
 
 # What does the pedigree look like?
@@ -160,6 +163,7 @@ own measure.
 ### Step 2: Compute relatedness matrices
 
 ``` r
+
 # Additive genetic relatedness (proportion of genome shared IBD)
 add_mat1 <- ped2add(fam1,
   sparse = FALSE,
@@ -198,6 +202,7 @@ The model needs a **one-row matrix** with one column per individual, in
 the same order as the relatedness matrix rows.
 
 ``` r
+
 # Individual IDs in the order the matrices use
 id_order1 <- rownames(add_mat1)
 
@@ -235,6 +240,7 @@ Individuals without a phenotype must be removed from the matrices —
 their rows and columns are dropped.
 
 ``` r
+
 # Use the original (non-make.names) IDs to index the matrix
 raw_obs_ids1 <- id_order1[observed1]
 
@@ -257,6 +263,7 @@ Before fitting, verify that the variance components you want to estimate
 are statistically identifiable given this pedigree’s structure.
 
 ``` r
+
 id_check1 <- identifyComponentModel(
   A  = add_mat1_obs,
   Cn = cn_mat1_obs,
@@ -275,6 +282,7 @@ id_check1
 ### Step 6: Build and fit the model
 
 ``` r
+
 # Starting values for variance components
 start_vars <- list(
   ad2 = 0.3, # additive genetic
@@ -328,8 +336,8 @@ summary(fitted1)
 #> AIC:      -9.611741               26.38826                14.388259
 #> BIC:      16.388259               16.38826                 5.991051
 #> To get additional fit indices, see help(mxRefModels)
-#> timestamp: 2026-04-12 00:20:43 
-#> Wall clock time: 0.07112837 secs 
+#> timestamp: 2026-05-27 03:07:19 
+#> Wall clock time: 0.07052422 secs 
 #> optimizer:  SLSQP 
 #> OpenMx version number: 2.22.11 
 #> Need help?  See help(mxSummary)
@@ -338,6 +346,7 @@ summary(fitted1)
 The estimated variance components are in `fitted1$ModelOne`:
 
 ``` r
+
 cat("Additive genetic (Vad):", fitted1$ModelOne$Vad$values, "\n")
 #> Additive genetic (Vad): 1e-10
 cat("Common nuclear  (Vcn):", fitted1$ModelOne$Vcn$values, "\n")
@@ -364,6 +373,7 @@ what repeats and what changes.
 ### Family 2: matrices
 
 ``` r
+
 fam2 <- subset(hazard, famID == 2)
 
 add_mat2 <- ped2add(fam2,
@@ -394,6 +404,7 @@ dim(add_mat2)
 ### Family 2: phenotype data
 
 ``` r
+
 id_order2 <- rownames(add_mat2)
 
 pheno_vals2 <- fam2$DA2[match(id_order2, as.character(fam2$ID))]
@@ -416,6 +427,7 @@ cat("Family 2 observed:", sum(observed2), "of", length(id_order2), "\n")
 ### Family 2: subset matrices
 
 ``` r
+
 add_mat2_obs <- add_mat2[raw_obs_ids2, raw_obs_ids2]
 cn_mat2_obs <- cn_mat2[raw_obs_ids2, raw_obs_ids2]
 mt_mat2_obs <- mt_mat2[raw_obs_ids2, raw_obs_ids2]
@@ -428,6 +440,7 @@ rownames(mt_mat2_obs) <- colnames(mt_mat2_obs) <- obs_ids2
 ### Check identification across both families
 
 ``` r
+
 n_total <- nrow(add_mat1_obs) + nrow(add_mat2_obs)
 
 id_check2 <- identifyComponentModel(
@@ -455,6 +468,7 @@ combines their likelihoods. The variance component parameters (`Vad`,
 `Vcn`, `Ver`) are estimated jointly.
 
 ``` r
+
 # Family 2 group model (identical call structure to family 1)
 group2 <- buildOneFamilyGroup(
   group_name  = "family2",
@@ -497,14 +511,15 @@ summary(fitted2)
 #> AIC:     -56.248897               29.75110                 14.75110
 #> BIC:      -6.588489               23.21684                 10.79231
 #> To get additional fit indices, see help(mxRefModels)
-#> timestamp: 2026-04-12 00:20:44 
-#> Wall clock time: 0.2272558 secs 
+#> timestamp: 2026-05-27 03:07:20 
+#> Wall clock time: 0.1415408 secs 
 #> optimizer:  SLSQP 
 #> OpenMx version number: 2.22.11 
 #> Need help?  See help(mxSummary)
 ```
 
 ``` r
+
 cat("Additive genetic (Vad):", fitted2$ModelOne$Vad$values, "\n")
 #> Additive genetic (Vad): 1e-10
 cat("Common nuclear  (Vcn):", fitted2$ModelOne$Vcn$values, "\n")
@@ -529,6 +544,7 @@ have known true parameter values to check our estimates against.
 ### Simulate pedigrees and data
 
 ``` r
+
 library(mvtnorm)
 set.seed(2024)
 
@@ -582,6 +598,7 @@ cat("Family sizes:", vapply(add_list, nrow, integer(1)), "\n")
 ### Build and fit the multi-family model
 
 ``` r
+
 group_models <- lapply(seq_len(n_families), function(i) {
   buildOneFamilyGroup(
     group_name  = paste0("ped", i),
@@ -606,6 +623,7 @@ fitted_multi <- mxRun(multi_model)
 ### Compare estimates to true values
 
 ``` r
+
 data.frame(
   Component = c(
     "Additive genetic (Vad)",
@@ -644,13 +662,14 @@ wraps the build and fit steps together, and uses
 robust optimization:
 
 ``` r
+
 fitted_easy <- fitPedigreeModel(
   model_name   = "EasyFit",
   vars         = start_vars,
   group_models = group_models,
   tryhard      = TRUE
 )
-#> Beginning initial fit attemptFit attempt 0, fit=1006.98143981446, new current best! (was 1012.79944855467)                                                                             
+#> Beginning initial fit attemptFit attempt 0, fit=1006.98143981446, new current best! (was 1012.79944855467)Final run, for Hessian and/or standard errors and/or confidence intervals                                                                             
 #> 
 #>  Solution found!  Final fit=1006.9814 (started at 1012.7994)  (1 attempt(s): 1 valid, 0 errors)
 summary(fitted_easy)
@@ -664,6 +683,14 @@ summary(fitted_easy)
 #> 4    ver ModelOne.Ver   1      1  3.139616e-01 0.09377585    1e-10       
 #> 5 meanLI       ped1.M   1 X10101 -6.637007e-03 0.08930530                
 #> 
+#> confidence intervals:
+#>           lbound     estimate   ubound note
+#> vad 0.2755861767 5.559858e-01       NA  !!!
+#> vcn 0.0605578266 1.658246e-01       NA  !!!
+#> vmt 0.0000000001 1.000004e-10       NA  !!!
+#> ver           NA 3.139616e-01 0.498803  !!!
+#>   To investigate missing CIs, run summary() again, with verbose=T, to see CI details. 
+#> 
 #> Model Statistics: 
 #>                |  Parameters  |  Degrees of Freedom  |  Fit (-2lnL units)
 #>        Model:              5                    370              1006.981
@@ -676,8 +703,8 @@ summary(fitted_easy)
 #> AIC:     266.981440               1016.981                 1023.648
 #> BIC:       5.002865               1020.522                 1005.257
 #> To get additional fit indices, see help(mxRefModels)
-#> timestamp: 2026-04-12 00:20:46 
-#> Wall clock time: 0.4641953 secs 
+#> timestamp: 2026-05-27 03:07:24 
+#> Wall clock time: 1.61849 secs 
 #> optimizer:  SLSQP 
 #> OpenMx version number: 2.22.11 
 #> Need help?  See help(mxSummary)
@@ -689,12 +716,14 @@ summary(fitted_easy)
 
 The model estimated above is defined by:
 
-$$V = \sigma_{a}^{2}\mathbf{A} + \sigma_{cn}^{2}\mathbf{C}_{n} + \sigma_{e}^{2}\mathbf{I}$$
+``` math
+V = \sigma^2_a \mathbf{A} + \sigma^2_{cn} \mathbf{C}_n + \sigma^2_e \mathbf{I}
+```
 
-where $\mathbf{A}$ is the additive genetic relatedness matrix,
-$\mathbf{C}_{n}$ is the common nuclear environment matrix, $\mathbf{I}$
-is the identity matrix (unique environment), and the $\sigma^{2}$ terms
-are the variance components estimated by the model.
+where $`\mathbf{A}`$ is the additive genetic relatedness matrix,
+$`\mathbf{C}_n`$ is the common nuclear environment matrix,
+$`\mathbf{I}`$ is the identity matrix (unique environment), and the
+$`\sigma^2`$ terms are the variance components estimated by the model.
 
 This is an extension of the classical twin model to arbitrary pedigree
 structures. Additional components can be added by passing `Extmat`
@@ -709,11 +738,11 @@ for background on identification.
 
 ## Summary
 
-| Part              | Data                     | Key point                                                                                                                    |
-|-------------------|--------------------------|------------------------------------------------------------------------------------------------------------------------------|
-| 1 — Single family | `hazard`, family 1       | Full pipeline, one group model                                                                                               |
-| 2 — Two families  | `hazard`, families 1 & 2 | Same steps twice; [`buildPedigreeMx()`](https://r-computing-lab.github.io/BGmisc/reference/buildPedigreeMx.md) combines them |
-| 3 — Many families | Simulated                | Loop over families; verify parameter recovery                                                                                |
+| Part | Data | Key point |
+|----|----|----|
+| 1 — Single family | `hazard`, family 1 | Full pipeline, one group model |
+| 2 — Two families | `hazard`, families 1 & 2 | Same steps twice; [`buildPedigreeMx()`](https://r-computing-lab.github.io/BGmisc/reference/buildPedigreeMx.md) combines them |
+| 3 — Many families | Simulated | Loop over families; verify parameter recovery |
 
 The helper functions
 ([`buildOneFamilyGroup()`](https://r-computing-lab.github.io/BGmisc/reference/buildOneFamilyGroup.md),

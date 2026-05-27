@@ -16,7 +16,7 @@ collapseNames(verbose, df_temp)
 
 - verbose:
 
-  Logical. If TRUE, print progress messages.
+  Logical. If \`TRUE\`, print progress messages.
 
 - df_temp:
 

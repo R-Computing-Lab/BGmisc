@@ -12,14 +12,16 @@ fitPedigreeModel(
     0.6),
   data = NULL,
   group_models = NULL,
-  tryhard = TRUE,
-  intervals = TRUE,
   Addmat = NULL,
   Nucmat = NULL,
   Extmat = NULL,
   Mtdmat = NULL,
   Amimat = NULL,
-  Dmgmat = NULL
+  Dmgmat = NULL,
+  tryhard = TRUE,
+  intervals = TRUE,
+  extraTries = 10,
+  condenseMatrixSlots = TRUE
 )
 ```
 
@@ -47,6 +49,36 @@ fitPedigreeModel(
   If NULL, they are generated from `data` using the provided relatedness
   matrices.
 
+- Addmat:
+
+  Additive genetic relatedness matrix (from
+  [`ped2add`](https://r-computing-lab.github.io/BGmisc/reference/ped2add.md)).
+
+- Nucmat:
+
+  Nuclear family shared environment relatedness matrix (from
+  [`ped2cn`](https://r-computing-lab.github.io/BGmisc/reference/ped2cn.md)).
+
+- Extmat:
+
+  Common extended family environment relatedness matrix. When non-NULL,
+  a Vce term scaled by this matrix is added to the covariance. If a
+  non-matrix value (e.g. `TRUE`) is supplied, a unit matrix (all members
+  share equally) is created automatically.
+
+- Mtdmat:
+
+  Mitochondrial genetic relatedness matrix (from
+  [`ped2mit`](https://r-computing-lab.github.io/BGmisc/reference/ped2mit.md)).
+
+- Amimat:
+
+  Additive by mitochondrial interaction relatedness matrix.
+
+- Dmgmat:
+
+  Dominance genetic relatedness matrix.
+
 - tryhard:
 
   Logical. If TRUE (default), use `mxTryHard` for robust optimization;
@@ -57,30 +89,15 @@ fitPedigreeModel(
   Logical. If TRUE (default), compute confidence intervals for the
   parameters using `mxSE` and `mxCI`.
 
-- Addmat:
+- extraTries:
 
-  Additive genetic relatedness matrix. Required when `group_models` is
-  NULL.
+  Numeric. The number of extra optimization attempts to make when
+  `tryhard` is TRUE. Default is 10.
 
-- Nucmat:
+- condenseMatrixSlots:
 
-  Common nuclear environment relatedness matrix. Optional.
-
-- Extmat:
-
-  Common extended environment relatedness matrix. Optional.
-
-- Mtdmat:
-
-  Mitochondrial relatedness matrix. Optional.
-
-- Amimat:
-
-  Additive-by-mitochondrial interaction matrix. Optional.
-
-- Dmgmat:
-
-  Dominance genetic relatedness matrix. Optional.
+  Logical. If TRUE, use the mxCondenseMatrixSlots wrapper to optimize
+  memory usage for large matrices. Default is TRUE.
 
 ## Value
 

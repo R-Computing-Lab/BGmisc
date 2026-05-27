@@ -15,6 +15,7 @@ sliceFamilies(
   chunk_size = 2e+07,
   max_lines = 1e+13,
   addRel_ceiling = 1.5,
+  mtdna = TRUE,
   input_file = NULL,
   folder_prefix = "data",
   progress_csv = "progress.csv",
@@ -57,6 +58,11 @@ sliceFamilies(
 - addRel_ceiling:
 
   Numeric. Maximum relatedness value to bin to. Default is 1.5
+
+- mtdna:
+
+  Logical. Whether to separate bins by mitochondrial relatedness
+  (mitRel) value. Default is TRUE
 
 - input_file:
 

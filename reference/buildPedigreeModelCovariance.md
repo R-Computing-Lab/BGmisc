@@ -15,7 +15,8 @@ buildPedigreeModelCovariance(
   Vce = TRUE,
   Vmt = TRUE,
   Vam = FALSE,
-  Ver = TRUE
+  Ver = TRUE,
+  lbound = 1e-10
 )
 ```
 
@@ -62,6 +63,11 @@ buildPedigreeModelCovariance(
 
   Logical. Include unique environmental variance component. Default is
   TRUE.
+
+- lbound:
+
+  Numeric. A lower bound for the variance components to ensure they
+  remain positive during optimization. Default is 1e-10
 
 ## Value
 

@@ -1,6 +1,8 @@
-# Take a pedigree and turn it into a generation relatedness matrix
+# Take a pedigree and turn it into a generation relatedness matrix. It computes the rank of the generation matrix, which is the number of generations separating two individuals
 
-Take a pedigree and turn it into a generation relatedness matrix
+Take a pedigree and turn it into a generation relatedness matrix. It
+computes the rank of the generation matrix, which is the number of
+generations separating two individuals
 
 ## Usage
 

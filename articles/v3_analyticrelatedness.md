@@ -34,22 +34,25 @@ in real data.
 
 ## Relatedness Coefficient
 
-The relatedness coefficient $r$ indexes the proportion of alleles shared
-identically by descent (IBD) between two individuals. This value ranges
-from 0 (no shared alleles by descent) to 1 (a perfect genetic match,
-which occurs when comparing an individual to themselves, their identical
-twin, or their clone). Values can be interpreted in the context of
-standard relationships: e.g., full siblings are expected to have
-$r = 0.5$, half siblings $r = 0.25$, and first cousins $r = 0.125$.
+The relatedness coefficient $`r`$ indexes the proportion of alleles
+shared identically by descent (IBD) between two individuals. This value
+ranges from 0 (no shared alleles by descent) to 1 (a perfect genetic
+match, which occurs when comparing an individual to themselves, their
+identical twin, or their clone). Values can be interpreted in the
+context of standard relationships: e.g., full siblings are expected to
+have $`r = 0.5`$, half siblings $`r = 0.25`$, and first cousins
+$`r = 0.125`$.
 
 Wright’s (1922) classic formulation computes 𝑟 by summing across shared
 ancestry paths:
 
-$$r_{bc} = \sum\left( \frac{1}{2} \right)^{n + n\prime + 1}\left( 1 + f_{a} \right)$$
+``` math
+r_{bc} = \sum \left(\frac{1}{2}\right)^{n+n'+1} (1+f_a)
+```
 
-Here, $n$ and $n\prime$ are the number of generations from each
-descendant to a common ancestor $a$, and $f_{a}$ is the inbreeding
-coefficient of $a$, assumed to be zero unless specified otherwise.
+Here, $`n`$ and $`n'`$ are the number of generations from each
+descendant to a common ancestor $`a`$, and $`f_a`$ is the inbreeding
+coefficient of $`a`$, assumed to be zero unless specified otherwise.
 
 The function `calculateRelatedness` computes the relatedness coefficient
 based on the number of generations back to common ancestors, whether the
@@ -58,6 +61,7 @@ used to calculate relatedness for various family structures, including
 full siblings, half siblings, and cousins.
 
 ``` r
+
 library(BGmisc)
 # Example usage:
 # For full siblings, the relatedness coefficient is expected to be 0.5:
@@ -83,11 +87,17 @@ would be consistent with that correlation under a fixed ACE model
 
 The `inferRelatedness` function inverts the equation:
 
-$$\text{obsR} = r \cdot a^{2} + \text{sharedC} \cdot c^{2}$$
+``` math
+\text{obsR} = r \cdot a^2 + \text{sharedC} \cdot c^2
+ 
+```
 
 to solve for:
 
-$$r = \frac{\text{obsR} - \text{sharedC} \cdot c^{2}}{a^{2}}$$
+``` math
+ r = \frac{\text{obsR} - \text{sharedC} \cdot c^2}{a^2}
+ 
+```
 
 where: - `obsR` is the observed phenotypic correlation between two
 individuals or groups. - `aceA` and `aceC` represent the proportions of
@@ -98,6 +108,7 @@ environmental variance applies to this pair (e.g., 1 for siblings raised
 together, 0 for siblings raised apart).
 
 ``` r
+
 # Example usage:
 # Infer the relatedness coefficient:
 inferRelatedness(obsR = 0.5, aceA = 0.9, aceC = 0, sharedC = 0)
@@ -112,6 +123,7 @@ that would be required to produce the observed similarity under these
 assumptions.
 
 ``` r
+
 # Now assume shared environment is fully shared:
 inferRelatedness(obsR = 0.5, aceA = 0.45, aceC = 0.45, sharedC = 1)
 #> [1] 0.1111111
@@ -155,6 +167,7 @@ We begin with the `hazard` dataset. First, we examine behavior under
 complete pedigree data.
 
 ``` r
+
 library(BGmisc)
 library(ggpedigree)
 data(hazard)
@@ -182,6 +195,7 @@ classic and partial parent methods. Because the pedigree is complete, we
 expect no differences in the resulting matrices.
 
 ``` r
+
 ped_add_partial_complete <- ped2com(df,
   isChild_method = "partialparent",
   component = "additive",
@@ -201,6 +215,7 @@ should be identical.
 This can be confirmed visually and numerically.
 
 ``` r
+
 library(ggpedigree)
 ggRelatednessMatrix(as.matrix(ped_add_classic_complete),
   config =
@@ -213,6 +228,7 @@ ggRelatednessMatrix(as.matrix(ped_add_classic_complete),
 ![](v3_analyticrelatedness_files/figure-html/unnamed-chunk-7-1.png)
 
 ``` r
+
 
 ggRelatednessMatrix(as.matrix(ped_add_partial_complete),
   config =
@@ -228,6 +244,7 @@ To verify this, we subtract one matrix from the other and calculate
 RMSE. The difference should be numerically zero. Indeed, it is 0.
 
 ``` r
+
 library(corrplot)
 #> corrplot 0.95 loaded
 corrplot((as.matrix(ped_add_classic_complete) - as.matrix(ped_add_partial_complete)),
@@ -246,10 +263,12 @@ To observe how the two methods diverge when data are incomplete, we
 remove one parent—starting with the mother of individual 4.
 
 ``` r
+
 df$momID[df$ID == 4] <- NA
 ```
 
 ``` r
+
 ped_add_partial_mom <- ped_add_partial <- ped2com(df,
   isChild_method = "partialparent",
   component = "additive",
@@ -273,6 +292,7 @@ The resulting additive matrices reflect this difference. The RMSE
 between the two matrices is 0.
 
 ``` r
+
 corrplot(as.matrix(ped_add_classic),
   method = "color", type = "lower", col.lim = c(0, 1),
   is.corr = FALSE, title = "Classic (mother removed)",
@@ -285,6 +305,7 @@ corrplot(as.matrix(ped_add_classic),
 ![](v3_analyticrelatedness_files/figure-html/unnamed-chunk-11-1.png)
 
 ``` r
+
 corrplot(as.matrix(ped_add_partial),
   method = "color", type = "lower", col.lim = c(0, 1),
   is.corr = FALSE, title = "Partial (mother removed)",
@@ -299,6 +320,7 @@ corrplot(as.matrix(ped_add_partial),
 We quantify the overall matrix difference:
 
 ``` r
+
 sqrt(mean((as.matrix(ped_add_classic) - as.matrix(ped_add_partial))^2))
 #> [1] 0
 ```
@@ -308,6 +330,7 @@ This evaluates how much each method deviates from the correct additive
 structure.
 
 ``` r
+
 corrplot(as.matrix(ped_add_classic_complete) - as.matrix(ped_add_classic),
   method = "color", type = "lower", col.lim = c(0, 1),
   is.corr = FALSE,
@@ -324,6 +347,7 @@ corrplot(as.matrix(ped_add_classic_complete) - as.matrix(ped_add_classic),
 
 ``` r
 
+
 sqrt(mean((ped_add_classic_complete - ped_add_classic)^2))
 #> [1] 0
 ```
@@ -332,6 +356,7 @@ The RMSE between the true additive component and the classic method is
 0.
 
 ``` r
+
 corrplot(as.matrix(ped_add_classic_complete - ped_add_partial),
   method = "color", type = "lower", col.lim = c(0, 1),
   is.corr = FALSE,
@@ -346,6 +371,7 @@ corrplot(as.matrix(ped_add_classic_complete - ped_add_partial),
 ![](v3_analyticrelatedness_files/figure-html/unnamed-chunk-14-1.png)
 
 ``` r
+
 
 sqrt(mean((ped_add_classic_complete - ped_add_partial)^2))
 #> [1] 0
@@ -364,6 +390,7 @@ We now repeat the same process, this time removing the father of
 individual 4.
 
 ``` r
+
 data(hazard)
 
 df <- hazard # this is the data that we will use for the example
@@ -389,6 +416,7 @@ As we can see, the two matrices are different. The RMSE between the two
 matrices is 0.009811.
 
 ``` r
+
 corrplot(as.matrix(ped_add_classic_dad),
   method = "color", type = "lower", col.lim = c(0, 1),
   is.corr = FALSE, title = "Classic (father removed)",
@@ -401,6 +429,7 @@ corrplot(as.matrix(ped_add_classic_dad),
 ![](v3_analyticrelatedness_files/figure-html/unnamed-chunk-16-1.png)
 
 ``` r
+
 
 corrplot(as.matrix(ped_add_partial_dad),
   method = "color", type = "lower", col.lim = c(0, 1),
@@ -416,6 +445,7 @@ corrplot(as.matrix(ped_add_partial_dad),
 Again, we compare to the true matrix from the complete pedigree:
 
 ``` r
+
 corrplot(as.matrix(ped_add_classic_complete - ped_add_classic),
   method = "color", type = "lower", col.lim = c(0, 1),
   is.corr = FALSE,
@@ -429,11 +459,13 @@ corrplot(as.matrix(ped_add_classic_complete - ped_add_classic),
 
 ``` r
 
+
 sqrt(mean((ped_add_classic_complete - ped_add_classic)^2))
 #> [1] 0.02991371
 ```
 
 ``` r
+
 corrplot(as.matrix(ped_add_classic_complete - ped_add_partial),
   method = "color", type = "lower", col.lim = c(0, 1),
   is.corr = FALSE,
@@ -446,6 +478,7 @@ corrplot(as.matrix(ped_add_classic_complete - ped_add_partial),
 ![](v3_analyticrelatedness_files/figure-html/unnamed-chunk-18-1.png)
 
 ``` r
+
 
 sqrt(mean((ped_add_classic_complete - ped_add_partial)^2))
 #> [1] 0.02825904
@@ -461,6 +494,7 @@ pedigrees, we use the `inbreeding` dataset. Each family in this dataset
 is analyzed independently.
 
 ``` r
+
 data("inbreeding")
 
 df <- inbreeding
@@ -484,6 +518,7 @@ to quantify which method more accurately reconstructs the original
 relatedness structure when parental data are partially missing.
 
 ``` r
+
 inbreeding_list <- list()
 results <- data.frame(
   famIDs = famIDs,
@@ -503,6 +538,7 @@ The loop below performs this procedure for all families in the dataset
 and stores both the RMSEs and the maximum relatedness values.
 
 ``` r
+
 for (i in seq_len(famIDs)) {
   # make three versions to filter down
   df_fam_dad <- df_fam_mom <- df_fam <- df[df$famID == famIDs[i], ]
@@ -592,6 +628,7 @@ the dataset.
 ![](v3_analyticrelatedness_files/figure-html/unnamed-chunk-22-1.png)
 
 ``` r
+
 # pull the first family from the list
 fam1 <- inbreeding_list[[1]]
 
@@ -608,6 +645,7 @@ corrplot(as.matrix(fam1$ped_add_classic_complete),
 
 ``` r
 
+
 corrplot(as.matrix(fam1$ped_add_classic_mom),
   method = "color", type = "lower", col.lim = c(0, 1),
   is.corr = FALSE, title = "Classic - Mom Missing",
@@ -620,6 +658,7 @@ corrplot(as.matrix(fam1$ped_add_classic_mom),
 ![](v3_analyticrelatedness_files/figure-html/unnamed-chunk-23-2.png)
 
 ``` r
+
 
 corrplot(as.matrix(fam1$ped_add_partial_mom),
   method = "color", type = "lower", col.lim = c(0, 1),
@@ -634,6 +673,7 @@ corrplot(as.matrix(fam1$ped_add_partial_mom),
 
 ``` r
 
+
 corrplot(as.matrix(fam1$ped_add_classic_dad),
   method = "color", type = "lower", col.lim = c(0, 1),
   is.corr = FALSE, title = "Classic - Dad Missing",
@@ -646,6 +686,7 @@ corrplot(as.matrix(fam1$ped_add_classic_dad),
 ![](v3_analyticrelatedness_files/figure-html/unnamed-chunk-23-4.png)
 
 ``` r
+
 
 corrplot(as.matrix(fam1$ped_add_partial_dad),
   method = "color", type = "lower", col.lim = c(0, 1),
@@ -661,6 +702,7 @@ corrplot(as.matrix(fam1$ped_add_partial_dad),
 To visualize the differences from the true matrix:
 
 ``` r
+
 corrplot(as.matrix(fam1$ped_add_classic_complete - fam1$ped_add_classic_mom),
   method = "color", type = "lower", col.lim = c(0, 1),
   is.corr = FALSE, title = "Classic Mom Diff from Complete",
@@ -673,6 +715,7 @@ corrplot(as.matrix(fam1$ped_add_classic_complete - fam1$ped_add_classic_mom),
 ![](v3_analyticrelatedness_files/figure-html/unnamed-chunk-24-1.png)
 
 ``` r
+
 
 corrplot(as.matrix(fam1$ped_add_classic_complete - fam1$ped_add_partial_mom),
   method = "color", type = "lower", col.lim = c(0, 1),
@@ -687,6 +730,7 @@ corrplot(as.matrix(fam1$ped_add_classic_complete - fam1$ped_add_partial_mom),
 
 ``` r
 
+
 corrplot(as.matrix(fam1$ped_add_classic_complete - fam1$ped_add_classic_dad),
   method = "color", type = "lower", col.lim = c(0, 1),
   is.corr = FALSE, title = "Classic Dad Diff from Complete",
@@ -699,6 +743,7 @@ corrplot(as.matrix(fam1$ped_add_classic_complete - fam1$ped_add_classic_dad),
 ![](v3_analyticrelatedness_files/figure-html/unnamed-chunk-24-3.png)
 
 ``` r
+
 
 corrplot(as.matrix(fam1$ped_add_classic_complete - fam1$ped_add_partial_dad),
   method = "color", type = "lower", col.lim = c(0, 1),
@@ -729,6 +774,7 @@ A positive value means that the partial method had lower RMSE (i.e.,
 better accuracy) than the classic method:
 
 ``` r
+
 results <- as.data.frame(results)
 
 results$RMSE_diff_dad <- results$RMSE_classic_dad - results$RMSE_partial_dad
@@ -738,6 +784,7 @@ results$RMSE_diff_mom <- results$RMSE_classic_mom - results$RMSE_partial_mom
 We can then summarize the pattern across families:
 
 ``` r
+
 summary(dplyr::select(results, RMSE_diff_mom, RMSE_diff_dad))
 #>  RMSE_diff_mom      RMSE_diff_dad     
 #>  Min.   :0.002127   Min.   :0.002127  
@@ -746,7 +793,7 @@ summary(dplyr::select(results, RMSE_diff_mom, RMSE_diff_dad))
 #>  Mean   :0.002127   Mean   :0.002127  
 #>  3rd Qu.:0.002127   3rd Qu.:0.002127  
 #>  Max.   :0.002127   Max.   :0.002127  
-#>  NA's   :7          NA's   :7
+#>  NAs    :7          NAs    :7
 ```
 
 In all families, both `RMSE_diff_mom` and `RMSE_diff_dad` are
@@ -757,6 +804,7 @@ missing parent is a mother or a father.
 To verify this directly:
 
 ``` r
+
 mean(results$RMSE_diff_mom > 0, na.rm = TRUE)
 #> [1] 1
 mean(results$RMSE_diff_dad > 0, na.rm = TRUE)
@@ -769,6 +817,7 @@ pedigree data are incomplete, the partial parent method more faithfully
 reconstructs the full-data relatedness matrix.
 
 ``` r
+
 results |>
   as.data.frame() |>
   dplyr::select(
@@ -783,7 +832,7 @@ results |>
 #>  Mean   :0.05634   Mean   :0.05634   Mean   :0.05846   Mean   :0.05846  
 #>  3rd Qu.:0.05634   3rd Qu.:0.05634   3rd Qu.:0.05846   3rd Qu.:0.05846  
 #>  Max.   :0.05634   Max.   :0.05634   Max.   :0.05846   Max.   :0.05846  
-#>  NA's   :7         NA's   :7         NA's   :7         NA's   :7
+#>  NAs    :7         NAs    :7         NAs    :7         NAs    :7
 ```
 
 This summary provides an overview of the RMSE values for each method

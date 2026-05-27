@@ -21,8 +21,7 @@
 
 CRAN release: 2026-03-13
 
-### CRAN submission
-
+- CRAN submission
 - Add OpenMx pedigree model builders and docs
 - Added vignette for OpenMx pedigree model builders
 - Add option for MZ twins in the additive genetic matrix
@@ -51,8 +50,7 @@ CRAN release: 2026-01-11
 
 ## BGmisc 1.5.1
 
-### CRAN submission
-
+- CRAN submission
 - partially refactored summarizePedigree to be more modular
 - added compression control to ped2com
 - Minor copy editing
@@ -61,8 +59,7 @@ CRAN release: 2026-01-11
 
 CRAN release: 2025-07-19
 
-### CRAN submission
-
+- CRAN submission
 - Removed ASOIAF dataset from BGmisc, now in ggpedigree
 - Enhancing potter family tree
 - updated tests to handle the transition of ASOIAF data to ggpedigree
@@ -101,7 +98,7 @@ CRAN release: 2025-06-10
 - Added twinIDs for potter and asoiaf pedigrees
 - Added twinID to simulatePedigree function, and extended to include MZ,
   DZ, and SS twins.
-- Added a few more tests for simulatePedigree
+- Added additional tests for simulatePedigree
 - Added function to easily add new person to a pedigree
 - Updated ASOIAF pedigree to reduce missing parents
 - Added a few more tests for simulatePedigree helpers

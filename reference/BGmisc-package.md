@@ -33,6 +33,9 @@ Useful links:
 
 Authors:
 
+- S. Mason Garrison <garrissm@wfu.edu>
+  ([ORCID](https://orcid.org/0000-0002-4804-6003))
+
 - Michael D. Hunter ([ORCID](https://orcid.org/0000-0002-3651-6709))
 
 - Xuanyu Lyu ([ORCID](https://orcid.org/0000-0002-2841-5529))

@@ -15,7 +15,8 @@ buildFamilyGroups(
   Mtdmat = NULL,
   Amimat = NULL,
   Dmgmat = NULL,
-  prefix = "fam"
+  prefix = "fam",
+  condenseMatrixSlots = TRUE
 )
 ```
 
@@ -33,19 +34,25 @@ buildFamilyGroups(
 
 - Addmat:
 
-  Additive genetic relatedness matrix.
+  Additive genetic relatedness matrix (from
+  [`ped2add`](https://r-computing-lab.github.io/BGmisc/reference/ped2add.md)).
 
 - Nucmat:
 
-  Nuclear family shared environment relatedness matrix.
+  Nuclear family shared environment relatedness matrix (from
+  [`ped2cn`](https://r-computing-lab.github.io/BGmisc/reference/ped2cn.md)).
 
 - Extmat:
 
-  Extended family shared environment relatedness matrix.
+  Common extended family environment relatedness matrix. When non-NULL,
+  a Vce term scaled by this matrix is added to the covariance. If a
+  non-matrix value (e.g. `TRUE`) is supplied, a unit matrix (all members
+  share equally) is created automatically.
 
 - Mtdmat:
 
-  Mitochondrial genetic relatedness matrix.
+  Mitochondrial genetic relatedness matrix (from
+  [`ped2mit`](https://r-computing-lab.github.io/BGmisc/reference/ped2mit.md)).
 
 - Amimat:
 
@@ -58,6 +65,11 @@ buildFamilyGroups(
 - prefix:
 
   A prefix for naming the family groups. Default is "fam".
+
+- condenseMatrixSlots:
+
+  Logical. If TRUE, use the mxCondenseMatrixSlots wrapper to optimize
+  memory usage for large matrices. Default is TRUE.
 
 ## Value
 

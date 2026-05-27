@@ -19,6 +19,7 @@ we analyze is lifetime reproductive success (LRS), which is a count of
 the number of offspring that survive to a certain age.
 
 ``` r
+
 library(ggpedigree) # for pedigree data)
 library(tidyverse)
 data("redsquirrels_full")
@@ -59,6 +60,7 @@ phenotyped individuals, which leaves us with a reduced number of
 families to include in the analysis.
 
 ``` r
+
 minim_family_size <- 10
 
 ped_krsp_subset <- ped_krsp |>
@@ -77,6 +79,7 @@ family. We pre-allocate lists to store these matrices and data for each
 family, which will be used to build the OpenMx models.
 
 ``` r
+
 # Pre-allocate storage
 add_list <- vector("list", length(n_families))
 cn_list <- vector("list", length(n_families))
@@ -92,6 +95,7 @@ These starting values can be adjusted based on the specific dataset and
 trait being analyzed.
 
 ``` r
+
 # Starting values for variance components
 start_vars <- list(
   ad2 = 0.1, # additive genetic
@@ -124,6 +128,7 @@ This allows us to compare the models and assess the contribution of each
 variance component to the trait of interest (LRS) in these squirrels.
 
 ``` r
+
 for (i in seq_len(n_families)) {
   ped_i <- subset(ped_krsp_subset, famID == id_families[i])
   phenotypic_ids <- ped_i$ID[!is.na(ped_i$lrs)]
@@ -160,6 +165,7 @@ function is used to combine these group models into a single multigroup
 model that can be fitted in OpenMx.
 
 ``` r
+
 group_models_mace <- lapply(seq_len(n_families), function(i) {
   buildOneFamilyGroup(
     group_name  = paste0("ped", i),
@@ -202,6 +208,7 @@ resulting models can then be fitted in OpenMx to estimate the variance
 components for each family and compare the ACE, MACE, and CE models.
 
 ``` r
+
 multi_model_mace <- buildPedigreeMx(
   model_name = "MultiPedigreeModel",
   vars = start_vars,
@@ -251,6 +258,7 @@ environmental contributions to the phenotype of interest (LRS) in these
 squirrels.
 
 ``` r
+
 summary(fitted_multi_mace)
 #> Summary of MultiPedigreeModel 
 #>  
@@ -305,6 +313,7 @@ total_var_mace <- sum(
 ```
 
 ``` r
+
 cat("Additive genetic (Vad):", fitted_multi_mace$ModelOne$Vad$values / total_var_mace, "\n")
 #> Additive genetic (Vad): 7.454725e-12
 cat("Common nuclear  (Vcn):", fitted_multi_mace$ModelOne$Vcn$values / total_var_mace, "\n")
@@ -335,7 +344,6 @@ mitochondrial component changes our estimates of heritability and
 environmental contributions to LRS in these squirrels.
 
 ``` r
-
 
 summary(fitted_multi_ace)
 #> Summary of MultiPedigreeModel 
@@ -377,7 +385,7 @@ summary(fitted_multi_ace, verbose = T)$CI
 #> vcn     NA 4.114450e+00        NA  !!!
 #> ver     NA 9.299892e+00        NA  !!!
 
-#summary(fitted_multi_ace)$CI
+# summary(fitted_multi_ace)$CI
 
 
 total_var_ace <- sum(
@@ -398,6 +406,7 @@ We can compare these estimates to those from the MACE model to assess
 the contribution of mitochondrial inheritance to LRS in these squirrels.
 
 ``` r
+
 cat("Additive genetic (Vad):", fitted_multi_ace$ModelOne$Vad$values / total_var_ace, "\n")
 #> Additive genetic (Vad): 7.455119e-12
 cat("Common nuclear  (Vcn):", fitted_multi_ace$ModelOne$Vcn$values / total_var_ace, "\n")
@@ -470,7 +479,7 @@ these squirrels.
 
 cat("Common nuclear  (Vcn):", fitted_multi_ce$ModelOne$Vcn$values / total_var_ce, "\n")
 #> Common nuclear  (Vcn): 0.3067201
-cat("Unique environ. (Ver):", fitted_multi_ce$ModelOne$Ver$values/ total_var_ce, "\n")
+cat("Unique environ. (Ver):", fitted_multi_ce$ModelOne$Ver$values / total_var_ce, "\n")
 #> Unique environ. (Ver): 0.6932799
 ```
 
@@ -490,6 +499,7 @@ inherited component (which could be due to mitochondria or maternal
 effects) explained a significant portion of the variance in LRS,.
 
 ``` r
+
 mxCompare(fitted_multi_mace, fitted_multi_ace)
 #>                 base         comparison ep minus2LL   df      AIC        diffLL
 #> 1 MultiPedigreeModel               <NA>  5 14465.02 2670 14475.02            NA
