@@ -18,8 +18,8 @@
   for (i in (lastComputed + 1):config$nr) {
     x <- ped[i, , drop = FALSE]
     # Handle parentage according to the 'component' specified
-    if (component %in% c("generation", "additive")) {
-      # Code for 'generation' and 'additive' components
+    if (component %in% c("generation", "additive", "distance")) {
+      # Code for 'generation', 'additive', and 'distance' components
       # Checks if is mom of ID or is dad of ID
       xID <- as.numeric(x["ID"])
       sMom <- (xID == ped$momID)
@@ -86,7 +86,7 @@
   dad_index <- match(ped$dadID, ped$ID, nomatch = 0)
 
   for (i in (lastComputed + 1):config$nr) {
-    if (component %in% c("generation", "additive")) {
+    if (component %in% c("generation", "additive", "distance")) {
       sMom <- (mom_index == i)
       sDad <- (dad_index == i)
       val <- sMom | sDad
@@ -147,7 +147,7 @@
   ped$momID <- as.numeric(factor(ped$momID, levels = uniID))
   ped$dadID <- as.numeric(factor(ped$dadID, levels = uniID))
 
-  if (component %in% c("generation", "additive")) {
+  if (component %in% c("generation", "additive", "distance")) {
     mIDs <- stats::na.omit(data.frame(rID = ped$ID, cID = ped$momID))
     dIDs <- stats::na.omit(data.frame(rID = ped$ID, cID = ped$dadID))
     iss <- c(mIDs$rID, dIDs$rID)

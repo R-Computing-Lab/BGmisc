@@ -126,9 +126,8 @@ test_that("simulated pedigree generates expected data structure when sexR is imb
     expect_equal(max(results$gen), Ngen, tolerance = strict_tolerance)
 
     # expect there to be parents in each for all generations except the first one
-    filter_parents <- results %>%
-      group_by(gen) %>%
-      summarize(num_parents = sum(!is.na(dadID), na.rm = TRUE) + sum(!is.na(momID), na.rm = TRUE))
+    filter_parents <- dplyr::group_by(results, gen) %>%
+      dplyr::summarize(num_parents = sum(!is.na(dadID), na.rm = TRUE) + sum(!is.na(momID), na.rm = TRUE))
 
     expect_true(all(filter_parents$num_parents[filter_parents$gen > 1] > 0), info = paste0("Beta option: ", beta))
     expect_true(all(filter_parents$num_parents[filter_parents$gen == 1] == 0), info = paste0("Beta option: ", beta))
@@ -199,9 +198,8 @@ test_that("simulated pedigree generates expected data structure but supply var n
     expect_lt(sex_mean_male, sex_mean_female)
 
     # expect there to be parents in each for all generations except the first one
-    filter_parents <- results %>%
-      group_by(gen) %>%
-      summarize(num_parents = sum(!is.na(dadID), na.rm = TRUE) + sum(!is.na(momID), na.rm = TRUE))
+    filter_parents <- dplyr::group_by(results, gen) %>%
+      dplyr::summarize(num_parents = sum(!is.na(dadID), na.rm = TRUE) + sum(!is.na(momID), na.rm = TRUE))
 
     expect_true(all(filter_parents$num_parents[filter_parents$gen > 1] > 0), info = paste0("Beta option: ", beta))
     expect_true(all(filter_parents$num_parents[filter_parents$gen == 1] == 0), info = paste0("Beta option: ", beta))
@@ -288,4 +286,65 @@ test_that("simulatePedigree accepts string aliases for beta parameter", {
     simulatePedigree(kpc = kpc, Ngen = Ngen, sexR = sexR, marR = marR, beta = "indexed"),
     "not yet implemented"
   )
+})
+
+test_that("simulatePedigrees returns combined data frame for multiple families", {
+  set.seed(5)
+  n_fam <- 3
+  results <- simulatePedigrees(n_fam = n_fam, kpc = 3, Ngen = 4, marR = 0.6)
+
+  # Should return a data frame
+  expect_s3_class(results, "data.frame")
+
+  # Should have exactly n_fam unique family IDs
+  fam_ids <- unique(results$fam)
+  expect_setequal(fam_ids, paste0("fam", seq_len(n_fam)))
+
+  # All person IDs should be unique across families
+  expect_equal(length(unique(results$ID)), nrow(results))
+
+  # Should have standard pedigree columns
+  expect_true(all(c("fam", "ID", "gen", "dadID", "momID", "spouseID", "sex") %in% colnames(results)))
+})
+
+test_that("simulatePedigrees with n_fam = 1 matches simulatePedigree structure", {
+  set.seed(42)
+  result_multi <- simulatePedigrees(n_fam = 1, kpc = 3, Ngen = 4, marR = 0.6)
+
+  set.seed(42)
+  result_single <- simulatePedigree(kpc = 3, Ngen = 4, marR = 0.6, fam_shift = 1L)
+
+  # Both should have the same number of rows and columns
+  expect_equal(nrow(result_multi), nrow(result_single))
+  expect_equal(ncol(result_multi), ncol(result_single))
+})
+
+test_that("simulatePedigrees returns sequential IDs starting at 1", {
+  set.seed(5)
+  results <- simulatePedigrees(n_fam = 3, kpc = 3, Ngen = 4, marR = 0.6)
+
+  # Person IDs should be close to 1:nrow(results) spouse might change this but they should still be sequential and unique
+  expect_equal(sort(results$ID), seq_len(nrow(results)))
+
+  # All parent/spouse references should be within the ID range (or NA)
+  valid_ids <- seq_len(nrow(results))
+  expect_true(all(is.na(results$momID) | results$momID %in% valid_ids))
+  expect_true(all(is.na(results$dadID) | results$dadID %in% valid_ids))
+  expect_true(all(is.na(results$spouseID) | results$spouseID %in% valid_ids))
+})
+
+test_that("simulatePedigrees works with beta = TRUE", {
+  set.seed(5)
+  n_fam <- 2
+  results <- simulatePedigrees(n_fam = n_fam, kpc = 3, Ngen = 4, marR = 0.6, beta = TRUE)
+
+  expect_s3_class(results, "data.frame")
+  expect_equal(length(unique(results$fam)), n_fam)
+  expect_equal(length(unique(results$ID)), nrow(results))
+})
+
+test_that("simulatePedigrees validates n_fam input", {
+  expect_error(simulatePedigrees(n_fam = 0), "'n_fam' must be a positive integer")
+  expect_error(simulatePedigrees(n_fam = -1), "'n_fam' must be a positive integer")
+  expect_error(simulatePedigrees(n_fam = NA), "'n_fam' must be a positive integer")
 })

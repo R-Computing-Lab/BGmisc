@@ -4,7 +4,13 @@
 \alias{buildPedigreeMx}
 \title{Build Pedigree mxModel}
 \usage{
-buildPedigreeMx(model_name, vars, group_models, ci = FALSE)
+buildPedigreeMx(
+  model_name,
+  vars,
+  group_models,
+  ci = FALSE,
+  condenseMatrixSlots = TRUE
+)
 }
 \arguments{
 \item{model_name}{Name of the overall pedigree model.}
@@ -14,6 +20,8 @@ buildPedigreeMx(model_name, vars, group_models, ci = FALSE)
 \item{group_models}{A list of OpenMx models for each family group.}
 
 \item{ci}{Logical. If TRUE, include confidence interval computations for the variance components. Default is FALSE}
+
+\item{condenseMatrixSlots}{Logical. If TRUE, use the mxCondenseMatrixSlots wrapper to optimize memory usage for large matrices. Default is TRUE.}
 }
 \value{
 An OpenMx pedigree model combining variance components and family groups.

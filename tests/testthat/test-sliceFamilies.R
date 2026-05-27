@@ -288,6 +288,37 @@ test_that(".write_bin_data creates file only when matching data exists", {
 
   files_after <- list.files("bin_test", pattern = "\\.csv$")
   expect_equal(length(files_after), 1) # still only 1 file
+
+  # Write mitRel=0 bin that matches addRel ~0.5 - should create a new file
+  BGmisc:::.write_bin_data(test_dt,
+    range_min = 0.45, range_max = 0.55, mit_val = 0,
+    data_directory = "bin_test", verbose = FALSE
+  )
+  files_final <- list.files("bin_test", pattern = "\\.csv$")
+  expect_equal(length(files_final), 2) # now we should have 2 files
+  expect_all_true(files_final %in% c("df_mt0_r0.45-r0.55.csv", "df_mt1_r0.45-r0.55.csv"))
+
+  BGmisc:::.write_bin_data(test_dt,
+    range_min = 0.45, range_max = 0.55, mit_val = NULL,
+    data_directory = "bin_test", verbose = FALSE
+  )
+  files_final_final <- list.files("bin_test", pattern = "\\.csv$")
+  expect_equal(length(files_final_final), 3) # now we should have 3 files
+  expect_all_true(files_final_final %in% c("df_r0.45-r0.55.csv", "df_mt0_r0.45-r0.55.csv", "df_mt1_r0.45-r0.55.csv"))
+
+  written1 <- data.table::fread(file.path("bin_test", "df_r0.45-r0.55.csv"))
+  written2 <- data.table::fread(file.path("bin_test", "df_mt0_r0.45-r0.55.csv"))
+  written3 <- data.table::fread(file.path("bin_test", "df_mt1_r0.45-r0.55.csv"))
+  expect_equal(nrow(written1), 2)
+  expect_equal(nrow(written2), 1)
+  expect_equal(nrow(written3), 1)
+
+  expect_all_true(written1$V1 %in% c(written2$V1, written3$V1))
+  expect_all_true(written2$V1 %in% written1$V1)
+  expect_all_true(written3$V1 %in% written1$V1)
+  expect_false(any(written2$V1 %in% written3$V1)) # mitRel=0 vs mitRel=1 should not overlap
+  expect_false(any(written3$V1 %in% written2$V1))
+  expect_false(any(written1$V1 %in% c(4, 5, 6))) # ID1=2,3 should not be in the 0.45-0.55 bin
 })
 
 test_that("sliceFamilies uses file.path correctly for output paths (no trailing slash needed)", {
@@ -302,6 +333,7 @@ test_that("sliceFamilies uses file.path correctly for output paths (no trailing 
     biggest = TRUE,
     chunk_size = 100,
     max_lines = 100,
+    mtdna = FALSE,
     input_file = "input.csv",
     data_directory = "pathtest/output", # no trailing slash
     progress_csv = "path_progress.csv",
@@ -315,6 +347,6 @@ test_that("sliceFamilies uses file.path correctly for output paths (no trailing 
   expect_gt(length(files), 0)
 
   # No files should be created at the parent level with mangled names
-  parent_files <- list.files("pathtest", pattern = "^df_mt")
+  parent_files <- list.files("pathtest", pattern = "^df_")
   expect_equal(length(parent_files), 0)
 })

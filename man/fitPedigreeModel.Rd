@@ -10,14 +10,16 @@ fitPedigreeModel(
     0.6),
   data = NULL,
   group_models = NULL,
-  tryhard = TRUE,
-  intervals = TRUE,
   Addmat = NULL,
   Nucmat = NULL,
   Extmat = NULL,
   Mtdmat = NULL,
   Amimat = NULL,
-  Dmgmat = NULL
+  Dmgmat = NULL,
+  tryhard = TRUE,
+  intervals = TRUE,
+  extraTries = 10,
+  condenseMatrixSlots = TRUE
 )
 }
 \arguments{
@@ -32,22 +34,29 @@ and columns correspond to individuals. Only used when \code{group_models} is NUL
 (from \code{\link{buildOneFamilyGroup}}). If NULL, they are generated from \code{data}
 using the provided relatedness matrices.}
 
+\item{Addmat}{Additive genetic relatedness matrix (from \code{\link{ped2add}}).}
+
+\item{Nucmat}{Nuclear family shared environment relatedness matrix (from \code{\link{ped2cn}}).}
+
+\item{Extmat}{Common extended family environment relatedness matrix. When non-NULL,
+a Vce term scaled by this matrix is added to the covariance. If a non-matrix
+value (e.g. \code{TRUE}) is supplied, a unit matrix (all members share equally)
+is created automatically.}
+
+\item{Mtdmat}{Mitochondrial genetic relatedness matrix (from \code{\link{ped2mit}}).}
+
+\item{Amimat}{Additive by mitochondrial interaction relatedness matrix.}
+
+\item{Dmgmat}{Dominance genetic relatedness matrix.}
+
 \item{tryhard}{Logical. If TRUE (default), use \code{mxTryHard} for robust optimization;
 if FALSE, use \code{mxRun}.}
 
 \item{intervals}{Logical. If TRUE (default), compute confidence intervals for the parameters using \code{mxSE} and \code{mxCI}.}
 
-\item{Addmat}{Additive genetic relatedness matrix. Required when \code{group_models} is NULL.}
+\item{extraTries}{Numeric. The number of extra optimization attempts to make when \code{tryhard} is TRUE. Default is 10.}
 
-\item{Nucmat}{Common nuclear environment relatedness matrix. Optional.}
-
-\item{Extmat}{Common extended environment relatedness matrix. Optional.}
-
-\item{Mtdmat}{Mitochondrial relatedness matrix. Optional.}
-
-\item{Amimat}{Additive-by-mitochondrial interaction matrix. Optional.}
-
-\item{Dmgmat}{Dominance genetic relatedness matrix. Optional.}
+\item{condenseMatrixSlots}{Logical. If TRUE, use the mxCondenseMatrixSlots wrapper to optimize memory usage for large matrices. Default is TRUE.}
 }
 \value{
 A fitted OpenMx model.

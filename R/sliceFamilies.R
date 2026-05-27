@@ -18,6 +18,7 @@
 #' @param data_directory Directory where output files will be saved. If NULL, it is constructed based on `outcome_name` and `folder_prefix`.
 #' @param verbose Logical; whether to print progress messages (default FALSE)
 #' @param addRel_ceiling Numeric. Maximum relatedness value to bin to. Default is 1.5
+#' @param mtdna Logical. Whether to separate bins by mitochondrial relatedness (mitRel) value. Default is TRUE
 #' @param error_handling Logical. Should more aggressive error handling be attempted? Default is FALSE
 #' @param max_retries Integer. Number of retry attempts with halved chunk size when error_handling is TRUE. Default is 2
 #' @return NULL. Writes CSV files to disk and updates progress logs.
@@ -31,6 +32,7 @@ sliceFamilies <- function(
   chunk_size = 2e7,
   max_lines = 1e13,
   addRel_ceiling = 1.5,
+  mtdna = TRUE,
   input_file = NULL,
   folder_prefix = "data",
   progress_csv = "progress.csv",
@@ -42,6 +44,11 @@ sliceFamilies <- function(
   file_column_names = c("ID1", "ID2", "addRel", "mitRel", "cnuRel")
 ) {
   bin_width_string <- as.character(bin_width * 100)
+
+  #  if(mtdna ==FALSE & "mitRel" %in% file_column_names) {
+  #   file_column_names <- file_column_names[!file_column_names %in% "mitRel"]
+  #  message("mtdna is set to FALSE, so 'mitRel' column will be ignored in processing.")
+  # }
 
   if (is.null(data_directory)) {
     # Set the data directory based on the outcome name and folder prefix
@@ -167,24 +174,43 @@ sliceFamilies <- function(
       range_max <- addRel_maxs[i]
       range_min <- addRel_mins[i]
 
-      # filter the data for the current bin
-      .write_bin_data(
-        data = dataRelatedPair_merge,
-        range_min = range_min,
-        range_max = range_max,
-        mit_val = 1,
-        data_directory = data_directory,
-        verbose = verbose
-      )
-      .write_bin_data(
-        data = dataRelatedPair_merge,
-        range_min = range_min,
-        range_max = range_max,
-        mit_val = 0,
-        data_directory = data_directory,
-        verbose = verbose
-      )
+      if (mtdna == TRUE) {
+        if (verbose == TRUE) {
+          message("Processing bin: ", range_min, " to ", range_max, " with mitRel = 1")
+        }
+        # filter the data for the current bin
+        .write_bin_data(
+          data = dataRelatedPair_merge,
+          range_min = range_min,
+          range_max = range_max,
+          mit_val = 1,
+          data_directory = data_directory,
+          verbose = verbose
+        )
+        .write_bin_data(
+          data = dataRelatedPair_merge,
+          range_min = range_min,
+          range_max = range_max,
+          mit_val = 0,
+          data_directory = data_directory,
+          verbose = verbose
+        )
+      } else {
+        if (verbose == TRUE) {
+          message("Processing bin: ", range_min, " to ", range_max)
+        }
+        .write_bin_data(
+          data = dataRelatedPair_merge,
+          range_min = range_min,
+          range_max = range_max,
+          mit_val = NULL,
+          data_directory = data_directory,
+          verbose = verbose
+        )
+      }
     }
+
+
     base::message(start_line)
     df_nrows <- base::nrow(dataRelatedPair_merge)
     if (verbose == TRUE) {

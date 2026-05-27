@@ -86,7 +86,6 @@ ped2com <- function(ped, component,
     force_symmetric = force_symmetric
   )
 
-
   #------
   # Checkpointing
   #------
@@ -106,7 +105,8 @@ ped2com <- function(ped, component,
       "additive",
       "common nuclear",
       "mitochondrial",
-      "mtdna", "mitochondria"
+      "mtdna", "mitochondria",
+      "distance"
     )
   )
 
@@ -194,9 +194,7 @@ ped2com <- function(ped, component,
     config = config
   )
 
-
   ## B. Resume loop from the next uncomputed index
-
 
   # Construct sparse matrix
   # Garbage collection if gc is TRUE
@@ -259,7 +257,6 @@ ped2com <- function(ped, component,
   # TODO merge twin columns
   # --- Step 2: Compute Relatedness Matrix ---
 
-
   if (config$resume == TRUE && file.exists(checkpoint_files$ram_checkpoint)) {
     if (config$verbose == TRUE) cat("Resuming: Loading completed RAM matrix...\n")
     r <- readRDS(checkpoint_files$ram_checkpoint)
@@ -287,6 +284,17 @@ ped2com <- function(ped, component,
   }
   maxCount <- config$max_gen + 1
 
+  # Ancestor distance matrix: ancDist[i, j] = min parent-child steps from i
+  # up to ancestor j; NA = j is not an ancestor of i; diagonal = 0 (self).
+  # Only allocated for the "distance" component; other components ignore it.
+  if (config$component == "distance") {
+    ancDist <- matrix(NA_integer_,
+      nrow = config$nr, ncol = config$nr,
+      dimnames = list(ped$ID, ped$ID)
+    )
+    diag(ancDist) <- 0L
+  }
+
   if (config$verbose == TRUE) {
     cat("About to do RAM path tracing\n")
   }
@@ -304,6 +312,21 @@ ped2com <- function(ped, component,
   while (mtSum != 0 && count < maxCount) {
     r <- r + newIsPar
     gen <- gen + (Matrix::rowSums(newIsPar) > 0)
+
+    # Record first-hit ancestor distances.  At this point newIsPar = A^(count+1),
+    # so the step count for these entries is count + 1.
+    if (config$component == "distance") {
+      Ak_t <- methods::as(newIsPar, "TsparseMatrix")
+      ri <- Ak_t@i + 1L # 0-based → 1-based row (child)
+      ci <- Ak_t@j + 1L # 0-based → 1-based col (ancestor)
+      if (length(ri) > 0L) {
+        fresh <- is.na(ancDist[cbind(ri, ci)])
+        if (any(fresh)) {
+          ancDist[cbind(ri[fresh], ci[fresh])] <- count + 1L
+        }
+      }
+    }
+
     newIsPar <- newIsPar %*% isPar
     mtSum <- sum(newIsPar)
     count <- count + 1
@@ -341,6 +364,13 @@ ped2com <- function(ped, component,
       verbose_message = "Subsetting generation component to %d target individuals\n"
     )
     return(gen)
+  } else if (config$component == "distance") { # no need to do the rest
+    if (!is.null(config$keep_ids)) {
+      keep_idx <- match(as.character(config$keep_ids), rownames(ancDist))
+      keep_idx <- keep_idx[!is.na(keep_idx)]
+      ancDist <- ancDist[keep_idx, , drop = FALSE]
+    }
+    return(ancDist)
   } else {
     if (config$verbose == TRUE) {
       cat("Completed RAM path tracing\n")
@@ -599,7 +629,6 @@ ped2com <- function(ped, component,
         }
       }
 
-
       if (force_symmetric == TRUE) {
         Matrix::forceSymmetric(do.call(rbind, blocks))
       } else {
@@ -611,58 +640,12 @@ ped2com <- function(ped, component,
   result
 }
 
-#' Initialize checkpoint files
-#' @inheritParams ped2com
-#' @keywords internal
-
-initializeCheckpoint <- function(config = list(
-                                   verbose = FALSE,
-                                   saveable = FALSE,
-                                   resume = FALSE,
-                                   save_path = "checkpoint/"
-                                 )) {
-  # Define checkpoint files
-  # Ensure save path exists
-  if (config$saveable == TRUE && !dir.exists(config$save_path)) {
-    if (config$verbose == TRUE) cat("Creating save path...\n")
-    dir.create(config$save_path, recursive = TRUE)
-  } else if (config$resume == TRUE && !dir.exists(config$save_path)) {
-    stop("Cannot resume from checkpoint. Save path does not exist.")
-  }
-
-  checkpoint_files <- list(
-    parList = file.path(config$save_path, "parList.rds"),
-    lens = file.path(config$save_path, "lens.rds"),
-    isPar = file.path(config$save_path, "isPar.rds"),
-    iss = file.path(config$save_path, "iss.rds"),
-    jss = file.path(config$save_path, "jss.rds"),
-    isChild = file.path(config$save_path, "isChild.rds"),
-    r_checkpoint = file.path(config$save_path, "r_checkpoint.rds"),
-    gen_checkpoint = file.path(config$save_path, "gen_checkpoint.rds"),
-    newIsPar_checkpoint = file.path(
-      config$save_path,
-      "newIsPar_checkpoint.rds"
-    ),
-    mtSum_checkpoint = file.path(config$save_path, "mtSum_checkpoint.rds"),
-    ram_checkpoint = file.path(config$save_path, "ram_checkpoint.rds"),
-    r2_checkpoint = file.path(config$save_path, "r2_checkpoint.rds"),
-    tcrossprod_checkpoint = file.path(
-      config$save_path,
-      "tcrossprod_checkpoint.rds"
-    ),
-    tcrossprod_ids = file.path(config$save_path, "tcrossprod_ids.rds"),
-    count_checkpoint = file.path(config$save_path, "count_checkpoint.rds"),
-    final_matrix = file.path(config$save_path, "final_matrix.rds")
-  )
-
-  checkpoint_files
-}
 
 #' Assign parent values based on component type
 #' @inheritParams ped2com
 .assignParentValue <- function(component) {
   # Set parent values depending on the component type
-  if (component %in% c("generation", "additive")) {
+  if (component %in% c("generation", "additive", "distance")) {
     parVal <- .5
   } else if (component %in%
     c("common nuclear", "mitochondrial", "mtdna", "mitochondria")) {
@@ -671,30 +654,6 @@ initializeCheckpoint <- function(config = list(
     stop("Don't know how to set parental value")
   }
   parVal
-}
-
-#' Load or compute a checkpoint
-#' @param file The file path to load the checkpoint from.
-#' @param compute_fn The function to compute the checkpoint if it doesn't exist.
-#' @param config A list containing configuration parameters such as `resume`, `verbose`, and `saveable`.
-#' @param message_resume Optional message to display when resuming from a checkpoint.
-#' @param message_compute Optional message to display when computing the checkpoint.
-#' @param compress a logical specifying whether saving to a named file is to use "gzip" compression, or one of "gzip", "bzip2", "xz" or "zstd" to indicate the type of compression to be used. Ignored if file is a connection.
-#' @return The loaded or computed checkpoint.
-#' @keywords internal
-loadOrComputeCheckpoint <- function(file, compute_fn,
-                                    config, message_resume = NULL,
-                                    message_compute = NULL,
-                                    compress = TRUE) {
-  if (config$resume == TRUE && file.exists(file)) {
-    if (config$verbose == TRUE && !is.null(message_resume)) cat(message_resume)
-    readRDS(file)
-  } else {
-    if (config$verbose == TRUE && !is.null(message_compute)) cat(message_compute)
-    result <- compute_fn()
-    if (config$saveable == TRUE) saveRDS(result, file = file, compress = compress)
-    result
-  }
 }
 
 #' Load or compute the isPar matrix
@@ -860,43 +819,4 @@ loadOrComputeCheckpoint <- function(file, compute_fn,
 }
 
 
-#' Subset output to requested IDs
-#' @inheritParams ped2com
-#' @param component A component to subset.
-#' @param keep_ids Character vector of IDs to retain.
-#' @param available_ids Character vector of IDs available in \code{x}.
-#' @param verbose_message Character. Message prefix to print when \code{config$verbose == TRUE}.
-#' @param drop logical. Passed to \code{[} when subsetting matrices.
-#' @keywords internal
-.subsetKeepIds <- function(component, keep_ids = NULL, available_ids, config,
-                           verbose_message = "Subsetting to %d target individuals\n",
-                           drop = FALSE) {
-  if (is.null(keep_ids)) {
-    return(component)
-  }
 
-  idx <- match(keep_ids, available_ids)
-  missing <- keep_ids[is.na(idx)]
-
-  if (length(missing) > 0) {
-    warning(
-      length(missing), " keep_ids not found in pedigree and will be dropped: ",
-      paste(Matrix::head(missing, 5), collapse = ", "),
-      if (length(missing) > 5) " ..." else ""
-    )
-  }
-
-  idx <- idx[!is.na(idx)]
-
-  if (config$verbose == TRUE) {
-    cat(sprintf(verbose_message, length(idx)))
-  }
-  # consequence is missing data
-  if (is.matrix(component) || methods::is(component, "Matrix")) {
-    component <- component[idx, , drop = drop]
-  } else {
-    component <- component[idx]
-  }
-
-  component
-}

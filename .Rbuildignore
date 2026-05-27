@@ -36,3 +36,5 @@ CITATION.cff$
 ^test-clean\.X
 ^vignettes/articles$
 ^.claude$
+^\.positai$
+^\.claude$

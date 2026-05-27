@@ -13,7 +13,8 @@ buildOneFamilyGroup(
   Amimat = NULL,
   Dmgmat = NULL,
   full_df_row,
-  obs_ids
+  obs_ids,
+  condenseMatrixSlots = TRUE
 )
 }
 \arguments{
@@ -23,8 +24,10 @@ buildOneFamilyGroup(
 
 \item{Nucmat}{Nuclear family shared environment relatedness matrix (from \code{\link{ped2cn}}).}
 
-\item{Extmat}{Extended family shared environment indicator. When non-NULL,
-a common-extended-environment term using a unit matrix is included.}
+\item{Extmat}{Common extended family environment relatedness matrix. When non-NULL,
+a Vce term scaled by this matrix is added to the covariance. If a non-matrix
+value (e.g. \code{TRUE}) is supplied, a unit matrix (all members share equally)
+is created automatically.}
 
 \item{Mtdmat}{Mitochondrial genetic relatedness matrix (from \code{\link{ped2mit}}).}
 
@@ -37,6 +40,8 @@ a common-extended-environment term using a unit matrix is included.}
 \item{obs_ids}{A character vector of individual IDs corresponding to the columns of
 \code{full_df_row} and the rows/columns of the relatedness matrices. Must be in the
 same order as the relatedness matrix rows.}
+
+\item{condenseMatrixSlots}{Logical. If TRUE, use the mxCondenseMatrixSlots wrapper to optimize memory usage for large matrices. Default is TRUE.}
 }
 \value{
 An OpenMx model for the specified family group.

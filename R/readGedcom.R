@@ -1,89 +1,107 @@
 #' Read a GEDCOM File
 #'
-#' This function ingests a GEDCOM genealogy file, identifies each individual described
-#' in the file, and parses their information into a structured data frame. It supports
-#' optional post-processing to enrich the raw data, such as inferring parental IDs,
-#' merging redundant name fields, and dropping uninformative columns.
+#' Ingests a GEDCOM genealogy file, identifies individual records, and parses
+#' person-level identifiers, names, life events, attributes, and family
+#' relationships into a structured data frame. Optional post-processing can infer
+#' parental IDs from family relationships, reconcile redundant name fields, and
+#' remove uninformative columns from the parsed output.
 #'
 #' @details
-#' The parser operates line-by-line and is tuned to the common GEDCOM 5.5/5.5.1 structure:
-#' This parser is line-oriented. Individuals are defined by blocks that start with a line
-#' containing "@ INDI". Within each block, tags are parsed using simple pattern matches:
-#' - Relationship tags FAMC (as child) and FAMS (as spouse) are collected and later
-#' mapped to parent IDs if add_parents = TRUE.
-#' - Individuals are defined in blocks beginning with lines containing @ INDI.
-#' Each block is passed to an internal parser that extracts identifiers, names, life events,
+#' `readGedcom()` is a line-oriented parser tuned to common GEDCOM 5.5 and 5.5.1
+#' structures. Individual records are identified from blocks that begin with an
+#' `@ INDI` line. Each individual block is passed to an internal parser that uses
+#' simple GEDCOM tag pattern matches to extract identifiers, names, life events,
 #' attributes, and family relationships.
 #'
-#' - Names are parsed from the GEDCOM NAME tag, which usually encodes the given name
-#' and surname with slashes (e.g., "NAME John /Smith/"). The parser extracts the
-#' given name, surname, and constructs a cleaned full name. Additional name components
-#' (prefix, suffix, nickname, married surname) are parsed if present.
+#' Name information is parsed primarily from the GEDCOM `NAME` tag, which often
+#' encodes given names and surnames using slash-delimited surname notation, such
+#' as `NAME John /Smith/`. The parser extracts the given name, surname, and a
+#' cleaned full name. Additional name components are parsed when present,
+#' including name prefix, name suffix, nickname, and married surname.
 #'
-#' - Life events are recognized by BIRT and DEAT tags. Event details are assumed
-#' to occur at fixed offsets in the block (for example, a BIRT tag is followed by a
-#' DATE, then a PLAC, and optionally geographic coordinates). Missing elements
-#' leave the corresponding field as NA.
-#' for birth, expected lines are DATE (i+1), PLAC (i+2), LATI (i+4), LONG (i+5);
-#' for death, expected lines are DATE (i+1), PLAC (i+2), CAUS (i+3), LATI (i+4), LONG (i+5).
+#' Birth and death events are recognized from `BIRT` and `DEAT` tags. Event
+#' details are currently parsed using fixed offsets within the individual block.
+#' For birth events, the parser expects `DATE` at `i + 1`, `PLAC` at `i + 2`,
+#' `LATI` at `i + 4`, and `LONG` at `i + 5`. For death events, the parser
+#' expects `DATE` at `i + 1`, `PLAC` at `i + 2`, `CAUS` at `i + 3`, `LATI` at
+#' `i + 4`, and `LONG` at `i + 5`. Missing elements leave the corresponding
+#' output fields as `NA`.
 #'
-#' - Attributes such as occupation, education, and religion are parsed directly
-#' from GEDCOM tags (OCCU, EDUC, RELI, etc.). Each attribute is stored in a
-#' dedicated column prefixed with attribute_.
+#' Attribute tags such as `OCCU`, `EDUC`, `RELI`, `CAST`, `NCHI`, `NMR`, `NATI`,
+#' `RESI`, `PROP`, `SSN`, `TITL`, `DSCR`, and `IDNO` are parsed directly into
+#' dedicated columns prefixed with `attribute_`.
 #'
-#' - Relationships are parsed from FAMC (family as child) and FAMS (family as spouse).
-#' These identifiers are preserved in the raw output and can optionally be mapped to
-#' explicit parent IDs via processParents().
+#' Family relationships are parsed from `FAMC` and `FAMS` tags. `FAMC` identifies
+#' the family in which an individual is a child, and `FAMS` identifies families
+#' in which an individual is a spouse. These raw family identifiers are retained
+#' in the parsed output unless removed during post-processing. When
+#' `add_parents = TRUE`, they are also used to infer `momID` and `dadID`.
 #'
-#' - Post-processing can be applied by setting post_process = TRUE. This applies
-#' several clean-up steps: adding inferred parents, merging duplicate name fields,
-#' and slimming the data frame by removing all-empty columns or relationship tags.
+#' If `post_process = TRUE`, `readGedcom()` applies optional cleanup steps
+#' controlled by `add_parents`, `combine_cols`, `remove_empty_cols`, and
+#' `skinny`. These steps can infer parent IDs, collapse redundant name fields,
+#' remove columns that are entirely missing, and drop raw family relationship
+#' columns for a slimmer output.
 #'
-#' @param file_path Character. Path to the GEDCOM file.
-#' @param verbose Logical. If TRUE, print progress messages.
-#' @param add_parents Logical. If TRUE, add momID and dadID via FAMC/FAMS mapping.
-#' @param remove_empty_cols Logical. If TRUE, drop columns that are entirely NA.
-#' @param combine_cols Logical. If TRUE, merge duplicate name columns (e.g., given/surn pieces).
-#' @param skinny Logical. If TRUE, return a slimmer data frame (drops FAMC, FAMS and all-empty cols).
-#' @param update_rate Numeric. Intended rate at which to print progress
-#' @param post_process Logical. If TRUE, apply post-processing (parents, combine, drop empty, skinny).
-#' @param ... Additional arguments to be passed to the function.
+#' @param file_path Character string. Path to the GEDCOM file.
+#' @param verbose Logical. If `TRUE`, print progress messages.
+#' @param add_parents Logical. If `TRUE`, infer `momID` and `dadID` from `FAMC`
+#'   and `FAMS` mappings during post-processing.
+#' @param remove_empty_cols Logical. If `TRUE`, drop columns that are entirely
+#'   `NA` during post-processing.
+#' @param combine_cols Logical. If `TRUE`, combine redundant name columns, such
+#'   as `name_given` with `name_given_pieces` and `name_surn` with
+#'   `name_surn_pieces`, when their values do not conflict.
+#' @param skinny Logical. If `TRUE`, return a slimmer data frame by dropping
+#'   `FAMC`, `FAMS`, and columns that are entirely `NA` during post-processing.
+#' @param update_rate Numeric. Intended rate at which progress messages should
+#'   be printed. Currently unused.
+#' @param post_process Logical. If `TRUE`, apply post-processing steps controlled
+#'   by `add_parents`, `combine_cols`, `remove_empty_cols`, and `skinny`.
+#' @param ... Additional arguments. Currently unused.
 #' @return A data frame containing information about individuals, with the following potential columns:
-#' - `personID`: ID of the individual parsed from the @ INDI line
-#' - `momID`: ID of the individual's mother
-#' - `dadID`: ID of the individual's father
-#' - `sex`: Sex of the individual
-#' - `name`: Full name of the individual
-#' - `name_given`: First name of the individual
-#' - `name_surn`: Last name of the individual
-#' - `name_marriedsurn`: Married name of the individual
-#' - `name_nick`: Nickname of the individual
-#' - `name_npfx`: Name prefix
-#' - `name_nsfx`: Name suffix
-#' - `birth_date`: Birth date of the individual
-#' - `birth_lat`: Latitude of the birthplace
-#' - `birth_long`: Longitude of the birthplace
-#' - `birth_place`: Birthplace of the individual
-#' - `death_caus`: Cause of death
-#' - `death_date`: Death date of the individual
-#' - `death_lat`: Latitude of the place of death
-#' - `death_long`: Longitude of the place of death
-#' - `death_place`: Place of death of the individual
-#' - `attribute_caste`: Caste of the individual
-#' - `attribute_children`: Number of children of the individual
-#' - `attribute_description`: Description of the individual
-#' - `attribute_education`: Education of the individual
-#' - `attribute_idnumber`: Identification number of the individual
-#' - `attribute_marriages`: Number of marriages of the individual
-#' - `attribute_nationality`: Nationality of the individual
-#' - `attribute_occupation`: Occupation of the individual
-#' - `attribute_property`: Property owned by the individual
-#' - `attribute_religion`: Religion of the individual
-#' - `attribute_residence`: Residence of the individual
-#' - `attribute_ssn`: Social security number of the individual
-#' - `attribute_title`: Title of the individual
-#' - `FAMC`: ID(s) of the family where the individual is a child
-#' - `FAMS`: ID(s) of the family where the individual is a spouse
+#' \describe{
+#'   \item{personID}{Individual ID parsed from the `@ INDI` line.}
+#'   \item{momID}{ID of the individual's mother, if inferred.}
+#'   \item{dadID}{ID of the individual's father, if inferred.}
+#'   \item{sex}{Sex of the individual.}
+#'   \item{name}{Cleaned full name of the individual.}
+#'   \item{name_given}{Given name parsed from the `NAME` tag.}
+#'   \item{name_given_pieces}{Given name parsed from a separate `GIVN` tag, if present.}
+#'   \item{name_surn}{Surname parsed from the `NAME` tag.}
+#'   \item{name_surn_pieces}{Surname parsed from a separate `SURN` tag, if present.}
+#'   \item{name_marriedsurn}{Married surname parsed from `_MARNM`, if present.}
+#'   \item{name_nick}{Nickname parsed from `NICK`, if present.}
+#'   \item{name_npfx}{Name prefix parsed from `NPFX`, if present.}
+#'   \item{name_nsfx}{Name suffix parsed from `NSFX`, if present.}
+#'   \item{birth_date}{Birth date of the individual.}
+#'   \item{birth_lat}{Latitude of the birthplace.}
+#'   \item{birth_long}{Longitude of the birthplace.}
+#'   \item{birth_place}{Birthplace of the individual.}
+#'   \item{death_caus}{Cause of death.}
+#'   \item{death_date}{Death date of the individual.}
+#'   \item{death_lat}{Latitude of the place of death.}
+#'   \item{death_long}{Longitude of the place of death.}
+#'   \item{death_place}{Place of death of the individual.}
+#'   \item{attribute_caste}{Caste of the individual.}
+#'   \item{attribute_children}{Number of children of the individual.}
+#'   \item{attribute_description}{Description of the individual.}
+#'   \item{attribute_education}{Education of the individual.}
+#'   \item{attribute_idnumber}{Identification number of the individual.}
+#'   \item{attribute_marriages}{Number of marriages of the individual.}
+#'   \item{attribute_nationality}{Nationality of the individual.}
+#'   \item{attribute_occupation}{Occupation of the individual.}
+#'   \item{attribute_property}{Property owned by the individual.}
+#'   \item{attribute_religion}{Religion of the individual.}
+#'   \item{attribute_residence}{Residence of the individual.}
+#'   \item{attribute_ssn}{Social Security number of the individual.}
+#'   \item{attribute_title}{Title of the individual.}
+#'   \item{FAMC}{ID or IDs of the family in which the individual is a child.}
+#'   \item{FAMS}{ID or IDs of families in which the individual is a spouse.}
+#' }
+#'
+#' If no individual records are found, the function returns `NULL` with a
+#' warning.
 #' @export
 #'
 readGedcom <- function(file_path,
@@ -119,9 +137,12 @@ readGedcom <- function(file_path,
     birth = c("birth_date", "birth_lat", "birth_long", "birth_place"),
     death = c("death_caus", "death_date", "death_lat", "death_long", "death_place"),
     attributes = c(
-      "attribute_caste", "attribute_children", "attribute_description", "attribute_education",
-      "attribute_idnumber", "attribute_marriages", "attribute_nationality", "attribute_occupation",
-      "attribute_property", "attribute_religion", "attribute_residence", "attribute_ssn",
+      "attribute_caste", "attribute_children",
+      "attribute_description", "attribute_education",
+      "attribute_idnumber", "attribute_marriages",
+      "attribute_nationality", "attribute_occupation",
+      "attribute_property", "attribute_religion",
+      "attribute_residence", "attribute_ssn",
       "attribute_title"
     ),
     relationships = c("FAMC", "FAMS")
@@ -152,7 +173,7 @@ readGedcom <- function(file_path,
   if (verbose == TRUE) message("File has ", nrow(df_temp), " people")
 
   # Run post-processing if requested.
-  if (post_process) {
+  if (post_process == TRUE) {
     if (verbose == TRUE) message("Post-processing data frame")
     df_temp <- postProcessGedcom(
       df_temp = df_temp,
@@ -187,11 +208,20 @@ splitIndividuals <- function(lines, verbose = FALSE) {
   if (length(indi_idx) == 0) {
     return(list())
   }
+  record_idx <- grep("@ (INDI|FAM|SOUR|REPO|OBJE|SUB[MN]|NOTE|_MTCAT)\\b| TRLR\\b", lines)
+
 
   blocks <- list()
   for (i in seq_along(indi_idx)) {
     start <- indi_idx[i]
-    end <- if (i < length(indi_idx)) indi_idx[i + 1] - 1 else length(lines)
+
+    next_record <- record_idx[record_idx > start]
+
+    end <- if (length(next_record) > 0) {
+      next_record[1] - 1
+    } else {
+      length(lines)
+    }
     block <- lines[start:end]
     blocks[[length(blocks) + 1]] <- block
   }
@@ -199,15 +229,6 @@ splitIndividuals <- function(lines, verbose = FALSE) {
   blocks
 }
 
-#' Initialize an Empty Individual Record
-#'
-#' @description Creates a named list with all GEDCOM initialized to NA_character_.
-#'
-#' @param all_var_names A character vector of variable names.
-#' @return A named list representing an empty individual record.
-initializeRecord <- function(all_var_names) {
-  stats::setNames(as.list(rep(NA_character_, length(all_var_names))), all_var_names)
-}
 
 #' Parse a GEDCOM Individual Block
 #'
@@ -332,7 +353,7 @@ parseIndividualBlock <- function(block, pattern_rows, all_var_names, verbose = F
 #' @param record A named list representing the individual's record.
 #' @return The updated record with parsed name information.
 parseNameLine <- function(line, record) {
-  record$name <- extract_info(line, "NAME")
+  record$name <- extractInfo(line, "NAME")
   record$name_given <- stringr::str_extract(record$name, ".*(?= /)")
   record$name_surn <- stringr::str_extract(record$name, "(?<=/).*(?=/)")
   record$name <- stringr::str_squish(stringr::str_replace(record$name, "/", " "))
@@ -354,16 +375,16 @@ parseNameLine <- function(line, record) {
 processEventLine <- function(event, block, i, record, pattern_rows) {
   n_lines <- length(block)
   if (event == "birth") {
-    if (i + 1 <= n_lines) record$birth_date <- extract_info(block[i + 1], "DATE")
-    if (i + 2 <= n_lines) record$birth_place <- extract_info(block[i + 2], "PLAC")
-    if (i + 4 <= n_lines) record$birth_lat <- extract_info(block[i + 4], "LATI")
-    if (i + 5 <= n_lines) record$birth_long <- extract_info(block[i + 5], "LONG")
+    if (i + 1 <= n_lines) record$birth_date <- extractInfo(block[i + 1], "DATE")
+    if (i + 2 <= n_lines) record$birth_place <- extractInfo(block[i + 2], "PLAC")
+    if (i + 4 <= n_lines) record$birth_lat <- extractInfo(block[i + 4], "LATI")
+    if (i + 5 <= n_lines) record$birth_long <- extractInfo(block[i + 5], "LONG")
   } else if (event == "death") {
-    if (i + 1 <= n_lines) record$death_date <- extract_info(block[i + 1], "DATE")
-    if (i + 2 <= n_lines) record$death_place <- extract_info(block[i + 2], "PLAC")
-    if (i + 3 <= n_lines) record$death_caus <- extract_info(block[i + 3], "CAUS")
-    if (i + 4 <= n_lines) record$death_lat <- extract_info(block[i + 4], "LATI")
-    if (i + 5 <= n_lines) record$death_long <- extract_info(block[i + 5], "LONG")
+    if (i + 1 <= n_lines) record$death_date <- extractInfo(block[i + 1], "DATE")
+    if (i + 2 <= n_lines) record$death_place <- extractInfo(block[i + 2], "PLAC")
+    if (i + 3 <= n_lines) record$death_caus <- extractInfo(block[i + 3], "CAUS")
+    if (i + 4 <= n_lines) record$death_lat <- extractInfo(block[i + 4], "LATI")
+    if (i + 5 <= n_lines) record$death_long <- extractInfo(block[i + 5], "LONG")
   }
   record
 }
@@ -386,7 +407,7 @@ processEventLine <- function(event, block, i, record, pattern_rows) {
 applyTagMappings <- function(line, record, pattern_rows, tag_mappings) {
   for (mapping in tag_mappings) {
     extractor <- if (is.null(mapping$extractor)) NULL else mapping$extractor
-    result <- process_tag(mapping$tag, mapping$field, pattern_rows, line, record,
+    result <- processTag(mapping$tag, mapping$field, pattern_rows, line, record,
       extractor = extractor, mode = mapping$mode
     )
     record <- result$vars
@@ -408,7 +429,7 @@ applyTagMappings <- function(line, record, pattern_rows, tag_mappings) {
 #' @param type A character string representing the type of information to extract.
 #' @return A character string with the extracted information.
 #' @keywords internal
-extract_info <- function(line, type) {
+extractInfo <- function(line, type) {
   stringr::str_squish(stringr::str_extract(line, paste0("(?<=", type, " ).+")))
 }
 
@@ -421,14 +442,16 @@ extract_info <- function(line, type) {
 #' @param file A data frame with a column \code{X1} containing GEDCOM lines.
 #' @return A list with counts of specific GEDCOM tag occurrences.
 countPatternRows <- function(file) {
-  pattern_counts <- sapply(
+  x <- file$X1
+  pattern_counts <- vapply(
     c(
       "@ INDI", " NAME", " GIVN", " NPFX", " NICK", " SURN", " NSFX", " _MARNM",
       " BIRT", " DEAT", " SEX", " CAST", " DSCR", " EDUC", " IDNO", " NATI",
       " NCHI", " NMR", " OCCU", " PROP", " RELI", " RESI", " SSN", " TITL",
       " FAMC", " FAMS", " PLAC", " LATI", " LONG", " DATE", " CAUS"
     ),
-    function(pat) sum(grepl(pat, file$X1))
+    function(pat) sum(grepl(pat, x, fixed = TRUE)),
+    integer(1L)
   )
   num_rows <- list(
     num_indi_rows = pattern_counts["@ INDI"],
@@ -479,7 +502,7 @@ countPatternRows <- function(file) {
 #' @param vars The current list of variables to update.
 #' @return A list with updated `vars` and a `matched` flag.
 #' @keywords internal
-process_tag <- function(tag, field_name, pattern_rows, line, vars,
+processTag <- function(tag, field_name, pattern_rows, line, vars,
                         extractor = NULL, mode = "replace") {
   count_name <- paste0("num_", tolower(tag), "_rows")
   matched <- FALSE
@@ -487,7 +510,7 @@ process_tag <- function(tag, field_name, pattern_rows, line, vars,
     pattern_rows[[count_name]] > 0 &&
     grepl(paste0(" ", tag), line)) {
     value <- if (is.null(extractor)) {
-      extract_info(line, tag)
+      extractInfo(line, tag)
     } else {
       extractor(line)
     }
@@ -523,16 +546,16 @@ postProcessGedcom <- function(df_temp,
     if (verbose == TRUE) message("Processing parents")
     df_temp <- processParents(df_temp, datasource = "gedcom")
   }
-  if (combine_cols) {
+  if (combine_cols == TRUE) {
     df_temp <- collapseNames(verbose = verbose, df_temp = df_temp)
   }
-  if (remove_empty_cols == TRUE) {
+  if (remove_empty_cols == TRUE || skinny == TRUE) {
     if (verbose == TRUE) message("Removing empty columns")
     df_temp <- df_temp[, colSums(is.na(df_temp)) < nrow(df_temp)]
   }
   if (skinny == TRUE) {
     if (verbose == TRUE) message("Slimming down the data frame")
-    df_temp <- df_temp[, colSums(is.na(df_temp)) < nrow(df_temp)]
+    # Remove raw family relationship columns
     df_temp$FAMC <- NULL
     df_temp$FAMS <- NULL
   }
@@ -547,7 +570,7 @@ postProcessGedcom <- function(df_temp,
 #' @param datasource Character string indicating the data source ("gedcom" or "wiki").
 #' @return The updated data frame with parent IDs added.
 processParents <- function(df_temp, datasource) {
-  if (datasource == "gedcom") {
+  if (datasource %in% c("gedcom", "ged")) {
     required_cols <- c("FAMC", "sex", "FAMS")
   } else if (datasource == "wiki") {
     required_cols <- c("personID")
@@ -634,50 +657,7 @@ mapFAMC2parents <- function(df_temp, family_to_parents) {
   df_temp
 }
 
-#' collapse Names
-#'
-#' This function combines the `name_given` and `name_given_pieces` columns in a data frame. If both columns have non-missing values that differ, a warning is issued and the original `name_given` is retained. If one column is missing, the other is used. The same logic applies to the `name_surn` and `name_surn_pieces` columns.
-#'
-#' @inheritParams readGedcom
-#' @param df_temp A data frame containing the columns to be combined.
-#' @return A data frame with the combined columns.
-collapseNames <- function(verbose, df_temp) {
-  if (verbose == TRUE) message("Combining Duplicate Columns")
 
-  if (!all(is.na(df_temp$name_given_pieces)) || !all(is.na(df_temp$name_given))) {
-    result <- combine_columns(df_temp$name_given, df_temp$name_given_pieces)
-    df_temp$name_given <- result$combined
-    if (!result$retain_col2) df_temp$name_given_pieces <- NULL
-  }
-
-  if (!all(is.na(df_temp$name_surn_pieces)) || !all(is.na(df_temp$name_surn))) {
-    result <- combine_columns(df_temp$name_surn, df_temp$name_surn_pieces)
-    df_temp$name_surn <- result$combined
-    if (!result$retain_col2) df_temp$name_surn_pieces <- NULL
-  }
-  df_temp
-}
-
-#' Combine Columns
-#'
-#' This function combines two columns, handling conflicts and merging non-conflicting data.
-#' @param col1 The first column to combine.
-#' @param col2 The second column to combine.
-#' @return A list with the combined column and a flag indicating if the second column should be retained.
-#' @keywords internal
-# Helper function to check for conflicts and merge columns
-combine_columns <- function(col1, col2) {
-  col1_lower <- stringr::str_to_lower(col1)
-  col2_lower <- stringr::str_to_lower(col2)
-  conflicts <- !is.na(col1_lower) & !is.na(col2_lower) & col1_lower != col2_lower
-  if (any(conflicts)) {
-    warning("Columns have conflicting values. They were not merged.")
-    list(combined = col1, retain_col2 = TRUE)
-  } else {
-    combined <- ifelse(is.na(col1), col2, col1)
-    list(combined = combined, retain_col2 = FALSE)
-  }
-}
 
 # --- Exported Aliases ---
 #' @rdname readGedcom

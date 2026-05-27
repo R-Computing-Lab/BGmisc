@@ -64,17 +64,17 @@ ped2fam <- function(ped, personID = "ID",
 
   if (length(uniques) == 1L && is.na(uniques)) {
     warning("After converting IDs to numeric, all IDs became NA. This indicates ID coercion collapsed IDs. Please ensure IDs aren't character or factor variables.")
- keep_string <- TRUE
-     } else if (length(uniques) < length(wcc$membership)) {
-     warning("After converting IDs to numeric, some IDs became NA. This indicates ID coercion collapsed some IDs. Please ensure IDs aren't character or factor variables.")
-  keep_string <- TRUE
-}
-if(keep_string==TRUE) {
+    keep_string <- TRUE
+  } else if (length(uniques) < length(wcc$membership)) {
+    warning("After converting IDs to numeric, some IDs became NA. This indicates ID coercion collapsed some IDs. Please ensure IDs aren't character or factor variables.")
+    keep_string <- TRUE
+  }
+  if (keep_string == TRUE) {
     fam <- data.frame(
       V1 = names(wcc$membership),
       V2 = wcc$membership
     )
-    } else {
+  } else {
     fam <- data.frame(
       V1 = as.numeric(names(wcc$membership)),
       V2 = wcc$membership
@@ -83,18 +83,17 @@ if(keep_string==TRUE) {
 
   names(fam) <- c(personID, famID)
 
-  if(famID %in% names(ped)) {
-    if(overwrite) {
-    overwrite_message <-  "be overwritten."
-    ped[[famID]] <- NULL
+  if (famID %in% names(ped)) {
+    if (overwrite) {
+      overwrite_message <- "be overwritten."
+      ped[[famID]] <- NULL
     } else {
-    overwrite_message <-  "not be overwritten."
-    fam[[famID]] <- NULL
-   }
+      overwrite_message <- "not be overwritten."
+      fam[[famID]] <- NULL
+    }
 
     warning(sprintf("The famID variable '%s' already exists in the pedigree. The existing variable will %s", famID, overwrite_message))
-
-   }
+  }
 
   ped2 <- merge(fam, ped,
     by = personID, all.x = FALSE, all.y = TRUE
