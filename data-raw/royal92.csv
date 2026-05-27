@@ -805,7 +805,7 @@ personID,famID,momID,dadID,name,sex,birth_date,death_date,attribute_title,twinID
 804,54,NA,NA,Peter Shand Kydd,M,1925-04-23,2006-03-23,NA,NA
 805,55,NA,NA,Unknown,F,NA,NA,NA,NA
 806,21,2996,2995,Barbara Cartland,F,1901-07-09,2000-05-21,Dame,NA
-807,1,NA,810,Robert Fellowes,M,1941-12-11,2024-07-29,Baron Fellowes,NA
+807,1,NA,810,Robert Fellowes,M,1941-12-11,2024-07-29,Baron,NA
 808,1,241,807,Laura Jane Fellowes,F,1980-07-19,NA,NA,NA
 809,56,NA,NA,Neil McCorquodale,M,1951-10-04,NA,NA,NA
 810,1,NA,NA,William Fellowes,M,NA,NA,Sir,NA
@@ -1865,7 +1865,7 @@ personID,famID,momID,dadID,name,sex,birth_date,death_date,attribute_title,twinID
 1864,195,NA,1865,Maud,F,NA,NA,NA,NA
 1865,195,NA,NA,Ingelbert of Carinthia,M,NA,NA,Duke,NA
 1866,1,1395,1405,Geoffrey VI of Anjou,M,1134-06-01,1158-07-27,Count of Nantes,NA
-1867,1,1395,1405,William,M,1136-07-22,1164-01-30,Count of Poitou,NA
+1867,1,1395,1405,William,M,1136-07-22,1164-01-30,Count of Poitiers,NA
 1868,1,NA,NA,William X of Aquitaine,M,1099-06-15,1137-04-09,Duke,NA
 1869,1,2453,2452,Louis VII of France,M,1120-06-15,1180-09-18,King of France,NA
 1870,126,NA,NA,William de Warenne,M,1071-06-15,1138-05-11,Earl of Surrey,NA
@@ -2143,7 +2143,7 @@ personID,famID,momID,dadID,name,sex,birth_date,death_date,attribute_title,twinID
 2142,1,NA,NA,Frederick II of Saxe-Gotha-Altenburg,M,1676-07-28,1732-03-23,Duke,NA
 2143,1,NA,NA,Magdalena Augusta of Anhalt-Zerbst,F,1679-10-13,1740-10-11,NA,NA
 2144,1,NA,NA,Edward Walpole,M,1706-06-15,1784-01-12,Hon. Sir,NA
-2145,237,NA,NA,James Waldegrave,M,1715-03-04,1763-04-28,Earl Waldegrave,NA
+2145,237,NA,NA,James Waldegrave,M,1715-03-04,1763-04-28,Earl,NA
 2146,1,762,336,Sophia of Gloucester,F,1773-05-29,1844-11-29,NA,NA
 2147,1,NA,NA,Charles Louis Frederick of Mecklenburg-Strelitz,M,1708-02-23,1752-06-05,Duke,NA
 2148,1,NA,NA,Elisabeth Albertine of Saxe-Hildburghausen,F,1713-08-04,1761-06-29,NA,NA
@@ -2298,7 +2298,7 @@ personID,famID,momID,dadID,name,sex,birth_date,death_date,attribute_title,twinID
 2297,259,NA,NA,Fitzwater,M,NA,NA,Lord,NA
 2298,260,NA,NA,John Golafre,M,1350-06-15,1442-11-18,Sir,NA
 2299,116,NA,NA,Thomas Clifford,M,1414-03-25,1455-05-22,Lord Clifford,NA
-2300,261,NA,NA,John Neville,M,1493-11-17,1543-03-02,Lord Latimer,NA
+2300,261,NA,NA,John Neville,M,1493-11-17,1543-03-02,Baron Latimer,NA
 2301,1,2304,2303,Hugh Seymour,M,1759-04-29,1801-09-11,Admiral,NA
 2302,1,NA,NA,Anne Horatia Waldegrave,F,1762-11-08,1801-06-12,Lady,NA
 2303,1,NA,NA,Francis Seymour-Conway,M,1718-07-05,1794-06-14,Marquess of Hertford,NA
@@ -2470,7 +2470,7 @@ personID,famID,momID,dadID,name,sex,birth_date,death_date,attribute_title,twinID
 2469,1,2453,2452,Philip of France,M,1116-06-15,1131-06-15,son of Louis VI,NA
 2470,1,2453,2452,Robert I,M,1123-06-15,1188-10-11,Count of Dreux,NA
 2471,1,2453,2452,Pierre de Courtenay,M,1126-06-15,1183-04-10,NA,NA
-2472,1,2453,2452,Henry of Beauvais,M,1121-06-15,1175-11-13,Bishop,NA
+2472,1,2453,2452,Henry of Beauvais,M,1121-06-15,1175-11-13,Bishop of Rouen,NA
 2473,1,2453,2452,Philip,M,NA,NA,Bishop of Paris,NA
 2474,1,2453,2452,Constance of Toulouse,F,1124-06-15,1176-08-16,Constance,NA
 2475,309,NA,NA,Constance of Castile,F,1141-06-15,1160-10-04,NA,NA
@@ -2830,7 +2830,7 @@ personID,famID,momID,dadID,name,sex,birth_date,death_date,attribute_title,twinID
 2829,1,598,597,Margaretha of Sweden,F,1899-06-25,1977-01-04,Princess of Denmark,NA
 2830,369,NA,NA,Axel of Denmark,M,1888-08-12,1964-07-14,NA,NA
 2831,1,NA,NA,Elsa von Rosen,F,1904-02-07,1991-04-15,Countess,NA
-2832,1,2831,2738,Madeleine Bernadotte af Wisborg,F,1938-10-08,NA,Countess Madeleine,NA
+2832,1,2831,2738,Madeleine Bernadotte af Wisborg,F,1938-10-08,NA,Countess,NA
 2833,1,NA,NA,Charles de Schooten Ullens,M,1927-06-15,NA,Count,NA
 2834,1,2832,2833,Marie Christine Ullens,F,1964-06-15,NA,NA,NA
 2835,1,2832,2833,Jean Charles Ullens,M,1965-06-15,NA,NA,NA
@@ -2883,7 +2883,7 @@ personID,famID,momID,dadID,name,sex,birth_date,death_date,attribute_title,twinID
 2882,1,NA,NA,Maria Anna Victoria of Bavaria,F,1660-11-28,1690-04-20,Dauphine,NA
 2883,386,NA,NA,Maria Luisa of Savoy,F,1688-09-17,1714-02-14,Queen,NA
 2884,1,NA,NA,Charles II of Inner Austria,M,1540-06-03,1590-07-10,Duke of Styria,NA
-2885,1,NA,NA,Philip I the Handsome,M,1478-07-22,1506-09-25,King,NA
+2885,1,NA,NA,Philip I the Handsome,M,1478-07-22,1506-09-25,King of Castile,NA
 2886,387,NA,NA,Germaine of Foix,F,1488-06-15,1536-10-15,NA,NA
 2887,1,841,840,Isabella of Aragon,F,1470-10-02,1498-08-23,Queen,NA
 2888,1,841,840,Maria of Aragon,F,1482-06-29,1517-03-07,Queen,NA
