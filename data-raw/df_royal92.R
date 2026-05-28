@@ -3460,6 +3460,7 @@ royal92_cleaned <- royal92 %>%
 
 
 royal92 <- royal92_cleaned %>%
+  rename(title = attribute_title) %>%
   select(-approximated_dob, -approximated_dod)
 
 checkis_acyclic <- checkPedigreeNetwork(royal92,
