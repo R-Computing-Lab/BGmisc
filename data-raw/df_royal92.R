@@ -3458,10 +3458,11 @@ royal92_cleaned <- royal92 %>%
       str_squish()
   )
 
-
 royal92 <- royal92_cleaned %>%
-  rename(title = attribute_title) %>%
-  select(-approximated_dob, -approximated_dod)
+  select(personID, momID, dadID,
+         famID, twinID, name, sex,
+         birth_date, death_date,
+         title = attribute_title)
 
 checkis_acyclic <- checkPedigreeNetwork(royal92,
   personID = "personID",
