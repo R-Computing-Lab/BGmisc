@@ -1,0 +1,580 @@
+---
+title: "Fitting Pedigree-Based Variance Component Models"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Fitting Pedigree-Based Variance Component Models}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+options(rmarkdown.html_vignette.check_title = FALSE,
+        scipen=999) # avoid scientific notation in tables
+```
+
+# Introduction
+
+A core goal of behavior genetics is to decompose observed phenotypic variance into genetic and environmental components.
+Extended pedigrees — multi-generational families with known parentage — provide richer information about relatedness than twin studies alone and allow researchers to estimate a wider array of variance components.
+
+The `BGmisc` package provides a complete pipeline for pedigree-based variance component modeling:
+
+1.  **Compute** relatedness matrices with `ped2add()`, `ped2cn()`, `ped2mit()`, and `ped2ce()`
+2.  **Check identification** with `identifyComponentModel()`
+3.  **Build** OpenMx group models with `buildOneFamilyGroup()`
+4.  **Fit** the combined model with `buildPedigreeMx()` and `mxRun()` (or the wrapper `fitPedigreeModel()`)
+
+This vignette builds up in three parts: a single-family model, a two-family multi-group model, and a scaled-up simulation study.
+An extension vignette `vignette("v61_pedigree_model_fitting", package = "BGmisc")` covers more complex models using squirrel data from the Kluane Red Squirrel Project.
+
+## Prerequisites
+
+```{r setup}
+library(BGmisc)
+library(tidyverse)
+has_openmx <- requireNamespace("OpenMx", quietly = TRUE)
+has_mvtnorm <- requireNamespace("mvtnorm", quietly = TRUE)
+
+if (has_openmx) {
+  library(OpenMx)
+} else {
+  message(
+    "OpenMx is not installed. Code will be shown but not executed.\n",
+    "Install with: install.packages('OpenMx')"
+  )
+}
+
+run_models <- has_openmx
+```
+
+# Data Requirements at a Glance
+
+Before diving in, here is a concise reference for what your data must look like.
+Return to this section whenever something is unclear.
+
+## Pedigree data frame
+
+One row per individual, at minimum:
+
+| Column  | Type              | Description                  |
+|---------|-------------------|------------------------------|
+| `ID`    | integer/character | Unique individual identifier |
+| `dadID` | same as `ID`      | Father's ID; `NA` if unknown |
+| `momID` | same as `ID`      | Mother's ID; `NA` if unknown |
+| `sex`   | integer           | `0` = male, `1` = female     |
+| `famID` | integer/character | Extended family identifier   |
+
+Column names are flexible — pass `personID = "myID"`, `famID = "famID"`, etc. to the `ped2*` functions.
+
+> **Tip:** Use `checkIDs()`, `checkSex()`, and `checkParents()` to validate your pedigree before computing relatedness matrices.
+
+## Relatedness matrices
+
+Each matrix returned by `ped2add()`, `ped2cn()`, etc. is square ($n \times n$), symmetric, and **labeled**: `rownames` and `colnames` are the individual IDs.
+These labels are the link between phenotype data and the model.
+
+## Phenotype data format
+
+The model-fitting functions expect phenotype data as a **one-row matrix**, where:
+
+- Each **column** is one individual.
+- **Column names** must exactly match `rownames(add_matrix)` for that family — same IDs, same order.
+- The vector of those column names is called `obs_ids` throughout this vignette.
+
+If your raw data is in long format (one row per person), you need to pivot it wide — this is shown step by step in Part 1 below.
+
+## Missing phenotypes
+
+Individuals present in the pedigree only to trace relatedness (e.g., deceased ancestors) must be **removed from the matrices** before fitting.
+The `ped2*` functions include every individual; you subset them explicitly to those with observed data.
+
+------------------------------------------------------------------------
+
+# Part 1: Single-Family Model
+
+We start with one family from the built-in `royal92` dataset.
+Every step is written out explicitly — so you can see exactly what happens.
+
+```{r load-royal92, eval = run_models}
+library(lubridate)
+
+data(royal92)
+
+royal92 %>%
+  group_by(famID) %>%
+  count() %>%
+  arrange(desc(n))
+
+royal92 <- royal92 %>%
+  mutate(
+    longevity = time_length(interval(birth_date, death_date), unit = "years"),
+    has_longevity = !is.na(longevity) & is.finite(longevity) & longevity > 0
+  )
+```
+
+## Step 1: Subset to one family and inspect
+
+```{r single-fam-subset, eval = run_models}
+
+fam1 <- subset(royal92, famID == 29)
+
+# What does the pedigree look like?
+head(fam1)
+```
+
+`DA2` is the phenotype we will model.
+It is binary in the actual dataset; for a real continuous-trait analysis you would substitute your own measure.
+
+## Step 2: Compute relatedness matrices
+
+```{r single-fam-matrices, eval = run_models}
+# Additive genetic relatedness
+add_mat1 <- ped2add(fam1,
+  sparse = FALSE,
+  famID = "famID", personID = "personID",
+  momID = "momID", dadID = "dadID", sex = "sex",
+  keep_ids = fam1$personID
+) # keep all individuals for now
+
+
+# Common nuclear environment (1 if same biological parents, 0 otherwise)
+cn_mat1 <- ped2cn(fam1,
+  sparse = FALSE,
+  famID = "famID", personID = "personID",
+  momID = "momID", dadID = "dadID", sex = "sex",
+  keep_ids = fam1$personID
+)
+
+mt_mat1 <- ped2mit(fam1,
+  sparse = FALSE,
+  famID = "famID", personID = "personID",
+  momID = "momID", dadID = "dadID", sex = "sex",
+  keep_ids = fam1$personID
+)
+
+# The matrices are square and labeled with individual IDs
+dim(add_mat1)
+rownames(add_mat1)
+```
+
+## Step 3: Prepare the phenotype data
+
+The model needs a **one-row matrix** with one column per individual, in the same order as the relatedness matrix rows.
+
+```{r single-fam-pheno, eval = run_models}
+# Individual IDs in the order the matrices use
+id_order1 <- rownames(add_mat1)
+
+# Pull phenotype values, reordered to match the matrix
+pheno_vals1 <- fam1$longevity[match(id_order1, as.character(fam1$personID))]
+
+
+names(pheno_vals1) <- id_order1
+
+# Who actually has an observed phenotype?
+observed1 <- !is.na(pheno_vals1)
+cat("Individuals in pedigree:", length(id_order1), "\n")
+cat("Individuals with observed phenotype:", sum(observed1), "\n")
+
+# obs_ids: the IDs of observed individuals — these will be column names
+# They must be syntactically valid R names (OpenMx requirement)
+obs_ids1 <- make.names(id_order1[observed1])
+
+# One-row matrix: one column per observed individual.
+# as.double() is required — OpenMx will error if the matrix storage mode
+# is integer rather than double, even if the values look numeric.
+pheno_row1 <- matrix(
+  as.double(pheno_vals1[observed1]),
+  nrow = 1,
+  dimnames = list(NULL, obs_ids1)
+)
+pheno_row1
+```
+
+## Step 4: Subset matrices to observed individuals
+
+Individuals without a phenotype must be removed from the matrices — their rows and columns are dropped.
+
+```{r single-fam-subset-mat, eval = run_models}
+# Use the original (non-make.names) IDs to index the matrix
+raw_obs_ids1 <- id_order1[observed1]
+
+add_mat1_obs <- add_mat1[raw_obs_ids1, raw_obs_ids1]
+cn_mat1_obs <- cn_mat1[raw_obs_ids1, raw_obs_ids1]
+mt_mat1_obs <- mt_mat1[raw_obs_ids1, raw_obs_ids1]
+
+# Rename rows/cols to match obs_ids1 (the make.names versions)
+rownames(add_mat1_obs) <- colnames(add_mat1_obs) <- obs_ids1
+rownames(cn_mat1_obs) <- colnames(cn_mat1_obs) <- obs_ids1
+rownames(mt_mat1_obs) <- colnames(mt_mat1_obs) <- obs_ids1
+
+dim(add_mat1_obs)
+```
+
+## Step 5: Check model identification
+
+Before fitting, verify that the variance components you want to estimate are statistically identifiable given this pedigree's structure.
+
+```{r single-fam-identify, eval = run_models}
+id_check1 <- identifyComponentModel(
+  A  = add_mat1_obs,
+  Cn = cn_mat1_obs,
+  Mt = mt_mat1_obs,
+  E  = diag(1, nrow(add_mat1_obs))
+)
+id_check1
+```
+
+## Step 6: Build and fit the model
+
+```{r single-fam-fit, eval = run_models}
+# Starting values for variance components
+start_vars <- list(
+  ad2 = 0.3, # additive genetic
+  cn2 = 0.1, # common nuclear environment
+  ce2 = 0, # common extended (not estimated here)
+  mt2 = 0.1, # mitochondrial
+  dd2 = 0, # dominance (not estimated here)
+  am2 = 0, # A x Mt interaction (not estimated here)
+  ee2 = 0.5 # unique environment
+)
+
+# Build the group model for family 1
+group1 <- buildOneFamilyGroup(
+  group_name  = "family1",
+  Addmat      = add_mat1_obs,
+  Nucmat      = cn_mat1_obs,
+  Mtdmat      = mt_mat1_obs,
+  full_df_row = pheno_row1,
+  obs_ids     = obs_ids1
+)
+
+# Wrap in a full pedigree model and fit
+model1 <- buildPedigreeMx(
+  model_name   = "SingleFamilyModel",
+  vars         = start_vars,
+  group_models = list(group1)
+)
+
+fitted1 <- mxRun(model1)
+summary(fitted1)
+```
+
+The estimated variance components are in `fitted1$ModelOne`:
+
+```{r single-fam-results, eval = run_models}
+
+cat("Additive genetic (Vad):", fitted1$ModelOne$Vad$values, "\n")
+cat("Common nuclear  (Vcn):", fitted1$ModelOne$Vcn$values, "\n")
+cat("Mitochondrial (Vmt):", fitted1$ModelOne$Vmt$values, "\n")
+cat("Unique environ. (Ver):", fitted1$ModelOne$Ver$values, "\n")
+```
+
+With a single family, estimates have wide uncertainty.
+Part 2 adds a second family to improve precision.
+
+# Part 2: Two-Family Multi-Group Model
+
+Multi-group modeling means that **variance component parameters are shared** across families, but each family has its own relatedness matrix and phenotype data.
+We write out the steps for family 2 explicitly — the same steps as Part 1, just on different data — so you can see exactly what repeats and what changes.
+
+## Family 2: matrices
+
+```{r two-fam-matrices, eval = run_models}
+fam2 <- subset(royal92, famID == 21)
+
+add_mat2 <- ped2add(fam2,
+  sparse = FALSE,
+  famID = "famID", personID = "personID",
+  momID = "momID", dadID = "dadID", sex = "sex",
+  keep_ids = fam2$personID
+)
+
+cn_mat2 <- ped2cn(fam2,
+  sparse = FALSE,
+  famID = "famID", personID = "personID",
+  momID = "momID", dadID = "dadID", sex = "sex",
+  keep_ids = fam2$personID
+)
+
+mt_mat2 <- ped2mit(fam2,
+  sparse = FALSE,
+  famID = "famID", personID = "personID",
+  momID = "momID", dadID = "dadID", sex = "sex",
+  keep_ids = fam2$personID
+)
+
+dim(add_mat2)
+```
+
+## Family 2: phenotype data
+
+```{r two-fam-pheno, eval = run_models}
+id_order2 <- rownames(add_mat2)
+
+pheno_vals2 <- fam2$longevity[match(id_order2, as.character(fam2$personID))]
+
+names(pheno_vals2) <- id_order2
+
+observed2 <- !is.na(pheno_vals2)
+obs_ids2 <- make.names(id_order2[observed2])
+raw_obs_ids2 <- id_order2[observed2]
+
+pheno_row2 <- matrix(
+  as.double(pheno_vals2[observed2]),
+  nrow = 1,
+  dimnames = list(NULL, obs_ids2)
+)
+
+cat("Family 2 observed:", sum(observed2), "of", length(id_order2), "\n")
+```
+
+## Family 2: subset matrices
+
+```{r two-fam-subset-mat, eval = run_models}
+add_mat2_obs <- add_mat2[raw_obs_ids2, raw_obs_ids2]
+cn_mat2_obs <- cn_mat2[raw_obs_ids2, raw_obs_ids2]
+mt_mat2_obs <- mt_mat2[raw_obs_ids2, raw_obs_ids2]
+
+rownames(add_mat2_obs) <- colnames(add_mat2_obs) <- obs_ids2
+rownames(cn_mat2_obs) <- colnames(cn_mat2_obs) <- obs_ids2
+rownames(mt_mat2_obs) <- colnames(mt_mat2_obs) <- obs_ids2
+```
+
+## Check identification across both families
+
+```{r two-fam-identify, eval = run_models}
+n_total <- nrow(add_mat1_obs) + nrow(add_mat2_obs)
+
+id_check2 <- identifyComponentModel(
+  A  = list(add_mat1_obs, add_mat2_obs),
+  Cn = list(cn_mat1_obs, cn_mat2_obs),
+  Mt = list(mt_mat1_obs, mt_mat2_obs),
+  E  = diag(1, n_total)
+)
+id_check2
+```
+
+## Build and fit the two-family model
+
+Each family gets its own group model.
+The key difference from Part 1: `buildPedigreeMx()` now receives both groups, and `mxFitFunctionMultigroup()` combines their likelihoods.
+The variance component parameters (`Vad`, `Vcn`, `Ver`) are estimated jointly.
+
+```{r two-fam-fit, eval = run_models}
+# Family 2 group model (identical call structure to family 1)
+group2 <- buildOneFamilyGroup(
+  group_name  = "family2",
+  Addmat      = add_mat2_obs,
+  Nucmat      = cn_mat2_obs,
+  Mtdmat      = mt_mat2_obs,
+  full_df_row = pheno_row2,
+  obs_ids     = obs_ids2
+)
+
+# Both groups share the same variance component parameters
+model2 <- buildPedigreeMx(
+  model_name   = "TwoFamilyModel",
+  vars         = start_vars,
+  group_models = list(group1, group2)
+)
+
+fitted2 <- mxRun(model2)
+summary(fitted2)
+```
+
+```{r two-fam-results, eval = run_models}
+cat("Additive genetic (Vad):", fitted2$ModelOne$Vad$values, "\n")
+cat("Common nuclear  (Vcn):", fitted2$ModelOne$Vcn$values, "\n")
+cat("Mitochondrial (Vmt):", fitted2$ModelOne$Vmt$values, "\n")
+cat("Unique environ. (Ver):", fitted2$ModelOne$Ver$values, "\n")
+```
+
+The estimates from both families together are generally more stable than those from either family alone.
+
+# Part 3: Scaling Up — Many Families and Parameter Recovery
+
+# Part 3: Full Longevity Model Across All Families
+
+Once you understand the pattern from Parts 1 and 2, you can scale the same workflow to every family in the dataset.
+Here we fit one multi-group model across all families with enough observed longevity data to contribute to the model.
+
+Each family gets its own relatedness matrices and phenotype row.
+The variance component parameters are shared across families.
+
+```{r full-longevity-model, eval = run_models}
+# Families with at least two observed longevity values.
+# A one-person family cannot contribute covariance information.
+usable_fams <- royal92 %>%
+  filter(has_longevity) %>%
+  count(famID, name = "n_longevity") %>%
+  filter(n_longevity >= 2) %>%
+  pull(famID)
+
+length(usable_fams)
+```
+
+```{r build-full-longevity-groups, eval = run_models}
+full_groups <- vector("list", length(usable_fams))
+names(full_groups) <- paste0("family", usable_fams)
+
+for (i in seq_along(usable_fams)) {
+  fam_i <- subset(royal92, famID == usable_fams[i])
+
+  add_i <- ped2add(fam_i,
+    sparse = FALSE,
+    famID = "famID", personID = "personID",
+    momID = "momID", dadID = "dadID", sex = "sex",
+    keep_ids = fam_i$personID
+  )
+
+  cn_i <- ped2cn(fam_i,
+    sparse = FALSE,
+    famID = "famID", personID = "personID",
+    momID = "momID", dadID = "dadID", sex = "sex",
+    keep_ids = fam_i$personID
+  )
+
+  mt_i <- ped2mit(fam_i,
+    sparse = FALSE,
+    famID = "famID", personID = "personID",
+    momID = "momID", dadID = "dadID", sex = "sex",
+    keep_ids = fam_i$personID
+  )
+
+  id_order_i <- rownames(add_i)
+
+  pheno_vals_i <- fam_i$longevity[match(id_order_i, as.character(fam_i$personID))]
+  has_longevity_i <- fam_i$has_longevity[match(id_order_i, as.character(fam_i$personID))]
+
+  names(pheno_vals_i) <- id_order_i
+  names(has_longevity_i) <- id_order_i
+
+  observed_i <- has_longevity_i %in% TRUE
+
+  raw_obs_ids_i <- id_order_i[observed_i]
+  obs_ids_i <- make.names(raw_obs_ids_i)
+
+  add_i_obs <- add_i[raw_obs_ids_i, raw_obs_ids_i]
+  cn_i_obs <- cn_i[raw_obs_ids_i, raw_obs_ids_i]
+  mt_i_obs <- mt_i[raw_obs_ids_i, raw_obs_ids_i]
+
+  rownames(add_i_obs) <- colnames(add_i_obs) <- obs_ids_i
+  rownames(cn_i_obs) <- colnames(cn_i_obs) <- obs_ids_i
+  rownames(mt_i_obs) <- colnames(mt_i_obs) <- obs_ids_i
+
+  pheno_row_i <- matrix(
+    as.double(pheno_vals_i[observed_i]),
+    nrow = 1,
+    dimnames = list(NULL, obs_ids_i)
+  )
+
+  full_groups[[i]] <- buildOneFamilyGroup(
+    group_name  = paste0("family", usable_fams[i]),
+    Addmat      = add_i_obs,
+    Nucmat      = cn_i_obs,
+    Mtdmat      = mt_i_obs,
+    full_df_row = pheno_row_i,
+    obs_ids     = obs_ids_i
+  )
+}
+
+cat("Families included:", length(full_groups), "\n")
+cat(
+  "Observed individuals included:",
+  sum(vapply(full_groups, function(x) ncol(x$data$observed), integer(1))),
+  "\n"
+)
+```
+
+```{r, include = FALSE}
+fitted_full_longevity <- NULL
+rds_file_full_longevity <- "extdata/fitted_full_longevity.rds"
+```
+
+```{r fit-full-longevity-model, eval = run_models}
+full_longevity_model <- buildPedigreeMx(
+  model_name   = "FullLongevityModel",
+  vars         = start_vars,
+  group_models = full_groups
+)
+```
+
+```{r fit-full-longevity-model, eval = run_models, include = FALSE}
+fitted_full_longevity <- mxRun(full_longevity_model)
+saveRDS(fitted_full_longevity, rds_file_full_longevity)
+```
+
+Note that fitting the full longevity model can take several minutes.
+For the website version of this vignette, the fitted model is loaded from a saved RDS file instead of being refit.
+
+```{r show-full-longevity-fit-code, eval = FALSE}
+fitted_full_longevity <- mxRun(full_longevity_model)
+```
+
+```{r load-full-longevity-model, eval = !run_models, include = FALSE}
+if (file.exists(rds_file_full_longevity)) {
+  fitted_full_longevity <- readRDS(rds_file_full_longevity)
+} else if (file.exists(file.path("vignettes", "articles", rds_file_full_longevity))) {
+  fitted_full_longevity <- readRDS(file.path("vignettes", "articles", rds_file_full_longevity))
+} else {
+  fitted_full_longevity <- readRDS(file.path("inst", rds_file_full_longevity))
+}
+```
+
+```{r full-longevity-summary, eval = has_openmx && !is.null(fitted_full_longevity), echo = TRUE}
+summary(fitted_full_longevity)
+```
+
+```{r full-longevity-results, eval = has_openmx && !is.null(fitted_full_longevity)}
+total_var <- sum(
+  fitted_full_longevity$ModelOne$Vad$values,
+  fitted_full_longevity$ModelOne$Vcn$values,
+  fitted_full_longevity$ModelOne$Vmt$values,
+  fitted_full_longevity$ModelOne$Ver$values
+)
+data.frame(
+  Component = c(
+    "Additive genetic (Vad)",
+    "Common nuclear  (Vcn)",
+    "Mitochondrial (Vmt)",
+    "Unique environ. (Ver)"
+  ),
+  Estimate = c(
+    fitted_full_longevity$ModelOne$Vad$values/total_var,
+    fitted_full_longevity$ModelOne$Vcn$values/total_var,
+    fitted_full_longevity$ModelOne$Vmt$values/total_var,
+    fitted_full_longevity$ModelOne$Ver$values/total_var
+  )
+)
+```
+
+The full model uses every family with at least two observed longevity values.
+The same variance components are estimated across all included families, while each family contributes its own observed phenotype vector and pedigree-derived covariance matrices.
+
+# Understanding the Covariance Structure
+
+The model estimated above is defined by:
+
+$$V = \sigma^2_a \mathbf{A} + \sigma^2_{cn} \mathbf{C}_n + \sigma^2_e \mathbf{I}$$
+
+where $\mathbf{A}$ is the additive genetic relatedness matrix, $\mathbf{C}_n$ is the common nuclear environment matrix, $\mathbf{I}$ is the identity matrix (unique environment), and the $\sigma^2$ terms are the variance components estimated by the model.
+
+This is an extension of the classical twin model to arbitrary pedigree structures.
+Additional components can be added by passing `Extmat` (common extended environment), `Mtdmat` (mitochondrial), or `Dmgmat` (dominance) to `buildOneFamilyGroup()`.
+See `vignette("v1_modelingvariancecomponents", package = "BGmisc")` for background on identification.
+
+# Summary
+
+| Part | Data | Key point |
+|-------------------|-------------------|----------------------------------|
+| 1 — Single family | `royal92`, family 29 | Full pipeline, one group model |
+| 2 — Two families | `royal92`, families 29 & 21 | Same steps twice; `buildPedigreeMx()` combines them |
+| 3 — Many families |  |  |
+
+The helper functions (`buildOneFamilyGroup()`, `buildPedigreeMx()`, `fitPedigreeModel()`) handle the translation from pedigree relatedness matrices into OpenMx model specifications.
+The pattern is always the same: one call to `buildOneFamilyGroup()` per family, then one call to `buildPedigreeMx()` to combine them.
