@@ -127,5 +127,5 @@ NULL
 #' @keywords datasets
 #' @name royal92
 #' @usage data(royal92)
-#' @format A data frame with 3111 observations
+#' @format A data frame with 3110 observations
 NULL

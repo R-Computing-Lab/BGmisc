@@ -5,7 +5,7 @@
 \alias{royal92}
 \title{Royal pedigree data from 1992}
 \format{
-A data frame with 3111 observations
+A data frame with 3110 observations
 }
 \usage{
 data(royal92)

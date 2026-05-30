@@ -80,12 +80,30 @@ royal92 <- df_raw <- readGedcom("data-raw/royal92.ged") %>%
     overwrite = TRUE
   )  %>%
   addPersonToPed(
-    personID = 3011,
+    personID = 128,
     name = "Simon de Montfort the Younger",
     sex = "M",
     momID = 1370,
-    dadID = 873
+    dadID = 873,
+    overwrite = TRUE
+  ) %>%
+  addPersonToPed(
+    personID = 1582,
+    name = "Sanchia of Provence",
+    sex = "F",
+    momID = 1884,
+    dadID = 1881,
+    overwrite = TRUE
+  )  %>%
+  addPersonToPed(
+    personID = 1884,
+    name = "Beatrice of Savoy",
+    sex = "F",
+    momID = NA_integer_,
+    dadID =  NA_integer_,
+    overwrite = TRUE
   )
+
 
 
 #----
@@ -163,6 +181,7 @@ date_overrides <- tribble(
   125, "17 MAY 1891", "26 FEB 1959", # Alexandra, 2nd Duchess of Fife
   126, "29 MAY 1881", "8 OCT 1972", # Alexander Ramsay
   127, "1295", "22 AUG 1358", # Isabella of France; birth year uncertain, sources vary ca. 1292/1295/1296; death date varies by one day, 22 AUG vs 23 AUG 1358
+  128, "15 APR 1240", "1271", # Simon de Montfort the Younger
   129, "19 JUL 1884", "6 MAR 1954", # Charles Edward, Duke of Saxe-Coburg and Gotha
   132, "24 FEB 1774", "8 JUL 1850", # Adolphus, Duke of Cambridge
   134, "25 JUL 1797", "6 APR 1889", # Augusta of Hesse-Kassel
@@ -1290,7 +1309,7 @@ date_overrides <- tribble(
   1881, "1198", "19 AUG 1245", # Raymond Berengar IV of Provence; approximate birth year
   1882, "2 NOV 1235", "13 MAR 1271", # Henry of Almain
   1883, "1146", "14 MAY 1219", # William Marshal, Earl of Pembroke; approximate birth year
-  1884, "1198", "19 AUG 1245", # Raymond Berengar IV of Provence; duplicate/variant row likely; approximate birth year
+  1884, "1198", "1267", #   Beatrice of Savoy
   1886, "24 AUG 1198", "6 JUL 1249", # Alexander II of Scotland
   1887, "26 DEC 1249", "25 SEP 1300", # Edmund, Earl of Cornwall
   1888, "1252", "1296", # Richard of Cornwall; approximate year-level dates
@@ -2084,8 +2103,8 @@ date_overrides <- tribble(
   2997, "3 JAN 1907", "30 MAY 1940", # Ronald Cartland
   2998, "4 JAN 1912", "29 MAY 1940", # Anthony Cartland
   3009, "1911", "1911", # Cartland infant; year-level birth and death only; exact date not resolved in this pass
-  3010, "31 DEC 1939", NA_character_, # Glen McCorquodale; living or death not found in this pass
-  3011, "15 APR 1240", "1271" # Simon de Montfort the Younger
+  3010, "31 DEC 1939", NA_character_ # Glen McCorquodale; living or death not found in this pass
+
 )
 
 # notes:
@@ -2491,7 +2510,6 @@ name_overrides <- tribble(
   1881, "Raymond Berengar IV of Provence",
   1882, "Henry of Almain",
   1883, "William Marshal",
-  1884, "Raymond Berengar IV of Provence",
   1886, "Alexander II of Scotland",
   1887, "Edmund",
   1888, "Richard of Cornwall",
@@ -3272,6 +3290,8 @@ royal92_cleaned <- royal92 %>%
       personID == 1846 ~ "King of Scots",
       personID %in%
         c(1848, 1870, 2355) ~ "Earl of Surrey",
+      personID %in%
+        c(1884) ~ "Countess of Provence",
       personID == 1887 ~ "Earl of Cornwall",
       personID == 1893 ~ "Count of Aumale",
       personID == 1894 ~ "Count of Artois",
@@ -3453,6 +3473,10 @@ royal92_cleaned <- royal92 %>%
       personID == 1155 ~ 1156,
       personID == 1156 ~ 1155,
       TRUE ~ NA_real_
+    ),
+    momID = case_when(
+      personID == 1282 ~ 1884,
+      TRUE ~ momID
     ),
     attribute_title = str_replace_all(attribute_title, text_cleanup_regex) %>%
       str_squish(),
