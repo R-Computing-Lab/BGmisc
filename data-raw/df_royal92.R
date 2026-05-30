@@ -110,7 +110,10 @@ date_overrides <- tribble(
   43, "13 JUL 1798", "1 NOV 1860", # Charlotte of Prussia
   44, "29 APR 1818", "13 MAR 1881", # Alexander II Nicholoevich Romanov, Gregorian/New Style; Old Style = 17 APR 1818, 1 MAR 1881
   45, "8 AUG 1824", "3 JUN 1880", # Marie of Hesse-Darmstadt
-
+  46, "15 NOV 1895", "17 JUL 1918", # Olga Nikolaevna Romanov, Gregorian/New Style; Old Style birth = 2 NOV 1895
+  47, "10 JUN 1897", "17 JUL 1918", # Tatiana Nikolaevna Romanov, Gregorian/New Style; Old Style birth = 29 May 1897
+  48, "26 JUN 1899", "17 JUL 1918", # Maria Nikolaevna Romanov, Gregorian/New Style; Old Style birth = 14 JUN 1899
+  49, "18 JUN 1901", "17 JUL 1918", # Anastasia Nikolaevna Romanov, Gregorian/New Style; Old Style birth = 5 Jun 1901
   51, "4 AUG 1900", "30 MAR 2002", #Elizabeth Angela Marguerite Bowes-Lyon
   52, "21 APR 1926", "8 SEP 2022", # Elizabeth II Alexandra Mary Windsor
   53, "21 AUG 1930", "9 FEB 2002", # Margaret Rose Windsor
@@ -195,6 +198,9 @@ date_overrides <- tribble(
   167, "23 MAR 1887", "27 SEP 1967", # Felix Yussoupov
   169, "10 OCT 1931", "16 MAR 2003", # Ronald Ivor Ferguson
   170, "9 JUN 1937", "19 SEP 1998", # Susan Mary Wright / Susan Barrantes
+  #Teackle Wallis Warfield
+  171, "8 FEB 1869", "15 NOV 1896", # Teackle Wallis Warfield
+  172, "30 NOV 1869", "2 NOV 1929",# Alice Montague
   173, "17 APR 1882", "17 OCT 1893", # Violet Hyacinth Bowes-Lyon
   174, "30 AUG 1883", "8 FEB 1961", # Mary Frances Bowes-Lyon / Lady Elphinstone
   175, "22 SEP 1884", "25 MAY 1949", # Patrick Bowes-Lyon, 15th Earl of Strathmore and Kinghorne
@@ -206,13 +212,17 @@ date_overrides <- tribble(
   181, "2 MAY 1902", "13 SEP 1961", # David Bowes-Lyon
   182, "21 JUL 1824", "16 FEB 1904", # Claude Bowes-Lyon
   183, "29 JUL 1832", "5 FEB 1922", # Frances Dora Smith / Countess of Strathmore and Kinghorne
+  185, "22 JAN 1797", "19 JAN 1881", # Charlotte Grimstead
+  186, "28 SEP 1822", "13 SEP 1865", # Thomas George Lyon-Bowes, 12th Earl of Strathmore and Kinghorne
   187, "17 JUL 1737", "7 MAR 1776", # John Lyon, 9th Earl of Strathmore and Kinghorne
   188, "24 FEB 1749", "28 APR 1800", # Mary Eleanor Bowes
   189, "14 APR 1769", "3 JUL 1820", # John Bowes, 10th Earl of Strathmore and Kinghorne
+  190, "1747", "1810", # Andrew Robinson Stoney
   191, "27 JUL 1869", "28 NOV 1955", # Sidney Elphinstone, 16th Lord Elphinstone
   192, "3 DEC 1888", "18 JUN 1946", # Dorothy Beatrix Godolphin Osborne
   195, "11 JUL 1880", "25 JUN 1953", # William Spencer Leveson-Gower, 4th Earl Granville
   198, "16 NOV 1528", "9 JUN 1572", # Jeanne d'Albret of France
+  199, "20 MAR 1828", "15 JUN 1885", # Prince Frederick Charles of Prussia
   201, "6 AUG 1845", "2 MAY 1914", # John Campbell, 9th Duke of Argyll
   211, "30 JUL 1769", "2 APR 1829", # Frederick VI of Hesse-Homburg
   220, "27 MAR 1819", "27 MAR 1819", # Charlotte Augusta Louisa Hanover
@@ -1723,7 +1733,7 @@ date_overrides <- tribble(
   2470, "1123", "11 OCT 1188", # Robert I, Count of Dreux; approximate birth year
   2471, "1126", "10 APR 1183", # Peter I of Courtenay; approximate birth year
   2472, "1121", "13 NOV 1175", # Henry of France, bishop; approximate birth year
-  2474, "1124", "16 AUG 1176", # Constance of Toulouse; approximate birth year
+  2474, "1124", "1190", # Constance of Toulouse; approximate birth year
   2475, "1141", "4 OCT 1160", # Constance of Castile; approximate birth year
   2476, "1140", "4 JUN 1206", # Adela of Champagne; approximate birth year
   2477, "5 APR 1170", "15 MAR 1190", # Isabella of Hainault
@@ -2173,6 +2183,7 @@ name_overrides <- tribble(
   134, "Augusta of Hesse-Kassel",
   135, "Augusta Caroline of Cambridge",
   136, "Mary Adelaide (Fat Mary)",
+  137, "Francis von Hohenstein",
   139, "Ernest I of Saxe-Coburg and Gotha",
   140, "Louise of Saxe-Gotha-Altenburg",
   146, "Cecilia Nina Cavendish-Bentinck",
@@ -2190,9 +2201,11 @@ name_overrides <- tribble(
 #  170, "Susan Mary Wright",
  # 174, "Mary Frances Bowes-Lyon",
 #  175, "Patrick Bowes-Lyon",
+  185, "Charlotte Grimstead",
   189, "John Bowes",
   191, "Sidney Elphinstone",
   195, "William Spencer Leveson-Gower",
+  199, "Friedrich Karl Nikolaus Hohenzollern",
 #  201, "John Campbell",
 #  220, "Charlotte Augusta Louisa Hanover",
   224, "Marie of Battenberg",
@@ -2807,12 +2820,13 @@ name_overrides <- tribble(
   2468, "Roger II of Sicily",
   2469, "Philip of France",
   2470, "Robert I",
+  2474, "Constance of France",
   2476, "Adela of Champagne",
   2478, "Ingeborg of Denmark",
   2479, "Agnes of Merania",
   2480, "Philip Hurepel of France",
   2481, "Alphonse of Poitiers",
-  2483, "Raymond Berengar IV of Provence",
+  2483, "Ramon Berenguer V",
   2485, "Marie of Brabant",
   2486, "Joan I of Navarre",
   2488, "Charles I of Hungary",
@@ -3125,6 +3139,7 @@ royal92_cleaned <- royal92 %>%
       personID == 179 ~ "Countess Granville",
       personID == 191 ~ "Lord Elphinstone",
       personID == 195 ~ "Earl Granville",
+      personID %in% c(199, 929) ~ "Prince of Prussia",
       personID == 201 ~ "Duke of Argyll",
       personID == 224 ~ "Princess of Battenberg; Princess of Erbach-Schönberg",
       personID %in%
@@ -3140,6 +3155,7 @@ royal92_cleaned <- royal92 %>%
         c(244, 293) ~ "Earl of Harewood",
       personID == 246 ~ "Landgrave of Hesse-Darmstadt",
       personID == 251 ~ "Crown Prince of Hanover",
+      personID == 261 ~ "Baron",
       personID %in%
         c(271, 272, 564) ~ "Grand Duke of Mecklenburg-Strelitz",
       personID == 278 ~ "Marquess of Cambridge",
@@ -3235,6 +3251,13 @@ royal92_cleaned <- royal92 %>%
       personID == 932 ~ "Princess of Prussia",
       personID %in%
         c(1373, 1867) ~ "Count of Poitiers",
+      personID %in%
+        c(1473, 1476,
+          1492, 1494) ~ "Earl of Arran",
+      personID %in%
+            c(1588, 1834,
+              1877, 1890,
+              2295) ~ "Earl of Gloucester",
       personID == 1802 ~ "wife of Edward the Elder",
       personID == 1804 ~ "son of Edward the Elder",
       personID == 1811 ~ "King of West Francia",
@@ -3242,9 +3265,6 @@ royal92_cleaned <- royal92 %>%
       personID == 1815 ~ "Duke of Guise",
       personID %in%
         c(1832, 1835) ~ "Lord of Annandale",
-      personID %in%
-        c(1834, 1877,
-          1890, 2295) ~ "Earl of Gloucester",
       personID %in%
         c(1837, 2228, 2329) ~ "Earl of Huntingdon",
       personID %in%
@@ -3368,6 +3388,8 @@ royal92_cleaned <- royal92 %>%
       personID == 2450 ~ "Palatine of Hungary",
       personID == 2469 ~ "son of Louis VI",
       personID == 2472 ~ "Bishop of Rouen",
+      personID == 2483 ~ "Count of Provence",
+      personID == 2474 ~  "Countess of Boulogne and Toulouse",
       personID == 2512 ~ "Queen of Sweden",
       personID == 2517 ~ "Duke of Orléans; Regent",
       personID == 2520 ~ "Countess of Hainaut",
