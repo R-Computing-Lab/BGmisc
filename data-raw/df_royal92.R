@@ -102,6 +102,13 @@ royal92 <- df_raw <- readGedcom("data-raw/royal92.ged") %>%
     momID = NA_integer_,
     dadID =  NA_integer_,
     overwrite = TRUE
+  )  %>%
+  addPersonToPed(
+    personID = 3011,
+    name = "Helen Louise Kirby",
+    sex = "F",
+    momID = 589,
+    dadID =  235
   )
 
 
@@ -242,6 +249,7 @@ date_overrides <- tribble(
   195, "11 JUL 1880", "25 JUN 1953", # William Spencer Leveson-Gower, 4th Earl Granville
   198, "16 NOV 1528", "9 JUN 1572", # Jeanne d'Albret of France
   199, "20 MAR 1828", "15 JUN 1885", # Prince Frederick Charles of Prussia
+  200, "14 SEP 1837", "12 MAY 1906", #   Princess Maria Anna of Anhalt-Dessau
   201, "6 AUG 1845", "2 MAY 1914", # John Campbell, 9th Duke of Argyll
   211, "30 JUL 1769", "2 APR 1829", # Frederick VI of Hesse-Homburg
   220, "27 MAR 1819", "27 MAR 1819", # Charlotte Augusta Louisa Hanover
@@ -249,6 +257,7 @@ date_overrides <- tribble(
   228, "3 SEP 1851", "18 JUN 1926", # Olga Constantinovna of Russia, Gregorian/New Style
   229, "22 JAN 1872", "8 FEB 1938", # Nicholas of Greece and Denmark, Gregorian/New Style
   230, "4 MAY 1913", "2 OCT 2007", # Princess Katherine of Greece and Denmark; row is currently labeled Child 6
+  235, "5 SEP 1895", "7 APR 1945", # Sumner Moore Kirby
   240, "19 MAR 1955", NA_character_, # Sarah Spencer / Lady Sarah McCorquodale; living
   241, "11 FEB 1957", NA_character_, # Jane Spencer / Lady Jane Fellowes; living
   242, "20 MAY 1964", NA_character_, # Charles Spencer, 9th Earl Spencer; living
@@ -272,6 +281,10 @@ date_overrides <- tribble(
   264, "24 AUG 1843", "2 SEP 1907", # George FitzGeorge
   265, "30 JAN 1846", "17 DEC 1922", # Adolphus FitzGeorge
   266, "12 JUN 1847", "30 OCT 1933", # Augustus FitzGeorge
+  267, "9 MAR 1854","10 MAR 1927", # Rosa Baring
+  268, "1892", "1960", #son 1 George William Frederick FitzGeorge
+  269, "1886", "1976",# daught 1 Mabel Iris FitzGeorge
+  270, "1889", "1954", # daught 2 George Daphne FitzGeorge
   271, "17 OCT 1819", "30 MAY 1904", # Frederick William, Grand Duke of Mecklenburg-Strelitz
   272, "22 JUL 1848", "11 JUN 1914", # Adolphus Frederick V, Grand Duke of Mecklenburg-Strelitz
   273, "7 SEP 1857", "20 JUL 1933", # Elisabeth of Anhalt
@@ -2103,8 +2116,8 @@ date_overrides <- tribble(
   2997, "3 JAN 1907", "30 MAY 1940", # Ronald Cartland
   2998, "4 JAN 1912", "29 MAY 1940", # Anthony Cartland
   3009, "1911", "1911", # Cartland infant; year-level birth and death only; exact date not resolved in this pass
-  3010, "31 DEC 1939", NA_character_ # Glen McCorquodale; living or death not found in this pass
-
+  3010, "31 DEC 1939", NA_character_, # Glen McCorquodale; living or death not found in this pass
+  3011, "26 JAN 1935",  NA_character_, #Helen Louise Kirby. Countess Dvinskaya
 )
 
 # notes:
@@ -2225,12 +2238,14 @@ name_overrides <- tribble(
   191, "Sidney Elphinstone",
   195, "William Spencer Leveson-Gower",
   199, "Friedrich Karl Nikolaus Hohenzollern",
+  200, "Maria Anna of Anhalt-Dessau",
 #  201, "John Campbell",
 #  220, "Charlotte Augusta Louisa Hanover",
   224, "Marie of Battenberg",
 #  228, "Olga Constantinovna of Russia",
   229, "Nicholas of Greece and Denmark",
   230, "Katherine of Greece and Denmark",
+  235, "Sumner Moore Kirby",
  # 240, "Sarah Spencer",
   #241, "Jane Spencer",
  # 242, "Charles Spencer",
@@ -2247,9 +2262,13 @@ name_overrides <- tribble(
   258, "Olga of Hanover",
   259, "Christian of Hanover",
   260, "René of Bourbon-Parma",
+
 #  262, "George",
   265, "Adolphus FitzGeorge",
   266, "Augustus FitzGeorge",
+  268, "George William Frederick FitzGeorge",
+  269, "Mabel Iris FitzGeorge",
+  270, "George Daphne FitzGeorge",
  # 271, "Frederick William",
  # 272, "Adolphus Frederick V",
   278, "Adolphus Cambridge",
@@ -3482,6 +3501,7 @@ royal92_cleaned <- royal92 %>%
       str_squish(),
     sex = case_when(
       personID %in% c(
+        235,
         1098,
         1753,
         1755,
