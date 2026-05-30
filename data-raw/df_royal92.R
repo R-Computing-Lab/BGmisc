@@ -40,7 +40,7 @@ parse_gedcom_date <- function(x) {
 ## Create dataframe
 royal92 <- df_raw <- readGedcom("data-raw/royal92.ged") %>%
   addPersonToPed(
-    personID = 914, # overwriting duplicate
+    personID = 914, # overwriting duplicates
     name = "Elizabeth Alexandrovna of Russia",
     sex = "F",
     momID = 1297,
@@ -104,12 +104,22 @@ royal92 <- df_raw <- readGedcom("data-raw/royal92.ged") %>%
     overwrite = TRUE
   )  %>%
   addPersonToPed(
-    personID = 3011,
+    personID = 2149,
     name = "Helen Louise Kirby",
     sex = "F",
     momID = 589,
-    dadID =  235
+    dadID =  235,
+    overwrite = TRUE
+  )  %>%
+  addPersonToPed(
+    personID = 1051, # overwriting duplicated Andreas, is already 911
+    name = "TBD",
+    sex = "M",
+    momID = NA_integer_,
+    dadID =  NA_integer_,
+    overwrite = TRUE
   )
+
 
 
 
@@ -740,7 +750,7 @@ date_overrides <- tribble(
   1048, "1 JUN 1985", NA_character_, # Christian Heinrich of Hanover; living
   1049, "12 DEC 1962", "29 NOV 1988", # Isabella von Thurn und Valsassina; source conflict: another source gives 8 SEP 1962, selected 12 DEC 1962
   1050, "13 FEB 1988", NA_character_, # Otto Heinrich of Hanover; living
-  1051, "27 NOV 1955", NA_character_, # Andreas of Leiningen; living; likely duplicate/identity match to personID 911
+  1051, NA_character_, NA_character_, # duplicated to be replaced
   1052, "3 JUL 1933", "29 DEC 2022", # Maximilian / Max, Margrave of Baden
   1053, "9 APR 1882", "17 NOV 1945", # Frederick Francis IV of Mecklenburg-Schwerin
   1054, "16 APR 1940", NA_character_, # Margrethe II of Denmark; living
@@ -1497,7 +1507,7 @@ date_overrides <- tribble(
   2146, "29 MAY 1773", "29 NOV 1844", # Sophia of Gloucester; identity inferred from Gloucester/Walpole context
   2147, "23 FEB 1708", "5 JUN 1752", # Charles Louis Frederick of Mecklenburg-Strelitz
   2148, "4 AUG 1713", "29 JUN 1761", # Elisabeth Albertine of Saxe-Hildburghausen
-  2149, "3 OCT 1941", "29 MAR 1956", # Alfonso of Spain; likely duplicate/identity match to personID 594
+  2149, "26 JAN 1935",  NA_character_, #Helen Louise Kirby. Countess Dvinskaya
   2150, "13 SEP 1794", "12 APR 1860", # Ernest I of Hohenlohe-Langenburg
   2152, "11 OCT 1957", NA_character_, # Katharine Fraser; living
   2155, "9 AUG 1914", "26 APR 1943", # Alastair Arthur of Connaught, 2nd Duke of Connaught
@@ -2116,8 +2126,8 @@ date_overrides <- tribble(
   2997, "3 JAN 1907", "30 MAY 1940", # Ronald Cartland
   2998, "4 JAN 1912", "29 MAY 1940", # Anthony Cartland
   3009, "1911", "1911", # Cartland infant; year-level birth and death only; exact date not resolved in this pass
-  3010, "31 DEC 1939", NA_character_, # Glen McCorquodale; living or death not found in this pass
-  3011, "26 JAN 1935",  NA_character_, #Helen Louise Kirby. Countess Dvinskaya
+  3010, "31 DEC 1939", NA_character_ # Glen McCorquodale; living or death not found in this pass
+
 )
 
 # notes:
@@ -2130,16 +2140,13 @@ date_overrides <- tribble(
 
 #1847: likely Isabel de Warenne based on the Balliol/Warenne placement, but the row’s given name alone is underspecified. I included the date data and flagged the inference.
 
-#1884: appears to duplicate or variant-match 1881 Raymond Berengar IV of Provence. I included the date data and flagged it.
 
-#1891: the row title says “King of Castile,” but Alfonso IX is King of León. I included the date data and flagged the title mismatch.
 
 #1975: likely duplicates or variant-matches 1968 Æthelstan of Kent. I included the date data and flagged it.
 
 
 #2065 likely duplicates the Catherine Swynford branch already represented elsewhere.
 
-#2149 likely duplicates Alfonso of Spain already represented at personID == 594.
 
 #2158 likely duplicates George Mountbatten already represented at personID == 102.
 
@@ -2456,6 +2463,8 @@ name_overrides <- tribble(
   924, "Louis Ferdinand of Prussia",
   930, "Cornelie-Cécile of Prussia",
   932, "Michaela of Prussia",
+  985, "Anne Neville",
+  989, "Cicely Neville",
   1137, "Augusta Wilhelmine of Hesse-Darmstadt",
   1176, "Sophia Louise of Mecklenburg-Schwerin",
   1197, "Karl Theodor (Gackl)",
@@ -2464,6 +2473,8 @@ name_overrides <- tribble(
   1213, "Frederick Francis II of Mecklenburg-Schwerin",
   1297, "Elizabeth Alexeievna (Louise of Baden)",
   1298, "Konstantin Pavlovich Romanov",
+  1340, "Isabel Neville",
+  1342, "Richard Neville",
   1347, "Violante Visconti",
   1373, "William IX",
   1407, "Paul Romanovsky-Ilyinsky",
@@ -2658,7 +2669,6 @@ name_overrides <- tribble(
   2146, "Sophia of Gloucester",
   2147, "Charles Louis Frederick of Mecklenburg-Strelitz",
   2148, "Elisabeth Albertine of Saxe-Hildburghausen",
-  2149, "Alfonso of Spain",
   2150, "Ernest I of Hohenlohe-Langenburg",
   2155, "Alastair Arthur of Connaught",
   2158, "George Mountbatten",
@@ -3286,6 +3296,7 @@ royal92_cleaned <- royal92 %>%
       personID == 877 ~ "Crown Prince of Yugoslavia",
       personID == 914 ~ "Grand Duchess of Russia",
       personID == 932 ~ "Princess of Prussia",
+      personID == 1051 ~ NA_character_,
       personID %in%
         c(1373, 1867) ~ "Count of Poitiers",
       personID %in%
@@ -3312,6 +3323,7 @@ royal92_cleaned <- royal92 %>%
       personID %in%
         c(1884) ~ "Countess of Provence",
       personID == 1887 ~ "Earl of Cornwall",
+      personID == 1891 ~ "King of León",
       personID == 1893 ~ "Count of Aumale",
       personID == 1894 ~ "Count of Artois",
       personID %in%
@@ -3482,6 +3494,7 @@ royal92_cleaned <- royal92 %>%
       personID == 2963 ~ "Lady",
       personID == 2964 ~ "Princess of Yugoslavia",
       personID == 2965 ~ "Prince of Yugoslavia",
+
       TRUE ~ attribute_title
     ),
     twinID = case_when(
@@ -3543,4 +3556,22 @@ if (checkis_acyclic$is_acyclic) {
   usethis::use_data(royal92, overwrite = TRUE, compress = "xz")
 } else {
   message("The pedigree contains cyclic relationships.")
+}
+
+if(FALSE){
+
+ library(ggpedigree)
+ggped<- ggPedigreeInteractive(royal92,
+            personID = "personID",
+            momID = "momID",
+            dadID = "dadID",
+            twinID = "twinID",
+            config = list(
+              code_male = "M",
+              code_female = "F",
+              add_phantoms = TRUE
+            )
+ )
+
+
 }

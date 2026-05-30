@@ -983,11 +983,11 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 982,316,291,1,NA,Martin Lascelles,M,1963-06-15,NA,NA
 983,NA,NA,68,NA,Alexandra Morton,F,NA,NA,NA
 984,989,988,1,NA,Richard III,M,1452-10-02,1485-08-22,King of England
-985,1339,987,1,NA,Anne Nevill,F,1456-06-11,1485-03-16,Lady
+985,1339,987,1,NA,Anne Neville,F,1456-06-11,1485-03-16,Lady
 986,985,984,1,NA,Edward,M,NA,1484-04-09,Prince of Wales
 987,NA,1342,1,NA,Richard Neville,M,1428-11-22,1471-04-14,Earl of Warwick
 988,1024,1023,1,NA,Richard Plantagenet,M,1411-09-21,1460-12-30,Duke of York
-989,1331,990,1,NA,Cicely Nevill,F,1415-05-03,1495-05-31,Lady
+989,1331,990,1,NA,Cicely Neville,F,1415-05-03,1495-05-31,Lady
 990,NA,NA,1,NA,Ralph of Westmoreland 1st,M,1364-06-15,1425-10-21,Earl
 991,989,988,1,NA,Edward IV,M,1442-04-28,1483-04-09,King of England
 992,989,988,1,NA,Edmund,M,1443-05-17,1460-12-30,Earl of Rutland
@@ -1049,7 +1049,7 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 1048,1046,1040,1,NA,Christian Heinrich Hanover,M,1985-06-01,NA,NA
 1049,NA,NA,1,NA,Isabella Valsassina von Thurn,F,1962-12-12,1988-11-29,Countess
 1050,1049,1041,1,NA,Otto Hanover,M,1988-02-13,NA,NA
-1051,NA,NA,79,NA,Andreas of Leiningen,M,1955-11-27,NA,Prince
+1051,NA,NA,79,NA,TBD,M,NA,NA,NA
 1052,NA,NA,80,NA,Max of Baden,M,1933-07-03,2022-12-29,Prince
 1053,NA,NA,81,NA,Frederick Francis IV of Mecklenburg,M,1882-04-09,1945-11-17,Grand Duke
 1054,NA,NA,1,NA,Margrethe of Denmark,F,1940-04-16,NA,NA
@@ -1338,9 +1338,9 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 1337,NA,2062,1,NA,Isabella of Castile,F,1355-06-15,1392-12-23,NA
 1338,1337,1237,1,NA,Edward,M,1373-06-15,1415-10-25,Duke of York
 1339,NA,NA,1,NA,Anne Beauchamp,F,1426-07-13,1492-09-20,Lady
-1340,1339,987,1,NA,Isabel Nevill,F,1451-09-05,1476-12-22,Lady
+1340,1339,987,1,NA,Isabel Neville,F,1451-09-05,1476-12-22,Lady
 1341,920,529,1,NA,Louis XIV,M,1638-09-05,1715-09-01,King of France
-1342,1331,990,1,NA,Richard Nevill,M,1400-06-15,1460-12-31,Earl Salisbury
+1342,1331,990,1,NA,Richard Neville,M,1400-06-15,1460-12-31,Earl Salisbury
 1343,NA,2069,1,NA,Eleanor De Bohun,F,1366-06-15,1399-10-03,Lady
 1344,1348,1349,1,NA,Roger Mortimer,M,1374-04-11,1398-07-20,Earl of March IV
 1345,NA,2277,1,NA,Eleanor Holland,F,1386-06-15,1405-10-18,NA
@@ -1889,7 +1889,7 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 1888,1582,1367,1,NA,Richard of Cornwall,M,1252-06-15,1296-06-15,NA
 1889,NA,1890,199,NA,Margaret,F,NA,NA,NA
 1890,NA,NA,199,NA,Richard de Clare,M,1222-08-04,1262-07-15,Earl of Gloucester
-1891,NA,NA,1,NA,Alfonso IX of León,M,1171-08-15,1230-09-24,King of Castile
+1891,NA,NA,1,NA,Alfonso IX of León,M,1171-08-15,1230-09-24,King of León
 1892,NA,NA,200,NA,Lucienne of Rochefort,F,NA,NA,NA
 1893,NA,NA,134,NA,William de Forz,M,1191-06-15,1242-03-26,Count of Aumale
 1894,1742,1741,1,NA,Robert I,M,1216-09-25,1250-02-08,Count of Artois
@@ -2147,22 +2147,22 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 2146,762,336,1,NA,Sophia of Gloucester,F,1773-05-29,1844-11-29,NA
 2147,NA,NA,1,NA,Charles Louis Frederick of Mecklenburg-Strelitz,M,1708-02-23,1752-06-05,Duke
 2148,NA,NA,1,NA,Elisabeth Albertine of Saxe-Hildburghausen,F,1713-08-04,1761-06-29,NA
-2149,NA,NA,236,NA,Alfonso of Spain,M,1941-10-03,1956-03-29,Infante of Spain
-2150,NA,NA,237,NA,Ernest I of Hohenlohe-Langenburg,M,1794-09-13,1860-04-12,Prince
+2149,589,235,1,NA,Helen Louise Kirby,F,1935-01-26,NA,Infante of Spain
+2150,NA,NA,236,NA,Ernest I of Hohenlohe-Langenburg,M,1794-09-13,1860-04-12,Prince
 2151,NA,NA,1,NA,of Dalhousie XIII,M,NA,NA,Earl
 2152,1707,1706,1,NA,Katharine Fraser,F,1957-10-11,NA,NA
 2153,1707,1706,1,NA,Alice,F,1961-06-15,NA,NA
 2154,1707,1706,1,NA,Elizabeth,F,1963-06-15,NA,NA
 2155,125,122,1,NA,Alastair Arthur of Connaught,M,1914-08-09,1943-04-26,Duke of Connaught
 2156,NA,NA,1,NA,Romaine,F,NA,NA,NA
-2157,NA,NA,238,NA,Janet Bryce,F,1889-05-04,1977-01-17,NA
+2157,NA,NA,237,NA,Janet Bryce,F,1889-05-04,1977-01-17,NA
 2158,2156,504,1,NA,George Mountbatten,M,1892-11-06,1938-04-08,Marquess of Milford Haven
 2159,2156,504,1,NA,Ivar Mountbatten,M,1963-03-09,NA,Lord
 2160,NA,NA,1,NA,Wilfrid Ashley,M,1867-09-13,1939-07-03,Baron Mount Temple
 2161,NA,NA,1,NA,of Lodesborough,M,NA,NA,Earl
-2162,NA,NA,239,NA,J. Keyes-O'Malley Hamilton,M,NA,NA,Capt.
+2162,NA,NA,238,NA,J. Keyes-O'Malley Hamilton,M,NA,NA,Capt.
 2163,NA,NA,1,NA,Michael Kelly Bryan,M,NA,NA,NA
-2164,NA,NA,240,NA,William Kemp,M,NA,NA,NA
+2164,NA,NA,239,NA,William Kemp,M,NA,NA,NA
 2165,509,2163,1,NA,Robin Alexander,M,NA,NA,NA
 2166,NA,NA,1,NA,Maelgwn Fychan,M,1205-06-15,1257-06-15,NA
 2167,1959,2166,1,NA,Eleanor,F,NA,NA,NA
@@ -2236,7 +2236,7 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 2235,NA,NA,1,NA,Eric II of Norway,M,1268-06-15,1299-07-15,King of Norway
 2236,2234,2235,1,NA,Margaret Maid of Norway,F,1283-04-09,1290-09-26,NA
 2237,2225,1511,1,NA,Duncan II of Scotland,M,1060-06-15,1094-11-12,King of Scotland
-2238,NA,NA,241,NA,Ethelreda,F,NA,NA,NA
+2238,NA,NA,240,NA,Ethelreda,F,NA,NA,NA
 2239,2243,2242,1,NA,Duncan I of Scotland,M,1001-06-15,1040-08-14,NA
 2240,NA,NA,1,NA,Sybil,F,NA,NA,NA
 2241,2240,2239,1,NA,Donald III Bane of Scotland,M,1033-06-15,1099-06-15,King of Scotland
@@ -2245,7 +2245,7 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 2244,NA,NA,1,NA,Gille Coemgáin of Moray,M,1000-06-15,1032-06-15,NA
 2245,NA,2255,1,NA,Gruoch of Scotland,F,1005-06-15,1060-06-15,NA
 2246,2245,2244,1,NA,Lulach of Scotland,M,1032-06-15,1058-03-17,King of Scotland
-2247,NA,NA,242,NA,Macbeth of Scotland,M,1005-06-15,1057-08-15,King of Scotland
+2247,NA,NA,241,NA,Macbeth of Scotland,M,1005-06-15,1057-08-15,King of Scotland
 2248,NA,2249,1,NA,Malcolm II of Scotland,M,NA,1034-11-25,King of Scotland
 2249,NA,2250,1,NA,Kenneth II of Scotland,M,NA,NA,King of Scotland
 2250,NA,2251,1,NA,Malcolm I of Scotland,M,NA,NA,King of Scotland
@@ -2271,34 +2271,34 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 2270,NA,NA,1,NA,Peter of Luxembourg,M,1390-06-15,1433-08-31,Count of Saint-Pol
 2271,NA,NA,1,NA,Richard Woodville,M,1405-06-15,1469-08-12,Earl Rivers
 2272,NA,NA,1,NA,René of Anjou,M,1409-01-16,1480-07-10,Count of Anjou
-2273,NA,NA,243,NA,Thomas Grey of Heton,M,1384-06-15,1415-08-02,Sir
+2273,NA,NA,242,NA,Thomas Grey of Heton,M,1384-06-15,1415-08-02,Sir
 2274,NA,NA,1,NA,Joachim Frederick of Brandenburg,M,1546-01-27,1608-07-18,Elector
-2275,NA,NA,244,NA,Richard Pole,M,1462-06-15,1505-12-18,Sir
-2276,NA,NA,245,NA,John de la Pole,M,1442-09-27,1492-06-15,Duke of Suffolk
+2275,NA,NA,243,NA,Richard Pole,M,1462-06-15,1505-12-18,Sir
+2276,NA,NA,244,NA,John de la Pole,M,1442-09-27,1492-06-15,Duke of Suffolk
 2277,NA,NA,1,NA,Thomas Holland,M,1350-06-15,1397-04-25,Earl of Kent
-2278,NA,NA,246,NA,Edward Charleton,M,1370-06-15,1421-03-14,Lord Cherleton
+2278,NA,NA,245,NA,Edward Charleton,M,1370-06-15,1421-03-14,Lord Cherleton
 2279,NA,NA,115,NA,Edmund Stafford,M,1378-03-02,1403-07-21,Earl of Stafford
 2280,1345,1344,1,NA,Roger Mortimer,M,1374-04-11,1398-07-20,Earl of March
 2281,1345,1344,1,NA,Eleanor Mortimer,F,1375-06-15,1405-06-15,NA
-2282,NA,NA,247,NA,Edward Courtenay,M,1357-06-15,1419-12-05,Sir
+2282,NA,NA,246,NA,Edward Courtenay,M,1357-06-15,1419-12-05,Sir
 2283,1348,1349,1,NA,Edmund Mortimer,M,1391-11-06,1425-01-18,Earl of March
 2284,1348,1349,1,NA,Elizabeth Mortimer,F,1371-02-12,1417-04-20,NA
 2285,1348,1349,1,NA,Philippa Mortimer,F,1375-11-21,1401-09-24,NA
-2286,NA,NA,248,NA,Henry (Hotspur) Percy,M,1364-05-20,1403-07-21,NA
-2287,NA,NA,249,NA,Thomas de Camoys,M,1351-06-15,1421-03-28,Lord Camoys
-2288,NA,NA,250,NA,John Hastings,M,1347-08-29,1375-04-16,Earl of Pembroke
-2289,NA,NA,251,NA,Richard FitzAlan,M,1346-06-15,1397-09-21,Earl of Arundel
-2290,NA,NA,252,NA,Thomas of Basing Poynings,M,1350-06-15,1429-03-07,Lord St John
+2286,NA,NA,247,NA,Henry (Hotspur) Percy,M,1364-05-20,1403-07-21,NA
+2287,NA,NA,248,NA,Thomas de Camoys,M,1351-06-15,1421-03-28,Lord Camoys
+2288,NA,NA,249,NA,John Hastings,M,1347-08-29,1375-04-16,Earl of Pembroke
+2289,NA,NA,250,NA,Richard FitzAlan,M,1346-06-15,1397-09-21,Earl of Arundel
+2290,NA,NA,251,NA,Thomas of Basing Poynings,M,1350-06-15,1429-03-07,Lord St John
 2291,NA,NA,108,NA,Charles IV,M,1316-05-14,1378-11-29,Holy Roman Emperor
-2292,NA,NA,253,NA,John Holland,M,1352-06-15,1400-01-16,Duke of Exeter
-2293,NA,NA,254,NA,John Cornwall,M,1364-06-15,1443-12-11,Lord Fanhope
+2292,NA,NA,252,NA,John Holland,M,1352-06-15,1400-01-16,Duke of Exeter
+2293,NA,NA,253,NA,John Cornwall,M,1364-06-15,1443-12-11,Lord Fanhope
 2294,1337,1237,1,NA,Constance of York,F,1374-06-15,1416-11-28,NA
-2295,NA,NA,255,NA,Thomas of Gloucester Despencer,M,1373-09-22,1400-01-13,Earl of Gloucester
-2296,NA,NA,256,NA,Philippa de Mohun,F,1367-06-15,1431-07-17,NA
-2297,NA,NA,257,NA,Fitzwater,M,NA,NA,Lord
-2298,NA,NA,258,NA,John Golafre,M,1350-06-15,1442-11-18,Sir
+2295,NA,NA,254,NA,Thomas of Gloucester Despencer,M,1373-09-22,1400-01-13,Earl of Gloucester
+2296,NA,NA,255,NA,Philippa de Mohun,F,1367-06-15,1431-07-17,NA
+2297,NA,NA,256,NA,Fitzwater,M,NA,NA,Lord
+2298,NA,NA,257,NA,John Golafre,M,1350-06-15,1442-11-18,Sir
 2299,NA,NA,114,NA,Thomas Clifford,M,1414-03-25,1455-05-22,Lord Clifford
-2300,NA,NA,259,NA,John Neville,M,1493-11-17,1543-03-02,Baron Latimer
+2300,NA,NA,258,NA,John Neville,M,1493-11-17,1543-03-02,Baron Latimer
 2301,2304,2303,1,NA,Hugh Seymour,M,1759-04-29,1801-09-11,Admiral
 2302,NA,NA,1,NA,Anne Horatia Waldegrave,F,1762-11-08,1801-06-12,Lady
 2303,NA,NA,1,NA,Francis Seymour-Conway,M,1718-07-05,1794-06-14,Marquess of Hertford
@@ -2318,23 +2318,23 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 2317,2311,2310,63,NA,Mary Dudley,F,1530-06-15,1586-08-09,Lady Sidney
 2318,2311,2310,63,NA,Catherine Dudley,F,1543-06-15,1620-08-14,Countess of Huntingdon
 2319,2393,2392,1,NA,Anne Seymour,F,1538-06-15,1588-02-17,Countess of Warwick
-2320,NA,NA,260,NA,Edward Unton,M,NA,NA,NA
+2320,NA,NA,259,NA,Edward Unton,M,NA,NA,NA
 2321,NA,NA,63,NA,Anne Whorwood,F,1500-06-15,1552-05-26,NA
-2322,NA,NA,261,NA,Elizabeth Talboys,F,1520-06-15,1563-06-15,NA
-2323,NA,NA,262,NA,Anne Russell,F,1548-06-15,1604-02-09,Countess of Warwick
+2322,NA,NA,260,NA,Elizabeth Talboys,F,1520-06-15,1563-06-15,NA
+2323,NA,NA,261,NA,Anne Russell,F,1548-06-15,1604-02-09,Countess of Warwick
 2324,2321,2313,63,NA,John Dudley,M,NA,NA,NA
-2325,NA,NA,263,NA,Margaret Audley,F,1540-06-15,1564-01-09,NA
-2326,NA,NA,264,NA,Thomas Howard,M,1538-03-10,1572-06-02,Duke of Norfolk
+2325,NA,NA,262,NA,Margaret Audley,F,1540-06-15,1564-01-09,NA
+2326,NA,NA,263,NA,Thomas Howard,M,1538-03-10,1572-06-02,Duke of Norfolk
 2327,2393,2392,1,NA,Henry Seymour,M,NA,NA,NA
-2328,NA,NA,265,NA,Henry Sidney,M,1529-07-20,1586-05-05,NA
-2329,NA,NA,266,NA,Henry Hastings,M,1535-06-15,1595-12-14,Earl of Huntingdon
-2330,NA,NA,267,NA,Amy Robsart,F,1532-06-07,1560-09-08,NA
+2328,NA,NA,264,NA,Henry Sidney,M,1529-07-20,1586-05-05,NA
+2329,NA,NA,265,NA,Henry Hastings,M,1535-06-15,1595-12-14,Earl of Huntingdon
+2330,NA,NA,266,NA,Amy Robsart,F,1532-06-07,1560-09-08,NA
 2331,2403,2405,1,NA,Lettice Knollys,F,1543-11-08,1634-12-25,NA
-2332,NA,NA,268,NA,Henry Herbert,M,1534-06-15,1601-01-19,Earl of Pembroke
-2333,NA,NA,269,NA,Thomas Keyes,M,1524-06-15,1571-09-03,NA
+2332,NA,NA,267,NA,Henry Herbert,M,1534-06-15,1601-01-19,Earl of Pembroke
+2333,NA,NA,268,NA,Thomas Keyes,M,1524-06-15,1571-09-03,NA
 2334,1428,2104,1,NA,Margaret Clifford,F,1540-06-15,1596-09-29,Countess of Derby
-2335,NA,NA,270,NA,Henry Stanley,M,NA,1593-09-25,Earl of Derby
-2336,NA,NA,271,NA,Anne Dacre,F,1557-03-21,1630-04-19,NA
+2335,NA,NA,269,NA,Henry Stanley,M,NA,1593-09-25,Earl of Derby
+2336,NA,NA,270,NA,Anne Dacre,F,1557-03-21,1630-04-19,NA
 2337,2342,2341,1,NA,Elizabeth Howard,F,1480-06-15,1538-04-03,NA
 2338,2337,2099,1,NA,George Rochford Boleyn,M,1504-06-15,1536-05-17,Viscount Rochford
 2339,2337,2099,1,NA,Mary Boleyn,F,1499-06-15,1543-07-19,NA
@@ -2342,17 +2342,17 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 2341,NA,NA,1,NA,Thomas Howard,M,1443-06-15,1524-05-21,Duke of Norfolk
 2342,NA,NA,1,NA,Elizabeth Tilney,F,1445-06-15,1497-04-04,NA
 2343,2342,2341,1,NA,Thomas Howard,M,1473-06-15,1554-08-25,Duke of Norfolk
-2344,NA,NA,272,NA,Anne of York,F,1475-11-02,1511-11-23,NA
+2344,NA,NA,271,NA,Anne of York,F,1475-11-02,1511-11-23,NA
 2345,NA,NA,1,NA,Elizabeth Stafford,F,1497-06-15,1558-11-30,Duchess of Norfolk
-2346,NA,NA,273,NA,Dorothy Troyes,F,NA,NA,NA
+2346,NA,NA,272,NA,Dorothy Troyes,F,NA,NA,NA
 2347,NA,NA,1,NA,Agnes Tilney,F,1477-06-15,1545-05-15,NA
 2348,2347,2341,1,NA,William Howard,M,1510-06-15,1573-01-12,Baron Howard of Effingham
 2349,2347,2341,1,NA,Dorothy Howard,F,NA,NA,NA
 2350,2347,2341,1,NA,Elizabeth Howard,F,1510-06-15,1534-09-18,NA
-2351,NA,NA,274,NA,Catherine Broughton,F,NA,1531-06-15,NA
-2352,NA,NA,275,NA,Margaret Gamage,F,NA,1535-06-15,NA
-2353,NA,NA,276,NA,Edward Stanley,M,1509-05-10,1572-10-24,Earl of Derby
-2354,NA,NA,277,NA,Henry Radcliffe,M,1507-06-15,1557-02-17,Earl of Sussex
+2351,NA,NA,273,NA,Catherine Broughton,F,NA,1531-06-15,NA
+2352,NA,NA,274,NA,Margaret Gamage,F,NA,1535-06-15,NA
+2353,NA,NA,275,NA,Edward Stanley,M,1509-05-10,1572-10-24,Earl of Derby
+2354,NA,NA,276,NA,Henry Radcliffe,M,1507-06-15,1557-02-17,Earl of Sussex
 2355,2345,2343,1,NA,Henry Howard,M,1517-06-15,1547-01-19,Earl of Surrey
 2356,2345,2343,1,NA,Mary Howard,F,1519-06-15,1557-12-07,Duchess of Richmond and Somerset
 2357,2345,2343,1,NA,Thomas Howard,M,1520-06-15,1582-01-28,Viscount Bindon
@@ -2362,57 +2362,57 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 2361,2358,2355,1,NA,Catherine Howard,F,1538-06-15,1596-04-07,NA
 2362,2358,2355,1,NA,Jane Howard,F,1537-06-15,1593-06-15,NA
 2363,2358,2355,1,NA,Margaret Howard,F,1547-06-15,1591-03-17,NA
-2364,NA,NA,278,NA,Henry FitzRoy,M,1519-06-15,1536-07-23,Duke of Richmond and Somerset
-2365,NA,NA,279,NA,Gertrude Lyte,F,NA,NA,NA
+2364,NA,NA,277,NA,Henry FitzRoy,M,1519-06-15,1536-07-23,Duke of Richmond and Somerset
+2365,NA,NA,278,NA,Gertrude Lyte,F,NA,NA,NA
 2366,NA,NA,1,NA,Mary FitzAlan,F,1540-06-15,1557-08-25,Duchess of Norfolk
 2367,2366,2359,1,NA,Philip Howard,M,1557-06-28,1595-10-19,Earl of Arundel
 2368,NA,NA,1,NA,Anne Dacre,F,1557-03-21,1630-04-19,Countess of Arundel
 2369,2368,2367,1,NA,Thomas Howard,M,1585-07-07,1646-10-04,Earl of Arundel
-2370,NA,NA,280,NA,Aletheia Talbot,F,1585-06-15,1654-06-03,NA
+2370,NA,NA,279,NA,Aletheia Talbot,F,1585-06-15,1654-06-03,NA
 2371,NA,NA,1,NA,Margaret Audley,F,1540-06-15,1564-01-09,NA
 2372,2371,2359,1,NA,Thomas Howard,M,1561-08-24,1626-05-28,Earl of Suffolk
-2373,NA,NA,281,NA,Mary Dacre,F,1563-07-04,1578-04-07,NA
+2373,NA,NA,280,NA,Mary Dacre,F,1563-07-04,1578-04-07,NA
 2374,NA,NA,1,NA,Catherine Knyvett,F,1564-06-15,1633-12-25,Countess of Suffolk
 2375,2374,2372,1,NA,Theophilus Howard,M,1584-08-13,1640-06-03,Earl of Suffolk
 2376,2374,2372,1,NA,Thomas Howard,M,1587-10-08,1669-07-16,Earl of Berkshire
 2377,2374,2372,1,NA,Henry Howard,M,NA,NA,NA
 2378,2374,2372,1,NA,Catherine Howard,F,1588-06-15,1672-06-15,NA
 2379,2374,2372,1,NA,Frances Howard,F,NA,NA,NA
-2380,NA,NA,282,NA,Elizabeth Dunbar,F,NA,NA,NA
-2381,NA,NA,283,NA,Elizabeth Cecil,F,NA,NA,NA
-2382,NA,NA,284,NA,Elizabeth Bassett,F,NA,1643-06-15,NA
-2383,NA,NA,285,NA,William Cavendish,M,1592-12-16,1676-12-25,Duke of Newcastle
-2384,NA,NA,286,NA,William Cecil,M,1591-03-28,1668-12-03,Earl of Salisbury
-2385,NA,NA,287,NA,Robert Devereux,M,1591-01-11,1646-09-14,Earl of Essex
-2386,NA,NA,288,NA,Robert Carr,M,1587-06-15,1645-07-17,Earl of Somerset
+2380,NA,NA,281,NA,Elizabeth Dunbar,F,NA,NA,NA
+2381,NA,NA,282,NA,Elizabeth Cecil,F,NA,NA,NA
+2382,NA,NA,283,NA,Elizabeth Bassett,F,NA,1643-06-15,NA
+2383,NA,NA,284,NA,William Cavendish,M,1592-12-16,1676-12-25,Duke of Newcastle
+2384,NA,NA,285,NA,William Cecil,M,1591-03-28,1668-12-03,Earl of Salisbury
+2385,NA,NA,286,NA,Robert Devereux,M,1591-01-11,1646-09-14,Earl of Essex
+2386,NA,NA,287,NA,Robert Carr,M,1587-06-15,1645-07-17,Earl of Somerset
 2387,2371,2359,1,NA,William Howard,M,1563-12-19,1640-10-07,NA
-2388,NA,NA,289,NA,Elizabeth Dacre,F,NA,NA,NA
-2389,NA,NA,290,NA,Frances Howard,F,1590-05-31,1632-08-23,Countess of Essex and Somerset
-2390,NA,NA,291,NA,Frances Howard,F,1578-06-15,1639-10-08,Duchess of Richmond and Lennox
-2391,NA,NA,292,NA,Ludovic Stuart,M,1574-09-29,1624-02-16,Duke of Lennox and Richmond
+2388,NA,NA,288,NA,Elizabeth Dacre,F,NA,NA,NA
+2389,NA,NA,289,NA,Frances Howard,F,1590-05-31,1632-08-23,Countess of Essex and Somerset
+2390,NA,NA,290,NA,Frances Howard,F,1578-06-15,1639-10-08,Duchess of Richmond and Lennox
+2391,NA,NA,291,NA,Ludovic Stuart,M,1574-09-29,1624-02-16,Duke of Lennox and Richmond
 2392,NA,NA,1,NA,Edward Seymour,M,1500-06-15,1552-01-22,Duke of Somerset
 2393,NA,NA,1,NA,Anne Stanhope,F,1510-06-15,1587-04-16,Duchess of Somerset
 2394,2339,2340,1,NA,Henry Carey,M,1526-03-04,1596-07-23,Baron Hunsdon
-2395,NA,NA,293,NA,Catherine Fillol,F,1507-06-15,1535-06-15,NA
+2395,NA,NA,292,NA,Catherine Fillol,F,1507-06-15,1535-06-15,NA
 2396,2112,2109,1,NA,Edward Beauchamp Seymour,M,1586-09-21,1618-06-15,Lord Beauchamp
 2397,2112,2109,1,NA,Francis Seymour,M,1590-06-15,1664-07-12,Baron Seymour of Trowbridge
 2398,2112,2109,1,NA,Honora Seymour,F,1594-06-15,1620-06-15,NA
-2399,NA,NA,294,NA,Anne Sackville,F,NA,NA,NA
-2400,NA,NA,295,NA,Edward Lewes,M,NA,NA,NA
-2401,NA,NA,296,NA,Frances Prynne,F,NA,NA,NA
-2402,NA,NA,297,NA,Catherine Lee,F,1652-06-15,1700-06-15,NA
+2399,NA,NA,293,NA,Anne Sackville,F,NA,NA,NA
+2400,NA,NA,294,NA,Edward Lewes,M,NA,NA,NA
+2401,NA,NA,295,NA,Frances Prynne,F,NA,NA,NA
+2402,NA,NA,296,NA,Catherine Lee,F,1652-06-15,1700-06-15,NA
 2403,2339,2340,1,NA,Catherine Carey,F,1524-06-15,1569-01-15,Lady
-2404,NA,NA,298,NA,Anne Morgan,F,NA,NA,NA
+2404,NA,NA,297,NA,Anne Morgan,F,NA,NA,NA
 2405,NA,NA,1,NA,Francis Knollys,M,1511-06-15,1596-07-19,NA
 2406,2403,2405,1,NA,Henry Knollys,M,1541-06-15,1582-06-15,NA
 2407,2403,2405,1,NA,William Knollys,M,1544-06-15,1632-05-25,Earl of Banbury
 2408,2403,2405,1,NA,Anne Knollys,F,NA,NA,NA
 2409,2403,2405,1,NA,Catherine Knollys,F,NA,NA,NA
-2410,NA,NA,299,NA,Margaret Cave,F,1549-06-15,1606-06-15,NA
-2411,NA,NA,300,NA,Walter Devereux,M,1541-09-16,1576-09-22,Earl of Essex
-2412,NA,NA,301,NA,Christopher Blount,M,1555-06-15,1601-03-18,NA
-2413,NA,NA,302,NA,Thomas Leighton,M,NA,NA,Lord De La Warr
-2414,NA,NA,303,NA,Gerald FitzGerald,M,1525-06-15,1585-11-16,Lord Offaly
+2410,NA,NA,298,NA,Margaret Cave,F,1549-06-15,1606-06-15,NA
+2411,NA,NA,299,NA,Walter Devereux,M,1541-09-16,1576-09-22,Earl of Essex
+2412,NA,NA,300,NA,Christopher Blount,M,1555-06-15,1601-03-18,NA
+2413,NA,NA,301,NA,Thomas Leighton,M,NA,NA,Lord De La Warr
+2414,NA,NA,302,NA,Gerald FitzGerald,M,1525-06-15,1585-11-16,Lord Offaly
 2415,769,765,1,NA,Charles II,M,1651-03-31,1685-05-26,Elector Palatine
 2416,2417,2418,1,NA,Mariana of Austria,F,1634-12-24,1696-05-16,Queen
 2417,1017,2132,1,NA,Maria Anna of Spain,F,1606-08-18,1646-05-13,NA
@@ -2454,13 +2454,13 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 2453,NA,NA,1,NA,Adelaide of Savoy,F,1092-06-15,1154-11-18,NA
 2454,2535,2457,1,NA,Philip I of France,M,1052-05-23,1108-07-29,King of France
 2455,NA,NA,1,NA,Bertha of Holland,F,1055-06-15,1093-10-15,NA
-2456,NA,NA,304,NA,Bertrada de Montfort,F,1070-06-15,1117-02-14,NA
+2456,NA,NA,303,NA,Bertrada de Montfort,F,1070-06-15,1117-02-14,NA
 2457,2459,2458,1,NA,Henry I of France,M,1008-05-04,1060-08-04,King of France
 2458,NA,2463,1,NA,Robert II the Pious of France,M,972-03-27,1031-07-20,King of France
 2459,NA,NA,1,NA,Constance of Arles,F,NA,1032-07-25,NA
 2460,2459,2458,1,NA,Hugh Magnus of France,M,1007-06-15,1025-09-17,NA
-2461,NA,NA,305,NA,Unknown,F,NA,NA,NA
-2462,NA,NA,306,NA,Bertha of Burgundy,F,NA,1010-01-16,NA
+2461,NA,NA,304,NA,Unknown,F,NA,NA,NA
+2462,NA,NA,305,NA,Bertha of Burgundy,F,NA,1010-01-16,NA
 2463,NA,NA,1,NA,Hugh Capet,M,NA,996-10-24,King of France
 2464,2486,1903,1,NA,Louis X the Headstrong,M,1289-10-04,1316-06-05,King of France
 2465,2486,1903,1,NA,Philip V the Tall of France,M,1293-06-15,1322-01-03,King of France
@@ -2473,10 +2473,10 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 2472,2453,2452,1,NA,Henry of Beauvais,M,1121-06-15,1175-11-13,Bishop of Rouen
 2473,2453,2452,1,NA,Philip,M,NA,NA,Bishop of Paris
 2474,2453,2452,1,NA,Constance of France,F,1124-06-15,1190-06-15,Countess of Boulogne and Toulouse
-2475,NA,NA,307,NA,Constance of Castile,F,1141-06-15,1160-10-04,NA
+2475,NA,NA,306,NA,Constance of Castile,F,1141-06-15,1160-10-04,NA
 2476,NA,NA,1,NA,Adela of Champagne,F,1140-06-15,1206-06-04,NA
 2477,NA,NA,1,NA,Isabella of Hainault,F,1170-04-05,1190-03-15,NA
-2478,NA,NA,308,NA,Ingeborg of Denmark,F,1174-06-15,1236-07-29,NA
+2478,NA,NA,307,NA,Ingeborg of Denmark,F,1174-06-15,1236-07-29,NA
 2479,NA,NA,1,NA,Agnes of Merania,F,1180-06-15,1201-07-29,Princess
 2480,2479,2451,1,NA,Philip Hurepel of France,M,1200-06-15,1234-01-19,NA
 2481,1742,1741,1,NA,Alphonse of Poitiers,M,1220-11-11,1271-08-21,NA
@@ -2488,14 +2488,14 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 2487,NA,2488,1,NA,Clemence of Hungary,F,1293-06-15,1328-10-12,NA
 2488,NA,2489,1,NA,Charles I of Hungary,M,1288-06-15,1342-07-16,King of Hungary
 2489,NA,NA,1,NA,Charles II of Naples,M,1254-06-15,1309-05-05,King of Naples
-2490,NA,NA,309,NA,Joan II of Burgundy,F,1293-06-15,1349-12-12,NA
-2491,NA,NA,310,NA,Blanche of Burgundy,F,1296-06-15,1326-04-29,NA
-2492,NA,NA,311,NA,Marie of Luxembourg,F,1304-06-15,1324-03-26,NA
-2493,NA,NA,312,NA,Joan of Évreux,F,1310-06-15,1371-03-04,NA
+2490,NA,NA,308,NA,Joan II of Burgundy,F,1293-06-15,1349-12-12,NA
+2491,NA,NA,309,NA,Blanche of Burgundy,F,1296-06-15,1326-04-29,NA
+2492,NA,NA,310,NA,Marie of Luxembourg,F,1304-06-15,1324-03-26,NA
+2493,NA,NA,311,NA,Joan of Évreux,F,1310-06-15,1371-03-04,NA
 2494,NA,2495,1,NA,Philip VI of France,M,1293-11-17,1350-08-22,King of France
 2495,NA,NA,1,NA,Charles of Valois,M,1270-03-12,1325-12-16,NA
 2496,NA,NA,1,NA,Joan of Burgundy,F,1293-06-24,1348-09-12,Queen
-2497,NA,NA,313,NA,Blanche of Navarre,F,1331-06-15,1398-10-05,NA
+2497,NA,NA,312,NA,Blanche of Navarre,F,1331-06-15,1398-10-05,NA
 2498,2496,2494,1,NA,John II the Good,M,1319-04-26,1364-04-08,King of France
 2499,2519,2498,1,NA,Charles V the Wise,M,1337-01-21,1380-09-16,King of France
 2500,NA,NA,1,NA,Joan of Bourbon,F,1338-02-03,1378-02-06,Queen
@@ -2503,14 +2503,14 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 2502,2500,2499,1,NA,Catherine of France,F,1378-02-04,1388-11-15,Princess
 2503,2500,2499,1,NA,Isabelle,F,NA,NA,NA
 2504,NA,NA,1,NA,Stanisław Leszczyński,M,1677-10-20,1766-02-23,King of Poland
-2505,NA,NA,314,NA,Margaret of Valois,F,1553-05-14,1615-03-27,NA
+2505,NA,NA,313,NA,Margaret of Valois,F,1553-05-14,1615-03-27,NA
 2506,587,894,1,NA,Elizabeth,F,NA,NA,NA
 2507,2882,2423,1,NA,Charles,M,1686-08-31,1714-05-05,Duke of Berry
 2508,NA,NA,1,NA,Clotilde of Savoy,F,1759-09-23,1802-03-07,Queen
 2509,2508,897,1,NA,Louis Antoine of Angouleme,M,1775-08-06,1844-06-03,Duke
 2510,2508,897,1,NA,Charles Ferdinand of Berry,M,1778-01-24,1820-02-14,Duke
 2511,2514,2513,1,NA,Louis Philippe I of France,M,1773-10-06,1850-08-26,King of France
-2512,NA,NA,315,NA,Désirée Clary,F,1777-11-08,1860-12-17,Queen of Sweden
+2512,NA,NA,314,NA,Désirée Clary,F,1777-11-08,1860-12-17,Queen of Sweden
 2513,NA,2515,1,NA,Louis Philippe Joseph d’Orléans,M,1747-04-13,1793-11-06,NA
 2514,NA,NA,1,NA,Louise Marie Adélaïde de Bourbon-Penthièvre,F,1753-03-13,1821-06-23,Princess
 2515,NA,2516,1,NA,Louis Philippe I,M,1725-05-12,1785-11-18,Duke of Orléans
@@ -2519,7 +2519,7 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 2518,2519,2498,1,NA,Philip the Bold,M,1342-01-17,1404-04-27,Duke of Burgundy
 2519,NA,NA,1,NA,Bonne of Luxembourg,F,1315-05-20,1349-09-11,NA
 2520,NA,2495,1,NA,Joan of Valois,F,1294-06-15,1342-03-07,Countess of Hainaut
-2521,NA,NA,316,NA,Robert III of Artois,M,1287-06-15,1342-08-16,Duke of Richmond
+2521,NA,NA,315,NA,Robert III of Artois,M,1287-06-15,1342-08-16,Duke of Richmond
 2522,2439,2438,58,NA,Charles IX,M,1550-06-27,1574-05-30,King of France
 2523,2439,2438,58,NA,Henry III,M,1551-09-19,1589-08-02,King of France
 2524,NA,2525,58,NA,Charles of Valois,M,1459-06-15,1496-01-01,Count of Angoulême
@@ -2539,13 +2539,13 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 2538,2539,NA,1,NA,Mary of Anjou,F,1404-10-14,1463-11-29,NA
 2539,NA,NA,1,NA,Yolande of Aragon,F,1384-08-11,1442-11-14,NA
 2540,2538,2537,1,NA,Louis XI,M,1423-07-03,1483-08-30,King of France
-2541,NA,NA,317,NA,Margaret of Scotland,F,1424-12-25,1445-08-16,Dauphine of France
+2541,NA,NA,316,NA,Margaret of Scotland,F,1424-12-25,1445-08-16,Dauphine of France
 2542,NA,NA,1,NA,Charlotte of Savoy,F,1441-11-11,1483-12-01,NA
 2543,2542,2540,1,NA,Charles VIII,M,1490-06-30,1498-04-07,King of France
 2544,2542,2540,1,NA,Anne of France,F,1461-04-03,1522-11-14,NA
-2545,NA,NA,318,NA,Anne of Brittany,F,1477-01-25,1514-01-09,NA
+2545,NA,NA,317,NA,Anne of Brittany,F,1477-01-25,1514-01-09,NA
 2546,NA,NA,58,NA,Anne of Cleves,F,1515-09-22,1557-07-16,NA
-2547,NA,NA,319,NA,Joan of Valois,F,1464-04-23,1505-02-04,NA
+2547,NA,NA,318,NA,Joan of Valois,F,1464-04-23,1505-02-04,NA
 2548,NA,NA,58,NA,Anne of Brittany,F,1477-01-25,1514-01-09,NA
 2549,NA,NA,1,NA,Catherine of Brandenburg-Küstrin,F,1549-08-10,1602-09-30,NA
 2550,NA,NA,27,NA,Hildegard of Vinzgau,F,NA,783-04-30,NA
@@ -2553,8 +2553,8 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 2552,2550,417,27,NA,Pepin of Italy,M,NA,810-07-08,King of Italy
 2553,2550,417,27,NA,Louis I the Pious of Aquitaine,M,778-04-16,840-06-20,King
 2554,2550,417,27,NA,Bertha,F,NA,824-03-11,daughter of Charlemagne
-2555,NA,NA,320,NA,Fastrada,F,NA,794-08-10,NA
-2556,NA,NA,321,NA,Luitgard,F,NA,800-06-04,NA
+2555,NA,NA,319,NA,Fastrada,F,NA,794-08-10,NA
+2556,NA,NA,320,NA,Luitgard,F,NA,800-06-04,NA
 2557,NA,NA,27,NA,Bertha of Toulouse,F,NA,NA,NA
 2558,NA,NA,27,NA,Ermengarde of Hesbaye,F,NA,818-10-03,NA
 2559,NA,NA,27,NA,Judith of Bavaria,F,NA,843-04-19,NA
@@ -2588,8 +2588,8 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 2587,2586,2567,27,NA,Ermengarde of Provence,F,NA,896-06-22,NA
 2588,NA,NA,27,NA,Boso of Provence,M,NA,887-01-11,King of Provence
 2589,2587,2588,27,NA,Louis III the Blind,M,NA,928-06-05,Holy Roman Emper
-2590,NA,NA,322,NA,Theutberga of Valois,F,NA,NA,NA
-2591,NA,NA,323,NA,Waldrada,F,NA,868-04-09,NA
+2590,NA,NA,321,NA,Theutberga of Valois,F,NA,NA,NA
+2591,NA,NA,322,NA,Waldrada,F,NA,868-04-09,NA
 2592,NA,NA,27,NA,Litwinde,F,NA,NA,NA
 2593,2592,2572,27,NA,Arnulf of Carinthia,M,NA,899-12-08,King of Germany
 2594,NA,NA,27,NA,Oda of Bavaria,F,NA,NA,NA
@@ -2610,52 +2610,52 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 2609,NA,2613,27,NA,Pepin the Short,M,NA,768-09-24,King of Franks
 2610,NA,NA,27,NA,Bertrada of Laon,F,NA,783-07-12,NA
 2611,2610,2609,27,NA,Carloman I,M,751-06-28,771-12-04,King of Franks
-2612,NA,NA,324,NA,Gerberga of the Lombards,F,NA,NA,NA
+2612,NA,NA,323,NA,Gerberga of the Lombards,F,NA,NA,NA
 2613,NA,NA,27,NA,Charles Martel,M,NA,741-10-22,NA
 2614,2896,2895,1,NA,Augusta Reuss-Ebersdorf,F,1757-01-19,1831-11-16,Countess
 2615,NA,NA,58,NA,Elisabeth of Austria,F,1554-06-05,1592-01-22,Queen
 2616,2615,2522,58,NA,Marie Elisabeth,F,1572-10-27,1578-04-02,NA
-2617,NA,NA,325,NA,Louise of Lorraine,F,1553-04-30,1601-01-29,NA
-2618,NA,NA,326,NA,Isabella of Aragon,F,1247-06-15,1271-01-28,Queen
-2619,NA,NA,327,NA,Marguerite of Burgundy,F,1290-06-15,1315-08-14,NA
-2620,NA,NA,328,NA,Joan of Boulogne,F,1326-05-08,1360-09-29,NA
-2621,NA,NA,329,NA,Magdalen of Hochstadten,F,1846-06-15,1917-06-15,Baroness
+2617,NA,NA,324,NA,Louise of Lorraine,F,1553-04-30,1601-01-29,NA
+2618,NA,NA,325,NA,Isabella of Aragon,F,1247-06-15,1271-01-28,Queen
+2619,NA,NA,326,NA,Marguerite of Burgundy,F,1290-06-15,1315-08-14,NA
+2620,NA,NA,327,NA,Joan of Boulogne,F,1326-05-08,1360-09-29,NA
+2621,NA,NA,328,NA,Magdalen of Hochstadten,F,1846-06-15,1917-06-15,Baroness
 2622,NA,NA,1,NA,William of Prussia,M,NA,NA,Prince
 2623,NA,NA,33,NA,John Loisinger,M,NA,NA,NA
-2624,NA,NA,330,NA,Frederick Francis II of Mecklenburg-Schwerin,M,1823-02-28,1883-04-15,Grand Duke
-2625,NA,2626,331,NA,Josephine of Lichtenberg,F,1857-06-15,1952-06-15,Baroness
-2626,NA,NA,331,NA,Philip Bender,M,NA,NA,NA
-2627,NA,NA,332,NA,Caroline of Nidda,F,1848-06-15,1879-06-15,Baroness
-2628,NA,NA,333,NA,Emily of Dornberg,F,1868-06-15,1961-06-15,Baroness
+2624,NA,NA,329,NA,Frederick Francis II of Mecklenburg-Schwerin,M,1823-02-28,1883-04-15,Grand Duke
+2625,NA,2626,330,NA,Josephine of Lichtenberg,F,1857-06-15,1952-06-15,Baroness
+2626,NA,NA,330,NA,Philip Bender,M,NA,NA,NA
+2627,NA,NA,331,NA,Caroline of Nidda,F,1848-06-15,1879-06-15,Baroness
+2628,NA,NA,332,NA,Emily of Dornberg,F,1868-06-15,1961-06-15,Baroness
 2629,463,461,1,NA,Ludwig of Hesse and by Rhine,M,1931-10-25,1937-11-16,NA
 2630,463,461,1,NA,Alexander of Hesse and by Rhine,M,1933-04-14,1937-11-16,NA
 2631,463,461,1,NA,Johanna of Hesse and by Rhine,F,1936-09-20,1939-06-14,NA
 2632,NA,NA,30,NA,Auckland Campbell Geddes,M,1879-06-21,1954-01-08,Baron Geddes
-2633,NA,NA,334,NA,Maria de las Mercedes of Orléans,F,1860-06-24,1878-06-26,Queen
+2633,NA,NA,333,NA,Maria de las Mercedes of Orléans,F,1860-06-24,1878-06-26,Queen
 2634,682,683,1,NA,María de las Mercedes,F,1880-09-11,1904-10-17,Princess of Asturias
 2635,682,683,1,NA,María Teresa of Spain,F,1882-11-12,1912-09-23,NA
 2636,NA,NA,1,NA,Carlos of Bourbon-Two Sicilies,M,1870-11-10,1949-11-11,Prince
 2637,NA,NA,1,NA,Louise of Orléans,F,1882-02-24,1958-04-18,Princess of Bourbon-Two Sicilies
-2638,NA,NA,335,NA,Luis Gómez-Acebo,M,1934-12-23,1991-03-09,Viscount de la Torre
-2639,NA,NA,336,NA,Carlos Zurita y Delgado,M,1943-10-09,NA,NA
-2640,NA,NA,337,NA,Edelmira Sampedro y Robato,F,1906-03-05,1994-05-23,NA
-2641,NA,NA,338,NA,Martha y Altazurra Rocafort,F,NA,NA,NA
+2638,NA,NA,334,NA,Luis Gómez-Acebo,M,1934-12-23,1991-03-09,Viscount de la Torre
+2639,NA,NA,335,NA,Carlos Zurita y Delgado,M,1943-10-09,NA,NA
+2640,NA,NA,336,NA,Edelmira Sampedro y Robato,F,1906-03-05,1994-05-23,NA
+2641,NA,NA,337,NA,Martha y Altazurra Rocafort,F,NA,NA,NA
 2642,27,409,1,NA,María Cristina of Spain,F,1911-12-12,1996-12-23,Countess Marone-Cinzano
 2643,27,409,1,NA,Gonzalo of Spain,M,1914-10-24,1934-08-13,NA
-2644,NA,NA,339,NA,Enrico Eugenio Antonio Marone-Cinzano,M,1895-03-15,1968-10-23,NA
-2645,NA,NA,340,NA,Alessandro Torlonia,M,1911-12-07,1986-05-12,Prince of Civitella-Cesi
-2646,NA,NA,341,NA,Emmanuelle de Dampierre,F,1913-11-08,2012-05-02,NA
-2647,NA,NA,342,NA,Charlotte Tiedemann,F,1919-06-15,NA,NA
-2648,2650,2649,343,NA,Ferdinand of Bavaria,M,1884-05-10,1958-04-05,NA
-2649,NA,NA,343,NA,Ludwig Ferdinand of Bavaria,M,1859-10-22,1949-11-23,Prince
-2650,NA,NA,343,NA,María de la Paz of Spain,F,1862-06-23,1946-12-04,NA
+2644,NA,NA,338,NA,Enrico Eugenio Antonio Marone-Cinzano,M,1895-03-15,1968-10-23,NA
+2645,NA,NA,339,NA,Alessandro Torlonia,M,1911-12-07,1986-05-12,Prince of Civitella-Cesi
+2646,NA,NA,340,NA,Emmanuelle de Dampierre,F,1913-11-08,2012-05-02,NA
+2647,NA,NA,341,NA,Charlotte Tiedemann,F,1919-06-15,NA,NA
+2648,2650,2649,342,NA,Ferdinand of Bavaria,M,1884-05-10,1958-04-05,NA
+2649,NA,NA,342,NA,Ludwig Ferdinand of Bavaria,M,1859-10-22,1949-11-23,Prince
+2650,NA,NA,342,NA,María de la Paz of Spain,F,1862-06-23,1946-12-04,NA
 2651,NA,NA,1,NA,Adolf of Schwarzburg-Rudolstadt,M,1801-09-27,1875-07-01,Prince
 2652,NA,NA,1,NA,Mathilde of Schönburg-Waldenburg,F,1826-11-18,1914-03-22,NA
 2653,651,650,1,NA,Frederica Louisa Wilhelmina of Orange-Nassau,F,1770-11-28,1819-10-15,NA
 2654,410,162,1,NA,Alexandrine of Prussia,F,1803-02-23,1892-04-21,Grand Duchess
 2655,651,650,1,NA,Frederick of Orange-Nassau,M,1774-02-28,1799-01-06,NA
-2656,NA,NA,344,NA,Amalia of Saxe-Weimar-Eisenach,F,1830-05-20,1872-05-01,NA
-2657,NA,NA,345,NA,Marie of Prussia,F,1855-09-14,1888-06-20,Princess of the Netherlands
+2656,NA,NA,343,NA,Amalia of Saxe-Weimar-Eisenach,F,1830-05-20,1872-05-01,NA
+2657,NA,NA,344,NA,Marie of Prussia,F,1855-09-14,1888-06-20,Princess of the Netherlands
 2658,NA,NA,1,NA,Lucas Streshniev,M,NA,1650-06-15,NA
 2659,NA,2924,1,NA,Anne Volkonska,F,NA,NA,NA
 2660,NA,NA,1,NA,Feodor Nikitich Romanov,M,1553-06-15,1633-10-01,Patr. of Moscow
@@ -2665,7 +2665,7 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 2664,NA,2923,1,NA,Praskovia Rayevska,F,NA,1641-06-15,NA
 2665,43,42,1,NA,Nicholas Nikolaevich Romanov,M,1831-08-08,1891-04-25,NA
 2666,43,42,1,NA,Michael Nikolaevich Romanov,M,1832-10-25,1909-12-18,NA
-2667,NA,NA,346,NA,Alexandra,F,1838-06-15,1900-06-15,NA
+2667,NA,NA,345,NA,Alexandra,F,1838-06-15,1900-06-15,NA
 2668,NA,NA,1,NA,Olga Feodorovna,F,1839-09-20,1891-04-12,NA
 2669,2668,2666,1,NA,Nicholas Mikhailovich Romanov,M,1859-04-26,1919-01-28,NA
 2670,2668,2666,1,NA,Michael Mikhailovich Romanov,M,1861-10-16,1929-04-26,NA
@@ -2674,7 +2674,7 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 2673,228,227,1,NA,Maria Georgievna of Greece and Denmark,F,1876-03-03,1940-12-14,NA
 2674,2668,2666,1,NA,George Mikhailovich Romanov,M,1863-08-23,1919-01-28,NA
 2675,2668,2666,1,NA,Alexander Mikhailovich Romanov,M,1866-04-13,1933-02-26,Grand Duke
-2676,NA,NA,347,NA,Sophia of Nassau,F,1868-06-15,1927-06-15,NA
+2676,NA,NA,346,NA,Sophia of Nassau,F,1868-06-15,1927-06-15,NA
 2677,354,353,1,NA,Dmitri Konstantinovich Romanov,M,1860-06-13,1919-01-28,NA
 2678,NA,NA,1,NA,Nadezhda Dreyer,F,1861-06-15,1929-06-15,NA
 2679,NA,2680,1,NA,Elizabeth Mavrikievna,F,1865-01-25,1927-03-24,NA
@@ -2685,8 +2685,8 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 2684,2679,2671,1,NA,Ivan Konstantinovich Romanov,M,1886-07-05,1918-07-18,NA
 2685,2679,2671,1,NA,Konstantin Konstantinovich Romanov,M,1891-01-01,1918-07-18,NA
 2686,2679,2671,1,NA,Igor Konstantinovich Romanov,M,1894-06-10,1918-07-18,NA
-2687,NA,2688,348,NA,Helen of Serbia,F,1884-11-04,1962-10-16,NA
-2688,NA,NA,348,NA,Peter I of Serbia,M,1844-07-11,1921-08-16,King of Serbia
+2687,NA,2688,347,NA,Helen of Serbia,F,1884-11-04,1962-10-16,NA
+2688,NA,NA,347,NA,Peter I of Serbia,M,1844-07-11,1921-08-16,King of Serbia
 2689,NA,NA,1,NA,Frederick Eugene of Württemberg,M,1732-01-21,1797-12-23,Duke
 2690,NA,NA,1,NA,Friederike Dorothea Sophia of Brandenburg-Schwedt,F,1736-12-18,1798-03-09,Princess
 2691,NA,NA,1,NA,Christian August of Anhalt-Zerbst,M,1690-11-29,1747-03-16,Prince
@@ -2696,19 +2696,19 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 2695,NA,NA,1,NA,Frederick Francis III of Mecklenburg-Schwerin,M,1851-03-19,1897-04-10,Grand Duke
 2696,NA,NA,1,NA,Anastasia Mikhailovna Romanov,F,1860-07-28,1922-03-11,NA
 2697,605,604,1,NA,Louise Caroline Reuss of Greiz,F,1875-12-03,1906-04-23,NA
-2698,NA,NA,349,NA,Frederick of Schaumburg-Lippe,M,1868-01-30,1945-12-12,Prince
+2698,NA,NA,348,NA,Frederick of Schaumburg-Lippe,M,1868-01-30,1945-12-12,Prince
 2699,1669,1664,1,NA,Feodora of Denmark,F,1910-07-03,1975-03-17,NA
 2700,1669,1664,1,NA,Alexandrine-Louise of Denmark,F,1914-12-12,1962-04-26,NA
 2701,1669,1664,1,NA,Gorm of Denmark,M,1919-02-24,1991-12-26,NA
 2702,1669,1664,1,NA,Oluf of Rosenborg,M,1923-03-10,1990-12-19,Count
-2703,NA,NA,350,NA,Helen Dorrit,F,1926-06-15,NA,NA
-2704,NA,NA,351,NA,Inge Terney,F,1938-06-15,NA,NA
+2703,NA,NA,349,NA,Helen Dorrit,F,1926-06-15,NA,NA
+2704,NA,NA,350,NA,Inge Terney,F,1938-06-15,NA,NA
 2705,NA,NA,1,NA,Charles Augustus Haraldsen,M,NA,NA,NA
 2706,1037,1031,1,NA,Welf Ernst of Hanover,M,1947-01-25,1981-01-10,NA
 2707,1037,1031,1,NA,Georg of Hanover,M,1949-12-09,NA,NA
 2708,1037,1031,1,NA,Frederica of Hanover,F,1954-10-15,NA,NA
-2709,NA,NA,352,NA,Wilbeke von Gunsteren,F,1948-06-15,NA,NA
-2710,NA,NA,353,NA,Victoria Bee,F,1951-06-15,NA,NA
+2709,NA,NA,351,NA,Wilbeke von Gunsteren,F,1948-06-15,NA,NA
+2710,NA,NA,352,NA,Victoria Bee,F,1951-06-15,NA,NA
 2711,1032,1033,1,NA,Caroline-Louise of Hanover,F,1965-10-10,NA,NA
 2712,1032,1033,1,NA,Mireille of Hanover,F,1971-06-03,NA,NA
 2713,NA,NA,1,NA,John Kenneth Ambler,M,1924-06-06,2008-05-31,NA
@@ -2728,21 +2728,21 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 2727,2529,2725,1,NA,Tord Oscar Fredrik,M,1977-06-20,NA,NA
 2728,2529,2725,1,NA,Victor Edmund Lennart,M,1980-09-10,NA,NA
 2729,1612,603,1,NA,Madeleine Therese Amelie,F,1982-06-10,NA,Princess
-2730,NA,NA,354,NA,Marianne Bernadotte,F,1924-07-15,2025-05-16,Countess
-2731,NA,NA,355,NA,Lilian May Davies,F,1915-08-30,2013-03-10,Princess of Sweden
-2732,NA,NA,356,NA,Erika Patzek,F,1911-07-12,2007-07-30,NA
+2730,NA,NA,353,NA,Marianne Bernadotte,F,1924-07-15,2025-05-16,Countess
+2731,NA,NA,354,NA,Lilian May Davies,F,1915-08-30,2013-03-10,Princess of Sweden
+2732,NA,NA,355,NA,Erika Patzek,F,1911-07-12,2007-07-30,NA
 2733,NA,NA,1,NA,Sonia Robbert,F,1909-05-12,2004-05-21,NA
 2734,NA,NA,1,NA,Elin Kerstin Margareta Wijkmark,F,1910-03-04,1987-09-11,Countess
-2735,NA,NA,357,NA,Gunnila Martha Louise Wachtmeister,F,1923-05-12,2016-09-12,Countess
+2735,NA,NA,356,NA,Gunnila Martha Louise Wachtmeister,F,1923-05-12,2016-09-12,Countess
 2736,NA,NA,1,NA,Karin Emma Louise Nissvandt,F,1911-07-07,1991-09-09,NA
 2737,NA,NA,1,NA,Sonja Anita Maria Hauntz,F,1944-05-07,NA,Countess
 2738,598,597,1,NA,Carl Gustaf Oscar Bernadotte,M,1911-01-10,2003-06-27,Prince of Sweden
-2739,NA,NA,358,NA,Kristine Rivelsrud,F,1932-04-22,2014-11-04,Princess
+2739,NA,NA,357,NA,Kristine Rivelsrud,F,1932-04-22,2014-11-04,Princess
 2740,2733,447,1,NA,Michael Bernadotte af Wisborg,M,1944-08-21,NA,Count
-2741,NA,NA,359,NA,Christine Wellhoefer,F,1947-06-15,NA,NA
+2741,NA,NA,358,NA,Christine Wellhoefer,F,1947-06-15,NA,NA
 2742,2734,449,1,NA,Monica,F,1948-06-15,NA,NA
 2743,2734,449,1,NA,Christian,M,1949-06-15,NA,NA
-2744,NA,NA,360,NA,Johan Bonde,M,1950-06-15,NA,Count
+2744,NA,NA,359,NA,Johan Bonde,M,1950-06-15,NA,Count
 2745,2736,1409,1,NA,Birgitta Bernadotte af Wisborg,F,1933-01-21,NA,NA
 2746,2736,1409,1,NA,Marie Louise Bernadotte af Wisborg,F,1935-11-02,1988-05-24,NA
 2747,2736,1409,1,NA,Jan Bernadotte af Wisborg,M,1941-01-09,2021-09-01,NA
@@ -2757,14 +2757,14 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 2756,2746,2755,1,NA,Heinrich Kautz,M,1957-06-15,NA,NA
 2757,2746,2755,1,NA,Karin Kautz,F,1958-06-15,NA,NA
 2758,2746,2755,1,NA,Madeleine Kautz,F,1961-06-15,NA,NA
-2759,NA,NA,361,NA,Gunilla Stampe,F,1941-06-15,NA,NA
+2759,NA,NA,360,NA,Gunilla Stampe,F,1941-06-15,NA,NA
 2760,NA,NA,1,NA,Anna Skarne,F,1944-06-15,NA,NA
 2761,2760,2747,1,NA,Sophia,F,1968-06-15,NA,NA
 2762,NA,NA,1,NA,Annegret Thomssen,F,1938-06-15,NA,NA
 2763,2762,2747,1,NA,Cecilia,F,1971-06-15,NA,NA
 2764,NA,NA,1,NA,Maritta Berg,F,1953-06-15,NA,NA
 2765,2764,2747,1,NA,Son,M,1977-06-15,NA,NA
-2766,NA,NA,362,NA,Hans-Jorg Baenkler,M,1939-06-15,NA,NA
+2766,NA,NA,361,NA,Hans-Jorg Baenkler,M,1939-06-15,NA,NA
 2767,2737,1409,1,NA,Bettina,F,1974-06-15,NA,NA
 2768,2737,1409,1,NA,Bjorn,M,1975-06-15,NA,NA
 2769,2737,1409,1,NA,Catherina,F,1977-06-15,NA,NA
@@ -2795,7 +2795,7 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 2794,NA,NA,1,NA,Johan Ryding,M,1943-06-15,NA,NA
 2795,2786,2794,1,NA,Gustaf Ryding,M,1971-06-15,NA,NA
 2796,2786,2794,1,NA,Charlotte Ryding,F,1974-06-15,NA,NA
-2797,NA,NA,363,NA,Esben Coljach,M,1947-06-15,NA,NA
+2797,NA,NA,362,NA,Esben Coljach,M,1947-06-15,NA,NA
 2798,NA,NA,1,NA,Ebba Gyllenkrok,F,1918-06-15,NA,NA
 2799,2798,2781,1,NA,Ebba,F,1945-06-15,NA,NA
 2800,NA,NA,1,NA,Pontus Reutersward,M,1943-06-15,NA,NA
@@ -2803,7 +2803,7 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 2802,2799,2800,1,NA,Anna Reutersward,F,1973-06-15,NA,NA
 2803,NA,NA,1,NA,Gertrude Ollen,F,1916-06-15,NA,NA
 2804,2803,2781,1,NA,Christina,F,1951-06-15,NA,NA
-2805,NA,NA,364,NA,Peter Langenskiold,M,1950-06-15,NA,Baron
+2805,NA,NA,363,NA,Peter Langenskiold,M,1950-06-15,NA,Baron
 2806,2803,2781,1,NA,Birgitta,F,1953-06-15,NA,NA
 2807,2803,2781,1,NA,Carl,M,1955-06-15,NA,NA
 2808,NA,NA,1,NA,Tore Nilert,M,1915-06-15,NA,NA
@@ -2815,8 +2815,8 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 2814,NA,NA,1,NA,Birgitta Magnusson,F,1943-06-15,NA,NA
 2815,2814,2813,1,NA,Carl Johann,M,1970-06-15,NA,NA
 2816,2814,2813,1,NA,Louise,F,1973-06-15,NA,NA
-2817,NA,NA,365,NA,Carl Marten Fleetwood,M,1885-06-15,1966-06-15,Baron
-2818,NA,NA,366,NA,Hugo Cedergren,M,1891-06-15,1971-06-15,NA
+2817,NA,NA,364,NA,Carl Marten Fleetwood,M,1885-06-15,1966-06-15,Baron
+2818,NA,NA,365,NA,Hugo Cedergren,M,1891-06-15,1971-06-15,NA
 2819,NA,NA,1,NA,Estelle Manville,F,1904-06-15,NA,NA
 2820,2819,2777,1,NA,Gustaf,M,1930-06-15,1966-06-15,NA
 2821,2819,2777,1,NA,Folke,M,1931-06-15,NA,NA
@@ -2828,7 +2828,7 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 2827,2824,2821,1,NA,Maria,F,1962-06-15,NA,NA
 2828,2824,2821,1,NA,Gunnar,M,1963-06-15,NA,NA
 2829,598,597,1,NA,Margaretha of Sweden,F,1899-06-25,1977-01-04,Princess of Denmark
-2830,NA,NA,367,NA,Axel of Denmark,M,1888-08-12,1964-07-14,NA
+2830,NA,NA,366,NA,Axel of Denmark,M,1888-08-12,1964-07-14,NA
 2831,NA,NA,1,NA,Elsa von Rosen,F,1904-02-07,1991-04-15,Countess
 2832,2831,2738,1,NA,Madeleine Bernadotte af Wisborg,F,1938-10-08,NA,Countess
 2833,NA,NA,1,NA,Charles de Schooten Ullens,M,1927-06-15,NA,Count
@@ -2836,33 +2836,33 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 2835,2832,2833,1,NA,Jean Charles Ullens,M,1965-06-15,NA,NA
 2836,2832,2833,1,NA,Astrid Ullens,F,1970-06-15,NA,NA
 2837,2832,2833,1,NA,Sophie Ullens,F,1972-06-15,NA,NA
-2838,NA,NA,368,NA,Ann Larsson,F,1921-06-15,NA,NA
+2838,NA,NA,367,NA,Ann Larsson,F,1921-06-15,NA,NA
 2839,NA,2840,1,NA,Marie Bonaparte,F,1882-07-02,1962-09-21,Princess of Greece and Denmark
 2840,NA,NA,1,NA,Roland Bonaparte,M,1858-05-19,1924-04-14,Prince
-2841,NA,NA,369,NA,Irene Ovtchinnikova,F,1904-10-04,1990-03-13,NA
+2841,NA,NA,368,NA,Irene Ovtchinnikova,F,1904-10-04,1990-03-13,NA
 2842,2839,466,1,NA,Eugenie of Greece and Denmark,F,1910-02-10,1989-02-13,Princess of Greece and Denmark
-2843,NA,NA,370,NA,Dominik Radziwill,M,1911-01-23,1976-11-19,Prince
-2844,NA,NA,371,NA,Raymond of Castel,M,1907-06-15,NA,Duke
-2845,NA,NA,372,NA,Anastasia of Greece and Denmark,F,1878-01-20,1923-08-29,Princess of Greece and Denmark
+2843,NA,NA,369,NA,Dominik Radziwill,M,1911-01-23,1976-11-19,Prince
+2844,NA,NA,370,NA,Raymond of Castel,M,1907-06-15,NA,Duke
+2845,NA,NA,371,NA,Anastasia of Greece and Denmark,F,1878-01-20,1923-08-29,Princess of Greece and Denmark
 2846,NA,NA,1,NA,Françoise of Orléans,F,1902-12-25,1953-02-25,NA
-2847,NA,NA,373,NA,Perikles Ioannidis,M,1881-11-01,1965-02-07,NA
+2847,NA,NA,372,NA,Perikles Ioannidis,M,1881-11-01,1965-02-07,NA
 2848,2846,465,1,NA,Michael of Greece and Denmark,M,1939-01-07,2024-07-28,NA
-2849,NA,NA,374,NA,Marina Karella,F,1940-07-17,NA,NA
+2849,NA,NA,373,NA,Marina Karella,F,1940-07-17,NA,NA
 2850,1621,1620,1,NA,Louise of Denmark and Norway,F,1726-10-19,1756-08-08,Duchess of Saxe-Hildburghausen
-2851,NA,NA,375,NA,Ernest Frederick III of Saxe-Hildburghausen,M,1727-06-10,1780-09-23,Duke
-2852,NA,NA,376,NA,Gustav III of Sweden,M,1746-01-24,1792-03-29,King of Sweden
-2853,NA,NA,377,NA,William I of Hesse-Cassel,M,1743-06-03,1821-02-27,Elector of Hesse-Cassel
+2851,NA,NA,374,NA,Ernest Frederick III of Saxe-Hildburghausen,M,1727-06-10,1780-09-23,Duke
+2852,NA,NA,375,NA,Gustav III of Sweden,M,1746-01-24,1792-03-29,King of Sweden
+2853,NA,NA,376,NA,William I of Hesse-Cassel,M,1743-06-03,1821-02-27,Elector of Hesse-Cassel
 2854,1626,1625,1,NA,Charles,M,1680-06-15,1729-06-15,NA
 2855,1626,1625,1,NA,William,M,1687-06-15,1705-06-15,NA
 2856,1631,1630,1,NA,Anne Sophie of Denmark,F,1647-09-01,1717-07-01,NA
 2857,1631,1630,1,NA,Frederica Amalia of Denmark,F,1649-04-11,1704-10-30,NA
 2858,1631,1630,1,NA,Ulrika Eleonora of Denmark,F,1656-09-11,1693-07-26,Queen
-2859,NA,NA,378,NA,Charles XI of Sweden,M,1655-11-24,1697-04-05,King of Sweden
+2859,NA,NA,377,NA,Charles XI of Sweden,M,1655-11-24,1697-04-05,King of Sweden
 2860,738,737,1,NA,Ulrik of Denmark,M,1578-12-30,1624-03-27,NA
 2861,738,737,1,NA,Augusta of Denmark,F,1580-04-08,1639-02-05,NA
 2862,738,737,1,NA,Hedwig of Denmark,F,1581-08-05,1641-11-26,NA
-2863,NA,NA,379,NA,Christopher III of Denmark,M,1416-02-26,1448-01-05,King of Denmark
-2864,NA,NA,380,NA,Christina of Saxony,F,1461-12-25,1521-12-08,Queen
+2863,NA,NA,378,NA,Christopher III of Denmark,M,1416-02-26,1448-01-05,King of Denmark
+2864,NA,NA,379,NA,Christina of Saxony,F,1461-12-25,1521-12-08,Queen
 2865,NA,NA,1,NA,Anne de la Tour,F,1512-06-15,NA,NA
 2866,1483,1470,1,NA,Alexander,M,1534-06-15,NA,Bishop of Moray
 2867,1469,1252,1,NA,James Stewart,M,1476-03-15,1504-01-15,Duke of Ross
@@ -2873,42 +2873,42 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 2872,1831,1830,1,NA,Nigel Bruce,M,1279-06-15,1306-09-15,NA
 2873,1831,1830,1,NA,Isabel Bruce,F,1272-06-15,1358-06-15,NA
 2874,NA,NA,1,NA,Maria Christina of the Two Sicilies,F,1806-04-27,1878-08-22,NA
-2875,NA,NA,381,NA,Maria Antonia of Naples and Sicily,F,1784-12-14,1806-05-21,Princess of Asturias
-2876,NA,NA,382,NA,Maria Isabel of Portugal,F,1797-05-19,1818-12-26,Queen
-2877,NA,NA,383,NA,Maria Josepha Amalia of Saxony,F,1803-12-06,1829-05-18,Queen
+2875,NA,NA,380,NA,Maria Antonia of Naples and Sicily,F,1784-12-14,1806-05-21,Princess of Asturias
+2876,NA,NA,381,NA,Maria Isabel of Portugal,F,1797-05-19,1818-12-26,Queen
+2877,NA,NA,382,NA,Maria Josepha Amalia of Saxony,F,1803-12-06,1829-05-18,Queen
 2878,2881,2880,1,NA,Charles IV of Spain,M,1748-11-11,1819-01-20,NA
 2879,NA,NA,1,NA,Maria Luisa of Parma,F,1751-12-09,1819-01-02,Queen
 2880,2425,2424,1,NA,Charles III of Spain,M,1716-01-20,1788-12-14,King of Spain
 2881,NA,NA,1,NA,Maria Amalia of Saxony,F,1724-11-24,1760-09-27,Queen
 2882,NA,NA,1,NA,Maria Anna Victoria of Bavaria,F,1660-11-28,1690-04-20,Dauphine
-2883,NA,NA,384,NA,Maria Luisa of Savoy,F,1688-09-17,1714-02-14,Queen
+2883,NA,NA,383,NA,Maria Luisa of Savoy,F,1688-09-17,1714-02-14,Queen
 2884,NA,NA,1,NA,Charles II of Inner Austria,M,1540-06-03,1590-07-10,Duke of Styria
 2885,NA,NA,1,NA,Philip I the Handsome,M,1478-07-22,1506-09-25,King of Castile
-2886,NA,NA,385,NA,Germaine of Foix,F,1488-06-15,1536-10-15,NA
+2886,NA,NA,384,NA,Germaine of Foix,F,1488-06-15,1536-10-15,NA
 2887,841,840,1,NA,Isabella of Aragon,F,1470-10-02,1498-08-23,Queen
 2888,841,840,1,NA,Maria of Aragon,F,1482-06-29,1517-03-07,Queen
 2889,841,840,1,NA,John,M,1478-06-30,1497-10-04,Prince of Asturias
-2890,NA,NA,386,NA,Alphonso of Portugal,M,1475-05-18,1491-07-13,Prince of Portugal
-2891,NA,NA,387,NA,Manuel I of Portugal,M,1469-05-31,1521-12-13,King of Portugal
-2892,NA,NA,388,NA,Margaret of Austria,F,1480-01-10,1530-12-01,Duchess of Savoy
-2893,NA,NA,389,NA,Philibert II,M,1480-04-10,1504-09-10,Duke of Savoy
+2890,NA,NA,385,NA,Alphonso of Portugal,M,1475-05-18,1491-07-13,Prince of Portugal
+2891,NA,NA,386,NA,Manuel I of Portugal,M,1469-05-31,1521-12-13,King of Portugal
+2892,NA,NA,387,NA,Margaret of Austria,F,1480-01-10,1530-12-01,Duchess of Savoy
+2893,NA,NA,388,NA,Philibert II,M,1480-04-10,1504-09-10,Duke of Savoy
 2894,2100,2885,1,NA,Eleanor of Austria,F,1498-11-15,1558-02-25,NA
 2895,NA,NA,1,NA,Henry XXIV Reuss-Ebersdorf,M,1724-01-22,1779-05-13,Count
 2896,NA,NA,1,NA,Caroline Ernestine of Erbach-Schönberg,F,1727-08-20,1796-04-22,Countess
 2897,NA,NA,1,NA,Ernest Frederick of Saxe-Coburg-Saalfeld,M,1724-03-08,1800-09-08,Duke
 2898,NA,NA,1,NA,Sophie Antoinette of Brunswick-Wolfenbüttel,F,1724-01-13,1802-05-17,Princess
 2899,NA,NA,1,NA,Miguel I of Portugal,M,1802-10-26,1866-11-14,Prince
-2900,NA,NA,390,NA,Emmanuel d'Orléans,M,1872-01-18,1931-02-01,Duke of Vendôme
+2900,NA,NA,389,NA,Emmanuel d'Orléans,M,1872-01-18,1931-02-01,Duke of Vendôme
 2901,2449,1698,1,NA,Louise of Belgium,F,1858-02-18,1924-03-01,NA
 2902,2449,1698,1,NA,Stéphanie of Belgium,F,1864-05-21,1945-08-23,NA
 2903,2449,1698,1,NA,Clémentine of Belgium,F,1872-07-30,1955-03-08,NA
-2904,NA,NA,391,NA,Victor,M,1862-07-18,1926-05-03,Prince Napoléon
-2905,NA,NA,392,NA,Rudolph of Austria,M,1858-08-21,1889-01-30,Crown Prince of Austria
-2906,NA,NA,393,NA,Elemér Lónyay,M,1863-08-24,1946-07-29,Prince Lonyai
-2907,NA,NA,394,NA,Philipp of Saxe-Coburg and Gotha,M,1844-03-28,1921-07-03,Prince
-2908,NA,NA,395,NA,Sophia,F,1760-06-15,1776-06-15,NA
-2909,NA,NA,396,NA,Alexandrine of Baden,F,1820-12-06,1904-12-20,NA
-2910,NA,NA,397,NA,Antoinette (Antonia) Kohary,F,1797-07-02,1862-09-25,NA
+2904,NA,NA,390,NA,Victor,M,1862-07-18,1926-05-03,Prince Napoléon
+2905,NA,NA,391,NA,Rudolph of Austria,M,1858-08-21,1889-01-30,Crown Prince of Austria
+2906,NA,NA,392,NA,Elemér Lónyay,M,1863-08-24,1946-07-29,Prince Lonyai
+2907,NA,NA,393,NA,Philipp of Saxe-Coburg and Gotha,M,1844-03-28,1921-07-03,Prince
+2908,NA,NA,394,NA,Sophia,F,1760-06-15,1776-06-15,NA
+2909,NA,NA,395,NA,Alexandrine of Baden,F,1820-12-06,1904-12-20,NA
+2910,NA,NA,396,NA,Antoinette (Antonia) Kohary,F,1797-07-02,1862-09-25,NA
 2911,NA,NA,1,NA,Louis I of Hesse-Darmstadt,M,1753-06-14,1830-04-06,Landgrave
 2912,NA,NA,1,NA,Louise of Hesse-Darmstadt,F,1761-02-15,1829-10-24,NA
 2913,741,740,1,NA,Marie Christine of France,F,1606-02-10,1663-12-27,Duchess of Savoy
@@ -2916,14 +2916,14 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 2915,2914,590,1,NA,Anne Marie Louise d'Orléans,F,1627-05-29,1693-04-05,Duchess of Montpensier
 2916,NA,NA,1,NA,Elizabeth Charlotte of the Palatinate,F,1652-05-27,1722-12-08,Duchess of Orléans
 2917,2916,751,1,NA,Élisabeth Charlotte d'Orléans,F,1676-09-13,1744-12-23,Duchess of Lorraine
-2918,NA,NA,398,NA,Leopold Joseph de Lorraine,M,1679-09-11,1729-03-27,Duke of Lorraine
+2918,NA,NA,397,NA,Leopold Joseph de Lorraine,M,1679-09-11,1729-03-27,Duke of Lorraine
 2919,NA,NA,1,NA,Françoise Marie de Bourbon,F,1677-05-04,1749-02-01,Mademoiselle
 2920,NA,NA,1,NA,Marie Adélaïde of Savoy,F,1685-12-06,1712-02-12,NA
 2921,2919,2517,1,NA,Marie Louise Élisabeth d’Orléans,F,1695-08-20,1719-07-21,NA
 2922,NA,NA,1,NA,Ivan of Shestov,M,NA,NA,NA
 2923,NA,NA,1,NA,Ivan Rayevski,M,NA,NA,NA
 2924,NA,NA,1,NA,Constantine Volkonski,M,NA,NA,NA
-2925,NA,NA,399,NA,Zenaida Rashevska,F,1898-06-15,1963-06-15,NA
+2925,NA,NA,398,NA,Zenaida Rashevska,F,1898-06-15,1963-06-15,NA
 2926,NA,NA,7,NA,Felix Krzesinski,M,NA,NA,NA
 2927,NA,NA,1,NA,Valerian Karnovich,M,NA,NA,NA
 2928,NA,NA,1,NA,John Emery,M,NA,NA,NA
@@ -2967,17 +2967,17 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 2966,2964,2965,1,NA,Son,M,NA,NA,NA
 2967,1362,229,1,NA,Elizabeth of Greece and Denmark,F,1904-05-24,1955-01-11,NA
 2968,NA,NA,1,NA,Peter Phillips,M,NA,NA,Major
-2969,2972,2971,400,NA,Sylvana Tomaselli,F,1957-05-28,NA,NA
-2970,NA,NA,401,NA,John Paul Jones,M,NA,NA,NA
-2971,NA,NA,400,NA,Max Tomaselli,M,NA,NA,NA
-2972,NA,NA,400,NA,Josiane Derners,F,NA,NA,Madame
+2969,2972,2971,399,NA,Sylvana Tomaselli,F,1957-05-28,NA,NA
+2970,NA,NA,400,NA,John Paul Jones,M,NA,NA,NA
+2971,NA,NA,399,NA,Max Tomaselli,M,NA,NA,NA
+2972,NA,NA,399,NA,Josiane Derners,F,NA,NA,Madame
 2973,2614,2448,1,NA,Antoinette of Saxe-Coburg-Saalfeld,F,1779-08-28,1824-03-14,NA
 2974,2614,2448,1,NA,Sophie of Saxe-Coburg-Saalfeld,F,1778-08-19,1835-07-08,NA
 2975,2614,2448,1,NA,Juliane of Saxe-Coburg-Saalfeld,F,1781-09-23,1860-08-15,NA
-2976,NA,NA,402,NA,Emich Carl of Leiningen,M,1763-09-27,1814-07-04,Prince
+2976,NA,NA,401,NA,Emich Carl of Leiningen,M,1763-09-27,1814-07-04,Prince
 2977,NA,NA,1,NA,Lucy Lindsay-Hogg,F,NA,NA,NA
 2978,2977,54,1,NA,Frances Armstrong-Jones,F,1979-07-17,NA,Lady
-2979,NA,NA,403,NA,Julia Rawlinson,F,NA,NA,NA
+2979,NA,NA,402,NA,Julia Rawlinson,F,NA,NA,NA
 2980,NA,NA,1,NA,Athol Schmith,M,NA,NA,NA
 2981,314,2980,1,NA,Schmith,M,1943-06-15,NA,NA
 2982,NA,NA,1,NA,Erwin Stein,M,NA,NA,NA
@@ -3009,4 +3009,3 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 3008,NA,NA,19,NA,Flora,F,NA,NA,NA
 3009,2996,2995,19,NA,Baby Cartland,F,1911-06-15,1911-06-15,NA
 3010,806,2986,19,NA,Glen McCorquodale,M,1939-12-31,NA,NA
-3011,589,235,1,NA,Helen Louise Kirby,F,1935-01-26,NA,NA
