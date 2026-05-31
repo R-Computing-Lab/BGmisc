@@ -113,7 +113,7 @@ royal92 <- df_raw <- readGedcom("data-raw/royal92.ged") %>%
   )  %>%
   addPersonToPed(
     personID = 1051, # overwriting duplicated Andreas, is already 911
-    name = "TBD",
+    name = "TODO",
     sex = "M",
     momID = NA_integer_,
     dadID =  NA_integer_,
@@ -750,7 +750,7 @@ date_overrides <- tribble(
   1048, "1 JUN 1985", NA_character_, # Christian Heinrich of Hanover; living
   1049, "12 DEC 1962", "29 NOV 1988", # Isabella von Thurn und Valsassina; source conflict: another source gives 8 SEP 1962, selected 12 DEC 1962
   1050, "13 FEB 1988", NA_character_, # Otto Heinrich of Hanover; living
-  1051, NA_character_, NA_character_, # duplicated to be replaced
+  1051, NA_character_, NA_character_, # to replace
   1052, "3 JUL 1933", "29 DEC 2022", # Maximilian / Max, Margrave of Baden
   1053, "9 APR 1882", "17 NOV 1945", # Frederick Francis IV of Mecklenburg-Schwerin
   1054, "16 APR 1940", NA_character_, # Margrethe II of Denmark; living
@@ -3294,7 +3294,8 @@ royal92_cleaned <- royal92 %>%
       personID %in% c(876, 1883,
                       2217, 2288, 2332) ~ "Earl of Pembroke",
       personID == 877 ~ "Crown Prince of Yugoslavia",
-      personID == 914 ~ "Grand Duchess of Russia",
+      personID %in%
+      c(914) ~ "Grand Duchess of Russia",
       personID == 932 ~ "Princess of Prussia",
       personID == 1051 ~ NA_character_,
       personID %in%
