@@ -3298,6 +3298,7 @@ royal92_cleaned <- royal92 %>%
       c(914) ~ "Grand Duchess of Russia",
       personID == 932 ~ "Princess of Prussia",
       personID == 1051 ~ NA_character_,
+      personID == 1250 ~ "Earl of Bothwell",
       personID %in%
         c(1373, 1867) ~ "Count of Poitiers",
       personID %in%
