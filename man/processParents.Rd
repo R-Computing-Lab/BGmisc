@@ -4,12 +4,14 @@
 \alias{processParents}
 \title{Process Parents Information from GEDCOM Data}
 \usage{
-processParents(df_temp, datasource)
+processParents(df_temp, datasource, person_id_col = "personID")
 }
 \arguments{
 \item{df_temp}{A data frame produced by \code{readGedcom()}.}
 
 \item{datasource}{Character string indicating the data source ("gedcom" or "wiki").}
+
+\item{person_id_col}{Character string indicating the column name for individual IDs (default "personID").}
 }
 \value{
 The updated data frame with parent IDs added.

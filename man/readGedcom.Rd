@@ -13,6 +13,7 @@ readGedcom(
   remove_empty_cols = TRUE,
   combine_cols = TRUE,
   skinny = FALSE,
+  parse_dates = FALSE,
   update_rate = 1000,
   post_process = TRUE,
   ...
@@ -25,6 +26,7 @@ readGed(
   remove_empty_cols = TRUE,
   combine_cols = TRUE,
   skinny = FALSE,
+  parse_dates = FALSE,
   update_rate = 1000,
   post_process = TRUE,
   ...
@@ -37,6 +39,7 @@ readgedcom(
   remove_empty_cols = TRUE,
   combine_cols = TRUE,
   skinny = FALSE,
+  parse_dates = FALSE,
   update_rate = 1000,
   post_process = TRUE,
   ...
@@ -60,11 +63,13 @@ as `name_given` with `name_given_pieces` and `name_surn` with
 \item{skinny}{Logical. If `TRUE`, return a slimmer data frame by dropping
 `FAMC`, `FAMS`, and columns that are entirely `NA` during post-processing.}
 
+\item{parse_dates}{Logical. If `TRUE`, attempt to parse date columns (e.g., `birth_date`, `death_date`) into Date objects, after removing common GEDCOM date qualifiers like "ABT", "BEF", and "AFT".}
+
 \item{update_rate}{Numeric. Intended rate at which progress messages should
 be printed. Currently unused.}
 
 \item{post_process}{Logical. If `TRUE`, apply post-processing steps controlled
-by `add_parents`, `combine_cols`, `remove_empty_cols`, and `skinny`.}
+by `add_parents`, `combine_cols`, `remove_empty_cols`, `skinny`, and `parse_dates`.}
 
 \item{...}{Additional arguments. Currently unused.}
 }
