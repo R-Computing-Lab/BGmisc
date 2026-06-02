@@ -751,7 +751,7 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 750,NA,NA,1,NA,William II of Orange,M,1626-05-27,1650-11-06,Prince
 751,920,529,1,NA,Philippe I,M,1640-09-21,1701-06-09,Duke of Orléans
 752,754,753,49,NA,Catherine of Braganza,F,1638-11-25,1705-12-31,NA
-753,NA,NA,49,NA,John IV of Portugal,M,1604-03-19,1656-11-06,King of Portugal
+753,NA,NA,49,NA,John IV the Fortunate,M,1604-03-19,1656-11-06,King of Portugal
 754,NA,NA,49,NA,Luiza Maria de Guzman,F,1613-10-13,1666-02-27,NA
 755,NA,NA,1,NA,Alfonso IV d'Este,M,1634-02-02,1662-07-16,Duke of Modena
 756,NA,NA,1,NA,Laura Martinozzi,F,1639-05-27,1687-07-19,NA
@@ -1829,7 +1829,7 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 1828,NA,2694,1,NA,Dorothea of Brandenburg,F,1430-06-15,1495-11-25,Queen
 1829,NA,NA,1,NA,Unknown,F,NA,NA,NA
 1830,1833,1832,1,NA,Robert Bruce of Liddesdale,M,1303-06-15,1332-08-12,NA
-1831,NA,NA,1,NA,Margaret,F,1253-06-15,1292-11-09,Countess
+1831,NA,NA,1,NA,Margaret of Carrick,F,1253-06-15,1292-11-09,Countess
 1832,1836,1835,1,NA,Robert de Brus,M,1243-06-15,1304-04-04,Lord of Annandale
 1833,NA,1834,1,NA,Isabel de Clare,F,1226-11-08,1264-07-10,NA
 1834,NA,NA,1,NA,Gilbert de Clare,M,1180-06-15,1230-10-25,Earl of Gloucester
@@ -2218,7 +2218,7 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 2217,NA,NA,1,NA,William Marshal,M,1146-06-15,1219-05-14,Earl of Pembroke
 2218,2220,2219,1,NA,Isabel de Clare,F,1172-06-15,1220-06-15,Countess of Pembroke
 2219,NA,NA,1,NA,Richard de Clare,M,1130-06-15,1176-04-20,Earl of Pembroke
-2220,NA,2221,1,NA,Aoife,F,1145-06-15,1188-06-15,NA
+2220,NA,2221,1,NA,Aoife (Eva),F,1145-06-15,1188-06-15,NA
 2221,NA,2222,1,NA,Dermot MacMurrough,M,1110-06-15,1171-05-01,King of Leinster
 2222,NA,2223,1,NA,Énna Mac Murchada,M,1080-06-15,1126-06-15,King of Leinster
 2223,NA,2215,1,NA,Donchad,M,NA,1126-06-15,King of Leinster
