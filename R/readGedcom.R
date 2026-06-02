@@ -512,8 +512,10 @@ processTag <- function(tag,
                        vars,
                        extractor = NULL,
                        mode = "replace") {
-    count_name <- paste0("num_",# normalize leading underscores
-                         tolower(gsub("^_", "", tag)), "_rows")
+  count_name <- paste0(
+    "num_", # normalize leading underscores
+    tolower(gsub("^_", "", tag)), "_rows"
+  )
   matched <- FALSE
   if (!is.null(pattern_rows[[count_name]]) &&
     pattern_rows[[count_name]] > 0 &&
@@ -564,30 +566,29 @@ postProcessGedcom <- function(df_temp,
     if (verbose == TRUE) message("Removing empty columns")
     df_temp <- df_temp[, colSums(is.na(df_temp)) < nrow(df_temp)]
   }
-  if(parse_dates == TRUE) {
+  if (parse_dates == TRUE) {
+    date_cols <- c("birth_date", "death_date")
+    if (verbose == TRUE) message("Parsing date columns: ", paste(date_cols[date_cols %in% colnames(df_temp)], collapse = ", "))
+    # GEDCOM date qualifiers like "ABT", "BEF", "AFT" can be present in date strings. We can remove them before parsing.
+    date_qualifier_regex <- "\\b(?:[aA][bBfF][tT]|[bB][eE][tTfF])\\.?\\b\\s*"
 
-  date_cols <- c("birth_date", "death_date")
-  if (verbose == TRUE) message("Parsing date columns: ", paste(date_cols[date_cols %in% colnames(df_temp)], collapse = ", "))
-  # GEDCOM date qualifiers like "ABT", "BEF", "AFT" can be present in date strings. We can remove them before parsing.
-  date_qualifier_regex <- "\\b(?:[aA][bBfF][tT]|[bB][eE][tTfF])\\.?\\b\\s*"
+    if (verbose == TRUE && any(sapply(df_temp[date_cols], function(col) any(grepl(date_qualifier_regex, col, perl = TRUE))))
+    ) {
+      message("Found date qualifiers in date columns. They will be removed before parsing.")
+    }
 
-  if(verbose == TRUE && any(sapply(df_temp[date_cols], function(col) any(grepl(date_qualifier_regex, col, perl = TRUE))))
-     ) {
-    message("Found date qualifiers in date columns. They will be removed before parsing.")
+    # only parse date columns that are present in the data frame
+    if (any(date_cols %in% colnames(df_temp))) {
+      df_temp[date_cols] <- lapply(df_temp[date_cols], function(x) {
+        if (is.character(x)) {
+          x <- stringr::str_replace_all(x, date_qualifier_regex, "")
+          as.Date(x, format = "%d %b %Y")
+        } else {
+          x
+        }
+      })
+    }
   }
-
-  # only parse date columns that are present in the data frame
-  if (any(date_cols %in% colnames(df_temp))) {
-    df_temp[date_cols] <- lapply(df_temp[date_cols], function(x) {
-      if (is.character(x)) {
-        x <- stringr::str_replace_all(x, date_qualifier_regex, "")
-        as.Date(x, format = "%d %b %Y")
-      } else {
-        x
-      }
-    })
-}
-}
   if (skinny == TRUE) {
     if (verbose == TRUE) message("Slimming down the data frame")
     # Remove raw family relationship columns
@@ -605,8 +606,7 @@ postProcessGedcom <- function(df_temp,
 #' @param datasource Character string indicating the data source ("gedcom" or "wiki").
 #' @param person_id_col Character string indicating the column name for individual IDs (default "personID").
 #' @return The updated data frame with parent IDs added.
-processParents <- function(df_temp, datasource, person_id_col = "personID"
-                           ) {
+processParents <- function(df_temp, datasource, person_id_col = "personID") {
   if (datasource %in% c("gedcom", "ged")) {
     required_cols <- c("FAMC", "sex", "FAMS")
   } else if (datasource == "wiki") {
@@ -638,8 +638,7 @@ processParents <- function(df_temp, datasource, person_id_col = "personID"
 #' @return A list mapping family IDs to parent information.
 mapFAMS2parents <- function(df_temp,
                             mom_sex = "F",
-                            dad_sex = "M"
-                            ) {
+                            dad_sex = "M") {
   if (!all(c("FAMS", "sex") %in% colnames(df_temp))) {
     warning("The data frame does not contain the necessary columns (FAMS, sex)")
     return(NULL)
@@ -698,7 +697,6 @@ mapFAMC2parents <- function(df_temp, family_to_parents) {
   }
   df_temp
 }
-
 
 
 # --- Exported Aliases ---

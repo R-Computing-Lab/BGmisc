@@ -817,6 +817,3 @@ ped2com <- function(ped, component,
   }
   list_of_adjacencies
 }
-
-
-

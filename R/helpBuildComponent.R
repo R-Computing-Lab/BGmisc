@@ -3,11 +3,11 @@
 #' @keywords internal
 
 initializeCheckpoint <- function(config = list(
-  verbose = FALSE,
-  saveable = FALSE,
-  resume = FALSE,
-  save_path = "checkpoint/"
-)) {
+                                   verbose = FALSE,
+                                   saveable = FALSE,
+                                   resume = FALSE,
+                                   save_path = "checkpoint/"
+                                 )) {
   # Define checkpoint files
   # Ensure save path exists
   if (config$saveable == TRUE && !dir.exists(config$save_path)) {
