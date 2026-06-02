@@ -5,6 +5,8 @@ library(readr)
 library(usethis)
 library(BGmisc)
 
+# Helper Functions
+
 date_qualifier_regex <- "\\b(?:A[BF]T|BE[TF])\\b\\s*"
 text_cleanup_regex <- c(
   "/|\\(twin\\)" = "",
@@ -22,10 +24,13 @@ strip_date_qualifier <- function(x) {
     str_squish()
 }
 
-standardize_partial_date <- function(x) {
+standardize_partial_date <- function(x, default_day = "15",
+                                     default_month = "JUN"
+                                     ) {
   case_when(
     str_length(x) == 0 ~ NA_character_,
-    str_length(x) == 4 ~ paste0("15 JUN ", x),
+    str_length(x) %in% c(3,4) ~ paste0(default_day," ",default_month," ", x),
+    str_length(x)  %in% c(7,8) ~ paste0(default_day," ", x),
     TRUE ~ x
   )
 }
@@ -37,8 +42,19 @@ parse_gedcom_date <- function(x) {
 }
 
 
-## Create dataframe
+# Create dataframe
+
+## Add missing individuals and overwrite duplicates based on historical records and data cleaning needs; these are added to the raw data frame before processing to ensure that they are included in the final cleaned dataset and to maintain consistency in the data cleaning process. The `overwrite = TRUE` argument is used to ensure that any existing entries with the same `personID` are updated with the new information, which is crucial for correcting errors or filling in missing details in the original dataset.
+
 royal92 <- df_raw <- readGedcom("data-raw/royal92.ged") %>%
+  addPersonToPed(
+    personID = 128,
+    name = "Simon de Montfort the Younger",
+    sex = "M",
+    momID = 1370,
+    dadID = 873,
+    overwrite = TRUE
+  ) %>%
   addPersonToPed(
     personID = 914, # overwriting duplicates
     name = "Elizabeth Alexandrovna of Russia",
@@ -78,15 +94,7 @@ royal92 <- df_raw <- readGedcom("data-raw/royal92.ged") %>%
     momID = 1295,
     dadID = 1294,
     overwrite = TRUE
-  )  %>%
-  addPersonToPed(
-    personID = 128,
-    name = "Simon de Montfort the Younger",
-    sex = "M",
-    momID = 1370,
-    dadID = 873,
-    overwrite = TRUE
-  ) %>%
+  )   %>%
   addPersonToPed(
     personID = 1582,
     name = "Sanchia of Provence",
@@ -114,12 +122,27 @@ royal92 <- df_raw <- readGedcom("data-raw/royal92.ged") %>%
   addPersonToPed(
     personID = 1051, # overwriting duplicated Andreas, is already 911
     name = "TODO",
-    sex = "M",
+    sex = "U",
+    momID = NA_integer_,
+    dadID =  NA_integer_,
+    overwrite = TRUE
+  ) %>%
+  addPersonToPed(
+    personID = 2300, # overwriting duplicated John Neville
+    name = "TODO",
+    sex = "U",
+    momID = NA_integer_,
+    dadID =  NA_integer_,
+    overwrite = TRUE
+  )%>%
+  addPersonToPed(
+    personID = 3009, # overwriting unnamed stillborn sibling of barbara cartland
+    name = "TODO",
+    sex = "U",
     momID = NA_integer_,
     dadID =  NA_integer_,
     overwrite = TRUE
   )
-
 
 
 
@@ -139,16 +162,23 @@ date_overrides <- tribble(
   29, "3 OCT 1891", "27 OCT 1914", # Maurice of Battenberg
   34, "31 MAR 1900", "10 JUN 1974", # Henry William Frederick Windsor
   38, "5 APR 1863", "24 SEP 1950", # Victoria Alberta of Hesse
-  40, "10 MAR 1845", "1 NOV 1894", # Alexander III Alexandrovich Romanov, Gregorian/New Style; Old Style = 26 FEB 1845, 20 OCT 1894
+  40, "10 MAR 1845", "1 NOV 1894", # Alexander III Alexandrovich Romanov,
+                                   # Old Style = 26 FEB 1845, 20 OCT 1894
   41, "26 NOV 1847", "13 OCT 1928", # Dagmar (Marie) of Denmark
-  42, "6 JUL 1796", "2 MAR 1855", # Nicholas I Romanov, Gregorian/New Style; Old Style = 25 JUN 1796, 18 FEB 1855
+  42, "6 JUL 1796", "2 MAR 1855", # Nicholas I Romanov,
+                                  # Old Style = 25 JUN 1796, 18 FEB 1855
   43, "13 JUL 1798", "1 NOV 1860", # Charlotte of Prussia
-  44, "29 APR 1818", "13 MAR 1881", # Alexander II Nicholoevich Romanov, Gregorian/New Style; Old Style = 17 APR 1818, 1 MAR 1881
+  44, "29 APR 1818", "13 MAR 1881", # Alexander II Nicholoevich Romanov,
+                                  # Gregorian/New Style; Old Style = 17 APR 1818, 1 MAR 1881
   45, "8 AUG 1824", "3 JUN 1880", # Marie of Hesse-Darmstadt
-  46, "15 NOV 1895", "17 JUL 1918", # Olga Nikolaevna Romanov, Gregorian/New Style; Old Style birth = 2 NOV 1895
-  47, "10 JUN 1897", "17 JUL 1918", # Tatiana Nikolaevna Romanov, Gregorian/New Style; Old Style birth = 29 May 1897
-  48, "26 JUN 1899", "17 JUL 1918", # Maria Nikolaevna Romanov, Gregorian/New Style; Old Style birth = 14 JUN 1899
-  49, "18 JUN 1901", "17 JUL 1918", # Anastasia Nikolaevna Romanov, Gregorian/New Style; Old Style birth = 5 Jun 1901
+  46, "15 NOV 1895", "17 JUL 1918", # Olga Nikolaevna Romanov,
+                                  # Old Style birth = 2 NOV 1895
+  47, "10 JUN 1897", "17 JUL 1918", # Tatiana Nikolaevna Romanov,
+                                  # Old Style birth = 29 May 1897
+  48, "26 JUN 1899", "17 JUL 1918", # Maria Nikolaevna Romanov,
+                                  # Old Style birth = 14 JUN 1899
+  49, "18 JUN 1901", "17 JUL 1918", # Anastasia Nikolaevna Romanov,
+                                  # Old Style birth = 5 Jun 1901
   51, "4 AUG 1900", "30 MAR 2002", #Elizabeth Angela Marguerite Bowes-Lyon
   52, "21 APR 1926", "8 SEP 2022", # Elizabeth II Alexandra Mary Windsor
   53, "21 AUG 1930", "9 FEB 2002", # Margaret Rose Windsor
@@ -174,7 +204,7 @@ date_overrides <- tribble(
   84, "1 NOV 1864", "18 JUL 1918", # Elizabeth (Ella)
   85, "24 MAY 1874", "16 NOV 1878", # Mary (May) of Hesse
   86, "7 OCT 1870", "29 MAY 1873", # Frederick of Hesse and by Rhine
-  89, "20 JUN 1946", NA_character_, # Birgitte of Denmark von Deurs; exact birth date, living
+  89, "20 JUN 1946", NA_character_, # Birgitte of Denmark von Deurs; living
   91, "20 SEP 1888", "29 MAY 1950", # Earl Winfield Spencer Jr.
   92, "6 MAY 1897", "30 NOV 1958", # Ernest Aldrich Simpson
   93, "20 JAN 1936", "3 JUN 2004", # Frances Burke Roche / Frances Shand Kydd
@@ -197,7 +227,9 @@ date_overrides <- tribble(
   123, "17 MAR 1886", "12 JAN 1974", # Patricia of Connaught
   125, "17 MAY 1891", "26 FEB 1959", # Alexandra, 2nd Duchess of Fife
   126, "29 MAY 1881", "8 OCT 1972", # Alexander Ramsay
-  127, "1295", "22 AUG 1358", # Isabella of France; birth year uncertain, sources vary ca. 1292/1295/1296; death date varies by one day, 22 AUG vs 23 AUG 1358
+  127, "1295", "22 AUG 1358", # Isabella of France; birth year uncertain,
+                              # sources vary ca. 1292/1295/1296;
+                              # death date varies by one day, 22 AUG vs 23 AUG 1358
   128, "15 APR 1240", "1271", # Simon de Montfort the Younger
   129, "19 JUL 1884", "6 MAR 1954", # Charles Edward, Duke of Saxe-Coburg and Gotha
   132, "24 FEB 1774", "8 JUL 1850", # Adolphus, Duke of Cambridge
@@ -213,19 +245,30 @@ date_overrides <- tribble(
   146, "11 SEP 1862", "23 JUN 1938", # Cecilia Nina Cavendish-Bentinck
   147, "18 APR 1905", "24 APR 1981", # Margarita of Greece and Denmark
   148, "30 MAY 1906", "16 OCT 1969", # Theodora of Greece and Denmark
-  149, "22 APR 1847", "17 FEB 1909", # Vladimir Alexandrovich Romanov, Gregorian/New Style; Old Style birth = 10 APR 1847
-  150, "14 JAN 1850", "27 NOV 1908", # Alexei Alexandrovich Romanov, Gregorian/New Style; Old Style = 2 JAN 1850, 14 NOV 1908
+  149, "22 APR 1847", "17 FEB 1909", # Vladimir Alexandrovich Romanov,
+                                     # Gregorian/New Style;
+                                     # Old Style birth = 10 APR 1847
+  150, "14 JAN 1850", "27 NOV 1908", # Alexei Alexandrovich Romanov,
+                                     # Gregorian/New Style;
+                                     # Old Style = 2 JAN 1850, 14 NOV 1908
   151, "11 MAY 1857", "17 FEB 1905", # Serge Alexandrovich Romanov
   152, "3 OCT 1860", "28 JAN 1919", # Paul Alexandrovich Romanov
   153, "9 MAY 1871", "10 JUL 1899", # George Alexandrovich Romanov
-  154, "6 APR 1875", "20 APR 1960", # Xenia Alexandrovna Romanov, Gregorian/New Style; Old Style birth = 25 MAR 1875
+  154, "6 APR 1875", "20 APR 1960", # Xenia Alexandrovna Romanov,
+                                    #   Gregorian/New Style; Old Style birth = 25 MAR 1875
   155, "4 DEC 1878", "13 JUN 1918", # Michael (Mischa) Alexandrovich Romanov, New Style
-  156, "13 JUN 1882", "24 NOV 1960", # Olga Alexandrovna Romanov, Gregorian/New Style; Old Style birth = 1 JUN 1882
-  157, "14 MAY 1854", "6 SEP 1920", # Maria Pavlovna the Elder, Gregorian/New Style; Old Style birth = 2 MAY 1854
-  158, "12 OCT 1876", "12 OCT 1938", # Kirill Vladimirovich Romanov, Gregorian/New Style; Old Style birth = 30 SEP 1876
-  159, "24 NOV 1877", "9 NOV 1943", # Boris Vladimirovich Romanov, Gregorian/New Style
-  160, "14 MAY 1879", "30 OCT 1956", # Andrei Vladimirovich Romanov, Gregorian/New Style; Old Style birth = 2 MAY 1879
-  161, "31 AUG 1872", "6 DEC 1971", # Mathilde Kschessinska, Gregorian/New Style; Old Style birth = 19 AUG 1872
+  156, "13 JUN 1882", "24 NOV 1960", # Olga Alexandrovna Romanov,
+                                    # Gregorian/New Style; Old Style birth = 1 JUN 1882
+  157, "14 MAY 1854", "6 SEP 1920", # Maria Pavlovna the Elder,
+                                    # Gregorian/New Style; Gregorian/New Style; Old Style birth = 2 MAY 1854
+  158, "12 OCT 1876", "12 OCT 1938", # Kirill Vladimirovich Romanov,
+                                      # Gregorian/New Style; Old Style birth = 30 SEP 1876
+  159, "24 NOV 1877", "9 NOV 1943", # Boris Vladimirovich Romanov,
+                                    # Gregorian/New Style
+  160, "14 MAY 1879", "30 OCT 1956", # Andrei Vladimirovich Romanov,
+                                    # Gregorian/New Style; Old Style birth = 2 MAY 1879
+  161, "31 AUG 1872", "6 DEC 1971", # Mathilde Kschessinska,
+                                   # Gregorian/New Style; Old Style birth = 19 AUG 1872
   162, "3 AUG 1770", "7 JUN 1840", # Frederick William III of Prussia
   163, "30 AUG 1870", "24 SEP 1891", # Alexandra of Greece and Denmark
   164, "18 SEP 1891", "5 MAR 1942", # Dmitri Pavlovich Romanov, Gregorian/New Style
@@ -305,7 +348,8 @@ date_overrides <- tribble(
   282, "11 OCT 1895", "16 APR 1981", # George of Cambridge
   284, "12 JUN 1897", "23 JUN 1987", # Mary Cambridge / Duchess of Beaufort
   285, "23 OCT 1899", "22 DEC 1969", # Helena Cambridge
-  287, "24 APR 1907", "15 APR 1928", # Rupert Cambridge, Viscount Trematon; note conflict: RoyalFamilyTree gives 24 AUG 1907
+  287, "24 APR 1907", "15 APR 1928", # Rupert Cambridge, Viscount Trematon;
+                                     # note conflict: RoyalFamilyTree gives 24 AUG 1907
   289, "23 JAN 1906", "29 MAY 1994", # May Cambridge
   291, "21 AUG 1924", "27 FEB 1998", # Gerald David Lascelles
   292, "18 OCT 1926", "6 MAR 2014", # Marion Stein / Countess of Harewood
@@ -337,7 +381,8 @@ date_overrides <- tribble(
   349, "26 DEC 1777", "16 JUN 1848", # Louis II of Hesse and the Rhine
   350, "21 SEP 1788", "27 JAN 1836", # Wilhelmina of Baden
   351, "26 OCT 1775", "29 NOV 1830", # John Maurice von Hauke
-  352, "1790", "27 AUG 1831", # Sophie la Fontaine; approximate birth year
+  352, "1790", "27 AUG 1831", # Sophie la Fontaine;
+                                     # approximate birth year
   353, "21 SEP 1827", "25 JAN 1892", # Constantine Nikolaievitch of Russia, Gregorian/New Style; Old Style = 9 SEP 1827, 13 JAN 1892
   354, "8 JUL 1830", "6 JUL 1911", # Elizabeth Alexandra of Saxe-Altenburg / Alexandra Iosifovna
   355, "27 AUG 1789", "25 NOV 1868", # Joseph of Saxe-Altenburg
@@ -346,7 +391,7 @@ date_overrides <- tribble(
   358, "18 JUN 1815", "21 MAR 1885", # Elizabeth of Prussia
   359, "8 NOV 1817", "17 AUG 1865", # Charles William Frederick Cavendish-Bentinck
   360, "3 OCT 1780", "28 APR 1826", # William Charles Augustus Cavendish-Bentinck
-  361, "1788", "19 MAR 1875", # Anne Wellesley; approximate birth year
+  361, "1788", "19 MAR 1875", # Anne Wellesley
   366, "23 MAY 1892", "9 JUN 1975", # Albert Edward John Spencer
   367, "16 AUG 1897", "4 DEC 1972", # Cynthia Elinor Beatrix Hamilton
   368, "15 MAY 1885", "8 JUL 1955", # Edmund Maurice Burke Roche
@@ -433,8 +478,10 @@ date_overrides <- tribble(
   488, "17 AUG 1840", "29 JAN 1908", # Gustav Ernst of Erbach-Schönberg
   489, "18 APR 1865", "20 JUL 1951", # Johanna Loisinger
   490, "18 AUG 1874", "22 APR 1971", # Anna of Montenegro
-  491, "30 AUG 1842", "10 JUL 1849", # Alexandra Alexandrovna Romanov, Gregorian/New Style; Old Style = 18 AUG 1842, 28 JUN 1849
-  492, "20 SEP 1843", "24 APR 1865", # Nicholas Alexandrovich Romanov, Gregorian/New Style; Old Style = 8 SEP 1843, 12 APR 1865
+  491, "30 AUG 1842", "10 JUL 1849", # Alexandra Alexandrovna Romanov,
+                                    # Gregorian/New Style; Old Style = 18 AUG 1842, 28 JUN 1849
+  492, "20 SEP 1843", "24 APR 1865", # Nicholas Alexandrovich Romanov,
+                                      # Gregorian/New Style; Old Style = 8 SEP 1843, 12 APR 1865
   493, "9 JUN 1806", "13 JUN 1877", # Louis III of Hesse
   494, "28 NOV 1901", "21 FEB 1960", # Edwina Ashley / Countess Mountbatten of Burma
   495, "30 AUG 1813", "25 MAY 1862", # Mathilde of Bavaria
@@ -466,8 +513,8 @@ date_overrides <- tribble(
   528, "9 MAY 1909", "8 SEP 1967", # Kira Kirillovna of Russia
   530, "24 JAN 1547", "11 APR 1578", # Joanna of Austria
   531, "25 MAR 1541", "19 OCT 1587", # Francesco I de' Medici, Grand Duke of Tuscany
-  532, "1160", "12 FEB 1218", # Alice de Courtenay; approximate birth year
-  533, "1160", "16 JUN 1202", # Aymer of Angoulême; approximate birth year
+  532, "1160", "12 FEB 1218", # Alice de Courtenay
+  533, "1160", "16 JUN 1202", # Aymer of Angoulême
   537, "20 AUG 1920", "10 OCT 2009", # Magdalene Reuss
   540, "30 JUL 1920", "8 MAR 1995", # Brigid Guinness
   547, "2 FEB 1879", "29 MAR 1964", # Sophie Charlotte of Oldenburg
@@ -497,7 +544,8 @@ date_overrides <- tribble(
   582, "22 APR 1852", "25 FEB 1912", # Guillaume IV of Luxembourg
   584, "23 JAN 1896", "9 JUL 1985", # Charlotte of Luxembourg
   586, "5 JAN 1921", "23 APR 2019", # Jean of Luxembourg
-  589, "6 OCT 1914", "23 MAY 2010", # Leonide Bagration-Moukhransky, Gregorian/New Style; Old Style birth = 23 SEP 1914
+  589, "6 OCT 1914", "23 MAY 2010", # Leonide Bagration-Moukhransky,
+                                      # Gregorian/New Style; Old Style birth = 23 SEP 1914
   590, "24 APR 1608", "2 FEB 1660", # Gaston, Duke of Orléans
   591, "23 JUN 1908", "20 MAR 1975", # James / Jaime, Duke of Segovia
   592, "30 JUL 1936", "8 JAN 2020", # Dona Maria of Bourbon / Infanta Pilar of Spain
@@ -526,7 +574,8 @@ date_overrides <- tribble(
   630, "11 DEC 1850", "14 MAY 1922", # Mary Victoria Hamilton
   631, "13 NOV 1848", "26 JUN 1922", # Albert I of Monaco
   632, "12 JUL 1870", "9 MAY 1949", # Louis II of Monaco
-  634, "30 SEP 1898", "16 NOV 1977", # Charlotte, Duchess of Valentinois; some sources give 15 NOV 1977
+  634, "30 SEP 1898", "16 NOV 1977", # Charlotte, Duchess of Valentinois;
+                                      # some sources give 15 NOV 1977
   635, "24 OCT 1895", "10 NOV 1964", # Pierre de Polignac
   636, "31 MAY 1923", "6 APR 2005", # Rainier III of Monaco
   638, "27 JAN 1805", "28 MAY 1872", # Sophie of Bavaria
@@ -551,7 +600,8 @@ date_overrides <- tribble(
   678, "5 SEP 1771", "30 APR 1847", # Archduke Charles of Austria, Duke of Teschen
   679, "30 OCT 1797", "29 DEC 1829", # Henrietta of Nassau-Weilburg
   680, "29 JUL 1818", "20 NOV 1874", # Karl Ferdinand of Austria
-  682, "21 JUL 1858", "6 FEB 1929", # Maria Cristina of Austria; some sources give 9 FEB 1929
+  682, "21 JUL 1858", "6 FEB 1929", # Maria Cristina of Austria;
+                                      # some sources give 9 FEB 1929
   683, "28 NOV 1857", "25 NOV 1885", # Alfonso XII
   684, "9 MAR 1776", "13 JAN 1847", # Archduke Joseph of Austria, Palatine of Hungary
   685, "17 JAN 1831", "14 FEB 1903", # Elisabeth Franziska of Austria
@@ -562,7 +612,8 @@ date_overrides <- tribble(
   716, "10 JAN 1675", "3 OCT 1675", # Catherine Laura Stuart; birth date added
   729, "24 DEC 1598", "1600", # Margaret Stuart; approximate death year
   735, "26 AUG 1596", "29 NOV 1632", # Frederick V of the Palatinate
-  736, "14 OCT 1630", "8 JUN 1714", # Sophia of Hanover; sources vary 13/14 OCT 1630
+  736, "14 OCT 1630", "8 JUN 1714", # Sophia of Hanover;
+                                      # sources vary 13/14 OCT 1630
   741, "26 APR 1575", "3 JUL 1642", # Marie de Medici; birth year varies in sources, selected 1575
   750, "27 MAY 1626", "6 NOV 1650", # William II of Orange
   751, "21 SEP 1640", "9 JUN 1701", # Philippe I, Duke of Orléans
@@ -577,11 +628,12 @@ date_overrides <- tribble(
   763, "24 JAN 1743", "28 DEC 1808", # Anne Horton / Anne Luttrell, Duchess of Cumberland
   765, "22 DEC 1617", "28 AUG 1680", # Charles I Louis, Elector Palatine
   766, "17 DEC 1619", "29 NOV 1682", # Rupert of the Rhine / Duke of Cumberland
-  767, "16 JAN 1621", "1652", # Maurice of the Palatinate; death year approximate, lost at sea
+  767, "16 JAN 1621", "1652", # Maurice of the Palatinate;
+                                      # death year approximate, lost at sea
   768, "5 OCT 1625", "10 MAR 1663", # Edward, Count Palatine of Simmern
   769, "20 NOV 1627", "16 MAR 1686", # Charlotte of Hesse-Kassel
   770, "7 SEP 1674", "14 AUG 1728", # Ernest Augustus, Duke of York and Albany
-  777, "1793", "10 SEP 1843", # John Crocker Bulteel; birth year approximate
+  777, "1793", "10 SEP 1843", # John Crocker Bulteel
   779, "22 NOV 1791", "23 NOV 1851", # Horace Beauchamp Seymour
   781, "1 SEP 1758", "10 NOV 1834", # George John Spencer, 2nd Earl Spencer
   782, "27 JUL 1762", "8 JUN 1831", # Lavinia Bingham / Countess Spencer
@@ -601,32 +653,32 @@ date_overrides <- tribble(
   809, "4 OCT 1951", NA_character_, # Neil McCorquodale; living
   811, "13 SEP 1899", "7 AUG 1966", # Andrew Henry Ferguson
   812, "16 JUN 1908", "11 DEC 1996", # Marian Louisa Montagu-Douglas-Scott
-  823, "1939", "10 AUG 1990", # Hector Barrantes; birth year approximate
+  823, "1939", "10 AUG 1990", # Hector Barrantes
   828, "28 JUN 1491", "28 JAN 1547", # Henry VIII Tudor
-  832, "2 FEB 1503", "10 FEB 1503", # Katherine Tudor; death date corrected from year placeholder
+  832, "2 FEB 1503", "10 FEB 1503", # Katherine Tudor
   833, "16 DEC 1485", "7 JAN 1536", # Catherine of Aragon
   834, "17 MAR 1473", "9 SEP 1513", # James IV of Scotland
   835, "10 APR 1512", "14 DEC 1542", # James V of Scotland
-  836, "1489", "22 JAN 1557", # Archibald Douglas, 6th Earl of Angus; birth year approximate
-  839, "1484", "22 AUG 1545", # Charles Brandon, 1st Duke of Suffolk; birth year approximate
+  836, "1489", "22 JAN 1557", # Archibald Douglas, 6th Earl of Angus
+  839, "1484", "22 AUG 1545", # Charles Brandon, 1st Duke of Suffolk
   840, "10 MAR 1452", "23 JAN 1516", # Ferdinand II of Aragon / Ferdinand V of Castile
   841, "22 APR 1451", "26 NOV 1504", # Isabella I of Castile
   848, "1501", "19 MAY 1536", # Anne Boleyn; birth year uncertain, commonly c.1501 or c.1507
   851, "1508", "24 OCT 1537", # Jane Seymour; birth year uncertain, commonly c.1508/1509
   856, "1524", "13 FEB 1542", # Catherine Howard; birth year uncertain, often c.1521/1524
-  857, "1478", "19 MAR 1539", # Edmund Howard; birth year approximate
+  857, "1478", "19 MAR 1539", # Edmund Howard
   863, "17 NOV 1493", "2 MAR 1543", # John Neville, 3rd Baron Latimer
-  864, "1508", "20 MAR 1549", # Thomas Seymour, Baron Seymour; birth year approximate
-  865, "1483", "12 NOV 1517", # Thomas Parr of Kendal; birth year approximate
+  864, "1508", "20 MAR 1549", # Thomas Seymour, Baron Seymour
+  865, "1483", "12 NOV 1517", # Thomas Parr of Kendal
   866, "6 APR 1492", "20 AUG 1531", # Maud Green
-  868, "1537", "12 FEB 1554", # Jane Grey; birth year approximate
-  869, "1535", "12 FEB 1554", # Guildford Dudley; birth year approximate
+  868, "1537", "12 FEB 1554", # Jane Grey
+  869, "1535", "12 FEB 1554", # Guildford Dudley
   871, "24 FEB 1500", "21 SEP 1558", # Charles V, Holy Roman Emperor
   872, "24 OCT 1503", "1 MAY 1539", # Isabella of Portugal
-  873, "1208", "4 AUG 1265", # Simon de Montfort, 6th Earl of Leicester; birth year approximate
+  873, "1208", "4 AUG 1265", # Simon de Montfort, 6th Earl of Leicester
   874, "19 JAN 1928", "12 JUL 2000", # Tomislav of Yugoslavia
   875, "28 JUN 1929", "7 MAY 1990", # Andrej of Yugoslavia
-  876, "1190", "6 APR 1231", # William Marshal, 2nd Earl of Pembroke; birth year approximate
+  876, "1190", "6 APR 1231", # William Marshal, 2nd Earl of Pembroke
   877, "17 JUL 1945", NA_character_, # Alexander, Crown Prince of Yugoslavia; living
   878, "13 DEC 1946", NA_character_, # Maria da Gloria of Orléans-Braganza; living
   879, "5 FEB 1980", NA_character_, # Peter of Yugoslavia; living
@@ -707,30 +759,30 @@ date_overrides <- tribble(
   987, "22 NOV 1428", "14 APR 1471", # Richard Neville, 16th Earl of Warwick
   988, "21 SEP 1411", "30 DEC 1460", # Richard of York, 3rd Duke of York
   989, "3 MAY 1415", "31 MAY 1495", # Cecily Neville
-  990, "1364", "21 OCT 1425", # Ralph Neville, 1st Earl of Westmorland; approximate birth year
+  990, "1364", "21 OCT 1425", # Ralph Neville, 1st Earl of Westmorland
   992, "17 MAY 1443", "30 DEC 1460", # Edmund, Earl of Rutland
   993, "21 OCT 1449", "18 FEB 1478", # George Plantagenet, Duke of Clarence
   994, "10 AUG 1439", "14 JAN 1476", # Anne of York, Duchess of Exeter
   995, "22 APR 1444", "1503", # Elizabeth of York, Duchess of Suffolk; death year only
   996, "3 MAY 1446", "23 NOV 1503", # Margaret of York, Duchess of Burgundy
-  998, "1437", "8 JUN 1492", # Elizabeth Woodville; approximate birth year
+  998, "1437", "8 JUN 1492", # Elizabeth Woodville
   999, "11 AUG 1467", "23 MAY 1482", # Mary of York
   1005, "1477", "1479", # George Plantagenet, Duke of Bedford; year-level dates only
   1007, "10 NOV 1480", "1517", # Bridget of York; death year only
-  1008, "1450", "9 FEB 1499", # John Welles, 1st Viscount Welles; approximate birth year
+  1008, "1450", "9 FEB 1499", # John Welles, 1st Viscount Welles
   1010, "10 DEC 1472", "19 NOV 1481", # Anne Mowbray
-  1011, "1473", "25 AUG 1554", # Thomas Howard, 3rd Duke of Norfolk; birth year approximate
-  1012, "1475", "9 JUN 1511", # William Courtenay, 1st Earl of Devon; birth year approximate
-  1013, "1432", "17 FEB 1461", # John Grey of Groby; birth year approximate
+  1011, "1473", "25 AUG 1554", # Thomas Howard, 3rd Duke of Norfolk
+  1012, "1475", "9 JUN 1511", # William Courtenay, 1st Earl of Devon
+  1013, "1432", "17 FEB 1461", # John Grey of Groby
   1017, "25 DEC 1584", "3 OCT 1611", # Margaret of Austria, Queen of Spain
   1018, "25 FEB 1475", "28 NOV 1499", # Edward Plantagenet, 17th Earl of Warwick
   1019, "14 AUG 1473", "27 MAY 1541", # Margaret Pole, Countess of Salisbury
-  1021, "1440", "8 NOV 1483", # Thomas St Leger; birth year approximate
+  1021, "1440", "8 NOV 1483", # Thomas St Leger
   1022, "10 NOV 1433", "5 JAN 1477", # Charles the Bold
   1023, "20 JUL 1385", "5 AUG 1415", # Richard of Conisburgh, Earl of Cambridge
   1024, "27 DEC 1388", "22 SEP 1411", # Anne Mortimer
   1025, "1409", "2 OCT 1484", # Isabel Plantagenet; birth year only
-  1026, "1404", "4 APR 1483", # Henry Bourchier, 1st Earl of Essex; birth year approximate
+  1026, "1404", "4 APR 1483", # Henry Bourchier, 1st Earl of Essex
   1029, "1 FEB 1808", "6 DEC 1870", # Louise of Prussia
   1030, "18 MAR 1914", "9 DEC 1987", # Ernst August, Prince of Hanover
   1031, "25 MAR 1915", "8 JAN 2006", # George William of Hanover
@@ -891,13 +943,13 @@ date_overrides <- tribble(
   1214, "29 JAN 1850", "22 APR 1922", # Marie of Schwarzburg-Rudolstadt
   1215, "22 APR 1518", "17 NOV 1562", # Antoine de Bourbon of France
   1216, "18 AUG 1831", "27 OCT 1888", # Helene of Nassau
-  1222, "1369", "4 JUN 1394", # Mary de Bohun; approximate birth year, sources give 1369/70
-  1224, "1388", "22 MAR 1421", # Thomas of Lancaster, Duke of Clarence; birth year approximate
+  1222, "1369", "4 JUN 1394", # Mary de Bohun, sources give 1369/70
+  1224, "1388", "22 MAR 1421", # Thomas of Lancaster, Duke of Clarence
   1226, "3 OCT 1390", "23 FEB 1447", # Humphrey of Gloucester
   1227, "25 FEB 1392", "22 MAY 1409", # Blanche of Lancaster
   1228, "4 JUN 1394", "5 JAN 1430", # Philippa of Lancaster
   1232, "16 JUN 1332", "5 OCT 1379", # Isabella of England, daughter of Edward III
-  1233, "1335", "2 SEP 1348", # Joan of England; approximate birth year
+  1233, "1335", "2 SEP 1348", # Joan of England
   1236, "6 MAR 1340", "3 FEB 1399", # John of Gaunt
   1238, "1342", "1342", # Blanche of the Tower; year-level infant dates
   1239, "10 OCT 1344", "1361", # Mary of Waltham; death year approximate
@@ -907,23 +959,23 @@ date_overrides <- tribble(
   1245, "13 MAY 1822", "17 APR 1902", # Francisco de Asís de Borbón
   1246, "14 OCT 1784", "29 SEP 1833", # Ferdinand VII of Spain
   1249, "7 DEC 1545", "10 FEB 1567", # Henry Stuart, Lord Darnley
-  1250, "1534", "14 APR 1578", # James Hepburn, 4th Earl of Bothwell; approximate birth year
+  1250, "1534", "14 APR 1578", # James Hepburn, 4th Earl of Bothwell
   1251, "22 NOV 1515", "11 JUN 1560", # Mary of Guise
   1252, "10 JUL 1451", "11 JUN 1488", # James III of Scotland; birth year sometimes given as 1451/1452
-  1253, "1259", "29 JUL 1326", # Richard de Burgh, 2nd Earl of Ulster; approximate birth year
+  1253, "1259", "29 JUL 1326", # Richard de Burgh, 2nd Earl of Ulster
   1254, "11 JUN 1430", "3 NOV 1456", # Edmund Tudor, Earl of Richmond
   1255, "31 MAY 1443", "29 JUN 1509", # Margaret Beaufort
-  1259, "1295", "12 OCT 1343", # Rainald II of Guelders; approximate birth year
+  1259, "1295", "12 OCT 1343", # Rainald II of Guelders
   1260, "24 NOV 1394", "5 JAN 1465", # Charles of Orléans
-  1262, "1241", "28 NOV 1290", # Eleanor of Castile; approximate birth year
-  1268, "1272", "23 APR 1307", # Joan of Acre; approximate birth year, born April 1272
+  1262, "1241", "28 NOV 1290", # Eleanor of Castile
+  1268, "1272", "23 APR 1307", # Joan of Acre, born April 1272
   1270, "15 MAR 1275", "11 MAR 1333", # Margaret of England, Duchess of Brabant; death often given as after 11 MAR 1333
   1271, "1 MAY 1276", "27 JUN 1278", # Berengaria of England
   1274, "7 AUG 1282", "5 MAY 1316", # Elizabeth of Rhuddlan
-  1277, "1279", "14 FEB 1318", # Marguerite of France; approximate birth year
+  1277, "1279", "14 FEB 1318", # Marguerite of France
   1278, "1 JUN 1300", "4 AUG 1338", # Thomas of Brotherton
   1279, "5 AUG 1301", "19 MAR 1330", # Edmund of Woodstock
-  1282, "1223", "24 JUN 1291", # Eleanor of Provence; approximate birth year
+  1282, "1223", "24 JUN 1291", # Eleanor of Provence
   1291, "13 MAY 1734", "31 OCT 1783", # John Spencer
   1292, "12 MAR 1716", "21 AUG 1780", # Georgiana Caroline Carteret
   1294, "1 OCT 1754", "24 MAR 1801", # Paul I Romanov, Gregorian/New Style; Old Style = 20 SEP 1754, 12 MAR 1801
@@ -952,29 +1004,29 @@ date_overrides <- tribble(
   1323, "23 AUG 1740", "16 JUL 1764", # Ivan VI Romanov, Gregorian/New Style; Old Style = 12 AUG 1740, 5 JUL 1764
   1324, "1655", "1669", # Ivan Alexeyevich Romanov; year-level dates only
   1325, "27 SEP 1657", "14 JUL 1704", # Sophia Alekseyevna Romanov, Gregorian/New Style; Old Style = 17 SEP 1657, 3 JUL 1704
-  1327, "1415", "30 MAY 1472", # Jacquetta of Luxembourg; birth year approximate, often 1415/1416
-  1328, "1350", "10 MAY 1403", # Catherine Swynford Roet; birth year approximate
-  1329, "1373", "16 MAR 1410", # John Beaufort, 1st Earl of Somerset; birth year approximate
-  1330, "1375", "11 APR 1447", # Henry Beaufort, Cardinal; birth year approximate
-  1331, "1377", "13 NOV 1440", # Joan Beaufort; birth year approximate
+  1327, "1415", "30 MAY 1472", # Jacquetta of Luxembourg, often 1415/1416
+  1328, "1350", "10 MAY 1403", # Catherine Swynford Roet
+  1329, "1373", "16 MAR 1410", # John Beaufort, 1st Earl of Somerset
+  1330, "1375", "11 APR 1447", # Henry Beaufort, Cardinal
+  1331, "1377", "13 NOV 1440", # Joan Beaufort
   1333, "26 NOV 1401", "25 NOV 1418", # Henry Beaufort, 2nd Earl of Somerset
   1334, "25 MAR 1404", "27 MAY 1444", # John Beaufort, Duke of Somerset
-  1335, "1406", "22 MAY 1455", # Edmund Beaufort, Duke of Somerset; birth year approximate
-  1336, "1410", "8 AUG 1482", # Margaret Beauchamp; birth year approximate
-  1337, "1355", "23 DEC 1392", # Isabella of Castile, Duchess of York; approximate birth year; death date varies in secondary sources
-  1338, "1373", "25 OCT 1415", # Edward of Norwich, Duke of York; approximate birth year
+  1335, "1406", "22 MAY 1455", # Edmund Beaufort, Duke of Somerset
+  1336, "1410", "8 AUG 1482", # Margaret Beauchamp
+  1337, "1355", "23 DEC 1392", # Isabella of Castile, Duchess of York; death date varies in secondary sources
+  1338, "1373", "25 OCT 1415", # Edward of Norwich, Duke of York
   1339, "13 JUL 1426", "20 SEP 1492", # Anne Beauchamp, 16th Countess of Warwick
   1340, "5 SEP 1451", "22 DEC 1476", # Isabel Neville
-  1342, "1400", "31 DEC 1460", # Richard Neville, Earl of Salisbury; birth year approximate
-  1343, "1366", "3 OCT 1399", # Eleanor de Bohun; birth year approximate
+  1342, "1400", "31 DEC 1460", # Richard Neville, Earl of Salisbury
+  1343, "1366", "3 OCT 1399", # Eleanor de Bohun
   1344, "11 APR 1374", "20 JUL 1398", # Roger Mortimer, 4th Earl of March
-  1345, "1386", "18 OCT 1405", # Eleanor Holland; birth year approximate
+  1345, "1386", "18 OCT 1405", # Eleanor Holland
   1346, "6 NOV 1391", "18 JAN 1425", # Edmund Mortimer, 5th Earl of March
-  1347, "1354", "NOV 1386", # Violante Visconti; year-level birth and month-level death
+  1347, "1354", "NOV 1386", # Violante Visconti
   1348, "16 AUG 1355", "5 JAN 1382", # Philippa of Ulster / Philippa of Clarence
   1349, "1 FEB 1352", "27 DEC 1381", # Edmund Mortimer, 3rd Earl of March
-  1351, "1435", "29 JUL 1504", # Thomas Stanley, 1st Earl of Derby; birth year approximate
-  1352, "1400", "2 FEB 1461", # Owen Tudor; birth year approximate
+  1351, "1435", "29 JUL 1504", # Thomas Stanley, 1st Earl of Derby
+  1352, "1400", "2 FEB 1461", # Owen Tudor
   1353, "NOV 1431", "21 DEC 1495", # Jasper Tudor; month-level birth date
   1354, "27 JUN 1880", "26 JAN 1952", # Natalia Sheremetevskaya, Gregorian/New Style; Old Style birth = 15 JUN 1880
   1355, "18 APR 1890", "13 DEC 1958", # Maria Pavlovna Romanov, Gregorian/New Style; Old Style birth = 6 APR 1890
@@ -984,34 +1036,34 @@ date_overrides <- tribble(
   1360, "6 AUG 1910", "21 JUL 1931", # George Mikhailovich, Count Brasov, Gregorian/New Style; Old Style birth = 24 JUL 1910
   1361, "21 NOV 1868", "11 MAR 1924", # Peter of Oldenburg, Gregorian/New Style; Old Style birth = 9 NOV 1868
   1362, "29 JAN 1882", "13 MAR 1957", # Helen Vladimirovna of Russia Romanov, Gregorian/New Style; Old Style birth = 17 JAN 1882
-  1366, "1188", "31 MAY 1246", # Isabella of Angouleme; birth year approximate
+  1366, "1188", "31 MAY 1246", # Isabella of Angouleme
   1367, "5 JAN 1209", "2 APR 1272", # Richard, Earl of Cornwall
-  1369, "1214", "1 DEC 1241", # Isabella of England; birth year approximate
-  1370, "1215", "13 APR 1275", # Eleanor of England; birth year approximate
-  1372, "1122", "1 APR 1204", # Eleanor of Aquitaine; birth year approximate
+  1369, "1214", "1 DEC 1241", # Isabella of England
+  1370, "1215", "13 APR 1275", # Eleanor of England
+  1372, "1122", "1 APR 1204", # Eleanor of Aquitaine
   1373, "17 AUG 1153", "1156",  #William IX, count of Poitiers
-  1375, "1156", "28 JUN 1189", # Matilda (Maud), Duchess of Saxony; birth year approximate
+  1375, "1156", "28 JUN 1189", # Matilda (Maud), Duchess of Saxony
   1376, "8 SEP 1157", "6 APR 1199", # Richard I Coeur de Lion
-  1379, "OCT 1165", "4 SEP 1199", # Joan Plantagenet; month-level birth date
-  1380, "1028", "9 SEP 1087", # William I the Conqueror; birth year approximate
-  1381, "1031", "2 NOV 1083", # Matilda of Flanders; birth year approximate
-  1382, "1054", "3 FEB 1134", # Robert Curthose; birth year approximate
-  1383, "1055", "1075", # Richard of Normandy; year-level dates approximate
-  1384, "1056", "2 AUG 1100", # William II Rufus; birth year approximate
-  1385, "1056", "30 JUL 1126", # Cecilia of Normandy / Abbess of Holy Trinity; birth year approximate
-  1388, "1067", "8 MAR 1137", # Adela of Normandy; birth year approximate
-  1390, "1066", "13 AUG 1090", # Constance of Normandy; birth year approximate
-  1391, "1068", "1 DEC 1135", # Henry I Beauclerc; birth year approximate
-  1392, "1080", "1 MAY 1118", # Matilda (Edith) of Scotland; birth year approximate
-  1393, "1090", "31 OCT 1147", # Robert of Gloucester; birth year approximate
+  1379, "OCT 1165", "4 SEP 1199", # Joan Plantagenet
+  1380, "1028", "9 SEP 1087", # William I the Conqueror
+  1381, "1031", "2 NOV 1083", # Matilda of Flanders
+  1382, "1054", "3 FEB 1134", # Robert Curthose
+  1383, "1055", "1075", # Richard of Normandy
+  1384, "1056", "2 AUG 1100", # William II Rufus
+  1385, "1056", "30 JUL 1126", # Cecilia of Normandy / Abbess of Holy Trinity
+  1388, "1067", "8 MAR 1137", # Adela of Normandy
+  1390, "1066", "13 AUG 1090", # Constance of Normandy
+  1391, "1068", "1 DEC 1135", # Henry I Beauclerc
+  1392, "1080", "1 MAY 1118", # Matilda (Edith) of Scotland
+  1393, "1090", "31 OCT 1147", # Robert of Gloucester
   1394, "5 AUG 1103", "25 NOV 1120", # William Adelin, Duke of Normandy
   1395, "7 FEB 1102", "10 SEP 1167", # Empress Matilda
-  1396, "1103", "23 APR 1151", # Adeliza of Louvain; birth year approximate
-  1397, "1092", "25 OCT 1154", # Stephen, King of England; birth year approximate
-  1398, "1105", "3 MAY 1152", # Matilda of Boulogne; birth year approximate
-  1400, "1130", "17 AUG 1153", # Eustace IV of Boulogne; birth year approximate
-  1402, "1137", "11 OCT 1159", # William of Boulogne; birth year approximate
-  1403, "1136", "1182", # Mary of Boulogne; approximate year-level dates
+  1396, "1103", "23 APR 1151", # Adeliza of Louvain
+  1397, "1092", "25 OCT 1154", # Stephen, King of England
+  1398, "1105", "3 MAY 1152", # Matilda of Boulogne
+  1400, "1130", "17 AUG 1153", # Eustace IV of Boulogne
+  1402, "1137", "11 OCT 1159", # William of Boulogne
+  1403, "1136", "1182", # Mary of Boulogne
   1404, "11 AUG 1086", "23 MAY 1125", # Henry V, Holy Roman Emperor
   1405, "24 AUG 1113", "7 SEP 1151", # Geoffrey V Plantagenet
   1406, "4 JAN 1904", "25 NOV 1971", # Audrey Emery / Princess Romanovsky-Ilyinsky
@@ -1019,92 +1071,92 @@ date_overrides <- tribble(
   1408, "17 JUN 1884", "5 JUN 1965", # Prince Wilhelm of Sweden
   1409, "8 MAY 1909", "21 DEC 2004", # Lennart Gustaf Nicholas
   1412, "6 JAN 1367", "14 FEB 1400", # Richard II of England
-  1415, "1340", "18 FEB 1397", # Enguerrand VII de Coucy; birth year approximate
-  1416, "1354", "24 MAR 1394", # Constance of Castile; birth year approximate
+  1415, "1340", "18 FEB 1397", # Enguerrand VII de Coucy
+  1416, "1354", "24 MAR 1394", # Constance of Castile
   1417, "29 AUG 1347", "16 APR 1375", # John Hastings, 2nd Earl of Pembroke
   1418, "6 JUL 1332", "10 DEC 1363", # Elizabeth de Burgh, Duchess of Clarence
   1419, "30 APR 1700", "18 JUN 1739", # Charles Frederick of Schleswig-Holstein-Gottorp
   1423, "23 JUN 1703", "24 JUN 1768", # Maria Leszczynska / Marie Leczinska
   1426, "11 MAR 1516", "8 MAR 1534", # Henry Brandon, Earl of Lincoln
   1427, "16 JUL 1517", "20 NOV 1559", # Frances Brandon
-  1428, "1519", "27 SEP 1547", # Eleanor Brandon; birth year approximate
+  1428, "1519", "27 SEP 1547", # Eleanor Brandon
   1429, "10 AUG 1520", "7 JUL 1537", # Madeleine of France
   1430, "17 JAN 1517", "23 FEB 1554", # Henry Grey, Duke of Suffolk
   1431, "8 OCT 1515", "9 MAR 1578", # Margaret Douglas
   1432, "21 SEP 1516", "4 SEP 1571", # Matthew Stuart, 4th Earl of Lennox
-  1433, "1555", "APR 1576", # Charles Stuart, Earl of Lennox; approximate birth year and month-level death date
-  1434, "1555", "21 JAN 1582", # Elizabeth Cavendish; birth year approximate
+  1433, "1555", "APR 1576", # Charles Stuart, Earl of Lennox and month-level death date
+  1434, "1555", "21 JAN 1582", # Elizabeth Cavendish
   1435, "10 NOV 1575", "25 SEP 1615", # Arabella Stuart
-  1436, "1588", "24 OCT 1660", # William Seymour, Duke of Somerset; birth year approximate
+  1436, "1588", "24 OCT 1660", # William Seymour, Duke of Somerset
   1439, "21 AUG 1858", "30 JAN 1889", # Rudolf, Crown Prince of Austria
   1442, "12 JUL 1844", "29 JUN 1910", # Ferdinand Philippe Marie d'Orléans, Duc d'Alençon
   1447, "11 JUL 1274", "7 JUN 1329", # Robert I Bruce
-  1449, "1296", "2 MAR 1316", # Marjorie Bruce; birth year approximate
-  1450, "1284", "27 OCT 1327", # Elizabeth de Burgh; birth year approximate
+  1449, "1296", "2 MAR 1316", # Marjorie Bruce
+  1450, "1284", "27 OCT 1327", # Elizabeth de Burgh
   1451, "5 MAR 1324", "22 FEB 1371", # David II Bruce
-  1454, "1296", "9 APR 1327", # Walter Stewart, 6th High Steward; birth year approximate
+  1454, "1296", "9 APR 1327", # Walter Stewart, 6th High Steward
   1455, "2 MAR 1316", "19 APR 1390", # Robert II of Scotland
   1457, "14 AUG 1337", "4 APR 1406", # Robert III of Scotland
-  1459, "1340", "3 SEP 1420", # Robert Stewart, Duke of Albany; birth year approximate
-  1461, "1350", "1401", # Annabella Drummond; approximate year-level dates
+  1459, "1340", "3 SEP 1420", # Robert Stewart, Duke of Albany
+  1461, "1350", "1401", # Annabella Drummond
   1462, "24 OCT 1378", "26 MAR 1402", # David Stewart, Duke of Rothesay
   1463, "1394", "21 FEB 1437", # James I of Scotland; birth date late July 1394
-  1465, "1404", "15 JUL 1445", # Joan Beaufort, Queen of Scots; birth year approximate
+  1465, "1404", "15 JUL 1445", # Joan Beaufort, Queen of Scots
   1466, "16 OCT 1430", "3 AUG 1460", # James II of Scotland
-  1467, "1434", "1 DEC 1463", # Mary of Guelders; birth year approximate
+  1467, "1434", "1 DEC 1463", # Mary of Guelders
   1468, "2 FEB 1455", "20 FEB 1513", # John, King of Denmark
   1469, "23 JUN 1456", "14 JUL 1486", # Margaret of Denmark
-  1470, "1454", "7 AUG 1485", # Alexander Stewart, Duke of Albany; birth year approximate
+  1470, "1454", "7 AUG 1485", # Alexander Stewart, Duke of Albany
   1471, "1456", "1479", # John Stewart, Earl of Mar and Garioch; year-level dates approximate
-  1472, "1453", "MAY 1488", # Mary Stewart, Countess of Arran; approximate birth year and month-level death date
-  1474, "1415", "6 NOV 1479", # James Hamilton, 1st Lord Hamilton; birth year approximate
+  1472, "1453", "MAY 1488", # Mary Stewart, Countess of Arran and month-level death date
+  1474, "1415", "6 NOV 1479", # James Hamilton, 1st Lord Hamilton
   1476, "1475", "1529", # James Hamilton, 1st Earl of Arran; year-level dates approximate
-  1478, "1490", "4 SEP 1526", # John Stewart, 3rd Earl of Lennox; birth year approximate
-  1482, "1542", "26 MAY 1583", # Esme Stuart, 1st Duke of Lennox; birth year approximate
-  1484, "1484", "2 JUN 1536", # John Stewart, Duke of Albany; birth year approximate
-  1488, "1440", "15 SEP 1512", # John Stewart, 1st Earl of Atholl; birth year approximate; death year/source conflict with 1513
-  1492, "1516", "22 JAN 1575", # James Hamilton, Duke of Châtellerault; birth year approximate
+  1478, "1490", "4 SEP 1526", # John Stewart, 3rd Earl of Lennox
+  1482, "1542", "26 MAY 1583", # Esme Stuart, 1st Duke of Lennox
+  1484, "1484", "2 JUN 1536", # John Stewart, Duke of Albany
+  1488, "1440", "15 SEP 1512", # John Stewart, 1st Earl of Atholl; death year/source conflict with 1513
+  1492, "1516", "22 JAN 1575", # James Hamilton, Duke of Châtellerault
   1494, "1537", "1609", # James Hamilton, 3rd Earl of Arran; year-level dates approximate
-  1495, "1248", "2 MAY 1302", # Blanche of Artois; birth year approximate
-  1496, "1278", "22 MAR 1322", # Thomas of Lancaster; birth year approximate
-  1497, "1281", "22 SEP 1345", # Henry of Lancaster; birth year approximate
+  1495, "1248", "2 MAY 1302", # Blanche of Artois
+  1496, "1278", "22 MAR 1322", # Thomas of Lancaster
+  1497, "1281", "22 SEP 1345", # Henry of Lancaster
   1498, "2 FEB 1282", "3 DEC 1322", # Maud Chaworth
-  1499, "1310", "23 MAR 1361", # Henry of Grosmont, Duke of Lancaster; birth year approximate
+  1499, "1310", "23 MAR 1361", # Henry of Grosmont, Duke of Lancaster
   1501, "31 MAR 1360", "19 JUL 1415", # Philippa of Lancaster
   1502, "21 FEB 1363", "24 NOV 1426", # Elizabeth of Lancaster
   1503, "11 APR 1357", "14 AUG 1433", # John I of Portugal
-  1506, "1161", "5 SEP 1201", # Constance of Brittany; birth year approximate
+  1506, "1161", "5 SEP 1201", # Constance of Brittany
   1507, "29 MAR 1187", "3 APR 1203", # Arthur, Duke of Brittany
-  1508, "1165", "23 DEC 1230", # Berengaria of Navarre; birth year approximate
-  1509, "1129", "6 AUG 1195", # Henry the Lion; birth year approximate
-  1510, "1158", "18 SEP 1197", # Margaret of France; birth year approximate
-  1511, "1031", "13 NOV 1093", # Malcolm III Canmore; birth year approximate
-  1512, "1045", "16 NOV 1093", # St Margaret of Scotland; birth year approximate
-  1513, "1074", "8 JAN 1107", # Edgar of Scotland; birth year approximate
-  1514, "1078", "23 APR 1124", # Alexander I the Fierce; birth year approximate
-  1515, "1084", "24 MAY 1153", # David I the Saint; birth year approximate
-  1517, "1045", "19 MAY 1102", # Stephen Henry, Count of Blois; birth year approximate
-  1518, "1090", "8 JAN 1152", # Theobald, Count of Blois; birth year approximate
+  1508, "1165", "23 DEC 1230", # Berengaria of Navarre
+  1509, "1129", "6 AUG 1195", # Henry the Lion
+  1510, "1158", "18 SEP 1197", # Margaret of France
+  1511, "1031", "13 NOV 1093", # Malcolm III Canmore
+  1512, "1045", "16 NOV 1093", # St Margaret of Scotland
+  1513, "1074", "8 JAN 1107", # Edgar of Scotland
+  1514, "1078", "23 APR 1124", # Alexander I the Fierce
+  1515, "1084", "24 MAY 1153", # David I the Saint
+  1517, "1045", "19 MAY 1102", # Stephen Henry, Count of Blois
+  1518, "1090", "8 JAN 1152", # Theobald, Count of Blois
   1520, "11 NOV 1155", "5 OCT 1214", # Alfonso VIII of Castile
-  1525, "1000", "3 JUL 1035", # Robert the Devil / Robert I of Normandy; birth year approximate
+  1525, "1000", "3 JUL 1035", # Robert the Devil / Robert I of Normandy
   1527, "23 AUG 963", "28 AUG 1026", # Richard II of Normandy
-  1529, "997", "6 AUG 1027", # Richard III of Normandy; birth year approximate
+  1529, "997", "6 AUG 1027", # Richard III of Normandy
   1530, "28 AUG 933", "20 NOV 996", # Richard I the Fearless of Normandy
-  1532, "984", "6 MAR 1052", # Emma of Normandy; birth year approximate
-  1533, "966", "23 APR 1016", # Ethelred II the Unready; birth year approximate
-  1535, "1025", "18 DEC 1075", # Edith (Eadgyth) of Wessex; birth year approximate
-  1538, "1022", "14 OCT 1066", # Harold II; birth year approximate
-  1541, "1053", "19 MAY 1125", # Vladimir of Kiev Monomakh; birth year approximate
-  1543, "990", "30 NOV 1016", # Edmund II Ironside; birth year approximate
-  1545, "1016", "19 APR 1057", # Edward Atheling / Edward the Exile; birth year approximate
-  1548, "995", "12 NOV 1035", # Canute II the Great; birth year approximate
-  1550, "1016", "17 MAR 1040", # Harold I Harefoot; birth year approximate
-  1551, "1016", "1035", # Sweyn Knutsson / Svein of Norway; approximate year-level dates
-  1552, "1018", "8 JUN 1042", # Hardicanute / Harthacnut; approximate birth year
-  1553, "1001", "1066", # Herluin of Conteville; approximate year-level dates
-  1554, "1035", "15 FEB 1097", # Odo of Bayeux; approximate birth year and approximate mid-month death date
-  1555, "1031", "8 DEC 1095", # Robert, Count of Mortain; approximate birth year
-  1556, "1063", "13 OCT 1119", # Alan IV of Brittany Fergant; approximate birth year
+  1532, "984", "6 MAR 1052", # Emma of Normandy
+  1533, "966", "23 APR 1016", # Ethelred II the Unready
+  1535, "1025", "18 DEC 1075", # Edith (Eadgyth) of Wessex
+  1538, "1022", "14 OCT 1066", # Harold II
+  1541, "1053", "19 MAY 1125", # Vladimir of Kiev Monomakh
+  1543, "990", "30 NOV 1016", # Edmund II Ironside
+  1545, "1016", "19 APR 1057", # Edward Atheling / Edward the Exile
+  1548, "995", "12 NOV 1035", # Canute II the Great
+  1550, "1016", "17 MAR 1040", # Harold I Harefoot
+  1551, "1016", "1035", # Sweyn Knutsson / Svein of Norway
+  1552, "1018", "8 JUN 1042", # Hardicanute / Harthacnut
+  1553, "1001", "1066", # Herluin of Conteville
+  1554, "1035", "15 FEB 1097", # Odo of Bayeux and approximate mid-month death date
+  1555, "1031", "8 DEC 1095", # Robert, Count of Mortain
+  1556, "1063", "13 OCT 1119", # Alan IV of Brittany Fergant
   1557, "1153", "11 NOV 1189", # William II the Good of Sicily; birth month uncertain in source summaries
   1558, "27 OCT 1156", "2 AUG 1222", # Raymond VI of Toulouse
   1559, "5 NOV 1881", "11 AUG 1958", # Nicholas / Nikolai Kulikovsky
@@ -1123,39 +1175,39 @@ date_overrides <- tribble(
   1572, "20 SEP 1878", "22 DEC 1959", # Catherine Alexandrovna Yurievskaya / Romanov, Gregorian/New Style
   1573, "10 MAY 1883", "28 MAY 1957", # Alexandra Zarnekau
   1581, "3 NOV 1890", "29 SEP 1978", # Serge Obelensky
-  1574, "21 DEC 1900", "29 FEB 1988", # Alexander Alexandrovich Yurievsky; date source should be cross-checked if stricter certainty needed
+  1574, "21 DEC 1900", "29 FEB 1988", # Alexander Alexandrovich Yurievsky
   1575, "13 FEB 1871", "31 MAY 1948", # George Nikolaus von Merenberg / Count von Merenberg
   1576, "16 OCT 1897", "11 JAN 1965", # George Michael von Merenberg; exact dates from genealogical summaries
   1577, "3 OCT 1898", "15 SEP 1983", # Olga von Merenberg; exact dates from genealogical summaries
   1578, "1870", "1910", # Alexander V. Bariatinsky; year-level dates only
   1579, "1902", "1931", # Andrei Bariatinsky; year-level dates only
   1580, "1905", NA_character_, # Alexander Bariatinsky; birth year only; death not resolved in this pass
-  1582, "1228", "9 NOV 1261", # Sanchia of Provence; approximate birth year
-  1583, "1254", "17 OCT 1277", # Beatrix of Falkenburg; approximate birth year
+  1582, "1228", "9 NOV 1261", # Sanchia of Provence
+  1583, "1254", "17 OCT 1277", # Beatrix of Falkenburg
   1584, "26 DEC 1194", "13 DEC 1250", # Frederick II of Germany / Holy Roman Emperor
   1585, "4 SEP 1241", "19 MAR 1286", # Alexander III of Scotland; Britannica notes death as 18/19 MAR 1286, selected 19 MAR
-  1586, "1217", "8 OCT 1286", # John of Dreux / John I of Brittany, Earl of Richmond; approximate birth year
+  1586, "1217", "8 OCT 1286", # John of Dreux / John I of Brittany, Earl of Richmond
   1587, "20 JAN 1259", "10 NOV 1274", # Aveline de Forz
   1588, "2 SEP 1243", "7 DEC 1295", # Gilbert de Clare, Earl of Gloucester
-  1589, "1270", "5 APR 1325", # Ralph de Monthermer; approximate birth year; corrects death-year placeholder
+  1589, "1270", "5 APR 1325", # Ralph de Monthermer; corrects death-year placeholder
   1590, "27 SEP 1275", "27 OCT 1312", # John II, Duke of Brabant
-  1591, "1284", "10 NOV 1299", # John I, Count of Holland; approximate birth year
-  1592, "1276", "16 MAR 1322", # Humphrey de Bohun, Earl of Hereford; approximate birth year
-  1593, "1290", "24 MAY 1326", # Mary de Ros; approximate birth year
-  1594, "1339", "1 NOV 1399", # John IV (the Conqueror) of Montfort / Duke of Brittany; approximate birth year
-  1595, "1385", "31 DEC 1439", # Margaret Holland; approximate birth year
+  1591, "1284", "10 NOV 1299", # John I, Count of Holland
+  1592, "1276", "16 MAR 1322", # Humphrey de Bohun, Earl of Hereford
+  1593, "1290", "24 MAY 1326", # Mary de Ros
+  1594, "1339", "1 NOV 1399", # John IV (the Conqueror) of Montfort / Duke of Brittany
+  1595, "1385", "31 DEC 1439", # Margaret Holland
   1596, "30 SEP 1404", "14 NOV 1432", # Anne of Burgundy
   1597, "16 JUL 1401", "8 OCT 1436", # Jacqueline of Holland
-  1598, "1400", "7 JUL 1452", # Eleanor de Cobham; approximate birth year
+  1598, "1400", "7 JUL 1452", # Eleanor de Cobham
   1599, "23 JAN 1378", "30 DEC 1436", # Ludwig III, Elector Palatine
   1600, "1382", "24 SEP 1459", # Eric X of Pomerania / Eric of Pomerania; birth year varies 1381/1382, selected 1382
-  1601, "1368", "10 JUN 1437", # Joan of Navarre; approximate birth year; corrects death date
-  1602, "1374", "28 MAY 1420", # William Bourchier, Count of Eu; approximate birth year
+  1601, "1368", "10 JUN 1437", # Joan of Navarre; corrects death date
+  1602, "1374", "28 MAY 1420", # William Bourchier, Count of Eu
   1603, "30 APR 1383", "16 OCT 1438", # Anne of Gloucester
   1604, "14 AUG 1720", "31 OCT 1785", # Frederick II of Hesse-Cassel
   1605, "8 NOV 1715", "13 JAN 1797", # Elizabeth Christine of Brunswick-Wolfenbüttel
   1606, "29 MAY 1680", "2 SEP 1735", # Ferdinand Albert II of Brunswick
-  1608, "1109", "12 OCT 1176", # William d'Aubigny, Earl of Arundel; approximate birth year
+  1608, "1109", "12 OCT 1176", # William d'Aubigny, Earl of Arundel
   1609, "11 JUN 1934", "13 FEB 2018", # Henri de Laborde de Monpezat / Prince Henrik of Denmark
   1610, "26 MAY 1968", NA_character_, # Frederik X of Denmark; living
   1611, "7 JUN 1969", NA_character_, # Joachim of Denmark; living
@@ -1166,7 +1218,7 @@ date_overrides <- tribble(
   1617, "28 JAN 1768", "3 DEC 1839", # Frederick VI of Denmark
   1618, "28 OCT 1767", "21 MAR 1852", # Marie of Hesse-Cassel
   1619, "4 SEP 1729", "10 OCT 1796", # Juliana Maria of Brunswick-Wolfenbüttel
-  1636, "1498", "13 MAY 1568", # Sophie / Sophia of Pomerania; approximate birth year
+  1636, "1498", "13 MAY 1568", # Sophie / Sophia of Pomerania
   1637, "7 JUL 1745", "3 JUN 1747", # Christian of Denmark
   1638, "3 JUL 1746", "21 AUG 1813", # Sophia Magdalena of Denmark
   1639, "10 JUL 1747", "14 JAN 1820", # Caroline of Denmark / Wilhelmina Caroline
@@ -1243,203 +1295,205 @@ date_overrides <- tribble(
   1726, "30 JUN 1641", "5 JUL 1719", # Meinhardt Schomberg, Duke of Schomberg
   1728, "4 DEC 1764", "30 JUN 1839", # Richard Bingham, Earl of Lucan
   1729, "22 SEP 1735", "29 MAR 1799", # Charles Bingham, Earl of Lucan
-  1730, "1799", "10 APR 1851", # Elizabeth Poyntz; approximate birth year
+  1730, "1799", "10 APR 1851", # Elizabeth Poyntz
   1731, "27 OCT 1835", "13 AUG 1910", # John Poyntz Spencer, 5th Earl Spencer
   1732, "28 SEP 1835", "31 OCT 1903", # Charlotte Seymour / Countess Spencer
-  1733, "11 JUN 1889", "18 JUL 1981", # Delia Peel; date source should be cross-checked if stricter certainty needed
+  1733, "11 JUN 1889", "18 JUL 1981", # Delia Peel
   1734, "29 SEP 1899", "7 FEB 1955", # Lavinia Annaly / Lady Lavinia Spencer
   1735, "13 MAY 1708", "19 JUN 1746", # John Spencer of Althorp
   1736, "3 JUN 1743", "27 FEB 1821", # William IX of Hesse-Cassel
   1737, "21 JUN 1818", "22 AUG 1893", # Ernest II of Saxe-Coburg-Saalfeld
   1742, "4 MAR 1188", "27 NOV 1252", # Blanche of Castile; source conflict with Britannica death as 12 NOV 1252, selected 27 NOV
   1743, "18 JUN 1294", "1 FEB 1328", # Charles IV the Fair
-  1746, "1199", "30 MAY 1252", # Ferdinand III of Castile; approximate birth year
+  1746, "1199", "30 MAY 1252", # Ferdinand III of Castile
   1747, "1 JUN 1180", "8 NOV 1246", # Berengaria of Castile
-  1748, "1134", "31 AUG 1158", # Sancho III of Castile; approximate birth year
+  1748, "1134", "31 AUG 1158", # Sancho III of Castile
   1749, "23 NOV 1221", "4 APR 1284", # Alfonso X the Wise
   1751, "12 MAY 1258", "25 APR 1295", # Sancho IV of Castile
-  1753, "986", "25 JUN 1014", # Athelstan Ætheling; approximate birth year
-  1754, "1001", "1005", # Egbert / Ecgberht, son of Æthelred II; approximate year-level dates
-  1756, "1003", "1017", # Edwy / Eadwig, son of Æthelred II; approximate year-level dates
-  1763, "975", "15 AUG 1038", # Stephen I of Hungary; approximate birth year
-  1767, "1005", "5 FEB 1036", # Alfred Aetheling; approximate birth year
-  1768, "1020", "18 JUL 1038", # Gunhilda of Denmark; approximate birth year
+  1753, "986", "25 JUN 1014", # Athelstan Ætheling
+  1754, "1001", "1005", # Egbert / Ecgberht, son of Æthelred II
+  1756, "1003", "1017", # Edwy / Eadwig, son of Æthelred II
+  1763, "975", "15 AUG 1038", # Stephen I of Hungary
+  1767, "1005", "5 FEB 1036", # Alfred Aetheling
+  1768, "1020", "18 JUL 1038", # Gunhilda of Denmark
   1776, "17 APR 963", "3 FEB 1014", # Sweyn Forkbeard
-  1778, "930", "25 MAY 992", # Mieszko I of Poland; approximate birth year
-  1779, "943", "8 JUL 975", # Edgar the Peaceful; birth year approximate 943/944
-  1780, "945", "17 NOV 1000", # Ælfthryth / Elfrida; approximate birth year
-  1782, "962", "18 MAR 978", # Edward the Martyr; approximate birth year
-  1786, "921", "26 MAY 946", # Edmund I the Elder; approximate birth year
-  1788, "940", "1 OCT 959", # Eadwig / Edwy; approximate birth year
-  1792, "874", "17 JUL 924", # Edward the Elder; approximate birth year
-  1794, "923", "23 NOV 955", # Eadred; approximate birth year
-  1799, "894", "27 OCT 939", # Æthelstan; approximate birth year
-  1801, "877", "927", # Sihtric Cáech / Sihtric of Northumbria; approximate birth year, death year; identity/title wording should be checked because row title says King of Denmark
+  1778, "930", "25 MAY 992", # Mieszko I of Poland
+  1779, "943", "8 JUL 975", # Edgar the Peaceful 943/944
+  1780, "945", "17 NOV 1000", # Ælfthryth / Elfrida
+  1782, "962", "18 MAR 978", # Edward the Martyr
+  1786, "921", "26 MAY 946", # Edmund I the Elder
+  1788, "940", "1 OCT 959", # Eadwig / Edwy
+  1792, "874", "17 JUL 924", # Edward the Elder
+  1794, "923", "23 NOV 955", # Eadred
+  1799, "894", "27 OCT 939", # Æthelstan
+  1801, "877", "927", # Sihtric Cáech / Sihtric of Northumbria, death year; identity/title wording should be checked because row title says King of Denmark
   1802, "878", "920", # Ælfflæd, wife of Edward the Elder; approximate birth and death years
-  1803, "904", "16 OCT 922", # Æthelweard, son of Edward the Elder; approximate birth year
-  1804, "902", "933", # Edwin, son of Edward the Elder; approximate year-level dates
-  1806, "902", "26 DEC 955", # Eadgifu / Edgiva of Kent; approximate birth year
-  1808, "910", "26 JAN 937", # Eadhild / Edhilda, daughter of Edward the Elder; approximate birth year
-  1809, "910", "26 JAN 946", # Eadgyth / Edith of England, wife of Otto I; approximate birth year
+  1803, "904", "16 OCT 922", # Æthelweard, son of Edward the Elder
+  1804, "902", "933", # Edwin, son of Edward the Elder
+  1806, "902", "26 DEC 955", # Eadgifu / Edgiva of Kent
+  1808, "910", "26 JAN 937", # Eadhild / Edhilda, daughter of Edward the Elder
+  1809, "910", "26 JAN 946", # Eadgyth / Edith of England, wife of Otto I
   1811, "17 SEP 879", "7 OCT 929", # Charles III the Simple, King of West Francia
-  1812, "898", "16 JUN 956", # Hugh the Great; approximate birth year
+  1812, "898", "16 JUN 956", # Hugh the Great
   1813, "23 NOV 912", "7 MAY 973", # Otto I the Great
   1814, "932", "7 FEB 999", # Boleslaus II, Duke of Bohemia; birth year only
   1815, "20 OCT 1496", "12 APR 1550", # Claude, Duke of Guise
   1817, "11 SEP 1476", "22 SEP 1531", # Louise of Savoy; replaces year-placeholder dates
   1827, "1 FEB 1426", "21 MAY 1481", # Christian I of Denmark
   1828, "1430", "25 NOV 1495", # Dorothea of Brandenburg / Queen of Denmark; birth year only
-  1830, "1303", "12 AUG 1332", # Robert Bruce of Liddesdale; approximate birth year; killed at Dupplin Moor
-  1831, "1253", "9 NOV 1292", # Margaret/Marjorie of Carrick; approximate birth year; row name may be variant
-  1832, "1243", "4 APR 1304", # Robert de Brus, 6th Lord of Annandale; approximate birth year, death before/around 4 APR 1304
+  1830, "1303", "12 AUG 1332", # Robert Bruce of Liddesdale; killed at Dupplin Moor
+  1831, "1253", "9 NOV 1292", # Margaret/Marjorie of Carrick; row name may be variant
+  1832, "1243", "4 APR 1304", # Robert de Brus, 6th Lord of Annandale, death before/around 4 APR 1304
   1833, "8 NOV 1226", "10 JUL 1264", # Isabel de Clare; death date sometimes given as after 10 JUL 1264
-  1834, "1180", "25 OCT 1230", # Gilbert de Clare, Earl of Gloucester; approximate birth year
-  1835, "1210", "31 MAR 1295", # Robert de Brus, 5th Lord of Annandale; approximate birth year
-  1836, "1199", "1251", # Isobel/Isabella of Huntingdon; approximate year-level dates
-  1837, "1144", "17 JUN 1219", # David of Scotland, Earl of Huntingdon; approximate birth year
-  1838, "1171", "6 JAN 1233", # Matilda of Chester; approximate birth year
-  1839, "1147", "30 JUN 1181", # Hugh de Kevelioc, Earl of Chester; approximate birth year
-  1842, "1194", "1228", # Margaret of Huntingdon; approximate year-level dates
-  1843, "1180", "1234", # Alan of Galloway; approximate year-level dates
-  1844, "1210", "28 JAN 1290", # Dervorguilla of Galloway; approximate birth year
-  1845, "1208", "25 OCT 1268", # John de Balliol; approximate birth year
-  1846, "1249", "25 NOV 1314", # John Balliol, King of Scots; approximate birth year
-  1847, "1253", "1292", # Isabel de Warenne; approximate year-level dates; identity inferred from Balliol/Warenne placement
-  1848, "1231", "27 SEP 1304", # John de Warenne, 6th Earl of Surrey; approximate birth year
-  1849, "1283", "15 JAN 1364", # Edward Balliol; approximate birth year and mid-month death date
-  1850, "1012", "1 SEP 1067", # Baldwin V of Flanders; approximate birth year
+  1834, "1180", "25 OCT 1230", # Gilbert de Clare, Earl of Gloucester
+  1835, "1210", "31 MAR 1295", # Robert de Brus, 5th Lord of Annandale
+  1836, "1199", "1251", # Isobel/Isabella of Huntingdon
+  1837, "1144", "17 JUN 1219", # David of Scotland, Earl of Huntingdon
+  1838, "1171", "6 JAN 1233", # Matilda of Chester
+  1839, "1147", "30 JUN 1181", # Hugh de Kevelioc, Earl of Chester
+  1842, "1194", "1228", # Margaret of Huntingdon
+  1843, "1180", "1234", # Alan of Galloway
+  1844, "1210", "28 JAN 1290", # Dervorguilla of Galloway
+  1845, "1208", "25 OCT 1268", # John de Balliol
+  1846, "1249", "25 NOV 1314", # John Balliol, King of Scots
+  1847, "1253", "1292", # Isabel de Warenne; identity inferred from Balliol/Warenne placement
+  1848, "1231", "27 SEP 1304", # John de Warenne, 6th Earl of Surrey
+  1849, "1283", "15 JAN 1364", # Edward Balliol and mid-month death date
+  1850, "1012", "1 SEP 1067", # Baldwin V of Flanders
   1853, "25 OCT 1102", "28 JUL 1128", # William Clito of Flanders
-  1854, "1112", "1165", # Sibyl of Anjou; approximate year-level dates
-  1855, "1092", "13 NOV 1143", # Fulk V of Anjou; approximate birth year
-  1857, "1162", "1183", # Rainier of Montferrat; approximate year-level dates
-  1859, "1060", "25 JAN 1100", # Godfrey of Bouillon / Lower Lorraine; approximate birth year
-  1860, "1090", "25 NOV 1120", # Matilda of Blois; approximate birth year
+  1854, "1112", "1165", # Sibyl of Anjou
+  1855, "1092", "13 NOV 1143", # Fulk V of Anjou
+  1857, "1162", "1183", # Rainier of Montferrat
+  1859, "1060", "25 JAN 1100", # Godfrey of Bouillon / Lower Lorraine
+  1860, "1090", "25 NOV 1120", # Matilda of Blois
   1866, "1 JUN 1134", "27 JUL 1158", # Geoffrey VI of Anjou; exact date completion
   1867, "22 JUL 1136", "30 JAN 1164", # William, Count of Poitou; exact date completion
   1868, "1099", "9 APR 1137", # William X of Aquitaine; birth year only
   1869, "1120", "18 SEP 1180", # Louis VII of France; birth year commonly 1120
-  1870, "1071", "11 MAY 1138", # William de Warenne, 2nd Earl of Surrey; approximate birth year
-  1871, "1099", "17 JAN 1168", # Thierry/Theodore of Flanders; approximate birth year
+  1870, "1071", "11 MAY 1138", # William de Warenne, 2nd Earl of Surrey
+  1871, "1099", "17 JAN 1168", # Thierry/Theodore of Flanders
   1872, "21 APR 1132", "27 JUN 1194", # Sancho VI of Navarre
-  1873, "1184", "10 AUG 1241", # Eleanor of Brittany; approximate birth year
-  1874, "1138", "20 FEB 1171", # Conan IV of Brittany; approximate birth year
-  1875, "1170", "26 OCT 1232", # Ranulf de Blondeville, Earl of Chester; approximate birth year
-  1876, "1155", "13 APR 1213", # Guy of Thouars; approximate birth year
+  1873, "1184", "10 AUG 1241", # Eleanor of Brittany
+  1874, "1138", "20 FEB 1171", # Conan IV of Brittany
+  1875, "1170", "26 OCT 1232", # Ranulf de Blondeville, Earl of Chester
+  1876, "1155", "13 APR 1213", # Guy of Thouars
   1877, "23 NOV 1116", "23 NOV 1183", # William FitzRobert, Earl of Gloucester
-  1878, "1100", "14 SEP 1144", # Geoffrey de Mandeville; approximate birth year
-  1879, "1170", "12 MAY 1243", # Hubert de Burgh; approximate birth year
-  1880, "1183", "5 JUN 1249", # Hugh X of Lusignan / Hugh de la Marche; approximate birth year
-  1881, "1198", "19 AUG 1245", # Raymond Berengar IV of Provence; approximate birth year
+  1878, "1100", "14 SEP 1144", # Geoffrey de Mandeville
+  1879, "1170", "12 MAY 1243", # Hubert de Burgh
+  1880, "1183", "5 JUN 1249", # Hugh X of Lusignan / Hugh de la Marche
+  1881, "1198", "19 AUG 1245", # Raymond Berengar IV of Provence
   1882, "2 NOV 1235", "13 MAR 1271", # Henry of Almain
-  1883, "1146", "14 MAY 1219", # William Marshal, Earl of Pembroke; approximate birth year
+  1883, "1146", "14 MAY 1219", # William Marshal, Earl of Pembroke
   1884, "1198", "1267", #   Beatrice of Savoy
   1886, "24 AUG 1198", "6 JUL 1249", # Alexander II of Scotland
   1887, "26 DEC 1249", "25 SEP 1300", # Edmund, Earl of Cornwall
-  1888, "1252", "1296", # Richard of Cornwall; approximate year-level dates
+  1888, "1252", "1296", # Richard of Cornwall
   1890, "4 AUG 1222", "15 JUL 1262", # Richard de Clare, Earl of Gloucester
   1891, "15 AUG 1171", "24 SEP 1230", # Alfonso IX of León; row title says Castile but identity appears Alfonso IX
-  1893, "1191", "26 MAR 1242", # William de Forz, Count of Aumale/Albemarle; approximate birth year
+  1893, "1191", "26 MAR 1242", # William de Forz, Count of Aumale/Albemarle
   1894, "25 SEP 1216", "8 FEB 1250", # Robert I, Count of Artois
-  1896, "1212", "30 OCT 1248", # Yolande of Dreux; approximate birth year
-  1897, "1241", "12 NOV 1282", # Robert IV, Count of Dreux; approximate birth year
+  1896, "1212", "30 OCT 1248", # Yolande of Dreux
+  1897, "1241", "12 NOV 1282", # Robert IV, Count of Dreux
   1903, "1268", "29 NOV 1314", # Philip IV the Fair; birth year only retained
   1904, "11 NOV 1328", "26 FEB 1360", # Roger Mortimer, 2nd Earl of March
-  1905, "1302", "16 DEC 1331", # Edmund Mortimer; approximate birth year
+  1905, "1302", "16 DEC 1331", # Edmund Mortimer
   1906, "25 APR 1287", "29 NOV 1330", # Roger Mortimer, 1st Earl of March
-  1907, "1251", "17 JUL 1304", # Edmund Mortimer, 2nd Baron Mortimer; approximate birth year
-  1908, "1231", "27 OCT 1282", # Roger Mortimer, 1st Baron Mortimer; approximate birth year
-  1909, "1224", "23 MAR 1301", # Maud de Braose; approximate birth year
-  1910, "1190", "6 AUG 1246", # Ralph de Mortimer; approximate birth year
-  1911, "1206", "1251", # Gwladus Ddu; approximate year-level dates
-  1912, "1178", "9 JUN 1228", # Reginald de Braose; approximate birth year
-  1913, "1173", "11 APR 1240", # Llywelyn the Great; approximate birth year
+  1907, "1251", "17 JUL 1304", # Edmund Mortimer, 2nd Baron Mortimer
+  1908, "1231", "27 OCT 1282", # Roger Mortimer, 1st Baron Mortimer
+  1909, "1224", "23 MAR 1301", # Maud de Braose
+  1910, "1190", "6 AUG 1246", # Ralph de Mortimer
+  1911, "1206", "1251", # Gwladus Ddu
+  1912, "1178", "9 JUN 1228", # Reginald de Braose
+  1913, "1173", "11 APR 1240", # Llywelyn the Great
   1914, "20 JUN 1760", "26 SEP 1842", # Richard Wellesley, 1st Marquess Wellesley
   1915, "19 JUL 1735", "22 MAY 1781", # Garret Wesley/Wellesley, 1st Earl of Mornington
   1916, "23 JUN 1742", "10 SEP 1831", # Anne Hill / Countess of Mornington
   1917, "1 MAY 1769", "14 SEP 1852", # Arthur Wellesley, 1st Duke of Wellington
   1918, "24 DEC 1738", "19 JUN 1770", # Arthur Hill-Trevor, Viscount Dungannon
-  1919, "1144", "9 AUG 1211", # William de Braose; approximate birth year
-  1920, "1112", "1192", # William de Braose; approximate year-level dates
-  1921, "1130", "1170", # Bertha of Hereford / de Gloucester; approximate year-level dates
-  1922, "1097", "24 DEC 1143", # Miles of Gloucester, Earl of Hereford; approximate birth year
-  1923, "1092", "1143", # Sibyl de Neufmarché; approximate year-level dates
-  1924, "1050", "1125", # Bernard de Neufmarché; approximate year-level dates
-  1927, "1059", "1136", # Nest ferch Gruffydd; approximate year-level dates
-  1928, "1010", "5 AUG 1063", # Gruffydd ap Llywelyn; approximate birth year
+  1919, "1144", "9 AUG 1211", # William de Braose
+  1920, "1112", "1192", # William de Braose
+  1921, "1130", "1170", # Bertha of Hereford / de Gloucester
+  1922, "1097", "24 DEC 1143", # Miles of Gloucester, Earl of Hereford
+  1923, "1092", "1143", # Sibyl de Neufmarché
+  1924, "1050", "1125", # Bernard de Neufmarché
+  1927, "1059", "1136", # Nest ferch Gruffydd
+  1928, "1010", "5 AUG 1063", # Gruffydd ap Llywelyn
   1929, "28 OCT 1016", "5 OCT 1056", # Henry III, Holy Roman Emperor
-  1930, "980", "1023", # Llywelyn ap Seisyll; approximate year-level dates
-  1931, "982", "1058", # Angharad ferch Maredudd; approximate year-level dates
-  1932, "978", "1023", # Cynfyn ap Gwerstan; approximate year-level dates
-  1933, "1025", "1075", # Bleddyn ap Cynfyn; approximate year-level dates
-  1934, "938", "999", # Maredudd ab Owain; approximate year-level dates
-  1935, "913", "987", # Owain ap Hywel Dda; approximate year-level dates
-  1936, "880", "950", # Hywel Dda; approximate year-level dates
-  1937, "854", "909", # Cadell ap Rhodri; approximate year-level dates
-  1938, "820", "878", # Rhodri Mawr; approximate year-level dates
-  1939, "857", "916", # Anarawd ap Rhodri; approximate year-level dates
-  1940, "883", "942", # Idwal Foel; approximate year-level dates
-  1942, "920", "979", # Iago ab Idwal; approximate year-level dates
-  1943, "920", "988", # Ieuaf ab Idwal; approximate year-level dates
-  1945, "950", "985", # Hywel ap Ieuaf; approximate year-level dates
-  1946, "950", "986", # Cadwallon ap Ieuaf; approximate year-level dates
-  1948, "975", "996", # Idwal ap Meurig; approximate year-level dates
-  1949, "1000", "1039", # Iago ap Idwal; approximate year-level dates
-  1951, "1055", "1137", # Gruffydd ap Cynan; approximate year-level dates
-  1952, "1100", "28 NOV 1170", # Owain Gwynedd; approximate birth year
-  1953, "1145", "1174", # Iorwerth Drwyndwn; approximate year-level dates
-  1955, "1145", "1203", # Dafydd ab Owain Gwynedd; approximate year-level dates
-  1957, "1198", "1 MAR 1244", # Gruffydd ap Llywelyn Fawr; approximate birth year
-  1958, "1212", "25 FEB 1246", # Dafydd ap Llywelyn; approximate birth year
-  1959, "1212", "1256", # Angharad ferch Llywelyn; approximate year-level dates
-  1960, "1282", "7 JUN 1337", # Gwenllian ferch Llywelyn; approximate birth year
-  1961, "1223", "11 DEC 1282", # Llywelyn ap Gruffudd; approximate birth year
-  1964, "849", "26 OCT 899", # Alfred the Great; birth year sometimes given 847-849, selected 849
-  1965, "852", "5 DEC 902", # Ealhswith of Mercia; approximate birth year
-  1966, "795", "13 JAN 858", # Æthelwulf of Wessex; approximate birth year
-  1968, "825", "852", # Æthelstan of Kent; approximate year-level dates
-  1969, "834", "20 DEC 860", # Æthelbald of Wessex; approximate birth year
-  1970, "843", "870", # Judith of Flanders; approximate year-level dates
-  1971, "835", "865", # Æthelberht of Wessex; approximate year-level dates
-  1972, "847", "15 APR 871", # Æthelred I of Wessex; approximate birth year and mid-month death date
-  1973, "771", "839", # Egbert of Wessex; approximate birth year
-  1975, "825", "852", # Æthelstan of Kent; approximate year-level dates; likely duplicate/variant to personID 1968
-  1977, "838", "888", # Æthelswith of Mercia; approximate year-level dates
-  1978, "860", "898", # Æthelhelm, son of Æthelred I; approximate year-level dates
-  1979, "868", "13 DEC 902", # Æthelwold ætheling; approximate birth year
-  1980, "830", "874", # Burgred of Mercia; approximate year-level dates
-  1982, "880", "16 OCT 922", # Æthelweard, son of Alfred; approximate birth year
-  1985, "870", "12 JUN 918", # Æthelflæd, Lady of the Mercians; approximate birth year
-  1986, "875", "896", # Æthelgifu of Shaftesbury; approximate year-level dates
-  1987, "877", "7 JUN 929", # Ælfthryth of Wessex; approximate birth year
-  1988, "865", "10 SEP 918", # Baldwin II of Flanders; approximate birth year
-  1989, "845", "911", # Æthelred, Lord of the Mercians; approximate year-level dates
-  1991, "467", "534", # Cerdic of Wessex; approximate year-level dates
-  1992, "500", "560", # Cynric of Wessex; approximate year-level dates
-  1993, "540", "593", # Ceawlin of Wessex; approximate year-level dates
-  2022, "570", "597", # Ceolric of Wessex; approximate year-level dates
-  2023, "560", "611", # Ceolwulf of Wessex; approximate year-level dates
-  2024, "600", "642", # Cynegils of Wessex; approximate birth year
-  2025, "620", "676", # Æscwine of Wessex; approximate year-level dates
-  2029, "600", "636", # Cwichelm of Wessex; approximate year-level dates
-  2030, "615", "672", # Cenwealh of Wessex; approximate birth year
-  2031, "625", "685", # Centwine of Wessex; approximate year-level dates
-  2035, "630", "674", # Seaxburh / Sexburh of Wessex; approximate year-level dates
-  2036, "604", "5 AUG 642", # Oswald of Northumbria; approximate birth year
-  2042, "659", "20 APR 689", # Cædwalla of Wessex; approximate birth year
-  2043, "660", "687", # Mul of Kent; approximate year-level dates
-  2046, "670", "726", # Ine of Wessex; approximate year-level dates
-  2050, "672", "718", # Ingild of Wessex; approximate year-level dates
-  2051, "670", "31 AUG 725", # Cuthburh of Wimborne; approximate birth year
-  2053, "630", "14 DEC 705", # Aldfrith of Northumbria; approximate birth year; death year varies 704/705, selected 705
-  2054, "758", "784", # Ealhmund of Kent; approximate birth year and death year
-  2057, "1307", "26 SEP 1345", # William II of Hainault; birth year only
-  2058, "1314", "26 DEC 1360", # Thomas Holland, 1st Earl of Kent; approximate birth year
+  1930, "980", "1023", # Llywelyn ap Seisyll
+  1931, "982", "1058", # Angharad ferch Maredudd
+  1932, "978", "1023", # Cynfyn ap Gwerstan
+  1933, "1025", "1075", # Bleddyn ap Cynfyn
+  1934, "938", "999", # Maredudd ab Owain
+  1935, "913", "987", # Owain ap Hywel Dda
+  1936, "880", "950", # Hywel Dda
+  1937, "854", "909", # Cadell ap Rhodri
+  1938, "820", "878", # Rhodri Mawr
+  1939, "857", "916", # Anarawd ap Rhodri
+  1940, "883", "942", # Idwal Foel
+  1942, "920", "979", # Iago ab Idwal
+  1943, "920", "988", # Ieuaf ab Idwal
+  1945, "950", "985", # Hywel ap Ieuaf
+  1946, "950", "986", # Cadwallon ap Ieuaf
+  1948, "975", "996", # Idwal ap Meurig
+  1949, "1000", "1039", # Iago ap Idwal
+  1951, "1055", "1137", # Gruffydd ap Cynan
+  1952, "1100", "28 NOV 1170", # Owain Gwynedd
+  1953, "1145", "1174", # Iorwerth Drwyndwn
+  1955, "1145", "1203", # Dafydd ab Owain Gwynedd
+  1957, "1198", "1 MAR 1244", # Gruffydd ap Llywelyn Fawr
+  1958, "1212", "25 FEB 1246", # Dafydd ap Llywelyn
+  1959, "1212", "1256", # Angharad ferch Llywelyn
+  1960, "1282", "7 JUN 1337", # Gwenllian ferch Llywelyn
+  1961, "1223", "11 DEC 1282", # Llywelyn ap Gruffudd
+  1964, "849", "26 OCT 899", # Alfred the Great;
+                            # birth year sometimes given 847-849, selected 849
+  1965, "852", "5 DEC 902", # Ealhswith of Mercia
+  1966, "795", "13 JAN 858", # Æthelwulf of Wessex
+  1968, "825", "852", # Æthelstan of Kent
+  1969, "834", "20 DEC 860", # Æthelbald of Wessex
+  1970, "843", "870", # Judith of Flanders
+  1971, "835", "865", # Æthelberht of Wessex
+  1972, "847", "APR 871", # Æthelred I of Wessex
+  1973, "771", "839", # Egbert of Wessex
+  1975, "825", "852", # Æthelstan of Kent; likely duplicate/variant to personID 1968
+  1977, "838", "888", # Æthelswith of Mercia
+  1978, "860", "898", # Æthelhelm, son of Æthelred I
+  1979, "868", "13 DEC 902", # Æthelwold ætheling
+  1980, "830", "874", # Burgred of Mercia
+  1982, "880", "16 OCT 922", # Æthelweard, son of Alfred
+  1985, "870", "12 JUN 918", # Æthelflæd, Lady of the Mercians
+  1986, "875", "896", # Æthelgifu of Shaftesbury
+  1987, "877", "7 JUN 929", # Ælfthryth of Wessex
+  1988, "865", "10 SEP 918", # Baldwin II of Flanders
+  1989, "845", "911", # Æthelred, Lord of the Mercians
+  1991, "467", "534", # Cerdic of Wessex
+  1992, "500", "560", # Cynric of Wessex
+  1993, "540", "593", # Ceawlin of Wessex
+  2022, "570", "597", # Ceolric of Wessex
+  2023, "560", "611", # Ceolwulf of Wessex
+  2024, "600", "642", # Cynegils of Wessex
+  2025, "620", "676", # Æscwine of Wessex
+  2029, "600", "636", # Cwichelm of Wessex
+  2030, "615", "672", # Cenwealh of Wessex
+  2031, "625", "685", # Centwine of Wessex
+  2035, "630", "674", # Seaxburh / Sexburh of Wessex
+  2036, "604", "5 AUG 642", # Oswald of Northumbria
+  2042, "659", "20 APR 689", # Cædwalla of Wessex
+  2043, "660", "687", # Mul of Kent
+  2046, "670", "726", # Ine of Wessex
+  2050, "672", "718", # Ingild of Wessex
+  2051, "670", "31 AUG 725", # Cuthburh of Wimborne
+  2053, "630", "14 DEC 705", # Aldfrith of Northumbria
+                            #; death year varies 704/705, selected 705
+  2054, "758", "784", # Ealhmund of Kent and death year
+  2057, "1307", "26 SEP 1345", # William II of Hainault
+  2058, "1314", "26 DEC 1360", # Thomas Holland, 1st Earl of Kent
   2059, "17 SEP 1312", "6 JUN 1333", # William de Burgh, 3rd Earl of Ulster
   2060, "1320", "4 AUG 1378", # Galeazzo II Visconti; identity inferred from Violante Visconti context
-  2061, "1358", "16 DEC 1378", # Otto III of Montferrat; approximate birth year; identity inferred from Violante Visconti context
+  2061, "1358", "16 DEC 1378", # Otto III of Montferrat; identity inferred from Violante Visconti context
   2062, "30 AUG 1334", "23 MAR 1369", # Peter/Pedro of Castile
-  2063, "1310", "1380", # Payne Roet of Guienne; approximate year-level dates
-  2064, "1340", "13 NOV 1371", # Hugh Swynford; approximate birth year
+  2063, "1310", "1380", # Payne Roet of Guienne
+  2064, "1340", "13 NOV 1371", # Hugh Swynford
   2065, "1350", "10 MAY 1403", # Katherine Swynford; likely duplicate/identity match to Catherine Swynford branch
   2066, "4 OCT 1379", "25 DEC 1406", # Henry III of Castile
   2067, "24 AUG 1358", "9 OCT 1390", # John I of Castile
@@ -1447,31 +1501,31 @@ date_overrides <- tribble(
   2069, "25 MAR 1342", "16 JAN 1373", # Humphrey de Bohun, Earl of Hereford; date source sometimes gives 1341/1342
   2070, "2 MAR 1378", "21 JUL 1403", # Edmund Stafford, Earl of Stafford
   2071, "15 AUG 1402", "10 JUL 1460", # Humphrey Stafford, Duke of Buckingham
-  2074, "1370", "24 SEP 1435", # Isabeau/Isabelle of Bavaria; approximate birth year
-  2079, "1409", "1449", # Margaret Beaufort, Countess of Devon; approximate year-level dates
-  2080, "1414", "3 FEB 1458", # Thomas Courtenay, Earl of Devon; approximate birth year
-  2081, "15 SEP 1408", "6 MAR 1467", # Eleanor Beauchamp; approximate mid-month birth date
+  2074, "1370", "24 SEP 1435", # Isabeau/Isabelle of Bavaria
+  2079, "1409", "1449", # Margaret Beaufort, Countess of Devon
+  2080, "1414", "3 FEB 1458", # Thomas Courtenay, Earl of Devon
+  2081, "SEP 1408", "6 MAR 1467", # Eleanor Beauchamp
   2082, "25 JAN 1382", "30 APR 1439", # Richard Beauchamp, Earl of Warwick
   2083, "26 JAN 1436", "15 MAY 1464", # Henry Beaufort, Duke of Somerset
-  2084, "1438", "6 MAY 1471", # Edmund Beaufort, Duke of Somerset; approximate birth year
-  2085, "1455", "4 MAY 1471", # John Beaufort; approximate birth year; identity inferred from Beaufort sibling cluster
-  2086, "1431", "16 AUG 1501", # Eleanor Beaufort; approximate birth year
-  2087, "1433", "11 AUG 1518", # Joan Beaufort; approximate birth year; identity inferred from Beaufort sibling cluster
-  2088, "1435", "1496", # Anne Beaufort; approximate year-level dates; identity inferred from Beaufort sibling cluster
-  2089, "1437", "1474", # Margaret Beaufort; approximate year-level dates; identity inferred from Beaufort sibling cluster
-  2090, "1450", "1473", # Elizabeth Beaufort; approximate year-level dates; identity inferred from Beaufort sibling cluster
+  2084, "1438", "6 MAY 1471", # Edmund Beaufort, Duke of Somerset
+  2085, "1455", "4 MAY 1471", # John Beaufort; identity inferred from Beaufort sibling cluster
+  2086, "1431", "16 AUG 1501", # Eleanor Beaufort
+  2087, "1433", "11 AUG 1518", # Joan Beaufort; identity inferred from Beaufort sibling cluster
+  2088, "1435", "1496", # Anne Beaufort; identity inferred from Beaufort sibling cluster
+  2089, "1437", "1474", # Margaret Beaufort; identity inferred from Beaufort sibling cluster
+  2090, "1450", "1473", # Elizabeth Beaufort; identity inferred from Beaufort sibling cluster
   2091, "24 NOV 1420", "1 MAY 1461", # James Butler, Earl of Wiltshire and Ormond
-  2092, "1430", "1493", # Robert Spencer; approximate year-level dates
-  2093, "1435", "1486", # Robert St Lawrence, Lord Howth; approximate year-level dates
-  2095, "1378", "13 AUG 1444", # William Paston; approximate birth year
-  2096, "1425", "22 MAY 1458", # Humphrey Stafford, Earl of Stafford; approximate birth year
-  2099, "1477", "12 MAR 1539", # Thomas Boleyn, Earl of Wiltshire; approximate birth year
+  2092, "1430", "1493", # Robert Spencer
+  2093, "1435", "1486", # Robert St Lawrence, Lord Howth
+  2095, "1378", "13 AUG 1444", # William Paston
+  2096, "1425", "22 MAY 1458", # Humphrey Stafford, Earl of Stafford
+  2099, "1477", "12 MAR 1539", # Thomas Boleyn, Earl of Wiltshire
   2100, "6 NOV 1479", "12 APR 1555", # Joanna of Castile / Juana the Mad
-  2101, "1505", "25 OCT 1557", # William Cavendish; approximate birth year
+  2101, "1505", "25 OCT 1557", # William Cavendish
   2102, "30 SEP 1599", "24 APR 1674", # Frances Devereux / Duchess of Somerset
   2103, "10 NOV 1565", "25 FEB 1601", # Robert Devereux, Earl of Essex
-  2104, "1517", "2 JAN 1570", # Henry Clifford, Earl of Cumberland; approximate birth year
-  2105, "1519", "30 NOV 1586", # Adrian Stokes; approximate birth year; death year differs from current placeholder
+  2104, "1517", "2 JAN 1570", # Henry Clifford, Earl of Cumberland
+  2105, "1519", "30 NOV 1586", # Adrian Stokes; death year differs from current placeholder
   2106, "25 AUG 1540", "26 JAN 1568", # Catherine Grey
   2107, "20 APR 1545", "20 APR 1578", # Mary Grey
   2108, "22 MAY 1539", "6 APR 1621", # Edward Seymour, Earl of Hertford
@@ -1502,7 +1556,7 @@ date_overrides <- tribble(
   2141, "3 JAN 1639", "5 FEB 1722", # Éléonore d'Olbreuse / Duchess of Celle; row name is generic
   2142, "28 JUL 1676", "23 MAR 1732", # Frederick II of Saxe-Gotha-Altenburg
   2143, "13 OCT 1679", "11 OCT 1740", # Magdalena Augusta of Anhalt-Zerbst
-  2144, "1706", "12 JAN 1784", # Edward Walpole; approximate birth year
+  2144, "1706", "12 JAN 1784", # Edward Walpole
   2145, "4 MAR 1715", "28 APR 1763", # James Waldegrave, 2nd Earl Waldegrave
   2146, "29 MAY 1773", "29 NOV 1844", # Sophia of Gloucester; identity inferred from Gloucester/Walpole context
   2147, "23 FEB 1708", "5 JUN 1752", # Charles Louis Frederick of Mecklenburg-Strelitz
@@ -1515,214 +1569,214 @@ date_overrides <- tribble(
   2158, "6 NOV 1892", "8 APR 1938", # George Mountbatten, 2nd Marquess of Milford Haven; likely duplicate/identity match to personID 102
   2159, "9 MAR 1963", NA_character_, # Ivar Mountbatten; living
   2160, "13 SEP 1867", "3 JUL 1939", # Wilfrid Ashley, 1st Baron Mount Temple
-  2166, "1205", "1257", # Maelgwn Fychan; approximate birth year and death year
-  2168, "1210", "1265", # Maredudd ap Owain; approximate birth year and death year
-  2169, "1240", "1275", # Owain ap Maredudd; approximate birth year and death year
-  2170, "1270", "1309", # Llywelyn ap Owain; approximate birth year and death year
-  2171, "1300", "1343", # Thomas ap Llywelyn; approximate birth year and death year
-  2173, "1310", "19 SEP 1367", # Tudur Fychan ap Goronwy; approximate birth year
-  2174, "1370", "1406", # Maredudd ap Tudur / Meredith Tudor; approximate year-level dates
-  2175, "1275", "1331", # Goronwy ap Tudur Hen; approximate birth year and death year
-  2176, "1245", "1311", # Tudur Hen / Tudor ap Goronwy; approximate year-level dates
-  2178, "1170", "1246", # Ednyfed Fychan; approximate year-level dates
-  2179, "1200", "7 JUN 1236", # Gwenllian ferch Llywelyn; approximate birth year
-  2180, "1132", "28 APR 1197", # Rhys ap Gruffydd / Lord Rhys; approximate birth year
-  2181, "1090", "1137", # Gruffydd ap Rhys; approximate year-level dates
-  2182, "1040", "1093", # Rhys ap Tewdwr; approximate year-level dates
+  2166, "1205", "1257", # Maelgwn Fychan and death year
+  2168, "1210", "1265", # Maredudd ap Owain and death year
+  2169, "1240", "1275", # Owain ap Maredudd and death year
+  2170, "1270", "1309", # Llywelyn ap Owain and death year
+  2171, "1300", "1343", # Thomas ap Llywelyn and death year
+  2173, "1310", "19 SEP 1367", # Tudur Fychan ap Goronwy
+  2174, "1370", "1406", # Maredudd ap Tudur / Meredith Tudor
+  2175, "1275", "1331", # Goronwy ap Tudur Hen and death year
+  2176, "1245", "1311", # Tudur Hen / Tudor ap Goronwy
+  2178, "1170", "1246", # Ednyfed Fychan
+  2179, "1200", "7 JUN 1236", # Gwenllian ferch Llywelyn
+  2180, "1132", "28 APR 1197", # Rhys ap Gruffydd / Lord Rhys
+  2181, "1090", "1137", # Gruffydd ap Rhys
+  2182, "1040", "1093", # Rhys ap Tewdwr
   2189, "1609", "10 DEC 1702", # Michael Boyle; identity inferred from O'Brien/Boyle context
-  2191, "1594", "1624", # Dermot O'Brien, 5th Baron Inchiquin; approximate birth year
-  2192, "1569", "20 APR 1597", # Murrough O'Brien, 4th Baron Inchiquin; approximate birth year
-  2193, "1550", "20 APR 1573", # Murrough O'Brien, 3rd Baron Inchiquin; approximate birth year
-  2194, "1500", "1 MAY 1557", # Dermod O'Brien, 2nd Baron Inchiquin; approximate birth year
-  2195, "1485", "7 NOV 1551", # Murrough O'Brien, King of Thomond; approximate birth year
-  2196, "1450", "1528", # Turlough Don O'Brien; approximate birth year and death year
-  2197, "1400", "1466", # Teige An Chomard O'Brien; approximate year-level dates
-  2198, "1360", "1459", # Turlough Bog O'Brien; approximate year-level dates
-  2199, "1320", "1400", # Brian Catha an Aenaigh O'Brien; approximate year-level dates
-  2200, "1280", "1369", # Mahon Moinmoy O'Brien; approximate year-level dates
-  2202, "1250", "1306", # Turlough O'Brien, King of Thomond; approximate birth year and death year
-  2203, "1210", "1259", # Teige Caeluisce O'Brien; approximate year-level dates
-  2204, "1195", "1268", # Conor Na Suidane O'Brien; approximate year-level dates
-  2205, "1170", "1242", # Donough Cairbreach O'Brien; approximate year-level dates
-  2206, "1137", "1194", # Domnall Mór O'Brien; approximate birth year
-  2208, "1088", "1167", # Turlough O'Brien; approximate year-level dates
-  2210, "1009", "14 JUL 1086", # Turlough O'Brien / Toirdelbach Ua Briain; approximate birth year
-  2211, "985", "1023", # Tadc mac Briain / Teige; approximate birth year and death year
-  2212, "941", "23 APR 1014", # Brian Boru; approximate birth year
-  2213, "1030", "1080", # Dearbforgail; approximate year-level dates
-  2214, "1000", "7 FEB 1072", # Diarmait mac Maíl na mBó; approximate birth year
-  2215, "1025", "1070", # Murchad mac Diarmata; approximate year-level dates; row death differs and identity should be checked
-  2216, "1145", "1188", # Aoife/Eva MacMurrough; approximate year-level dates
-  2217, "1146", "14 MAY 1219", # William Marshal, Earl of Pembroke; approximate birth year
-  2218, "1172", "1220", # Isabel de Clare, Countess of Pembroke; approximate year-level dates
-  2219, "1130", "20 APR 1176", # Richard de Clare / Strongbow; approximate birth year
-  2220, "1145", "1188", # Aoife/Eva MacMurrough; approximate year-level dates
-  2221, "1110", "1 MAY 1171", # Dermot MacMurrough / Diarmait Mac Murchada; approximate birth year
-  2222, "1080", "1126", # Énna Mac Murchada; approximate birth year and death year
-  2224, "1092", "1143", # Sibyl de Neufmarché; approximate year-level dates
-  2225, "1021", "1069", # Ingibiorg Finnsdottir; approximate year-level dates
-  2226, "1005", "1065", # Finn Arnesson; approximate year-level dates
-  2227, "1074", "23 APR 1130", # Matilda of Huntingdon; approximate birth year; death sometimes given 1130/1131
+  2191, "1594", "1624", # Dermot O'Brien, 5th Baron Inchiquin
+  2192, "1569", "20 APR 1597", # Murrough O'Brien, 4th Baron Inchiquin
+  2193, "1550", "20 APR 1573", # Murrough O'Brien, 3rd Baron Inchiquin
+  2194, "1500", "1 MAY 1557", # Dermod O'Brien, 2nd Baron Inchiquin
+  2195, "1485", "7 NOV 1551", # Murrough O'Brien, King of Thomond
+  2196, "1450", "1528", # Turlough Don O'Brien and death year
+  2197, "1400", "1466", # Teige An Chomard O'Brien
+  2198, "1360", "1459", # Turlough Bog O'Brien
+  2199, "1320", "1400", # Brian Catha an Aenaigh O'Brien
+  2200, "1280", "1369", # Mahon Moinmoy O'Brien
+  2202, "1250", "1306", # Turlough O'Brien, King of Thomond and death year
+  2203, "1210", "1259", # Teige Caeluisce O'Brien
+  2204, "1195", "1268", # Conor Na Suidane O'Brien
+  2205, "1170", "1242", # Donough Cairbreach O'Brien
+  2206, "1137", "1194", # Domnall Mór O'Brien
+  2208, "1088", "1167", # Turlough O'Brien
+  2210, "1009", "14 JUL 1086", # Turlough O'Brien / Toirdelbach Ua Briain
+  2211, "985", "1023", # Tadc mac Briain / Teige and death year
+  2212, "941", "23 APR 1014", # Brian Boru
+  2213, "1030", "1080", # Dearbforgail
+  2214, "1000", "7 FEB 1072", # Diarmait mac Maíl na mBó
+  2215, "1025", "1070", # Murchad mac Diarmata; row death differs and identity should be checked
+  2216, "1145", "1188", # Aoife/Eva MacMurrough
+  2217, "1146", "14 MAY 1219", # William Marshal, Earl of Pembroke
+  2218, "1172", "1220", # Isabel de Clare, Countess of Pembroke
+  2219, "1130", "20 APR 1176", # Richard de Clare / Strongbow
+  2220, "1145", "1188", # Aoife/Eva MacMurrough
+  2221, "1110", "1 MAY 1171", # Dermot MacMurrough / Diarmait Mac Murchada
+  2222, "1080", "1126", # Énna Mac Murchada and death year
+  2224, "1092", "1143", # Sibyl de Neufmarché
+  2225, "1021", "1069", # Ingibiorg Finnsdottir
+  2226, "1005", "1065", # Finn Arnesson
+  2227, "1074", "23 APR 1130", # Matilda of Huntingdon; death sometimes given 1130/1131
   2228, "1114", "12 JUN 1152", # Henry of Scotland, Earl of Huntingdon
-  2229, "1120", "1178", # Ada de Warenne; approximate year-level dates
+  2229, "1120", "1178", # Ada de Warenne
   2230, "23 APR 1141", "9 DEC 1165", # Malcolm IV of Scotland
-  2231, "1142", "4 DEC 1214", # William I the Lion of Scotland; approximate birth year
-  2232, "1170", "11 FEB 1234", # Ermengarde de Beaumont; approximate birth year
-  2233, "1218", "1285", # Marie de Coucy; approximate year-level dates
+  2231, "1142", "4 DEC 1214", # William I the Lion of Scotland
+  2232, "1170", "11 FEB 1234", # Ermengarde de Beaumont
+  2233, "1218", "1285", # Marie de Coucy
   2234, "28 FEB 1261", "9 APR 1283", # Margaret of Scotland, Queen of Norway
-  2235, "1268", "15 JUL 1299", # Eric II of Norway; approximate birth year
+  2235, "1268", "15 JUL 1299", # Eric II of Norway
   2236, "9 APR 1283", "26 SEP 1290", # Margaret, Maid of Norway; birth between MAR and 9 APR 1283, selected latest date
-  2237, "1060", "12 NOV 1094", # Duncan II of Scotland; approximate birth year
-  2239, "1001", "14 AUG 1040", # Duncan I of Scotland; approximate birth year
-  2241, "1033", "1099", # Donald III Bane of Scotland; approximate year-level dates
-  2242, "975", "1045", # Crínán of Dunkeld; approximate year-level dates
-  2243, "984", "1045", # Bethóc of Scotland; approximate year-level dates
-  2244, "1000", "1032", # Gille Coemgáin of Moray; approximate year-level dates
-  2245, "1005", "1060", # Gruoch of Scotland; approximate year-level dates
-  2246, "1032", "17 MAR 1058", # Lulach of Scotland; approximate birth year
-  2247, "1005", "15 AUG 1057", # Macbeth of Scotland; approximate birth year
-  2248, "954", "25 NOV 1034", # Malcolm II of Scotland; approximate birth year
-  2249, "932", "995", # Kenneth II of Scotland; approximate year-level dates
-  2250, "900", "954", # Malcolm I of Scotland; approximate year-level dates
-  2251, "862", "900", # Donald II of Scotland; approximate year-level dates
-  2252, "879", "952", # Constantine II of Scotland; approximate year-level dates
-  2253, "930", "967", # Dub / Duff of Scotland; approximate year-level dates
-  2254, "966", "25 MAR 1005", # Kenneth III of Scotland; approximate birth year
-  2255, "980", "1058", # Boite mac Cináeda / Beoedhe; approximate year-level dates
-  2256, "970", "997", # Causantín mac Cuilén / Constantine; approximate year-level dates
-  2257, "945", "971", # Cuilén / Colin of Scotland; approximate year-level dates
-  2258, "910", "962", # Indulf of Scotland; approximate year-level dates
-  2260, "840", "878", # Áed of Scotland; approximate year-level dates
-  2261, "810", "13 FEB 858", # Kenneth I MacAlpin; approximate birth year
-  2263, "830", "878", # Run of Strathclyde; approximate year-level dates
-  2264, "860", "889", # Eochaid of Scotland; approximate year-level dates
-  2265, "778", "834", # Alpin of Scotland; approximate year-level dates
-  2266, "812", "13 APR 862", # Donald I of Scotland; approximate birth year
+  2237, "1060", "12 NOV 1094", # Duncan II of Scotland
+  2239, "1001", "14 AUG 1040", # Duncan I of Scotland
+  2241, "1033", "1099", # Donald III Bane of Scotland
+  2242, "975", "1045", # Crínán of Dunkeld
+  2243, "984", "1045", # Bethóc of Scotland
+  2244, "1000", "1032", # Gille Coemgáin of Moray
+  2245, "1005", "1060", # Gruoch of Scotland
+  2246, "1032", "17 MAR 1058", # Lulach of Scotland
+  2247, "1005", "15 AUG 1057", # Macbeth of Scotland
+  2248, "954", "25 NOV 1034", # Malcolm II of Scotland
+  2249, "932", "995", # Kenneth II of Scotland
+  2250, "900", "954", # Malcolm I of Scotland
+  2251, "862", "900", # Donald II of Scotland
+  2252, "879", "952", # Constantine II of Scotland
+  2253, "930", "967", # Dub / Duff of Scotland
+  2254, "966", "25 MAR 1005", # Kenneth III of Scotland
+  2255, "980", "1058", # Boite mac Cináeda / Beoedhe
+  2256, "970", "997", # Causantín mac Cuilén / Constantine
+  2257, "945", "971", # Cuilén / Colin of Scotland
+  2258, "910", "962", # Indulf of Scotland
+  2260, "840", "878", # Áed of Scotland
+  2261, "810", "13 FEB 858", # Kenneth I MacAlpin
+  2263, "830", "878", # Run of Strathclyde
+  2264, "860", "889", # Eochaid of Scotland
+  2265, "778", "834", # Alpin of Scotland
+  2266, "812", "13 APR 862", # Donald I of Scotland
   2267, "10 OCT 1332", "1 JAN 1387", # Charles II of Navarre
-  2268, "1348", "6 JUL 1403", # Reynold Cobham; approximate birth year
+  2268, "1348", "6 JUL 1403", # Reynold Cobham
   2269, "17 JAN 1342", "27 APR 1404", # Philip the Bold, Duke of Burgundy; identity inferred from Burgundy row
-  2270, "1390", "31 AUG 1433", # Peter of Luxembourg, Count of Saint-Pol; approximate birth year
-  2271, "1405", "12 AUG 1469", # Richard Woodville, Earl Rivers; approximate birth year
+  2270, "1390", "31 AUG 1433", # Peter of Luxembourg, Count of Saint-Pol
+  2271, "1405", "12 AUG 1469", # Richard Woodville, Earl Rivers
   2272, "16 JAN 1409", "10 JUL 1480", # René of Anjou
-  2273, "1384", "2 AUG 1415", # Thomas Grey of Heton; approximate birth year
+  2273, "1384", "2 AUG 1415", # Thomas Grey of Heton
   2274, "27 JAN 1546", "18 JUL 1608", # Joachim Frederick of Brandenburg
-  2275, "1462", "18 DEC 1505", # Richard Pole; approximate birth year
+  2275, "1462", "18 DEC 1505", # Richard Pole
   2276, "27 SEP 1442", "1492", # John de la Pole, Duke of Suffolk; death year only
-  2277, "1350", "25 APR 1397", # Thomas Holland, 2nd Earl of Kent; approximate birth year
-  2278, "1370", "14 MAR 1421", # Edward Charleton, Lord Cherleton; approximate birth year
+  2277, "1350", "25 APR 1397", # Thomas Holland, 2nd Earl of Kent
+  2278, "1370", "14 MAR 1421", # Edward Charleton, Lord Cherleton
   2279, "2 MAR 1378", "21 JUL 1403", # Edmund Stafford, Earl of Stafford; duplicate/identity match to personID 2070 likely
   2280, "11 APR 1374", "20 JUL 1398", # Roger Mortimer, 4th Earl of March
-  2281, "1375", "1405", # Eleanor Mortimer; approximate year-level dates
-  2282, "1357", "5 DEC 1419", # Edward Courtenay; approximate birth year; identity should be checked against Courtenay branch
+  2281, "1375", "1405", # Eleanor Mortimer
+  2282, "1357", "5 DEC 1419", # Edward Courtenay; identity should be checked against Courtenay branch
   2283, "6 NOV 1391", "18 JAN 1425", # Edmund Mortimer, 5th Earl of March
   2284, "12 FEB 1371", "20 APR 1417", # Elizabeth Mortimer
   2285, "21 NOV 1375", "24 SEP 1401", # Philippa Mortimer
   2286, "20 MAY 1364", "21 JUL 1403", # Henry Percy / Hotspur
-  2287, "1351", "28 MAR 1421", # Thomas de Camoys; approximate birth year
+  2287, "1351", "28 MAR 1421", # Thomas de Camoys
   2288, "29 AUG 1347", "16 APR 1375", # John Hastings, Earl of Pembroke; duplicate/identity match to personID 1417 likely
-  2289, "1346", "21 SEP 1397", # Richard FitzAlan, Earl of Arundel; approximate birth year
-  2290, "1350", "7 MAR 1429", # Thomas Poynings, Lord St John; approximate birth year; identity should be checked
+  2289, "1346", "21 SEP 1397", # Richard FitzAlan, Earl of Arundel
+  2290, "1350", "7 MAR 1429", # Thomas Poynings, Lord St John; identity should be checked
   2291, "14 MAY 1316", "29 NOV 1378", # Charles IV, Holy Roman Emperor
-  2292, "1352", "16 JAN 1400", # John Holland, Duke of Exeter; approximate birth year
-  2293, "1364", "11 DEC 1443", # John Cornwall, Lord Fanhope; approximate birth year
-  2294, "1374", "28 NOV 1416", # Constance of York; approximate birth year; identity inferred from Despenser context
+  2292, "1352", "16 JAN 1400", # John Holland, Duke of Exeter
+  2293, "1364", "11 DEC 1443", # John Cornwall, Lord Fanhope
+  2294, "1374", "28 NOV 1416", # Constance of York; identity inferred from Despenser context
   2295, "22 SEP 1373", "13 JAN 1400", # Thomas Despenser, Earl of Gloucester
-  2296, "1367", "17 JUL 1431", # Philippa de Mohun; approximate birth year; identity inferred from York/Exeter context
-  2298, "1350", "18 NOV 1442", # John Golafre; approximate birth year
+  2296, "1367", "17 JUL 1431", # Philippa de Mohun; identity inferred from York/Exeter context
+  2298, "1350", "18 NOV 1442", # John Golafre
   2299, "25 MAR 1414", "22 MAY 1455", # Thomas Clifford, Lord Clifford
-  2300, "17 NOV 1493", "2 MAR 1543", # John Neville, Lord Latimer; likely duplicate/identity match to personID 863
+  2300, NA_character_, NA_character_, # Blanking duplicate
   2301, "29 APR 1759", "11 SEP 1801", # Hugh Seymour / Vice-Admiral Lord Hugh Seymour
-  2302, "8 NOV 1762", "12 JUN 1801", # Anne Horatia Waldegrave; date source should be cross-checked if stricter certainty needed
+  2302, "8 NOV 1762", "12 JUN 1801", # Anne Horatia Waldegrave
   2303, "5 JUL 1718", "14 JUN 1794", # Francis Seymour-Conway, 1st Marquess of Hertford
   2304, "1726", "10 NOV 1782", # Isabella FitzRoy; birth year only
   2305, "25 OCT 1683", "6 MAY 1757", # Charles FitzRoy, 2nd Duke of Grafton
   2306, "27 AUG 1690", "9 AUG 1726", # Henrietta Somerset / Duchess of Grafton
   2307, "28 SEP 1663", "9 OCT 1690", # Henry FitzRoy, 1st Duke of Grafton
-  2308, "1668", "7 FEB 1723", # Isabella Bennet / Countess of Arlington; approximate birth year
+  2308, "1668", "7 FEB 1723", # Isabella Bennet / Countess of Arlington
   2309, "14 AUG 1513", "28 OCT 1571", # William Parr, Marquess of Northampton
-  2310, "1504", "22 AUG 1553", # John Dudley, Duke of Northumberland; approximate birth year
-  2311, "1508", "15 JAN 1555", # Jane Guildford / Duchess of Northumberland; approximate birth year
-  2312, "1527", "21 OCT 1554", # John Dudley, Earl of Warwick; approximate birth year
-  2313, "1530", "21 FEB 1590", # Ambrose Dudley, Earl of Warwick; approximate birth year
-  2314, "1531", "1557", # Henry Dudley; approximate year-level dates
+  2310, "1504", "22 AUG 1553", # John Dudley, Duke of Northumberland
+  2311, "1508", "15 JAN 1555", # Jane Guildford / Duchess of Northumberland
+  2312, "1527", "21 OCT 1554", # John Dudley, Earl of Warwick
+  2313, "1530", "21 FEB 1590", # Ambrose Dudley, Earl of Warwick
+  2314, "1531", "1557", # Henry Dudley
   2315, "24 JUN 1532", "4 SEP 1588", # Robert Dudley, Earl of Leicester
-  2316, "1531", "1555", # Jane Dudley; approximate year-level dates; identity should be checked within Dudley sibling cluster
-  2317, "1530", "9 AUG 1586", # Mary Dudley / Lady Sidney; approximate birth year
-  2318, "1543", "14 AUG 1620", # Catherine Dudley / Countess of Huntingdon; approximate birth year
-  2319, "1538", "17 FEB 1588", # Anne Seymour / Countess of Warwick; approximate birth year
-  2321, "1500", "26 MAY 1552", # Anne Whorwood; approximate birth year
-  2322, "1520", "1563", # Elizabeth Talboys; approximate year-level dates
-  2323, "1548", "9 FEB 1604", # Anne Russell / Countess of Warwick; approximate birth year
-  2325, "1540", "9 JAN 1564", # Margaret Audley; approximate birth year
+  2316, "1531", "1555", # Jane Dudley; identity should be checked within Dudley sibling cluster
+  2317, "1530", "9 AUG 1586", # Mary Dudley / Lady Sidney
+  2318, "1543", "14 AUG 1620", # Catherine Dudley / Countess of Huntingdon
+  2319, "1538", "17 FEB 1588", # Anne Seymour / Countess of Warwick
+  2321, "1500", "26 MAY 1552", # Anne Whorwood
+  2322, "1520", "1563", # Elizabeth Talboys
+  2323, "1548", "9 FEB 1604", # Anne Russell / Countess of Warwick
+  2325, "1540", "9 JAN 1564", # Margaret Audley
   2326, "10 MAR 1538", "2 JUN 1572", # Thomas Howard, 4th Duke of Norfolk; source conflict on 1536/1538, selected Britannica date
   2328, "20 JUL 1529", "5 MAY 1586", # Henry Sidney
-  2329, "1535", "14 DEC 1595", # Henry Hastings, 3rd Earl of Huntingdon; approximate birth year
+  2329, "1535", "14 DEC 1595", # Henry Hastings, 3rd Earl of Huntingdon
   2330, "7 JUN 1532", "8 SEP 1560", # Amy Robsart
   2331, "8 NOV 1543", "25 DEC 1634", # Lettice Knollys
   2332, "1534", "19 JAN 1601", # Henry Herbert, 2nd Earl of Pembroke; identity inferred from Tudor/Dudley cluster
-  2333, "1524", "3 SEP 1571", # Thomas Keyes; approximate birth year
-  2334, "1540", "29 SEP 1596", # Margaret Clifford / Countess of Derby; approximate birth year
+  2333, "1524", "3 SEP 1571", # Thomas Keyes
+  2334, "1540", "29 SEP 1596", # Margaret Clifford / Countess of Derby
   2335, "SEP 1531", "25 SEP 1593", # Henry Stanley, 4th Earl of Derby; month-level birth date
   2336, "21 MAR 1557", "19 APR 1630", # Anne Dacre; identity inferred from Howard/Arundel cluster
-  2337, "1480", "3 APR 1538", # Elizabeth Howard / Lady Boleyn; approximate birth year
-  2338, "1504", "17 MAY 1536", # George Boleyn, Viscount Rochford; approximate birth year
-  2339, "1499", "19 JUL 1543", # Mary Boleyn; approximate birth year
-  2340, "1495", "22 JUN 1528", # William Carey; approximate birth year
-  2341, "1443", "21 MAY 1524", # Thomas Howard, 2nd Duke of Norfolk; approximate birth year
-  2342, "1445", "4 APR 1497", # Elizabeth Tilney; approximate birth year
-  2343, "1473", "25 AUG 1554", # Thomas Howard, 3rd Duke of Norfolk; approximate birth year
+  2337, "1480", "3 APR 1538", # Elizabeth Howard / Lady Boleyn
+  2338, "1504", "17 MAY 1536", # George Boleyn, Viscount Rochford
+  2339, "1499", "19 JUL 1543", # Mary Boleyn
+  2340, "1495", "22 JUN 1528", # William Carey
+  2341, "1443", "21 MAY 1524", # Thomas Howard, 2nd Duke of Norfolk
+  2342, "1445", "4 APR 1497", # Elizabeth Tilney
+  2343, "1473", "25 AUG 1554", # Thomas Howard, 3rd Duke of Norfolk
   2344, "2 NOV 1475", "23 NOV 1511", # Anne of York
-  2345, "1497", "30 NOV 1558", # Elizabeth Stafford / Duchess of Norfolk; approximate birth year
-  2347, "1477", "15 MAY 1545", # Agnes Tilney; approximate birth year and mid-month death date
-  2348, "1510", "12 JAN 1573", # William Howard, 1st Baron Howard of Effingham; approximate birth year
+  2345, "1497", "30 NOV 1558", # Elizabeth Stafford / Duchess of Norfolk
+  2347, "1477", "15 MAY 1545", # Agnes Tilney and mid-month death date
+  2348, "1510", "12 JAN 1573", # William Howard, 1st Baron Howard of Effingham
   2350, "1510", "18 SEP 1534", # Elizabeth Howard; identity inferred from Howard/Sussex branch
   2353, "10 MAY 1509", "24 OCT 1572", # Edward Stanley, 3rd Earl of Derby
-  2354, "1507", "17 FEB 1557", # Henry Radcliffe, 2nd Earl of Sussex; approximate birth year
+  2354, "1507", "17 FEB 1557", # Henry Radcliffe, 2nd Earl of Sussex
   2355, "1517", "19 JAN 1547", # Henry Howard, Earl of Surrey; birth year sometimes given 1516/1517, selected 1517
-  2356, "1519", "7 DEC 1557", # Mary Howard / Duchess of Richmond and Somerset; approximate birth year
-  2357, "1520", "28 JAN 1582", # Thomas Howard, Viscount Bindon; approximate birth year
-  2358, "1517", "30 JUN 1577", # Frances de Vere; approximate birth year
+  2356, "1519", "7 DEC 1557", # Mary Howard / Duchess of Richmond and Somerset
+  2357, "1520", "28 JAN 1582", # Thomas Howard, Viscount Bindon
+  2358, "1517", "30 JUN 1577", # Frances de Vere
   2359, "10 MAR 1538", "2 JUN 1572", # Thomas Howard, 4th Duke of Norfolk; likely duplicate/identity match to personID 2326
   2360, "25 FEB 1540", "15 JUN 1614", # Henry Howard, 1st Earl of Northampton
-  2361, "1538", "7 APR 1596", # Catherine Howard; approximate birth year; identity inferred from Howard sibling cluster
-  2362, "1537", "1593", # Jane Howard; approximate year-level dates
-  2363, "1547", "17 MAR 1591", # Margaret Howard; approximate birth year
+  2361, "1538", "7 APR 1596", # Catherine Howard; identity inferred from Howard sibling cluster
+  2362, "1537", "1593", # Jane Howard
+  2363, "1547", "17 MAR 1591", # Margaret Howard
   2364, "15 JUN 1519", "23 JUL 1536", # Henry FitzRoy, Duke of Richmond and Somerset
-  2366, "1540", "25 AUG 1557", # Mary FitzAlan / Duchess of Norfolk; approximate birth year
+  2366, "1540", "25 AUG 1557", # Mary FitzAlan / Duchess of Norfolk
   2367, "28 JUN 1557", "19 OCT 1595", # Philip Howard, Earl of Arundel
   2368, "21 MAR 1557", "19 APR 1630", # Anne Dacre / Countess of Arundel
   2369, "7 JUL 1585", "4 OCT 1646", # Thomas Howard, Earl of Arundel
-  2370, "1585", "3 JUN 1654", # Aletheia Talbot; approximate birth year
+  2370, "1585", "3 JUN 1654", # Aletheia Talbot
   2371, "1540", "9 JAN 1564", # Margaret Audley; likely duplicate/identity match to personID 2325
   2372, "24 AUG 1561", "28 MAY 1626", # Thomas Howard, 1st Earl of Suffolk
   2373, "4 JUL 1563", "7 APR 1578", # Mary Dacre; identity inferred from Suffolk/Howard branch
-  2374, "1564", "25 DEC 1633", # Catherine Knyvett / Countess of Suffolk; approximate birth year
+  2374, "1564", "25 DEC 1633", # Catherine Knyvett / Countess of Suffolk
   2375, "13 AUG 1584", "3 JUN 1640", # Theophilus Howard, 2nd Earl of Suffolk
   2376, "8 OCT 1587", "16 JUL 1669", # Thomas Howard, 1st Earl of Berkshire
-  2378, "1588", "1672", # Catherine Howard; approximate year-level dates; identity inferred from Suffolk sibling cluster
+  2378, "1588", "1672", # Catherine Howard; identity inferred from Suffolk sibling cluster
   2383, "16 DEC 1592", "25 DEC 1676", # William Cavendish, Duke of Newcastle; row title currently Earl
   2384, "28 MAR 1591", "3 DEC 1668", # William Cecil, 2nd Earl of Salisbury; row title says Berkshire, likely title/name mismatch
   2385, "11 JAN 1591", "14 SEP 1646", # Robert Devereux, 3rd Earl of Essex
-  2386, "1587", "17 JUL 1645", # Robert Carr, Earl of Somerset; approximate birth year
+  2386, "1587", "17 JUL 1645", # Robert Carr, Earl of Somerset
   2387, "19 DEC 1563", "7 OCT 1640", # William Howard; identity inferred from Howard sibling cluster
   2389, "31 MAY 1590", "23 AUG 1632", # Frances Howard / Countess of Essex and Somerset; current death appears inconsistent, identity should be checked
-  2390, "1578", "8 OCT 1639", # Frances Howard / Duchess of Richmond and Lennox; approximate birth year
+  2390, "1578", "8 OCT 1639", # Frances Howard / Duchess of Richmond and Lennox
   2391, "29 SEP 1574", "16 FEB 1624", # Ludovic Stuart, Duke of Lennox and Richmond
-  2392, "1500", "22 JAN 1552", # Edward Seymour, Duke of Somerset; approximate birth year
-  2393, "1510", "16 APR 1587", # Anne Stanhope / Duchess of Somerset; approximate birth year
+  2392, "1500", "22 JAN 1552", # Edward Seymour, Duke of Somerset
+  2393, "1510", "16 APR 1587", # Anne Stanhope / Duchess of Somerset
   2394, "4 MAR 1526", "23 JUL 1596", # Henry Carey, Baron Hunsdon
-  2395, "1507", "1535", # Catherine Fillol; approximate year-level dates
+  2395, "1507", "1535", # Catherine Fillol
   2396, "21 SEP 1586", "1618", # Edward Seymour, Lord Beauchamp; identity inferred from Beauchamp/Seymour branch
-  2397, "1590", "12 JUL 1664", # Francis Seymour, 1st Baron Seymour of Trowbridge; approximate birth year
-  2398, "1594", "1620", # Honora Seymour; approximate year-level dates
-  2402, "1652", "1700", # Catherine Lee; approximate year-level dates; identity should be checked if stricter certainty needed
-  2403, "1524", "15 JAN 1569", # Catherine Carey / Lady Knollys; approximate birth year
-  2405, "1511", "19 JUL 1596", # Francis Knollys; approximate birth year
-  2406, "1541", "1582", # Henry Knollys; approximate year-level dates
-  2407, "1544", "25 MAY 1632", # William Knollys, Earl of Banbury; approximate birth year
-  2410, "1549", "1606", # Margaret Cave; approximate year-level dates
+  2397, "1590", "12 JUL 1664", # Francis Seymour, 1st Baron Seymour of Trowbridge
+  2398, "1594", "1620", # Honora Seymour
+  2402, "1652", "1700", # Catherine Lee; identity should be checked if stricter certainty needed
+  2403, "1524", "15 JAN 1569", # Catherine Carey / Lady Knollys
+  2405, "1511", "19 JUL 1596", # Francis Knollys
+  2406, "1541", "1582", # Henry Knollys
+  2407, "1544", "25 MAY 1632", # William Knollys, Earl of Banbury
+  2410, "1549", "1606", # Margaret Cave
   2411, "16 SEP 1541", "22 SEP 1576", # Walter Devereux, 1st Earl of Essex
-  2412, "1555", "18 MAR 1601", # Christopher Blount; approximate birth year
+  2412, "1555", "18 MAR 1601", # Christopher Blount
   2414, "1525", "16 NOV 1585", # Gerald FitzGerald, Lord Offaly / 11th Earl of Kildare; title/name should be checked
   2415, "31 MAR 1651", "26 MAY 1685", # Charles II, Elector Palatine; row name is generic Charles
   2416, "24 DEC 1634", "16 MAY 1696", # Mariana of Austria / Queen of Spain
@@ -1751,54 +1805,54 @@ date_overrides <- tribble(
   2440, "13 OCT 1499", "20 JUL 1524", # Claude of France
   2441, "11 APR 1492", "21 DEC 1549", # Margaret of Navarre
   2442, "6 MAR 1405", "20 JUL 1454", # John II of Castile
-  2443, "1428", "15 AUG 1496", # Isabella of Portugal / Queen of Castile; approximate birth year
+  2443, "1428", "15 AUG 1496", # Isabella of Portugal / Queen of Castile
   2444, "22 JAN 1901", "21 OCT 1990", # Walter Sommerlath
   2445, "25 MAY 1906", "9 MAR 1997", # Alice Soares de Toledo / Alice de Toledo
   2448, "15 JUL 1750", "9 DEC 1806", # Francis Frederick of Saxe-Coburg-Saalfeld
   2449, "23 AUG 1836", "19 SEP 1902", # Maria Henrietta of Austria / Queen of the Belgians
   2450, "9 MAR 1776", "13 JAN 1847", # Joseph of Austria, Palatine of Hungary
   2452, "1 DEC 1081", "1 AUG 1137", # Louis VI the Fat of France
-  2453, "1092", "18 NOV 1154", # Adelaide of Savoy / Maurienne; approximate birth year
+  2453, "1092", "18 NOV 1154", # Adelaide of Savoy / Maurienne
   2454, "23 MAY 1052", "29 JUL 1108", # Philip I of France
-  2455, "1055", "15 OCT 1093", # Bertha of Holland; approximate birth year
+  2455, "1055", "15 OCT 1093", # Bertha of Holland
   2456, "1070", "14 FEB 1117", # Bertrada de Montfort
   2457, "4 MAY 1008", "4 AUG 1060", # Henry I of France
   2458, "27 MAR 972", "20 JUL 1031", # Robert II the Pious of France
-  2459, "986", "25 JUL 1032", # Constance of Arles; approximate birth year
+  2459, "986", "25 JUL 1032", # Constance of Arles
   2460, "1007", "17 SEP 1025", # Hugh Magnus of France; birth year only
-  2462, "964", "16 JAN 1010", # Bertha of Burgundy; approximate birth year
-  2463, "941", "24 OCT 996", # Hugh Capet; approximate birth year
-  2465, "1293", "3 JAN 1322", # Philip V the Tall of France; approximate birth year
-  2467, "1120", "7 MAY 1166", # William I of Sicily; approximate birth year
+  2462, "964", "16 JAN 1010", # Bertha of Burgundy
+  2463, "941", "24 OCT 996", # Hugh Capet
+  2465, "1293", "3 JAN 1322", # Philip V the Tall of France
+  2467, "1120", "7 MAY 1166", # William I of Sicily
   2468, "22 DEC 1095", "26 FEB 1154", # Roger II of Sicily
-  2469, "1116", "1131", # Philip of France, son of Louis VI; approximate year-level dates
-  2470, "1123", "11 OCT 1188", # Robert I, Count of Dreux; approximate birth year
-  2471, "1126", "10 APR 1183", # Peter I of Courtenay; approximate birth year
-  2472, "1121", "13 NOV 1175", # Henry of France, bishop; approximate birth year
-  2474, "1124", "1190", # Constance of Toulouse; approximate birth year
-  2475, "1141", "4 OCT 1160", # Constance of Castile; approximate birth year
-  2476, "1140", "4 JUN 1206", # Adela of Champagne; approximate birth year
+  2469, "1116", "1131", # Philip of France, son of Louis VI
+  2470, "1123", "11 OCT 1188", # Robert I, Count of Dreux
+  2471, "1126", "10 APR 1183", # Peter I of Courtenay
+  2472, "1121", "13 NOV 1175", # Henry of France, bishop
+  2474, "1124", "1190", # Constance of Toulouse
+  2475, "1141", "4 OCT 1160", # Constance of Castile
+  2476, "1140", "4 JUN 1206", # Adela of Champagne
   2477, "5 APR 1170", "15 MAR 1190", # Isabella of Hainault
-  2478, "1174", "29 JUL 1236", # Ingeborg of Denmark; approximate birth year
-  2479, "1180", "29 JUL 1201", # Agnes of Merania; approximate birth year
-  2480, "1200", "19 JAN 1234", # Philip Hurepel of France; approximate birth year
+  2478, "1174", "29 JUL 1236", # Ingeborg of Denmark
+  2479, "1180", "29 JUL 1201", # Agnes of Merania
+  2480, "1200", "19 JAN 1234", # Philip Hurepel of France
   2481, "11 NOV 1220", "21 AUG 1271", # Alphonse of Poitiers
-  2482, "1221", "20 DEC 1295", # Margaret of Provence; approximate birth year
-  2483, "1198", "19 AUG 1245", # Raymond Berengar IV of Provence; approximate birth year
+  2482, "1221", "20 DEC 1295", # Margaret of Provence
+  2483, "1198", "19 AUG 1245", # Raymond Berengar IV of Provence
   2484, "21 MAR 1227", "7 JAN 1285", # Charles of Anjou
   2485, "13 MAY 1254", "12 JAN 1321", # Marie of Brabant / Queen of France
   2486, "14 JAN 1273", "2 APR 1305", # Joan I of Navarre
-  2487, "1293", "12 OCT 1328", # Clemence of Hungary; approximate birth year
-  2488, "1288", "16 JUL 1342", # Charles I of Hungary; approximate birth year
-  2489, "1254", "5 MAY 1309", # Charles II of Naples; approximate birth year
-  2490, "1293", "12 DEC 1349", # Joan II of Burgundy; approximate birth year
-  2491, "1296", "29 APR 1326", # Blanche of Burgundy; approximate birth year
-  2492, "1304", "26 MAR 1324", # Marie of Luxembourg; approximate birth year
-  2493, "1310", "4 MAR 1371", # Joan of Évreux; approximate birth year
+  2487, "1293", "12 OCT 1328", # Clemence of Hungary
+  2488, "1288", "16 JUL 1342", # Charles I of Hungary
+  2489, "1254", "5 MAY 1309", # Charles II of Naples
+  2490, "1293", "12 DEC 1349", # Joan II of Burgundy
+  2491, "1296", "29 APR 1326", # Blanche of Burgundy
+  2492, "1304", "26 MAR 1324", # Marie of Luxembourg
+  2493, "1310", "4 MAR 1371", # Joan of Évreux
   2494, "17 NOV 1293", "22 AUG 1350", # Philip VI of France
   2495, "12 MAR 1270", "16 DEC 1325", # Charles of Valois
   2496, "24 JUN 1293", "12 SEP 1348", # Joan the Lame / Joan of Burgundy
-  2497, "1331", "5 OCT 1398", # Blanche of Navarre; approximate birth year
+  2497, "1331", "5 OCT 1398", # Blanche of Navarre
   2500, "3 FEB 1338", "6 FEB 1378", # Joan of Bourbon
   2501, "13 MAR 1372", "23 NOV 1407", # Louis I, Duke of Orléans; row label says Louis of Beaumont / Count of Valois, likely identity mismatch
   2502, "4 FEB 1378", "15 NOV 1388", # Catherine of France; approximate mid-month death date
@@ -1817,17 +1871,17 @@ date_overrides <- tribble(
   2517, "2 AUG 1674", "2 DEC 1723", # Philippe II, Duke of Orléans / Regent
   2518, "17 JAN 1342", "27 APR 1404", # Philip the Bold, Duke of Burgundy
   2519, "20 MAY 1315", "11 SEP 1349", # Bonne of Luxembourg
-  2520, "1294", "7 MAR 1342", # Joan of Valois, Countess of Hainaut; approximate birth year
-  2521, "1287", "16 AUG 1342", # Robert III of Artois; approximate birth year; row title says Duke of Richmond
-  2524, "1459", "1 JAN 1496", # Charles of Valois, Count of Angoulême; approximate birth year
+  2520, "1294", "7 MAR 1342", # Joan of Valois, Countess of Hainaut
+  2521, "1287", "16 AUG 1342", # Robert III of Artois; row title says Duke of Richmond
+  2524, "1459", "1 JAN 1496", # Charles of Valois, Count of Angoulême
   2525, "26 JUN 1399", "30 APR 1467", # John of Valois, Count of Angoulême
   2530, "11 JUL 1844", "16 AUG 1921", # Peter I of Serbia
   2531, "23 DEC 1864", "16 MAR 1890", # Zorka of Montenegro
   2532, "8 SEP 1887", "17 OCT 1972", # George Karađorđević / George Karageorgeovitch
-  2533, "1011", "21 MAR 1076", # Robert I, Duke of Burgundy; approximate birth year
-  2534, "1057", "18 OCT 1101", # Hugh the Great of Vermandois; approximate birth year
-  2535, "1030", "1075", # Anne of Kiev; approximate dates; current CSV dates differ and should be treated as uncertain
-  2536, "1024", "1044", # Matilda of Frisia / Germany; approximate year-level dates
+  2533, "1011", "21 MAR 1076", # Robert I, Duke of Burgundy
+  2534, "1057", "18 OCT 1101", # Hugh the Great of Vermandois
+  2535, "1030", "1075", # Anne of Kiev
+  2536, "1024", "1044", # Matilda of Frisia / Germany
   2538, "14 OCT 1404", "29 NOV 1463", # Mary / Marie of Anjou
   2539, "11 AUG 1384", "14 NOV 1442", # Yolande of Aragon
   2541, "25 DEC 1424", "16 AUG 1445", # Margaret of Scotland, Dauphine of France
@@ -1838,71 +1892,72 @@ date_overrides <- tribble(
   2547, "23 APR 1464", "4 FEB 1505", # Joan of Valois
   2548, "25 JAN 1477", "9 JAN 1514", # Anne of Brittany
   2549, "10 AUG 1549", "30 SEP 1602", # Catherine of Brandenburg-Küstrin
-  2550, "758", "30 APR 783", # Hildegard of Vinzgau / wife of Charlemagne; approximate birth year
-  2551, "772", "4 DEC 811", # Charles the Younger; approximate birth year
-  2552, "777", "8 JUL 810", # Pepin / Pippin of Italy; birth year approximate
+  2550, "758", "30 APR 783", # Hildegard of Vinzgau / wife of Charlemagne
+  2551, "772", "4 DEC 811", # Charles the Younger
+  2552, "777", "8 JUL 810", # Pepin / Pippin of Italy
   2553, "16 APR 778", "20 JUN 840", # Louis I the Pious of Aquitaine
-  2554, "779", "11 MAR 824", # Bertha, daughter of Charlemagne; approximate birth year; death date/source should be treated as uncertain
-  2555, "765", "10 AUG 794", # Fastrada; approximate birth year
-  2556, "776", "4 JUN 800", # Luitgard; approximate birth year
-  2558, "778", "3 OCT 818", # Ermengarde of Hesbaye; approximate birth year
-  2559, "797", "19 APR 843", # Judith of Bavaria; approximate birth year
-  2560, "795", "29 SEP 855", # Lothair I; approximate birth year
-  2561, "797", "13 DEC 838", # Pepin I of Aquitaine; approximate birth year
-  2563, "806", "28 AUG 876", # Louis II the German; approximate birth year
+  2554, "779", "11 MAR 824", # Bertha, daughter of Charlemagne
+  2555, "765", "10 AUG 794", # Fastrada
+  2556, "776", "4 JUN 800", # Luitgard
+  2558, "778", "3 OCT 818", # Ermengarde of Hesbaye
+  2559, "797", "19 APR 843", # Judith of Bavaria
+  2560, "795", "29 SEP 855", # Lothair I
+  2561, "797", "13 DEC 838", # Pepin I of Aquitaine
+  2563, "806", "28 AUG 876", # Louis II the German
   2564, "13 JUN 823", "6 OCT 877", # Charles II the Bald
-  2565, "797", "17 APR 818", # Bernard of Italy; approximate birth year
-  2566, "805", "20 MAR 851", # Ermengarde of Tours; approximate birth year
-  2567, "825", "12 AUG 875", # Louis II the Younger / Louis II of Italy; approximate birth year
-  2568, "835", "8 AUG 869", # Lothair II of Lorraine; approximate birth year
-  2569, "845", "25 JAN 863", # Charles of Provence; approximate birth year
-  2570, "823", "864", # Pepin II of Aquitaine; approximate birth year and death year
-  2571, "808", "31 JAN 876", # Emma of Bavaria; approximate birth year
-  2572, "830", "22 MAR 880", # Carloman of Bavaria; approximate birth year
-  2573, "830", "20 JAN 882", # Louis the Younger; approximate birth year
+  2565, "797", "17 APR 818", # Bernard of Italy
+  2566, "805", "20 MAR 851", # Ermengarde of Tours
+  2567, "825", "12 AUG 875", # Louis II the Younger / Louis II of Italy
+  2568, "835", "8 AUG 869", # Lothair II of Lorraine
+  2569, "845", "25 JAN 863", # Charles of Provence
+  2570, "823", "864", # Pepin II of Aquitaine and death year
+  2571, "808", "31 JAN 876", # Emma of Bavaria
+  2572, "830", "22 MAR 880", # Carloman of Bavaria
+  2573, "830", "20 JAN 882", # Louis the Younger
   2574, "13 JUN 839", "13 JAN 888", # Charles III the Fat
   2575, "27 SEP 823", "6 OCT 869", # Ermentrude of Orléans
   2576, "1 NOV 846", "10 APR 879", # Louis II the Stammerer
-  2577, "847", "29 SEP 866", # Charles of Aquitaine / Charles the Child; approximate birth year
-  2578, "849", "876", # Carloman, son of Charles the Bald; approximate year-level dates
-  2579, "843", "870", # Judith of Flanders; approximate year-level dates
-  2580, "826", "2 NOV 880", # Ansgarde of Burgundy; approximate birth year
-  2581, "864", "5 AUG 882", # Louis III of France; approximate birth year
-  2582, "866", "6 DEC 884", # Carloman II of France; approximate birth year
-  2583, "850", "10 NOV 901", # Adelaide of Paris / Adelaide Judith; approximate birth year
+  2577, "847", "29 SEP 866", # Charles of Aquitaine / Charles the Child
+  2578, "849", "876", # Carloman, son of Charles the Bald
+  2579, "843", "870", # Judith of Flanders
+  2580, "826", "2 NOV 880", # Ansgarde of Burgundy
+  2581, "864", "5 AUG 882", # Louis III of France
+  2582, "866", "6 DEC 884", # Carloman II of France
+  2583, "850", "10 NOV 901", # Adelaide of Paris / Adelaide Judith
   2584, "17 SEP 879", "7 OCT 929", # Charles III the Simple
-  2585, "902", "26 DEC 955", # Eadgifu of England; approximate birth year
-  2586, "830", "896", # Engelberga / Engeberge; approximate year-level dates
-  2587, "852", "22 JUN 896", # Ermengarde of Provence; approximate birth year
-  2588, "841", "11 JAN 887", # Boso of Provence; approximate birth year
-  2589, "880", "5 JUN 928", # Louis III the Blind; approximate birth year
-  2590, "835", "875", # Theutberga of Valois; approximate year-level dates
-  2591, "835", "9 APR 868", # Waldrada; approximate birth year
-  2593, "850", "8 DEC 899", # Arnulf of Carinthia; approximate birth year
-  2594, "873", "903", # Oda of Bavaria; approximate birth year and death after/about 903
-  2595, "893", "24 SEP 911", # Louis the Child; death date varies 20/24 SEP 911, selected 24 SEP
-  2596, "870", "13 AUG 900", # Zwentibold; approximate birth year
-  2597, "850", "24 DEC 903", # Hedwiga of Babenberg; approximate birth year
-  2598, "851", "30 NOV 912", # Otto of Saxony / Otto the Illustrious; approximate birth year
-  2599, "876", "2 JUL 936", # Henry the Fowler; approximate birth year
-  2600, "892", "14 MAR 968", # Matilda of Ringelheim; approximate birth year
-  2601, "925", "11 OCT 965", # Bruno of Cologne; approximate birth year
+  2585, "902", "26 DEC 955", # Eadgifu of England
+  2586, "830", "896", # Engelberga / Engeberge
+  2587, "852", "22 JUN 896", # Ermengarde of Provence
+  2588, "841", "11 JAN 887", # Boso of Provence
+  2589, "880", "5 JUN 928", # Louis III the Blind
+  2590, "835", "875", # Theutberga of Valois
+  2591, "835", "9 APR 868", # Waldrada
+  2593, "850", "8 DEC 899", # Arnulf of Carinthia
+  2594, "873", "903", # Oda of Bavaria and death after/about 903
+  2595, "893", "24 SEP 911", # Louis the Child;
+                              # death date varies 20/24 SEP 911, selected 24 SEP
+  2596, "870", "13 AUG 900", # Zwentibold
+  2597, "850", "24 DEC 903", # Hedwiga of Babenberg
+  2598, "851", "30 NOV 912", # Otto of Saxony / Otto the Illustrious
+  2599, "876", "2 JUL 936", # Henry the Fowler
+  2600, "892", "14 MAR 968", # Matilda of Ringelheim
+  2601, "925", "11 OCT 965", # Bruno of Cologne
   2602, "23 NOV 912", "7 MAY 973", # Otto I the Great
-  2603, "913", "5 MAY 984", # Gerberga of Saxony; approximate birth year
+  2603, "913", "5 MAY 984", # Gerberga of Saxony
   2604, "10 SEP 920", "10 SEP 954", # Louis IV d’Outre-Mer
-  2605, "941", "2 MAR 986", # Lothair of France; approximate birth year
-  2606, "953", "993", # Charles of Lower Lorraine; approximate year-level dates
-  2607, "966", "22 MAY 987", # Louis V of France; approximate birth year
-  2609, "714", "24 SEP 768", # Pepin the Short; approximate birth year
-  2610, "710", "12 JUL 783", # Bertrada of Laon; approximate birth year
+  2605, "941", "2 MAR 986", # Lothair of France
+  2606, "953", "993", # Charles of Lower Lorraine
+  2607, "966", "22 MAY 987", # Louis V of France
+  2609, "714", "24 SEP 768", # Pepin the Short
+  2610, "710", "12 JUL 783", # Bertrada of Laon
   2611, "28 JUN 751", "4 DEC 771", # Carloman I
-  2612, "750", "780", # Gerberga of the Lombards; approximate year-level dates
-  2613, "688", "22 OCT 741", # Charles Martel; approximate birth year
+  2612, "750", "780", # Gerberga of the Lombards
+  2613, "688", "22 OCT 741", # Charles Martel
   2614, "19 JAN 1757", "16 NOV 1831", # Augusta Reuss-Ebersdorf
   2615, "5 JUN 1554", "22 JAN 1592", # Elisabeth of Austria / Queen of France
   2617, "30 APR 1553", "29 JAN 1601", # Louise of Lorraine
-  2618, "1247", "28 JAN 1271", # Isabella of Aragon / Queen of France; approximate birth year
-  2619, "1290", "14 AUG 1315", # Margaret of Burgundy; approximate birth year
+  2618, "1247", "28 JAN 1271", # Isabella of Aragon / Queen of France
+  2619, "1290", "14 AUG 1315", # Margaret of Burgundy
   2620, "8 MAY 1326", "29 SEP 1360", # Joan of Boulogne
   2624, "28 FEB 1823", "15 APR 1883", # Frederick Francis II of Mecklenburg-Schwerin; duplicate/identity match to personID 1213 likely
   2629, "25 OCT 1931", "16 NOV 1937", # Ludwig of Hesse and by Rhine
@@ -1932,8 +1987,8 @@ date_overrides <- tribble(
   2655, "28 FEB 1774", "6 JAN 1799", # Frederick of Orange-Nassau
   2656, "20 MAY 1830", "1 MAY 1872", # Amalia of Saxe-Weimar-Eisenach
   2657, "14 SEP 1855", "20 JUN 1888", # Marie of Prussia / Princess Henry of the Netherlands
-  2660, "1553", "1 OCT 1633", # Feodor Nikitich Romanov / Patriarch Filaret; approximate birth year
-  2661, "1560", "26 JAN 1631", # Xenia Shestova; approximate birth year
+  2660, "1553", "1 OCT 1633", # Feodor Nikitich Romanov / Patriarch Filaret
+  2661, "1560", "26 JAN 1631", # Xenia Shestova
   2665, "8 AUG 1831", "25 APR 1891", # Nicholas Nikolaevich Romanov, Gregorian/New Style; Old Style = 27 JUL 1831, 13 APR 1891
   2666, "25 OCT 1832", "18 DEC 1909", # Michael Nikolaevich Romanov, Gregorian/New Style; Old Style = 13 OCT 1832, 5 DEC 1909
   2668, "20 SEP 1839", "12 APR 1891", # Olga Feodorovna / Cecily of Baden
@@ -1978,16 +2033,16 @@ date_overrides <- tribble(
   2725, "7 APR 1941", NA_character_, # Tord Gösta Magnuson; living
   2730, "15 JUL 1924", "16 MAY 2025", # Marianne Bernadotte / Marianne Lindberg
   2731, "30 AUG 1915", "10 MAR 2013", # Lilian May Davies / Princess Lilian of Sweden
-  2732, "12 JUL 1911", "30 JUL 2007", # Erika Patzek; date source should be cross-checked if stricter certainty needed
-  2733, "12 MAY 1909", "21 MAY 2004", # Sonia Robbert; date source should be cross-checked if stricter certainty needed
-  2735, "12 MAY 1923", "12 SEP 2016", # Gunnila Wachtmeister; date source should be cross-checked if stricter certainty needed
-  2736, "7 JUL 1911", "9 SEP 1991", # Karin Emma Louise Nissvandt; date source should be cross-checked if stricter certainty needed
+  2732, "12 JUL 1911", "30 JUL 2007", # Erika Patzek
+  2733, "12 MAY 1909", "21 MAY 2004", # Sonia Robbert
+  2735, "12 MAY 1923", "12 SEP 2016", # Gunnila Wachtmeister
+  2736, "7 JUL 1911", "9 SEP 1991", # Karin Emma Louise Nissvandt
   2738, "10 JAN 1911", "27 JUN 2003", # Carl Gustaf Oscar Bernadotte / Carl Jr.
   2739, "22 APR 1932", "4 NOV 2014", # Kristine Rivelsrud
   2740, "21 AUG 1944", NA_character_, # Michael Bernadotte af Wisborg; living
   2745, "21 JAN 1933", NA_character_, # Birgitta Bernadotte af Wisborg; living
-  2746, "2 NOV 1935", "24 MAY 1988", # Marie Louise Bernadotte af Wisborg; death date should be cross-checked if stricter certainty needed
-  2747, "9 JAN 1941", "1 SEP 2021", # Jan Bernadotte af Wisborg; death date should be cross-checked if stricter certainty needed
+  2746, "2 NOV 1935", "24 MAY 1988", # Marie Louise Bernadotte af Wisborg
+  2747, "9 JAN 1941", "1 SEP 2021", # Jan Bernadotte af Wisborg
   2748, "28 SEP 1944", NA_character_, # Cecilia Bernadotte af Wisborg; living
   2770, "15 NOV 1859", "4 OCT 1953", # Oscar Bernadotte / Count of Wisborg
   2771, "1 AUG 1865", "17 AUG 1947", # Prince Eugen of Sweden, Duke of Närke
@@ -1998,13 +2053,13 @@ date_overrides <- tribble(
   2776, "3 AUG 1893", "17 JUL 1996", # Elsa Victoria Bernadotte af Wisborg
   2777, "2 JAN 1895", "17 SEP 1948", # Folke Bernadotte af Wisborg
   2778, "20 DEC 1808", "30 MAR 1882", # Carl Jacob Munck af Fulkila; identity inferred from Ebba Munck parent row
-  2779, "4 OCT 1893", "8 OCT 1978", # Marianne de Geer af Leufsta; date source should be cross-checked if stricter certainty needed
-  2780, "10 APR 1916", "22 DEC 2019", # Dagmar Bernadotte af Wisborg; date source should be cross-checked if stricter certainty needed
-  2781, "12 JUL 1921", "3 NOV 2018", # Oscar Bernadotte af Wisborg; date source should be cross-checked if stricter certainty needed
+  2779, "4 OCT 1893", "8 OCT 1978", # Marianne de Geer af Leufsta
+  2780, "10 APR 1916", "22 DEC 2019", # Dagmar Bernadotte af Wisborg
+  2781, "12 JUL 1921", "3 NOV 2018", # Oscar Bernadotte af Wisborg
   2782, "10 JAN 1926", NA_character_, # Catharina Bernadotte af Wisborg; living or death not found in this pass
   2829, "25 JUN 1899", "4 JAN 1977", # Margaretha of Sweden / Princess Axel of Denmark
   2830, "12 AUG 1888", "14 JUL 1964", # Axel of Denmark
-  2831, "7 FEB 1904", "15 APR 1991", # Elsa von Rosen; date source should be cross-checked if stricter certainty needed
+  2831, "7 FEB 1904", "15 APR 1991", # Elsa von Rosen
   2832, "8 OCT 1938", NA_character_, # Madeleine Bernadotte af Wisborg / Countess Madeleine; living
   2839, "2 JUL 1882", "21 SEP 1962", # Marie Bonaparte / Princess George of Greece and Denmark; row currently Mary
   2840, "19 MAY 1858", "14 APR 1924", # Roland Bonaparte
@@ -2029,18 +2084,19 @@ date_overrides <- tribble(
   2862, "5 AUG 1581", "26 NOV 1641", # Hedwig of Denmark
   2863, "26 FEB 1416", "5 JAN 1448", # Christopher III of Denmark, Norway, and Sweden
   2864, "25 DEC 1461", "8 DEC 1521", # Christina of Saxony / Queen of Denmark
-  2867, "15 MAR 1476", "15 JAN 1504", # James Stewart, Duke of Ross; approximate mid-month dates selected from month-level source dates
-  2868, "15 DEC 1479", "11 MAR 1503", # John Stewart, Earl of Mar and Garioch; approximate mid-month birth date selected from month-level source date
-  2869, "1280", "14 OCT 1318", # Edward Bruce, Earl of Carrick; approximate birth year
-  2870, "1284", "9 FEB 1307", # Thomas Bruce; approximate birth year
-  2871, "1285", "9 FEB 1307", # Alexander Bruce; approximate birth year
-  2872, "1279", "15 SEP 1306", # Nigel Bruce / Niall Bruce; approximate birth year and approximate mid-month death date selected from month-level death date
-  2873, "1272", "1358", # Isabel Bruce; approximate year-level dates
+  2867, "MAR 1476", "JAN 1504", # James Stewart, Duke of Ross
+  2868, "DEC 1479", "11 MAR 1503", # John Stewart, Earl of Mar and Garioch
+  2869, "1280", "14 OCT 1318", # Edward Bruce, Earl of Carrick
+  2870, "1284", "9 FEB 1307", # Thomas Bruce
+  2871, "1285", "9 FEB 1307", # Alexander Bruce
+  2872, "1279", "SEP 1306", # Nigel Bruce / Niall Bruce
+  2873, "1272", "1358", # Isabel Bruce
   2874, "27 APR 1806", "22 AUG 1878", # Maria Christina of the Two Sicilies
   2875, "14 DEC 1784", "21 MAY 1806", # Maria Antonia of Naples and Sicily / Princess of Asturias
   2876, "19 MAY 1797", "26 DEC 1818", # Maria Isabel of Portugal / Queen of Spain
   2877, "6 DEC 1803", "18 MAY 1829", # Maria Josepha Amalia of Saxony / Queen of Spain
-  2878, "11 NOV 1748", "20 JAN 1819", # Charles IV of Spain; some sources give death as 19 JAN 1819
+  2878, "11 NOV 1748", "20 JAN 1819", # Charles IV of Spain;
+                                      # some sources give death as 19 JAN 1819
   2879, "9 DEC 1751", "2 JAN 1819", # Maria Luisa of Parma / Queen of Spain
   2880, "20 JAN 1716", "14 DEC 1788", # Charles III of Spain
   2881, "24 NOV 1724", "27 SEP 1760", # Maria Amalia of Saxony / Queen of Spain
@@ -2048,7 +2104,7 @@ date_overrides <- tribble(
   2883, "17 SEP 1688", "14 FEB 1714", # Maria Luisa of Savoy / Queen of Spain
   2884, "3 JUN 1540", "10 JUL 1590", # Charles II of Inner Austria / Duke of Styria
   2885, "22 JUL 1478", "25 SEP 1506", # Philip I the Handsome / King of Castile
-  2886, "1488", "15 OCT 1536", # Germaine of Foix / of Narbonne; approximate birth year
+  2886, "1488", "15 OCT 1536", # Germaine of Foix / of Narbonne
   2887, "2 OCT 1470", "23 AUG 1498", # Isabella of Aragon / Queen of Portugal
   2888, "29 JUN 1482", "7 MAR 1517", # Maria of Aragon / Queen of Portugal
   2889, "30 JUN 1478", "4 OCT 1497", # John, Prince of Asturias
@@ -2082,19 +2138,19 @@ date_overrides <- tribble(
   2918, "11 SEP 1679", "27 MAR 1729", # Leopold, Duke of Lorraine
   2919, "4 MAY 1677", "1 FEB 1749", # Françoise Marie de Bourbon
   2920, "6 DEC 1685", "12 FEB 1712", # Marie Adélaïde of Savoy
-  2921, "20 AUG 1695", "21 JUL 1719", # Marie Louise Élisabeth d'Orléans, Duchess of Berry; row death placeholder appears to use wrong year
+  2921, "20 AUG 1695", "21 JUL 1719", # Marie Louise Élisabeth d'Orléans, Duchess of Berry
   2930, "19 FEB 1978", NA_character_, # Andrew Ferguson; living
   2931, "9 AUG 1980", NA_character_, # Alice Ferguson; living
   2932, "15 APR 1986", NA_character_, # Elizabeth / Eliza Ferguson; living
   2933, "16 JUL 1880", "21 MAR 1947", # Mervyn Powerscourt Wingfield, 8th Viscount Powerscourt
   2934, "13 OCT 1836", "5 JUN 1904", # Mervyn Wingfield, 7th Viscount Powerscourt
   2935, "4 DEC 1844", "7 AUG 1931", # Julia Coke / Lady Powerscourt
-  2936, "9 OCT 1870", "24 FEB 1947", # Henry FitzHerbert Wright; date source should be cross-checked if stricter certainty needed
-  2937, "18 NOV 1873", "29 SEP 1955", # Muriel Fletcher; date source should be cross-checked if stricter certainty needed
-  2938, "14 MAY 1833", "14 NOV 1879", # Henry Fletcher; date source should be cross-checked if stricter certainty needed
+  2936, "9 OCT 1870", "24 FEB 1947", # Henry FitzHerbert Wright
+  2937, "18 NOV 1873", "29 SEP 1955", # Muriel Fletcher
+  2938, "14 MAY 1833", "14 NOV 1879", # Henry Fletcher
   2939, "17 JUL 1838", "14 NOV 1886", # Harriet Marsham
   2940, "30 JUL 1808", "3 SEP 1874", # Charles Marsham, 3rd Earl of Romney
-  2941, "12 JUN 1811", "5 JUN 1846", # Margaret-Scott Montagu-Douglas-
+  2941, "12 JUN 1811", "5 JUN 1846", # Margaret Scott-Montagu-Douglas
   2942, "24 MAY 1772", "20 APR 1819", # Charles of Buccleuch Montagu-Douglas
   2943, "25 NOV 1806", "16 APR 1884", # Walter Scott-Montagu-Douglas, 5th Duke of Buccleuch
   2944, "9 SEP 1831", "5 NOV 1914", # William Scott-Montagu-Douglas, 6th Duke of Buccleuch
@@ -2109,7 +2165,7 @@ date_overrides <- tribble(
   2954, "6 MAY 1754", "30 JUN 1842", # Thomas William Coke, 1st Earl of Leicester
   2955, "16 JUN 1803", "22 JUL 1844", # Anne Amelia Keppel
   2956, "14 MAY 1772", "30 OCT 1849", # William Charles Keppel, 4th Earl of Albemarle
-  2957, "1101", "25 NOV 1120", # Richard of Lincoln / Richard, son of Henry I; approximate birth year, died in White Ship disaster
+  2957, "1101", "25 NOV 1120", # Richard of Lincoln / Richard, son of Henry I, died in White Ship disaster
   2962, "20 APR 1965", NA_character_, # Victoria Lockwood / Catherine Victoria Aitken; living
   2963, "28 DEC 1990", NA_character_, # Kitty Spencer / Lady Kitty Spencer; living
   2964, "11 JUN 1903", "16 OCT 1997", # Olga of Greece and Denmark / Princess Paul of Yugoslavia
@@ -2120,13 +2176,14 @@ date_overrides <- tribble(
   2974, "19 AUG 1778", "8 JUL 1835", # Sophie of Saxe-Coburg-Saalfeld
   2975, "23 SEP 1781", "15 AUG 1860", # Juliane of Saxe-Coburg-Saalfeld / Anna Feodorovna
   2976, "27 SEP 1763", "4 JUL 1814", # Emich Carl of Leiningen
-  2984, "20 APR 1898", "12 NOV 1964", # Alexander / Sachie McCorquodale; date source should be cross-checked if stricter certainty needed
+  2984, "20 APR 1898", "12 NOV 1964", # Alexander / Sachie McCorquodale
   2985, "26 APR 1924", "14 DEC 1997", # Gerald Legge
-  2995, "3 JAN 1876", "27 MAY 1917", # Bertram Cartland / Bertie Cartland; died in WWI
+  2995, "3 JAN 1876", "27 MAY 1917", # Bertram Cartland / Bertie Cartland
+  2996, "5 SEP 1877", "1976", # Mary Hamilton (Polly) Scobell
   2997, "3 JAN 1907", "30 MAY 1940", # Ronald Cartland
   2998, "4 JAN 1912", "29 MAY 1940", # Anthony Cartland
-  3009, "1911", "1911", # Cartland infant; year-level birth and death only; exact date not resolved in this pass
-  3010, "31 DEC 1939", NA_character_ # Glen McCorquodale; living or death not found in this pass
+  3009, NA_character_, NA_character_, # blanking the infant Cartland row for now
+  3010, "31 DEC 1939", NA_character_ # Glen McCorquodale
 
 )
 
@@ -2237,7 +2294,7 @@ name_overrides <- tribble(
   161, "Mathilde Kschessinska",
   163, "Alexandra of Greece and Denmark",
   165, "Nicholas Konstantinovich Romanov",
-#  170, "Susan Mary Wright",
+  170, "Susan Mary Wright",
  # 174, "Mary Frances Bowes-Lyon",
 #  175, "Patrick Bowes-Lyon",
   185, "Charlotte Grimstead",
@@ -2768,7 +2825,6 @@ name_overrides <- tribble(
   2294, "Constance of York",
   2296, "Philippa de Mohun",
   2299, "Thomas Clifford",
-  2300, "John Neville",
   2301, "Hugh Seymour",
   2303, "Francis Seymour-Conway",
   2304, "Isabella FitzRoy",
@@ -3133,8 +3189,7 @@ name_overrides <- tribble(
   2992, "Charlotte Legge",
   2993, "Henry Legge",
   2995, "Bertram Cartland",
-  2998, "Anthony Cartland",
-  3009, "Baby Cartland"
+  2998, "Anthony Cartland"
 )
 
 # Convert the pedigree data to a tidy format and clean it up
@@ -3281,7 +3336,7 @@ royal92_cleaned <- royal92 %>%
       personID %in%
         c(839, 2276) ~ "Duke of Suffolk",
       personID %in%
-        c(863, 2300) ~ "Baron Latimer",
+        c(863) ~ "Baron Latimer",
       personID == 864 ~ "Baron Seymour",
       personID %in%
         c(871, 1929,
@@ -3301,6 +3356,7 @@ royal92_cleaned <- royal92 %>%
       personID == 1250 ~ "Earl of Bothwell",
       personID %in%
         c(1373, 1867) ~ "Count of Poitiers",
+      personID == 1385 ~ "Abbess",
       personID %in%
         c(1473, 1476,
           1492, 1494) ~ "Earl of Arran",
@@ -3390,6 +3446,7 @@ royal92_cleaned <- royal92 %>%
       personID == 2292 ~ "Duke of Exeter",
       personID == 2293 ~ "Lord Fanhope",
       personID == 2299 ~ "Lord Clifford",
+      personID == 2300 ~ NA_character_,
       personID == 2303 ~ "Marquess of Hertford",
       personID %in%
         c(2305, 2307) ~ "Duke of Grafton",
@@ -3431,7 +3488,8 @@ royal92_cleaned <- royal92 %>%
       personID == 2394 ~ "Baron Hunsdon",
       personID == 2396 ~ "Lord Beauchamp",
       personID == 2397 ~ "Baron Seymour of Trowbridge",
-      personID == 2403 ~ "Lady",
+      personID %in%
+        c(2403,2963) ~ "Lady",
       personID == 2407 ~ "Earl of Banbury",
       personID == 2414 ~ "Lord Offaly",
       personID == 2427 ~ "Electress",
@@ -3442,7 +3500,7 @@ royal92_cleaned <- royal92 %>%
       personID == 2469 ~ "son of Louis VI",
       personID == 2472 ~ "Bishop of Rouen",
       personID == 2483 ~ "Count of Provence",
-      personID == 2474 ~  "Countess of Boulogne and Toulouse",
+      personID == 2474 ~ "Countess of Boulogne and Toulouse",
       personID == 2512 ~ "Queen of Sweden",
       personID == 2517 ~ "Duke of Orléans; Regent",
       personID == 2520 ~ "Countess of Hainaut",
@@ -3475,7 +3533,8 @@ royal92_cleaned <- royal92 %>%
       personID == 2885 ~ "King of Castile",
       personID == 2889 ~ "Prince of Asturias",
       personID == 2890 ~ "Prince of Portugal",
-      personID %in% c(2892, 2913) ~ "Duchess of Savoy",
+      personID %in%
+          c(2892, 2913) ~ "Duchess of Savoy",
       personID == 2893 ~ "Duke of Savoy",
       personID == 2900 ~ "Duke of Vendôme",
       personID == 2904 ~ "Prince Napoléon",
@@ -3493,10 +3552,9 @@ royal92_cleaned <- royal92 %>%
       personID == 2949 ~ "Viscount Hampden",
       personID == 2951 ~ "Earl of Dalkeith",
       personID == 2956 ~ "Earl of Albemarle",
-      personID == 2963 ~ "Lady",
       personID == 2964 ~ "Princess of Yugoslavia",
       personID == 2965 ~ "Prince of Yugoslavia",
-
+      personID == 3009 ~ NA_character_, #Blanking
       TRUE ~ attribute_title
     ),
     twinID = case_when(
@@ -3563,7 +3621,11 @@ if (checkis_acyclic$is_acyclic) {
 if(FALSE){
 
  library(ggpedigree)
-ggped<- ggPedigreeInteractive(royal92,
+  royal92_famid <- royal92 %>%
+    group_by(famID) %>%
+    group_split()
+
+ggped<- ggPedigreeInteractive(royal92_famid[[1]],
             personID = "personID",
             momID = "momID",
             dadID = "dadID",

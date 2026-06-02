@@ -730,7 +730,7 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 729,726,725,1,NA,Margaret Stuart,F,1598-12-24,1600-06-15,NA
 730,726,725,1,NA,Charles I Stuart,M,1600-11-19,1649-01-30,King of England
 731,726,725,1,NA,Robert Stuart,M,1602-01-18,1602-05-27,Duke of Kintyre
-732,726,725,1,NA,Son,M,NA,NA,NA
+732,726,725,1,NA,Son,M,1603-05-15,1603-05-15,NA
 733,726,725,1,NA,Mary Stuart,F,1605-04-08,1607-09-16,NA
 734,726,725,1,NA,Sophia Stuart,F,1606-06-22,1606-06-23,NA
 735,NA,NA,1,NA,Frederick V of the Palatinate,M,1596-08-26,1632-11-29,King of Bohemia
@@ -842,8 +842,8 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 841,2443,2442,1,NA,Isabella I of Castile,F,1451-04-22,1504-11-26,Queen of Castile
 842,833,828,1,NA,Daughter Tudor,F,1510-01-31,1510-01-31,NA
 843,833,828,1,NA,Henry (1) Tudor,M,1511-01-01,1511-02-22,Duke of Cornwall
-844,833,828,1,NA,Henry (2) Tudor,M,NA,NA,Duke of Cornwall
-845,833,828,1,NA,Son Tudor,M,NA,NA,NA
+844,833,828,1,NA,Henry (2) Tudor,M,1513-11-15,1513-11-15,Duke of Cornwall
+845,833,828,1,NA,Son Tudor,M,1514-12-15,1514-12-15,NA
 846,833,828,1,NA,Mary I Tudor,F,1516-02-18,1558-11-17,Queen of England
 847,833,828,1,NA,Daughter Tudor,F,1518-11-10,1518-11-10,NA
 848,2337,2099,1,NA,Anne Boleyn,F,1501-06-15,1536-05-19,NA
@@ -860,7 +860,7 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 859,866,865,60,NA,Catherine Parr,F,1512-06-15,1548-09-05,NA
 860,NA,NA,1,NA,John Seymour,M,NA,NA,Sir
 861,NA,NA,1,NA,Margery Wentworth,F,NA,NA,NA
-862,NA,NA,61,NA,Edward Borough,M,NA,NA,Sir
+862,NA,NA,61,NA,Edward Borough,M,NA,1533-04-15,Sir
 863,NA,NA,62,NA,John Neville,M,1493-11-17,1543-03-02,Baron Latimer
 864,NA,NA,60,NA,Thomas Seymour,M,1508-06-15,1549-03-20,Baron Seymour
 865,NA,NA,60,NA,Thomas Parr of Kendal,M,1483-06-15,1517-11-12,Sir
@@ -984,7 +984,7 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 983,NA,NA,68,NA,Alexandra Morton,F,NA,NA,NA
 984,989,988,1,NA,Richard III,M,1452-10-02,1485-08-22,King of England
 985,1339,987,1,NA,Anne Neville,F,1456-06-11,1485-03-16,Lady
-986,985,984,1,NA,Edward,M,NA,1484-04-09,Prince of Wales
+986,985,984,1,NA,Edward,M,1473-12-15,1484-04-09,Prince of Wales
 987,NA,1342,1,NA,Richard Neville,M,1428-11-22,1471-04-14,Earl of Warwick
 988,1024,1023,1,NA,Richard Plantagenet,M,1411-09-21,1460-12-30,Duke of York
 989,1331,990,1,NA,Cicely Neville,F,1415-05-03,1495-05-31,Lady
@@ -1049,7 +1049,7 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 1048,1046,1040,1,NA,Christian Heinrich Hanover,M,1985-06-01,NA,NA
 1049,NA,NA,1,NA,Isabella Valsassina von Thurn,F,1962-12-12,1988-11-29,Countess
 1050,1049,1041,1,NA,Otto Hanover,M,1988-02-13,NA,NA
-1051,NA,NA,79,NA,TODO,M,NA,NA,NA
+1051,NA,NA,79,NA,TODO,U,NA,NA,NA
 1052,NA,NA,80,NA,Max of Baden,M,1933-07-03,2022-12-29,Prince
 1053,NA,NA,81,NA,Frederick Francis IV of Mecklenburg,M,1882-04-09,1945-11-17,Grand Duke
 1054,NA,NA,1,NA,Margrethe of Denmark,F,1940-04-16,NA,NA
@@ -1221,7 +1221,7 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 1220,2074,2075,1,NA,Catherine of Valois,F,1401-10-27,1437-01-03,NA
 1221,1243,1236,1,NA,Henry IV,M,1366-04-04,1413-03-20,King of England
 1222,NA,1332,1,NA,Mary De Bohun,F,1369-06-15,1394-06-04,NA
-1223,1222,1221,1,NA,Son,M,NA,1382-06-15,NA
+1223,1222,1221,1,NA,Son,M,1382-04-15,1382-06-15,NA
 1224,1222,1221,1,NA,Thomas,M,1388-06-15,1421-03-22,Duke of Clarence
 1225,1222,1221,1,NA,John,M,1389-06-20,1435-09-15,Duke of Bedford
 1226,1222,1221,1,NA,Humphrey of Gloucester,M,1390-10-03,1447-02-23,Duke
@@ -1248,7 +1248,7 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 1247,1251,835,1,NA,Mary Stuart,F,1542-12-07,1587-02-08,Queen of Scots
 1248,2439,2438,58,NA,Francis II,M,1544-01-19,1560-12-05,King of France
 1249,1431,1432,1,NA,Henry Stuart,M,1545-12-07,1567-02-10,Lord Darnley
-1250,NA,NA,98,NA,James Hepburn,M,1534-06-15,1578-04-14,Earl Bothwell-4
+1250,NA,NA,98,NA,James Hepburn,M,1534-06-15,1578-04-14,Earl of Bothwell
 1251,NA,1815,1,NA,Mary of Guise,F,1515-11-22,1560-06-11,NA
 1252,1467,1466,1,NA,James III,M,1451-07-10,1488-06-11,King of Scotland
 1253,NA,NA,1,NA,Richard de Burgh,M,1259-06-15,1326-07-29,Earl of Ulster
@@ -1345,13 +1345,13 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 1344,1348,1349,1,NA,Roger Mortimer,M,1374-04-11,1398-07-20,Earl of March IV
 1345,NA,2277,1,NA,Eleanor Holland,F,1386-06-15,1405-10-18,NA
 1346,1345,1344,1,NA,Edmund Mortimer,M,1391-11-06,1425-01-18,Earl of March
-1347,NA,2060,101,NA,Violante Visconti,F,1354-06-15,NA,NA
+1347,NA,2060,101,NA,Violante Visconti,F,1354-06-15,1386-11-15,NA
 1348,1418,1235,1,NA,Philippa of Ulster,F,1355-08-16,1382-01-05,Countess
 1349,NA,1904,1,NA,Edmund Mortimer,M,1352-02-01,1381-12-27,Earl of March 3d
 1350,NA,NA,102,NA,Henry Stafford,M,NA,1481-06-15,Sir
 1351,NA,NA,103,NA,Thomas Stanley,M,1435-06-15,1504-07-29,Lord
 1352,NA,2174,1,NA,Owen Tudor,M,1400-06-15,1461-02-02,NA
-1353,1220,1352,1,NA,Jasper Tudor,M,NA,1495-12-21,Earl of Pembroke
+1353,1220,1352,1,NA,Jasper Tudor,M,1431-11-15,1495-12-21,Earl of Pembroke
 1354,NA,NA,1,NA,Natalia Sheremetevskaya,F,1880-06-27,1952-01-26,NA
 1355,163,152,1,NA,Maria Pavlovna Romanov,F,1890-04-18,1958-12-13,NA
 1356,NA,2927,1,NA,Olga Karnovich,F,1866-06-15,1929-06-15,Princess
@@ -1363,7 +1363,7 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 1362,157,149,1,NA,Helen Vladimirovna of Russia Romanov,F,1882-01-29,1957-03-13,Grand Duchess
 1363,NA,NA,1,NA,Charles of Brunswick-Wolfenbuttel,M,NA,NA,Duke
 1364,1372,1371,1,NA,John Lackland,M,1167-12-24,1216-10-19,King of England
-1365,NA,1877,105,NA,Isabella De Clare of Gloucester,F,NA,NA,Countess
+1365,NA,1877,105,NA,Isabella De Clare of Gloucester,F,NA,1217-11-15,Countess
 1366,532,533,1,NA,Isabella of Angouleme,F,1188-06-15,1246-05-31,NA
 1367,1366,1364,1,NA,Richard,M,1209-01-05,1272-04-02,Earl of Cornwall
 1368,1366,1364,1,NA,Joan,F,1210-07-22,1238-03-04,NA
@@ -1377,13 +1377,13 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 1376,1372,1371,1,NA,Richard I Coeur de Lion,M,1157-09-08,1199-04-06,King of England
 1377,1372,1371,1,NA,Geoffrey,M,1158-09-23,1186-08-19,Duke of Brittany
 1378,1372,1371,1,NA,Eleanor,F,1162-10-13,1214-10-31,NA
-1379,1372,1371,1,NA,Joan Plantagenet,F,NA,1199-09-04,NA
+1379,1372,1371,1,NA,Joan Plantagenet,F,1165-10-15,1199-09-04,NA
 1380,1526,1525,1,NA,William I the Conqueror,M,1028-06-15,1087-09-09,King of England
 1381,NA,1850,1,NA,Matilda of Flanders,F,1031-06-15,1083-11-02,NA
 1382,1381,1380,1,NA,Robert Curthose,M,1054-06-15,1134-02-03,Duke of Normandy
 1383,1381,1380,1,NA,Richard,M,1055-06-15,1075-06-15,NA
 1384,1381,1380,1,NA,William II Rufus,M,1056-06-15,1100-08-02,King of England
-1385,1381,1380,1,NA,Cecilia of Holy Trinity,F,1056-06-15,1126-07-30,Abess
+1385,1381,1380,1,NA,Cecilia of Holy Trinity,F,1056-06-15,1126-07-30,Abbess
 1386,1381,1380,1,NA,Agatha,F,NA,NA,NA
 1387,1381,1380,1,NA,Adeliza a nun,F,NA,NA,NA
 1388,1381,1380,1,NA,Adela,F,1067-06-15,1137-03-08,NA
@@ -1431,7 +1431,7 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 1430,NA,NA,1,NA,Henry Grey,M,1517-01-17,1554-02-23,Duke of Suffolk
 1431,776,836,1,NA,Margaret Douglas,F,1515-10-08,1578-03-09,Lady
 1432,1479,1478,1,NA,Matthew Stuart,M,1516-09-21,1571-09-04,Earl Lennox 4th
-1433,1431,1432,1,NA,Charles Stuart,M,1555-06-15,NA,Earl Lennox 6th
+1433,1431,1432,1,NA,Charles Stuart,M,1555-06-15,1576-04-15,Earl Lennox 6th
 1434,NA,2101,1,NA,Elizabeth Cavendish,F,1555-06-15,1582-01-21,NA
 1435,1434,1433,1,NA,Arabella Stuart,F,1575-11-10,1615-09-25,NA
 1436,2112,2109,1,NA,William Seymour,M,1588-06-15,1660-10-24,Duke Sommerset
@@ -1470,7 +1470,7 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 1469,1828,1827,1,NA,Margaret of Denmark,F,1456-06-23,1486-07-14,NA
 1470,1467,1466,1,NA,Alexander,M,1454-06-15,1485-08-07,Duke of Albany
 1471,1467,1466,1,NA,John,M,1456-06-15,1479-06-15,Earl of Mar
-1472,1467,1466,1,NA,Mary,F,1453-06-15,NA,NA
+1472,1467,1466,1,NA,Mary,F,1453-06-15,1488-05-15,NA
 1473,NA,NA,119,NA,Thomas Boyd,M,NA,NA,Earl of Arran
 1474,NA,NA,1,NA,James Hamilton,M,1415-06-15,1479-11-06,Lord 1st
 1475,1472,1474,1,NA,Elizabeth,F,NA,NA,NA
@@ -1527,11 +1527,11 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 1526,NA,NA,1,NA,Herleva,F,NA,NA,NA
 1527,1531,1530,1,NA,Richard II of Normandy,M,963-08-23,1026-08-28,Duke
 1528,NA,NA,1,NA,Judith of Brittany,F,NA,NA,NA
-1529,1528,1527,1,NA,Richard III of Normandy,M,NA,1027-08-06,Duke
+1529,1528,1527,1,NA,Richard III of Normandy,M,997-06-15,1027-08-06,Duke
 1530,NA,NA,1,NA,Richard I the Fearless of Normandy,M,933-08-28,996-11-20,Count
 1531,NA,NA,1,NA,Gunnor of Denmark,F,NA,NA,NA
-1532,1531,1530,1,NA,Emma of Normandy,F,NA,1052-03-06,NA
-1533,1780,1779,1,NA,Ethelred II the Unready,M,NA,1016-04-23,King of Kent
+1532,1531,1530,1,NA,Emma of Normandy,F,984-06-15,1052-03-06,NA
+1533,1780,1779,1,NA,Ethelred II the Unready,M,966-06-15,1016-04-23,King of Kent
 1534,1532,1533,1,NA,Edward the Confessor,M,1002-06-15,1066-01-05,King of England
 1535,1537,1536,1,NA,Edith (Eadgyth),F,1025-06-15,1075-12-18,NA
 1536,NA,NA,1,NA,Godwin,M,NA,NA,Earl of Wessex
@@ -1541,12 +1541,12 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 1540,1539,1538,1,NA,Gytha,F,NA,NA,NA
 1541,NA,NA,126,NA,Vladimir of Kiev Monomakh,M,1053-06-15,1125-05-19,Grand Duke
 1542,NA,1452,1,NA,Elfreda (Elfgiva),F,NA,NA,NA
-1543,1542,1533,1,NA,Edmund II Ironside,M,NA,1016-11-30,NA
+1543,1542,1533,1,NA,Edmund II Ironside,M,990-06-15,1016-11-30,NA
 1544,NA,NA,1,NA,Ealdgyth,F,NA,NA,NA
 1545,1544,1543,1,NA,Edward Athling,M,1016-06-15,1057-04-19,NA
 1546,NA,1763,1,NA,Agatha,F,NA,NA,NA
 1547,1546,1545,1,NA,Edgar Athling,M,NA,NA,NA
-1548,1777,1776,1,NA,Canute II the Great,M,NA,1035-11-12,NA
+1548,1777,1776,1,NA,Canute II the Great,M,995-06-15,1035-11-12,NA
 1549,NA,1775,1,NA,Elfgiva of Northampton,F,NA,NA,NA
 1550,1549,1548,1,NA,Harold I Harefoot,M,1016-06-15,1040-03-17,NA
 1551,1549,1548,1,NA,Sweyn,M,1016-06-15,1035-06-15,King of Norway
@@ -1702,7 +1702,7 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 1701,1425,1424,1,NA,Louis XVII,M,1785-03-27,1795-06-08,King of France
 1702,1425,1424,1,NA,Sophie Beatrix,F,1786-07-09,1787-06-19,NA
 1703,1425,1424,1,NA,Marie Therese of Angouleme,F,1778-12-19,1851-10-19,Duchess
-1704,514,417,27,NA,Pepin the Hunchback,M,NA,NA,NA
+1704,514,417,27,NA,Pepin the Hunchback,M,769-06-15,811-06-15,NA
 1705,NA,NA,1,NA,Marie Amelie of Bourbon,F,1782-04-26,1866-03-24,Queen of France
 1706,123,126,1,NA,Alexander of Mar Ramsay,M,1919-12-21,2000-12-20,Capt.
 1707,NA,NA,1,NA,Flora Fraser,F,1930-10-18,NA,Lady
@@ -1751,7 +1751,7 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 1750,NA,NA,1,NA,Unknown,F,NA,NA,NA
 1751,1750,1749,1,NA,Sancho IV,M,1258-05-12,1295-04-25,NA
 1752,NA,NA,1,NA,Gunnor,M,NA,NA,NA
-1753,1542,1533,1,NA,Athelstan,M,NA,1014-06-25,NA
+1753,1542,1533,1,NA,Athelstan,M,986-06-15,1014-06-25,NA
 1754,1542,1533,1,NA,Egbert,M,1001-06-15,1005-06-15,NA
 1755,1542,1533,1,NA,Edred,M,NA,NA,NA
 1756,1542,1533,1,NA,Edwy,M,1003-06-15,1017-06-15,NA
@@ -1761,7 +1761,7 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 1760,1542,1533,1,NA,Elgiva,F,NA,NA,NA
 1761,1542,1533,1,NA,Wulfhilda,F,NA,NA,NA
 1762,1542,1533,1,NA,(Daughter),F,NA,NA,NA
-1763,NA,NA,1,NA,Stephen I,M,NA,1038-08-15,King of Hungary
+1763,NA,NA,1,NA,Stephen I,M,975-06-15,1038-08-15,King of Hungary
 1764,1544,1543,1,NA,Edmund,M,NA,NA,NA
 1765,NA,1763,1,NA,Hedwig,F,NA,NA,NA
 1766,1546,1545,1,NA,Christina,F,NA,NA,NA
@@ -1776,43 +1776,43 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 1775,NA,NA,1,NA,Alfhelm of Northhampton,M,NA,NA,Earl
 1776,NA,NA,1,NA,Sweyn Forkbeard,M,963-04-17,1014-02-03,King of Denmark
 1777,NA,1778,1,NA,Gunhilda,F,NA,NA,NA
-1778,NA,NA,1,NA,Mieczislaw I of Poland,M,NA,992-05-25,Duke
-1779,1787,1786,1,NA,Edgar the Peaceful,M,NA,975-07-08,NA
-1780,NA,1785,1,NA,Elfrida,F,NA,1000-11-17,NA
+1778,NA,NA,1,NA,Mieczislaw I of Poland,M,930-06-15,992-05-25,Duke
+1779,1787,1786,1,NA,Edgar the Peaceful,M,943-06-15,975-07-08,NA
+1780,NA,1785,1,NA,Elfrida,F,945-06-15,1000-11-17,NA
 1781,NA,1783,1,NA,Ethelfleda,F,NA,NA,NA
-1782,1781,1779,1,NA,Edward the Martyr,M,NA,978-03-18,NA
+1782,1781,1779,1,NA,Edward the Martyr,M,962-06-15,978-03-18,NA
 1783,NA,NA,1,NA,Ordmaer,M,NA,NA,Ealdorman
-1784,1780,1779,1,NA,Edmund,M,NA,NA,NA
+1784,1780,1779,1,NA,Edmund,M,NA,970-06-15,NA
 1785,NA,NA,1,NA,Ordgar of Devon Ealdorman,M,NA,NA,NA
-1786,1793,1792,1,NA,Edmund I the Elder,M,NA,946-05-26,NA
+1786,1793,1792,1,NA,Edmund I the Elder,M,921-06-15,946-05-26,NA
 1787,NA,NA,1,NA,St. Elgiva,F,NA,NA,NA
-1788,1787,1786,1,NA,Edwy,M,NA,959-10-01,NA
+1788,1787,1786,1,NA,Edwy,M,940-06-15,959-10-01,NA
 1789,NA,NA,178,NA,Elgiva,F,NA,NA,NA
 1790,NA,1791,179,NA,Ethelfleda of Domerham,F,NA,NA,NA
 1791,NA,NA,179,NA,Alfgar of Wiltshire,M,NA,NA,Ealdorman
-1792,1965,1964,1,NA,Edward the Elder,M,NA,924-07-17,NA
+1792,1965,1964,1,NA,Edward the Elder,M,874-06-15,924-07-17,NA
 1793,NA,NA,1,NA,Edgiva,F,NA,NA,NA
-1794,1793,1792,1,NA,Edred,M,NA,955-11-23,NA
+1794,1793,1792,1,NA,Edred,M,923-06-15,955-11-23,NA
 1795,1793,1792,1,NA,Edburh,F,NA,NA,NA
 1796,1793,1792,1,NA,Edgiva,F,NA,NA,NA
 1797,NA,NA,180,NA,Louis,M,NA,NA,King of Provence
 1798,NA,NA,1,NA,Ecgwyn,F,NA,NA,NA
-1799,1798,1792,1,NA,Athelstan,M,NA,939-10-27,NA
+1799,1798,1792,1,NA,Athelstan,M,894-06-15,939-10-27,NA
 1800,1798,1792,1,NA,Daughter,F,NA,NA,NA
-1801,NA,NA,181,NA,Sihtric Cáech,M,NA,NA,King of Denmark
-1802,NA,NA,1,NA,Ælfflæd,F,NA,NA,wife of Edward the Elder
-1803,1802,1792,1,NA,Æthelweard,M,NA,922-10-16,NA
-1804,1802,1792,1,NA,Edwin,M,NA,NA,son of Edward the Elder
+1801,NA,NA,181,NA,Sihtric Cáech,M,877-06-15,927-06-15,King of Denmark
+1802,NA,NA,1,NA,Ælfflæd,F,878-06-15,920-06-15,wife of Edward the Elder
+1803,1802,1792,1,NA,Æthelweard,M,904-06-15,922-10-16,NA
+1804,1802,1792,1,NA,Edwin,M,902-06-15,933-06-15,son of Edward the Elder
 1805,1802,1792,1,NA,Elfleda,F,NA,NA,NA
-1806,1802,1792,1,NA,Eadgifu of Kent,F,NA,955-12-26,NA
+1806,1802,1792,1,NA,Eadgifu of Kent,F,902-06-15,955-12-26,NA
 1807,1802,1792,1,NA,Ethelhilda,F,NA,NA,NA
-1808,1802,1792,1,NA,Eadhild,F,NA,937-01-26,NA
-1809,1802,1792,1,NA,Eadgyth of England,F,NA,946-01-26,NA
+1808,1802,1792,1,NA,Eadhild,F,910-06-15,937-01-26,NA
+1809,1802,1792,1,NA,Eadgyth of England,F,910-06-15,946-01-26,NA
 1810,1802,1792,1,NA,Elgiva,F,NA,NA,NA
 1811,NA,NA,182,NA,Charles III the Simple,M,879-09-17,929-10-07,King of West Francia
-1812,NA,NA,183,NA,Hugh the Great,M,NA,956-06-16,Count of Paris
+1812,NA,NA,183,NA,Hugh the Great,M,898-06-15,956-06-16,Count of Paris
 1813,NA,NA,184,NA,Otho I the Great,M,912-11-23,973-05-07,King of Germany
-1814,NA,NA,185,NA,Boleslaus II,M,NA,999-02-07,Duke of Bohemia
+1814,NA,NA,185,NA,Boleslaus II,M,932-06-15,999-02-07,Duke of Bohemia
 1815,NA,NA,1,NA,Claude,M,1496-10-20,1550-04-12,Duke of Guise
 1816,1817,2524,58,NA,Francis I,M,1494-09-12,1547-03-31,King of France
 1817,NA,NA,58,NA,Louise of Savoy,F,1476-09-11,1531-09-22,NA
@@ -1928,25 +1928,25 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 1927,1539,1928,1,NA,Nest ferch Gruffydd,F,1059-06-15,1136-06-15,NA
 1928,1931,1930,1,NA,Gruffydd Ap Llywelyn,M,1010-06-15,1063-08-05,NA
 1929,NA,NA,1,NA,Henry III,M,1016-10-28,1056-10-05,Holy Roman Emperor
-1930,NA,NA,1,NA,Llywelyn Ap Seisyll,M,NA,1023-06-15,NA
-1931,NA,1934,1,NA,Angharad ferch Maredudd,F,NA,1058-06-15,NA
-1932,NA,NA,1,NA,Cynfyn of Powys,M,NA,1023-06-15,NA
+1930,NA,NA,1,NA,Llywelyn Ap Seisyll,M,980-06-15,1023-06-15,NA
+1931,NA,1934,1,NA,Angharad ferch Maredudd,F,982-06-15,1058-06-15,NA
+1932,NA,NA,1,NA,Cynfyn of Powys,M,978-06-15,1023-06-15,NA
 1933,1931,1932,1,NA,Bleddyn ap Cynfyn,M,1025-06-15,1075-06-15,NA
-1934,NA,1935,1,NA,Maredudd ab Owain,M,NA,NA,NA
-1935,NA,1936,1,NA,Owain ap Hywel Dda,M,NA,NA,NA
-1936,NA,1937,1,NA,Hywel Dda (the Good),M,NA,NA,NA
-1937,NA,1938,1,NA,Cadell ap Rhodri,M,NA,NA,NA
-1938,NA,NA,1,NA,Rhodri Mawr (the Great),M,NA,NA,NA
-1939,NA,1938,1,NA,Anarawd ap Rhodri,M,NA,NA,NA
-1940,NA,1939,1,NA,Idwal Foel (the Bald),M,NA,NA,NA
+1934,NA,1935,1,NA,Maredudd ab Owain,M,938-06-15,999-06-15,NA
+1935,NA,1936,1,NA,Owain ap Hywel Dda,M,913-06-15,987-06-15,NA
+1936,NA,1937,1,NA,Hywel Dda (the Good),M,880-06-15,950-06-15,NA
+1937,NA,1938,1,NA,Cadell ap Rhodri,M,854-06-15,909-06-15,NA
+1938,NA,NA,1,NA,Rhodri Mawr (the Great),M,820-06-15,878-06-15,NA
+1939,NA,1938,1,NA,Anarawd ap Rhodri,M,857-06-15,916-06-15,NA
+1940,NA,1939,1,NA,Idwal Foel (the Bald),M,883-06-15,942-06-15,NA
 1941,NA,NA,1,NA,Unknown,F,NA,NA,NA
-1942,1941,1940,1,NA,Iago ab Idwal,M,NA,NA,NA
-1943,1941,1940,1,NA,Ieuaf ab Idwal,M,NA,NA,NA
-1944,1941,1940,1,NA,Meurig,M,NA,NA,NA
-1945,NA,1943,1,NA,Hywel (the Bad),M,NA,NA,NA
-1946,NA,1943,1,NA,Cadwallon ap Ieuaf,M,NA,NA,NA
+1942,1941,1940,1,NA,Iago ab Idwal,M,920-06-15,979-06-15,NA
+1943,1941,1940,1,NA,Ieuaf ab Idwal,M,920-06-15,988-06-15,NA
+1944,1941,1940,1,NA,Meurig,M,NA,986-06-15,NA
+1945,NA,1943,1,NA,Hywel (the Bad),M,950-06-15,985-06-15,NA
+1946,NA,1943,1,NA,Cadwallon ap Ieuaf,M,950-06-15,986-06-15,NA
 1947,NA,1945,1,NA,Cynan,M,NA,NA,NA
-1948,NA,1944,1,NA,Idwal ap Meurig,M,NA,NA,NA
+1948,NA,1944,1,NA,Idwal ap Meurig,M,975-06-15,996-06-15,NA
 1949,NA,1948,1,NA,Iago ap Idwal,M,1000-06-15,1039-06-15,NA
 1950,NA,1949,1,NA,Cynan,M,NA,NA,NA
 1951,NA,1950,1,NA,Gruffydd Ap Cynan,M,1055-06-15,1137-06-15,NA
@@ -1962,37 +1962,37 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 1961,NA,1957,1,NA,Llywelyn ap Gruffudd,M,1223-06-15,1282-12-11,NA
 1962,193,176,1,NA,Kathryn,F,NA,NA,NA
 1963,193,176,1,NA,Norissa,F,NA,NA,NA
-1964,1967,1966,1,NA,Alfred the Great,M,NA,899-10-26,King West Saxons
-1965,NA,1981,1,NA,Ealhswith of Mercia,F,NA,902-12-05,NA
-1966,1974,1973,1,NA,Æthelwulf of Wessex,M,NA,858-01-13,King of Wessex
-1967,NA,1976,1,NA,Osburh,F,NA,NA,NA
-1968,1967,1966,1,NA,Æthelstan of Kent,M,NA,NA,NA
-1969,1967,1966,1,NA,Æthelbald of Wessex,M,NA,860-12-20,King of Wessex
-1970,NA,NA,204,NA,Judith of Flanders,F,NA,NA,NA
-1971,1967,1966,1,NA,Æthelberht of Wessex,M,NA,NA,King of Wessex
-1972,1967,1966,1,NA,Æthelred I of Wessex,M,NA,871-04-15,King of Wessex
-1973,NA,2054,1,NA,Egbert of Wessex,M,NA,NA,King of Wessex
+1964,1967,1966,1,NA,Alfred the Great,M,849-06-15,899-10-26,King West Saxons
+1965,NA,1981,1,NA,Ealhswith of Mercia,F,852-06-15,902-12-05,NA
+1966,1974,1973,1,NA,Æthelwulf of Wessex,M,795-06-15,858-01-13,King of Wessex
+1967,NA,1976,1,NA,Osburh,F,NA,846-06-15,NA
+1968,1967,1966,1,NA,Æthelstan of Kent,M,825-06-15,852-06-15,NA
+1969,1967,1966,1,NA,Æthelbald of Wessex,M,834-06-15,860-12-20,King of Wessex
+1970,NA,NA,204,NA,Judith of Flanders,F,843-06-15,870-06-15,NA
+1971,1967,1966,1,NA,Æthelberht of Wessex,M,835-06-15,865-06-15,King of Wessex
+1972,1967,1966,1,NA,Æthelred I of Wessex,M,847-06-15,871-04-15,King of Wessex
+1973,NA,2054,1,NA,Egbert of Wessex,M,771-06-15,839-06-15,King of Wessex
 1974,NA,NA,1,NA,Redburh,F,NA,NA,NA
-1975,1974,1973,1,NA,Æthelstan of Kent,M,NA,NA,NA
+1975,1974,1973,1,NA,Æthelstan of Kent,M,825-06-15,852-06-15,NA
 1976,NA,NA,1,NA,Oslac,M,NA,NA,NA
-1977,1967,1966,1,NA,Æthelswith of Mercia,F,NA,NA,NA
-1978,NA,1972,1,NA,Æthelhelm,M,NA,NA,son of Æthelred I
-1979,NA,1972,1,NA,Æthelwold ætheling,M,NA,902-12-13,King of York
-1980,NA,NA,205,NA,Burgred of Mercia,M,NA,NA,King of Mercia
+1977,1967,1966,1,NA,Æthelswith of Mercia,F,838-06-15,888-06-15,NA
+1978,NA,1972,1,NA,Æthelhelm,M,860-06-15,898-06-15,son of Æthelred I
+1979,NA,1972,1,NA,Æthelwold ætheling,M,868-06-15,902-12-13,King of York
+1980,NA,NA,205,NA,Burgred of Mercia,M,830-06-15,874-06-15,King of Mercia
 1981,NA,NA,1,NA,Ethelred Mucel,M,NA,NA,Ealdorman
-1982,1965,1964,1,NA,Æthelweard,M,NA,922-10-16,son of Alfred
-1983,NA,1982,1,NA,Elfwine,M,NA,NA,NA
-1984,NA,1982,1,NA,Ethelwine,M,NA,NA,NA
-1985,1965,1964,1,NA,Æthelflæd,F,NA,918-06-12,Lady of the Mercians
-1986,1965,1964,1,NA,Æthelgifu of Shaftesbury,F,NA,NA,Abbess
-1987,1965,1964,1,NA,Ælfthryth of Wessex,F,NA,929-06-07,NA
-1988,NA,NA,206,NA,Baldwin II of Flanders,M,NA,918-09-10,Count
-1989,NA,NA,207,NA,Æthelred,M,NA,NA,Lord of the Mercians
+1982,1965,1964,1,NA,Æthelweard,M,880-06-15,922-10-16,son of Alfred
+1983,NA,1982,1,NA,Elfwine,M,NA,937-06-15,NA
+1984,NA,1982,1,NA,Ethelwine,M,NA,937-06-15,NA
+1985,1965,1964,1,NA,Æthelflæd,F,870-06-15,918-06-12,Lady of the Mercians
+1986,1965,1964,1,NA,Æthelgifu of Shaftesbury,F,875-06-15,896-06-15,Abbess
+1987,1965,1964,1,NA,Ælfthryth of Wessex,F,877-06-15,929-06-07,NA
+1988,NA,NA,206,NA,Baldwin II of Flanders,M,865-06-15,918-09-10,Count
+1989,NA,NA,207,NA,Æthelred,M,845-06-15,911-06-15,Lord of the Mercians
 1990,1768,1929,1,NA,Henry IV,M,1050-11-11,1106-08-07,Emperor
-1991,NA,1995,1,NA,Cerdic of Wessex,M,NA,NA,King of Wessex
-1992,NA,1991,1,NA,Cynric of Wessex,M,NA,NA,King of Wessex
-1993,NA,1992,1,NA,Ceawlin of Wessex,M,NA,NA,NA
-1994,NA,1992,1,NA,Cutha,M,NA,NA,King of Wessex
+1991,NA,1995,1,NA,Cerdic of Wessex,M,467-06-15,534-06-15,King of Wessex
+1992,NA,1991,1,NA,Cynric of Wessex,M,500-06-15,560-06-15,King of Wessex
+1993,NA,1992,1,NA,Ceawlin of Wessex,M,540-06-15,593-06-15,NA
+1994,NA,1992,1,NA,Cutha,M,NA,584-06-15,King of Wessex
 1995,NA,1996,1,NA,Elesa,M,NA,NA,NA
 1996,NA,1997,1,NA,Elsa,M,NA,NA,NA
 1997,NA,1998,1,NA,Gewis,M,NA,NA,NA
@@ -2019,40 +2019,40 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 2018,NA,NA,1,NA,Sceaf,M,NA,NA,NA
 2019,NA,1995,1,NA,Unknown,F,NA,NA,NA
 2020,2019,NA,1,NA,Stuf,M,NA,NA,NA
-2021,2019,NA,1,NA,Wihtgar Isle of Wight,M,NA,NA,King
-2022,NA,1994,1,NA,Ceolric of Wessex,M,NA,NA,King of Wessex
-2023,NA,1994,1,NA,Ceolwulf of Wessex,M,NA,NA,King of Wessex
-2024,NA,2022,1,NA,Cynegils of Wessex,M,NA,NA,King of Wessex
-2025,NA,2026,1,NA,Æscwine of Wessex,M,NA,NA,King of Wessex
+2021,2019,NA,1,NA,Wihtgar Isle of Wight,M,NA,544-06-15,King
+2022,NA,1994,1,NA,Ceolric of Wessex,M,570-06-15,597-06-15,King of Wessex
+2023,NA,1994,1,NA,Ceolwulf of Wessex,M,560-06-15,611-06-15,King of Wessex
+2024,NA,2022,1,NA,Cynegils of Wessex,M,600-06-15,642-06-15,King of Wessex
+2025,NA,2026,1,NA,Æscwine of Wessex,M,620-06-15,676-06-15,King of Wessex
 2026,NA,2027,1,NA,Cenfus,M,NA,NA,NA
 2027,NA,2028,1,NA,Cenferth,M,NA,NA,NA
 2028,NA,2023,1,NA,Cuthgils,M,NA,NA,NA
-2029,NA,2024,1,NA,Cwichelm of Wessex,M,NA,NA,NA
-2030,NA,2024,1,NA,Cenwealh of Wessex,M,NA,NA,NA
-2031,NA,2024,1,NA,Centwine of Wessex,M,NA,NA,King of Wessex
+2029,NA,2024,1,NA,Cwichelm of Wessex,M,600-06-15,636-06-15,NA
+2030,NA,2024,1,NA,Cenwealh of Wessex,M,615-06-15,672-06-15,NA
+2031,NA,2024,1,NA,Centwine of Wessex,M,625-06-15,685-06-15,King of Wessex
 2032,NA,2024,1,NA,Cyneburh,F,NA,NA,NA
 2033,NA,2029,1,NA,Cuthred,M,NA,NA,NA
 2034,NA,NA,208,NA,Unknown,F,NA,NA,NA
-2035,NA,NA,209,NA,Seaxburh,F,NA,NA,Queen of Wessex
-2036,NA,NA,210,NA,Oswald of Northumbria,M,NA,642-08-05,King
+2035,NA,NA,209,NA,Seaxburh,F,630-06-15,674-06-15,Queen of Wessex
+2036,NA,NA,210,NA,Oswald of Northumbria,M,604-06-15,642-08-05,King
 2037,NA,1993,1,NA,Cuthwine,M,NA,NA,NA
 2038,NA,2037,1,NA,Chad,M,NA,NA,NA
 2039,NA,2037,1,NA,Cynebald,M,NA,NA,NA
 2040,NA,2037,1,NA,Cuthwulf (Cutha),M,NA,NA,NA
-2041,NA,2038,1,NA,Cenbert,M,NA,NA,NA
-2042,NA,2041,1,NA,Cædwalla of Wessex,M,NA,689-04-20,King of Wessex
-2043,NA,2041,1,NA,Mul of Kent,M,NA,NA,King of Kent
-2044,NA,2045,1,NA,Oswald Atheling,M,NA,NA,NA
+2041,NA,2038,1,NA,Cenbert,M,NA,661-06-15,NA
+2042,NA,2041,1,NA,Cædwalla of Wessex,M,659-06-15,689-04-20,King of Wessex
+2043,NA,2041,1,NA,Mul of Kent,M,660-06-15,687-06-15,King of Kent
+2044,NA,2045,1,NA,Oswald Atheling,M,NA,729-06-15,NA
 2045,NA,2039,1,NA,Ethelbald,M,NA,NA,NA
-2046,NA,2047,1,NA,Ine of Wessex,M,NA,NA,King of Wessex
+2046,NA,2047,1,NA,Ine of Wessex,M,670-06-15,726-06-15,King of Wessex
 2047,NA,2048,1,NA,Cenred,M,NA,NA,NA
 2048,NA,2040,1,NA,Ceolwald,M,NA,NA,NA
 2049,NA,NA,211,NA,Ethelburh,F,NA,NA,NA
-2050,NA,2047,1,NA,Ingild of Wessex,M,NA,NA,NA
-2051,NA,2047,1,NA,Cuthburh of Wimborne,F,NA,725-08-31,Abbess
+2050,NA,2047,1,NA,Ingild of Wessex,M,672-06-15,718-06-15,NA
+2051,NA,2047,1,NA,Cuthburh of Wimborne,F,670-06-15,725-08-31,Abbess
 2052,NA,2047,1,NA,Cuthburh,F,NA,NA,NA
-2053,NA,NA,212,NA,Aldfrith of Northumbria,M,NA,705-12-14,King
-2054,NA,2055,1,NA,Ealhmund of Kent,M,NA,NA,Under-King
+2053,NA,NA,212,NA,Aldfrith of Northumbria,M,630-06-15,705-12-14,King
+2054,NA,2055,1,NA,Ealhmund of Kent,M,758-06-15,784-06-15,Under-King
 2055,NA,2056,1,NA,Eaba,M,NA,NA,NA
 2056,NA,2050,1,NA,Eoppa,M,NA,NA,NA
 2057,NA,NA,1,NA,William II of Hainault,M,1307-06-15,1345-09-26,Count
@@ -2183,7 +2183,7 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 2182,NA,2183,1,NA,Rhys Ap Twedwr,M,1040-06-15,1093-06-15,Prince S. Wales
 2183,NA,2184,1,NA,Tewdwr Mawr the Great,M,NA,NA,NA
 2184,NA,2185,1,NA,Cadell,M,NA,NA,NA
-2185,NA,1935,1,NA,Einion,M,NA,NA,NA
+2185,NA,1935,1,NA,Einion,M,NA,984-06-15,NA
 2186,2188,2187,1,NA,Michael of Hillsborough Hill,M,NA,NA,NA
 2187,NA,NA,1,NA,William Hill,M,NA,NA,NA
 2188,2190,2189,1,NA,Eleanor Boyle,F,NA,NA,NA
@@ -2209,8 +2209,8 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 2208,NA,2209,1,NA,Turlough O'Brien,M,1088-06-15,1167-06-15,King of Thomond
 2209,NA,2210,1,NA,Dermot,M,NA,NA,King of Munster
 2210,NA,2211,1,NA,Turlough O'Brien,M,1009-06-15,1086-07-14,King of Munster
-2211,NA,2212,1,NA,Tadc mac Briain,M,NA,1023-06-15,NA
-2212,NA,NA,1,NA,Brian Boru,M,NA,1014-04-23,King of Ireland
+2211,NA,2212,1,NA,Tadc mac Briain,M,985-06-15,1023-06-15,NA
+2212,NA,NA,1,NA,Brian Boru,M,941-06-15,1014-04-23,King of Ireland
 2213,NA,2212,1,NA,Dearbforgail,F,1030-06-15,1080-06-15,NA
 2214,NA,NA,1,NA,Diarmait mac Maíl na mBó,M,1000-06-15,1072-02-07,King of Ireland
 2215,2213,2214,1,NA,Murchad mac Diarmata,M,1025-06-15,1070-06-15,King of Leinster
@@ -2240,31 +2240,31 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 2239,2243,2242,1,NA,Duncan I of Scotland,M,1001-06-15,1040-08-14,NA
 2240,NA,NA,1,NA,Sybil,F,NA,NA,NA
 2241,2240,2239,1,NA,Donald III Bane of Scotland,M,1033-06-15,1099-06-15,King of Scotland
-2242,NA,NA,1,NA,Crínán of Dunkeld,M,NA,1045-06-15,NA
-2243,NA,2248,1,NA,Bethóc of Scotland,F,NA,1045-06-15,NA
+2242,NA,NA,1,NA,Crínán of Dunkeld,M,975-06-15,1045-06-15,NA
+2243,NA,2248,1,NA,Bethóc of Scotland,F,984-06-15,1045-06-15,NA
 2244,NA,NA,1,NA,Gille Coemgáin of Moray,M,1000-06-15,1032-06-15,NA
 2245,NA,2255,1,NA,Gruoch of Scotland,F,1005-06-15,1060-06-15,NA
 2246,2245,2244,1,NA,Lulach of Scotland,M,1032-06-15,1058-03-17,King of Scotland
 2247,NA,NA,241,NA,Macbeth of Scotland,M,1005-06-15,1057-08-15,King of Scotland
-2248,NA,2249,1,NA,Malcolm II of Scotland,M,NA,1034-11-25,King of Scotland
-2249,NA,2250,1,NA,Kenneth II of Scotland,M,NA,NA,King of Scotland
-2250,NA,2251,1,NA,Malcolm I of Scotland,M,NA,NA,King of Scotland
-2251,NA,2252,1,NA,Donald II of Scotland,M,NA,NA,King of Scotland
-2252,NA,2261,1,NA,Constantine II of Scotland,M,NA,NA,King of Scotland
-2253,NA,2250,1,NA,Dub,M,NA,NA,King of Scotland
-2254,NA,2253,1,NA,Kenneth III of Scotland,M,NA,1005-03-25,King of Scotland
-2255,NA,2254,1,NA,Boite mac Cináeda,M,NA,1058-06-15,NA
-2256,NA,2257,1,NA,Causantín mac Cuilén,M,NA,NA,King of Scotland
-2257,NA,2258,1,NA,Cuilén,M,NA,NA,King of Scotland
-2258,NA,2259,1,NA,Indulf of Scotland,M,NA,NA,King of Scotland
+2248,NA,2249,1,NA,Malcolm II of Scotland,M,954-06-15,1034-11-25,King of Scotland
+2249,NA,2250,1,NA,Kenneth II of Scotland,M,932-06-15,995-06-15,King of Scotland
+2250,NA,2251,1,NA,Malcolm I of Scotland,M,900-06-15,954-06-15,King of Scotland
+2251,NA,2252,1,NA,Donald II of Scotland,M,862-06-15,900-06-15,King of Scotland
+2252,NA,2261,1,NA,Constantine II of Scotland,M,879-06-15,952-06-15,King of Scotland
+2253,NA,2250,1,NA,Dub,M,930-06-15,967-06-15,King of Scotland
+2254,NA,2253,1,NA,Kenneth III of Scotland,M,966-06-15,1005-03-25,King of Scotland
+2255,NA,2254,1,NA,Boite mac Cináeda,M,980-06-15,1058-06-15,NA
+2256,NA,2257,1,NA,Causantín mac Cuilén,M,970-06-15,997-06-15,King of Scotland
+2257,NA,2258,1,NA,Cuilén,M,945-06-15,971-06-15,King of Scotland
+2258,NA,2259,1,NA,Indulf of Scotland,M,910-06-15,962-06-15,King of Scotland
 2259,NA,2260,1,NA,Constantine III,M,NA,NA,King of Scotland
-2260,NA,2261,1,NA,Áed of Scotland,M,NA,NA,King of Scotland
-2261,NA,2265,1,NA,Kenneth I MacAlpin,M,NA,858-02-13,King of Scotland
+2260,NA,2261,1,NA,Áed of Scotland,M,840-06-15,878-06-15,King of Scotland
+2261,NA,2265,1,NA,Kenneth I MacAlpin,M,810-06-15,858-02-13,King of Scotland
 2262,NA,2261,1,NA,Unknown Dau.,F,NA,NA,NA
-2263,NA,NA,1,NA,Run of Strathclyde,M,NA,NA,King
-2264,2262,2263,1,NA,Eochaid of Scotland,M,NA,NA,King of Scotland
-2265,NA,NA,1,NA,Alpin of Scotland,M,NA,NA,King of Scotland
-2266,NA,2265,1,NA,Donald I of Scotland,M,NA,862-04-13,King of Scotland
+2263,NA,NA,1,NA,Run of Strathclyde,M,830-06-15,878-06-15,King
+2264,2262,2263,1,NA,Eochaid of Scotland,M,860-06-15,889-06-15,King of Scotland
+2265,NA,NA,1,NA,Alpin of Scotland,M,778-06-15,834-06-15,King of Scotland
+2266,NA,2265,1,NA,Donald I of Scotland,M,812-06-15,862-04-13,King of Scotland
 2267,NA,NA,147,NA,Charles II of Navarre,M,1332-10-10,1387-01-01,King of Navarre
 2268,NA,NA,144,NA,Reynold Cobham,M,1348-06-15,1403-07-06,Sir
 2269,NA,NA,142,NA,Philip the Bold,M,1342-01-17,1404-04-27,Duke of Burgundy
@@ -2298,7 +2298,7 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 2297,NA,NA,256,NA,Fitzwater,M,NA,NA,Lord
 2298,NA,NA,257,NA,John Golafre,M,1350-06-15,1442-11-18,Sir
 2299,NA,NA,114,NA,Thomas Clifford,M,1414-03-25,1455-05-22,Lord Clifford
-2300,NA,NA,258,NA,John Neville,M,1493-11-17,1543-03-02,Baron Latimer
+2300,NA,NA,258,NA,TODO,U,NA,NA,NA
 2301,2304,2303,1,NA,Hugh Seymour,M,1759-04-29,1801-09-11,Admiral
 2302,NA,NA,1,NA,Anne Horatia Waldegrave,F,1762-11-08,1801-06-12,Lady
 2303,NA,NA,1,NA,Francis Seymour-Conway,M,1718-07-05,1794-06-14,Marquess of Hertford
@@ -2333,7 +2333,7 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 2332,NA,NA,267,NA,Henry Herbert,M,1534-06-15,1601-01-19,Earl of Pembroke
 2333,NA,NA,268,NA,Thomas Keyes,M,1524-06-15,1571-09-03,NA
 2334,1428,2104,1,NA,Margaret Clifford,F,1540-06-15,1596-09-29,Countess of Derby
-2335,NA,NA,269,NA,Henry Stanley,M,NA,1593-09-25,Earl of Derby
+2335,NA,NA,269,NA,Henry Stanley,M,1531-09-15,1593-09-25,Earl of Derby
 2336,NA,NA,270,NA,Anne Dacre,F,1557-03-21,1630-04-19,NA
 2337,2342,2341,1,NA,Elizabeth Howard,F,1480-06-15,1538-04-03,NA
 2338,2337,2099,1,NA,George Rochford Boleyn,M,1504-06-15,1536-05-17,Viscount Rochford
@@ -2457,11 +2457,11 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 2456,NA,NA,303,NA,Bertrada de Montfort,F,1070-06-15,1117-02-14,NA
 2457,2459,2458,1,NA,Henry I of France,M,1008-05-04,1060-08-04,King of France
 2458,NA,2463,1,NA,Robert II the Pious of France,M,972-03-27,1031-07-20,King of France
-2459,NA,NA,1,NA,Constance of Arles,F,NA,1032-07-25,NA
+2459,NA,NA,1,NA,Constance of Arles,F,986-06-15,1032-07-25,NA
 2460,2459,2458,1,NA,Hugh Magnus of France,M,1007-06-15,1025-09-17,NA
 2461,NA,NA,304,NA,Unknown,F,NA,NA,NA
-2462,NA,NA,305,NA,Bertha of Burgundy,F,NA,1010-01-16,NA
-2463,NA,NA,1,NA,Hugh Capet,M,NA,996-10-24,King of France
+2462,NA,NA,305,NA,Bertha of Burgundy,F,964-06-15,1010-01-16,NA
+2463,NA,NA,1,NA,Hugh Capet,M,941-06-15,996-10-24,King of France
 2464,2486,1903,1,NA,Louis X the Headstrong,M,1289-10-04,1316-06-05,King of France
 2465,2486,1903,1,NA,Philip V the Tall of France,M,1293-06-15,1322-01-03,King of France
 2466,2487,2464,1,NA,John I,M,1316-11-15,1316-11-20,King of France
@@ -2501,7 +2501,7 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 2500,NA,NA,1,NA,Joan of Bourbon,F,1338-02-03,1378-02-06,Queen
 2501,2500,2499,1,NA,Louis of Beaumont,M,1372-03-13,1407-11-23,Duke of Orléans
 2502,2500,2499,1,NA,Catherine of France,F,1378-02-04,1388-11-15,Princess
-2503,2500,2499,1,NA,Isabelle,F,NA,NA,NA
+2503,2500,2499,1,NA,Isabelle,F,1378-02-15,1378-02-15,NA
 2504,NA,NA,1,NA,Stanisław Leszczyński,M,1677-10-20,1766-02-23,King of Poland
 2505,NA,NA,313,NA,Margaret of Valois,F,1553-05-14,1615-03-27,NA
 2506,587,894,1,NA,Elizabeth,F,NA,NA,NA
@@ -2548,70 +2548,70 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 2547,NA,NA,318,NA,Joan of Valois,F,1464-04-23,1505-02-04,NA
 2548,NA,NA,58,NA,Anne of Brittany,F,1477-01-25,1514-01-09,NA
 2549,NA,NA,1,NA,Catherine of Brandenburg-Küstrin,F,1549-08-10,1602-09-30,NA
-2550,NA,NA,27,NA,Hildegard of Vinzgau,F,NA,783-04-30,NA
-2551,2550,417,27,NA,Charles the Younger,M,NA,811-12-04,NA
-2552,2550,417,27,NA,Pepin of Italy,M,NA,810-07-08,King of Italy
+2550,NA,NA,27,NA,Hildegard of Vinzgau,F,758-06-15,783-04-30,NA
+2551,2550,417,27,NA,Charles the Younger,M,772-06-15,811-12-04,NA
+2552,2550,417,27,NA,Pepin of Italy,M,777-06-15,810-07-08,King of Italy
 2553,2550,417,27,NA,Louis I the Pious of Aquitaine,M,778-04-16,840-06-20,King
-2554,2550,417,27,NA,Bertha,F,NA,824-03-11,daughter of Charlemagne
-2555,NA,NA,319,NA,Fastrada,F,NA,794-08-10,NA
-2556,NA,NA,320,NA,Luitgard,F,NA,800-06-04,NA
+2554,2550,417,27,NA,Bertha,F,779-06-15,824-03-11,daughter of Charlemagne
+2555,NA,NA,319,NA,Fastrada,F,765-06-15,794-08-10,NA
+2556,NA,NA,320,NA,Luitgard,F,776-06-15,800-06-04,NA
 2557,NA,NA,27,NA,Bertha of Toulouse,F,NA,NA,NA
-2558,NA,NA,27,NA,Ermengarde of Hesbaye,F,NA,818-10-03,NA
-2559,NA,NA,27,NA,Judith of Bavaria,F,NA,843-04-19,NA
-2560,2558,2553,27,NA,Lothair I,M,NA,855-09-29,Holy Roman Emper
-2561,2558,2553,27,NA,Pepin I of Aquitaine,M,NA,838-12-13,King
+2558,NA,NA,27,NA,Ermengarde of Hesbaye,F,778-06-15,818-10-03,NA
+2559,NA,NA,27,NA,Judith of Bavaria,F,797-06-15,843-04-19,NA
+2560,2558,2553,27,NA,Lothair I,M,795-06-15,855-09-29,Holy Roman Emper
+2561,2558,2553,27,NA,Pepin I of Aquitaine,M,797-06-15,838-12-13,King
 2562,2558,2553,27,NA,Adelaide,F,NA,NA,NA
-2563,2558,2553,27,NA,Louis the German,M,NA,876-08-28,King East Franks
+2563,2558,2553,27,NA,Louis the German,M,806-06-15,876-08-28,King East Franks
 2564,2559,2553,27,NA,Charles the Bald,M,823-06-13,877-10-06,King West Franks
-2565,2557,2552,27,NA,Bernard of Italy,M,NA,818-04-17,King of Italy
-2566,NA,NA,27,NA,Ermengarde of Tours,F,NA,851-03-20,NA
-2567,2566,2560,27,NA,Louis II the Younger,M,NA,875-08-12,Holy Roman Emper
-2568,2566,2560,27,NA,Lothair II of Lorraine,M,NA,869-08-08,King
-2569,2566,2560,27,NA,Charles of Provence,M,NA,863-01-25,King of Provence
-2570,NA,2561,27,NA,Pepin II of Aquitaine,M,NA,NA,King
-2571,NA,NA,27,NA,Emma of Bavaria,F,NA,876-01-31,NA
-2572,2571,2563,27,NA,Carloman of Bavaria,M,NA,880-03-22,King of Bavaria
-2573,2571,2563,27,NA,Louis the Younger,M,NA,882-01-20,King East Franks
+2565,2557,2552,27,NA,Bernard of Italy,M,797-06-15,818-04-17,King of Italy
+2566,NA,NA,27,NA,Ermengarde of Tours,F,805-06-15,851-03-20,NA
+2567,2566,2560,27,NA,Louis II the Younger,M,825-06-15,875-08-12,Holy Roman Emper
+2568,2566,2560,27,NA,Lothair II of Lorraine,M,835-06-15,869-08-08,King
+2569,2566,2560,27,NA,Charles of Provence,M,845-06-15,863-01-25,King of Provence
+2570,NA,2561,27,NA,Pepin II of Aquitaine,M,823-06-15,864-06-15,King
+2571,NA,NA,27,NA,Emma of Bavaria,F,808-06-15,876-01-31,NA
+2572,2571,2563,27,NA,Carloman of Bavaria,M,830-06-15,880-03-22,King of Bavaria
+2573,2571,2563,27,NA,Louis the Younger,M,830-06-15,882-01-20,King East Franks
 2574,2571,2563,27,NA,Charles III the Fat,M,839-06-13,888-01-13,King West Franks
 2575,NA,NA,27,NA,Ermentrude of Orléans,F,823-09-27,869-10-06,NA
 2576,2575,2564,27,NA,Louis the Stammerer,M,846-11-01,879-04-10,King of France
-2577,2575,2564,27,NA,Charles of Aquitaine,M,NA,866-09-29,King
-2578,2575,2564,27,NA,Carloman,M,NA,NA,son of Charles the Bald
-2579,2575,2564,27,NA,Judith of Flanders,F,NA,NA,NA
-2580,NA,NA,27,NA,Ansgarde of Burgundy,F,NA,880-11-02,NA
-2581,2580,2576,27,NA,Louis III of France,M,NA,882-08-05,King of France
-2582,2580,2576,27,NA,Carloman II of France,M,NA,884-12-06,King of France
-2583,NA,NA,27,NA,Adelaide of Paris,F,NA,901-11-10,NA
+2577,2575,2564,27,NA,Charles of Aquitaine,M,847-06-15,866-09-29,King
+2578,2575,2564,27,NA,Carloman,M,849-06-15,876-06-15,son of Charles the Bald
+2579,2575,2564,27,NA,Judith of Flanders,F,843-06-15,870-06-15,NA
+2580,NA,NA,27,NA,Ansgarde of Burgundy,F,826-06-15,880-11-02,NA
+2581,2580,2576,27,NA,Louis III of France,M,864-06-15,882-08-05,King of France
+2582,2580,2576,27,NA,Carloman II of France,M,866-06-15,884-12-06,King of France
+2583,NA,NA,27,NA,Adelaide of Paris,F,850-06-15,901-11-10,NA
 2584,2583,2576,27,NA,Charles the Simple,M,879-09-17,929-10-07,King of France
-2585,NA,NA,27,NA,Eadgifu of England,F,NA,955-12-26,NA
-2586,NA,NA,27,NA,Engelberga,F,NA,NA,NA
-2587,2586,2567,27,NA,Ermengarde of Provence,F,NA,896-06-22,NA
-2588,NA,NA,27,NA,Boso of Provence,M,NA,887-01-11,King of Provence
-2589,2587,2588,27,NA,Louis III the Blind,M,NA,928-06-05,Holy Roman Emper
-2590,NA,NA,321,NA,Theutberga of Valois,F,NA,NA,NA
-2591,NA,NA,322,NA,Waldrada,F,NA,868-04-09,NA
+2585,NA,NA,27,NA,Eadgifu of England,F,902-06-15,955-12-26,NA
+2586,NA,NA,27,NA,Engelberga,F,830-06-15,896-06-15,NA
+2587,2586,2567,27,NA,Ermengarde of Provence,F,852-06-15,896-06-22,NA
+2588,NA,NA,27,NA,Boso of Provence,M,841-06-15,887-01-11,King of Provence
+2589,2587,2588,27,NA,Louis III the Blind,M,880-06-15,928-06-05,Holy Roman Emper
+2590,NA,NA,321,NA,Theutberga of Valois,F,835-06-15,875-06-15,NA
+2591,NA,NA,322,NA,Waldrada,F,835-06-15,868-04-09,NA
 2592,NA,NA,27,NA,Litwinde,F,NA,NA,NA
-2593,2592,2572,27,NA,Arnulf of Carinthia,M,NA,899-12-08,King of Germany
-2594,NA,NA,27,NA,Oda of Bavaria,F,NA,NA,NA
-2595,2594,2593,27,NA,Louis the Child,M,NA,911-09-24,King of Germany
-2596,2594,2593,27,NA,Zwentibold,M,NA,900-08-13,King of Lorraine
-2597,2594,2593,27,NA,Hedwiga of Babenberg,F,NA,903-12-24,NA
-2598,NA,NA,27,NA,Otto the Illustrious,M,NA,912-11-30,NA
-2599,2597,2598,27,NA,Henry the Fowler,M,NA,936-07-02,Emperor
-2600,NA,NA,27,NA,Matilda of Ringelheim,F,NA,968-03-14,NA
-2601,2600,2599,27,NA,Bruno of Cologne,M,NA,965-10-11,Archbishop
+2593,2592,2572,27,NA,Arnulf of Carinthia,M,850-06-15,899-12-08,King of Germany
+2594,NA,NA,27,NA,Oda of Bavaria,F,873-06-15,903-06-15,NA
+2595,2594,2593,27,NA,Louis the Child,M,893-06-15,911-09-24,King of Germany
+2596,2594,2593,27,NA,Zwentibold,M,870-06-15,900-08-13,King of Lorraine
+2597,2594,2593,27,NA,Hedwiga of Babenberg,F,850-06-15,903-12-24,NA
+2598,NA,NA,27,NA,Otto the Illustrious,M,851-06-15,912-11-30,NA
+2599,2597,2598,27,NA,Henry the Fowler,M,876-06-15,936-07-02,Emperor
+2600,NA,NA,27,NA,Matilda of Ringelheim,F,892-06-15,968-03-14,NA
+2601,2600,2599,27,NA,Bruno of Cologne,M,925-06-15,965-10-11,Archbishop
 2602,2600,2599,27,NA,Otto I the Great,M,912-11-23,973-05-07,Emperor
-2603,2600,2599,27,NA,Gerberga of Saxony,F,NA,984-05-05,NA
+2603,2600,2599,27,NA,Gerberga of Saxony,F,913-06-15,984-05-05,NA
 2604,2585,2584,27,NA,Louis IV d'Outre-Mer,M,920-09-10,954-09-10,NA
-2605,2603,2604,27,NA,Lothair of France,M,NA,986-03-02,King of France
-2606,2603,2604,27,NA,Charles of Lower Lorraine,M,NA,NA,NA
-2607,NA,2605,27,NA,Louis V of France,M,NA,987-05-22,NA
+2605,2603,2604,27,NA,Lothair of France,M,941-06-15,986-03-02,King of France
+2606,2603,2604,27,NA,Charles of Lower Lorraine,M,953-06-15,993-06-15,NA
+2607,NA,2605,27,NA,Louis V of France,M,966-06-15,987-05-22,NA
 2608,NA,2605,27,NA,Adalberon of Rheims,M,NA,1021-06-15,Archbishop
-2609,NA,2613,27,NA,Pepin the Short,M,NA,768-09-24,King of Franks
-2610,NA,NA,27,NA,Bertrada of Laon,F,NA,783-07-12,NA
+2609,NA,2613,27,NA,Pepin the Short,M,714-06-15,768-09-24,King of Franks
+2610,NA,NA,27,NA,Bertrada of Laon,F,710-06-15,783-07-12,NA
 2611,2610,2609,27,NA,Carloman I,M,751-06-28,771-12-04,King of Franks
-2612,NA,NA,323,NA,Gerberga of the Lombards,F,NA,NA,NA
-2613,NA,NA,27,NA,Charles Martel,M,NA,741-10-22,NA
+2612,NA,NA,323,NA,Gerberga of the Lombards,F,750-06-15,780-06-15,NA
+2613,NA,NA,27,NA,Charles Martel,M,688-06-15,741-10-22,NA
 2614,2896,2895,1,NA,Augusta Reuss-Ebersdorf,F,1757-01-19,1831-11-16,Countess
 2615,NA,NA,58,NA,Elisabeth of Austria,F,1554-06-05,1592-01-22,Queen
 2616,2615,2522,58,NA,Marie Elisabeth,F,1572-10-27,1578-04-02,NA
@@ -2994,7 +2994,7 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 2993,243,2985,19,NA,Henry Legge,M,NA,NA,NA
 2994,NA,NA,19,NA,Humphrey Legge,M,NA,NA,Hon.
 2995,3008,3007,19,NA,Bertram Cartland,M,1876-01-03,1917-05-27,Major
-2996,2999,3002,19,NA,Mary Hamilton (Polly) Scobell,F,1877-09-05,NA,NA
+2996,2999,3002,19,NA,Mary Hamilton (Polly) Scobell,F,1877-09-05,1976-06-15,NA
 2997,2996,2995,19,NA,Ronald Cartland,M,1907-01-03,1940-05-30,NA
 2998,2996,2995,19,NA,Anthony Cartland,M,1912-01-04,1940-05-29,NA
 2999,3000,NA,19,NA,Edith Palairet,F,NA,NA,NA
@@ -3007,5 +3007,5 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 3006,2999,3002,19,NA,John Sanford Scobell,M,1879-06-15,NA,Sir
 3007,NA,NA,19,NA,James Cartland,M,NA,NA,NA
 3008,NA,NA,19,NA,Flora,F,NA,NA,NA
-3009,2996,2995,19,NA,Baby Cartland,F,1911-06-15,1911-06-15,NA
+3009,NA,NA,403,NA,TODO,U,NA,1911-06-15,NA
 3010,806,2986,19,NA,Glen McCorquodale,M,1939-12-31,NA,NA
