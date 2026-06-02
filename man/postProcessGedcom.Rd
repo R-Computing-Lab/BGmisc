@@ -8,6 +8,7 @@ postProcessGedcom(
   df_temp,
   remove_empty_cols = TRUE,
   combine_cols = TRUE,
+  parse_dates = FALSE,
   add_parents = TRUE,
   skinny = TRUE,
   verbose = FALSE
@@ -19,6 +20,8 @@ postProcessGedcom(
 \item{remove_empty_cols}{Logical indicating whether to remove columns that are entirely missing.}
 
 \item{combine_cols}{Logical indicating whether to combine columns with duplicate values.}
+
+\item{parse_dates}{Logical indicating whether to parse date columns into Date objects.}
 
 \item{add_parents}{Logical indicating whether to add parent information.}
 

@@ -48,7 +48,7 @@ if (has_openmx) {
 run_models <- has_openmx
 ```
 
----
+
 
 # Data Requirements at a Glance
 
@@ -61,8 +61,8 @@ One row per individual, at minimum:
 | Column | Type | Description |
 |--------|------|-------------|
 | `ID` | integer/character | Unique individual identifier |
-| `dadID` | same as `ID` | Father's ID; `NA` or `0` if unknown |
-| `momID` | same as `ID` | Mother's ID; `NA` or `0` if unknown |
+| `dadID` | same as `ID` | Father's ID; `NA` if unknown |
+| `momID` | same as `ID` | Mother's ID; `NA` if unknown |
 | `sex` | integer | `0` = male, `1` = female |
 | `famID` | integer/character | Extended family identifier |
 
@@ -92,7 +92,7 @@ Individuals present in the pedigree only to trace relatedness (e.g., deceased an
 
 # Part 1: Single-Family Model
 
-We start with one family from the built-in `hazard` dataset. Every step is written out explicitly — no helper functions, no loops — so you can see exactly what happens.
+We start with one family from the built-in `hazard` dataset. Every step is written out explicitly — so you can see exactly what happens.
 
 ```{r load-hazard, eval = run_models}
 data(hazard)
@@ -115,7 +115,7 @@ head(fam1[, c("famID", "ID", "sex", "dadID", "momID", "DA2")])
 ## Step 2: Compute relatedness matrices
 
 ```{r single-fam-matrices, eval = run_models}
-# Additive genetic relatedness (proportion of genome shared IBD)
+# Additive genetic relatedness
 add_mat1 <- ped2add(fam1,
   sparse = FALSE,
   famID = "famID", personID = "ID",
@@ -256,7 +256,7 @@ cat("Unique environ. (Ver):", fitted1$ModelOne$Ver$values, "\n")
 
 With a single family, estimates have wide uncertainty. Part 2 adds a second family to improve precision.
 
----
+
 
 # Part 2: Two-Family Multi-Group Model
 
@@ -495,7 +495,7 @@ fitted_easy <- fitPedigreeModel(
 summary(fitted_easy)
 ```
 
----
+
 
 # Understanding the Covariance Structure
 
@@ -507,7 +507,7 @@ where $\mathbf{A}$ is the additive genetic relatedness matrix, $\mathbf{C}_n$ is
 
 This is an extension of the classical twin model to arbitrary pedigree structures. Additional components can be added by passing `Extmat` (common extended environment), `Mtdmat` (mitochondrial), or `Dmgmat` (dominance) to `buildOneFamilyGroup()`. See `vignette("v1_modelingvariancecomponents", package = "BGmisc")` for background on identification.
 
----
+
 
 # Summary
 

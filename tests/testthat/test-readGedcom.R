@@ -266,3 +266,335 @@ test_that("readGedcom handles incomplete individual records gracefully", {
 
   unlink(temp_file)
 })
+
+test_that("readGedcom returns NULL with warning when no individual records are found", {
+  gedcom_content <- c(
+    "0 HEAD",
+    "1 GEDC",
+    "2 VERS 5.5",
+    "0 TRLR"
+  )
+
+  temp_file <- tempfile(fileext = ".ged")
+  writeLines(gedcom_content, temp_file)
+
+  expect_warning(
+    df <- readGedcom(temp_file),
+    "No people found in file"
+  )
+  expect_null(df)
+
+  unlink(temp_file)
+})
+
+test_that("readGedcom post_process = FALSE preserves raw columns and skips cleanup", {
+  gedcom_content <- c(
+    "0 @I1@ INDI",
+    "1 NAME John /Doe/",
+    "1 GIVN Johnny",
+    "1 SURN Dough",
+    "1 SEX M"
+  )
+
+  temp_file <- tempfile(fileext = ".ged")
+  writeLines(gedcom_content, temp_file)
+
+  df <- readGedcom(temp_file, post_process = FALSE)
+
+  expect_equal(nrow(df), 1)
+  expect_true("name_given" %in% colnames(df))
+  expect_true("name_given_pieces" %in% colnames(df))
+  expect_true("name_surn" %in% colnames(df))
+  expect_true("name_surn_pieces" %in% colnames(df))
+  expect_true("birth_date" %in% colnames(df))
+  expect_true("death_date" %in% colnames(df))
+  expect_true("FAMC" %in% colnames(df))
+  expect_true("FAMS" %in% colnames(df))
+
+  expect_equal(df$name_given[1], "John")
+  expect_equal(df$name_given_pieces[1], "Johnny")
+  expect_equal(df$name_surn[1], "Doe")
+  expect_equal(df$name_surn_pieces[1], "Dough")
+  expect_equal(df$birth_date[1], NA_character_)
+  expect_equal(df$death_date[1], NA_character_)
+
+  unlink(temp_file)
+})
+
+test_that("readGedcom parses all supported name component tags", {
+  gedcom_content <- c(
+    "0 @I1@ INDI",
+    "1 NAME Dr. John Quincy /Doe/ Jr.",
+    "1 GIVN John Quincy",
+    "1 NPFX Dr.",
+    "1 NICK Jack",
+    "1 SURN Doe",
+    "1 NSFX Jr.",
+    "1 _MARNM John Quincy /MarriedDoe/",
+    "1 SEX M"
+  )
+
+  temp_file <- tempfile(fileext = ".ged")
+  writeLines(gedcom_content, temp_file)
+
+  df <- readGedcom(
+    temp_file,
+    add_parents = FALSE,
+    combine_cols = FALSE,
+    remove_empty_cols = FALSE,
+    skinny = FALSE
+  )
+
+  expect_equal(df$name_given[1], "Dr. John Quincy")
+  expect_equal(df$name_surn[1], "Doe")
+  expect_equal(df$name_given_pieces[1], "John Quincy")
+  expect_equal(df$name_npfx[1], "Dr.")
+  expect_equal(df$name_nick[1], "Jack")
+  expect_equal(df$name_surn_pieces[1], "Doe")
+  expect_equal(df$name_nsfx[1], "Jr.")
+  expect_equal(df$name_marriedsurn[1], "John Quincy /MarriedDoe/")
+
+  unlink(temp_file)
+})
+
+test_that("readGedcom parses all supported attribute tags", {
+  gedcom_content <- c(
+    "0 @I1@ INDI",
+    "1 NAME John /Doe/",
+    "1 SEX M",
+    "1 CAST Example caste",
+    "1 DSCR Example description",
+    "1 EDUC Example education",
+    "1 IDNO Example ID",
+    "1 NATI Example nationality",
+    "1 NCHI 3",
+    "1 NMR 2",
+    "1 OCCU Example occupation",
+    "1 PROP Example property",
+    "1 RELI Example religion",
+    "1 RESI Example residence",
+    "1 SSN 123-45-6789",
+    "1 TITL Example title"
+  )
+
+  temp_file <- tempfile(fileext = ".ged")
+  writeLines(gedcom_content, temp_file)
+
+  df <- readGedcom(
+    temp_file,
+    add_parents = FALSE,
+    combine_cols = FALSE,
+    remove_empty_cols = FALSE,
+    skinny = FALSE
+  )
+
+  expect_equal(df$attribute_caste[1], "Example caste")
+  expect_equal(df$attribute_description[1], "Example description")
+  expect_equal(df$attribute_education[1], "Example education")
+  expect_equal(df$attribute_idnumber[1], "Example ID")
+  expect_equal(df$attribute_nationality[1], "Example nationality")
+  expect_equal(df$attribute_children[1], "3")
+  expect_equal(df$attribute_marriages[1], "2")
+  expect_equal(df$attribute_occupation[1], "Example occupation")
+  expect_equal(df$attribute_property[1], "Example property")
+  expect_equal(df$attribute_religion[1], "Example religion")
+  expect_equal(df$attribute_residence[1], "Example residence")
+  expect_equal(df$attribute_ssn[1], "123-45-6789")
+  expect_equal(df$attribute_title[1], "Example title")
+
+  unlink(temp_file)
+})
+
+test_that("readGedcom appends multiple FAMC and FAMS tags for one individual", {
+  gedcom_content <- c(
+    "0 @I1@ INDI",
+    "1 NAME John /Doe/",
+    "1 SEX M",
+    "1 FAMC @F1@",
+    "1 FAMC @F2@",
+    "1 FAMS @F3@",
+    "1 FAMS @F4@"
+  )
+
+  temp_file <- tempfile(fileext = ".ged")
+  writeLines(gedcom_content, temp_file)
+
+  df <- readGedcom(
+    temp_file,
+    post_process = FALSE
+  )
+
+  expect_equal(df$FAMC[1], "1, 2")
+  expect_equal(df$FAMS[1], "3, 4")
+
+  unlink(temp_file)
+})
+
+test_that("readGedcom infers parents end-to-end from GEDCOM FAMC and FAMS tags", {
+  gedcom_content <- c(
+    "0 @I1@ INDI",
+    "1 NAME John /Doe/",
+    "1 SEX M",
+    "1 FAMS @F1@",
+    "0 @I2@ INDI",
+    "1 NAME Jane /Smith/",
+    "1 SEX F",
+    "1 FAMS @F1@",
+    "0 @I3@ INDI",
+    "1 NAME Child /Doe/",
+    "1 SEX F",
+    "1 FAMC @F1@"
+  )
+
+  temp_file <- tempfile(fileext = ".ged")
+  writeLines(gedcom_content, temp_file)
+
+  df <- readGedcom(
+    temp_file,
+    add_parents = TRUE,
+    combine_cols = TRUE,
+    remove_empty_cols = FALSE,
+    skinny = FALSE
+  )
+
+  child_row <- which(df$personID == "3")
+
+  expect_equal(df$dadID[child_row], "1")
+  expect_equal(df$momID[child_row], "2")
+
+  unlink(temp_file)
+})
+
+test_that("readGedcom parse_dates = TRUE parses birth and death dates", {
+  gedcom_content <- c(
+    "0 @I1@ INDI",
+    "1 NAME John /Doe/",
+    "1 SEX M",
+    "1 BIRT",
+    "2 DATE ABT 1 JAN 1900",
+    "2 PLAC Someplace",
+    "1 DEAT",
+    "2 DATE BEF 31 DEC 2000",
+    "2 PLAC Lastplace",
+    "2 CAUS Old age"
+  )
+
+  temp_file <- tempfile(fileext = ".ged")
+  writeLines(gedcom_content, temp_file)
+
+  df <- readGedcom(
+    temp_file,
+    parse_dates = TRUE,
+    add_parents = FALSE,
+    combine_cols = TRUE,
+    remove_empty_cols = FALSE,
+    skinny = FALSE
+  )
+
+  expect_s3_class(df$birth_date, "Date")
+  expect_s3_class(df$death_date, "Date")
+  expect_equal(df$birth_date[1], as.Date("1900-01-01"))
+  expect_equal(df$death_date[1], as.Date("2000-12-31"))
+
+  unlink(temp_file)
+})
+
+test_that("postProcessGedcom parse_dates = TRUE parses date columns and removes GEDCOM date qualifiers", {
+  df_temp <- data.frame(
+    personID = "1",
+    sex = "M",
+    name = "John Doe/",
+    name_given = "John",
+    name_given_pieces = NA_character_,
+    name_surn = "Doe",
+    name_surn_pieces = NA_character_,
+    birth_date = "ABT 1 JAN 1900",
+    death_date = "AFT 31 DEC 2000",
+    FAMC = NA_character_,
+    FAMS = NA_character_,
+    stringsAsFactors = FALSE
+  )
+
+  df <- postProcessGedcom(
+    df_temp,
+    add_parents = FALSE,
+    combine_cols = FALSE,
+    remove_empty_cols = FALSE,
+    parse_dates = TRUE,
+    skinny = FALSE
+  )
+
+  expect_s3_class(df$birth_date, "Date")
+  expect_s3_class(df$death_date, "Date")
+  expect_equal(df$birth_date[1], as.Date("1900-01-01"))
+  expect_equal(df$death_date[1], as.Date("2000-12-31"))
+})
+
+test_that("processParents warns and returns unchanged data when required GEDCOM columns are missing", {
+  df_temp <- data.frame(
+    personID = c("I1", "I2"),
+    sex = c("M", "F"),
+    stringsAsFactors = FALSE
+  )
+
+  expect_warning(
+    out <- processParents(df_temp, datasource = "gedcom"),
+    "Missing necessary columns"
+  )
+
+  expect_equal(out, df_temp)
+})
+
+test_that("processParents rejects invalid datasource values", {
+  df_temp <- data.frame(
+    personID = "I1",
+    sex = "M",
+    FAMC = NA_character_,
+    FAMS = NA_character_,
+    stringsAsFactors = FALSE
+  )
+
+  expect_error(
+    processParents(df_temp, datasource = "unknown"),
+    "Invalid datasource"
+  )
+})
+
+test_that("mapFAMS2parents warns and returns NULL when required columns are missing", {
+  df_temp <- data.frame(
+    personID = c("I1", "I2"),
+    FAMS = c("F1", "F1"),
+    stringsAsFactors = FALSE
+  )
+
+  expect_warning(
+    out <- mapFAMS2parents(df_temp),
+    "necessary columns"
+  )
+
+  expect_null(out)
+})
+
+test_that("readGed and readgedcom aliases return the same output as readGedcom", {
+  gedcom_content <- c(
+    "0 @I1@ INDI",
+    "1 NAME John /Doe/",
+    "1 SEX M"
+  )
+
+  temp_file <- tempfile(fileext = ".ged")
+  writeLines(gedcom_content, temp_file)
+
+  df_main <- readGedcom(temp_file)
+  df_readGed <- readGed(temp_file)
+  df_readgedcom <- readgedcom(temp_file)
+
+  row.names(df_main) <- NULL
+  row.names(df_readGed) <- NULL
+  row.names(df_readgedcom) <- NULL
+
+  expect_equal(df_readGed, df_main)
+  expect_equal(df_readgedcom, df_main)
+
+  unlink(temp_file)
+})

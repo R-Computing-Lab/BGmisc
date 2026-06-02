@@ -4,10 +4,14 @@
 \alias{mapFAMS2parents}
 \title{Create a Mapping from Family IDs to Parent IDs}
 \usage{
-mapFAMS2parents(df_temp)
+mapFAMS2parents(df_temp, mom_sex = "F", dad_sex = "M")
 }
 \arguments{
 \item{df_temp}{A data frame produced by \code{readGedcom()}.}
+
+\item{mom_sex}{Character string indicating the value of sex that corresponds to mothers (default "F").}
+
+\item{dad_sex}{Character string indicating the value of sex that corresponds to fathers (default "M").}
 }
 \value{
 A list mapping family IDs to parent information.

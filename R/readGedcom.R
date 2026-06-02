@@ -52,12 +52,13 @@
 #' @param combine_cols Logical. If `TRUE`, combine redundant name columns, such
 #'   as `name_given` with `name_given_pieces` and `name_surn` with
 #'   `name_surn_pieces`, when their values do not conflict.
+#' @param parse_dates Logical. If `TRUE`, attempt to parse date columns (e.g., `birth_date`, `death_date`) into Date objects, after removing common GEDCOM date qualifiers like "ABT", "BEF", and "AFT".
 #' @param skinny Logical. If `TRUE`, return a slimmer data frame by dropping
 #'   `FAMC`, `FAMS`, and columns that are entirely `NA` during post-processing.
 #' @param update_rate Numeric. Intended rate at which progress messages should
 #'   be printed. Currently unused.
 #' @param post_process Logical. If `TRUE`, apply post-processing steps controlled
-#'   by `add_parents`, `combine_cols`, `remove_empty_cols`, and `skinny`.
+#'   by `add_parents`, `combine_cols`, `remove_empty_cols`, `skinny`, and `parse_dates`.
 #' @param ... Additional arguments. Currently unused.
 #' @return A data frame containing information about individuals, with the following potential columns:
 #' \describe{
@@ -110,6 +111,7 @@ readGedcom <- function(file_path,
                        remove_empty_cols = TRUE,
                        combine_cols = TRUE,
                        skinny = FALSE,
+                       parse_dates = FALSE,
                        update_rate = 1000,
                        post_process = TRUE,
                        ...) {
@@ -179,6 +181,7 @@ readGedcom <- function(file_path,
       df_temp = df_temp,
       remove_empty_cols = remove_empty_cols,
       combine_cols = combine_cols,
+      parse_dates = parse_dates,
       add_parents = add_parents,
       skinny = skinny,
       verbose = verbose
@@ -502,9 +505,15 @@ countPatternRows <- function(file) {
 #' @param vars The current list of variables to update.
 #' @return A list with updated `vars` and a `matched` flag.
 #' @keywords internal
-processTag <- function(tag, field_name, pattern_rows, line, vars,
-                        extractor = NULL, mode = "replace") {
-  count_name <- paste0("num_", tolower(tag), "_rows")
+processTag <- function(tag,
+                       field_name,
+                       pattern_rows,
+                       line,
+                       vars,
+                       extractor = NULL,
+                       mode = "replace") {
+    count_name <- paste0("num_",# normalize leading underscores
+                         tolower(gsub("^_", "", tag)), "_rows")
   matched <- FALSE
   if (!is.null(pattern_rows[[count_name]]) &&
     pattern_rows[[count_name]] > 0 &&
@@ -533,12 +542,14 @@ processTag <- function(tag, field_name, pattern_rows, line, vars,
 #' @param remove_empty_cols Logical indicating whether to remove columns that are entirely missing.
 #' @param combine_cols Logical indicating whether to combine columns with duplicate values.
 #' @param add_parents Logical indicating whether to add parent information.
+#' @param parse_dates Logical indicating whether to parse date columns into Date objects.
 #' @param skinny Logical indicating whether to slim down the data frame.
 #' @param verbose Logical indicating whether to print progress messages.
 #' @return The post-processed data frame.
 postProcessGedcom <- function(df_temp,
                               remove_empty_cols = TRUE,
                               combine_cols = TRUE,
+                              parse_dates = FALSE,
                               add_parents = TRUE,
                               skinny = TRUE,
                               verbose = FALSE) {
@@ -553,6 +564,30 @@ postProcessGedcom <- function(df_temp,
     if (verbose == TRUE) message("Removing empty columns")
     df_temp <- df_temp[, colSums(is.na(df_temp)) < nrow(df_temp)]
   }
+  if(parse_dates == TRUE) {
+
+  date_cols <- c("birth_date", "death_date")
+  if (verbose == TRUE) message("Parsing date columns: ", paste(date_cols[date_cols %in% colnames(df_temp)], collapse = ", "))
+  # GEDCOM date qualifiers like "ABT", "BEF", "AFT" can be present in date strings. We can remove them before parsing.
+  date_qualifier_regex <- "\\b(?:[aA][bBfF][tT]|[bB][eE][tTfF])\\.?\\b\\s*"
+
+  if(verbose == TRUE && any(sapply(df_temp[date_cols], function(col) any(grepl(date_qualifier_regex, col, perl = TRUE))))
+     ) {
+    message("Found date qualifiers in date columns. They will be removed before parsing.")
+  }
+
+  # only parse date columns that are present in the data frame
+  if (any(date_cols %in% colnames(df_temp))) {
+    df_temp[date_cols] <- lapply(df_temp[date_cols], function(x) {
+      if (is.character(x)) {
+        x <- stringr::str_replace_all(x, date_qualifier_regex, "")
+        as.Date(x, format = "%d %b %Y")
+      } else {
+        x
+      }
+    })
+}
+}
   if (skinny == TRUE) {
     if (verbose == TRUE) message("Slimming down the data frame")
     # Remove raw family relationship columns
@@ -568,12 +603,14 @@ postProcessGedcom <- function(df_temp,
 #'
 #' @param df_temp A data frame produced by \code{readGedcom()}.
 #' @param datasource Character string indicating the data source ("gedcom" or "wiki").
+#' @param person_id_col Character string indicating the column name for individual IDs (default "personID").
 #' @return The updated data frame with parent IDs added.
-processParents <- function(df_temp, datasource) {
+processParents <- function(df_temp, datasource, person_id_col = "personID"
+                           ) {
   if (datasource %in% c("gedcom", "ged")) {
     required_cols <- c("FAMC", "sex", "FAMS")
   } else if (datasource == "wiki") {
-    required_cols <- c("personID")
+    required_cols <- c(person_id_col)
   } else {
     stop("Invalid datasource")
   }
@@ -596,8 +633,13 @@ processParents <- function(df_temp, datasource) {
 #' to the corresponding parent IDs.
 #'
 #' @param df_temp A data frame produced by \code{readGedcom()}.
+#' @param mom_sex Character string indicating the value of sex that corresponds to mothers (default "F").
+#' @param dad_sex Character string indicating the value of sex that corresponds to fathers (default "M").
 #' @return A list mapping family IDs to parent information.
-mapFAMS2parents <- function(df_temp) {
+mapFAMS2parents <- function(df_temp,
+                            mom_sex = "F",
+                            dad_sex = "M"
+                            ) {
   if (!all(c("FAMS", "sex") %in% colnames(df_temp))) {
     warning("The data frame does not contain the necessary columns (FAMS, sex)")
     return(NULL)
@@ -608,16 +650,16 @@ mapFAMS2parents <- function(df_temp) {
       fams_ids <- unlist(strsplit(df_temp$FAMS[i], ", "))
       for (fams_id in fams_ids) {
         if (!is.null(family_to_parents[[fams_id]])) {
-          if (df_temp$sex[i] == "M") {
+          if (df_temp$sex[i] == dad_sex) {
             family_to_parents[[fams_id]]$father <- df_temp$personID[i]
-          } else if (df_temp$sex[i] == "F") {
+          } else if (df_temp$sex[i] == mom_sex) {
             family_to_parents[[fams_id]]$mother <- df_temp$personID[i]
           }
         } else {
           family_to_parents[[fams_id]] <- list()
-          if (df_temp$sex[i] == "M") {
+          if (df_temp$sex[i] == dad_sex) {
             family_to_parents[[fams_id]]$father <- df_temp$personID[i]
-          } else if (df_temp$sex[i] == "F") {
+          } else if (df_temp$sex[i] == mom_sex) {
             family_to_parents[[fams_id]]$mother <- df_temp$personID[i]
           }
         }
