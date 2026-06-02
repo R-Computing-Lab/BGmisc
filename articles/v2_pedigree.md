@@ -64,7 +64,7 @@ row corresponds to a simulated individual.
 
 df_ped[21, ]
 #>      fam    ID gen dadID momID spouseID sex
-#> 21 fam 1 10312   3 10204 10202    10317   M
+#> 21 fam 1 10320   3 10203 10201    10318   M
 ```
 
 The columns represents the individual’s family ID, the individual’s

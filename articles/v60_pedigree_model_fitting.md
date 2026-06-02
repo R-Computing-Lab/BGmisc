@@ -62,8 +62,6 @@ if (has_openmx) {
 run_models <- has_openmx
 ```
 
-------------------------------------------------------------------------
-
 ## Data Requirements at a Glance
 
 Before diving in, here is a concise reference for what your data must
@@ -73,13 +71,13 @@ look like. Return to this section whenever something is unclear.
 
 One row per individual, at minimum:
 
-| Column  | Type              | Description                         |
-|---------|-------------------|-------------------------------------|
-| `ID`    | integer/character | Unique individual identifier        |
-| `dadID` | same as `ID`      | Father’s ID; `NA` or `0` if unknown |
-| `momID` | same as `ID`      | Mother’s ID; `NA` or `0` if unknown |
-| `sex`   | integer           | `0` = male, `1` = female            |
-| `famID` | integer/character | Extended family identifier          |
+| Column  | Type              | Description                  |
+|---------|-------------------|------------------------------|
+| `ID`    | integer/character | Unique individual identifier |
+| `dadID` | same as `ID`      | Father’s ID; `NA` if unknown |
+| `momID` | same as `ID`      | Mother’s ID; `NA` if unknown |
+| `sex`   | integer           | `0` = male, `1` = female     |
+| `famID` | integer/character | Extended family identifier   |
 
 Column names are flexible — pass `personID = "myID"`, `famID = "famID"`,
 etc. to the `ped2*` functions.
@@ -125,8 +123,7 @@ explicitly to those with observed data.
 ## Part 1: Single-Family Model
 
 We start with one family from the built-in `hazard` dataset. Every step
-is written out explicitly — no helper functions, no loops — so you can
-see exactly what happens.
+is written out explicitly — so you can see exactly what happens.
 
 ``` r
 
@@ -164,7 +161,7 @@ own measure.
 
 ``` r
 
-# Additive genetic relatedness (proportion of genome shared IBD)
+# Additive genetic relatedness
 add_mat1 <- ped2add(fam1,
   sparse = FALSE,
   famID = "famID", personID = "ID",
@@ -336,8 +333,8 @@ summary(fitted1)
 #> AIC:      -9.611741               26.38826                14.388259
 #> BIC:      16.388259               16.38826                 5.991051
 #> To get additional fit indices, see help(mxRefModels)
-#> timestamp: 2026-05-27 03:07:19 
-#> Wall clock time: 0.07052422 secs 
+#> timestamp: 2026-06-02 17:06:59 
+#> Wall clock time: 0.0725565 secs 
 #> optimizer:  SLSQP 
 #> OpenMx version number: 2.22.11 
 #> Need help?  See help(mxSummary)
@@ -359,8 +356,6 @@ cat("Unique environ. (Ver):", fitted1$ModelOne$Ver$values, "\n")
 
 With a single family, estimates have wide uncertainty. Part 2 adds a
 second family to improve precision.
-
-------------------------------------------------------------------------
 
 ## Part 2: Two-Family Multi-Group Model
 
@@ -511,8 +506,8 @@ summary(fitted2)
 #> AIC:     -56.248897               29.75110                 14.75110
 #> BIC:      -6.588489               23.21684                 10.79231
 #> To get additional fit indices, see help(mxRefModels)
-#> timestamp: 2026-05-27 03:07:20 
-#> Wall clock time: 0.1415408 secs 
+#> timestamp: 2026-06-02 17:07:00 
+#> Wall clock time: 0.08786893 secs 
 #> optimizer:  SLSQP 
 #> OpenMx version number: 2.22.11 
 #> Need help?  See help(mxSummary)
@@ -644,10 +639,10 @@ data.frame(
   ), 4)
 )
 #>                Component True Estimated
-#> 1 Additive genetic (Vad)  0.4    0.5560
-#> 2  Common nuclear  (Vcn)  0.1    0.1658
-#> 3    Mitochondrial (Vmt)  0.1    0.0000
-#> 4  Unique environ. (Ver)  0.4    0.3140
+#> 1 Additive genetic (Vad)  0.4    0.5990
+#> 2  Common nuclear  (Vcn)  0.1    0.1461
+#> 3    Mitochondrial (Vmt)  0.1    0.0398
+#> 4  Unique environ. (Ver)  0.4    0.2870
 ```
 
 With ten families, estimates should be substantially closer to the true
@@ -669,48 +664,46 @@ fitted_easy <- fitPedigreeModel(
   group_models = group_models,
   tryhard      = TRUE
 )
-#> Beginning initial fit attemptFit attempt 0, fit=1006.98143981446, new current best! (was 1012.79944855467)Final run, for Hessian and/or standard errors and/or confidence intervals                                                                             
+#> Beginning initial fit attemptFit attempt 0, fit=1008.36320769182, new current best! (was 1013.57665124202)Final run, for Hessian and/or standard errors and/or confidence intervals                                                                             
 #> 
-#>  Solution found!  Final fit=1006.9814 (started at 1012.7994)  (1 attempt(s): 1 valid, 0 errors)
+#>  Solution found!  Final fit=1008.3632 (started at 1013.5767)  (1 attempt(s): 1 valid, 0 errors)
 summary(fitted_easy)
 #> Summary of EasyFit 
 #>  
 #> free parameters:
-#>     name       matrix row    col      Estimate  Std.Error A lbound ubound
-#> 1    vad ModelOne.Vad   1      1  5.559858e-01 0.15718894    1e-10       
-#> 2    vcn ModelOne.Vcn   1      1  1.658246e-01 0.06370359    1e-10       
-#> 3    vmt ModelOne.Vmt   1      1  1.000004e-10 0.05859561 !     0!       
-#> 4    ver ModelOne.Ver   1      1  3.139616e-01 0.09377585    1e-10       
-#> 5 meanLI       ped1.M   1 X10101 -6.637007e-03 0.08930530                
+#>     name       matrix row    col    Estimate  Std.Error A lbound ubound
+#> 1    vad ModelOne.Vad   1      1  0.59903086 0.16291591    1e-10       
+#> 2    vcn ModelOne.Vcn   1      1  0.14613696 0.06795751    1e-10       
+#> 3    vmt ModelOne.Vmt   1      1  0.03980215 0.06904713 !     0!       
+#> 4    ver ModelOne.Ver   1      1  0.28696799 0.09940299    1e-10       
+#> 5 meanLI       ped1.M   1 X10102 -0.01901727 0.09329989                
 #> 
 #> confidence intervals:
-#>           lbound     estimate   ubound note
-#> vad 0.2755861767 5.559858e-01       NA  !!!
-#> vcn 0.0605578266 1.658246e-01       NA  !!!
-#> vmt 0.0000000001 1.000004e-10       NA  !!!
-#> ver           NA 3.139616e-01 0.498803  !!!
+#>           lbound   estimate    ubound note
+#> vad 0.3042803327 0.59903086 0.9551061     
+#> vcn           NA 0.14613696        NA  !!!
+#> vmt 0.0000000001 0.03980215 0.2105368     
+#> ver 0.1036228265 0.28696799 0.4836285     
 #>   To investigate missing CIs, run summary() again, with verbose=T, to see CI details. 
 #> 
 #> Model Statistics: 
 #>                |  Parameters  |  Degrees of Freedom  |  Fit (-2lnL units)
-#>        Model:              5                    370              1006.981
+#>        Model:              5                    370              1008.363
 #>    Saturated:             NA                     NA                    NA
 #> Independence:             NA                     NA                    NA
 #> Number of observations/statistics: 15/375
 #> 
 #> Information Criteria: 
 #>       |  df Penalty  |  Parameters Penalty  |  Sample-Size Adjusted
-#> AIC:     266.981440               1016.981                 1023.648
-#> BIC:       5.002865               1020.522                 1005.257
+#> AIC:     268.363208               1018.363                 1025.030
+#> BIC:       6.384633               1021.903                 1006.639
 #> To get additional fit indices, see help(mxRefModels)
-#> timestamp: 2026-05-27 03:07:24 
-#> Wall clock time: 1.61849 secs 
+#> timestamp: 2026-06-02 17:07:04 
+#> Wall clock time: 1.699893 secs 
 #> optimizer:  SLSQP 
 #> OpenMx version number: 2.22.11 
 #> Need help?  See help(mxSummary)
 ```
-
-------------------------------------------------------------------------
 
 ## Understanding the Covariance Structure
 
@@ -733,8 +726,6 @@ structures. Additional components can be added by passing `Extmat`
 See
 [`vignette("v1_modelingvariancecomponents", package = "BGmisc")`](https://r-computing-lab.github.io/BGmisc/articles/v1_modelingvariancecomponents.md)
 for background on identification.
-
-------------------------------------------------------------------------
 
 ## Summary
 

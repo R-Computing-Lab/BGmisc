@@ -57,6 +57,7 @@ and removes empty columns from the GEDCOM data frame. It is called by <code><a h
 <span>  <span class="va">df_temp</span>,</span>
 <span>  remove_empty_cols <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  combine_cols <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  parse_dates <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  add_parents <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  skinny <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
@@ -77,6 +78,10 @@ and removes empty columns from the GEDCOM data frame. It is called by <code><a h
 
 <dt id="arg-combine-cols">combine_cols<a class="anchor" aria-label="anchor" href="#arg-combine-cols"></a></dt>
 <dd><p>Logical indicating whether to combine columns with duplicate values.</p></dd>
+
+
+<dt id="arg-parse-dates">parse_dates<a class="anchor" aria-label="anchor" href="#arg-parse-dates"></a></dt>
+<dd><p>Logical indicating whether to parse date columns into Date objects.</p></dd>
 
 
 <dt id="arg-add-parents">add_parents<a class="anchor" aria-label="anchor" href="#arg-add-parents"></a></dt>

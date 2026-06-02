@@ -6,7 +6,7 @@ to the corresponding parent IDs.
 ## Usage
 
 ``` r
-mapFAMS2parents(df_temp)
+mapFAMS2parents(df_temp, mom_sex = "F", dad_sex = "M")
 ```
 
 ## Arguments
@@ -15,6 +15,16 @@ mapFAMS2parents(df_temp)
 
   A data frame produced by
   [`readGedcom()`](https://r-computing-lab.github.io/BGmisc/reference/readGedcom.md).
+
+- mom_sex:
+
+  Character string indicating the value of sex that corresponds to
+  mothers (default "F").
+
+- dad_sex:
+
+  Character string indicating the value of sex that corresponds to
+  fathers (default "M").
 
 ## Value
 

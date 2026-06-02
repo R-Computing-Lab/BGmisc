@@ -69,6 +69,7 @@ remove uninformative columns from the parsed output.</p>
 <span>  remove_empty_cols <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  combine_cols <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  skinny <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  parse_dates <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  update_rate <span class="op">=</span> <span class="fl">1000</span>,</span>
 <span>  post_process <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
@@ -81,6 +82,7 @@ remove uninformative columns from the parsed output.</p>
 <span>  remove_empty_cols <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  combine_cols <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  skinny <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  parse_dates <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  update_rate <span class="op">=</span> <span class="fl">1000</span>,</span>
 <span>  post_process <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
@@ -93,6 +95,7 @@ remove uninformative columns from the parsed output.</p>
 <span>  remove_empty_cols <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  combine_cols <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  skinny <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  parse_dates <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  update_rate <span class="op">=</span> <span class="fl">1000</span>,</span>
 <span>  post_process <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
@@ -132,6 +135,10 @@ as `name_given` with `name_given_pieces` and `name_surn` with
 `FAMC`, `FAMS`, and columns that are entirely `NA` during post-processing.</p></dd>
 
 
+<dt id="arg-parse-dates">parse_dates<a class="anchor" aria-label="anchor" href="#arg-parse-dates"></a></dt>
+<dd><p>Logical. If `TRUE`, attempt to parse date columns (e.g., `birth_date`, `death_date`) into Date objects, after removing common GEDCOM date qualifiers like "ABT", "BEF", and "AFT".</p></dd>
+
+
 <dt id="arg-update-rate">update_rate<a class="anchor" aria-label="anchor" href="#arg-update-rate"></a></dt>
 <dd><p>Numeric. Intended rate at which progress messages should
 be printed. Currently unused.</p></dd>
@@ -139,7 +146,7 @@ be printed. Currently unused.</p></dd>
 
 <dt id="arg-post-process">post_process<a class="anchor" aria-label="anchor" href="#arg-post-process"></a></dt>
 <dd><p>Logical. If `TRUE`, apply post-processing steps controlled
-by `add_parents`, `combine_cols`, `remove_empty_cols`, and `skinny`.</p></dd>
+by `add_parents`, `combine_cols`, `remove_empty_cols`, `skinny`, and `parse_dates`.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>

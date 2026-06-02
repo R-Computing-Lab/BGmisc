@@ -156,19 +156,19 @@ df_peds <- simulatePedigrees(
 )
 summary(df_peds)
 #>         fam            ID             gen            dadID       
-#>  Length   :171   Min.   :  1.0   Min.   :1.000   Min.   :  2.00  
-#>  N.unique :  3   1st Qu.: 43.5   1st Qu.:3.000   1st Qu.: 21.00  
-#>  N.blank  :  0   Median : 86.0   Median :3.000   Median : 71.00  
-#>  Min.nchar:  4   Mean   : 86.0   Mean   :3.298   Mean   : 71.21  
-#>  Max.nchar:  4   3rd Qu.:128.5   3rd Qu.:4.000   3rd Qu.:120.00  
-#>                  Max.   :171.0   Max.   :4.000   Max.   :142.00  
+#>  Length   :171   Min.   :  1.0   Min.   :1.000   Min.   :  1.00  
+#>  N.unique :  3   1st Qu.: 43.5   1st Qu.:3.000   1st Qu.: 22.00  
+#>  N.blank  :  0   Median : 86.0   Median :3.000   Median : 70.00  
+#>  Min.nchar:  4   Mean   : 86.0   Mean   :3.298   Mean   : 69.94  
+#>  Max.nchar:  4   3rd Qu.:128.5   3rd Qu.:4.000   3rd Qu.:121.00  
+#>                  Max.   :171.0   Max.   :4.000   Max.   :138.00  
 #>                                                  NAs    :39      
 #>      momID           spouseID             sex     
-#>  Min.   :  1.00   Min.   :  1.00   Length   :171  
-#>  1st Qu.: 22.00   1st Qu.: 20.75   N.unique :  2  
-#>  Median : 70.00   Median : 72.00   N.blank  :  0  
-#>  Mean   : 70.82   Mean   : 71.31   Min.nchar:  1  
-#>  3rd Qu.:119.00   3rd Qu.:120.50   Max.nchar:  1  
-#>  Max.   :141.00   Max.   :142.00                  
+#>  Min.   :  2.00   Min.   :  1.00   Length   :171  
+#>  1st Qu.: 23.00   1st Qu.: 23.75   N.unique :  2  
+#>  Median : 69.00   Median : 70.50   N.blank  :  0  
+#>  Mean   : 70.15   Mean   : 71.19   Min.nchar:  1  
+#>  3rd Qu.:120.00   3rd Qu.:121.25   Max.nchar:  1  
+#>  Max.   :137.00   Max.   :140.00                  
 #>  NAs    :39       NAs    :99                      
 ```

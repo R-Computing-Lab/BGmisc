@@ -6,7 +6,7 @@ frame
 ## Usage
 
 ``` r
-processParents(df_temp, datasource)
+processParents(df_temp, datasource, person_id_col = "personID")
 ```
 
 ## Arguments
@@ -19,6 +19,11 @@ processParents(df_temp, datasource)
 - datasource:
 
   Character string indicating the data source ("gedcom" or "wiki").
+
+- person_id_col:
+
+  Character string indicating the column name for individual IDs
+  (default "personID").
 
 ## Value
 
