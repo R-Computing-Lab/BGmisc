@@ -1123,7 +1123,7 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 1122,NA,NA,90,NA,Umberto II,M,1904-09-15,1983-03-18,King of Italy
 1123,599,600,1,NA,Josephine Charlotte,F,1927-10-11,2005-01-10,NA
 1124,599,600,1,NA,Albert,M,1934-06-06,NA,Prince of Liege
-1125,NA,NA,91,NA,Jean of Luxembourg,M,1921-01-05,2019-04-23,Grand Duke
+1125,NA,NA,91,NA,TODO,U,1921-06-15,NA,NA
 1126,NA,NA,92,NA,Fabiola de Mora y Aragon,F,1928-06-11,2014-12-05,NA
 1127,NA,NA,1,NA,Paola di Calabria Ruffo,F,1937-09-11,NA,NA
 1128,1127,1124,1,NA,Philippe,M,1960-04-15,NA,NA
@@ -1704,7 +1704,7 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 1703,1425,1424,1,NA,Marie Therese of Angouleme,F,1778-12-19,1851-10-19,Duchess
 1704,514,417,27,NA,Pepin the Hunchback,M,769-06-15,811-06-15,NA
 1705,NA,NA,1,NA,Marie Amelie of Bourbon,F,1782-04-26,1866-03-24,Queen of France
-1706,123,126,1,NA,Alexander of Mar Ramsay,M,1919-12-21,2000-12-20,Capt.
+1706,123,126,1,NA,Alexander of Mar Ramsay,M,1919-12-21,2000-12-20,Captain
 1707,NA,NA,1,NA,Flora Fraser,F,1930-10-18,NA,Lady
 1708,NA,NA,166,NA,Dorothy Hastings,F,1899-06-15,NA,NA
 1709,NA,NA,167,NA,Henry Somerset,M,1900-04-04,1984-02-04,Duke of Beaufort
@@ -2160,7 +2160,7 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 2159,2156,504,1,NA,Ivar Mountbatten,M,1963-03-09,NA,Lord
 2160,NA,NA,1,NA,Wilfrid Ashley,M,1867-09-13,1939-07-03,Baron Mount Temple
 2161,NA,NA,1,NA,of Lodesborough,M,NA,NA,Earl
-2162,NA,NA,238,NA,J. Keyes-O'Malley Hamilton,M,NA,NA,Capt.
+2162,NA,NA,238,NA,Hamilton Joseph Keyes-O'Malley,M,1910-10-19,1989-03-31,Captain
 2163,NA,NA,1,NA,Michael Kelly Bryan,M,NA,NA,NA
 2164,NA,NA,239,NA,William Kemp,M,NA,NA,NA
 2165,509,2163,1,NA,Robin Alexander,M,NA,NA,NA
@@ -2787,8 +2787,8 @@ personID,momID,dadID,famID,twinID,name,sex,birth_date,death_date,title
 2786,2780,2783,1,NA,Catherine von Arbin,F,1946-06-15,NA,NA
 2787,2780,2783,1,NA,Jeanette von Arbin,F,1951-06-15,NA,NA
 2788,2780,2783,1,NA,Madeleine von Arbin,F,1955-06-15,NA,NA
-2789,NA,NA,1,NA,Miles Flach,M,1934-06-15,NA,Capt.
-2790,2784,2789,1,NA,Camilla Flach,F,1960-06-15,NA,NA
+2789,NA,NA,1,NA,Miles Carl Flach,M,1934-08-10,NA,Captain
+2790,2784,2789,1,NA,Jana Camilla Flach,F,1960-12-22,NA,NA
 2791,NA,NA,1,NA,Dick Bergstrom,M,1936-06-15,NA,NA
 2792,2785,2791,1,NA,Therese Bergstrom,F,1963-06-15,NA,NA
 2793,2785,2791,1,NA,Michael Bergstrom,M,1965-06-15,NA,NA

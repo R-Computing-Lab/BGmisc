@@ -127,6 +127,14 @@ royal92 <- df_raw <- readGedcom("data-raw/royal92.ged") %>%
     overwrite = TRUE
   ) %>%
   addPersonToPed(
+    personID = 1125, # overwriting duplicated Jean of Luxembourg
+    name = "TODO",
+    sex = "U",
+    momID = NA_integer_,
+    dadID = NA_integer_,
+    overwrite = TRUE
+  ) %>%
+  addPersonToPed(
     personID = 2300, # overwriting duplicated John Neville
     name = "TODO",
     sex = "U",
@@ -862,7 +870,7 @@ date_overrides <- tribble(
   1122, "15 SEP 1904", "18 MAR 1983", # Umberto II of Italy
   1123, "11 OCT 1927", "10 JAN 2005", # Josephine-Charlotte of Belgium
   1124, "6 JUN 1934", NA_character_, # Albert II of Belgium; living
-  1125, "5 JAN 1921", "23 APR 2019", # Jean of Luxembourg; duplicate/identity match to personID 586 likely
+  1125, NA_character_, NA_character_, # to replace
   1126, "11 JUN 1928", "5 DEC 2014", # Fabiola de Mora y Aragón
   1127, "11 SEP 1937", NA_character_, # Paola Ruffo di Calabria; living
   1128, "15 APR 1960", NA_character_, # Philippe of Belgium; living
@@ -1567,6 +1575,8 @@ date_overrides <- tribble(
   2158, "6 NOV 1892", "8 APR 1938", # George Mountbatten, 2nd Marquess of Milford Haven; likely duplicate/identity match to personID 102
   2159, "9 MAR 1963", NA_character_, # Ivar Mountbatten; living
   2160, "13 SEP 1867", "3 JUL 1939", # Wilfrid Ashley, 1st Baron Mount Temple
+  2162, "19 OCT 1910", "31 MAR 1989", #Hamilton Joseph Keyes O'Malley (Q75382629)
+
   2166, "1205", "1257", # Maelgwn Fychan and death year
   2168, "1210", "1265", # Maredudd ap Owain and death year
   2169, "1240", "1275", # Owain ap Maredudd and death year
@@ -2055,6 +2065,8 @@ date_overrides <- tribble(
   2780, "10 APR 1916", "22 DEC 2019", # Dagmar Bernadotte af Wisborg
   2781, "12 JUL 1921", "3 NOV 2018", # Oscar Bernadotte af Wisborg
   2782, "10 JAN 1926", NA_character_, # Catharina Bernadotte af Wisborg; living or death not found in this pass
+  2789, "10 AUG 1934", NA_character_, #Miles Carl Flach
+  2790, "22 DEC 1960", NA_character_, # Jana Camilla Flach
   2829, "25 JUN 1899", "4 JAN 1977", # Margaretha of Sweden / Princess Axel of Denmark
   2830, "12 AUG 1888", "14 JUL 1964", # Axel of Denmark
   2831, "7 FEB 1904", "15 APR 1991", # Elsa von Rosen
@@ -2185,7 +2197,6 @@ date_overrides <- tribble(
 )
 
 # notes:
-# 1125 likely duplicates Jean of Luxembourg already represented at personID == 586.
 
 #  1801: the row title says “King of Denmark,” but the likely identity is Sihtric Cáech/Sihtric of Northumbria or Dublin. I included the date data and noted the title/identity caution in the comment.
 
@@ -2208,8 +2219,6 @@ date_overrides <- tribble(
 
 # 2288 likely duplicates John Hastings already represented at personID == 1417.
 
-
-
 # 2359 likely duplicates Thomas Howard, 4th Duke of Norfolk, already represented at personID == 2326.
 
 # 2371 likely duplicates Margaret Audley already represented at personID == 2325.
@@ -2230,15 +2239,10 @@ date_overrides <- tribble(
 # 2689, 2690: likely duplicate/identity matches to the Württemberg/Brandenburg-Schwedt parents already represented at personID == 1067 and 1068.
 # 2839 is listed as Mary, but the row clearly matches Marie Bonaparte through the father Roland Bonaparte and the marriage to Prince George of Greece.
 
-# 2867, 2868, and 2872 required approximate mid-month values because the available date information was month-level. I used parse-compatible dates and marked them as approximate.
-
-# 2878 Charles IV has a one-day death-date discrepancy. I used 20 JAN 1819, while noting that some sources give 19 JAN 1819.
-
-# 2921 appears to be Marie Louise Élisabeth d’Orléans, Duchess of Berry. The current row’s death-year placeholder appears to be wrong, so I used 21 JUL 1719.
 
 # 2964, 2965, and 2967 resolve the Greek/Yugoslav branch: Olga of Greece and Denmark, Prince Paul of Yugoslavia, and Elizabeth of Greece and Denmark.
 
-# 3009 is only identifiable as an infant Cartland row in this pass, so I used year-level dates only rather than fabricating precision.
+
 
 name_overrides <- tribble(
   ~personID, ~name_override,
@@ -2635,6 +2639,7 @@ name_overrides <- tribble(
   2158, "George Mountbatten",
   2159, "Ivar Mountbatten",
   2160, "Wilfrid Ashley",
+  2162, "Hamilton Joseph Keyes-O'Malley",
   2169, "Owain ap Maredudd",
   2170, "Llywelyn ap Owain",
   2171, "Thomas ap Llywelyn",
@@ -2912,6 +2917,8 @@ name_overrides <- tribble(
   2780, "Dagmar Bernadotte af Wisborg",
   2781, "Oscar Bernadotte af Wisborg",
   2782, "Catharina Bernadotte af Wisborg",
+  2789, "Miles Carl Flach",
+  2790, "Jana Camilla Flach",
   2829, "Margaretha of Sweden",
   2832, "Madeleine Bernadotte af Wisborg",
   2839, "Marie Bonaparte",
@@ -3175,6 +3182,7 @@ royal92_cleaned <- royal92 %>%
         c(914) ~ "Grand Duchess of Russia",
       personID == 932 ~ "Princess of Prussia",
       personID == 1051 ~ NA_character_,
+      personID == 1125  ~ NA_character_,
       personID == 1250 ~ "Earl of Bothwell",
       personID %in%
         c(1373, 1867) ~ "Count of Poitiers",
@@ -3190,6 +3198,8 @@ royal92_cleaned <- royal92 %>%
           1877, 1890,
           2295
         ) ~ "Earl of Gloucester",
+        personID %in%
+        c(1706,2162,2789) ~ "Captain",
       personID == 1802 ~ "wife of Edward the Elder",
       personID == 1804 ~ "son of Edward the Elder",
       personID == 1811 ~ "King of West Francia",
@@ -3425,7 +3435,8 @@ royal92_cleaned <- royal92 %>%
       ) ~ "F",
       TRUE ~ sex
     ),
-    name = str_replace_all(name, text_cleanup_regex) %>%
+    name = str_replace_all(name,
+                           text_cleanup_regex) %>%
       str_squish()
   )
 
@@ -3457,7 +3468,15 @@ if (FALSE) {
     group_by(famID) %>%
     group_split()
 
-  ggped <- ggPedigreeInteractive(royal92_famid[[1]],
+  royal92_trimmed1 <-
+  royal92_famid[[1]]%>% trimPedigree(
+          personID = "personID",
+    momID = "momID",
+    dadID = "dadID",
+    max_iter = 2
+      )
+
+  ggped <- ggPedigreeInteractive(royal92_trimmed1,
     personID = "personID",
     momID = "momID",
     dadID = "dadID",
@@ -3465,7 +3484,11 @@ if (FALSE) {
     config = list(
       code_male = "M",
       code_female = "F",
-      add_phantoms = TRUE
-    )
+      add_phantoms = TRUE,
+      ped_packed=T,
+      ped_align = T
+    ),
+      tooltip_columns = c("personID", "name", "title", "birth_date", "death_date")
+
   )
 }
