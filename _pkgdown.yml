@@ -10,3 +10,7 @@ reference:
       - readgedcom
       - gedcomLatToNumeric
       - gedcomLonToNumeric
+
+- title: Other functions
+  contents:
+    - matches(".*")

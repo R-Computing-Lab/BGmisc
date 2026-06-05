@@ -616,7 +616,7 @@ postProcessGedcom <- function(df_temp,
   }
   if (parse_dates == TRUE) {
     date_cols <- c("birth_date", "death_date")
-    calendar_escape_regex <- "@#D[A-Z]+@\\s*"
+    calendar_escape_regex <- "@#D[A-Z ]+@\\s*"
     date_qualifier_regex <- "\\b(?:[aA][bBfF][tT]|[bB][eE][tTfF])\\.?\\b\\s*"
 
     if (verbose == TRUE) message("Parsing date columns: ", paste(date_cols[date_cols %in% colnames(df_temp)], collapse = ", "))

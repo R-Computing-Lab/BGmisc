@@ -780,3 +780,13 @@ test_that("gedcomLonToNumeric converts E/W notation correctly", {
   expect_equal(gedcomLonToNumeric("W0.1278"), -0.1278)
   expect_true(is.na(gedcomLonToNumeric(NA_character_)))
 })
+
+test_that("gedcomLatToNumeric returns NA for unrecognised prefix", {
+  expect_true(is.na(gedcomLatToNumeric("12.34")))
+  expect_true(is.na(gedcomLatToNumeric("")))
+})
+
+test_that("gedcomLonToNumeric returns NA for unrecognised prefix", {
+  expect_true(is.na(gedcomLonToNumeric("12.34")))
+  expect_true(is.na(gedcomLonToNumeric("")))
+})

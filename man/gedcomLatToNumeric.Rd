@@ -14,5 +14,8 @@ Numeric vector of decimal degrees (positive = N, negative = S).
 }
 \description{
 Converts GEDCOM-style latitude strings like `"N51.5074"` or `"S33.8688"` to
-signed decimal degrees. Returns `NA` for `NA` input.
+signed decimal degrees. Returns `NA` for `NA` or unrecognised-prefix input.
+}
+\examples{
+gedcomLatToNumeric(c("N51.5074", "S33.8688", NA))
 }
