@@ -51,12 +51,17 @@ detectGedcomVersion <- function(lines) {
   gedc_idx <- which(grepl("^1 GEDC\\b", head_block))[1L]
   if (is.na(gedc_idx)) return("unknown")
 
+  # Guard: if GEDC is the last line of HEAD, there is no VERS to look ahead to
+  if (gedc_idx >= length(head_block)) return("unknown")
+
   # Look ahead within HEAD block for the VERS line under GEDC
   lookahead <- head_block[seq(gedc_idx + 1L, min(gedc_idx + 5L, length(head_block)))]
   vers_line <- lookahead[grepl("^2 VERS\\b", lookahead)][1L]
   if (is.na(vers_line)) return("unknown")
 
-  stringr::str_trim(stringr::str_extract(vers_line, "(?<=VERS ).*"))
+  val <- extractInfo(vers_line, "VERS")
+  if (is.na(val) || !nzchar(val)) return("unknown")
+  val
 }
 
 #' Combine Columns

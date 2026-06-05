@@ -672,6 +672,26 @@ test_that("readGedcom attaches gedcom_version attribute", {
   unlink(temp_file)
 })
 
+test_that("detectGedcomVersion returns unknown when GEDC is present but VERS is missing", {
+  lines <- c(
+    "0 HEAD",
+    "1 GEDC",
+    "1 CHAR UTF-8",
+    "0 @I1@ INDI",
+    "1 NAME Test /Person/",
+    "1 SEX M"
+  )
+  expect_equal(detectGedcomVersion(lines), "unknown")
+})
+
+test_that("readGedcom attaches gedcom_version attribute with post_process = FALSE", {
+  temp_file <- tempfile(fileext = ".ged")
+  writeLines(gedcom55_header, temp_file)
+  df <- readGedcom(temp_file, post_process = FALSE)
+  expect_equal(attr(df, "gedcom_version"), "5.5.1")
+  unlink(temp_file)
+})
+
 test_that("readGed and readgedcom aliases return the same output as readGedcom", {
   gedcom_content <- c(
     "0 @I1@ INDI",

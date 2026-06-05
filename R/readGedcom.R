@@ -167,6 +167,7 @@ readGedcom <- function(file_path,
   records <- Filter(Negate(is.null), records)
 
   if (length(records) == 0) {
+    # Returns NULL without a gedcom_version attribute; callers should check is.null() first.
     warning("No people found in file")
     return(NULL)
   }
