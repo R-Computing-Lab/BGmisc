@@ -363,31 +363,71 @@ parseNameLine <- function(line, record) {
   record
 }
 
+extractGedcomLevel <- function(line) {
+  as.integer(stringr::str_extract(line, "^\\d+"))
+}
+
+extractEventSubBlock <- function(block, start_idx) {
+  event_level <- extractGedcomLevel(block[start_idx])
+  n <- length(block)
+  if (start_idx >= n) return(character(0))
+  end_idx <- start_idx
+  for (j in (start_idx + 1L):n) {
+    if (extractGedcomLevel(block[j]) <= event_level) break
+    end_idx <- j
+  }
+  if (end_idx == start_idx) return(character(0))
+  block[(start_idx + 1L):end_idx]
+}
+
+extractInfoFromLines <- function(lines, tag) {
+  pattern <- paste0("\\b", tag, "\\b")
+  matches <- lines[grepl(pattern, lines)]
+  if (length(matches) == 0L) return(NA_character_)
+  extractInfo(matches[1L], tag)
+}
+
+extractCoordFromSubBlock <- function(sub_block, tag) {
+  # Searches all levels of the sub-block so it handles:
+  #   GEDCOM 5.5.x: LATI/LONG as direct children of the event
+  #   GEDCOM 5.5.x standard: LATI/LONG under PLAC (level+2)
+  #   GEDCOM 7.x: LATI/LONG under MAP under PLAC (level+3)
+  pattern <- paste0("\\b", tag, "\\b")
+  matches <- sub_block[grepl(pattern, sub_block)]
+  if (length(matches) == 0L) return(NA_character_)
+  extractInfo(matches[1L], tag)
+}
+
 #' Process Event Lines (Birth or Death)
 #'
 #' @description Extracts event details (e.g., date, place, cause, latitude, longitude) from a block of GEDCOM lines.
-#' For "birth": expect DATE on line i+1, PLAC on i+2, LATI on i+4, LONG on i+5.
-#' For "death": expect DATE on line i+1, PLAC on i+2, CAUS on i+3, LATI on i+4, LONG on i+5.
+#' Uses level-aware sub-block parsing so fields are looked up by tag name rather than fixed offsets.
 #' @param event A character string indicating the event type ("birth" or "death").
 #' @param block A character vector of GEDCOM lines.
 #' @param i The current line index where the event tag is found.
 #' @param record A named list representing the individual's record.
 #' @param pattern_rows A list with counts of GEDCOM tag occurrences.
-#' @return The updated record with parsed event information.#
-# For "death": expect DATE on line i+1, PLAC on i+2, CAUS on i+3, LATI on i+4, LONG on i+5.
+#' @return The updated record with parsed event information.
 processEventLine <- function(event, block, i, record, pattern_rows) {
-  n_lines <- length(block)
+  sub_block <- extractEventSubBlock(block, i)
+  if (length(sub_block) == 0L) return(record)
+
+  event_level <- extractGedcomLevel(block[i])
+  direct_children <- sub_block[
+    vapply(sub_block, extractGedcomLevel, integer(1L)) == event_level + 1L
+  ]
+
   if (event == "birth") {
-    if (i + 1 <= n_lines) record$birth_date <- extractInfo(block[i + 1], "DATE")
-    if (i + 2 <= n_lines) record$birth_place <- extractInfo(block[i + 2], "PLAC")
-    if (i + 4 <= n_lines) record$birth_lat <- extractInfo(block[i + 4], "LATI")
-    if (i + 5 <= n_lines) record$birth_long <- extractInfo(block[i + 5], "LONG")
+    record$birth_date <- extractInfoFromLines(direct_children, "DATE")
+    record$birth_place <- extractInfoFromLines(direct_children, "PLAC")
+    record$birth_lat <- extractCoordFromSubBlock(sub_block, "LATI")
+    record$birth_long <- extractCoordFromSubBlock(sub_block, "LONG")
   } else if (event == "death") {
-    if (i + 1 <= n_lines) record$death_date <- extractInfo(block[i + 1], "DATE")
-    if (i + 2 <= n_lines) record$death_place <- extractInfo(block[i + 2], "PLAC")
-    if (i + 3 <= n_lines) record$death_caus <- extractInfo(block[i + 3], "CAUS")
-    if (i + 4 <= n_lines) record$death_lat <- extractInfo(block[i + 4], "LATI")
-    if (i + 5 <= n_lines) record$death_long <- extractInfo(block[i + 5], "LONG")
+    record$death_date <- extractInfoFromLines(direct_children, "DATE")
+    record$death_place <- extractInfoFromLines(direct_children, "PLAC")
+    record$death_caus <- extractInfoFromLines(direct_children, "CAUS")
+    record$death_lat <- extractCoordFromSubBlock(sub_block, "LATI")
+    record$death_long <- extractCoordFromSubBlock(sub_block, "LONG")
   }
   record
 }
