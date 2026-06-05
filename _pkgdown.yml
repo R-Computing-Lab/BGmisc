@@ -1,3 +1,12 @@
 url: https://r-computing-lab.github.io/BGmisc
 template:
   bootstrap: 5
+
+reference:
+  - title: GEDCOM I/O
+    contents:
+      - readGedcom
+      - readGed
+      - readgedcom
+      - gedcomLatToNumeric
+      - gedcomLonToNumeric

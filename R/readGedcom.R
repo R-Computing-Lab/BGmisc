@@ -616,21 +616,29 @@ postProcessGedcom <- function(df_temp,
   }
   if (parse_dates == TRUE) {
     date_cols <- c("birth_date", "death_date")
-    if (verbose == TRUE) message("Parsing date columns: ", paste(date_cols[date_cols %in% colnames(df_temp)], collapse = ", "))
-    # GEDCOM date qualifiers like "ABT", "BEF", "AFT" can be present in date strings. We can remove them before parsing.
+    calendar_escape_regex <- "@#D[A-Z]+@\\s*"
     date_qualifier_regex <- "\\b(?:[aA][bBfF][tT]|[bB][eE][tTfF])\\.?\\b\\s*"
 
-    if (verbose == TRUE && any(sapply(df_temp[date_cols], function(col) any(grepl(date_qualifier_regex, col, perl = TRUE))))
-    ) {
-      message("Found date qualifiers in date columns. They will be removed before parsing.")
+    if (verbose == TRUE) message("Parsing date columns: ", paste(date_cols[date_cols %in% colnames(df_temp)], collapse = ", "))
+
+    if (verbose == TRUE && any(date_cols %in% colnames(df_temp))) {
+      has_qualifiers <- any(sapply(
+        df_temp[date_cols[date_cols %in% colnames(df_temp)]],
+        function(col) any(grepl(date_qualifier_regex, col, perl = TRUE))
+      ))
+      if (has_qualifiers) {
+        message("Found date qualifiers in date columns. They will be removed before parsing.")
+      }
     }
 
     # only parse date columns that are present in the data frame
-    if (any(date_cols %in% colnames(df_temp))) {
-      df_temp[date_cols] <- lapply(df_temp[date_cols], function(x) {
+    present_date_cols <- date_cols[date_cols %in% colnames(df_temp)]
+    if (length(present_date_cols) > 0) {
+      df_temp[present_date_cols] <- lapply(df_temp[present_date_cols], function(x) {
         if (is.character(x)) {
+          x <- stringr::str_replace_all(x, calendar_escape_regex, "")
           x <- stringr::str_replace_all(x, date_qualifier_regex, "")
-          as.Date(x, format = "%d %b %Y")
+          as.Date(stringr::str_trim(x), format = "%d %b %Y")
         } else {
           x
         }

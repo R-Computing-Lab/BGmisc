@@ -64,6 +64,36 @@ detectGedcomVersion <- function(lines) {
   val
 }
 
+#' Convert GEDCOM Latitude String to Numeric
+#'
+#' Converts GEDCOM-style latitude strings like `"N51.5074"` or `"S33.8688"` to
+#' signed decimal degrees. Returns `NA` for `NA` input.
+#'
+#' @param x Character vector of GEDCOM latitude values.
+#' @return Numeric vector of decimal degrees (positive = N, negative = S).
+#' @export
+gedcomLatToNumeric <- function(x) {
+  ifelse(is.na(x), NA_real_, {
+    sign <- ifelse(startsWith(x, "N"), 1, -1)
+    sign * as.numeric(substring(x, 2))
+  })
+}
+
+#' Convert GEDCOM Longitude String to Numeric
+#'
+#' Converts GEDCOM-style longitude strings like `"E151.2093"` or `"W0.1278"` to
+#' signed decimal degrees. Returns `NA` for `NA` input.
+#'
+#' @param x Character vector of GEDCOM longitude values.
+#' @return Numeric vector of decimal degrees (positive = E, negative = W).
+#' @export
+gedcomLonToNumeric <- function(x) {
+  ifelse(is.na(x), NA_real_, {
+    sign <- ifelse(startsWith(x, "E"), 1, -1)
+    sign * as.numeric(substring(x, 2))
+  })
+}
+
 #' Combine Columns
 #'
 #' This function combines two columns, handling conflicts and merging non-conflicting data.

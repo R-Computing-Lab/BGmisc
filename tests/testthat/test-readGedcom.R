@@ -715,3 +715,68 @@ test_that("readGed and readgedcom aliases return the same output as readGedcom",
 
   unlink(temp_file)
 })
+
+gedcom7_map_content <- c(
+  "0 HEAD",
+  "1 GEDC",
+  "2 VERS 7.0",
+  "0 @I1@ INDI",
+  "1 NAME Test /Person/",
+  "1 SEX F",
+  "1 BIRT",
+  "2 DATE 1 JAN 2000",
+  "2 PLAC London, England",
+  "3 MAP",
+  "4 LATI N51.5074",
+  "4 LONG W0.1278",
+  "1 DEAT",
+  "2 DATE 31 DEC 2080",
+  "2 PLAC Edinburgh, Scotland",
+  "3 MAP",
+  "4 LATI N55.9533",
+  "4 LONG W3.1883"
+)
+
+gedcom_calendar_escape_content <- c(
+  "0 HEAD",
+  "1 GEDC",
+  "2 VERS 5.5",
+  "0 @I1@ INDI",
+  "1 NAME Old /Style/",
+  "1 SEX M",
+  "1 BIRT",
+  "2 DATE @#DGREGORIAN@ 15 JUL 1823"
+)
+
+test_that("readGedcom parses GEDCOM 7.x MAP coordinate structure", {
+  temp_file <- tempfile(fileext = ".ged")
+  writeLines(gedcom7_map_content, temp_file)
+  df <- readGedcom(temp_file)
+  expect_equal(attr(df, "gedcom_version"), "7.0")
+  expect_equal(df$birth_lat[1], "N51.5074")
+  expect_equal(df$birth_long[1], "W0.1278")
+  expect_equal(df$death_lat[1], "N55.9533")
+  expect_equal(df$death_long[1], "W3.1883")
+  unlink(temp_file)
+})
+
+test_that("parse_dates strips GEDCOM 5.5 calendar escape before parsing", {
+  temp_file <- tempfile(fileext = ".ged")
+  writeLines(gedcom_calendar_escape_content, temp_file)
+  df <- readGedcom(temp_file, parse_dates = TRUE)
+  expect_false(is.na(df$birth_date[1]))
+  expect_equal(format(df$birth_date[1], "%d %b %Y"), "15 Jul 1823")
+  unlink(temp_file)
+})
+
+test_that("gedcomLatToNumeric converts N/S notation correctly", {
+  expect_equal(gedcomLatToNumeric("N51.5074"), 51.5074)
+  expect_equal(gedcomLatToNumeric("S33.8688"), -33.8688)
+  expect_true(is.na(gedcomLatToNumeric(NA_character_)))
+})
+
+test_that("gedcomLonToNumeric converts E/W notation correctly", {
+  expect_equal(gedcomLonToNumeric("E151.2093"), 151.2093)
+  expect_equal(gedcomLonToNumeric("W0.1278"), -0.1278)
+  expect_true(is.na(gedcomLonToNumeric(NA_character_)))
+})
