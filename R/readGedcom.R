@@ -123,6 +123,8 @@ readGedcom <- function(file_path,
   }
   if (verbose == TRUE) message("Reading file: ", file_path)
   lines <- readLines(file_path)
+  gedcom_version <- detectGedcomVersion(lines)
+  if (verbose) message("Detected GEDCOM version: ", gedcom_version)
   total_lines <- length(lines)
   if (verbose == TRUE) message("File is ", total_lines, " lines long")
 
@@ -190,6 +192,7 @@ readGedcom <- function(file_path,
     )
   }
 
+  attr(df_temp, "gedcom_version") <- gedcom_version
   df_temp
 }
 

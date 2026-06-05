@@ -32,6 +32,8 @@ test_that("readGedcom parses death event correctly for legacy", {
   row.names(df) <- NULL
   row.names(df_leg) <- NULL
   df_leg <- dplyr::rename(df_leg, personID = id)
+  # Strip the gedcom_version attribute added by readGedcom before comparing
+  attr(df, "gedcom_version") <- NULL
   expect_equal(df_leg, df)
 
   unlink(temp_file)

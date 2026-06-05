@@ -34,6 +34,31 @@ collapseNames <- function(verbose, df_temp) {
   df_temp
 }
 
+#' Detect GEDCOM Version from File Lines
+#'
+#' @param lines Character vector of lines from a GEDCOM file.
+#' @return A string such as `"5.5.1"`, `"7.0"`, or `"unknown"`.
+#' @keywords internal
+detectGedcomVersion <- function(lines) {
+  head_idx <- which(grepl("^0 HEAD\\b", lines))[1L]
+  if (is.na(head_idx)) return("unknown")
+
+  # End of HEAD is the next level-0 record
+  next_l0 <- which(grepl("^0 ", lines[(head_idx + 1L):length(lines)]))[1L]
+  head_end <- if (is.na(next_l0)) length(lines) else head_idx + next_l0 - 1L
+  head_block <- lines[head_idx:head_end]
+
+  gedc_idx <- which(grepl("^1 GEDC\\b", head_block))[1L]
+  if (is.na(gedc_idx)) return("unknown")
+
+  # Look ahead within HEAD block for the VERS line under GEDC
+  lookahead <- head_block[seq(gedc_idx + 1L, min(gedc_idx + 5L, length(head_block)))]
+  vers_line <- lookahead[grepl("^2 VERS\\b", lookahead)][1L]
+  if (is.na(vers_line)) return("unknown")
+
+  stringr::str_trim(stringr::str_extract(vers_line, "(?<=VERS ).*"))
+}
+
 #' Combine Columns
 #'
 #' This function combines two columns, handling conflicts and merging non-conflicting data.

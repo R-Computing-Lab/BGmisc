@@ -243,6 +243,8 @@ test_that("readGedcom parses death event correctly", {
   row.names(df) <- NULL
   row.names(df_leg) <- NULL
   df_leg <- dplyr::rename(df_leg, personID = id)
+  # Strip the gedcom_version attribute added by readGedcom before comparing
+  attr(df, "gedcom_version") <- NULL
   expect_equal(df_leg, df)
 
   unlink(temp_file)
@@ -632,6 +634,41 @@ test_that("processEventLine handles reordered subfields correctly", {
   expect_equal(df$birth_place[1], "New York")
   expect_equal(df$birth_lat[1], "N40.7128")
   expect_equal(df$birth_long[1], "W74.0060")
+  unlink(temp_file)
+})
+
+gedcom55_header <- c(
+  "0 HEAD",
+  "1 GEDC",
+  "2 VERS 5.5.1",
+  "2 FORM LINEAGE-LINKED",
+  "1 CHAR UTF-8",
+  "0 @I1@ INDI",
+  "1 NAME Test /Person/",
+  "1 SEX M"
+)
+
+gedcom7_header <- c(
+  "0 HEAD",
+  "1 GEDC",
+  "2 VERS 7.0",
+  "1 CHAR UTF-8",
+  "0 @I1@ INDI",
+  "1 NAME Test /Person/",
+  "1 SEX M"
+)
+
+test_that("detectGedcomVersion returns correct version string", {
+  expect_equal(detectGedcomVersion(gedcom55_header), "5.5.1")
+  expect_equal(detectGedcomVersion(gedcom7_header), "7.0")
+  expect_equal(detectGedcomVersion(c("0 @I1@ INDI", "1 NAME No /Head/")), "unknown")
+})
+
+test_that("readGedcom attaches gedcom_version attribute", {
+  temp_file <- tempfile(fileext = ".ged")
+  writeLines(gedcom55_header, temp_file)
+  df <- readGedcom(temp_file)
+  expect_equal(attr(df, "gedcom_version"), "5.5.1")
   unlink(temp_file)
 })
 
