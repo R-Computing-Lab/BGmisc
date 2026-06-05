@@ -20,12 +20,14 @@
 #' including name prefix, name suffix, nickname, and married surname.
 #'
 #' Birth and death events are recognized from `BIRT` and `DEAT` tags. Event
-#' details are currently parsed using fixed offsets within the individual block.
-#' For birth events, the parser expects `DATE` at `i + 1`, `PLAC` at `i + 2`,
-#' `LATI` at `i + 4`, and `LONG` at `i + 5`. For death events, the parser
-#' expects `DATE` at `i + 1`, `PLAC` at `i + 2`, `CAUS` at `i + 3`, `LATI` at
-#' `i + 4`, and `LONG` at `i + 5`. Missing elements leave the corresponding
-#' output fields as `NA`.
+#' details are parsed by collecting all child lines whose GEDCOM level equals
+#' the event level plus one (direct children), then looking up sub-fields by
+#' tag name. `DATE`, `PLAC`, and `CAUS` are matched as direct children of the
+#' event. Coordinates (`LATI` and `LONG`) are searched across all descendant
+#' lines, which allows them to be located whether they appear as direct children
+#' (common in some GEDCOM 5.5.x exporters), under `PLAC` (standard GEDCOM
+#' 5.5.1), or under a `MAP` substructure under `PLAC` (GEDCOM 7.x). Missing
+#' sub-fields leave the corresponding output columns as `NA`.
 #'
 #' Attribute tags such as `OCCU`, `EDUC`, `RELI`, `CAST`, `NCHI`, `NMR`, `NATI`,
 #' `RESI`, `PROP`, `SSN`, `TITL`, `DSCR`, and `IDNO` are parsed directly into
@@ -370,6 +372,8 @@ extractGedcomLevel <- function(line) {
 extractEventSubBlock <- function(block, start_idx) {
   event_level <- extractGedcomLevel(block[start_idx])
   n <- length(block)
+  # start_idx is always within bounds because it comes from a bounded loop in the caller,
+  # but guard defensively to avoid the descending-sequence pitfall of R's : operator.
   if (start_idx >= n) return(character(0))
   end_idx <- start_idx
   for (j in (start_idx + 1L):n) {
