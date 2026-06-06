@@ -44,6 +44,7 @@ detectGedcomVersion <- function(lines) {
   if (is.na(head_idx)) return("unknown")
 
   # End of HEAD is the next level-0 record
+  if (head_idx >= length(lines)) return("unknown")
   next_l0 <- which(grepl("^0 ", lines[(head_idx + 1L):length(lines)]))[1L]
   head_end <- if (is.na(next_l0)) length(lines) else head_idx + next_l0 - 1L
   head_block <- lines[head_idx:head_end]
@@ -75,10 +76,10 @@ detectGedcomVersion <- function(lines) {
 #' gedcomLatToNumeric(c("N51.5074", "S33.8688", NA))
 #' @export
 gedcomLatToNumeric <- function(x) {
-  is_north <- startsWith(x, "N")
-  is_valid <- is_north | startsWith(x, "S")
-  result   <- as.numeric(substring(x, 2)) * ifelse(is_north, 1, -1)
-  ifelse(is.na(x) | !is_valid, NA_real_, result)
+  out <- rep(NA_real_, length(x))
+  ok <- !is.na(x) & (startsWith(x, "N") | startsWith(x, "S"))
+  out[ok] <- as.numeric(substring(x[ok], 2)) * ifelse(startsWith(x[ok], "N"), 1, -1)
+  out
 }
 
 #' Convert GEDCOM Longitude String to Numeric
@@ -92,10 +93,10 @@ gedcomLatToNumeric <- function(x) {
 #' gedcomLonToNumeric(c("E151.2093", "W0.1278", NA))
 #' @export
 gedcomLonToNumeric <- function(x) {
-  is_east  <- startsWith(x, "E")
-  is_valid <- is_east | startsWith(x, "W")
-  result   <- as.numeric(substring(x, 2)) * ifelse(is_east, 1, -1)
-  ifelse(is.na(x) | !is_valid, NA_real_, result)
+  out <- rep(NA_real_, length(x))
+  ok <- !is.na(x) & (startsWith(x, "E") | startsWith(x, "W"))
+  out[ok] <- as.numeric(substring(x[ok], 2)) * ifelse(startsWith(x[ok], "E"), 1, -1)
+  out
 }
 
 #' Combine Columns

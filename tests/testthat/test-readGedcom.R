@@ -659,9 +659,9 @@ gedcom7_header <- c(
 )
 
 test_that("detectGedcomVersion returns correct version string", {
-  expect_equal(detectGedcomVersion(gedcom55_header), "5.5.1")
-  expect_equal(detectGedcomVersion(gedcom7_header), "7.0")
-  expect_equal(detectGedcomVersion(c("0 @I1@ INDI", "1 NAME No /Head/")), "unknown")
+  expect_equal(BGmisc:::detectGedcomVersion(gedcom55_header), "5.5.1")
+  expect_equal(BGmisc:::detectGedcomVersion(gedcom7_header), "7.0")
+  expect_equal(BGmisc:::detectGedcomVersion(c("0 @I1@ INDI", "1 NAME No /Head/")), "unknown")
 })
 
 test_that("readGedcom attaches gedcom_version attribute", {
@@ -681,7 +681,7 @@ test_that("detectGedcomVersion returns unknown when GEDC is present but VERS is 
     "1 NAME Test /Person/",
     "1 SEX M"
   )
-  expect_equal(detectGedcomVersion(lines), "unknown")
+  expect_equal(BGmisc:::detectGedcomVersion(lines), "unknown")
 })
 
 test_that("readGedcom attaches gedcom_version attribute with post_process = FALSE", {

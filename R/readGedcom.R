@@ -381,7 +381,9 @@ extractEventSubBlock <- function(block, start_idx) {
   if (start_idx >= n) return(character(0))
   end_idx <- start_idx
   for (j in (start_idx + 1L):n) {
-    if (extractGedcomLevel(block[j]) <= event_level) break
+    lvl <- extractGedcomLevel(block[j])
+    if (is.na(lvl)) next
+    if (lvl <= event_level) break
     end_idx <- j
   }
   if (end_idx == start_idx) return(character(0))

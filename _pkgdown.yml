@@ -11,6 +11,6 @@ reference:
       - gedcomLatToNumeric
       - gedcomLonToNumeric
 
-- title: Other functions
-  contents:
-    - matches(".*")
+  - title: Other functions
+    contents:
+      - matches(".*")
