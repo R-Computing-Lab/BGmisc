@@ -73,7 +73,7 @@ detectGedcomVersion <- function(lines) {
 #' @param x Character vector of GEDCOM latitude values.
 #' @return Numeric vector of decimal degrees (positive = N, negative = S).
 #' @examples
-#' gedcomLatToNumeric(c("N51.5074", "S33.8688", NA))
+#' BGmisc:::gedcomLatToNumeric(c("N51.5074", "S33.8688", NA))
 #' @keywords internal
 gedcomLatToNumeric <- function(x) {
   out <- rep(NA_real_, length(x))
@@ -90,7 +90,7 @@ gedcomLatToNumeric <- function(x) {
 #' @param x Character vector of GEDCOM longitude values.
 #' @return Numeric vector of decimal degrees (positive = E, negative = W).
 #' @examples
-#' gedcomLonToNumeric(c("E151.2093", "W0.1278", NA))
+#' BGmisc:::gedcomLonToNumeric(c("E151.2093", "W0.1278", NA))
 #' @keywords internal
 gedcomLonToNumeric <- function(x) {
   out <- rep(NA_real_, length(x))
