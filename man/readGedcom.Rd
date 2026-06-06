@@ -9,39 +9,42 @@
 readGedcom(
   file_path,
   verbose = FALSE,
+  post_process = TRUE,
   add_parents = TRUE,
   remove_empty_cols = TRUE,
   combine_cols = TRUE,
   skinny = FALSE,
   parse_dates = FALSE,
+  clean_names = TRUE,
   update_rate = 1000,
-  post_process = TRUE,
   ...
 )
 
 readGed(
   file_path,
   verbose = FALSE,
+  post_process = TRUE,
   add_parents = TRUE,
   remove_empty_cols = TRUE,
   combine_cols = TRUE,
   skinny = FALSE,
   parse_dates = FALSE,
+  clean_names = TRUE,
   update_rate = 1000,
-  post_process = TRUE,
   ...
 )
 
 readgedcom(
   file_path,
   verbose = FALSE,
+  post_process = TRUE,
   add_parents = TRUE,
   remove_empty_cols = TRUE,
   combine_cols = TRUE,
   skinny = FALSE,
   parse_dates = FALSE,
+  clean_names = TRUE,
   update_rate = 1000,
-  post_process = TRUE,
   ...
 )
 }
@@ -50,11 +53,13 @@ readgedcom(
 
 \item{verbose}{Logical. If `TRUE`, print progress messages.}
 
+\item{post_process}{Logical. If `TRUE`, apply post-processing steps controlled
+by `add_parents`, `combine_cols`, `remove_empty_cols`, `skinny`, and `parse_dates`.}
+
 \item{add_parents}{Logical. If `TRUE`, infer `momID` and `dadID` from `FAMC`
 and `FAMS` mappings during post-processing.}
 
-\item{remove_empty_cols}{Logical. If `TRUE`, drop columns that are entirely
-`NA` during post-processing.}
+\item{remove_empty_cols}{Logical indicating whether to remove columns that are entirely missing.}
 
 \item{combine_cols}{Logical. If `TRUE`, combine redundant name columns, such
 as `name_given` with `name_given_pieces` and `name_surn` with
@@ -65,11 +70,10 @@ as `name_given` with `name_given_pieces` and `name_surn` with
 
 \item{parse_dates}{Logical. If `TRUE`, attempt to parse date columns (e.g., `birth_date`, `death_date`) into Date objects, after removing common GEDCOM date qualifiers like "ABT", "BEF", and "AFT".}
 
+\item{clean_names}{Logical indicating whether to clean name columns by removing trailing slashes and squishing whitespace.}
+
 \item{update_rate}{Numeric. Intended rate at which progress messages should
 be printed. Currently unused.}
-
-\item{post_process}{Logical. If `TRUE`, apply post-processing steps controlled
-by `add_parents`, `combine_cols`, `remove_empty_cols`, `skinny`, and `parse_dates`.}
 
 \item{...}{Additional arguments. Currently unused.}
 }

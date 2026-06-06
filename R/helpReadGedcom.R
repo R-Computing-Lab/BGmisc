@@ -18,7 +18,7 @@ initializeRecord <- function(all_var_names) {
 #' @param df_temp A data frame containing the columns to be combined.
 #' @return A data frame with the combined columns.
 collapseNames <- function(verbose, df_temp) {
-  if (verbose == TRUE) message("Combining Duplicate Columns")
+  if (verbose == TRUE) message("Combining Duplicate Name Columns...")
 
   if (!all(is.na(df_temp$name_given_pieces)) || !all(is.na(df_temp$name_given))) {
     result <- combineColumns(df_temp$name_given, df_temp$name_given_pieces)
@@ -74,7 +74,7 @@ detectGedcomVersion <- function(lines) {
 #' @return Numeric vector of decimal degrees (positive = N, negative = S).
 #' @examples
 #' gedcomLatToNumeric(c("N51.5074", "S33.8688", NA))
-#' @export
+#' @keywords internal
 gedcomLatToNumeric <- function(x) {
   out <- rep(NA_real_, length(x))
   ok <- !is.na(x) & (startsWith(x, "N") | startsWith(x, "S"))
@@ -91,7 +91,7 @@ gedcomLatToNumeric <- function(x) {
 #' @return Numeric vector of decimal degrees (positive = E, negative = W).
 #' @examples
 #' gedcomLonToNumeric(c("E151.2093", "W0.1278", NA))
-#' @export
+#' @keywords internal
 gedcomLonToNumeric <- function(x) {
   out <- rep(NA_real_, length(x))
   ok <- !is.na(x) & (startsWith(x, "E") | startsWith(x, "W"))

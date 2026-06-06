@@ -47,20 +47,22 @@
 #'
 #' @param file_path Character string. Path to the GEDCOM file.
 #' @param verbose Logical. If `TRUE`, print progress messages.
-#' @param add_parents Logical. If `TRUE`, infer `momID` and `dadID` from `FAMC`
-#'   and `FAMS` mappings during post-processing.
 #' @param remove_empty_cols Logical. If `TRUE`, drop columns that are entirely
 #'   `NA` during post-processing.
-#' @param combine_cols Logical. If `TRUE`, combine redundant name columns, such
-#'   as `name_given` with `name_given_pieces` and `name_surn` with
-#'   `name_surn_pieces`, when their values do not conflict.
-#' @param parse_dates Logical. If `TRUE`, attempt to parse date columns (e.g., `birth_date`, `death_date`) into Date objects, after removing common GEDCOM date qualifiers like "ABT", "BEF", and "AFT".
 #' @param skinny Logical. If `TRUE`, return a slimmer data frame by dropping
 #'   `FAMC`, `FAMS`, and columns that are entirely `NA` during post-processing.
 #' @param update_rate Numeric. Intended rate at which progress messages should
 #'   be printed. Currently unused.
 #' @param post_process Logical. If `TRUE`, apply post-processing steps controlled
 #'   by `add_parents`, `combine_cols`, `remove_empty_cols`, `skinny`, and `parse_dates`.
+#' @param remove_empty_cols Logical indicating whether to remove columns that are entirely missing.
+#' @param combine_cols Logical. If `TRUE`, combine redundant name columns, such
+#'   as `name_given` with `name_given_pieces` and `name_surn` with
+#'   `name_surn_pieces`, when their values do not conflict.
+#' @param add_parents Logical. If `TRUE`, infer `momID` and `dadID` from `FAMC`
+#'   and `FAMS` mappings during post-processing.
+#' @param parse_dates Logical. If `TRUE`, attempt to parse date columns (e.g., `birth_date`, `death_date`) into Date objects, after removing common GEDCOM date qualifiers like "ABT", "BEF", and "AFT".
+#' @param clean_names Logical indicating whether to clean name columns by removing trailing slashes and squishing whitespace.
 #' @param ... Additional arguments. Currently unused.
 #' @return A data frame containing information about individuals, with the following potential columns:
 #' \describe{
@@ -109,13 +111,15 @@
 #'
 readGedcom <- function(file_path,
                        verbose = FALSE,
+                       post_process = TRUE,
                        add_parents = TRUE,
                        remove_empty_cols = TRUE,
                        combine_cols = TRUE,
                        skinny = FALSE,
                        parse_dates = FALSE,
+                       clean_names = TRUE,
                        update_rate = 1000,
-                       post_process = TRUE,
+
                        ...) {
   # Ensure the file exists and read all lines.
   if (!file.exists(file_path)) {
@@ -188,6 +192,7 @@ readGedcom <- function(file_path,
       combine_cols = combine_cols,
       parse_dates = parse_dates,
       add_parents = add_parents,
+      clean_names = clean_names,
       skinny = skinny,
       verbose = verbose
     )
@@ -460,8 +465,11 @@ processEventLine <- function(event, block, i, record, pattern_rows) {
 applyTagMappings <- function(line, record, pattern_rows, tag_mappings) {
   for (mapping in tag_mappings) {
     extractor <- if (is.null(mapping$extractor)) NULL else mapping$extractor
-    result <- processTag(mapping$tag, mapping$field, pattern_rows, line, record,
-      extractor = extractor, mode = mapping$mode
+    result <- processTag(mapping$tag,
+                         mapping$field,
+                         pattern_rows, line, record,
+                         extractor = extractor,
+                         mode = mapping$mode
     )
     record <- result$vars
     if (result$matched) {
@@ -589,20 +597,16 @@ processTag <- function(tag,
 #'
 #' @description This function optionally adds parent information, combines duplicate columns,
 #' and removes empty columns from the GEDCOM data frame. It is called by \code{readGedcom()} if \code{post_process = TRUE}.
-#'
+#' @inheritParams readGedcom
 #' @param df_temp A data frame produced by \code{readGedcom()}.
-#' @param remove_empty_cols Logical indicating whether to remove columns that are entirely missing.
-#' @param combine_cols Logical indicating whether to combine columns with duplicate values.
-#' @param add_parents Logical indicating whether to add parent information.
-#' @param parse_dates Logical indicating whether to parse date columns into Date objects.
-#' @param skinny Logical indicating whether to slim down the data frame.
 #' @param verbose Logical indicating whether to print progress messages.
 #' @return The post-processed data frame.
 postProcessGedcom <- function(df_temp,
                               remove_empty_cols = TRUE,
                               combine_cols = TRUE,
-                              parse_dates = FALSE,
                               add_parents = TRUE,
+                              parse_dates = FALSE,
+                              clean_names = TRUE,
                               skinny = TRUE,
                               verbose = FALSE) {
   if (add_parents == TRUE) {
@@ -621,14 +625,16 @@ postProcessGedcom <- function(df_temp,
     calendar_escape_regex <- "@#D[A-Z ]+@\\s*"
     date_qualifier_regex <- "\\b(?:[aA][bBfF][tT]|[bB][eE][tTfF])\\.?\\b\\s*"
 
-    if (verbose == TRUE) message("Parsing date columns: ", paste(date_cols[date_cols %in% colnames(df_temp)], collapse = ", "))
+    if (verbose == TRUE) {
+      message("Parsing date columns: ", paste(date_cols[date_cols %in% colnames(df_temp)], collapse = ", "))
+    }
 
     if (verbose == TRUE && any(date_cols %in% colnames(df_temp))) {
       has_qualifiers <- any(sapply(
         df_temp[date_cols[date_cols %in% colnames(df_temp)]],
         function(col) any(grepl(date_qualifier_regex, col, perl = TRUE))
       ))
-      if (has_qualifiers) {
+      if (has_qualifiers==TRUE) {
         message("Found date qualifiers in date columns. They will be removed before parsing.")
       }
     }
@@ -646,6 +652,21 @@ postProcessGedcom <- function(df_temp,
         }
       })
     }
+  }
+  if (clean_names == TRUE) {
+    if (verbose == TRUE) message("Cleaning column names")
+    name_cols <- grep("^name", colnames(df_temp), value = TRUE)
+     if (verbose == TRUE && any(name_cols %in% colnames(df_temp))) {
+      message("Cleaning name columns: ", paste(name_cols, collapse = ", "))
+     }
+    df_temp[name_cols] <- lapply(df_temp[name_cols], function(x) {
+      if (is.character(x)) { # remove / at end of names if present, and squish whitespace
+        stringr::str_squish(stringr::str_replace(x,"/+$", ""))
+      } else {
+        x
+      }
+    }
+    )
   }
   if (skinny == TRUE) {
     if (verbose == TRUE) message("Slimming down the data frame")

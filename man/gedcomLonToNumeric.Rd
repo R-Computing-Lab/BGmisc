@@ -19,3 +19,4 @@ signed decimal degrees. Returns `NA` for `NA` or unrecognised-prefix input.
 \examples{
 gedcomLonToNumeric(c("E151.2093", "W0.1278", NA))
 }
+\keyword{internal}
