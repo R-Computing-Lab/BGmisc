@@ -3,6 +3,7 @@
 * Optimized gedcom reader, com2links for speed and memory usage, with a focus on large pedigrees
 * Fixed bug in gedcom reader that resulted in document records being added to the final person in the pedigree
 * Added more unit tests for gedcom reader and data parser
+* several improvements to the GEDCOM parsing functionality, focusing on more robust and flexible event parsing, better support for different GEDCOM versions, and enhanced usability.
 * Optimized sliceFamilies to be more abstract, and no longer require mtdna
 * Created `.require_openmx()` to make it easier to use OpenMx functions without making OpenMx a dependency
 * Smarter string ID handling for ped2id

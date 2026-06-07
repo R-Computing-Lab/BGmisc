@@ -8,8 +8,9 @@ postProcessGedcom(
   df_temp,
   remove_empty_cols = TRUE,
   combine_cols = TRUE,
-  parse_dates = FALSE,
   add_parents = TRUE,
+  parse_dates = FALSE,
+  clean_names = TRUE,
   skinny = TRUE,
   verbose = FALSE
 )
@@ -19,13 +20,19 @@ postProcessGedcom(
 
 \item{remove_empty_cols}{Logical indicating whether to remove columns that are entirely missing.}
 
-\item{combine_cols}{Logical indicating whether to combine columns with duplicate values.}
+\item{combine_cols}{Logical. If `TRUE`, combine redundant name columns, such
+as `name_given` with `name_given_pieces` and `name_surn` with
+`name_surn_pieces`, when their values do not conflict.}
 
-\item{parse_dates}{Logical indicating whether to parse date columns into Date objects.}
+\item{add_parents}{Logical. If `TRUE`, infer `momID` and `dadID` from `FAMC`
+and `FAMS` mappings during post-processing.}
 
-\item{add_parents}{Logical indicating whether to add parent information.}
+\item{parse_dates}{Logical. If `TRUE`, attempt to parse date columns (e.g., `birth_date`, `death_date`) into Date objects, after removing common GEDCOM date qualifiers like "ABT", "BEF", and "AFT".}
 
-\item{skinny}{Logical indicating whether to slim down the data frame.}
+\item{clean_names}{Logical indicating whether to clean name columns by removing trailing slashes and squishing whitespace.}
+
+\item{skinny}{Logical. If `TRUE`, return a slimmer data frame by dropping
+`FAMC`, `FAMS`, and columns that are entirely `NA` during post-processing.}
 
 \item{verbose}{Logical indicating whether to print progress messages.}
 }

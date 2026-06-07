@@ -18,7 +18,7 @@ initializeRecord <- function(all_var_names) {
 #' @param df_temp A data frame containing the columns to be combined.
 #' @return A data frame with the combined columns.
 collapseNames <- function(verbose, df_temp) {
-  if (verbose == TRUE) message("Combining Duplicate Columns")
+  if (verbose == TRUE) message("Combining Duplicate Name Columns...")
 
   if (!all(is.na(df_temp$name_given_pieces)) || !all(is.na(df_temp$name_given))) {
     result <- combineColumns(df_temp$name_given, df_temp$name_given_pieces)
@@ -32,6 +32,71 @@ collapseNames <- function(verbose, df_temp) {
     if (!result$retain_col2) df_temp$name_surn_pieces <- NULL
   }
   df_temp
+}
+
+#' Detect GEDCOM Version from File Lines
+#'
+#' @param lines Character vector of lines from a GEDCOM file.
+#' @return A string such as `"5.5.1"`, `"7.0"`, or `"unknown"`.
+#' @keywords internal
+detectGedcomVersion <- function(lines) {
+  head_idx <- which(grepl("^0 HEAD\\b", lines))[1L]
+  if (is.na(head_idx)) return("unknown")
+
+  # End of HEAD is the next level-0 record
+  if (head_idx >= length(lines)) return("unknown")
+  next_l0 <- which(grepl("^0 ", lines[(head_idx + 1L):length(lines)]))[1L]
+  head_end <- if (is.na(next_l0)) length(lines) else head_idx + next_l0 - 1L
+  head_block <- lines[head_idx:head_end]
+
+  gedc_idx <- which(grepl("^1 GEDC\\b", head_block))[1L]
+  if (is.na(gedc_idx)) return("unknown")
+
+  # Guard: if GEDC is the last line of HEAD, there is no VERS to look ahead to
+  if (gedc_idx >= length(head_block)) return("unknown")
+
+  # Look ahead within HEAD block for the VERS line under GEDC
+  lookahead <- head_block[seq(gedc_idx + 1L, min(gedc_idx + 5L, length(head_block)))]
+  vers_line <- lookahead[grepl("^2 VERS\\b", lookahead)][1L]
+  if (is.na(vers_line)) return("unknown")
+
+  val <- extractInfo(vers_line, "VERS")
+  if (is.na(val) || !nzchar(val)) return("unknown")
+  val
+}
+
+#' Convert GEDCOM Latitude String to Numeric
+#'
+#' Converts GEDCOM-style latitude strings like `"N51.5074"` or `"S33.8688"` to
+#' signed decimal degrees. Returns `NA` for `NA` or unrecognised-prefix input.
+#'
+#' @param x Character vector of GEDCOM latitude values.
+#' @return Numeric vector of decimal degrees (positive = N, negative = S).
+#' @examples
+#' BGmisc:::gedcomLatToNumeric(c("N51.5074", "S33.8688", NA))
+#' @keywords internal
+gedcomLatToNumeric <- function(x) {
+  out <- rep(NA_real_, length(x))
+  ok <- !is.na(x) & (startsWith(x, "N") | startsWith(x, "S"))
+  out[ok] <- as.numeric(substring(x[ok], 2)) * ifelse(startsWith(x[ok], "N"), 1, -1)
+  out
+}
+
+#' Convert GEDCOM Longitude String to Numeric
+#'
+#' Converts GEDCOM-style longitude strings like `"E151.2093"` or `"W0.1278"` to
+#' signed decimal degrees. Returns `NA` for `NA` or unrecognised-prefix input.
+#'
+#' @param x Character vector of GEDCOM longitude values.
+#' @return Numeric vector of decimal degrees (positive = E, negative = W).
+#' @examples
+#' BGmisc:::gedcomLonToNumeric(c("E151.2093", "W0.1278", NA))
+#' @keywords internal
+gedcomLonToNumeric <- function(x) {
+  out <- rep(NA_real_, length(x))
+  ok <- !is.na(x) & (startsWith(x, "E") | startsWith(x, "W"))
+  out[ok] <- as.numeric(substring(x[ok], 2)) * ifelse(startsWith(x[ok], "E"), 1, -1)
+  out
 }
 
 #' Combine Columns

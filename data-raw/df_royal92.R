@@ -3485,8 +3485,8 @@ if (FALSE) {
       code_male = "M",
       code_female = "F",
       add_phantoms = TRUE,
-      ped_packed=T,
-      ped_align = T
+      ped_packed=TRUE,
+      ped_align = TRUE
     ),
       tooltip_columns = c("personID", "name", "title", "birth_date", "death_date")
 

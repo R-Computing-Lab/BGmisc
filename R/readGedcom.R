@@ -20,12 +20,14 @@
 #' including name prefix, name suffix, nickname, and married surname.
 #'
 #' Birth and death events are recognized from `BIRT` and `DEAT` tags. Event
-#' details are currently parsed using fixed offsets within the individual block.
-#' For birth events, the parser expects `DATE` at `i + 1`, `PLAC` at `i + 2`,
-#' `LATI` at `i + 4`, and `LONG` at `i + 5`. For death events, the parser
-#' expects `DATE` at `i + 1`, `PLAC` at `i + 2`, `CAUS` at `i + 3`, `LATI` at
-#' `i + 4`, and `LONG` at `i + 5`. Missing elements leave the corresponding
-#' output fields as `NA`.
+#' details are parsed by collecting all child lines whose GEDCOM level equals
+#' the event level plus one (direct children), then looking up sub-fields by
+#' tag name. `DATE`, `PLAC`, and `CAUS` are matched as direct children of the
+#' event. Coordinates (`LATI` and `LONG`) are searched across all descendant
+#' lines, which allows them to be located whether they appear as direct children
+#' (common in some GEDCOM 5.5.x exporters), under `PLAC` (standard GEDCOM
+#' 5.5.1), or under a `MAP` substructure under `PLAC` (GEDCOM 7.x). Missing
+#' sub-fields leave the corresponding output columns as `NA`.
 #'
 #' Attribute tags such as `OCCU`, `EDUC`, `RELI`, `CAST`, `NCHI`, `NMR`, `NATI`,
 #' `RESI`, `PROP`, `SSN`, `TITL`, `DSCR`, and `IDNO` are parsed directly into
@@ -45,20 +47,22 @@
 #'
 #' @param file_path Character string. Path to the GEDCOM file.
 #' @param verbose Logical. If `TRUE`, print progress messages.
-#' @param add_parents Logical. If `TRUE`, infer `momID` and `dadID` from `FAMC`
-#'   and `FAMS` mappings during post-processing.
 #' @param remove_empty_cols Logical. If `TRUE`, drop columns that are entirely
 #'   `NA` during post-processing.
-#' @param combine_cols Logical. If `TRUE`, combine redundant name columns, such
-#'   as `name_given` with `name_given_pieces` and `name_surn` with
-#'   `name_surn_pieces`, when their values do not conflict.
-#' @param parse_dates Logical. If `TRUE`, attempt to parse date columns (e.g., `birth_date`, `death_date`) into Date objects, after removing common GEDCOM date qualifiers like "ABT", "BEF", and "AFT".
 #' @param skinny Logical. If `TRUE`, return a slimmer data frame by dropping
 #'   `FAMC`, `FAMS`, and columns that are entirely `NA` during post-processing.
 #' @param update_rate Numeric. Intended rate at which progress messages should
 #'   be printed. Currently unused.
 #' @param post_process Logical. If `TRUE`, apply post-processing steps controlled
 #'   by `add_parents`, `combine_cols`, `remove_empty_cols`, `skinny`, and `parse_dates`.
+#' @param remove_empty_cols Logical indicating whether to remove columns that are entirely missing.
+#' @param combine_cols Logical. If `TRUE`, combine redundant name columns, such
+#'   as `name_given` with `name_given_pieces` and `name_surn` with
+#'   `name_surn_pieces`, when their values do not conflict.
+#' @param add_parents Logical. If `TRUE`, infer `momID` and `dadID` from `FAMC`
+#'   and `FAMS` mappings during post-processing.
+#' @param parse_dates Logical. If `TRUE`, attempt to parse date columns (e.g., `birth_date`, `death_date`) into Date objects, after removing common GEDCOM date qualifiers like "ABT", "BEF", and "AFT".
+#' @param clean_names Logical indicating whether to clean name columns by removing trailing slashes and squishing whitespace.
 #' @param ... Additional arguments. Currently unused.
 #' @return A data frame containing information about individuals, with the following potential columns:
 #' \describe{
@@ -107,13 +111,15 @@
 #'
 readGedcom <- function(file_path,
                        verbose = FALSE,
+                       post_process = TRUE,
                        add_parents = TRUE,
                        remove_empty_cols = TRUE,
                        combine_cols = TRUE,
                        skinny = FALSE,
                        parse_dates = FALSE,
+                       clean_names = TRUE,
                        update_rate = 1000,
-                       post_process = TRUE,
+
                        ...) {
   # Ensure the file exists and read all lines.
   if (!file.exists(file_path)) {
@@ -121,6 +127,8 @@ readGedcom <- function(file_path,
   }
   if (verbose == TRUE) message("Reading file: ", file_path)
   lines <- readLines(file_path)
+  gedcom_version <- detectGedcomVersion(lines)
+  if (verbose) message("Detected GEDCOM version: ", gedcom_version)
   total_lines <- length(lines)
   if (verbose == TRUE) message("File is ", total_lines, " lines long")
 
@@ -163,6 +171,7 @@ readGedcom <- function(file_path,
   records <- Filter(Negate(is.null), records)
 
   if (length(records) == 0) {
+    # Returns NULL without a gedcom_version attribute; callers should check is.null() first.
     warning("No people found in file")
     return(NULL)
   }
@@ -183,11 +192,13 @@ readGedcom <- function(file_path,
       combine_cols = combine_cols,
       parse_dates = parse_dates,
       add_parents = add_parents,
+      clean_names = clean_names,
       skinny = skinny,
       verbose = verbose
     )
   }
 
+  attr(df_temp, "gedcom_version") <- gedcom_version
   df_temp
 }
 
@@ -363,31 +374,75 @@ parseNameLine <- function(line, record) {
   record
 }
 
+extractGedcomLevel <- function(line) {
+  as.integer(stringr::str_extract(line, "^\\d+"))
+}
+
+extractEventSubBlock <- function(block, start_idx) {
+  event_level <- extractGedcomLevel(block[start_idx])
+  n <- length(block)
+  # start_idx is always within bounds because it comes from a bounded loop in the caller,
+  # but guard defensively to avoid the descending-sequence pitfall of R's : operator.
+  if (start_idx >= n) return(character(0))
+  end_idx <- start_idx
+  for (j in (start_idx + 1L):n) {
+    lvl <- extractGedcomLevel(block[j])
+    if (is.na(lvl)) next
+    if (lvl <= event_level) break
+    end_idx <- j
+  }
+  if (end_idx == start_idx) return(character(0))
+  block[(start_idx + 1L):end_idx]
+}
+
+extractInfoFromLines <- function(lines, tag) {
+  pattern <- paste0("\\b", tag, "\\b")
+  matches <- lines[grepl(pattern, lines)]
+  if (length(matches) == 0L) return(NA_character_)
+  extractInfo(matches[1L], tag)
+}
+
+extractCoordFromSubBlock <- function(sub_block, tag) {
+  # Searches all levels of the sub-block so it handles:
+  #   GEDCOM 5.5.x: LATI/LONG as direct children of the event
+  #   GEDCOM 5.5.x standard: LATI/LONG under PLAC (level+2)
+  #   GEDCOM 7.x: LATI/LONG under MAP under PLAC (level+3)
+  pattern <- paste0("\\b", tag, "\\b")
+  matches <- sub_block[grepl(pattern, sub_block)]
+  if (length(matches) == 0L) return(NA_character_)
+  extractInfo(matches[1L], tag)
+}
+
 #' Process Event Lines (Birth or Death)
 #'
 #' @description Extracts event details (e.g., date, place, cause, latitude, longitude) from a block of GEDCOM lines.
-#' For "birth": expect DATE on line i+1, PLAC on i+2, LATI on i+4, LONG on i+5.
-#' For "death": expect DATE on line i+1, PLAC on i+2, CAUS on i+3, LATI on i+4, LONG on i+5.
+#' Uses level-aware sub-block parsing so fields are looked up by tag name rather than fixed offsets.
 #' @param event A character string indicating the event type ("birth" or "death").
 #' @param block A character vector of GEDCOM lines.
 #' @param i The current line index where the event tag is found.
 #' @param record A named list representing the individual's record.
 #' @param pattern_rows A list with counts of GEDCOM tag occurrences.
-#' @return The updated record with parsed event information.#
-# For "death": expect DATE on line i+1, PLAC on i+2, CAUS on i+3, LATI on i+4, LONG on i+5.
+#' @return The updated record with parsed event information.
 processEventLine <- function(event, block, i, record, pattern_rows) {
-  n_lines <- length(block)
+  sub_block <- extractEventSubBlock(block, i)
+  if (length(sub_block) == 0L) return(record)
+
+  event_level <- extractGedcomLevel(block[i])
+  direct_children <- sub_block[
+    vapply(sub_block, extractGedcomLevel, integer(1L)) == event_level + 1L
+  ]
+
   if (event == "birth") {
-    if (i + 1 <= n_lines) record$birth_date <- extractInfo(block[i + 1], "DATE")
-    if (i + 2 <= n_lines) record$birth_place <- extractInfo(block[i + 2], "PLAC")
-    if (i + 4 <= n_lines) record$birth_lat <- extractInfo(block[i + 4], "LATI")
-    if (i + 5 <= n_lines) record$birth_long <- extractInfo(block[i + 5], "LONG")
+    record$birth_date <- extractInfoFromLines(direct_children, "DATE")
+    record$birth_place <- extractInfoFromLines(direct_children, "PLAC")
+    record$birth_lat <- extractCoordFromSubBlock(sub_block, "LATI")
+    record$birth_long <- extractCoordFromSubBlock(sub_block, "LONG")
   } else if (event == "death") {
-    if (i + 1 <= n_lines) record$death_date <- extractInfo(block[i + 1], "DATE")
-    if (i + 2 <= n_lines) record$death_place <- extractInfo(block[i + 2], "PLAC")
-    if (i + 3 <= n_lines) record$death_caus <- extractInfo(block[i + 3], "CAUS")
-    if (i + 4 <= n_lines) record$death_lat <- extractInfo(block[i + 4], "LATI")
-    if (i + 5 <= n_lines) record$death_long <- extractInfo(block[i + 5], "LONG")
+    record$death_date <- extractInfoFromLines(direct_children, "DATE")
+    record$death_place <- extractInfoFromLines(direct_children, "PLAC")
+    record$death_caus <- extractInfoFromLines(direct_children, "CAUS")
+    record$death_lat <- extractCoordFromSubBlock(sub_block, "LATI")
+    record$death_long <- extractCoordFromSubBlock(sub_block, "LONG")
   }
   record
 }
@@ -410,8 +465,11 @@ processEventLine <- function(event, block, i, record, pattern_rows) {
 applyTagMappings <- function(line, record, pattern_rows, tag_mappings) {
   for (mapping in tag_mappings) {
     extractor <- if (is.null(mapping$extractor)) NULL else mapping$extractor
-    result <- processTag(mapping$tag, mapping$field, pattern_rows, line, record,
-      extractor = extractor, mode = mapping$mode
+    result <- processTag(mapping$tag,
+                         mapping$field,
+                         pattern_rows, line, record,
+                         extractor = extractor,
+                         mode = mapping$mode
     )
     record <- result$vars
     if (result$matched) {
@@ -539,20 +597,16 @@ processTag <- function(tag,
 #'
 #' @description This function optionally adds parent information, combines duplicate columns,
 #' and removes empty columns from the GEDCOM data frame. It is called by \code{readGedcom()} if \code{post_process = TRUE}.
-#'
+#' @inheritParams readGedcom
 #' @param df_temp A data frame produced by \code{readGedcom()}.
-#' @param remove_empty_cols Logical indicating whether to remove columns that are entirely missing.
-#' @param combine_cols Logical indicating whether to combine columns with duplicate values.
-#' @param add_parents Logical indicating whether to add parent information.
-#' @param parse_dates Logical indicating whether to parse date columns into Date objects.
-#' @param skinny Logical indicating whether to slim down the data frame.
 #' @param verbose Logical indicating whether to print progress messages.
 #' @return The post-processed data frame.
 postProcessGedcom <- function(df_temp,
                               remove_empty_cols = TRUE,
                               combine_cols = TRUE,
-                              parse_dates = FALSE,
                               add_parents = TRUE,
+                              parse_dates = FALSE,
+                              clean_names = TRUE,
                               skinny = TRUE,
                               verbose = FALSE) {
   if (add_parents == TRUE) {
@@ -568,26 +622,51 @@ postProcessGedcom <- function(df_temp,
   }
   if (parse_dates == TRUE) {
     date_cols <- c("birth_date", "death_date")
-    if (verbose == TRUE) message("Parsing date columns: ", paste(date_cols[date_cols %in% colnames(df_temp)], collapse = ", "))
-    # GEDCOM date qualifiers like "ABT", "BEF", "AFT" can be present in date strings. We can remove them before parsing.
+    calendar_escape_regex <- "@#D[A-Z ]+@\\s*"
     date_qualifier_regex <- "\\b(?:[aA][bBfF][tT]|[bB][eE][tTfF])\\.?\\b\\s*"
 
-    if (verbose == TRUE && any(sapply(df_temp[date_cols], function(col) any(grepl(date_qualifier_regex, col, perl = TRUE))))
-    ) {
-      message("Found date qualifiers in date columns. They will be removed before parsing.")
+    if (verbose == TRUE) {
+      message("Parsing date columns: ", paste(date_cols[date_cols %in% colnames(df_temp)], collapse = ", "))
+    }
+
+    if (verbose == TRUE && any(date_cols %in% colnames(df_temp))) {
+      has_qualifiers <- any(sapply(
+        df_temp[date_cols[date_cols %in% colnames(df_temp)]],
+        function(col) any(grepl(date_qualifier_regex, col, perl = TRUE))
+      ))
+      if (has_qualifiers==TRUE) {
+        message("Found date qualifiers in date columns. They will be removed before parsing.")
+      }
     }
 
     # only parse date columns that are present in the data frame
-    if (any(date_cols %in% colnames(df_temp))) {
-      df_temp[date_cols] <- lapply(df_temp[date_cols], function(x) {
+    present_date_cols <- date_cols[date_cols %in% colnames(df_temp)]
+    if (length(present_date_cols) > 0) {
+      df_temp[present_date_cols] <- lapply(df_temp[present_date_cols], function(x) {
         if (is.character(x)) {
+          x <- stringr::str_replace_all(x, calendar_escape_regex, "")
           x <- stringr::str_replace_all(x, date_qualifier_regex, "")
-          as.Date(x, format = "%d %b %Y")
+          as.Date(stringr::str_trim(x), format = "%d %b %Y")
         } else {
           x
         }
       })
     }
+  }
+  if (clean_names == TRUE) {
+    if (verbose == TRUE) message("Cleaning column names")
+    name_cols <- grep("^name", colnames(df_temp), value = TRUE)
+     if (verbose == TRUE && any(name_cols %in% colnames(df_temp))) {
+      message("Cleaning name columns: ", paste(name_cols, collapse = ", "))
+     }
+    df_temp[name_cols] <- lapply(df_temp[name_cols], function(x) {
+      if (is.character(x)) { # remove / at end of names if present, and squish whitespace
+        stringr::str_squish(stringr::str_replace(x,"/+$", ""))
+      } else {
+        x
+      }
+    }
+    )
   }
   if (skinny == TRUE) {
     if (verbose == TRUE) message("Slimming down the data frame")

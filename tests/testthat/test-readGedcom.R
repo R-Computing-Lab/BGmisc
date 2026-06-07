@@ -80,14 +80,14 @@ test_that("readGedcom reads and parses a GEDCOM file correctly", {
   expect_equal(nrow(df), 2)
   expect_equal(df$name_given[1], "John")
   expect_equal(df$name_surn[1], "Doe")
-  expect_equal(df$name[1], "John Doe/")
+  expect_equal(df$name[1], "John Doe")
   expect_equal(df$sex[1], "M")
   expect_equal(df$birth_date[1], "1 JAN 1900")
   expect_equal(df$birth_place[1], "Someplace")
   expect_equal(df$attribute_children[1], NA_character_)
   expect_equal(df$name_given[2], "Jane")
   expect_equal(df$name_surn[2], "Smith")
-  expect_equal(df$name[2], "Jane Smith/")
+  expect_equal(df$name[2], "Jane Smith")
   expect_equal(df$sex[2], "F")
   expect_equal(df$birth_date[2], "2 FEB 1910")
   expect_equal(df$birth_place[2], "Anotherplace")
@@ -213,7 +213,7 @@ test_that("readGedcom parses death event correctly", {
   temp_file <- tempfile(fileext = ".ged")
   writeLines(gedcom_content, temp_file)
 
-  df <- readGedcom(temp_file, verbose = TRUE)
+  df <- readGedcom(temp_file, verbose = TRUE, clean_names = FALSE)
 
   expect_true("death_date" %in% colnames(df))
   expect_true("death_place" %in% colnames(df))
@@ -243,6 +243,8 @@ test_that("readGedcom parses death event correctly", {
   row.names(df) <- NULL
   row.names(df_leg) <- NULL
   df_leg <- dplyr::rename(df_leg, personID = id)
+  # Strip the gedcom_version attribute added by readGedcom before comparing
+  attr(df, "gedcom_version") <- NULL
   expect_equal(df_leg, df)
 
   unlink(temp_file)
@@ -352,7 +354,7 @@ test_that("readGedcom parses all supported name component tags", {
   expect_equal(df$name_nick[1], "Jack")
   expect_equal(df$name_surn_pieces[1], "Doe")
   expect_equal(df$name_nsfx[1], "Jr.")
-  expect_equal(df$name_marriedsurn[1], "John Quincy /MarriedDoe/")
+  expect_equal(df$name_marriedsurn[1], "John Quincy /MarriedDoe")
 
   unlink(temp_file)
 })
@@ -575,6 +577,121 @@ test_that("mapFAMS2parents warns and returns NULL when required columns are miss
   expect_null(out)
 })
 
+birt_no_date_content <- c(
+  "0 @I1@ INDI",
+  "1 NAME Alice /Jones/",
+  "1 SEX F",
+  "1 BIRT",
+  "2 PLAC Springfield",
+  "2 LATI N39.7817",
+  "2 LONG W89.6501"
+)
+
+birt_no_plac_content <- c(
+  "0 @I1@ INDI",
+  "1 NAME Bob /Smith/",
+  "1 SEX M",
+  "1 BIRT",
+  "2 DATE 15 MAR 1955"
+)
+
+birt_reordered_content <- c(
+  "0 @I1@ INDI",
+  "1 NAME Carol /Lee/",
+  "1 SEX F",
+  "1 BIRT",
+  "2 LATI N40.7128",
+  "2 LONG W74.0060",
+  "2 PLAC New York",
+  "2 DATE 4 JUL 1976"
+)
+
+test_that("processEventLine handles missing DATE gracefully", {
+  temp_file <- tempfile(fileext = ".ged")
+  writeLines(birt_no_date_content, temp_file)
+  df <- readGedcom(temp_file, remove_empty_cols = FALSE)
+  expect_true(is.na(df$birth_date[1]))
+  expect_equal(df$birth_place[1], "Springfield")
+  expect_equal(df$birth_lat[1], "N39.7817")
+  expect_equal(df$birth_long[1], "W89.6501")
+  unlink(temp_file)
+})
+
+test_that("processEventLine handles missing PLAC gracefully", {
+  temp_file <- tempfile(fileext = ".ged")
+  writeLines(birt_no_plac_content, temp_file)
+  df <- readGedcom(temp_file, remove_empty_cols = FALSE)
+  expect_equal(df$birth_date[1], "15 MAR 1955")
+  expect_true(is.na(df$birth_place[1]))
+  unlink(temp_file)
+})
+
+test_that("processEventLine handles reordered subfields correctly", {
+  temp_file <- tempfile(fileext = ".ged")
+  writeLines(birt_reordered_content, temp_file)
+  df <- readGedcom(temp_file)
+  expect_equal(df$birth_date[1], "4 JUL 1976")
+  expect_equal(df$birth_place[1], "New York")
+  expect_equal(df$birth_lat[1], "N40.7128")
+  expect_equal(df$birth_long[1], "W74.0060")
+  unlink(temp_file)
+})
+
+gedcom55_header <- c(
+  "0 HEAD",
+  "1 GEDC",
+  "2 VERS 5.5.1",
+  "2 FORM LINEAGE-LINKED",
+  "1 CHAR UTF-8",
+  "0 @I1@ INDI",
+  "1 NAME Test /Person/",
+  "1 SEX M"
+)
+
+gedcom7_header <- c(
+  "0 HEAD",
+  "1 GEDC",
+  "2 VERS 7.0",
+  "1 CHAR UTF-8",
+  "0 @I1@ INDI",
+  "1 NAME Test /Person/",
+  "1 SEX M"
+)
+
+test_that("detectGedcomVersion returns correct version string", {
+  expect_equal(BGmisc:::detectGedcomVersion(gedcom55_header), "5.5.1")
+  expect_equal(BGmisc:::detectGedcomVersion(gedcom7_header), "7.0")
+  expect_equal(BGmisc:::detectGedcomVersion(c("0 @I1@ INDI", "1 NAME No /Head/")), "unknown")
+})
+
+test_that("readGedcom attaches gedcom_version attribute", {
+  temp_file <- tempfile(fileext = ".ged")
+  writeLines(gedcom55_header, temp_file)
+  df <- readGedcom(temp_file)
+  expect_equal(attr(df, "gedcom_version"), "5.5.1")
+  unlink(temp_file)
+})
+
+test_that("detectGedcomVersion returns unknown when GEDC is present but VERS is missing", {
+  lines <- c(
+    "0 HEAD",
+    "1 GEDC",
+    "1 CHAR UTF-8",
+    "0 @I1@ INDI",
+    "1 NAME Test /Person/",
+    "1 SEX M"
+  )
+  expect_equal(BGmisc:::detectGedcomVersion(lines), "unknown")
+})
+
+test_that("readGedcom attaches gedcom_version attribute with post_process = FALSE", {
+  temp_file <- tempfile(fileext = ".ged")
+  writeLines(gedcom55_header, temp_file)
+  df <- readGedcom(temp_file, post_process = FALSE)
+  expect_equal(attr(df, "gedcom_version"), "5.5.1")
+  unlink(temp_file)
+})
+
 test_that("readGed and readgedcom aliases return the same output as readGedcom", {
   gedcom_content <- c(
     "0 @I1@ INDI",
@@ -597,4 +714,79 @@ test_that("readGed and readgedcom aliases return the same output as readGedcom",
   expect_equal(df_readgedcom, df_main)
 
   unlink(temp_file)
+})
+
+gedcom7_map_content <- c(
+  "0 HEAD",
+  "1 GEDC",
+  "2 VERS 7.0",
+  "0 @I1@ INDI",
+  "1 NAME Test /Person/",
+  "1 SEX F",
+  "1 BIRT",
+  "2 DATE 1 JAN 2000",
+  "2 PLAC London, England",
+  "3 MAP",
+  "4 LATI N51.5074",
+  "4 LONG W0.1278",
+  "1 DEAT",
+  "2 DATE 31 DEC 2080",
+  "2 PLAC Edinburgh, Scotland",
+  "3 MAP",
+  "4 LATI N55.9533",
+  "4 LONG W3.1883"
+)
+
+gedcom_calendar_escape_content <- c(
+  "0 HEAD",
+  "1 GEDC",
+  "2 VERS 5.5",
+  "0 @I1@ INDI",
+  "1 NAME Old /Style/",
+  "1 SEX M",
+  "1 BIRT",
+  "2 DATE @#DGREGORIAN@ 15 JUL 1823"
+)
+
+test_that("readGedcom parses GEDCOM 7.x MAP coordinate structure", {
+  temp_file <- tempfile(fileext = ".ged")
+  writeLines(gedcom7_map_content, temp_file)
+  df <- readGedcom(temp_file)
+  expect_equal(attr(df, "gedcom_version"), "7.0")
+  expect_equal(df$birth_lat[1], "N51.5074")
+  expect_equal(df$birth_long[1], "W0.1278")
+  expect_equal(df$death_lat[1], "N55.9533")
+  expect_equal(df$death_long[1], "W3.1883")
+  unlink(temp_file)
+})
+
+test_that("parse_dates strips GEDCOM 5.5 calendar escape before parsing", {
+  temp_file <- tempfile(fileext = ".ged")
+  writeLines(gedcom_calendar_escape_content, temp_file)
+  df <- readGedcom(temp_file, parse_dates = TRUE)
+  expect_false(is.na(df$birth_date[1]))
+  expect_equal(format(df$birth_date[1], "%d %b %Y"), "15 Jul 1823")
+  unlink(temp_file)
+})
+
+test_that("gedcomLatToNumeric converts N/S notation correctly", {
+  expect_equal(gedcomLatToNumeric("N51.5074"), 51.5074)
+  expect_equal(gedcomLatToNumeric("S33.8688"), -33.8688)
+  expect_true(is.na(gedcomLatToNumeric(NA_character_)))
+})
+
+test_that("gedcomLonToNumeric converts E/W notation correctly", {
+  expect_equal(gedcomLonToNumeric("E151.2093"), 151.2093)
+  expect_equal(gedcomLonToNumeric("W0.1278"), -0.1278)
+  expect_true(is.na(gedcomLonToNumeric(NA_character_)))
+})
+
+test_that("gedcomLatToNumeric returns NA for unrecognised prefix", {
+  expect_true(is.na(gedcomLatToNumeric("12.34")))
+  expect_true(is.na(gedcomLatToNumeric("")))
+})
+
+test_that("gedcomLonToNumeric returns NA for unrecognised prefix", {
+  expect_true(is.na(gedcomLonToNumeric("12.34")))
+  expect_true(is.na(gedcomLonToNumeric("")))
 })

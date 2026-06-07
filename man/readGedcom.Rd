@@ -9,39 +9,42 @@
 readGedcom(
   file_path,
   verbose = FALSE,
+  post_process = TRUE,
   add_parents = TRUE,
   remove_empty_cols = TRUE,
   combine_cols = TRUE,
   skinny = FALSE,
   parse_dates = FALSE,
+  clean_names = TRUE,
   update_rate = 1000,
-  post_process = TRUE,
   ...
 )
 
 readGed(
   file_path,
   verbose = FALSE,
+  post_process = TRUE,
   add_parents = TRUE,
   remove_empty_cols = TRUE,
   combine_cols = TRUE,
   skinny = FALSE,
   parse_dates = FALSE,
+  clean_names = TRUE,
   update_rate = 1000,
-  post_process = TRUE,
   ...
 )
 
 readgedcom(
   file_path,
   verbose = FALSE,
+  post_process = TRUE,
   add_parents = TRUE,
   remove_empty_cols = TRUE,
   combine_cols = TRUE,
   skinny = FALSE,
   parse_dates = FALSE,
+  clean_names = TRUE,
   update_rate = 1000,
-  post_process = TRUE,
   ...
 )
 }
@@ -50,11 +53,13 @@ readgedcom(
 
 \item{verbose}{Logical. If `TRUE`, print progress messages.}
 
+\item{post_process}{Logical. If `TRUE`, apply post-processing steps controlled
+by `add_parents`, `combine_cols`, `remove_empty_cols`, `skinny`, and `parse_dates`.}
+
 \item{add_parents}{Logical. If `TRUE`, infer `momID` and `dadID` from `FAMC`
 and `FAMS` mappings during post-processing.}
 
-\item{remove_empty_cols}{Logical. If `TRUE`, drop columns that are entirely
-`NA` during post-processing.}
+\item{remove_empty_cols}{Logical indicating whether to remove columns that are entirely missing.}
 
 \item{combine_cols}{Logical. If `TRUE`, combine redundant name columns, such
 as `name_given` with `name_given_pieces` and `name_surn` with
@@ -65,11 +70,10 @@ as `name_given` with `name_given_pieces` and `name_surn` with
 
 \item{parse_dates}{Logical. If `TRUE`, attempt to parse date columns (e.g., `birth_date`, `death_date`) into Date objects, after removing common GEDCOM date qualifiers like "ABT", "BEF", and "AFT".}
 
+\item{clean_names}{Logical indicating whether to clean name columns by removing trailing slashes and squishing whitespace.}
+
 \item{update_rate}{Numeric. Intended rate at which progress messages should
 be printed. Currently unused.}
-
-\item{post_process}{Logical. If `TRUE`, apply post-processing steps controlled
-by `add_parents`, `combine_cols`, `remove_empty_cols`, `skinny`, and `parse_dates`.}
 
 \item{...}{Additional arguments. Currently unused.}
 }
@@ -139,12 +143,14 @@ cleaned full name. Additional name components are parsed when present,
 including name prefix, name suffix, nickname, and married surname.
 
 Birth and death events are recognized from `BIRT` and `DEAT` tags. Event
-details are currently parsed using fixed offsets within the individual block.
-For birth events, the parser expects `DATE` at `i + 1`, `PLAC` at `i + 2`,
-`LATI` at `i + 4`, and `LONG` at `i + 5`. For death events, the parser
-expects `DATE` at `i + 1`, `PLAC` at `i + 2`, `CAUS` at `i + 3`, `LATI` at
-`i + 4`, and `LONG` at `i + 5`. Missing elements leave the corresponding
-output fields as `NA`.
+details are parsed by collecting all child lines whose GEDCOM level equals
+the event level plus one (direct children), then looking up sub-fields by
+tag name. `DATE`, `PLAC`, and `CAUS` are matched as direct children of the
+event. Coordinates (`LATI` and `LONG`) are searched across all descendant
+lines, which allows them to be located whether they appear as direct children
+(common in some GEDCOM 5.5.x exporters), under `PLAC` (standard GEDCOM
+5.5.1), or under a `MAP` substructure under `PLAC` (GEDCOM 7.x). Missing
+sub-fields leave the corresponding output columns as `NA`.
 
 Attribute tags such as `OCCU`, `EDUC`, `RELI`, `CAST`, `NCHI`, `NMR`, `NATI`,
 `RESI`, `PROP`, `SSN`, `TITL`, `DSCR`, and `IDNO` are parsed directly into
