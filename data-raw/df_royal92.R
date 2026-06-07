@@ -1575,7 +1575,7 @@ date_overrides <- tribble(
   2158, "6 NOV 1892", "8 APR 1938", # George Mountbatten, 2nd Marquess of Milford Haven; likely duplicate/identity match to personID 102
   2159, "9 MAR 1963", NA_character_, # Ivar Mountbatten; living
   2160, "13 SEP 1867", "3 JUL 1939", # Wilfrid Ashley, 1st Baron Mount Temple
-  2162, "19 OCT 1910", "31 MAR 1989", #Hamilton Joseph Keyes O'Malley (Q75382629)
+  2162, "19 OCT 1910", "31 MAR 1989", # Hamilton Joseph Keyes O'Malley (Q75382629)
 
   2166, "1205", "1257", # Maelgwn Fychan and death year
   2168, "1210", "1265", # Maredudd ap Owain and death year
@@ -2065,7 +2065,7 @@ date_overrides <- tribble(
   2780, "10 APR 1916", "22 DEC 2019", # Dagmar Bernadotte af Wisborg
   2781, "12 JUL 1921", "3 NOV 2018", # Oscar Bernadotte af Wisborg
   2782, "10 JAN 1926", NA_character_, # Catharina Bernadotte af Wisborg; living or death not found in this pass
-  2789, "10 AUG 1934", NA_character_, #Miles Carl Flach
+  2789, "10 AUG 1934", NA_character_, # Miles Carl Flach
   2790, "22 DEC 1960", NA_character_, # Jana Camilla Flach
   2829, "25 JUN 1899", "4 JAN 1977", # Margaretha of Sweden / Princess Axel of Denmark
   2830, "12 AUG 1888", "14 JUL 1964", # Axel of Denmark
@@ -2241,7 +2241,6 @@ date_overrides <- tribble(
 
 
 # 2964, 2965, and 2967 resolve the Greek/Yugoslav branch: Olga of Greece and Denmark, Prince Paul of Yugoslavia, and Elizabeth of Greece and Denmark.
-
 
 
 name_overrides <- tribble(
@@ -3182,7 +3181,7 @@ royal92_cleaned <- royal92 %>%
         c(914) ~ "Grand Duchess of Russia",
       personID == 932 ~ "Princess of Prussia",
       personID == 1051 ~ NA_character_,
-      personID == 1125  ~ NA_character_,
+      personID == 1125 ~ NA_character_,
       personID == 1250 ~ "Earl of Bothwell",
       personID %in%
         c(1373, 1867) ~ "Count of Poitiers",
@@ -3198,8 +3197,8 @@ royal92_cleaned <- royal92 %>%
           1877, 1890,
           2295
         ) ~ "Earl of Gloucester",
-        personID %in%
-        c(1706,2162,2789) ~ "Captain",
+      personID %in%
+        c(1706, 2162, 2789) ~ "Captain",
       personID == 1802 ~ "wife of Edward the Elder",
       personID == 1804 ~ "son of Edward the Elder",
       personID == 1811 ~ "King of West Francia",
@@ -3435,8 +3434,10 @@ royal92_cleaned <- royal92 %>%
       ) ~ "F",
       TRUE ~ sex
     ),
-    name = str_replace_all(name,
-                           text_cleanup_regex) %>%
+    name = str_replace_all(
+      name,
+      text_cleanup_regex
+    ) %>%
       str_squish()
   )
 
@@ -3469,12 +3470,12 @@ if (FALSE) {
     group_split()
 
   royal92_trimmed1 <-
-  royal92_famid[[1]]%>% trimPedigree(
-          personID = "personID",
-    momID = "momID",
-    dadID = "dadID",
-    max_iter = 2
-      )
+    royal92_famid[[1]] %>% trimPedigree(
+      personID = "personID",
+      momID = "momID",
+      dadID = "dadID",
+      max_iter = 2
+    )
 
   ggped <- ggPedigreeInteractive(royal92_trimmed1,
     personID = "personID",
@@ -3485,10 +3486,9 @@ if (FALSE) {
       code_male = "M",
       code_female = "F",
       add_phantoms = TRUE,
-      ped_packed=TRUE,
+      ped_packed = TRUE,
       ped_align = TRUE
     ),
-      tooltip_columns = c("personID", "name", "title", "birth_date", "death_date")
-
+    tooltip_columns = c("personID", "name", "title", "birth_date", "death_date")
   )
 }

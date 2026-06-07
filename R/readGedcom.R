@@ -119,7 +119,6 @@ readGedcom <- function(file_path,
                        parse_dates = FALSE,
                        clean_names = TRUE,
                        update_rate = 1000,
-
                        ...) {
   # Ensure the file exists and read all lines.
   if (!file.exists(file_path)) {
@@ -383,7 +382,9 @@ extractEventSubBlock <- function(block, start_idx) {
   n <- length(block)
   # start_idx is always within bounds because it comes from a bounded loop in the caller,
   # but guard defensively to avoid the descending-sequence pitfall of R's : operator.
-  if (start_idx >= n) return(character(0))
+  if (start_idx >= n) {
+    return(character(0))
+  }
   end_idx <- start_idx
   for (j in (start_idx + 1L):n) {
     lvl <- extractGedcomLevel(block[j])
@@ -391,14 +392,18 @@ extractEventSubBlock <- function(block, start_idx) {
     if (lvl <= event_level) break
     end_idx <- j
   }
-  if (end_idx == start_idx) return(character(0))
+  if (end_idx == start_idx) {
+    return(character(0))
+  }
   block[(start_idx + 1L):end_idx]
 }
 
 extractInfoFromLines <- function(lines, tag) {
   pattern <- paste0("\\b", tag, "\\b")
   matches <- lines[grepl(pattern, lines)]
-  if (length(matches) == 0L) return(NA_character_)
+  if (length(matches) == 0L) {
+    return(NA_character_)
+  }
   extractInfo(matches[1L], tag)
 }
 
@@ -409,7 +414,9 @@ extractCoordFromSubBlock <- function(sub_block, tag) {
   #   GEDCOM 7.x: LATI/LONG under MAP under PLAC (level+3)
   pattern <- paste0("\\b", tag, "\\b")
   matches <- sub_block[grepl(pattern, sub_block)]
-  if (length(matches) == 0L) return(NA_character_)
+  if (length(matches) == 0L) {
+    return(NA_character_)
+  }
   extractInfo(matches[1L], tag)
 }
 
@@ -425,7 +432,9 @@ extractCoordFromSubBlock <- function(sub_block, tag) {
 #' @return The updated record with parsed event information.
 processEventLine <- function(event, block, i, record, pattern_rows) {
   sub_block <- extractEventSubBlock(block, i)
-  if (length(sub_block) == 0L) return(record)
+  if (length(sub_block) == 0L) {
+    return(record)
+  }
 
   event_level <- extractGedcomLevel(block[i])
   direct_children <- sub_block[
@@ -466,10 +475,10 @@ applyTagMappings <- function(line, record, pattern_rows, tag_mappings) {
   for (mapping in tag_mappings) {
     extractor <- if (is.null(mapping$extractor)) NULL else mapping$extractor
     result <- processTag(mapping$tag,
-                         mapping$field,
-                         pattern_rows, line, record,
-                         extractor = extractor,
-                         mode = mapping$mode
+      mapping$field,
+      pattern_rows, line, record,
+      extractor = extractor,
+      mode = mapping$mode
     )
     record <- result$vars
     if (result$matched) {
@@ -634,7 +643,7 @@ postProcessGedcom <- function(df_temp,
         df_temp[date_cols[date_cols %in% colnames(df_temp)]],
         function(col) any(grepl(date_qualifier_regex, col, perl = TRUE))
       ))
-      if (has_qualifiers==TRUE) {
+      if (has_qualifiers == TRUE) {
         message("Found date qualifiers in date columns. They will be removed before parsing.")
       }
     }
@@ -656,17 +665,16 @@ postProcessGedcom <- function(df_temp,
   if (clean_names == TRUE) {
     if (verbose == TRUE) message("Cleaning column names")
     name_cols <- grep("^name", colnames(df_temp), value = TRUE)
-     if (verbose == TRUE && any(name_cols %in% colnames(df_temp))) {
+    if (verbose == TRUE && any(name_cols %in% colnames(df_temp))) {
       message("Cleaning name columns: ", paste(name_cols, collapse = ", "))
-     }
+    }
     df_temp[name_cols] <- lapply(df_temp[name_cols], function(x) {
       if (is.character(x)) { # remove / at end of names if present, and squish whitespace
-        stringr::str_squish(stringr::str_replace(x,"/+$", ""))
+        stringr::str_squish(stringr::str_replace(x, "/+$", ""))
       } else {
         x
       }
-    }
-    )
+    })
   }
   if (skinny == TRUE) {
     if (verbose == TRUE) message("Slimming down the data frame")

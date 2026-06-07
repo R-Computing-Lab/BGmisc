@@ -14,9 +14,10 @@ test_that("readGedcom parses death event correctly for legacy", {
   temp_file <- tempfile(fileext = ".ged")
   writeLines(gedcom_content, temp_file)
 
-  df <- readGedcom(temp_file, verbose = TRUE,
-                   clean_names = FALSE
-                   )
+  df <- readGedcom(temp_file,
+    verbose = TRUE,
+    clean_names = FALSE
+  )
   df_leg <- .readGedcom.legacy(temp_file, verbose = TRUE)
 
   expect_true("death_date" %in% colnames(df_leg))

@@ -41,27 +41,39 @@ collapseNames <- function(verbose, df_temp) {
 #' @keywords internal
 detectGedcomVersion <- function(lines) {
   head_idx <- which(grepl("^0 HEAD\\b", lines))[1L]
-  if (is.na(head_idx)) return("unknown")
+  if (is.na(head_idx)) {
+    return("unknown")
+  }
 
   # End of HEAD is the next level-0 record
-  if (head_idx >= length(lines)) return("unknown")
+  if (head_idx >= length(lines)) {
+    return("unknown")
+  }
   next_l0 <- which(grepl("^0 ", lines[(head_idx + 1L):length(lines)]))[1L]
   head_end <- if (is.na(next_l0)) length(lines) else head_idx + next_l0 - 1L
   head_block <- lines[head_idx:head_end]
 
   gedc_idx <- which(grepl("^1 GEDC\\b", head_block))[1L]
-  if (is.na(gedc_idx)) return("unknown")
+  if (is.na(gedc_idx)) {
+    return("unknown")
+  }
 
   # Guard: if GEDC is the last line of HEAD, there is no VERS to look ahead to
-  if (gedc_idx >= length(head_block)) return("unknown")
+  if (gedc_idx >= length(head_block)) {
+    return("unknown")
+  }
 
   # Look ahead within HEAD block for the VERS line under GEDC
   lookahead <- head_block[seq(gedc_idx + 1L, min(gedc_idx + 5L, length(head_block)))]
   vers_line <- lookahead[grepl("^2 VERS\\b", lookahead)][1L]
-  if (is.na(vers_line)) return("unknown")
+  if (is.na(vers_line)) {
+    return("unknown")
+  }
 
   val <- extractInfo(vers_line, "VERS")
-  if (is.na(val) || !nzchar(val)) return("unknown")
+  if (is.na(val) || !nzchar(val)) {
+    return("unknown")
+  }
   val
 }
 
