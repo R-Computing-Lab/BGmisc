@@ -1,4 +1,9 @@
 # BGmisc NEWS
+
+## Development version
+
+* Add building of parental chains with `addParentalChain()` and `addParentalFlag()`, so that you can easily trace maternity and paternity. This is implemented as a general function that can be used to build any type of parental chain, and a specific wrapper for maternal and paternal chains. The parental flag is a binary variable that indicates whether the individual is in the specified parental chain, which can be useful for filtering or grouping individuals based on their lineage.
+
 ## BGmisc 1.8.0
 * Optimized gedcom reader, com2links for speed and memory usage, with a focus on large pedigrees
 * Fixed bug in gedcom reader that resulted in document records being added to the final person in the pedigree

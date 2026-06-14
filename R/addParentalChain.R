@@ -14,6 +14,7 @@
 #'   character column that will contain the collapsed paternal ancestor chain.
 #' @param collapse Character string used to collapse ancestor IDs into
 #'   `chain_string_col`.
+#'  @param traversal_direction Character giving the mode of transversion: defaults to "in"
 #'
 #' @return A data frame with two added columns:
 #'   \describe{
@@ -32,7 +33,8 @@ addPaternalChain <- function(
     momID = "momID",
     chain_col = "dadID_chain",
     chain_string_col = "dadID_chain_string",
-    collapse = "|"
+    collapse = "|",
+    traversal_direction = "in"
 ) {
 addParentalChain(
     ped = ped,
@@ -42,7 +44,8 @@ addParentalChain(
     chain_col = chain_col,
     chain_string_col = chain_string_col,
     collapse = collapse,
-    component = "dadID"
+    component = "dadID",
+    traversal_direction = traversal_direction
 )
 }
 
@@ -87,7 +90,8 @@ addMaternalChain <- function(
     momID = "momID",
     chain_col = "momID_chain",
     chain_string_col = "momID_chain_string",
-    collapse = "|"
+    collapse = "|",
+    traversal_direction = "in"
 ) {
 addParentalChain(
     ped = ped,
@@ -97,7 +101,8 @@ addParentalChain(
     chain_col = chain_col,
     chain_string_col = chain_string_col,
     collapse = collapse,
-    component = "momID"
+    component = "momID",
+    traversal_direction = traversal_direction
 )
 }
 #' Add unilineal parental ancestor chains to a pedigree
@@ -165,7 +170,8 @@ addParentalChain <- function(
     chain_col = "chain",
     chain_string_col = "chain_string",
     collapse = "|",
-    component = c("dadID",  "momID")
+    component = c("dadID",  "momID"),
+    traversal_direction = "in"
 ) {
 
   # Build a paternal-only version of the pedigree.
@@ -220,8 +226,8 @@ addParentalChain <- function(
     reachable_ids <- igraph::subcomponent(
       graph = parental_graph,
       v = id_chr,
-      mode = "out"
-    ) %>%
+      mode = traversal_direction
+    ) |>
       names()
 
     # Remove the person themselves from their paternal ancestor list.
@@ -240,7 +246,7 @@ addParentalChain <- function(
       graph = parental_graph,
       v = id_chr,
       to = reachable_ids,
-      mode = "out"
+      mode = traversal_direction
     )[1, ]
 
     reachable_ids[order(ancestor_distances)]

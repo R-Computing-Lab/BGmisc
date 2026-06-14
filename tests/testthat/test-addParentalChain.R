@@ -48,7 +48,6 @@ test_that("addPaternalChain adds ordered paternal chains", {
 })
 
 
-
 test_that("addMaternalChain adds ordered maternal chains", {
 
   ped <- data.frame(
@@ -64,22 +63,22 @@ test_that("addMaternalChain adds ordered maternal chains", {
   expect_true("momID_chain_string" %in% names(result))
 
   expect_identical(
-    result$momID_chain[[result$personID == "ego"]],
+    get_chain(result, "personID", "ego", "momID_chain"),
     c("mom", "mat_gm", "mat_ggm")
   )
 
   expect_identical(
-    result$momID_chain_string[result$personID == "ego"],
+    get_value(result, "personID", "ego", "momID_chain_string"),
     "mom|mat_gm|mat_ggm"
   )
 
   expect_identical(
-    result$momID_chain[[result$personID == "mat_ggm"]],
+    get_chain(result, "personID", "mat_ggm", "momID_chain"),
     character(0)
   )
 
   expect_true(
-    is.na(result$momID_chain_string[result$personID == "mat_ggm"])
+    is.na(get_value(result, "personID", "mat_ggm", "momID_chain_string"))
   )
 })
 
@@ -110,22 +109,32 @@ test_that("addParentalChain can add paternal and maternal chains with custom out
   )
 
   expect_identical(
-    paternal_result$custom_pat_chain[[paternal_result$personID == "ego"]],
+    get_chain(paternal_result, "personID", "ego", "custom_pat_chain"),
     c("dad", "pat_gf")
   )
 
   expect_identical(
-    paternal_result$custom_pat_chain_string[paternal_result$personID == "ego"],
+    get_value(
+      paternal_result,
+      "personID",
+      "ego",
+      "custom_pat_chain_string"
+    ),
     "dad > pat_gf"
   )
 
   expect_identical(
-    maternal_result$custom_mat_chain[[maternal_result$personID == "ego"]],
+    get_chain(maternal_result, "personID", "ego", "custom_mat_chain"),
     c("mom", "mat_gm")
   )
 
   expect_identical(
-    maternal_result$custom_mat_chain_string[maternal_result$personID == "ego"],
+    get_value(
+      maternal_result,
+      "personID",
+      "ego",
+      "custom_mat_chain_string"
+    ),
     "mom > mat_gm"
   )
 })
@@ -151,12 +160,12 @@ test_that("addParentalChain works with custom input column names", {
   )
 
   expect_identical(
-    result$chain[[result$id == "ego"]],
+    get_chain(result, "id", "ego", "chain"),
     c("dad", "pat_gf")
   )
 
   expect_identical(
-    result$chain_string[result$id == "ego"],
+    get_value(result, "id", "ego", "chain_string"),
     "dad|pat_gf"
   )
 })
@@ -173,12 +182,12 @@ test_that("addParentalChain coerces numeric IDs to character chains", {
   result <- addPaternalChain(ped)
 
   expect_identical(
-    result$dadID_chain[[result$personID == 1]],
+    get_chain(result, "personID", 1, "dadID_chain"),
     c("2", "3")
   )
 
   expect_identical(
-    result$dadID_chain_string[result$personID == 1],
+    get_value(result, "personID", 1, "dadID_chain_string"),
     "2|3"
   )
 })
