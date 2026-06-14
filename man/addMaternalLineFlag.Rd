@@ -7,20 +7,20 @@
 addMaternalLineFlag(ped, anchor_id, flag_col, chain_col = "momID_chain")
 }
 \arguments{
-\item{ped}{A pedigree data frame containing a maternal chain list-column.}
+\item{ped}{A pedigree data frame containing a parental chain list-column.}
 
 \item{anchor_id}{ID of the anchor individual to search for within each
-person's maternal chain.}
+person's parental chain.}
 
 \item{flag_col}{Character string giving the name of the logical output column
 to add to `ped`.}
 
 \item{chain_col}{Character string giving the name of the list-column
-containing ordered maternal ancestor chains.}
+containing ordered parental ancestor chains.}
 }
 \value{
 A data frame with `flag_col` added. The flag is `TRUE` when
-  `anchor_id` appears in the individual's maternal chain and `FALSE`
+  `anchor_id` appears in the individual's selected parental chain and `FALSE`
   otherwise.
 }
 \description{

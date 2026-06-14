@@ -28,13 +28,15 @@ paternal IDs.}
 maternal IDs.}
 
 \item{chain_col}{Character string giving the name of the output list-column
-that will contain the ordered maternal ancestor chain for each individual.}
+that will contain the ordered parental ancestor chain for each individual.}
 
 \item{chain_string_col}{Character string giving the name of the output
-character column that will contain the collapsed maternal ancestor chain.}
+character column that will contain the collapsed parental ancestor chain.}
 
 \item{collapse}{Character string used to collapse ancestor IDs into
 `chain_string_col`.}
+
+\item{traversal_direction}{Character giving the mode of transversion: defaults to "in". If set to out, will procedure a list of descendants.}
 }
 \value{
 A data frame with two added columns:

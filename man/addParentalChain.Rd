@@ -40,6 +40,8 @@ character column that will contain the collapsed parental ancestor chain.}
 \item{component}{Character string specifying which parental component to
 follow. Must be either `"dadID"` for paternal chains or `"momID"` for
 maternal chains.}
+
+\item{traversal_direction}{Character giving the mode of transversion: defaults to "in". If set to out, will procedure a list of descendants.}
 }
 \value{
 A data frame with two added columns:

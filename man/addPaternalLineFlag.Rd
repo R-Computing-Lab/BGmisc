@@ -7,16 +7,16 @@
 addPaternalLineFlag(ped, anchor_id, flag_col, chain_col = "dadID_chain")
 }
 \arguments{
-\item{ped}{A pedigree data frame containing a paternal chain list-column.}
+\item{ped}{A pedigree data frame containing a parental chain list-column.}
 
 \item{anchor_id}{ID of the anchor individual to search for within each
-person's paternal chain.}
+person's parental chain.}
 
 \item{flag_col}{Character string giving the name of the logical output column
 to add to `ped`.}
 
 \item{chain_col}{Character string giving the name of the list-column
-containing ordered paternal ancestor chains.}
+containing ordered parental ancestor chains.}
 }
 \value{
 A data frame with `flag_col` added. The flag is `TRUE` when

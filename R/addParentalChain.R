@@ -9,12 +9,12 @@
 #' @param momID Character string giving the name of the column containing
 #'   maternal IDs.
 #' @param chain_col Character string giving the name of the output list-column
-#'   that will contain the ordered paternal ancestor chain for each individual.
+#'   that will contain the ordered parental ancestor chain for each individual.
 #' @param chain_string_col Character string giving the name of the output
-#'   character column that will contain the collapsed paternal ancestor chain.
+#'   character column that will contain the collapsed parental ancestor chain.
 #' @param collapse Character string used to collapse ancestor IDs into
 #'   `chain_string_col`.
-#'  @param traversal_direction Character giving the mode of transversion: defaults to "in"
+#' @param traversal_direction Character giving the mode of transversion: defaults to "in". If set to out, will procedure a list of descendants.
 #'
 #' @return A data frame with two added columns:
 #'   \describe{
@@ -58,19 +58,7 @@ addParentalChain(
 #' This is a convenience wrapper around [addParentalChain()] with
 #' `component = "momID"`.
 #'
-#' @param ped A pedigree data frame.
-#' @param personID Character string giving the name of the column containing
-#'   individual IDs.
-#' @param dadID Character string giving the name of the column containing
-#'   paternal IDs.
-#' @param momID Character string giving the name of the column containing
-#'   maternal IDs.
-#' @param chain_col Character string giving the name of the output list-column
-#'   that will contain the ordered maternal ancestor chain for each individual.
-#' @param chain_string_col Character string giving the name of the output
-#'   character column that will contain the collapsed maternal ancestor chain.
-#' @param collapse Character string used to collapse ancestor IDs into
-#'   `chain_string_col`.
+#' @inheritParams addPaternalChain
 #'
 #' @return A data frame with two added columns:
 #'   \describe{
@@ -123,19 +111,7 @@ addParentalChain(
 #' individual, and adds both a list-column representation and a collapsed string
 #' representation to the original pedigree.
 #'
-#' @param ped A pedigree data frame.
-#' @param personID Character string giving the name of the column containing
-#'   individual IDs.
-#' @param dadID Character string giving the name of the column containing
-#'   paternal IDs.
-#' @param momID Character string giving the name of the column containing
-#'   maternal IDs.
-#' @param chain_col Character string giving the name of the output list-column
-#'   that will contain the ordered parental ancestor chain for each individual.
-#' @param chain_string_col Character string giving the name of the output
-#'   character column that will contain the collapsed parental ancestor chain.
-#' @param collapse Character string used to collapse ancestor IDs into
-#'   `chain_string_col`.
+#' @inheritParams addPaternalChain
 #' @param component Character string specifying which parental component to
 #'   follow. Must be either `"dadID"` for paternal chains or `"momID"` for
 #'   maternal chains.
@@ -282,13 +258,13 @@ addParentalChain <- function(
 #' This is a convenience wrapper around [addParentalLineFlag()] with
 #' `component = "dadID"`.
 #'
-#' @param ped A pedigree data frame containing a paternal chain list-column.
+#' @param ped A pedigree data frame containing a parental chain list-column.
 #' @param anchor_id ID of the anchor individual to search for within each
-#'   person's paternal chain.
+#'   person's parental chain.
 #' @param flag_col Character string giving the name of the logical output column
 #'   to add to `ped`.
 #' @param chain_col Character string giving the name of the list-column
-#'   containing ordered paternal ancestor chains.
+#'   containing ordered parental ancestor chains.
 #'
 #' @return A data frame with `flag_col` added. The flag is `TRUE` when
 #'   `anchor_id` appears in the individual's paternal chain and `FALSE`
@@ -318,19 +294,12 @@ addPaternalLineFlag <- function(
 #' This is a convenience wrapper around [addParentalLineFlag()] with
 #' `component = "momID"`.
 #'
-#' @param ped A pedigree data frame containing a maternal chain list-column.
-#' @param anchor_id ID of the anchor individual to search for within each
-#'   person's maternal chain.
-#' @param flag_col Character string giving the name of the logical output column
-#'   to add to `ped`.
-#' @param chain_col Character string giving the name of the list-column
-#'   containing ordered maternal ancestor chains.
-#'
+#' @inheritParams addPaternalLineFlag
 #' @return A data frame with `flag_col` added. The flag is `TRUE` when
-#'   `anchor_id` appears in the individual's maternal chain and `FALSE`
+#'   `anchor_id` appears in the individual's selected parental chain and `FALSE`
 #'   otherwise.
-#'
 #' @export
+
 addMaternalLineFlag <- function(
     ped,
     anchor_id,
@@ -354,13 +323,7 @@ addMaternalLineFlag <- function(
 #' For `component = "dadID"`, the function searches the paternal chain.
 #' For `component = "momID"`, the function searches the maternal chain.
 #'
-#' @param ped A pedigree data frame containing a parental chain list-column.
-#' @param anchor_id ID of the anchor individual to search for within each
-#'   person's parental chain.
-#' @param flag_col Character string giving the name of the logical output column
-#'   to add to `ped`.
-#' @param chain_col Character string giving the name of the list-column
-#'   containing ordered parental ancestor chains.
+#' @inheritParams addPaternalLineFlag
 #' @param component Character string specifying which parental component the
 #'   chain represents. Must be either `"dadID"` for paternal chains or `"momID"`
 #'   for maternal chains.
