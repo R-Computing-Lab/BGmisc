@@ -314,8 +314,6 @@ df_repaired <- checkParentIDs(df_got, # %>% filter(famID == 1),
 )
 ```
 
-    ## REPAIR IN EARLY ALPHA
-
 This code creates new IDs for individuals with one known parent and a
 missing other. It checks if either `momID` or `dadID` is missing, and if
 so, it assigns a new ID based on the row number. This allows us to
