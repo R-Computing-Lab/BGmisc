@@ -135,7 +135,7 @@ checkParentIDs <- function(ped, verbose = FALSE, repair = FALSE,
       cat("Step 3: Attempting to repair missing parents...\n")
     }
 
-    cat("REPAIR IN EARLY ALPHA\n")
+  #  cat("REPAIR IN EARLY ALPHA\n")
     # Initialize a list to track changes made during repair
     changes <- list(
       corrected_mom_sex = character(0),
