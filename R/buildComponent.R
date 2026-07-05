@@ -672,6 +672,10 @@ ped2com <- function(ped, component,
   isPar <- loadOrComputeCheckpoint(
     file = checkpoint_files$isPar,
     compute_fn = function() {
+      if(is.null(iss) || is.null(jss) || length(iss) == 0 || length(jss) == 0) {
+        warning("Cannot construct isPar matrix: iss or jss is NULL or empty.")
+      }
+
       Matrix::sparseMatrix(
         i = iss, j = jss, x = parVal,
         dims = c(config$nr, config$nr),
@@ -791,7 +795,7 @@ ped2com <- function(ped, component,
       save_rate_parlist = config$save_rate_parlist,
       checkpoint_files = checkpoint_files,
       component = config$component,
-      adjacency_method = config$adjacency_method, # adjacency_method,
+      adjacency_method = config$adjacency_method,
       saveable = config$saveable,
       resume = config$resume,
       save_path = config$save_path,

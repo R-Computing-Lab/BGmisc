@@ -19,7 +19,8 @@ fitPedigreeModel(
   tryhard = TRUE,
   intervals = TRUE,
   extraTries = 10,
-  condenseMatrixSlots = TRUE
+  condenseMatrixSlots = TRUE,
+  runmodel = TRUE
 )
 }
 \arguments{
@@ -57,6 +58,8 @@ if FALSE, use \code{mxRun}.}
 \item{extraTries}{Numeric. The number of extra optimization attempts to make when \code{tryhard} is TRUE. Default is 10.}
 
 \item{condenseMatrixSlots}{Logical. If TRUE, use the mxCondenseMatrixSlots wrapper to optimize memory usage for large matrices. Default is TRUE.}
+
+\item{runmodel}{Logical. If TRUE (default), the model is fitted; if FALSE, the model is returned without fitting.}
 }
 \value{
 A fitted OpenMx model.

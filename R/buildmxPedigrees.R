@@ -345,6 +345,7 @@ buildPedigreeMx <- function(model_name, vars, group_models,
 #'   if FALSE, use \code{mxRun}.
 #' @param intervals Logical. If TRUE (default), compute confidence intervals for the parameters using \code{mxSE} and \code{mxCI}.
 #' @param extraTries Numeric. The number of extra optimization attempts to make when \code{tryhard} is TRUE. Default is 10.
+#' @param runmodel Logical. If TRUE (default), the model is fitted; if FALSE, the model is returned without fitting.
 #' @return A fitted OpenMx model.
 #' @export
 
@@ -370,7 +371,8 @@ fitPedigreeModel <- function(
   tryhard = TRUE,
   intervals = TRUE,
   extraTries = 10,
-  condenseMatrixSlots = TRUE
+  condenseMatrixSlots = TRUE,
+  runmodel = TRUE
 ) {
   .require_openmx("fitPedigreeModel")
 
@@ -402,11 +404,16 @@ fitPedigreeModel <- function(
     ci = intervals,
     condenseMatrixSlots = FALSE # only need to condense once
   )
+  if(runmodel == TRUE){
   if (tryhard == TRUE) {
     fitted_model <- OpenMx::mxTryHard(pedigree_model, silent = TRUE, extraTries = extraTries, intervals = intervals)
   } else {
     fitted_model <- OpenMx::mxRun(pedigree_model, intervals = intervals)
   }
+    } else {
+    fitted_model <- pedigree_model
+  }
+
   fitted_model
 }
 
