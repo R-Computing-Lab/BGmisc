@@ -19,6 +19,8 @@
 #' @param keep_ids character vector of IDs to retain in the final relatedness matrix. When supplied, only the rows of \code{r2} corresponding to these IDs are used in the tcrossprod, so the result is a \code{length(keep_ids) x length(keep_ids)} matrix. All columns of \code{r2} are retained during the multiplication so relatedness values remain correct. IDs not found in the pedigree are silently dropped with a warning.
 #' @param adjacency_method character. The method to use for computing the adjacency matrix.  Options are "loop", "indexed", direct or beta
 #' @param isChild_method character. The method to use for computing the isChild matrix.  Options are "classic" or "partialparent"
+#' @param repair_rowless_parents logical. If TRUE, automatically correct for parents referenced in momID/dadID that have no row of their own in \code{ped} (e.g., unrecorded founder stock), before computing relatedness. Without this, such parents are still treated as "known" for the purposes of \code{isChild_method = "partialparent"} even though their genetic contribution cannot be traced, which understates diagonal relatedness and drops covariance between siblings who share the missing parent. How the correction is applied is controlled by \code{rowless_parents_method}. Defaults to FALSE, in which case a warning is issued instead.
+#' @param rowless_parents_method character. How to apply the \code{repair_rowless_parents} correction. \code{"rows"} (default) adds one placeholder founder row per unique missing parent ID (not one per affected child) to a working copy of \code{ped}, then restricts the returned matrix back to the original individuals via \code{keep_ids} unless \code{keep_ids} is already supplied. \code{"schur"} applies a Schur complement on the block-triangular RAM system -- for each missing parent, its already-known children define a rank-1 update (\code{v \%*\% t(v)}, where \code{v} is that parent's traced genetic contribution to every individual, computed from the existing RAM matrix) which is added to the relatedness matrix at the tcrossprod step. \code{"schur"} currently only supports \code{component = "additive"}.
 #' @param adjBeta_method numeric The method to use for computing the building the adjacency_method matrix when using the "beta" build
 #' @param compress logical. If TRUE, use compression when saving the checkpoint files.  Defaults to TRUE.
 #' @param mz_twins logical. If TRUE, merge MZ co-twin columns in the r2 matrix before tcrossprod so that MZ twins are coded with relatedness 1 instead of 0.5. Twin pairs are identified from the \code{twinID} column. When a \code{zygosity} column is also present, only pairs where both members have \code{zygosity == "MZ"} are used; otherwise all \code{twinID} pairs are assumed to be MZ. Defaults to TRUE.
@@ -41,6 +43,8 @@ ped2com <- function(ped, component,
                     keep_ids = NULL,
                     adjacency_method = "direct",
                     isChild_method = "partialparent",
+                    repair_rowless_parents = FALSE,
+                    rowless_parents_method = "rows",
                     saveable = FALSE,
                     resume = FALSE,
                     save_rate = 5,
@@ -71,6 +75,8 @@ ped2com <- function(ped, component,
     transpose_method = transpose_method,
     adjacency_method = adjacency_method,
     isChild_method = isChild_method,
+    repair_rowless_parents = repair_rowless_parents,
+    rowless_parents_method = rowless_parents_method,
     save_rate = save_rate,
     save_rate_gen = save_rate_gen,
     save_rate_parlist = save_rate_parlist,
@@ -133,9 +139,74 @@ ped2com <- function(ped, component,
     ))
   }
 
+  # Validate the 'rowless_parents_method' argument
+  rowless_parents_method_options <- c("rows", "schur")
+  if (!config$rowless_parents_method %in% rowless_parents_method_options) {
+    stop(paste0(
+      "Invalid rowless_parents_method specified. Choose from ",
+      paste(rowless_parents_method_options, collapse = ", "), "."
+    ))
+  }
+  # "schur" is a pure argument-compatibility constraint, checked here for the
+  # same reason adjacency_method/transpose_method are validated up front --
+  # this is NOT the correction itself running early. Components that return
+  # before the tcrossprod step (generation/distance/common nuclear) would
+  # otherwise never reach the check below and silently skip the correction.
+  if (isTRUE(config$repair_rowless_parents) && config$rowless_parents_method == "schur" &&
+    config$component != "additive") {
+    stop(
+      "repair_rowless_parents = TRUE with rowless_parents_method = \"schur\" is currently ",
+      "only implemented for component = \"additive\". Use rowless_parents_method = \"rows\" ",
+      "for other components."
+    )
+  }
+
   # standardize colnames
   if (config$standardize_colnames == TRUE) {
     ped <- standardizeColnames(ped, verbose = config$verbose)
+  }
+
+  # Detect parents referenced in momID/dadID that have no row of their own
+  # (e.g., unrecorded founder stock). Left unrepaired, isChild_method =
+  # "partialparent" (based on raw NA-status of momID/dadID) and the adjacency
+  # builders (based on actual row matches) disagree about whether such a
+  # parent is "known," which understates diagonal relatedness and silently
+  # drops covariance between siblings who share the same missing parent.
+  # rowless_parents_method = "rows" is handled entirely here, since it must
+  # mutate `ped` before anything downstream (isPar/isChild/RAM tracing) runs.
+  # rowless_parents_method = "schur" touches nothing here -- it needs the RAM
+  # matrix `r`, so its validation and correction both live at the tcrossprod
+  # step below, right where the relatedness matrix is actually assembled.
+  rowless_parents <- .findRowlessParents(ped)
+  if (length(rowless_parents) > 0) {
+    if (isTRUE(config$repair_rowless_parents) && config$rowless_parents_method == "rows") {
+      if (config$verbose == TRUE) {
+        message(
+          length(rowless_parents), " parent ID(s) referenced in momID/dadID have no row in `ped`. ",
+          "Adding one placeholder founder row per missing parent before computing relatedness.\n"
+        )
+      }
+      original_ids <- ped$ID
+      ped <- addRowlessParents(
+        ped = ped, verbose = config$verbose,
+        validation_results = list(female_var = NA, male_var = NA)
+      )
+      config$nr <- nrow(ped)
+      if (is.null(config$keep_ids)) {
+        keep_ids <- original_ids
+        config$keep_ids <- original_ids
+      }
+    } else if (!isTRUE(config$repair_rowless_parents)) {
+      warning(
+        length(rowless_parents), " parent ID(s) referenced in momID/dadID have no matching row in `ped`. ",
+        "isChild_method = \"", config$isChild_method, "\" and the adjacency builders will disagree about ",
+        "whether these parents are \"known,\" which can understate diagonal relatedness (e.g., 0.5/0.75 ",
+        "instead of 1) and omit covariance between siblings who share the missing parent. Set ",
+        "repair_rowless_parents = TRUE (with rowless_parents_method = \"rows\" or \"schur\") to correct ",
+        "for them, or repair `ped` yourself first with checkParentIDs(ped, repair = TRUE, parentswithoutrow = TRUE).",
+        call. = FALSE
+      )
+    }
   }
 
   mz_row_pairs <- NULL
@@ -409,6 +480,44 @@ ped2com <- function(ped, component,
       }
     }
   }
+
+  # --- Step 3c: Schur-complement correction for rowless parents ---
+  # For each parent referenced in momID/dadID with no row of its own, its
+  # (known) children define a rank-1 update: v = r %*% p_f, where p_f places
+  # `parVal` at each of that parent's children and r is the not-yet-isChild-
+  # scaled RAM matrix (I-A)^-1. Appending v as an extra column of r2 makes
+  # the upcoming tcrossprod add v %*% t(v) for free -- this is exactly the
+  # contribution that parent would have made had it been a real row, derived
+  # via a Schur complement on the block-triangular (rowless-parents-first)
+  # system. No row is ever added to `ped`, and the matrix's row dimension
+  # (and therefore dimnames) never changes.
+  if (length(rowless_parents) > 0 && isTRUE(config$repair_rowless_parents) &&
+    config$rowless_parents_method == "schur") {
+    # component compatibility already validated up front
+    if (config$verbose == TRUE) {
+      message(
+        length(rowless_parents), " parent ID(s) referenced in momID/dadID have no row in `ped`. ",
+        "Applying an exact low-rank (Schur complement) correction for them here at the tcrossprod ",
+        "step; `ped` and matrix dimensions are left untouched.\n"
+      )
+    }
+    p_nf <- matrix(0,
+      nrow = config$nr, ncol = length(rowless_parents),
+      dimnames = list(NULL, rowless_parents)
+    )
+    for (j in seq_along(rowless_parents)) {
+      f <- rowless_parents[j]
+      p_nf[, j] <- parVal * (
+        (!is.na(ped$momID) & ped$momID == f) + (!is.na(ped$dadID) & ped$dadID == f)
+      )
+    }
+    v <- as.matrix(r %*% p_nf)
+    r2 <- cbind(r2, v)
+    if (config$verbose == TRUE) {
+      message("Added ", length(rowless_parents), " rank-1 rowless-parent correction column(s) to r2")
+    }
+  }
+
   # --- Step 4: T crossproduct  ---
 
   # Subset rows of r2 to target individuals if requested.
@@ -672,7 +781,7 @@ ped2com <- function(ped, component,
   isPar <- loadOrComputeCheckpoint(
     file = checkpoint_files$isPar,
     compute_fn = function() {
-      if(is.null(iss) || is.null(jss) || length(iss) == 0 || length(jss) == 0) {
+      if (is.null(iss) || is.null(jss) || length(iss) == 0 || length(jss) == 0) {
         warning("Cannot construct isPar matrix: iss or jss is NULL or empty.")
       }
 

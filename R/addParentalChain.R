@@ -27,16 +27,16 @@
 #'
 #' @export
 addPaternalChain <- function(
-    ped,
-    personID = "personID",
-    dadID = "dadID",
-    momID = "momID",
-    chain_col = "dadID_chain",
-    chain_string_col = "dadID_chain_string",
-    collapse = "|",
-    traversal_direction = "in"
+  ped,
+  personID = "personID",
+  dadID = "dadID",
+  momID = "momID",
+  chain_col = "dadID_chain",
+  chain_string_col = "dadID_chain_string",
+  collapse = "|",
+  traversal_direction = "in"
 ) {
-addParentalChain(
+  addParentalChain(
     ped = ped,
     personID = personID,
     dadID = dadID,
@@ -46,7 +46,7 @@ addParentalChain(
     collapse = collapse,
     component = "dadID",
     traversal_direction = traversal_direction
-)
+  )
 }
 
 #' Add maternal ancestor chains to a pedigree
@@ -72,16 +72,16 @@ addParentalChain(
 #' @export
 
 addMaternalChain <- function(
-    ped,
-    personID = "personID",
-    dadID = "dadID",
-    momID = "momID",
-    chain_col = "momID_chain",
-    chain_string_col = "momID_chain_string",
-    collapse = "|",
-    traversal_direction = "in"
+  ped,
+  personID = "personID",
+  dadID = "dadID",
+  momID = "momID",
+  chain_col = "momID_chain",
+  chain_string_col = "momID_chain_string",
+  collapse = "|",
+  traversal_direction = "in"
 ) {
-addParentalChain(
+  addParentalChain(
     ped = ped,
     personID = personID,
     dadID = dadID,
@@ -91,7 +91,7 @@ addParentalChain(
     collapse = collapse,
     component = "momID",
     traversal_direction = traversal_direction
-)
+  )
 }
 #' Add unilineal parental ancestor chains to a pedigree
 #'
@@ -139,17 +139,16 @@ addParentalChain(
 #' @export
 
 addParentalChain <- function(
-    ped,
-    personID = "personID",
-    dadID = "dadID",
-    momID = "momID",
-    chain_col = "chain",
-    chain_string_col = "chain_string",
-    collapse = "|",
-    component = c("dadID",  "momID"),
-    traversal_direction = "in"
+  ped,
+  personID = "personID",
+  dadID = "dadID",
+  momID = "momID",
+  chain_col = "chain",
+  chain_string_col = "chain_string",
+  collapse = "|",
+  component = c("dadID", "momID"),
+  traversal_direction = "in"
 ) {
-
   # Build a paternal-only version of the pedigree.
   # This removes maternal edges so the resulting graph only represents:
   # person -> father -> father's father -> father's father's father.
@@ -165,21 +164,21 @@ addParentalChain <- function(
         personID = as.character(ped[[personID]]),
         momID = as.character(ped[[momID]]),
         dadID = NA_character_,
-      stringsAsFactors = FALSE
+        stringsAsFactors = FALSE
       )
   } else if (component == "dadID") {
     ##############
     # Paternal-only pedigree.
     ##############
-  parental_ped <- data.frame(
+    parental_ped <- data.frame(
       personID = as.character(ped[[personID]]),
       momID = NA_character_,
       dadID = as.character(ped[[dadID]]),
-    stringsAsFactors = FALSE
+      stringsAsFactors = FALSE
     )
-} else {
- stop("unknown id supplied")
-}
+  } else {
+    stop("unknown id supplied")
+  }
   # Use BGmisc infrastructure to convert the paternal-only pedigree into a graph.
   parental_graph <- ped2graph(
     parental_ped,
@@ -190,7 +189,6 @@ addParentalChain <- function(
 
   # For one person, recover the ordered paternal chain from the network.
   get_ordered_parental_chain <- function(id) {
-
     id_chr <- as.character(id)
 
     # If the person is not represented as a graph vertex, return no chain.
@@ -272,10 +270,10 @@ addParentalChain <- function(
 #'
 #' @export
 addPaternalLineFlag <- function(
-    ped,
-    anchor_id,
-    flag_col,
-    chain_col = "dadID_chain"
+  ped,
+  anchor_id,
+  flag_col,
+  chain_col = "dadID_chain"
 ) {
   addParentalLineFlag(
     ped = ped,
@@ -301,10 +299,10 @@ addPaternalLineFlag <- function(
 #' @export
 
 addMaternalLineFlag <- function(
-    ped,
-    anchor_id,
-    flag_col,
-    chain_col = "momID_chain"
+  ped,
+  anchor_id,
+  flag_col,
+  chain_col = "momID_chain"
 ) {
   addParentalLineFlag(
     ped = ped,
@@ -343,13 +341,12 @@ addMaternalLineFlag <- function(
 #'
 #' @export
 addParentalLineFlag <- function(
-    ped,
-    anchor_id,
-    flag_col,
-    chain_col,
-    component = c("dadID", "momID")
+  ped,
+  anchor_id,
+  flag_col,
+  chain_col,
+  component = c("dadID", "momID")
 ) {
-
   component <- match.arg(component)
 
   # Convert the anchor ID to character because the parental chain stores graph

@@ -14,7 +14,6 @@ get_value <- function(x, id_col, id, value_col) {
 
 
 test_that("addPaternalChain adds ordered paternal chains", {
-
   ped <- data.frame(
     personID = c("ego", "dad", "pat_gf", "pat_ggf", "mom", "mat_gm"),
     dadID = c("dad", "pat_gf", "pat_ggf", NA, NA, NA),
@@ -49,7 +48,6 @@ test_that("addPaternalChain adds ordered paternal chains", {
 
 
 test_that("addMaternalChain adds ordered maternal chains", {
-
   ped <- data.frame(
     personID = c("ego", "dad", "pat_gf", "mom", "mat_gm", "mat_ggm"),
     dadID = c("dad", "pat_gf", NA, NA, NA, NA),
@@ -84,7 +82,6 @@ test_that("addMaternalChain adds ordered maternal chains", {
 
 
 test_that("addParentalChain can add paternal and maternal chains with custom output columns", {
-
   ped <- data.frame(
     personID = c("ego", "dad", "pat_gf", "mom", "mat_gm"),
     dadID = c("dad", "pat_gf", NA, NA, NA),
@@ -141,7 +138,6 @@ test_that("addParentalChain can add paternal and maternal chains with custom out
 
 
 test_that("addParentalChain works with custom input column names", {
-
   ped <- data.frame(
     id = c("ego", "dad", "pat_gf", "mom", "mat_gm"),
     father = c("dad", "pat_gf", NA, NA, NA),
@@ -172,7 +168,6 @@ test_that("addParentalChain works with custom input column names", {
 
 
 test_that("addParentalChain coerces numeric IDs to character chains", {
-
   ped <- data.frame(
     personID = c(1, 2, 3, 4, 5),
     dadID = c(2, 3, NA, NA, NA),
@@ -194,7 +189,6 @@ test_that("addParentalChain coerces numeric IDs to character chains", {
 
 
 test_that("addPaternalLineFlag flags whether anchor appears in paternal chain", {
-
   ped <- data.frame(
     personID = c("ego", "sibling", "dad", "pat_gf", "unrelated"),
     stringsAsFactors = FALSE
@@ -224,7 +218,6 @@ test_that("addPaternalLineFlag flags whether anchor appears in paternal chain", 
 
 
 test_that("addMaternalLineFlag flags whether anchor appears in maternal chain", {
-
   ped <- data.frame(
     personID = c("ego", "sibling", "mom", "mat_gm", "unrelated"),
     stringsAsFactors = FALSE
@@ -254,7 +247,6 @@ test_that("addMaternalLineFlag flags whether anchor appears in maternal chain", 
 
 
 test_that("addParentalLineFlag works with explicit paternal and maternal chain columns", {
-
   ped <- data.frame(
     personID = c("ego", "dad", "mom", "pat_gf", "mat_gm", "unrelated"),
     stringsAsFactors = FALSE
@@ -307,7 +299,6 @@ test_that("addParentalLineFlag works with explicit paternal and maternal chain c
 
 
 test_that("addParentalLineFlag coerces numeric anchor IDs to character", {
-
   ped <- data.frame(
     personID = c(1, 2, 3, 4),
     stringsAsFactors = FALSE
@@ -334,7 +325,6 @@ test_that("addParentalLineFlag coerces numeric anchor IDs to character", {
 
 
 test_that("addParentalLineFlag errors for invalid component", {
-
   ped <- data.frame(
     personID = c("ego"),
     stringsAsFactors = FALSE

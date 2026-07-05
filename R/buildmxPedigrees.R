@@ -404,13 +404,13 @@ fitPedigreeModel <- function(
     ci = intervals,
     condenseMatrixSlots = FALSE # only need to condense once
   )
-  if(runmodel == TRUE){
-  if (tryhard == TRUE) {
-    fitted_model <- OpenMx::mxTryHard(pedigree_model, silent = TRUE, extraTries = extraTries, intervals = intervals)
-  } else {
-    fitted_model <- OpenMx::mxRun(pedigree_model, intervals = intervals)
-  }
+  if (runmodel == TRUE) {
+    if (tryhard == TRUE) {
+      fitted_model <- OpenMx::mxTryHard(pedigree_model, silent = TRUE, extraTries = extraTries, intervals = intervals)
     } else {
+      fitted_model <- OpenMx::mxRun(pedigree_model, intervals = intervals)
+    }
+  } else {
     fitted_model <- pedigree_model
   }
 
