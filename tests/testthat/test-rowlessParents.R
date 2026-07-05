@@ -54,3 +54,53 @@ test_that("repair_rowless_parents = TRUE is a no-op when there are no rowless pa
   r_plain <- ped2add(ped_complete, sparse = FALSE)
   expect_equal(r_repaired, r_plain)
 })
+
+test_that("rowless_parents_method = 'schur' matches 'rows' exactly without adding any rows", {
+  r_rows <- ped2add(ped_rowless, sparse = FALSE, repair_rowless_parents = TRUE, rowless_parents_method = "rows")
+  # This toy pedigree has zero resolvable edges among the recorded individuals
+  # (every parent is rowless), which independently triggers a pre-existing,
+  # unrelated "empty isPar" warning regardless of rowless-parent handling --
+  # suppress it here since it's not what this test is checking.
+  r_schur <- suppressWarnings(
+    ped2add(ped_rowless, sparse = FALSE, repair_rowless_parents = TRUE, rowless_parents_method = "schur")
+  )
+
+  expect_equal(dim(r_schur), c(4L, 4L))
+  expect_equal(sort(rownames(r_schur)), c("C1", "C2", "C3", "C4"))
+  expect_equal(r_schur[sort(rownames(r_schur)), sort(rownames(r_schur))],
+               r_rows[sort(rownames(r_rows)), sort(rownames(r_rows))])
+
+  expect_equal(unname(diag(r_schur)), rep(1, 4))
+  expect_equal(r_schur["C1", "C2"], 0.5)
+  expect_equal(r_schur["C1", "C3"], 0.25)
+  expect_equal(r_schur["C2", "C3"], 0.25)
+  expect_equal(r_schur["C1", "C4"], 0)
+})
+
+test_that("rowless_parents_method = 'schur' propagates correctly to a grandchild generation", {
+  # F1 (rowless) -> C1 x D2 -> G1, G2 (full sibs); C1 x D3 -> G3 (paternal half-sib of G1/G2 via C1)
+  ped_deep <- data.frame(
+    ID    = c("C1", "D2", "D3", "G1", "G2", "G3"),
+    momID = c("F1", NA,   NA,   "C1", "C1", "C1"),
+    dadID = c(NA,   NA,   NA,   "D2", "D2", "D3"),
+    sex   = c(0, 1, 1, 0, 1, 0),
+    stringsAsFactors = FALSE
+  )
+
+  r_rows <- ped2add(ped_deep, sparse = FALSE, repair_rowless_parents = TRUE, rowless_parents_method = "rows")
+  r_schur <- ped2add(ped_deep, sparse = FALSE, repair_rowless_parents = TRUE, rowless_parents_method = "schur")
+
+  ids <- ped_deep$ID
+  expect_equal(r_schur[ids, ids], r_rows[ids, ids])
+  expect_equal(unname(diag(r_schur)), rep(1, 6))
+  expect_equal(r_schur["G1", "G2"], 0.5)
+  expect_equal(r_schur["G1", "G3"], 0.25)
+})
+
+test_that("rowless_parents_method = 'schur' errors for unsupported components", {
+  expect_error(
+    ped2com(ped_rowless, component = "distance", sparse = FALSE, repair_rowless_parents = TRUE,
+            rowless_parents_method = "schur"),
+    "additive"
+  )
+})
