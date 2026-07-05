@@ -290,6 +290,20 @@ repairParentIDs <- function(ped, verbose = FALSE,
   )
 }
 
+#' Find Rowless Parents
+#'
+#' Identifies IDs referenced in momID or dadID that have no row of their own in \code{ped}.
+#' Used to detect parents (e.g., unrecorded founder stock) whose genetic contribution
+#' cannot be traced because their own ancestry is absent from the pedigree.
+#' @param ped A dataframe representing the pedigree data with columns 'ID', 'dadID', and 'momID'.
+#' @return A character/numeric vector of rowless parent IDs (empty if none).
+#' @keywords internal
+.findRowlessParents <- function(ped) {
+  all_parents <- unique(c(ped$momID, ped$dadID))
+  all_parents <- all_parents[!is.na(all_parents)]
+  all_parents[!all_parents %in% ped$ID]
+}
+
 #' Add addRowlessParents
 #'
 #' This function adds parents who appear in momID or dadID but are missing from ID

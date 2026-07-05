@@ -18,6 +18,7 @@ ped2com(
   keep_ids = NULL,
   adjacency_method = "direct",
   isChild_method = "partialparent",
+  repair_rowless_parents = FALSE,
   saveable = FALSE,
   resume = FALSE,
   save_rate = 5,
@@ -60,6 +61,8 @@ ped2com(
 \item{adjacency_method}{character. The method to use for computing the adjacency matrix.  Options are "loop", "indexed", direct or beta}
 
 \item{isChild_method}{character. The method to use for computing the isChild matrix.  Options are "classic" or "partialparent"}
+
+\item{repair_rowless_parents}{logical. If TRUE, automatically add a placeholder founder row for each ID referenced in momID/dadID that has no row of its own in \code{ped} (e.g., unrecorded founder stock), before computing relatedness. Without this, such parents are still treated as "known" for the purposes of \code{isChild_method = "partialparent"} even though their genetic contribution cannot be traced, which understates diagonal relatedness and drops covariance between siblings who share the missing parent. Exactly one placeholder row is added per unique missing parent ID (not one per affected child), and the returned matrix is automatically restricted to the original individuals via \code{keep_ids} unless \code{keep_ids} is already supplied. Defaults to FALSE, in which case a warning is issued instead.}
 
 \item{saveable}{logical. If TRUE, save the intermediate results to disk}
 

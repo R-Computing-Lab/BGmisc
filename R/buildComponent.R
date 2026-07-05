@@ -19,6 +19,7 @@
 #' @param keep_ids character vector of IDs to retain in the final relatedness matrix. When supplied, only the rows of \code{r2} corresponding to these IDs are used in the tcrossprod, so the result is a \code{length(keep_ids) x length(keep_ids)} matrix. All columns of \code{r2} are retained during the multiplication so relatedness values remain correct. IDs not found in the pedigree are silently dropped with a warning.
 #' @param adjacency_method character. The method to use for computing the adjacency matrix.  Options are "loop", "indexed", direct or beta
 #' @param isChild_method character. The method to use for computing the isChild matrix.  Options are "classic" or "partialparent"
+#' @param repair_rowless_parents logical. If TRUE, automatically add a placeholder founder row for each ID referenced in momID/dadID that has no row of its own in \code{ped} (e.g., unrecorded founder stock), before computing relatedness. Without this, such parents are still treated as "known" for the purposes of \code{isChild_method = "partialparent"} even though their genetic contribution cannot be traced, which understates diagonal relatedness and drops covariance between siblings who share the missing parent. Exactly one placeholder row is added per unique missing parent ID (not one per affected child), and the returned matrix is automatically restricted to the original individuals via \code{keep_ids} unless \code{keep_ids} is already supplied. Defaults to FALSE, in which case a warning is issued instead.
 #' @param adjBeta_method numeric The method to use for computing the building the adjacency_method matrix when using the "beta" build
 #' @param compress logical. If TRUE, use compression when saving the checkpoint files.  Defaults to TRUE.
 #' @param mz_twins logical. If TRUE, merge MZ co-twin columns in the r2 matrix before tcrossprod so that MZ twins are coded with relatedness 1 instead of 0.5. Twin pairs are identified from the \code{twinID} column. When a \code{zygosity} column is also present, only pairs where both members have \code{zygosity == "MZ"} are used; otherwise all \code{twinID} pairs are assumed to be MZ. Defaults to TRUE.
@@ -41,6 +42,7 @@ ped2com <- function(ped, component,
                     keep_ids = NULL,
                     adjacency_method = "direct",
                     isChild_method = "partialparent",
+                    repair_rowless_parents = FALSE,
                     saveable = FALSE,
                     resume = FALSE,
                     save_rate = 5,
@@ -71,6 +73,7 @@ ped2com <- function(ped, component,
     transpose_method = transpose_method,
     adjacency_method = adjacency_method,
     isChild_method = isChild_method,
+    repair_rowless_parents = repair_rowless_parents,
     save_rate = save_rate,
     save_rate_gen = save_rate_gen,
     save_rate_parlist = save_rate_parlist,
@@ -136,6 +139,44 @@ ped2com <- function(ped, component,
   # standardize colnames
   if (config$standardize_colnames == TRUE) {
     ped <- standardizeColnames(ped, verbose = config$verbose)
+  }
+
+  # Detect parents referenced in momID/dadID that have no row of their own
+  # (e.g., unrecorded founder stock). Left unrepaired, isChild_method =
+  # "partialparent" (based on raw NA-status of momID/dadID) and the adjacency
+  # builders (based on actual row matches) disagree about whether such a
+  # parent is "known," which understates diagonal relatedness and silently
+  # drops covariance between siblings who share the same missing parent.
+  rowless_parents <- .findRowlessParents(ped)
+  if (length(rowless_parents) > 0) {
+    if (isTRUE(config$repair_rowless_parents)) {
+      if (config$verbose == TRUE) {
+        message(
+          length(rowless_parents), " parent ID(s) referenced in momID/dadID have no row in `ped`. ",
+          "Adding one placeholder founder row per missing parent before computing relatedness.\n"
+        )
+      }
+      original_ids <- ped$ID
+      ped <- addRowlessParents(
+        ped = ped, verbose = config$verbose,
+        validation_results = list(female_var = NA, male_var = NA)
+      )
+      config$nr <- nrow(ped)
+      if (is.null(config$keep_ids)) {
+        keep_ids <- original_ids
+        config$keep_ids <- original_ids
+      }
+    } else {
+      warning(
+        length(rowless_parents), " parent ID(s) referenced in momID/dadID have no matching row in `ped`. ",
+        "isChild_method = \"", config$isChild_method, "\" and the adjacency builders will disagree about ",
+        "whether these parents are \"known,\" which can understate diagonal relatedness (e.g., 0.5/0.75 ",
+        "instead of 1) and omit covariance between siblings who share the missing parent. Set ",
+        "repair_rowless_parents = TRUE to auto-add placeholder founder rows for them, or repair `ped` ",
+        "yourself first with checkParentIDs(ped, repair = TRUE, parentswithoutrow = TRUE).",
+        call. = FALSE
+      )
+    }
   }
 
   mz_row_pairs <- NULL

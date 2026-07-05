@@ -3,6 +3,7 @@
 ## Development version
 
 * Add building of parental chains with `addParentalChain()` and `addParentalFlag()`, so that you can easily trace maternity and paternity. This is implemented as a general function that can be used to build any type of parental chain, and a specific wrapper for maternal and paternal chains. The parental flag is a binary variable that indicates whether the individual is in the specified parental chain, which can be useful for filtering or grouping individuals based on their lineage.
+* Fixed silent mis-scoring in `ped2com()`/`ped2add()` (and other component wrappers) when `momID`/`dadID` reference a parent ID that has no row of its own in `ped` (e.g., unrecorded founder stock, or a pedigree subset that excludes the parent's own row). Previously, `isChild_method = "partialparent"` treated such a parent as "known" (based on `momID`/`dadID` not being `NA`) while the adjacency builders correctly treated the link as absent, so the diagonal was silently understated (e.g., 0.5/0.75 instead of 1) and covariance between siblings who shared the missing parent was lost entirely. `ped2com()` now warns when this is detected, and a new `repair_rowless_parents = TRUE` argument will auto-add one placeholder founder row per unique missing parent (not one per affected child) before computing relatedness, then restrict the returned matrix back to the original individuals via `keep_ids` so the result doesn't grow.
 
 ## BGmisc 1.8.0
 * Optimized gedcom reader, com2links for speed and memory usage, with a focus on large pedigrees
