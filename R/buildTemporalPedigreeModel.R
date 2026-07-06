@@ -116,6 +116,8 @@ buildOneTemporalFamilyGroup <- function(
     )
   })
 
+  # Eta_k = Tpoly %*% B_k + H %*% G_k
+
   make_eta_alg <- function(k) {
     if (p_hist > 0) {
       mxAlgebraFromString(
