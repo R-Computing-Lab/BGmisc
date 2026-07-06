@@ -2,36 +2,39 @@
 
 ## Development version
 
-* Add building of parental chains with `addParentalChain()` and `addParentalFlag()`, so that you can easily trace maternity and paternity. This is implemented as a general function that can be used to build any parental chain, and a specific wrapper for maternal and paternal chains. The parental flag is a binary variable that indicates whether the individual is in the specified parental chain, which can be useful for filtering or grouping individuals based on their lineage.
-* Fixed silent mis-scoring in `ped2com()`/`ped2add()` (and other component wrappers) when `momID`/`dadID` reference a parent ID that has no row of its own in `ped` (e.g., unrecorded founder stock, or a pedigree subset that excludes the parent's own row). Previously, `isChild_method = "partialparent"` treated such a parent as "known" (based on `momID`/`dadID` not being `NA`) while the adjacency builders correctly treated the link as absent, so the diagonal was silently understated (e.g., 0.5/0.75 instead of 1) and covariance between siblings who shared the missing parent was lost entirely. `ped2com()` now warns when this is detected. Two solutions are available in the new `repair_rowless_parents = TRUE` argument.
-    * \code{"rows"} (default) adds one placeholder founder row per unique missing parent ID (not one per affected child) to a working copy of \code{ped}, then restricts the returned matrix back to the original individuals via \code{keep_ids} unless \code{keep_ids} is already supplied. 
-    * \code{"schur"} applies a Schur complement on the block-triangular RAM system -- for each missing parent, its already-known children define a rank-1 update (\code{v \%*\% t(v)}, where \code{v} is that parent's traced genetic contribution to every individual, computed from the existing RAM matrix) which is added to the relatedness matrix at the tcrossprod step. \code{"schur"} currently only supports \code{component = "additive"}.
+
+## BGmisc 1.9.0
+* Added `addParentalChain()` and `addParentalFlag()` for tracing parental lineages. These functions support general parental-chain construction and convenient maternal and paternal lineage workflows. `addParentalFlag()` adds a binary indicator for whether each individual belongs to a specified parental chain, which can be useful for filtering, grouping, and lineage-specific summaries.
+* Fixed silent mis-scoring in `ped2com()`, `ped2add()`, and related component wrappers when momID or dadID referenced a parent ID that was not present as its own row in ped, such as an unrecorded founder or a parent excluded from a pedigree subset. Previously, isChild_method = "partialparent" treated these parents as known because their IDs were non-missing, while adjacency builders treated the corresponding parent-child link as absent. This could understate diagonal values and remove covariance between siblings who shared the missing rowless parent.
+* `ped2com()` now warns when rowless parents are detected. The new repair_rowless_parents argument provides two repair strategies:
+    * "rows" adds one placeholder founder row for each unique missing parent ID to a working copy of ped, then restricts the returned matrix back to the original individuals through keep_ids, unless keep_ids is already supplied.
+    * "schur" applies a Schur-complement update to the block-triangular RAM system. For each missing parent, its known children define a rank-1 update, v %*% t(v), where v is that parent's traced genetic contribution to every individual. This update is added to the relatedness matrix at the tcrossprod step. The "schur" method currently supports only component = "additive".
 
 ## BGmisc 1.8.0
-* Optimized gedcom reader, com2links for speed and memory usage, with a focus on large pedigrees
-* Fixed bug in gedcom reader that resulted in document records being added to the final person in the pedigree
-* Added more unit tests for gedcom reader and data parser
-* several improvements to the GEDCOM parsing functionality, focusing on more robust and flexible event parsing, better support for different GEDCOM versions, and enhanced usability.
-* Optimized sliceFamilies to be more abstract, and no longer require mtdna
-* Created `.require_openmx()` to make it easier to use OpenMx functions without making OpenMx a dependency
-* Smarter string ID handling for ped2id
-* Fixed how different-sized matrices are handled by `com2links()`
-* Added alignPhenToMatrix function to align phenotypic data to the order of the relatedness matrix
-* Added `simulatePedigrees()` function to easily simulate multiple families at once and return them as a single combined data frame
-* Refactor openmx wrapper functions
-* Added `ped2focal()` core function and component-specific wrappers (`ped2addFocal()`, `ped2mitFocal()`/`ped2mtFocal()`, `ped2cnFocal()`, `ped2genFocal`) to compute relatedness between all pedigree members and a single focal individual, appending the result as a new column on the pedigree data frame. `ped2focal()` is a general function that can be used with any relatedness method, while the component-specific wrappers provide convenient shortcuts for common use cases. Note that Individuals excluded via `keep_ids` are coded as `NA`; all others receive their computed value with genuine zeros made explicit.
-* Added `getGenDist()`, `ped2genDistFocal()`, and `ped2genDist()` for computing generational distance between individuals. Supports five methods: `rank` (absolute generation-number difference via `ped2gen`), `path` (minimum parent-child steps through any shared ancestor), `mrca_min` (total steps via the most recent common ancestor), `mrca_max` (total steps via the most distant common ancestor), and `mrca_all` (aggregation across all common ancestors — strategy to be defined). Output forms cover single pairs, a focal column appended to the pedigree, and a full n×n pairwise matrix.
-* Optimized `countPatternRows()` in the GEDCOM reader to use `fixed = TRUE` string matching and a pre-extracted column vector, reducing redundant work across 31 pattern passes
+* Optimized the GEDCOM reader and com2links() for speed and memory usage, especially for large pedigrees.
+* Fixed a GEDCOM reader bug that caused document records to be added to the final person in the pedigree.
+* Added unit tests for the GEDCOM reader and data parser.
+* Improved GEDCOM parsing, including more robust event parsing, better support for different GEDCOM versions, and improved usability.
+* Optimized `sliceFamilies()` to be more general and to no longer require mitochondrial DNA information.
+* Added `.require_openmx()` to make OpenMx-dependent functionality easier to use without making OpenMx a package dependency.
+* Improved string ID handling in `ped2id()`.
+* Fixed handling of different-sized matrices in `com2links()`.
+* Added `alignPhenToMatrix()` to align phenotypic data to the order of a relatedness matrix.
+* Added `simulatePedigrees()` to simulate multiple families at once and return them as a single combined data frame.
+* Refactored OpenMx wrapper functions.
+* Added `ped2focal()` and component-specific wrappers, including `ped2addFocal()`, `ped2mitFocal()`, `ped2mtFocal()`, `ped2cnFocal()`, and `ped2genFocal()`, to compute relatedness between all pedigree members and a focal individual. These functions append the focal relatedness values to the pedigree data frame, with individuals excluded by keep_ids coded as NA and genuine zero values retained.
+* Added `getGenDist()`, `ped2genDistFocal()`, and `ped2genDist()` for computing generational distance between individuals. Supported methods include generation-rank differences, shortest parent-child paths through shared ancestors, and most-recent-common-ancestor based distances. tput fs includeongle pairs, a focal column appended to the pedigree, and a full n×n pairwise matrixix.
+* Optimized `countPatternRows()` in the GEDCOM reader by using fixed string matching and a pre-extracted column vector, reducing redundant work across repeated pattern checks.
 
 # BGmisc 1.7.0.0
-* Fixed bug in parList
-* Moved wrappers of ped2com to own .R file
-* Fixed missing checkpoint for ram_checkpoint
-* Try a chunk_size argument for ped2com to reduce memory usage during transpose
-* Try filter method for whose relatedness to return by individual ID
+* Fixed a bug in parList.
+* Moved ped2com() wrappers to their own .R file.
+* Fixed a missing checkpoint for ram_checkpoint.
+* Added a chunk_size argument to `ped2com()` to reduce memory usage during matrix transposition.
+* Added an individual-ID filtering method for selecting whose relatedness values are returned.
 * Renamed `ytemp` parameter to `obs_ids` in `buildOneFamilyGroup()` and `buildFamilyGroups()` for clarity
-* Expanded v6 vignettes with data requirements reference and real-data workflow using the `hazard` dataset
-* Allow confidence intervals for pedigree mx wrappers
+* Expanded v6 vignettes with a data requirements reference and a real-data workflow using the hazard dataset.
+* Added support for confidence intervals in pedigree OpenMx wrappers.
 
 # BGmisc 1.6.0.1
 * CRAN submission
