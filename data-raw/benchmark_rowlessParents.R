@@ -21,13 +21,49 @@ makeRowlessPed <- function(kpc, Ngen, sexR = .5, marR = .7, seed = 1, drop_frac 
   ped[!ped$ID %in% drop_ids, ]
 }
 ped_small_complete <- makeRowlessPed(kpc = 3, Ngen = 5, seed = 15, full = TRUE)
-ped_big_complete <- makeRowlessPed(kpc = 8, Ngen = 5, seed = 1151, full = TRUE)
+ped_big_complete <- makeRowlessPed(kpc = 9, Ngen = 5, seed = 1151, full = TRUE)
 ped_small <- makeRowlessPed(kpc = 3, Ngen = 5, seed = 15)
-ped_big <- makeRowlessPed(kpc = 8, Ngen = 5, seed = 1151)
+ped_big <- makeRowlessPed(kpc = 9, Ngen = 5, seed = 1151)
 
 
 cat("small: n =", nrow(ped_small), ", rowless parents =", length(.findRowlessParents(standardizeColnames(ped_small))), "\n")
 cat("big:   n =", nrow(ped_big), ", rowless parents =", length(.findRowlessParents(standardizeColnames(ped_big))), "\n")
+
+
+# check if methods return the same result
+check_small <- ped2com(
+  ped = ped_small, component = "additive",
+  repair_rowless_parents = TRUE, rowless_parents_method = "rows",
+  saveable = FALSE, resume = FALSE, verbose = FALSE, sparse = FALSE
+) %>%
+  all.equal(
+    ped2com(
+      ped = ped_small, component = "additive",
+      repair_rowless_parents = TRUE, rowless_parents_method = "schur",
+      saveable = FALSE, resume = FALSE, verbose = FALSE, sparse = FALSE
+    )
+  )
+
+if (!check_small) {
+  stop("ped2com() results differ for rowless_parents_method = 'rows' vs 'schur' on small pedigree")
+}
+# check if methods return the same result
+check_big <- ped2com(
+  ped = ped_big, component = "additive",
+  repair_rowless_parents = TRUE, rowless_parents_method = "rows",
+  saveable = FALSE, resume = FALSE, verbose = FALSE, sparse = FALSE
+) %>%
+  all.equal(
+    ped2com(
+      ped = ped_big, component = "additive",
+      repair_rowless_parents = TRUE, rowless_parents_method = "schur",
+      saveable = FALSE, resume = FALSE, verbose = FALSE, sparse = FALSE
+    )
+  )
+
+if (!check_big) {
+  stop("ped2com() results differ for rowless_parents_method = 'rows' vs 'schur' on big pedigree")
+}
 
 component <- "additive"
 verbose <- FALSE

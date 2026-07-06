@@ -57,3 +57,4 @@ vignettes/understanding_relatedness.Rmd
 vignettes/understanding_relatedness.Xmd
 .positai
 *.tmp.*
+benchmark_rowlessParents_results.csv
