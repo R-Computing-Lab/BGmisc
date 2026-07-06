@@ -11,7 +11,7 @@ Provides functions for behavior genetics analysis, including variance component 
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/R-Computing-Lab/BGmisc/}
+  \item \url{https://github.com/R-Computing-Lab/BGmisc}
   \item \url{https://r-computing-lab.github.io/BGmisc/}
   \item Report bugs at \url{https://github.com/R-Computing-Lab/BGmisc/issues}
 }
