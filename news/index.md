@@ -2,20 +2,22 @@
 
 ## BGmisc 1.7.0.0
 
-- Fixed bug in parList
-- Moved wrappers of ped2com to own .R file
-- Fixed missing checkpoint for ram_checkpoint
-- Try a chunk_size argument for ped2com to reduce memory usage during
-  transpose
-- Try filter method for whose relatedness to return by individual ID
+- Fixed a bug in parList.
+- Moved ped2com() wrappers to their own .R file.
+- Fixed a missing checkpoint for ram_checkpoint.
+- Added a chunk_size argument to
+  [`ped2com()`](https://r-computing-lab.github.io/BGmisc/reference/ped2com.md)
+  to reduce memory usage during matrix transposition.
+- Added an individual-ID filtering method for selecting whose
+  relatedness values are returned.
 - Renamed `ytemp` parameter to `obs_ids` in
   [`buildOneFamilyGroup()`](https://r-computing-lab.github.io/BGmisc/reference/buildOneFamilyGroup.md)
   and
   [`buildFamilyGroups()`](https://r-computing-lab.github.io/BGmisc/reference/buildFamilyGroups.md)
   for clarity
-- Expanded v6 vignettes with data requirements reference and real-data
-  workflow using the `hazard` dataset
-- Allow confidence intervals for pedigree mx wrappers
+- Expanded v6 vignettes with a data requirements reference and a
+  real-data workflow using the hazard dataset.
+- Added support for confidence intervals in pedigree OpenMx wrappers.
 
 ## BGmisc 1.6.0.1
 
