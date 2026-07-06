@@ -5,7 +5,7 @@ This update includes an extended vignette and several openmx convenience functio
 
 # Test Environments
 
-1. Local OS: Windows 11 x64 (build 26220), R 4.5.3 (2026-03-11 ucrt)
+1. Local OS: Windows 11 x64 (build 26220), R 4.6.1 (2026-03-11 ucrt)
 2. **GitHub Actions**:  
     - [Link](https://github.com/R-Computing-Lab/BGmisc/actions/runs/23058399384)
     - macOS (latest version) with the latest R release.
@@ -17,12 +17,10 @@ This update includes an extended vignette and several openmx convenience functio
 ## R CMD check results
 
 
-── R CMD check results ───────────────── BGmisc 1.6.0.1 ────
-Duration: 1m 44.2s
+── R CMD check results ──────────────────────────────────────────────── BGmisc 1.9.0 ────
+Duration: 3m 46.5s
 
 0 errors ✔ | 0 warnings ✔ | 0 notes ✔
-
-R CMD check succeeded
 
 ## revdepcheck results
 

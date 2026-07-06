@@ -113,7 +113,7 @@ benchmark_results <- microbenchmark(
       saveable = saveable, resume = resume, verbose = verbose, sparse = FALSE
     )
   },
-  times = 20
+  times = 50
 )
 
 summary(benchmark_results)
@@ -130,13 +130,13 @@ df_plot <- benchmark_results %>% mutate(
     ) ~ "big"
   ),
   method = case_when(
+       expr %in% c("base_small", "base_big") ~ "base",
     expr %in% c("rows_small", "rows_big") ~ "rows",
-    expr %in% c("schur_small", "schur_big") ~ "schur",
-    expr %in% c("base_small", "base_big") ~ "base"
-  )
+    expr %in% c("schur_small", "schur_big") ~ "schur"
+  ) # make base the reference level for the linear model, so that the intercept is the mean of the base method
 )
 
-df_plot$method <- factor(df_plot$method, levels = c("rows", "schur", "base"))
+df_plot$method <- factor(df_plot$method, levels = c("base", "rows", "schur"))
 df_plot$size <- factor(df_plot$size, levels = c("small", "big"))
 
 lm(time ~ method * size, data = df_plot) %>%
