@@ -92,10 +92,40 @@ file.
 
 # Package index
 
-## All functions
+## GEDCOM I/O
+
+- [`readGedcom()`](https://r-computing-lab.github.io/BGmisc/reference/readGedcom.md)
+  [`readGed()`](https://r-computing-lab.github.io/BGmisc/reference/readGedcom.md)
+  [`readgedcom()`](https://r-computing-lab.github.io/BGmisc/reference/readGedcom.md)
+  : Read a GEDCOM File
+- [`gedcomLatToNumeric()`](https://r-computing-lab.github.io/BGmisc/reference/gedcomLatToNumeric.md)
+  : Convert GEDCOM Latitude String to Numeric
+- [`gedcomLonToNumeric()`](https://r-computing-lab.github.io/BGmisc/reference/gedcomLonToNumeric.md)
+  : Convert GEDCOM Longitude String to Numeric
+
+## Other functions
+
+- [`addMaternalChain()`](https://r-computing-lab.github.io/BGmisc/reference/addMaternalChain.md)
+  : Add maternal ancestor chains to a pedigree
+
+- [`addMaternalLineFlag()`](https://r-computing-lab.github.io/BGmisc/reference/addMaternalLineFlag.md)
+  : Add a maternal-line descendant flag to a pedigree
 
 - [`addParentRow()`](https://r-computing-lab.github.io/BGmisc/reference/addParentRow.md)
   : Create a properly formatted parent row for the pedigree
+
+- [`addParentalChain()`](https://r-computing-lab.github.io/BGmisc/reference/addParentalChain.md)
+  : Add unilineal parental ancestor chains to a pedigree
+
+- [`addParentalLineFlag()`](https://r-computing-lab.github.io/BGmisc/reference/addParentalLineFlag.md)
+  : Add a unilineal parental-line descendant flag to a pedigree
+
+- [`addPaternalChain()`](https://r-computing-lab.github.io/BGmisc/reference/addPaternalChain.md)
+  : This is a convenience wrapper around \[addParentalChain()\] with
+  \`component = "dadID"\`.
+
+- [`addPaternalLineFlag()`](https://r-computing-lab.github.io/BGmisc/reference/addPaternalLineFlag.md)
+  : Add a paternal-line descendant flag to a pedigree
 
 - [`addPersonToPed()`](https://r-computing-lab.github.io/BGmisc/reference/addPersonToPed.md)
   : addPersonToPed

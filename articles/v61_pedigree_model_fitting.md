@@ -151,6 +151,38 @@ for (i in seq_len(n_families)) {
   obs_ids_list[[i]] <- obs_ids_i
   pheno_list[[i]] <- pheno_row_i
 }
+#> Warning in compute_fn(): Cannot construct isPar matrix: iss or jss is NULL or
+#> empty.
+#> Warning in compute_fn(): Cannot construct isPar matrix: iss or jss is NULL or
+#> empty.
+#> Warning in compute_fn(): Cannot construct isPar matrix: iss or jss is NULL or
+#> empty.
+#> Warning in compute_fn(): Cannot construct isPar matrix: iss or jss is NULL or
+#> empty.
+#> Warning in compute_fn(): Cannot construct isPar matrix: iss or jss is NULL or
+#> empty.
+#> Warning in compute_fn(): Cannot construct isPar matrix: iss or jss is NULL or
+#> empty.
+#> Warning in compute_fn(): Cannot construct isPar matrix: iss or jss is NULL or
+#> empty.
+#> Warning in compute_fn(): Cannot construct isPar matrix: iss or jss is NULL or
+#> empty.
+#> Warning in compute_fn(): Cannot construct isPar matrix: iss or jss is NULL or
+#> empty.
+#> Warning in compute_fn(): Cannot construct isPar matrix: iss or jss is NULL or
+#> empty.
+#> Warning in compute_fn(): Cannot construct isPar matrix: iss or jss is NULL or
+#> empty.
+#> Warning in compute_fn(): Cannot construct isPar matrix: iss or jss is NULL or
+#> empty.
+#> Warning in compute_fn(): Cannot construct isPar matrix: iss or jss is NULL or
+#> empty.
+#> Warning in compute_fn(): Cannot construct isPar matrix: iss or jss is NULL or
+#> empty.
+#> Warning in compute_fn(): Cannot construct isPar matrix: iss or jss is NULL or
+#> empty.
+#> Warning in compute_fn(): Cannot construct isPar matrix: iss or jss is NULL or
+#> empty.
 ```
 
 For convenience, we build the group models for each family separately

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">BGmisc</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.8.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.8.0.9</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,6 +64,8 @@
 <span>  keep_ids <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  adjacency_method <span class="op">=</span> <span class="st">"direct"</span>,</span>
 <span>  isChild_method <span class="op">=</span> <span class="st">"partialparent"</span>,</span>
+<span>  repair_rowless_parents <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  rowless_parents_method <span class="op">=</span> <span class="st">"rows"</span>,</span>
 <span>  saveable <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  resume <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  save_rate <span class="op">=</span> <span class="fl">5</span>,</span>
@@ -135,6 +137,14 @@
 
 <dt id="arg-ischild-method">isChild_method<a class="anchor" aria-label="anchor" href="#arg-ischild-method"></a></dt>
 <dd><p>character. The method to use for computing the isChild matrix.  Options are "classic" or "partialparent"</p></dd>
+
+
+<dt id="arg-repair-rowless-parents">repair_rowless_parents<a class="anchor" aria-label="anchor" href="#arg-repair-rowless-parents"></a></dt>
+<dd><p>logical. If TRUE, automatically correct for parents referenced in momID/dadID that have no row of their own in <code>ped</code> (e.g., unrecorded founder stock), before computing relatedness. Without this, such parents are still treated as "known" for the purposes of <code>isChild_method = "partialparent"</code> even though their genetic contribution cannot be traced, which understates diagonal relatedness and drops covariance between siblings who share the missing parent. How the correction is applied is controlled by <code>rowless_parents_method</code>. Defaults to FALSE, in which case a warning is issued instead.</p></dd>
+
+
+<dt id="arg-rowless-parents-method">rowless_parents_method<a class="anchor" aria-label="anchor" href="#arg-rowless-parents-method"></a></dt>
+<dd><p>character. How to apply the <code>repair_rowless_parents</code> correction. <code>"rows"</code> (default) adds one placeholder founder row per unique missing parent ID (not one per affected child) to a working copy of <code>ped</code>, then restricts the returned matrix back to the original individuals via <code>keep_ids</code> unless <code>keep_ids</code> is already supplied. <code>"schur"</code> applies a Schur complement on the block-triangular RAM system – for each missing parent, its already-known children define a rank-1 update (<code>v %*% t(v)</code>, where <code>v</code> is that parent's traced genetic contribution to every individual, computed from the existing RAM matrix) which is added to the relatedness matrix at the tcrossprod step. <code>"schur"</code> currently only supports <code>component = "additive"</code>.</p></dd>
 
 
 <dt id="arg-saveable">saveable<a class="anchor" aria-label="anchor" href="#arg-saveable"></a></dt>

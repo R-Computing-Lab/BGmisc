@@ -21,7 +21,8 @@ fitPedigreeModel(
   tryhard = TRUE,
   intervals = TRUE,
   extraTries = 10,
-  condenseMatrixSlots = TRUE
+  condenseMatrixSlots = TRUE,
+  runmodel = TRUE
 )
 ```
 
@@ -98,6 +99,11 @@ fitPedigreeModel(
 
   Logical. If TRUE, use the mxCondenseMatrixSlots wrapper to optimize
   memory usage for large matrices. Default is TRUE.
+
+- runmodel:
+
+  Logical. If TRUE (default), the model is fitted; if FALSE, the model
+  is returned without fitting.
 
 ## Value
 

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">BGmisc</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.8.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.8.0.9</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,7 +43,7 @@
     </div>
 
     <div class="section level2">
-      <h2 id="all-functions">All functions<a class="anchor" aria-label="anchor" href="#all-functions"></a></h2>
+      <h2 id="gedcom-i-o">GEDCOM I/O<a class="anchor" aria-label="anchor" href="#gedcom-i-o"></a></h2>
 
 
 
@@ -54,10 +54,82 @@
 
       <dl><dt>
 
+          <code><a href="readGedcom.html">readGedcom()</a></code> <code><a href="readGedcom.html">readGed()</a></code> <code><a href="readGedcom.html">readgedcom()</a></code>
+
+        </dt>
+        <dd>Read a GEDCOM File</dd>
+
+        <dt>
+
+          <code><a href="gedcomLatToNumeric.html">gedcomLatToNumeric()</a></code>
+
+        </dt>
+        <dd>Convert GEDCOM Latitude String to Numeric</dd>
+
+        <dt>
+
+          <code><a href="gedcomLonToNumeric.html">gedcomLonToNumeric()</a></code>
+
+        </dt>
+        <dd>Convert GEDCOM Longitude String to Numeric</dd>
+      </dl></div><div class="section level2">
+      <h2 id="other-functions">Other functions<a class="anchor" aria-label="anchor" href="#other-functions"></a></h2>
+
+
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="addMaternalChain.html">addMaternalChain()</a></code>
+
+        </dt>
+        <dd>Add maternal ancestor chains to a pedigree</dd>
+
+        <dt>
+
+          <code><a href="addMaternalLineFlag.html">addMaternalLineFlag()</a></code>
+
+        </dt>
+        <dd>Add a maternal-line descendant flag to a pedigree</dd>
+
+        <dt>
+
           <code><a href="addParentRow.html">addParentRow()</a></code>
 
         </dt>
         <dd>Create a properly formatted parent row for the pedigree</dd>
+
+        <dt>
+
+          <code><a href="addParentalChain.html">addParentalChain()</a></code>
+
+        </dt>
+        <dd>Add unilineal parental ancestor chains to a pedigree</dd>
+
+        <dt>
+
+          <code><a href="addParentalLineFlag.html">addParentalLineFlag()</a></code>
+
+        </dt>
+        <dd>Add a unilineal parental-line descendant flag to a pedigree</dd>
+
+        <dt>
+
+          <code><a href="addPaternalChain.html">addPaternalChain()</a></code>
+
+        </dt>
+        <dd>This is a convenience wrapper around [addParentalChain()] with `component = "dadID"`.</dd>
+
+        <dt>
+
+          <code><a href="addPaternalLineFlag.html">addPaternalLineFlag()</a></code>
+
+        </dt>
+        <dd>Add a paternal-line descendant flag to a pedigree</dd>
 
         <dt>
 
@@ -745,7 +817,8 @@
         </dt>
         <dd>vech Create the half-vectorization of a matrix</dd>
       </dl></div>
-  </main></div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">

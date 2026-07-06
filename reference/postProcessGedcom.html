@@ -9,7 +9,7 @@ and removes empty columns from the GEDCOM data frame. It is called by readGedcom
 
     <a class="navbar-brand me-2" href="../index.html">BGmisc</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.8.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.8.0.9</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -57,8 +57,9 @@ and removes empty columns from the GEDCOM data frame. It is called by <code><a h
 <span>  <span class="va">df_temp</span>,</span>
 <span>  remove_empty_cols <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  combine_cols <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  parse_dates <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  add_parents <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  parse_dates <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  clean_names <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  skinny <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -77,19 +78,27 @@ and removes empty columns from the GEDCOM data frame. It is called by <code><a h
 
 
 <dt id="arg-combine-cols">combine_cols<a class="anchor" aria-label="anchor" href="#arg-combine-cols"></a></dt>
-<dd><p>Logical indicating whether to combine columns with duplicate values.</p></dd>
-
-
-<dt id="arg-parse-dates">parse_dates<a class="anchor" aria-label="anchor" href="#arg-parse-dates"></a></dt>
-<dd><p>Logical indicating whether to parse date columns into Date objects.</p></dd>
+<dd><p>Logical. If `TRUE`, combine redundant name columns, such
+as `name_given` with `name_given_pieces` and `name_surn` with
+`name_surn_pieces`, when their values do not conflict.</p></dd>
 
 
 <dt id="arg-add-parents">add_parents<a class="anchor" aria-label="anchor" href="#arg-add-parents"></a></dt>
-<dd><p>Logical indicating whether to add parent information.</p></dd>
+<dd><p>Logical. If `TRUE`, infer `momID` and `dadID` from `FAMC`
+and `FAMS` mappings during post-processing.</p></dd>
+
+
+<dt id="arg-parse-dates">parse_dates<a class="anchor" aria-label="anchor" href="#arg-parse-dates"></a></dt>
+<dd><p>Logical. If `TRUE`, attempt to parse date columns (e.g., `birth_date`, `death_date`) into Date objects, after removing common GEDCOM date qualifiers like "ABT", "BEF", and "AFT".</p></dd>
+
+
+<dt id="arg-clean-names">clean_names<a class="anchor" aria-label="anchor" href="#arg-clean-names"></a></dt>
+<dd><p>Logical indicating whether to clean name columns by removing trailing slashes and squishing whitespace.</p></dd>
 
 
 <dt id="arg-skinny">skinny<a class="anchor" aria-label="anchor" href="#arg-skinny"></a></dt>
-<dd><p>Logical indicating whether to slim down the data frame.</p></dd>
+<dd><p>Logical. If `TRUE`, return a slimmer data frame by dropping
+`FAMC`, `FAMS`, and columns that are entirely `NA` during post-processing.</p></dd>
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>

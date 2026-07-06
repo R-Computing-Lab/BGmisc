@@ -15,7 +15,7 @@ remove uninformative columns from the parsed output."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">BGmisc</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.8.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.8.0.9</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -65,39 +65,42 @@ remove uninformative columns from the parsed output.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">readGedcom</span><span class="op">(</span></span>
 <span>  <span class="va">file_path</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  post_process <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  add_parents <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  remove_empty_cols <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  combine_cols <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  skinny <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  parse_dates <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  clean_names <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  update_rate <span class="op">=</span> <span class="fl">1000</span>,</span>
-<span>  post_process <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">readGed</span><span class="op">(</span></span>
 <span>  <span class="va">file_path</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  post_process <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  add_parents <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  remove_empty_cols <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  combine_cols <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  skinny <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  parse_dates <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  clean_names <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  update_rate <span class="op">=</span> <span class="fl">1000</span>,</span>
-<span>  post_process <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">readgedcom</span><span class="op">(</span></span>
 <span>  <span class="va">file_path</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  post_process <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  add_parents <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  remove_empty_cols <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  combine_cols <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  skinny <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  parse_dates <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  clean_names <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  update_rate <span class="op">=</span> <span class="fl">1000</span>,</span>
-<span>  post_process <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -114,14 +117,18 @@ remove uninformative columns from the parsed output.</p>
 <dd><p>Logical. If `TRUE`, print progress messages.</p></dd>
 
 
+<dt id="arg-post-process">post_process<a class="anchor" aria-label="anchor" href="#arg-post-process"></a></dt>
+<dd><p>Logical. If `TRUE`, apply post-processing steps controlled
+by `add_parents`, `combine_cols`, `remove_empty_cols`, `skinny`, and `parse_dates`.</p></dd>
+
+
 <dt id="arg-add-parents">add_parents<a class="anchor" aria-label="anchor" href="#arg-add-parents"></a></dt>
 <dd><p>Logical. If `TRUE`, infer `momID` and `dadID` from `FAMC`
 and `FAMS` mappings during post-processing.</p></dd>
 
 
 <dt id="arg-remove-empty-cols">remove_empty_cols<a class="anchor" aria-label="anchor" href="#arg-remove-empty-cols"></a></dt>
-<dd><p>Logical. If `TRUE`, drop columns that are entirely
-`NA` during post-processing.</p></dd>
+<dd><p>Logical indicating whether to remove columns that are entirely missing.</p></dd>
 
 
 <dt id="arg-combine-cols">combine_cols<a class="anchor" aria-label="anchor" href="#arg-combine-cols"></a></dt>
@@ -139,14 +146,13 @@ as `name_given` with `name_given_pieces` and `name_surn` with
 <dd><p>Logical. If `TRUE`, attempt to parse date columns (e.g., `birth_date`, `death_date`) into Date objects, after removing common GEDCOM date qualifiers like "ABT", "BEF", and "AFT".</p></dd>
 
 
+<dt id="arg-clean-names">clean_names<a class="anchor" aria-label="anchor" href="#arg-clean-names"></a></dt>
+<dd><p>Logical indicating whether to clean name columns by removing trailing slashes and squishing whitespace.</p></dd>
+
+
 <dt id="arg-update-rate">update_rate<a class="anchor" aria-label="anchor" href="#arg-update-rate"></a></dt>
 <dd><p>Numeric. Intended rate at which progress messages should
 be printed. Currently unused.</p></dd>
-
-
-<dt id="arg-post-process">post_process<a class="anchor" aria-label="anchor" href="#arg-post-process"></a></dt>
-<dd><p>Logical. If `TRUE`, apply post-processing steps controlled
-by `add_parents`, `combine_cols`, `remove_empty_cols`, `skinny`, and `parse_dates`.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
@@ -283,12 +289,14 @@ as `NAME John /Smith/`. The parser extracts the given name, surname, and a
 cleaned full name. Additional name components are parsed when present,
 including name prefix, name suffix, nickname, and married surname.</p>
 <p>Birth and death events are recognized from `BIRT` and `DEAT` tags. Event
-details are currently parsed using fixed offsets within the individual block.
-For birth events, the parser expects `DATE` at `i + 1`, `PLAC` at `i + 2`,
-`LATI` at `i + 4`, and `LONG` at `i + 5`. For death events, the parser
-expects `DATE` at `i + 1`, `PLAC` at `i + 2`, `CAUS` at `i + 3`, `LATI` at
-`i + 4`, and `LONG` at `i + 5`. Missing elements leave the corresponding
-output fields as `NA`.</p>
+details are parsed by collecting all child lines whose GEDCOM level equals
+the event level plus one (direct children), then looking up sub-fields by
+tag name. `DATE`, `PLAC`, and `CAUS` are matched as direct children of the
+event. Coordinates (`LATI` and `LONG`) are searched across all descendant
+lines, which allows them to be located whether they appear as direct children
+(common in some GEDCOM 5.5.x exporters), under `PLAC` (standard GEDCOM
+5.5.1), or under a `MAP` substructure under `PLAC` (GEDCOM 7.x). Missing
+sub-fields leave the corresponding output columns as `NA`.</p>
 <p>Attribute tags such as `OCCU`, `EDUC`, `RELI`, `CAST`, `NCHI`, `NMR`, `NATI`,
 `RESI`, `PROP`, `SSN`, `TITL`, `DSCR`, and `IDNO` are parsed directly into
 dedicated columns prefixed with `attribute_`.</p>

@@ -9,7 +9,7 @@ specified variance components and family group models."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">BGmisc</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.8.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.8.0.9</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -68,7 +68,8 @@ specified variance components and family group models.</p>
 <span>  tryhard <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  intervals <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  extraTries <span class="op">=</span> <span class="fl">10</span>,</span>
-<span>  condenseMatrixSlots <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  condenseMatrixSlots <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  runmodel <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -137,6 +138,10 @@ if FALSE, use <code>mxRun</code>.</p></dd>
 
 <dt id="arg-condensematrixslots">condenseMatrixSlots<a class="anchor" aria-label="anchor" href="#arg-condensematrixslots"></a></dt>
 <dd><p>Logical. If TRUE, use the mxCondenseMatrixSlots wrapper to optimize memory usage for large matrices. Default is TRUE.</p></dd>
+
+
+<dt id="arg-runmodel">runmodel<a class="anchor" aria-label="anchor" href="#arg-runmodel"></a></dt>
+<dd><p>Logical. If TRUE (default), the model is fitted; if FALSE, the model is returned without fitting.</p></dd>
 
 </dl></div>
     <div class="section level2">

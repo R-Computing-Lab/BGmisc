@@ -19,7 +19,13 @@
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/BGmisc-package.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/Null.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/addIfAny.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/addMaternalChain.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/addMaternalLineFlag.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/addParentRow.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/addParentalChain.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/addParentalLineFlag.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/addPaternalChain.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/addPaternalLineFlag.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/addPersonToPed.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/addRowlessParents.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/adjustKidsPerCouple.html</loc></url>
@@ -57,6 +63,7 @@
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/countPatternRows.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/createGenDataFrame.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/deduplicatePairs.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/detectGedcomVersion.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/determineSex.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/dot-adjBeta.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/dot-adjDirect.html</loc></url>
@@ -70,6 +77,7 @@
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/dot-computeTranspose.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/dot-countPatternRows.legacy.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/dot-extract_info.legacy.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/dot-findRowlessParents.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/dot-fisherz.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/dot-fisherz2r.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/dot-getModalValue.html</loc></url>
@@ -100,6 +108,8 @@
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/fitComponentModel.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/fitPedigreeModel.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/fuseTwins.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/gedcomLatToNumeric.html</loc></url>
+<url><loc>https://r-computing-lab.github.io/BGmisc/reference/gedcomLonToNumeric.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/getGenDist.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/getGridNeighbors.html</loc></url>
 <url><loc>https://r-computing-lab.github.io/BGmisc/reference/getWikiTreeSummary.html</loc></url>
