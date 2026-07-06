@@ -18,10 +18,9 @@ processEventLine(event, block, i, record, pattern_rows)
 \item{pattern_rows}{A list with counts of GEDCOM tag occurrences.}
 }
 \value{
-The updated record with parsed event information.#
+The updated record with parsed event information.
 }
 \description{
 Extracts event details (e.g., date, place, cause, latitude, longitude) from a block of GEDCOM lines.
-For "birth": expect DATE on line i+1, PLAC on i+2, LATI on i+4, LONG on i+5.
-For "death": expect DATE on line i+1, PLAC on i+2, CAUS on i+3, LATI on i+4, LONG on i+5.
+Uses level-aware sub-block parsing so fields are looked up by tag name rather than fixed offsets.
 }

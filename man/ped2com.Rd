@@ -18,6 +18,8 @@ ped2com(
   keep_ids = NULL,
   adjacency_method = "direct",
   isChild_method = "partialparent",
+  repair_rowless_parents = FALSE,
+  rowless_parents_method = "rows",
   saveable = FALSE,
   resume = FALSE,
   save_rate = 5,
@@ -60,6 +62,10 @@ ped2com(
 \item{adjacency_method}{character. The method to use for computing the adjacency matrix.  Options are "loop", "indexed", direct or beta}
 
 \item{isChild_method}{character. The method to use for computing the isChild matrix.  Options are "classic" or "partialparent"}
+
+\item{repair_rowless_parents}{logical. If TRUE, automatically correct for parents referenced in momID/dadID that have no row of their own in \code{ped} (e.g., unrecorded founder stock), before computing relatedness. Without this, such parents are still treated as "known" for the purposes of \code{isChild_method = "partialparent"} even though their genetic contribution cannot be traced, which understates diagonal relatedness and drops covariance between siblings who share the missing parent. How the correction is applied is controlled by \code{rowless_parents_method}. Defaults to FALSE, in which case a warning is issued instead.}
+
+\item{rowless_parents_method}{character. How to apply the \code{repair_rowless_parents} correction. \code{"rows"} (default) adds one placeholder founder row per unique missing parent ID (not one per affected child) to a working copy of \code{ped}, then restricts the returned matrix back to the original individuals via \code{keep_ids} unless \code{keep_ids} is already supplied. \code{"schur"} applies a Schur complement on the block-triangular RAM system -- for each missing parent, its already-known children define a rank-1 update (\code{v \%*\% t(v)}, where \code{v} is that parent's traced genetic contribution to every individual, computed from the existing RAM matrix) which is added to the relatedness matrix at the tcrossprod step. \code{"schur"} currently only supports \code{component = "additive"}.}
 
 \item{saveable}{logical. If TRUE, save the intermediate results to disk}
 

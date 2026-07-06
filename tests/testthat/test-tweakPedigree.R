@@ -97,7 +97,7 @@ test_that("makeTwins - dz Twins specified by generation", {
   # did it make the pair in the correct generation?
   expect_equal(mean(resultdz$gen[!is.na(resultdz$twinID)]), gen_twin)
   # how many sexes do we have?
-  sexes <-  length(unique(resultdz$sex[!is.na(resultdz$twinID)]))
+  sexes <- length(unique(resultdz$sex[!is.na(resultdz$twinID)]))
   expect_lte(sexes, 2)
   expect_gte(sexes, 1)
   # are they from the same family?

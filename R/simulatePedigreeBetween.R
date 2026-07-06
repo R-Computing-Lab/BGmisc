@@ -42,41 +42,41 @@ buildBtwnGenerations <- function(df_Fam, Ngen, sizeGens, verbose = FALSE, marR, 
     stop("Invalid value for parameter 'beta'. Accepted values are TRUE, FALSE, 'optimized', 'base', 'original', or 'index'/'indexed'.")
   }
 
-#  if (use_optimized) {
-#    df_Fam <- buildBtwnGenerations_opt(
-#      df_Fam = df_Fam,
-#      Ngen = Ngen,
-#      sizeGens = sizeGens,
-#      verbose = verbose,
-#      marR = marR,
-#      sexR = sexR,
-#      kpc = kpc,
-#      rd_kpc = rd_kpc,
- #     personID = personID,
- #     momID = momID,
- #     dadID = dadID,
-#      code_male = code_male,
- #     code_female = code_female,
- #     beta = TRUE
-#    )
-#  } else {
-    df_Fam <- buildBtwnGenerations_base(
-      df_Fam = df_Fam,
-      Ngen = Ngen,
-      sizeGens = sizeGens,
-      verbose = verbose,
-      marR = marR,
-      sexR = sexR,
-      kpc = kpc,
-      rd_kpc = rd_kpc,
-      personID = personID,
-      momID = momID,
-      dadID = dadID,
-      code_male = code_male,
-      code_female = code_female,
-      beta = FALSE
-    )
-#  }
+  #  if (use_optimized) {
+  #    df_Fam <- buildBtwnGenerations_opt(
+  #      df_Fam = df_Fam,
+  #      Ngen = Ngen,
+  #      sizeGens = sizeGens,
+  #      verbose = verbose,
+  #      marR = marR,
+  #      sexR = sexR,
+  #      kpc = kpc,
+  #      rd_kpc = rd_kpc,
+  #     personID = personID,
+  #     momID = momID,
+  #     dadID = dadID,
+  #      code_male = code_male,
+  #     code_female = code_female,
+  #     beta = TRUE
+  #    )
+  #  } else {
+  df_Fam <- buildBtwnGenerations_base(
+    df_Fam = df_Fam,
+    Ngen = Ngen,
+    sizeGens = sizeGens,
+    verbose = verbose,
+    marR = marR,
+    sexR = sexR,
+    kpc = kpc,
+    rd_kpc = rd_kpc,
+    personID = personID,
+    momID = momID,
+    dadID = dadID,
+    code_male = code_male,
+    code_female = code_female,
+    beta = FALSE
+  )
+  #  }
   df_Fam
 }
 
@@ -459,5 +459,4 @@ buildBtwnGenerations_base <- function(df_Fam,
   df_Fam
 }
 
-#buildBtwnGenerations_opt <- buildBtwnGenerations_base
-
+# buildBtwnGenerations_opt <- buildBtwnGenerations_base

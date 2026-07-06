@@ -25,12 +25,11 @@ strip_date_qualifier <- function(x) {
 }
 
 standardize_partial_date <- function(x, default_day = "15",
-                                     default_month = "JUN"
-                                     ) {
+                                     default_month = "JUN") {
   case_when(
     str_length(x) == 0 ~ NA_character_,
-    str_length(x) %in% c(3,4) ~ paste0(default_day," ",default_month," ", x),
-    str_length(x)  %in% c(7,8) ~ paste0(default_day," ", x),
+    str_length(x) %in% c(3, 4) ~ paste0(default_day, " ", default_month, " ", x),
+    str_length(x) %in% c(7, 8) ~ paste0(default_day, " ", x),
     TRUE ~ x
   )
 }
@@ -94,7 +93,7 @@ royal92 <- df_raw <- readGedcom("data-raw/royal92.ged") %>%
     momID = 1295,
     dadID = 1294,
     overwrite = TRUE
-  )   %>%
+  ) %>%
   addPersonToPed(
     personID = 1582,
     name = "Sanchia of Provence",
@@ -102,29 +101,37 @@ royal92 <- df_raw <- readGedcom("data-raw/royal92.ged") %>%
     momID = 1884,
     dadID = 1881,
     overwrite = TRUE
-  )  %>%
+  ) %>%
   addPersonToPed(
     personID = 1884,
     name = "Beatrice of Savoy",
     sex = "F",
     momID = NA_integer_,
-    dadID =  NA_integer_,
+    dadID = NA_integer_,
     overwrite = TRUE
-  )  %>%
+  ) %>%
   addPersonToPed(
     personID = 2149,
     name = "Helen Louise Kirby",
     sex = "F",
     momID = 589,
-    dadID =  235,
+    dadID = 235,
     overwrite = TRUE
-  )  %>%
+  ) %>%
   addPersonToPed(
     personID = 1051, # overwriting duplicated Andreas, is already 911
     name = "TODO",
     sex = "U",
     momID = NA_integer_,
-    dadID =  NA_integer_,
+    dadID = NA_integer_,
+    overwrite = TRUE
+  ) %>%
+  addPersonToPed(
+    personID = 1125, # overwriting duplicated Jean of Luxembourg
+    name = "TODO",
+    sex = "U",
+    momID = NA_integer_,
+    dadID = NA_integer_,
     overwrite = TRUE
   ) %>%
   addPersonToPed(
@@ -132,18 +139,17 @@ royal92 <- df_raw <- readGedcom("data-raw/royal92.ged") %>%
     name = "TODO",
     sex = "U",
     momID = NA_integer_,
-    dadID =  NA_integer_,
+    dadID = NA_integer_,
     overwrite = TRUE
-  )%>%
+  ) %>%
   addPersonToPed(
     personID = 3009, # overwriting unnamed stillborn sibling of barbara cartland
     name = "TODO",
     sex = "U",
     momID = NA_integer_,
-    dadID =  NA_integer_,
+    dadID = NA_integer_,
     overwrite = TRUE
   )
-
 
 
 #----
@@ -163,27 +169,27 @@ date_overrides <- tribble(
   34, "31 MAR 1900", "10 JUN 1974", # Henry William Frederick Windsor
   38, "5 APR 1863", "24 SEP 1950", # Victoria Alberta of Hesse
   40, "10 MAR 1845", "1 NOV 1894", # Alexander III Alexandrovich Romanov,
-                                   # Old Style = 26 FEB 1845, 20 OCT 1894
+  # Old Style = 26 FEB 1845, 20 OCT 1894
   41, "26 NOV 1847", "13 OCT 1928", # Dagmar (Marie) of Denmark
   42, "6 JUL 1796", "2 MAR 1855", # Nicholas I Romanov,
-                                  # Old Style = 25 JUN 1796, 18 FEB 1855
+  # Old Style = 25 JUN 1796, 18 FEB 1855
   43, "13 JUL 1798", "1 NOV 1860", # Charlotte of Prussia
   44, "29 APR 1818", "13 MAR 1881", # Alexander II Nicholoevich Romanov,
-                                  # Gregorian/New Style; Old Style = 17 APR 1818, 1 MAR 1881
+  # Gregorian/New Style; Old Style = 17 APR 1818, 1 MAR 1881
   45, "8 AUG 1824", "3 JUN 1880", # Marie of Hesse-Darmstadt
   46, "15 NOV 1895", "17 JUL 1918", # Olga Nikolaevna Romanov,
-                                  # Old Style birth = 2 NOV 1895
+  # Old Style birth = 2 NOV 1895
   47, "10 JUN 1897", "17 JUL 1918", # Tatiana Nikolaevna Romanov,
-                                  # Old Style birth = 29 May 1897
+  # Old Style birth = 29 May 1897
   48, "26 JUN 1899", "17 JUL 1918", # Maria Nikolaevna Romanov,
-                                  # Old Style birth = 14 JUN 1899
+  # Old Style birth = 14 JUN 1899
   49, "18 JUN 1901", "17 JUL 1918", # Anastasia Nikolaevna Romanov,
-                                  # Old Style birth = 5 Jun 1901
-  51, "4 AUG 1900", "30 MAR 2002", #Elizabeth Angela Marguerite Bowes-Lyon
+  # Old Style birth = 5 Jun 1901
+  51, "4 AUG 1900", "30 MAR 2002", # Elizabeth Angela Marguerite Bowes-Lyon
   52, "21 APR 1926", "8 SEP 2022", # Elizabeth II Alexandra Mary Windsor
   53, "21 AUG 1930", "9 FEB 2002", # Margaret Rose Windsor
   54, "7 APR 1930", "13 JAN 2017", # Antony Armstrong-Jones
-  57, "10 JUN 1921", "9 APR 2021", #Philip Mountbatten
+  57, "10 JUN 1921", "9 APR 2021", # Philip Mountbatten
   65, "1 JUL 1961", "31 AUG 1997", # Diana Frances Spencer
   66, "13 DEC 1906", "27 AUG 1968", # Marina of Greece, Gregorian/New Style; Old Style birth = 30 NOV 1906
   68, "9 SEP 1882", "24 MAY 1947", # Henry George Charles Lascelles
@@ -228,8 +234,8 @@ date_overrides <- tribble(
   125, "17 MAY 1891", "26 FEB 1959", # Alexandra, 2nd Duchess of Fife
   126, "29 MAY 1881", "8 OCT 1972", # Alexander Ramsay
   127, "1295", "22 AUG 1358", # Isabella of France; birth year uncertain,
-                              # sources vary ca. 1292/1295/1296;
-                              # death date varies by one day, 22 AUG vs 23 AUG 1358
+  # sources vary ca. 1292/1295/1296;
+  # death date varies by one day, 22 AUG vs 23 AUG 1358
   128, "15 APR 1240", "1271", # Simon de Montfort the Younger
   129, "19 JUL 1884", "6 MAR 1954", # Charles Edward, Duke of Saxe-Coburg and Gotha
   132, "24 FEB 1774", "8 JUL 1850", # Adolphus, Duke of Cambridge
@@ -246,29 +252,29 @@ date_overrides <- tribble(
   147, "18 APR 1905", "24 APR 1981", # Margarita of Greece and Denmark
   148, "30 MAY 1906", "16 OCT 1969", # Theodora of Greece and Denmark
   149, "22 APR 1847", "17 FEB 1909", # Vladimir Alexandrovich Romanov,
-                                     # Gregorian/New Style;
-                                     # Old Style birth = 10 APR 1847
+  # Gregorian/New Style;
+  # Old Style birth = 10 APR 1847
   150, "14 JAN 1850", "27 NOV 1908", # Alexei Alexandrovich Romanov,
-                                     # Gregorian/New Style;
-                                     # Old Style = 2 JAN 1850, 14 NOV 1908
+  # Gregorian/New Style;
+  # Old Style = 2 JAN 1850, 14 NOV 1908
   151, "11 MAY 1857", "17 FEB 1905", # Serge Alexandrovich Romanov
   152, "3 OCT 1860", "28 JAN 1919", # Paul Alexandrovich Romanov
   153, "9 MAY 1871", "10 JUL 1899", # George Alexandrovich Romanov
   154, "6 APR 1875", "20 APR 1960", # Xenia Alexandrovna Romanov,
-                                    #   Gregorian/New Style; Old Style birth = 25 MAR 1875
+  #   Gregorian/New Style; Old Style birth = 25 MAR 1875
   155, "4 DEC 1878", "13 JUN 1918", # Michael (Mischa) Alexandrovich Romanov, New Style
   156, "13 JUN 1882", "24 NOV 1960", # Olga Alexandrovna Romanov,
-                                    # Gregorian/New Style; Old Style birth = 1 JUN 1882
+  # Gregorian/New Style; Old Style birth = 1 JUN 1882
   157, "14 MAY 1854", "6 SEP 1920", # Maria Pavlovna the Elder,
-                                    # Gregorian/New Style; Gregorian/New Style; Old Style birth = 2 MAY 1854
+  # Gregorian/New Style; Gregorian/New Style; Old Style birth = 2 MAY 1854
   158, "12 OCT 1876", "12 OCT 1938", # Kirill Vladimirovich Romanov,
-                                      # Gregorian/New Style; Old Style birth = 30 SEP 1876
+  # Gregorian/New Style; Old Style birth = 30 SEP 1876
   159, "24 NOV 1877", "9 NOV 1943", # Boris Vladimirovich Romanov,
-                                    # Gregorian/New Style
+  # Gregorian/New Style
   160, "14 MAY 1879", "30 OCT 1956", # Andrei Vladimirovich Romanov,
-                                    # Gregorian/New Style; Old Style birth = 2 MAY 1879
+  # Gregorian/New Style; Old Style birth = 2 MAY 1879
   161, "31 AUG 1872", "6 DEC 1971", # Mathilde Kschessinska,
-                                   # Gregorian/New Style; Old Style birth = 19 AUG 1872
+  # Gregorian/New Style; Old Style birth = 19 AUG 1872
   162, "3 AUG 1770", "7 JUN 1840", # Frederick William III of Prussia
   163, "30 AUG 1870", "24 SEP 1891", # Alexandra of Greece and Denmark
   164, "18 SEP 1891", "5 MAR 1942", # Dmitri Pavlovich Romanov, Gregorian/New Style
@@ -277,9 +283,9 @@ date_overrides <- tribble(
   167, "23 MAR 1887", "27 SEP 1967", # Felix Yussoupov
   169, "10 OCT 1931", "16 MAR 2003", # Ronald Ivor Ferguson
   170, "9 JUN 1937", "19 SEP 1998", # Susan Mary Wright / Susan Barrantes
-  #Teackle Wallis Warfield
+  # Teackle Wallis Warfield
   171, "8 FEB 1869", "15 NOV 1896", # Teackle Wallis Warfield
-  172, "30 NOV 1869", "2 NOV 1929",# Alice Montague
+  172, "30 NOV 1869", "2 NOV 1929", # Alice Montague
   173, "17 APR 1882", "17 OCT 1893", # Violet Hyacinth Bowes-Lyon
   174, "30 AUG 1883", "8 FEB 1961", # Mary Frances Bowes-Lyon / Lady Elphinstone
   175, "22 SEP 1884", "25 MAY 1949", # Patrick Bowes-Lyon, 15th Earl of Strathmore and Kinghorne
@@ -334,9 +340,9 @@ date_overrides <- tribble(
   264, "24 AUG 1843", "2 SEP 1907", # George FitzGeorge
   265, "30 JAN 1846", "17 DEC 1922", # Adolphus FitzGeorge
   266, "12 JUN 1847", "30 OCT 1933", # Augustus FitzGeorge
-  267, "9 MAR 1854","10 MAR 1927", # Rosa Baring
-  268, "1892", "1960", #son 1 George William Frederick FitzGeorge
-  269, "1886", "1976",# daught 1 Mabel Iris FitzGeorge
+  267, "9 MAR 1854", "10 MAR 1927", # Rosa Baring
+  268, "1892", "1960", # son 1 George William Frederick FitzGeorge
+  269, "1886", "1976", # daught 1 Mabel Iris FitzGeorge
   270, "1889", "1954", # daught 2 George Daphne FitzGeorge
   271, "17 OCT 1819", "30 MAY 1904", # Frederick William, Grand Duke of Mecklenburg-Strelitz
   272, "22 JUL 1848", "11 JUN 1914", # Adolphus Frederick V, Grand Duke of Mecklenburg-Strelitz
@@ -349,7 +355,7 @@ date_overrides <- tribble(
   284, "12 JUN 1897", "23 JUN 1987", # Mary Cambridge / Duchess of Beaufort
   285, "23 OCT 1899", "22 DEC 1969", # Helena Cambridge
   287, "24 APR 1907", "15 APR 1928", # Rupert Cambridge, Viscount Trematon;
-                                     # note conflict: RoyalFamilyTree gives 24 AUG 1907
+  # note conflict: RoyalFamilyTree gives 24 AUG 1907
   289, "23 JAN 1906", "29 MAY 1994", # May Cambridge
   291, "21 AUG 1924", "27 FEB 1998", # Gerald David Lascelles
   292, "18 OCT 1926", "6 MAR 2014", # Marion Stein / Countess of Harewood
@@ -382,7 +388,7 @@ date_overrides <- tribble(
   350, "21 SEP 1788", "27 JAN 1836", # Wilhelmina of Baden
   351, "26 OCT 1775", "29 NOV 1830", # John Maurice von Hauke
   352, "1790", "27 AUG 1831", # Sophie la Fontaine;
-                                     # approximate birth year
+  # approximate birth year
   353, "21 SEP 1827", "25 JAN 1892", # Constantine Nikolaievitch of Russia, Gregorian/New Style; Old Style = 9 SEP 1827, 13 JAN 1892
   354, "8 JUL 1830", "6 JUL 1911", # Elizabeth Alexandra of Saxe-Altenburg / Alexandra Iosifovna
   355, "27 AUG 1789", "25 NOV 1868", # Joseph of Saxe-Altenburg
@@ -479,9 +485,9 @@ date_overrides <- tribble(
   489, "18 APR 1865", "20 JUL 1951", # Johanna Loisinger
   490, "18 AUG 1874", "22 APR 1971", # Anna of Montenegro
   491, "30 AUG 1842", "10 JUL 1849", # Alexandra Alexandrovna Romanov,
-                                    # Gregorian/New Style; Old Style = 18 AUG 1842, 28 JUN 1849
+  # Gregorian/New Style; Old Style = 18 AUG 1842, 28 JUN 1849
   492, "20 SEP 1843", "24 APR 1865", # Nicholas Alexandrovich Romanov,
-                                      # Gregorian/New Style; Old Style = 8 SEP 1843, 12 APR 1865
+  # Gregorian/New Style; Old Style = 8 SEP 1843, 12 APR 1865
   493, "9 JUN 1806", "13 JUN 1877", # Louis III of Hesse
   494, "28 NOV 1901", "21 FEB 1960", # Edwina Ashley / Countess Mountbatten of Burma
   495, "30 AUG 1813", "25 MAY 1862", # Mathilde of Bavaria
@@ -545,7 +551,7 @@ date_overrides <- tribble(
   584, "23 JAN 1896", "9 JUL 1985", # Charlotte of Luxembourg
   586, "5 JAN 1921", "23 APR 2019", # Jean of Luxembourg
   589, "6 OCT 1914", "23 MAY 2010", # Leonide Bagration-Moukhransky,
-                                      # Gregorian/New Style; Old Style birth = 23 SEP 1914
+  # Gregorian/New Style; Old Style birth = 23 SEP 1914
   590, "24 APR 1608", "2 FEB 1660", # Gaston, Duke of Orléans
   591, "23 JUN 1908", "20 MAR 1975", # James / Jaime, Duke of Segovia
   592, "30 JUL 1936", "8 JAN 2020", # Dona Maria of Bourbon / Infanta Pilar of Spain
@@ -575,7 +581,7 @@ date_overrides <- tribble(
   631, "13 NOV 1848", "26 JUN 1922", # Albert I of Monaco
   632, "12 JUL 1870", "9 MAY 1949", # Louis II of Monaco
   634, "30 SEP 1898", "16 NOV 1977", # Charlotte, Duchess of Valentinois;
-                                      # some sources give 15 NOV 1977
+  # some sources give 15 NOV 1977
   635, "24 OCT 1895", "10 NOV 1964", # Pierre de Polignac
   636, "31 MAY 1923", "6 APR 2005", # Rainier III of Monaco
   638, "27 JAN 1805", "28 MAY 1872", # Sophie of Bavaria
@@ -601,7 +607,7 @@ date_overrides <- tribble(
   679, "30 OCT 1797", "29 DEC 1829", # Henrietta of Nassau-Weilburg
   680, "29 JUL 1818", "20 NOV 1874", # Karl Ferdinand of Austria
   682, "21 JUL 1858", "6 FEB 1929", # Maria Cristina of Austria;
-                                      # some sources give 9 FEB 1929
+  # some sources give 9 FEB 1929
   683, "28 NOV 1857", "25 NOV 1885", # Alfonso XII
   684, "9 MAR 1776", "13 JAN 1847", # Archduke Joseph of Austria, Palatine of Hungary
   685, "17 JAN 1831", "14 FEB 1903", # Elisabeth Franziska of Austria
@@ -613,7 +619,7 @@ date_overrides <- tribble(
   729, "24 DEC 1598", "1600", # Margaret Stuart; approximate death year
   735, "26 AUG 1596", "29 NOV 1632", # Frederick V of the Palatinate
   736, "14 OCT 1630", "8 JUN 1714", # Sophia of Hanover;
-                                      # sources vary 13/14 OCT 1630
+  # sources vary 13/14 OCT 1630
   741, "26 APR 1575", "3 JUL 1642", # Marie de Medici; birth year varies in sources, selected 1575
   750, "27 MAY 1626", "6 NOV 1650", # William II of Orange
   751, "21 SEP 1640", "9 JUN 1701", # Philippe I, Duke of Orléans
@@ -629,7 +635,7 @@ date_overrides <- tribble(
   765, "22 DEC 1617", "28 AUG 1680", # Charles I Louis, Elector Palatine
   766, "17 DEC 1619", "29 NOV 1682", # Rupert of the Rhine / Duke of Cumberland
   767, "16 JAN 1621", "1652", # Maurice of the Palatinate;
-                                      # death year approximate, lost at sea
+  # death year approximate, lost at sea
   768, "5 OCT 1625", "10 MAR 1663", # Edward, Count Palatine of Simmern
   769, "20 NOV 1627", "16 MAR 1686", # Charlotte of Hesse-Kassel
   770, "7 SEP 1674", "14 AUG 1728", # Ernest Augustus, Duke of York and Albany
@@ -864,7 +870,7 @@ date_overrides <- tribble(
   1122, "15 SEP 1904", "18 MAR 1983", # Umberto II of Italy
   1123, "11 OCT 1927", "10 JAN 2005", # Josephine-Charlotte of Belgium
   1124, "6 JUN 1934", NA_character_, # Albert II of Belgium; living
-  1125, "5 JAN 1921", "23 APR 2019", # Jean of Luxembourg; duplicate/identity match to personID 586 likely
+  1125, NA_character_, NA_character_, # to replace
   1126, "11 JUN 1928", "5 DEC 2014", # Fabiola de Mora y Aragón
   1127, "11 SEP 1937", NA_character_, # Paola Ruffo di Calabria; living
   1128, "15 APR 1960", NA_character_, # Philippe of Belgium; living
@@ -1041,7 +1047,7 @@ date_overrides <- tribble(
   1369, "1214", "1 DEC 1241", # Isabella of England
   1370, "1215", "13 APR 1275", # Eleanor of England
   1372, "1122", "1 APR 1204", # Eleanor of Aquitaine
-  1373, "17 AUG 1153", "1156",  #William IX, count of Poitiers
+  1373, "17 AUG 1153", "1156", # William IX, count of Poitiers
   1375, "1156", "28 JUN 1189", # Matilda (Maud), Duchess of Saxony
   1376, "8 SEP 1157", "6 APR 1199", # Richard I Coeur de Lion
   1379, "OCT 1165", "4 SEP 1199", # Joan Plantagenet
@@ -1446,7 +1452,7 @@ date_overrides <- tribble(
   1960, "1282", "7 JUN 1337", # Gwenllian ferch Llywelyn
   1961, "1223", "11 DEC 1282", # Llywelyn ap Gruffudd
   1964, "849", "26 OCT 899", # Alfred the Great;
-                            # birth year sometimes given 847-849, selected 849
+  # birth year sometimes given 847-849, selected 849
   1965, "852", "5 DEC 902", # Ealhswith of Mercia
   1966, "795", "13 JAN 858", # Æthelwulf of Wessex
   1968, "825", "852", # Æthelstan of Kent
@@ -1484,7 +1490,7 @@ date_overrides <- tribble(
   2050, "672", "718", # Ingild of Wessex
   2051, "670", "31 AUG 725", # Cuthburh of Wimborne
   2053, "630", "14 DEC 705", # Aldfrith of Northumbria
-                            #; death year varies 704/705, selected 705
+  # ; death year varies 704/705, selected 705
   2054, "758", "784", # Ealhmund of Kent and death year
   2057, "1307", "26 SEP 1345", # William II of Hainault
   2058, "1314", "26 DEC 1360", # Thomas Holland, 1st Earl of Kent
@@ -1561,7 +1567,7 @@ date_overrides <- tribble(
   2146, "29 MAY 1773", "29 NOV 1844", # Sophia of Gloucester; identity inferred from Gloucester/Walpole context
   2147, "23 FEB 1708", "5 JUN 1752", # Charles Louis Frederick of Mecklenburg-Strelitz
   2148, "4 AUG 1713", "29 JUN 1761", # Elisabeth Albertine of Saxe-Hildburghausen
-  2149, "26 JAN 1935",  NA_character_, #Helen Louise Kirby. Countess Dvinskaya
+  2149, "26 JAN 1935", NA_character_, # Helen Louise Kirby. Countess Dvinskaya
   2150, "13 SEP 1794", "12 APR 1860", # Ernest I of Hohenlohe-Langenburg
   2152, "11 OCT 1957", NA_character_, # Katharine Fraser; living
   2155, "9 AUG 1914", "26 APR 1943", # Alastair Arthur of Connaught, 2nd Duke of Connaught
@@ -1569,6 +1575,8 @@ date_overrides <- tribble(
   2158, "6 NOV 1892", "8 APR 1938", # George Mountbatten, 2nd Marquess of Milford Haven; likely duplicate/identity match to personID 102
   2159, "9 MAR 1963", NA_character_, # Ivar Mountbatten; living
   2160, "13 SEP 1867", "3 JUL 1939", # Wilfrid Ashley, 1st Baron Mount Temple
+  2162, "19 OCT 1910", "31 MAR 1989", # Hamilton Joseph Keyes O'Malley (Q75382629)
+
   2166, "1205", "1257", # Maelgwn Fychan and death year
   2168, "1210", "1265", # Maredudd ap Owain and death year
   2169, "1240", "1275", # Owain ap Maredudd and death year
@@ -1935,7 +1943,7 @@ date_overrides <- tribble(
   2593, "850", "8 DEC 899", # Arnulf of Carinthia
   2594, "873", "903", # Oda of Bavaria and death after/about 903
   2595, "893", "24 SEP 911", # Louis the Child;
-                              # death date varies 20/24 SEP 911, selected 24 SEP
+  # death date varies 20/24 SEP 911, selected 24 SEP
   2596, "870", "13 AUG 900", # Zwentibold
   2597, "850", "24 DEC 903", # Hedwiga of Babenberg
   2598, "851", "30 NOV 912", # Otto of Saxony / Otto the Illustrious
@@ -2057,6 +2065,8 @@ date_overrides <- tribble(
   2780, "10 APR 1916", "22 DEC 2019", # Dagmar Bernadotte af Wisborg
   2781, "12 JUL 1921", "3 NOV 2018", # Oscar Bernadotte af Wisborg
   2782, "10 JAN 1926", NA_character_, # Catharina Bernadotte af Wisborg; living or death not found in this pass
+  2789, "10 AUG 1934", NA_character_, # Miles Carl Flach
+  2790, "22 DEC 1960", NA_character_, # Jana Camilla Flach
   2829, "25 JUN 1899", "4 JAN 1977", # Margaretha of Sweden / Princess Axel of Denmark
   2830, "12 AUG 1888", "14 JUL 1964", # Axel of Denmark
   2831, "7 FEB 1904", "15 APR 1991", # Elsa von Rosen
@@ -2096,7 +2106,7 @@ date_overrides <- tribble(
   2876, "19 MAY 1797", "26 DEC 1818", # Maria Isabel of Portugal / Queen of Spain
   2877, "6 DEC 1803", "18 MAY 1829", # Maria Josepha Amalia of Saxony / Queen of Spain
   2878, "11 NOV 1748", "20 JAN 1819", # Charles IV of Spain;
-                                      # some sources give death as 19 JAN 1819
+  # some sources give death as 19 JAN 1819
   2879, "9 DEC 1751", "2 JAN 1819", # Maria Luisa of Parma / Queen of Spain
   2880, "20 JAN 1716", "14 DEC 1788", # Charles III of Spain
   2881, "24 NOV 1724", "27 SEP 1760", # Maria Amalia of Saxony / Queen of Spain
@@ -2184,39 +2194,30 @@ date_overrides <- tribble(
   2998, "4 JAN 1912", "29 MAY 1940", # Anthony Cartland
   3009, NA_character_, NA_character_, # blanking the infant Cartland row for now
   3010, "31 DEC 1939", NA_character_ # Glen McCorquodale
-
 )
 
 # notes:
-# 1051 likely duplicates the Andreas of Leiningen already represented at personID == 911.
-#1125 likely duplicates Jean of Luxembourg already represented at personID == 586.
-
-# Non-date cautions surfaced while auditing:
 
 #  1801: the row title says “King of Denmark,” but the likely identity is Sihtric Cáech/Sihtric of Northumbria or Dublin. I included the date data and noted the title/identity caution in the comment.
 
-#1847: likely Isabel de Warenne based on the Balliol/Warenne placement, but the row’s given name alone is underspecified. I included the date data and flagged the inference.
+# 1847: likely Isabel de Warenne based on the Balliol/Warenne placement, but the row’s given name alone is underspecified. I included the date data and flagged the inference.
 
 
-
-#1975: likely duplicates or variant-matches 1968 Æthelstan of Kent. I included the date data and flagged it.
-
-
-#2065 likely duplicates the Catherine Swynford branch already represented elsewhere.
+# 1975: likely duplicates or variant-matches 1968 Æthelstan of Kent. I included the date data and flagged it.
 
 
-#2158 likely duplicates George Mountbatten already represented at personID == 102.
+# 2065 likely duplicates the Catherine Swynford branch already represented elsewhere.
 
-#2215 has a current death-year pattern that may not match the most likely identification as Murchad mac Diarmata; I included the date data and flagged the identity concern.
 
-#2269 is listed only as “of Burgundy,” but the most likely identity in context is Philip the Bold, Duke of Burgundy. I included the date data and flagged that inference.
+# 2158 likely duplicates George Mountbatten already represented at personID == 102.
 
-#2279 likely duplicates Edmund Stafford already represented at personID == 2070.
+# 2215 has a current death-year pattern that may not match the most likely identification as Murchad mac Diarmata; I included the date data and flagged the identity concern.
 
-#2288 likely duplicates John Hastings already represented at personID == 1417.
+# 2269 is listed only as “of Burgundy,” but the most likely identity in context is Philip the Bold, Duke of Burgundy. I included the date data and flagged that inference.
 
-#2300 likely duplicates John Neville, Lord Latimer already represented at personID == 863.
+# 2279 likely duplicates Edmund Stafford already represented at personID == 2070.
 
+# 2288 likely duplicates John Hastings already represented at personID == 1417.
 
 # 2359 likely duplicates Thomas Howard, 4th Duke of Norfolk, already represented at personID == 2326.
 
@@ -2238,15 +2239,9 @@ date_overrides <- tribble(
 # 2689, 2690: likely duplicate/identity matches to the Württemberg/Brandenburg-Schwedt parents already represented at personID == 1067 and 1068.
 # 2839 is listed as Mary, but the row clearly matches Marie Bonaparte through the father Roland Bonaparte and the marriage to Prince George of Greece.
 
-# 2867, 2868, and 2872 required approximate mid-month values because the available date information was month-level. I used parse-compatible dates and marked them as approximate.
-
-# 2878 Charles IV has a one-day death-date discrepancy. I used 20 JAN 1819, while noting that some sources give 19 JAN 1819.
-
-# 2921 appears to be Marie Louise Élisabeth d’Orléans, Duchess of Berry. The current row’s death-year placeholder appears to be wrong, so I used 21 JUL 1719.
 
 # 2964, 2965, and 2967 resolve the Greek/Yugoslav branch: Olga of Greece and Denmark, Prince Paul of Yugoslavia, and Elizabeth of Greece and Denmark.
 
-# 3009 is only identifiable as an infant Cartland row in this pass, so I used year-level dates only rather than fabricating precision.
 
 name_overrides <- tribble(
   ~personID, ~name_override,
@@ -2643,6 +2638,7 @@ name_overrides <- tribble(
   2158, "George Mountbatten",
   2159, "Ivar Mountbatten",
   2160, "Wilfrid Ashley",
+  2162, "Hamilton Joseph Keyes-O'Malley",
   2169, "Owain ap Maredudd",
   2170, "Llywelyn ap Owain",
   2171, "Thomas ap Llywelyn",
@@ -2920,6 +2916,8 @@ name_overrides <- tribble(
   2780, "Dagmar Bernadotte af Wisborg",
   2781, "Oscar Bernadotte af Wisborg",
   2782, "Catharina Bernadotte af Wisborg",
+  2789, "Miles Carl Flach",
+  2790, "Jana Camilla Flach",
   2829, "Margaretha of Sweden",
   2832, "Madeleine Bernadotte af Wisborg",
   2839, "Marie Bonaparte",
@@ -3063,8 +3061,10 @@ royal92_cleaned <- royal92 %>%
       personID == 201 ~ "Duke of Argyll",
       personID == 224 ~ "Princess of Battenberg; Princess of Erbach-Schönberg",
       personID %in%
-        c(230, 2839,
-          2842, 2845) ~ "Princess of Greece and Denmark",
+        c(
+          230, 2839,
+          2842, 2845
+        ) ~ "Princess of Greece and Denmark",
       personID == 240 ~ "Lady McCorquodale",
       personID == 241 ~ "Lady Fellowes",
       personID %in%
@@ -3100,12 +3100,14 @@ royal92_cleaned <- royal92 %>%
       personID %in%
         c(453, 2234) ~ "Queen of Norway",
       personID %in%
-        c(474, 1828, 2416,
+        c(
+          474, 1828, 2416,
           2443, 2449, 2485,
           2508, 2615, 2618,
           2633, 2858, 2864,
           2876, 2877, 2879,
-          2881, 2883, 2887, 2888) ~ "Queen",
+          2881, 2883, 2887, 2888
+        ) ~ "Queen",
       personID == 479 ~ "Margrave of Baden",
       personID == 484 ~ "Duke of Württemberg",
       personID %in%
@@ -3120,9 +3122,11 @@ royal92_cleaned <- royal92 %>%
       personID == 531 ~ "Grand Duke of Tuscany",
       personID == 578 ~ "Duke of Nassau",
       personID %in%
-        c(590, 751,
+        c(
+          590, 751,
           2501,
-          2515, 2516) ~ "Duke of Orléans",
+          2515, 2516
+        ) ~ "Duke of Orléans",
       personID == 591 ~ "Duke of Segovia",
       personID == 593 ~ "Duchess of Soria",
       personID == 594 ~ "Infante of Spain",
@@ -3157,31 +3161,44 @@ royal92_cleaned <- royal92 %>%
         c(863) ~ "Baron Latimer",
       personID == 864 ~ "Baron Seymour",
       personID %in%
-        c(871, 1929,
+        c(
+          871, 1929,
           2291, 2418,
           2419, 2420,
           2430, 2431,
-          2433, 2434) ~ "Holy Roman Emperor",
-      personID %in% c(873, 2315,
-                      2953, 2954) ~ "Earl of Leicester",
-      personID %in% c(876, 1883,
-                      2217, 2288, 2332) ~ "Earl of Pembroke",
+          2433, 2434
+        ) ~ "Holy Roman Emperor",
+      personID %in% c(
+        873, 2315,
+        2953, 2954
+      ) ~ "Earl of Leicester",
+      personID %in% c(
+        876, 1883,
+        2217, 2288, 2332
+      ) ~ "Earl of Pembroke",
       personID == 877 ~ "Crown Prince of Yugoslavia",
       personID %in%
-      c(914) ~ "Grand Duchess of Russia",
+        c(914) ~ "Grand Duchess of Russia",
       personID == 932 ~ "Princess of Prussia",
       personID == 1051 ~ NA_character_,
+      personID == 1125 ~ NA_character_,
       personID == 1250 ~ "Earl of Bothwell",
       personID %in%
         c(1373, 1867) ~ "Count of Poitiers",
       personID == 1385 ~ "Abbess",
       personID %in%
-        c(1473, 1476,
-          1492, 1494) ~ "Earl of Arran",
+        c(
+          1473, 1476,
+          1492, 1494
+        ) ~ "Earl of Arran",
       personID %in%
-            c(1588, 1834,
-              1877, 1890,
-              2295) ~ "Earl of Gloucester",
+        c(
+          1588, 1834,
+          1877, 1890,
+          2295
+        ) ~ "Earl of Gloucester",
+      personID %in%
+        c(1706, 2162, 2789) ~ "Captain",
       personID == 1802 ~ "wife of Edward the Elder",
       personID == 1804 ~ "son of Edward the Elder",
       personID == 1811 ~ "King of West Francia",
@@ -3205,8 +3222,10 @@ royal92_cleaned <- royal92 %>%
       personID %in%
         c(1897, 2470) ~ "Count of Dreux",
       personID %in%
-        c(1904, 1906,
-          2280, 2283) ~ "Earl of March",
+        c(
+          1904, 1906,
+          2280, 2283
+        ) ~ "Earl of March",
       personID %in%
         c(1907, 1908) ~ "Baron Mortimer",
       personID == 1914 ~ "Marquess Wellesley",
@@ -3248,14 +3267,18 @@ royal92_cleaned <- royal92 %>%
       personID == 2160 ~ "Baron Mount Temple",
       personID == 2180 ~ "Lord Rhys",
       personID %in%
-        c(2191, 2192,
-          2193, 2194) ~ "Baron Inchiquin",
+        c(
+          2191, 2192,
+          2193, 2194
+        ) ~ "Baron Inchiquin",
       personID %in%
         c(2195, 2202) ~ "King of Thomond",
       personID == 2218 ~ "Countess of Pembroke",
       personID %in%
-        c(2269, 2426,
-          2518, 2533) ~ "Duke of Burgundy",
+        c(
+          2269, 2426,
+          2518, 2533
+        ) ~ "Duke of Burgundy",
       personID == 2270 ~ "Count of Saint-Pol",
       personID == 2271 ~ "Earl Rivers",
       personID == 2278 ~ "Lord Cherleton",
@@ -3307,7 +3330,7 @@ royal92_cleaned <- royal92 %>%
       personID == 2396 ~ "Lord Beauchamp",
       personID == 2397 ~ "Baron Seymour of Trowbridge",
       personID %in%
-        c(2403,2963) ~ "Lady",
+        c(2403, 2963) ~ "Lady",
       personID == 2407 ~ "Earl of Banbury",
       personID == 2414 ~ "Lord Offaly",
       personID == 2427 ~ "Electress",
@@ -3329,7 +3352,7 @@ royal92_cleaned <- royal92 %>%
       personID == 2578 ~ "son of Charles the Bald",
       personID == 2632 ~ "Baron Geddes",
       personID %in%
-        c(2634, 2875)  ~ "Princess of Asturias",
+        c(2634, 2875) ~ "Princess of Asturias",
       personID == 2637 ~ "Princess of Bourbon-Two Sicilies",
       personID == 2638 ~ "Viscount de la Torre",
       personID == 2642 ~ "Countess Marone-Cinzano",
@@ -3352,7 +3375,7 @@ royal92_cleaned <- royal92 %>%
       personID == 2889 ~ "Prince of Asturias",
       personID == 2890 ~ "Prince of Portugal",
       personID %in%
-          c(2892, 2913) ~ "Duchess of Savoy",
+        c(2892, 2913) ~ "Duchess of Savoy",
       personID == 2893 ~ "Duke of Savoy",
       personID == 2900 ~ "Duke of Vendôme",
       personID == 2904 ~ "Prince Napoléon",
@@ -3372,7 +3395,7 @@ royal92_cleaned <- royal92 %>%
       personID == 2956 ~ "Earl of Albemarle",
       personID == 2964 ~ "Princess of Yugoslavia",
       personID == 2965 ~ "Prince of Yugoslavia",
-      personID == 3009 ~ NA_character_, #Blanking
+      personID == 3009 ~ NA_character_, # Blanking
       TRUE ~ attribute_title
     ),
     twinID = case_when(
@@ -3411,15 +3434,19 @@ royal92_cleaned <- royal92 %>%
       ) ~ "F",
       TRUE ~ sex
     ),
-    name = str_replace_all(name, text_cleanup_regex) %>%
+    name = str_replace_all(
+      name,
+      text_cleanup_regex
+    ) %>%
       str_squish()
   )
 
 royal92 <- royal92_cleaned %>%
   select(personID, momID, dadID,
-         famID, twinID, name, sex,
-         birth_date, death_date,
-         title = attribute_title)
+    famID, twinID, name, sex,
+    birth_date, death_date,
+    title = attribute_title
+  )
 
 checkis_acyclic <- checkPedigreeNetwork(royal92,
   personID = "personID",
@@ -3436,24 +3463,32 @@ if (checkis_acyclic$is_acyclic) {
   message("The pedigree contains cyclic relationships.")
 }
 
-if(FALSE){
-
- library(ggpedigree)
+if (FALSE) {
+  library(ggpedigree)
   royal92_famid <- royal92 %>%
     group_by(famID) %>%
     group_split()
 
-ggped<- ggPedigreeInteractive(royal92_famid[[1]],
-            personID = "personID",
-            momID = "momID",
-            dadID = "dadID",
-            twinID = "twinID",
-            config = list(
-              code_male = "M",
-              code_female = "F",
-              add_phantoms = TRUE
-            )
- )
+  royal92_trimmed1 <-
+    royal92_famid[[1]] %>% trimPedigree(
+      personID = "personID",
+      momID = "momID",
+      dadID = "dadID",
+      max_iter = 2
+    )
 
-
+  ggped <- ggPedigreeInteractive(royal92_trimmed1,
+    personID = "personID",
+    momID = "momID",
+    dadID = "dadID",
+    twinID = "twinID",
+    config = list(
+      code_male = "M",
+      code_female = "F",
+      add_phantoms = TRUE,
+      ped_packed = TRUE,
+      ped_align = TRUE
+    ),
+    tooltip_columns = c("personID", "name", "title", "birth_date", "death_date")
+  )
 }
