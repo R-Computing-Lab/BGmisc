@@ -20,7 +20,7 @@ big data application see \[Burt et al. (2025) [doi:
 
 Useful links:
 
-- <https://github.com/R-Computing-Lab/BGmisc/>
+- <https://github.com/R-Computing-Lab/BGmisc>
 
 - <https://r-computing-lab.github.io/BGmisc/>
 
