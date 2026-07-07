@@ -1,0 +1,11 @@
+Notes on candidate datasets
+
+Rum Red Deer Pedigree
+
+https://biology.ed.ac.uk/rumdeer/project/data-collection
+
+A pedigree of 4,515 individuals is available for the population
+https://www.biorxiv.org/content/10.1101/2021.04.16.440189v1.full
+
+St Kilda Soay Sheep Project
+https://biology.ed.ac.uk/soaysheep/meet-sheep
