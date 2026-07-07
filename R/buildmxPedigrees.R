@@ -38,6 +38,7 @@ buildPedigreeModelCovariance <- function(
   Vmt = TRUE,
   Vam = FALSE,
   Ver = TRUE,
+  temporal = FALSE,
   lbound = 1e-10
 ) {
   .require_openmx("buildPedigreeModelCovariance")
@@ -130,13 +131,18 @@ buildOneFamilyGroup <- function(
   Dmgmat = NULL,
   full_df_row,
   obs_ids,
-  condenseMatrixSlots = TRUE
+  condenseMatrixSlots = TRUE,
+  birth_year = NULL,
+  H = NULL,
+  use_exp_loadings = TRUE,
+  time_point_max = NULL
 ) {
   .require_openmx("buildOneFamilyGroup")
 
   # Determine family size from first available matrix
+   mats_in <- list(Addmat, Dmgmat, Nucmat, Extmat, Mtdmat, Amimat)
   fsize <- NULL
-  for (m in list(Addmat, Nucmat, Extmat, Mtdmat, Amimat, Dmgmat)) {
+  for (m in mats_in) {
     if (!is.null(m)) {
       fsize <- nrow(m)
       break
