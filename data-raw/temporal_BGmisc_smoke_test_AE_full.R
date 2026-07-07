@@ -30,7 +30,7 @@ if (length(missing_packages) > 0) {
 library(BGmisc)
 library(OpenMx)
 library(mvtnorm)
-
+library(tidyverse)
 set.seed(202601)
 
 # -----------------------------------------------------------------------------
@@ -49,9 +49,12 @@ get_generation_vector <- function(ped) {
   as.numeric(ped[[gen_col]])
 }
 
-make_time_vars <- function(ped, threshold_year = 1760) {
+make_time_vars <- function(ped, threshold_year = 1776, birth_year_sd = 3,
+                             birth_year_base = 1700,
+                           gen_gap=30
+                             ) {
   gen <- get_generation_vector(ped)
-  birth_year <- 1700 + 30 * (gen - min(gen, na.rm = TRUE)) + rnorm(length(gen), mean = 0, sd = 3)
+  birth_year <- birth_year_base + gen_gap * (gen - min(gen, na.rm = TRUE)) + rnorm(length(gen), mean = 0, sd = birth_year_sd)
   t_i <- as.numeric(scale(birth_year))
   h_i <- as.numeric(birth_year >= threshold_year)
   H_i <- matrix(h_i, ncol = 1)
@@ -143,13 +146,15 @@ simulate_temporal_family <- function(
     kpc = 3,
     Ngen = 4,
     marR = 0.6,
-    threshold_year = 1760,
+    threshold_year = 1776,
     true_beta,
     true_gamma,
-    components = c("a", "e")
+    components = c("a", "e"),
+    family_id = NULL
 ) {
   ped_i <- simulate_pedigree_safe(kpc = kpc, Ngen = Ngen, marR = marR)
-
+  if (is.null(family_id)) family_id <- 1
+  ped_i$fam<- paste0("FAM ", family_id)
   A_i <- make_symmetric(BGmisc::ped2add(ped_i))
   Cn_i <- make_symmetric(BGmisc::ped2cn(ped_i))
   Ce_i <- make_symmetric(BGmisc::ped2ce(ped_i))
@@ -187,6 +192,7 @@ simulate_temporal_family <- function(
     y = as.numeric(y_i),
     obs_ids = obs_ids,
     birth_year_scaled = t_i,
+    birth_year = tv_i$birth_year,
     H = H_i,
     A = A_i,
     Cn = Cn_i,
@@ -195,6 +201,7 @@ simulate_temporal_family <- function(
     V_true = V_i
   )
 }
+
 
 # -----------------------------------------------------------------------------
 # Run smoke test
@@ -211,20 +218,20 @@ fit_components <- c("a", "e")
 
 
 true_beta <- list(
-  a  = c(0.65, 0.00, 0.00, 0.00),
+  a  = c(0.65, 0.30, 0.00, 0.00),
   cn = c(0.00, 0.00, 0.00, 0.00),
   ce = c(0.00, 0.00, 0.00, 0.00),
   mt = c(0.00, 0.00, 0.00, 0.00),
-  e  = c(0.75, 0.10, 0.00, 0.00)
+  e  = c(0.75, 0.00, 0.00, 0.00)
 )
 
 
 true_gamma <- list(
-  a  = 0.30,
+  a  = 0.00,
   cn = 0.00,
   ce = 0.00,
   mt = 0.00,
-  e  = 0.00
+  e  = 0.20
 )
 
 families <- vector("list", n_families)
@@ -236,12 +243,35 @@ for (i in seq_len(n_families)) {
     threshold_year = threshold_year,
     true_beta = true_beta,
     true_gamma = true_gamma,
-    components = sim_components
+    components = sim_components,
+    family_id = i
   )
+
 }
 
 cat("Simulated", n_families, "families. Family sizes:\n")
 print(vapply(families, function(x) length(x$y), integer(1)))
+
+
+# nees to add H, y and birth_year_scaled to the family data frame for plotting and analysis
+family_peds <- lapply(families, function(x)
+  cbind(x$ped,y = x$y,birth_year = x$birth_year,
+                        birth_year_scaled = x$birth_year_scaled,
+                        post_1776 = x$H
+                      )
+
+
+                      ) %>% dplyr::bind_rows() %>%
+  dplyr::mutate(fam = factor(fam))
+
+ggplot2::ggplot(family_peds) +
+  ggplot2::geom_point(ggplot2::aes(x = birth_year_scaled, y = y, color = post_1760)) +
+#  ggplot2::facet_wrap(~fam) +
+  ggplot2::theme_bw() +
+  ggplot2::labs(title = "Simulated Phenotypes by Family", x = "Scaled Birth Year", y = "Phenotype (y)")
+
+
+
 
 # Build family group models for temporal A + E.
 group_models <- vector("list", n_families)
@@ -306,6 +336,39 @@ target <- c(
 est <- omxGetParameters(fit_ae_linear_h)[names(target)]
 
 round(cbind(target = target, estimate = est, diff = est - target), 3)
+
+# graph estimates of a as a function of time and historical moderator
+
+
+
+graphing_data <- data.frame(
+  time = seq(-3, 3, length.out = 100),
+  historical = c(0, 1))
+
+graphing_data$estimated_a_variance <- exp(est["b_a_0"] + est["b_a_1"] * graphing_data$time + est["g_a_1"] * graphing_data$historical)
+graphing_data$true_a_variance <- exp(target["b_a_0"] + target["b_a_1"] * graphing_data$time + target["g_a_1"] * graphing_data$historical)
+graphing_data$estimated_e_variance <- exp(est["b_e_0"] + est["b_e_1"] * graphing_data$time + est["g_e_1"] * graphing_data$historical)
+graphing_data$true_e_variance <- exp(target["b_e_0"] + target["b_e_1"] * graphing_data$time + target["g_e_1"] * graphing_data$historical)
+graphing_data$estimated_total_variance <- graphing_data$estimated_a_variance + graphing_data$estimated_e_variance
+graphing_data$true_total_variance <- graphing_data$true_a_variance + graphing_data$true_e_variance
+graphing_data$unscaled_time <- graphing_data$time * sd(unlist(lapply(families, function(x) x$birth_year_scaled))) + mean(unlist(lapply(families, function(x) x$birth_year_scaled)))
+
+graphing_data_long <- # have a true and estimated factor
+graphing_data %>%
+  tidyr::pivot_longer(cols = c(estimated_a_variance, true_a_variance, estimated_e_variance, true_e_variance, estimated_total_variance, true_total_variance),
+                      names_to = c("type", "component", NA),
+                      names_sep = "_",
+                      values_to = "variance")
+
+
+ggplot2::ggplot(graphing_data_long) +
+  ggplot2::geom_line(ggplot2::aes(x = unscaled_time, y = variance, linetype = factor(historical),
+                                  color = factor(component)
+                                  )) +
+  ggplot2::labs(title = "Estimated Variance as a function of time and historical moderator", x = "Scaled Birth Year", y = "Estimated Variance", color = "Variance Component") +
+  ggplot2::theme_bw() + facet_wrap(~type)
+
+
 
 
 # -----------------------------------------------------------------------------

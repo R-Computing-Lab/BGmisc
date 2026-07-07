@@ -3,12 +3,21 @@ buildTemporalPedigreeModelCovariance <- function(
   components = c("a", "d", "cn", "ce", "mt", "e"),
   start_beta0 = 0.5,
   start_beta_time = 0,
-  start_gamma = 0
+  start_gamma = 0,
+  time_point_max = NULL
 ) {
   .require_openmx("buildTemporalPedigreeModelCovariance")
 
   beta_name <- function(k) paste0("B_", k)
   gamma_name <- function(k) paste0("G_", k)
+  if(is.null(time_point_max)) {
+    time_point_max <- 3
+    time_points <- 0:time_point_max
+  } else {
+    if (!is.numeric(time_points) || length(time_points) < 1) {
+      stop("time_points must be a numeric vector of length >= 1.")
+    }
+  }
 
   mats <- list()
 
@@ -18,8 +27,8 @@ buildTemporalPedigreeModelCovariance <- function(
       nrow = 4,
       ncol = 1,
       free = TRUE,
-      values = c(start_beta0, start_beta_time, start_beta_time, start_beta_time),
-      labels = paste0("b_", k, "_", 0:3),
+      values = c(start_beta0, rep(start_beta_time, time_point_max)),
+      labels = paste0("b_", k, "_", time_points),
       name = beta_name(k)
     )
 
@@ -51,7 +60,9 @@ buildOneTemporalFamilyGroup <- function(
     obs_ids,
     birth_year,
     H = NULL,
-    use_exp_loadings = TRUE
+    use_exp_loadings = TRUE,
+    condenseMatrixSlots = TRUE,
+    time_point_max = NULL
 ) {
   mats_in <- list(Addmat, Dmgmat, Nucmat, Extmat, Mtdmat)
   fsize <- NULL
@@ -73,7 +84,12 @@ buildOneTemporalFamilyGroup <- function(
     if (nrow(H) != fsize) stop("H must have nrow equal to family size.")
   }
   p_hist <- ncol(H)
-
+  if (p_hist > 0 && condenseMatrixSlots &&FALSE) {
+    H <- condenseMatrixSlots(H)
+  }
+  if(is.null(time_point_max)) {
+    time_point_max <- 3
+  }
   # One raw-data row with named phenotype columns.
   full_df_row <- matrix(as.numeric(full_df_row), nrow = 1)
   colnames(full_df_row) <- obs_ids
@@ -82,7 +98,17 @@ buildOneTemporalFamilyGroup <- function(
   stopifnot(identical(colnames(full_df_row), obs_ids))
 
   t_i <- as.numeric(birth_year)
-  Tpoly <- cbind(1, t_i, t_i^2, t_i^3)
+  # use time_point_max to determine the degree of the polynomial basis # for max 3,
+  if (time_point_max < 0) stop("time_point_max must be non-negative.")
+  if(time_point_max == 3) {
+   Tpoly <- cbind(1, t_i, t_i^2, t_i^3)
+  } else {
+  Tpoly <- sapply(0:time_point_max, function(p) t_i^p)
+  }
+  if (condenseMatrixSlots&FALSE) {
+    Tpoly <- condenseMatrixSlots(Tpoly)
+    }
+
 
   mat_spec <- list(
     list(mat = Addmat, mxname = "A",  k = "a",  K = "Ka"),
