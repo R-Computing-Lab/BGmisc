@@ -690,6 +690,7 @@ buildFamilyGroups_list <- function(
   groups
 }
 
+
 #' Build Pedigree mxModel
 #'
 #' This function constructs an OpenMx pedigree model by combining variance
@@ -708,34 +709,6 @@ buildFamilyGroups_list <- function(
 #'   "ce", "mt", "am", "e"). Only used when \code{temporal = TRUE}. Default is \code{c("a", "e")}.
 #' @return An OpenMx pedigree model combining variance components and family groups.
 #' @export
-
-#' Assemble the top-level pedigree mxModel (internal)
-#'
-#' Combines the covariance sub-model (\code{ModelOne}), the family-group models, the
-#' multigroup fit function, and (optionally) a confidence-interval specification into
-#' one mxModel. Shared by both the static and temporal branches of
-#' \code{\link{buildPedigreeMx}}, which otherwise only differ in how \code{model_one}
-#' and \code{ci_obj} are built.
-#'
-#' @param model_name Name of the overall pedigree model.
-#' @param model_one The covariance sub-model (from \code{\link{buildPedigreeModelCovariance}}).
-#' @param group_models A list of OpenMx models for each family group.
-#' @param ci_obj An \code{mxCI} object to include, or NULL to omit confidence intervals.
-#' @return An OpenMx pedigree model.
-#' @keywords internal
-.assemblePedigreeMx <- function(model_name, model_one, group_models, ci_obj = NULL) {
-  group_names <- vapply(group_models, function(m) m$name, character(1))
-
-  model_parts <- c(
-    list(model_name),
-    list(model_one),
-    group_models,
-    list(OpenMx::mxFitFunctionMultigroup(group_names))
-  )
-  if (!is.null(ci_obj)) model_parts[[length(model_parts) + 1]] <- ci_obj
-
-  do.call(OpenMx::mxModel, model_parts)
-}
 
 buildPedigreeMx <- function(model_name, vars, group_models,
                             ci = FALSE,
@@ -982,6 +955,33 @@ fitPedigreeModel <- function(
   fitted_model
 }
 
+#' Assemble the top-level pedigree mxModel (internal)
+#'
+#' Combines the covariance sub-model (named \code{"ModelOne"}), the family-group models,
+#' the multigroup fit function, and (optionally) a confidence-interval specification into
+#' one mxModel. Shared by both the static and temporal branches of
+#' \code{\link{buildPedigreeMx}}, which otherwise only differ in how \code{model_one}
+#' and \code{ci_obj} are built.
+#'
+#' @param model_name Name of the overall pedigree model.
+#' @param model_one The covariance sub-model (from \code{\link{buildPedigreeModelCovariance}}).
+#' @param group_models A list of OpenMx models for each family group.
+#' @param ci_obj An \code{mxCI} object to include, or NULL to omit confidence intervals.
+#' @return An OpenMx pedigree model.
+#' @keywords internal
+.assemblePedigreeMx <- function(model_name, model_one, group_models, ci_obj = NULL) {
+  group_names <- vapply(group_models, function(m) m$name, character(1))
+
+  model_parts <- c(
+    list(model_name),
+    list(model_one),
+    group_models,
+    list(OpenMx::mxFitFunctionMultigroup(group_names))
+  )
+  if (!is.null(ci_obj)) model_parts[[length(model_parts) + 1]] <- ci_obj
+
+  do.call(OpenMx::mxModel, model_parts)
+}
 
 #' Align Phenotype Vector to Matrix Format for OpenMx
 #'
