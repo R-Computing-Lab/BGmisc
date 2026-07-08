@@ -110,7 +110,7 @@ checkParentIDs <- function(ped, verbose = FALSE, repair = FALSE,
   }
   # Are any parents in both momID and dadID?
   momdad <- intersect(ped$dadID, ped$momID)
-  if (length(momdad) > 0 && !is.na(momdad)) {
+  if (any(length(momdad) > 0 && !is.na(momdad))) {
     validation_results$parents_in_both <- momdad
     if (verbose == TRUE) {
       cat(paste(
