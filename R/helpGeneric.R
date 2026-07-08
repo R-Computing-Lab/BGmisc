@@ -104,6 +104,38 @@ resample <- function(x, ...) {
   x[sample.int(length(x), ...)]
 }
 
+#' Coerce to a Numeric Matrix
+#'
+#' @param x An object coercible to a matrix.
+#' @keywords internal
+#' @return \code{x} as a matrix with numeric storage mode.
+#'
+as_numeric_matrix <- function(x) {
+  x <- as.matrix(x)
+  storage.mode(x) <- "numeric"
+  x
+}
+
+#' Symmetrize a Matrix
+#'
+#' Averages a matrix with its transpose when it is not already symmetric
+#' within tolerance. Used to clean up relatedness matrices before they are
+#' passed to OpenMx, which requires exact symmetry for \code{"Symm"}-type
+#' \code{mxMatrix} objects.
+#'
+#' @param x A square matrix, or an object coercible to one.
+#' @param tol Numeric tolerance for asymmetry. Default is 1e-10.
+#' @keywords internal
+#' @return A numeric matrix, symmetrized if needed.
+#'
+make_symmetric <- function(x, tol = 1e-10) {
+  x <- as_numeric_matrix(x)
+  if (max(abs(x - t(x)), na.rm = TRUE) > tol) {
+    x <- (x + t(x)) / 2
+  }
+  x
+}
+
 #' Check for OpenMx Package
 #'
 #' This function checks if the OpenMx package is installed and available for use. If the package is not installed, it throws an error with a message indicating that OpenMx is required and provides instructions for installation.
