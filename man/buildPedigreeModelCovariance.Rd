@@ -14,6 +14,13 @@ buildPedigreeModelCovariance(
   Vmt = TRUE,
   Vam = FALSE,
   Ver = TRUE,
+  temporal = FALSE,
+  p_hist = 0,
+  components = c("a", "e"),
+  start_beta0 = 0.5,
+  start_beta_time = 0,
+  start_gamma = 0,
+  time_point_max = NULL,
   lbound = 1e-10
 )
 }
@@ -21,7 +28,7 @@ buildPedigreeModelCovariance(
 \item{vars}{A named list or vector of initial variance component values. Names should include
 ad2 (additive), dd2 (dominance), cn2 (common nuclear), ce2 (common extended),
 mt2 (mitochondrial), am2 (additive-mitochondrial interaction), and ee2 (unique environment).
-Default values are provided.}
+Default values are provided. Only used when \code{temporal = FALSE}.}
 
 \item{Vad}{Logical. Include additive genetic variance component. Default is TRUE.}
 
@@ -36,6 +43,29 @@ Default values are provided.}
 \item{Vam}{Logical. Include additive by mitochondrial interaction variance component. Default is FALSE.}
 
 \item{Ver}{Logical. Include unique environmental variance component. Default is TRUE.}
+
+\item{temporal}{Logical. If TRUE, build a time-varying covariance sub-model in which each
+component's weight is a function of birth year (and, optionally, historical moderators)
+rather than a fixed scalar. See \code{p_hist}, \code{components}, \code{start_beta0},
+\code{start_beta_time}, \code{start_gamma}, and \code{time_point_max}. Default is FALSE.}
+
+\item{p_hist}{Integer. Number of historical moderator columns. Only used when
+\code{temporal = TRUE}. Default is 0.}
+
+\item{components}{Character vector of component keys to include when \code{temporal = TRUE}
+(any of "a", "d", "cn", "ce", "mt", "am", "e"). Default is \code{c("a", "e")}.}
+
+\item{start_beta0}{Numeric. Starting value for each component's intercept loading. Only used
+when \code{temporal = TRUE}. Default is 0.5.}
+
+\item{start_beta_time}{Numeric. Starting value for each component's time-slope loadings. Only
+used when \code{temporal = TRUE}. Default is 0.}
+
+\item{start_gamma}{Numeric. Starting value for historical-moderator loadings. Only used when
+\code{temporal = TRUE}. Default is 0.}
+
+\item{time_point_max}{Integer. Degree of the polynomial birth-year basis. Only used when
+\code{temporal = TRUE}. Default is 3.}
 
 \item{lbound}{Numeric. A lower bound for the variance components to ensure they remain positive during optimization. Default is 1e-10}
 }

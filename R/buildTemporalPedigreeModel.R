@@ -1,3 +1,20 @@
+# Temporal pedigree model builders
+#
+# These are thin, temporal-flavored wrappers around the generalized,
+# temporal=-aware functions in R/buildmxPedigrees.R (buildPedigreeModelCovariance,
+# buildOneFamilyGroup, buildFamilyGroups, buildFamilyGroups_list, buildPedigreeMx,
+# fitPedigreeModel). They carry no independent model-building logic; they exist so
+# that the temporal-specific argument names (birth_year_list, H_list, p_hist,
+# components, ...) have a discoverable, temporal-only entry point.
+
+#' Build a Temporal Covariance Sub-model
+#'
+#' Wrapper around \code{\link{buildPedigreeModelCovariance}} with \code{temporal = TRUE}.
+#'
+#' @inheritParams buildPedigreeModelCovariance
+#' @param p_hist Integer. Number of historical moderator columns.
+#' @return An OpenMx model containing the \code{B_*}/\code{G_*} parameter matrices.
+#' @export
 buildTemporalPedigreeModelCovariance <- function(
   p_hist,
   components = c("a", "d", "cn", "ce", "mt", "e"),
@@ -6,55 +23,31 @@ buildTemporalPedigreeModelCovariance <- function(
   start_gamma = 0,
   time_point_max = NULL
 ) {
-  .require_openmx("buildTemporalPedigreeModelCovariance")
-
-  beta_name <- function(k) paste0("B_", k)
-  gamma_name <- function(k) paste0("G_", k)
-  if(is.null(time_point_max)) {
-    time_point_max <- 3
-    time_points <- 0:time_point_max
-  } else {
-    if (!is.numeric(time_points) || length(time_points) < 1) {
-      stop("time_points must be a numeric vector of length >= 1.")
-    }
-  }
-
-  mats <- list()
-
-  for (k in components) {
-    mats[[beta_name(k)]] <- OpenMx::mxMatrix(
-      type = "Full",
-      nrow = 4,
-      ncol = 1,
-      free = TRUE,
-      values = c(start_beta0, rep(start_beta_time, time_point_max)),
-      labels = paste0("b_", k, "_", time_points),
-      name = beta_name(k)
-    )
-
-    if (p_hist > 0) {
-      mats[[gamma_name(k)]] <- OpenMx::mxMatrix(
-        type = "Full",
-        nrow = p_hist,
-        ncol = 1,
-        free = TRUE,
-        values = start_gamma,
-        labels = paste0("g_", k, "_", seq_len(p_hist)),
-        name = gamma_name(k)
-      )
-    }
-  }
-
-  do.call(OpenMx::mxModel, c(list("ModelOne"), mats))
+  buildPedigreeModelCovariance(
+    temporal = TRUE,
+    p_hist = p_hist,
+    components = components,
+    start_beta0 = start_beta0,
+    start_beta_time = start_beta_time,
+    start_gamma = start_gamma,
+    time_point_max = time_point_max
+  )
 }
 
-
+#' Build One Temporal Family Group Model
+#'
+#' Wrapper around \code{\link{buildOneFamilyGroup}} with \code{temporal = TRUE}.
+#'
+#' @inheritParams buildOneFamilyGroup
+#' @return An OpenMx model for the specified family group.
+#' @export
 buildOneTemporalFamilyGroup <- function(
     group_name,
     Addmat = NULL,
     Nucmat = NULL,
     Extmat = NULL,
     Mtdmat = NULL,
+    Amimat = NULL,
     Dmgmat = NULL,
     full_df_row,
     obs_ids,
@@ -64,162 +57,35 @@ buildOneTemporalFamilyGroup <- function(
     condenseMatrixSlots = TRUE,
     time_point_max = NULL
 ) {
-  mats_in <- list(Addmat, Dmgmat, Nucmat, Extmat, Mtdmat)
-  fsize <- NULL
-  for (m in mats_in) {
-    if (!is.null(m)) {
-      fsize <- nrow(m)
-      break
-    }
-  }
-  if (is.null(fsize)) stop("At least one relatedness matrix must be provided.")
-
-  if (length(obs_ids) != fsize) stop("Length of obs_ids must equal family size.")
-  if (length(birth_year) != fsize) stop("Length of birth_year must equal family size.")
-
-  if (is.null(H)) {
-    H <- matrix(numeric(0), nrow = fsize, ncol = 0)
-  } else {
-    H <- as_numeric_matrix(H)
-    if (nrow(H) != fsize) stop("H must have nrow equal to family size.")
-  }
-  p_hist <- ncol(H)
-  if (p_hist > 0 && condenseMatrixSlots &&FALSE) {
-    H <- condenseMatrixSlots(H)
-  }
-  if(is.null(time_point_max)) {
-    time_point_max <- 3
-  }
-  # One raw-data row with named phenotype columns.
-  full_df_row <- matrix(as.numeric(full_df_row), nrow = 1)
-  colnames(full_df_row) <- obs_ids
-  rownames(full_df_row) <- group_name
-  full_df_row <- as.data.frame(full_df_row, check.names = FALSE)
-  stopifnot(identical(colnames(full_df_row), obs_ids))
-
-  t_i <- as.numeric(birth_year)
-  # use time_point_max to determine the degree of the polynomial basis # for max 3,
-  if (time_point_max < 0) stop("time_point_max must be non-negative.")
-  if(time_point_max == 3) {
-   Tpoly <- cbind(1, t_i, t_i^2, t_i^3)
-  } else {
-  Tpoly <- sapply(0:time_point_max, function(p) t_i^p)
-  }
-  if (condenseMatrixSlots&FALSE) {
-    Tpoly <- condenseMatrixSlots(Tpoly)
-    }
-
-
-  mat_spec <- list(
-    list(mat = Addmat, mxname = "A",  k = "a",  K = "Ka"),
-    list(mat = Dmgmat, mxname = "D",  k = "d",  K = "Kd"),
-    list(mat = Nucmat, mxname = "Cn", k = "cn", K = "Kcn"),
-    list(mat = Extmat, mxname = "Ce", k = "ce", K = "Kce"),
-    list(mat = Mtdmat, mxname = "Mt", k = "mt", K = "Kmt")
+  buildOneFamilyGroup(
+    group_name = group_name,
+    Addmat = Addmat,
+    Nucmat = Nucmat,
+    Extmat = Extmat,
+    Mtdmat = Mtdmat,
+    Amimat = Amimat,
+    Dmgmat = Dmgmat,
+    full_df_row = full_df_row,
+    obs_ids = obs_ids,
+    condenseMatrixSlots = condenseMatrixSlots,
+    temporal = TRUE,
+    birth_year = birth_year,
+    H = H,
+    use_exp_loadings = use_exp_loadings,
+    time_point_max = time_point_max
   )
-  active <- Filter(function(s) !is.null(s$mat), mat_spec)
-
-  fixed_parts <- list(
-    mxData(observed = full_df_row, type = "raw", sort = FALSE),
-    mxMatrix("Iden", nrow = fsize, ncol = fsize, name = "I"),
-    mxMatrix("Full", nrow = fsize, ncol = 4, free = FALSE, values = Tpoly, name = "Tpoly")
-  )
-
-  if (p_hist > 0) {
-    fixed_parts[[length(fixed_parts) + 1]] <- mxMatrix(
-      "Full", nrow = fsize, ncol = p_hist, free = FALSE, values = H, name = "H"
-    )
-  }
-
-  rel_parts <- lapply(active, function(s) {
-    mxMatrix(
-      type = "Symm",
-      nrow = fsize,
-      ncol = fsize,
-      free = FALSE,
-      values = make_symmetric(s$mat),
-      name = s$mxname
-    )
-  })
-
-  # Eta_k = Tpoly %*% B_k + H %*% G_k
-
-  make_eta_alg <- function(k) {
-    if (p_hist > 0) {
-      mxAlgebraFromString(
-        paste0("Tpoly %*% ModelOne.B_", k, " + H %*% ModelOne.G_", k),
-        name = paste0("Eta_", k)
-      )
-    } else {
-      mxAlgebraFromString(
-        paste0("Tpoly %*% ModelOne.B_", k),
-        name = paste0("Eta_", k)
-      )
-    }
-  }
-
-  make_lambda_alg <- function(k) {
-    if (use_exp_loadings) {
-      mxAlgebraFromString(paste0("exp(Eta_", k, ")"), name = paste0("L_", k))
-    } else {
-      mxAlgebraFromString(paste0("Eta_", k), name = paste0("L_", k))
-    }
-  }
-
-  make_K_alg <- function(k, Kname) {
-    mxAlgebraFromString(paste0("L_", k, " %*% t(L_", k, ")"), name = Kname)
-  }
-
-  eta_parts <- lapply(active, function(s) make_eta_alg(s$k))
-  lambda_parts <- lapply(active, function(s) make_lambda_alg(s$k))
-  K_parts <- lapply(active, function(s) make_K_alg(s$k, s$K))
-
-  eta_e <- make_eta_alg("e")
-  lambda_e <- make_lambda_alg("e")
-  K_e <- make_K_alg("e", "Ke")
-
-  rel_terms <- vapply(
-    active,
-    function(s) paste0("(", s$mxname, " * ", s$K, ")"),
-    character(1)
-  )
-  covariance_algebra <- paste(c(rel_terms, "(I * Ke)"), collapse = " + ")
-
-  model_parts <- c(
-    list(group_name),
-    fixed_parts,
-    rel_parts,
-    eta_parts,
-    lambda_parts,
-    K_parts,
-    list(
-      eta_e,
-      lambda_e,
-      K_e,
-      mxMatrix(
-        "Full",
-        nrow = 1,
-        ncol = fsize,
-        name = "M",
-        free = TRUE,
-        values = 0,
-        labels = "mean_y",
-        dimnames = list(NULL, obs_ids)
-      ),
-      mxAlgebraFromString(
-        covariance_algebra,
-        name = "V",
-        dimnames = list(obs_ids, obs_ids)
-      ),
-      mxExpectationNormal(covariance = "V", means = "M", dimnames = obs_ids),
-      mxFitFunctionML()
-    )
-  )
-
-  do.call(mxModel, model_parts)
 }
 
-
+#' Build Temporal Family Group Models
+#'
+#' Wrapper around \code{\link{buildFamilyGroups}} with \code{temporal = TRUE}. All families
+#' share the same relatedness matrices; only phenotype data, birth year, and historical
+#' moderators vary by family. For families with different structure or size, see
+#' \code{\link{buildTemporalFamilyGroups_list}}.
+#'
+#' @inheritParams buildFamilyGroups
+#' @return A list of OpenMx models for each family group.
+#' @export
 buildTemporalFamilyGroups <- function(
   dat,
   obs_ids,
@@ -229,47 +95,40 @@ buildTemporalFamilyGroups <- function(
   Nucmat = NULL,
   Extmat = NULL,
   Mtdmat = NULL,
+  Amimat = NULL,
   Dmgmat = NULL,
   prefix = "fam",
   use_exp_loadings = FALSE,
-  condenseMatrixSlots = TRUE
+  condenseMatrixSlots = TRUE,
+  time_point_max = NULL
 ) {
-  .require_openmx("buildTemporalFamilyGroups")
-
-  numfam <- nrow(dat)
-
-  if (is.null(H_list)) {
-    H_list <- vector("list", numfam)
-  }
-
-  groups <- vector("list", numfam)
-
-  for (afam in seq_len(numfam)) {
-    full_df_row <- matrix(
-      dat[afam, ],
-      nrow = 1,
-      dimnames = list(NULL, obs_ids)
-    )
-
-    groups[[afam]] <- buildOneTemporalFamilyGroup(
-      group_name = paste0(prefix, afam),
-      Addmat = Addmat,
-      Nucmat = Nucmat,
-      Extmat = Extmat,
-      Mtdmat = Mtdmat,
-      Dmgmat = Dmgmat,
-      full_df_row = full_df_row,
-      obs_ids = obs_ids,
-      birth_year = birth_year_list[[afam]],
-      H = H_list[[afam]],
-      use_exp_loadings = use_exp_loadings,
-      condenseMatrixSlots = condenseMatrixSlots
-    )
-  }
-
-  groups
+  buildFamilyGroups(
+    dat = dat,
+    obs_ids = obs_ids,
+    Addmat = Addmat,
+    Nucmat = Nucmat,
+    Extmat = Extmat,
+    Mtdmat = Mtdmat,
+    Amimat = Amimat,
+    Dmgmat = Dmgmat,
+    prefix = prefix,
+    condenseMatrixSlots = condenseMatrixSlots,
+    temporal = TRUE,
+    birth_year_list = birth_year_list,
+    H_list = H_list,
+    use_exp_loadings = use_exp_loadings,
+    time_point_max = time_point_max
+  )
 }
 
+#' Build Temporal Family Group Models with Per-Family Relatedness Matrices
+#'
+#' Wrapper around \code{\link{buildFamilyGroups_list}} with \code{temporal = TRUE}. Use this
+#' when families vary in size or structure.
+#'
+#' @inheritParams buildFamilyGroups_list
+#' @return A list of OpenMx models for each family group.
+#' @export
 buildTemporalFamilyGroups_list <- function(
   dat_list,
   obs_ids_list,
@@ -279,86 +138,67 @@ buildTemporalFamilyGroups_list <- function(
   Nucmat_list = NULL,
   Extmat_list = NULL,
   Mtdmat_list = NULL,
+  Amimat_list = NULL,
   Dmgmat_list = NULL,
   prefix = "fam",
   use_exp_loadings = FALSE,
-  condenseMatrixSlots = TRUE
+  condenseMatrixSlots = TRUE,
+  time_point_max = NULL
 ) {
-  .require_openmx("buildTemporalFamilyGroups_list")
-
-  numfam <- length(dat_list)
-  groups <- vector("list", numfam)
-
-  get_or_null <- function(x, i) {
-    if (is.null(x)) NULL else x[[i]]
-  }
-
-  for (afam in seq_len(numfam)) {
-    obs_ids <- obs_ids_list[[afam]]
-
-    full_df_row <- matrix(
-      dat_list[[afam]],
-      nrow = 1,
-      dimnames = list(NULL, obs_ids)
-    )
-
-    groups[[afam]] <- buildOneTemporalFamilyGroup(
-      group_name = paste0(prefix, afam),
-      Addmat = get_or_null(Addmat_list, afam),
-      Nucmat = get_or_null(Nucmat_list, afam),
-      Extmat = get_or_null(Extmat_list, afam),
-      Mtdmat = get_or_null(Mtdmat_list, afam),
-      Dmgmat = get_or_null(Dmgmat_list, afam),
-      full_df_row = full_df_row,
-      obs_ids = obs_ids,
-      birth_year = birth_year_list[[afam]],
-      H = H_list[[afam]],
-      use_exp_loadings = use_exp_loadings,
-      condenseMatrixSlots = condenseMatrixSlots
-    )
-  }
-
-  groups
+  buildFamilyGroups_list(
+    dat_list = dat_list,
+    obs_ids_list = obs_ids_list,
+    Addmat_list = Addmat_list,
+    Nucmat_list = Nucmat_list,
+    Extmat_list = Extmat_list,
+    Mtdmat_list = Mtdmat_list,
+    Amimat_list = Amimat_list,
+    Dmgmat_list = Dmgmat_list,
+    prefix = prefix,
+    condenseMatrixSlots = condenseMatrixSlots,
+    temporal = TRUE,
+    birth_year_list = birth_year_list,
+    H_list = H_list,
+    use_exp_loadings = use_exp_loadings,
+    time_point_max = time_point_max
+  )
 }
 
-
-
-
+#' Build a Temporal Pedigree mxModel
+#'
+#' Wrapper around \code{\link{buildPedigreeMx}} with \code{temporal = TRUE}.
+#'
+#' @inheritParams buildPedigreeMx
+#' @param p_hist Integer. Number of historical moderator columns.
+#' @return An OpenMx pedigree model combining the temporal covariance sub-model and family groups.
+#' @export
 buildTemporalPedigreeMx <- function(
     model_name,
     group_models,
     p_hist,
     components = c("a", "e"),
-    ci = FALSE
+    ci = FALSE,
+    time_point_max = NULL
 ) {
-  group_names <- vapply(group_models, function(m) m$name, character(1))
-  components <- unique(c(components, "e"))
-
-  model_one <- buildTemporalPedigreeModelCovariance(
+  buildPedigreeMx(
+    model_name = model_name,
+    group_models = group_models,
+    ci = ci,
+    temporal = TRUE,
     p_hist = p_hist,
-    components = components
+    components = components,
+    time_point_max = time_point_max
   )
-
-  model_parts <- c(
-    list(model_name),
-    list(model_one),
-    group_models,
-    list(mxFitFunctionMultigroup(group_names))
-  )
-
-  if (ci) {
-    ci_names <- unlist(lapply(components, function(k) {
-      out <- paste0("b_", k, "_", 0:3)
-      if (p_hist > 0) out <- c(out, paste0("g_", k, "_", seq_len(p_hist)))
-      out
-    }))
-    model_parts[[length(model_parts) + 1]] <- mxCI(ci_names)
-  }
-
-  do.call(mxModel, model_parts)
 }
 
-
+#' Fit a Temporal OpenMx Pedigree Model to Observed Data
+#'
+#' Wrapper around \code{\link{fitPedigreeModel}} with \code{temporal = TRUE}, exposing only the
+#' temporal-relevant arguments.
+#'
+#' @inheritParams fitPedigreeModel
+#' @return A fitted OpenMx model.
+#' @export
 fitTemporalPedigreeModel <- function(
   model_name = "TemporalPedigreeModel",
   group_models = NULL,
@@ -370,6 +210,7 @@ fitTemporalPedigreeModel <- function(
   Nucmat_list = NULL,
   Extmat_list = NULL,
   Mtdmat_list = NULL,
+  Amimat_list = NULL,
   Dmgmat_list = NULL,
   p_hist = NULL,
   components = c("a", "d", "cn", "ce", "mt", "e"),
@@ -377,62 +218,30 @@ fitTemporalPedigreeModel <- function(
   tryhard = TRUE,
   intervals = TRUE,
   extraTries = 10,
-  runmodel = TRUE
+  runmodel = TRUE,
+  time_point_max = NULL
 ) {
-  .require_openmx("fitTemporalPedigreeModel")
-
-  if (is.null(group_models)) {
-    if (is.null(dat_list) || is.null(obs_ids_list) || is.null(birth_year_list)) {
-      stop("Provide either 'group_models' or dat_list, obs_ids_list, and birth_year_list.")
-    }
-
-    if (is.null(H_list)) {
-      H_list <- lapply(birth_year_list, function(x) matrix(numeric(0), nrow = length(x), ncol = 0))
-    }
-
-    group_models <- buildTemporalFamilyGroups_list(
-      dat_list = dat_list,
-      obs_ids_list = obs_ids_list,
-      birth_year_list = birth_year_list,
-      H_list = H_list,
-      Addmat_list = Addmat_list,
-      Nucmat_list = Nucmat_list,
-      Extmat_list = Extmat_list,
-      Mtdmat_list = Mtdmat_list,
-      Dmgmat_list = Dmgmat_list,
-      use_exp_loadings = use_exp_loadings
-    )
-  }
-
-  if (is.null(p_hist)) {
-    if (!is.null(H_list) && length(H_list) > 0 && !is.null(H_list[[1]])) {
-      p_hist <- ncol(H_list[[1]])
-    } else {
-      p_hist <- 0
-    }
-  }
-
-  temporal_model <- buildTemporalPedigreeMx(
+  fitPedigreeModel(
     model_name = model_name,
     group_models = group_models,
+    temporal = TRUE,
+    dat_list = dat_list,
+    obs_ids_list = obs_ids_list,
+    birth_year_list = birth_year_list,
+    H_list = H_list,
+    Addmat_list = Addmat_list,
+    Nucmat_list = Nucmat_list,
+    Extmat_list = Extmat_list,
+    Mtdmat_list = Mtdmat_list,
+    Amimat_list = Amimat_list,
+    Dmgmat_list = Dmgmat_list,
     p_hist = p_hist,
     components = components,
-    ci = intervals
+    use_exp_loadings = use_exp_loadings,
+    tryhard = tryhard,
+    intervals = intervals,
+    extraTries = extraTries,
+    runmodel = runmodel,
+    time_point_max = time_point_max
   )
-
-  if (!runmodel) return(temporal_model)
-
-  if (tryhard) {
-    OpenMx::mxTryHard(
-      temporal_model,
-      silent = TRUE,
-      extraTries = extraTries,
-      intervals = intervals
-    )
-  } else {
-    OpenMx::mxRun(
-      temporal_model,
-      intervals = intervals
-    )
-  }
 }

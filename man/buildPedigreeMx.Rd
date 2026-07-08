@@ -9,26 +9,44 @@ buildPedigreeMx(
   vars,
   group_models,
   ci = FALSE,
-  condenseMatrixSlots = TRUE
+  condenseMatrixSlots = TRUE,
+  temporal = FALSE,
+  p_hist = 0,
+  components = c("a", "e"),
+  time_point_max = NULL
 )
 }
 \arguments{
 \item{model_name}{Name of the overall pedigree model.}
 
-\item{vars}{A named list or vector of initial variance component values.}
+\item{vars}{A named list or vector of initial variance component values. Only used
+when \code{temporal = FALSE}.}
 
 \item{group_models}{A list of OpenMx models for each family group.}
 
 \item{ci}{Logical. If TRUE, include confidence interval computations for the variance components. Default is FALSE}
 
 \item{condenseMatrixSlots}{Logical. If TRUE, use the mxCondenseMatrixSlots wrapper to optimize memory usage for large matrices. Default is TRUE.}
+
+\item{temporal}{Logical. If TRUE, build a time-varying family-group model where each
+component's weight is a function of \code{birth_year} (and, optionally, \code{H}) instead
+of a fixed scalar. Default is FALSE.}
+
+\item{p_hist}{Integer. Number of historical moderator columns. Only used when
+\code{temporal = TRUE}. Default is 0.}
+
+\item{components}{Character vector of component keys to include (any of "a", "d", "cn",
+"ce", "mt", "am", "e"). Only used when \code{temporal = TRUE}. Default is \code{c("a", "e")}.}
+
+\item{time_point_max}{Integer degree of the polynomial birth-year basis. Only used when
+\code{temporal = TRUE}. Default is 3.}
 }
 \value{
 An OpenMx pedigree model combining variance components and family groups.
 }
 \description{
 This function constructs an OpenMx pedigree model by combining variance
-component parameters and family group models. It auto-detects which
-variance components are referenced in the group algebras and creates
-only those parameters.
+component parameters and family group models. For static (\code{temporal = FALSE})
+models, it auto-detects which variance components are referenced in the group
+algebras and creates only those parameters.
 }
