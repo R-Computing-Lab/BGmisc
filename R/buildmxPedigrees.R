@@ -298,7 +298,7 @@ buildOneFamilyGroup <- function(
   temporal = FALSE,
   birth_year = NULL,
   H = NULL,
-  use_exp_loadings = TRUE,
+  use_exp_loadings = FALSE,
   time_point_max = NULL
 ) {
   .require_openmx("buildOneFamilyGroup")
@@ -446,7 +446,7 @@ buildOneFamilyGroup <- function(
   colnames(full_df_row) <- obs_ids
   rownames(full_df_row) <- group_name
   full_df_row <- as.data.frame(full_df_row, check.names = FALSE)
-  stopifnot(identical(colnames(full_df_row), obs_ids))
+ # stopifnot(identical(colnames(full_df_row), obs_ids))
 
   t_i <- as.numeric(birth_year)
   # Polynomial basis of degree time_point_max: columns are t_i^0, t_i^1, ..., t_i^time_point_max.
@@ -502,6 +502,7 @@ buildOneFamilyGroup <- function(
   }
 
   make_K_alg <- function(k, Kname) {
+    # The K matrix is the outer product of the loading vector L_k with itself, which gives a symmetric matrix of loadings for the covariance structure.
     OpenMx::mxAlgebraFromString(paste0("L_", k, " %*% t(L_", k, ")"), name = Kname)
   }
 

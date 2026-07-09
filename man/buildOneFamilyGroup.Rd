@@ -18,7 +18,7 @@ buildOneFamilyGroup(
   temporal = FALSE,
   birth_year = NULL,
   H = NULL,
-  use_exp_loadings = TRUE,
+  use_exp_loadings = FALSE,
   time_point_max = NULL
 )
 }
