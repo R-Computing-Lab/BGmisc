@@ -130,7 +130,7 @@ df_plot <- benchmark_results %>% mutate(
     ) ~ "big"
   ),
   method = case_when(
-       expr %in% c("base_small", "base_big") ~ "base",
+    expr %in% c("base_small", "base_big") ~ "base",
     expr %in% c("rows_small", "rows_big") ~ "rows",
     expr %in% c("schur_small", "schur_big") ~ "schur"
   ) # make base the reference level for the linear model, so that the intercept is the mean of the base method

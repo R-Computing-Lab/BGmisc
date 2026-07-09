@@ -73,7 +73,7 @@ target <- c(
   g_a_1 = true_gamma$a[1] / true_beta$a[1],
   b_e_0 = log(true_beta$e[1]),
   b_e_1 = true_beta$e[2] / true_beta$e[1],
-  g_e_1 = true_gamma$e[1]/ true_beta$e[1]
+  g_e_1 = true_gamma$e[1] / true_beta$e[1]
 )
 
 
@@ -89,7 +89,6 @@ for (i in seq_len(n_families)) {
     components = sim_components,
     family_id = i
   )
-
 }
 
 cat("Simulated", n_families, "families. Family sizes:\n")
@@ -97,23 +96,21 @@ print(vapply(families, function(x) length(x$y), integer(1)))
 
 
 # nees to add H, y and birth_year_scaled to the family data frame for plotting and analysis
-family_peds <- lapply(families, function(x)
-  cbind(x$ped,y = x$y,birth_year = x$birth_year,
-                        birth_year_scaled = x$birth_year_scaled,
-                        post_1776 = x$H
-                      )
-
-
-                      ) %>% dplyr::bind_rows() %>%
+family_peds <- lapply(families, function(x) {
+  cbind(x$ped,
+    y = x$y, birth_year = x$birth_year,
+    birth_year_scaled = x$birth_year_scaled,
+    post_1776 = x$H
+  )
+}) %>%
+  dplyr::bind_rows() %>%
   dplyr::mutate(fam = factor(fam))
 
 ggplot2::ggplot(family_peds) +
   ggplot2::geom_point(ggplot2::aes(x = birth_year_scaled, y = y, color = post_1776)) +
-#  ggplot2::facet_wrap(~fam) +
+  #  ggplot2::facet_wrap(~fam) +
   ggplot2::theme_bw() +
   ggplot2::labs(title = "Simulated Phenotypes by Family", x = "Scaled Birth Year", y = "Phenotype (y)")
-
-
 
 
 # Build family group models for temporal A + E.
@@ -152,11 +149,9 @@ temporal_model_ae0 <- free_only(
 fit_ae0 <- run_and_report(temporal_model_ae0, "AE intercept-only", tries = 20)
 
 
-
 est <- est_int <- omxGetParameters(fit_ae0)[names(target)]
 
 round(cbind(target = target, estimate = est, diff = est - target), 3)
-
 
 
 # Stage 2: AE with linear birth-cohort moderation.
@@ -172,7 +167,6 @@ est <- est_linear <- omxGetParameters(fit_ae_linear)[names(target)]
 round(cbind(target = target, estimate = est, diff = est - target), 3)
 
 
-
 # Stage 3: AE with linear birth-cohort moderation plus one historical moderator.
 temporal_model_ae_linear_h <- free_only(
   temporal_model_ae,
@@ -183,11 +177,9 @@ fit_ae_linear_h <- run_and_report(temporal_model_ae_linear_h, "AE linear time + 
 cat("\nTemporal BGmisc-style AE smoke test completed successfully.\n")
 
 
-est <- est_linear_h  <- omxGetParameters(fit_ae_linear_h)[names(target)]
+est <- est_linear_h <- omxGetParameters(fit_ae_linear_h)[names(target)]
 
 round(cbind(target = target, estimate = est, diff = est - target), 3)
-
-
 
 
 # graph estimates of a as a function of time and historical moderator
@@ -195,7 +187,8 @@ round(cbind(target = target, estimate = est, diff = est - target), 3)
 
 graphing_data <- data.frame(
   time = seq(-3, 3, length.out = 100),
-  historical = c(0, 1))
+  historical = c(0, 1)
+)
 
 graphing_data$estimated_a_variance <- exp(est["b_a_0"] + est["b_a_1"] * graphing_data$time + est["g_a_1"] * graphing_data$historical)
 graphing_data$true_a_variance <- exp(target["b_a_0"] + target["b_a_1"] * graphing_data$time + target["g_a_1"] * graphing_data$historical)
@@ -206,39 +199,54 @@ graphing_data$true_total_variance <- graphing_data$true_a_variance + graphing_da
 graphing_data$unscaled_time <- graphing_data$time * sd(unlist(lapply(families, function(x) x$birth_year_scaled))) + mean(unlist(lapply(families, function(x) x$birth_year_scaled)))
 
 graphing_data_long <- # have a true and estimated factor
-graphing_data %>%
-  tidyr::pivot_longer(cols = c(estimated_a_variance, true_a_variance, estimated_e_variance, true_e_variance, estimated_total_variance, true_total_variance),
-                      names_to = c("type", "component", NA),
-                      names_sep = "_",
-                      values_to = "variance")
+  graphing_data %>%
+  tidyr::pivot_longer(
+    cols = c(estimated_a_variance, true_a_variance, estimated_e_variance, true_e_variance, estimated_total_variance, true_total_variance),
+    names_to = c("type", "component", NA),
+    names_sep = "_",
+    values_to = "variance"
+  )
 
 
 ggplot2::ggplot(graphing_data_long) +
-  ggplot2::geom_line(ggplot2::aes(x = unscaled_time, y = variance, linetype = factor(historical),
-                                  color = factor(component)
-                                  )) +
+  ggplot2::geom_line(ggplot2::aes(
+    x = unscaled_time, y = variance, linetype = factor(historical),
+    color = factor(component)
+  )) +
   ggplot2::labs(title = "Estimated Variance as a function of time and historical moderator", x = "Scaled Birth Year", y = "Estimated Variance", color = "Variance Component") +
-  ggplot2::theme_bw() + facet_wrap(~type)
+  ggplot2::theme_bw() +
+  facet_wrap(~type)
 
 
 # summary of the models versus the true parameter
 
 results_summary <- data.frame(
-  model = c("true",
-    "intercept-only", "linear time", "linear time + historical moderator"),
-  b_a_0 = c(target["b_a_0"],
-    est_int["b_a_0"], est_linear["b_a_0"], est_linear_h["b_a_0"]),
-  b_a_1 = c(target["b_a_1"],
-    NA, est_linear["b_a_1"], est_linear_h["b_a_1"]),
-  g_a_1 = c(target["g_a_1"],
-    NA, NA, est_linear_h["g_a_1"]),
+  model = c(
+    "true",
+    "intercept-only", "linear time", "linear time + historical moderator"
+  ),
+  b_a_0 = c(
+    target["b_a_0"],
+    est_int["b_a_0"], est_linear["b_a_0"], est_linear_h["b_a_0"]
+  ),
+  b_a_1 = c(
+    target["b_a_1"],
+    NA, est_linear["b_a_1"], est_linear_h["b_a_1"]
+  ),
+  g_a_1 = c(
+    target["g_a_1"],
+    NA, NA, est_linear_h["g_a_1"]
+  ),
   b_e_0 = c(target["b_e_0"], est_int["b_e_0"], est_linear["b_e_0"], est_linear_h["b_e_0"]),
-  b_e_1 = c(target["b_e_1"],
-    NA, est_linear["b_e_1"], est_linear_h["b_e_1"]),
-  g_e_1 = c(target["g_e_1"],
-    NA, NA, est_linear_h["g_e_1"])
+  b_e_1 = c(
+    target["b_e_1"],
+    NA, est_linear["b_e_1"], est_linear_h["b_e_1"]
+  ),
+  g_e_1 = c(
+    target["g_e_1"],
+    NA, NA, est_linear_h["g_e_1"]
+  )
 )
-
 
 
 # -----------------------------------------------------------------------------

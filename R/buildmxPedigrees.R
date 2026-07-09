@@ -281,6 +281,7 @@ buildPedigreeModelCovariance <- function(
 #'   exponentiated so its implied variance stays positive. Only used when \code{temporal = TRUE}.
 #' @param time_point_max Integer degree of the polynomial birth-year basis. Only used when
 #'   \code{temporal = TRUE}. Default is 3.
+#' @param clean_ids Logical. If TRUE, clean the \code{obs_ids} to be syntactically valid R names using \code{make.names}. Default is FALSE.
 #' @return An OpenMx model for the specified family group.
 #' @export
 
@@ -299,10 +300,15 @@ buildOneFamilyGroup <- function(
   birth_year = NULL,
   H = NULL,
   use_exp_loadings = FALSE,
-  time_point_max = NULL
+  time_point_max = NULL,
+  clean_ids = FALSE
 ) {
   .require_openmx("buildOneFamilyGroup")
-
+  if (clean_ids) {
+    obs_ids <- make.names(as.character(obs_ids))
+    # clean once
+    clean_ids <- FALSE
+  }
   # Determine family size from first available matrix. Shared by both branches below.
   fsize <- .pedigreeFamilySize(list(Addmat, Dmgmat, Nucmat, Extmat, Mtdmat, Amimat))
 
@@ -411,17 +417,17 @@ buildOneFamilyGroup <- function(
 #' @return An OpenMx model for the specified family group.
 #' @keywords internal
 .temporalFamilyGroupAlgebra <- function(
-    group_name,
-    fsize,
-    active,
-    relmat_list,
-    full_df_row,
-    obs_ids,
-    birth_year,
-    H = NULL,
-    use_exp_loadings = TRUE,
-    condenseMatrixSlots = TRUE,
-    time_point_max = NULL
+  group_name,
+  fsize,
+  active,
+  relmat_list,
+  full_df_row,
+  obs_ids,
+  birth_year,
+  H = NULL,
+  use_exp_loadings = TRUE,
+  condenseMatrixSlots = TRUE,
+  time_point_max = NULL
 ) {
   if (length(obs_ids) != fsize) stop("Length of obs_ids must equal family size.")
   if (length(birth_year) != fsize) stop("Length of birth_year must equal family size.")
@@ -446,7 +452,7 @@ buildOneFamilyGroup <- function(
   colnames(full_df_row) <- obs_ids
   rownames(full_df_row) <- group_name
   full_df_row <- as.data.frame(full_df_row, check.names = FALSE)
- # stopifnot(identical(colnames(full_df_row), obs_ids))
+  # stopifnot(identical(colnames(full_df_row), obs_ids))
 
   t_i <- as.numeric(birth_year)
   # Polynomial basis of degree time_point_max: columns are t_i^0, t_i^1, ..., t_i^time_point_max.
@@ -566,7 +572,8 @@ buildOneFamilyGroup <- function(
 #' @export
 
 buildFamilyGroups <- function(
-  dat, obs_ids,
+  dat,
+  obs_ids,
   Addmat = NULL,
   Nucmat = NULL,
   Extmat = NULL,
@@ -579,10 +586,15 @@ buildFamilyGroups <- function(
   birth_year_list = NULL,
   H_list = NULL,
   use_exp_loadings = TRUE,
-  time_point_max = NULL
+  time_point_max = NULL,
+  clean_ids = TRUE
 ) {
   .require_openmx("buildFamilyGroups")
-
+  if (clean_ids == TRUE) {
+    obs_ids <- make.names(as.character(obs_ids))
+    # clean once
+    clean_ids <- FALSE
+  }
   numfam <- nrow(dat)
   groups <- vector("list", numfam)
 
@@ -649,7 +661,8 @@ buildFamilyGroups_list <- function(
   birth_year_list = NULL,
   H_list = NULL,
   use_exp_loadings = TRUE,
-  time_point_max = NULL
+  time_point_max = NULL,
+  clean_ids = TRUE
 ) {
   .require_openmx("buildFamilyGroups_list")
 
@@ -661,8 +674,11 @@ buildFamilyGroups_list <- function(
   }
 
   for (afam in seq_len(numfam)) {
-    obs_ids <- obs_ids_list[[afam]]
-
+    if (clean_ids == TRUE) {
+      obs_ids <- make.names(as.character(obs_ids_list[[afam]]))
+    } else {
+      obs_ids <- obs_ids_list[[afam]]
+    }
     full_df_row <- matrix(
       dat_list[[afam]],
       nrow = 1,
@@ -684,7 +700,8 @@ buildFamilyGroups_list <- function(
       birth_year = if (temporal) birth_year_list[[afam]] else NULL,
       H = if (temporal) get_or_null(H_list, afam) else NULL,
       use_exp_loadings = use_exp_loadings,
-      time_point_max = time_point_max
+      time_point_max = time_point_max,
+      clean_ids = FALSE # already cleaned above if requested
     )
   }
 
@@ -873,7 +890,8 @@ fitPedigreeModel <- function(
   p_hist = NULL,
   components = c("a", "d", "cn", "ce", "mt", "am", "e"),
   use_exp_loadings = FALSE,
-  time_point_max = NULL
+  time_point_max = NULL,
+  clean_ids = TRUE
 ) {
   .require_openmx("fitPedigreeModel")
 
@@ -901,15 +919,21 @@ fitPedigreeModel <- function(
         birth_year_list = birth_year_list,
         H_list = H_list,
         use_exp_loadings = use_exp_loadings,
-        time_point_max = time_point_max
+        time_point_max = time_point_max,
+        clean_ids = clean_ids
       )
     } else {
       # generate them from data and relatedness matrices
       if (is.null(data)) {
         stop("Either 'group_models' or 'data' must be provided.")
       }
-
-      obs_ids <- colnames(data)
+      if (clean_ids == TRUE) {
+        obs_ids <- make.names(as.character(colnames(data)))
+        # clean once
+        clean_ids <- FALSE
+      } else {
+        obs_ids <- colnames(data)
+      }
       group_models <- buildFamilyGroups(
         dat = data,
         obs_ids = obs_ids,
@@ -919,7 +943,8 @@ fitPedigreeModel <- function(
         Mtdmat = Mtdmat,
         Amimat = Amimat,
         Dmgmat = Dmgmat,
-        condenseMatrixSlots = condenseMatrixSlots
+        condenseMatrixSlots = condenseMatrixSlots,
+        clean_ids = clean_ids
       )
     }
   }

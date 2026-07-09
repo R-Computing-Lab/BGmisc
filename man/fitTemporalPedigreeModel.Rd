@@ -24,7 +24,8 @@ fitTemporalPedigreeModel(
   intervals = TRUE,
   extraTries = 10,
   runmodel = TRUE,
-  time_point_max = NULL
+  time_point_max = NULL,
+  clean_ids = FALSE
 )
 }
 \arguments{
@@ -85,6 +86,8 @@ if FALSE, use \code{mxRun}.}
 
 \item{time_point_max}{Integer degree of the polynomial birth-year basis. Only used when
 \code{temporal = TRUE}. Default is 3.}
+
+\item{clean_ids}{Logical. If TRUE, clean the \code{obs_ids} to be syntactically valid R names using \code{make.names}. Default is FALSE.}
 }
 \value{
 A fitted OpenMx model.

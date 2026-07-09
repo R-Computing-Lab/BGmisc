@@ -15,9 +15,8 @@ get_generation_vector <- function(ped) {
 }
 
 make_time_vars <- function(ped, threshold_year = 1776, birth_year_sd = 3,
-                             birth_year_base = 1700,
-                           gen_gap=30
-                             ) {
+                           birth_year_base = 1700,
+                           gen_gap = 30) {
   gen <- get_generation_vector(ped)
   birth_year <- birth_year_base + gen_gap * (gen - min(gen, na.rm = TRUE)) + rnorm(length(gen), mean = 0, sd = birth_year_sd)
   t_i <- as.numeric(scale(birth_year))
@@ -68,7 +67,6 @@ simulate_pedigree_safe <- function(kpc = 3, Ngen = 4, marR = 0.6) {
 # -----------------------------------------------------------------------------
 
 
-
 free_only <- function(model, labels_to_free) {
   pars <- omxGetParameters(model)
   omxSetParameters(
@@ -108,18 +106,18 @@ run_and_report <- function(model, label, tries = 20) {
 # -----------------------------------------------------------------------------
 
 simulate_temporal_family <- function(
-    kpc = 3,
-    Ngen = 4,
-    marR = 0.6,
-    threshold_year = 1776,
-    true_beta,
-    true_gamma,
-    components = c("a", "e"),
-    family_id = NULL
+  kpc = 3,
+  Ngen = 4,
+  marR = 0.6,
+  threshold_year = 1776,
+  true_beta,
+  true_gamma,
+  components = c("a", "e"),
+  family_id = NULL
 ) {
   ped_i <- simulate_pedigree_safe(kpc = kpc, Ngen = Ngen, marR = marR)
   if (is.null(family_id)) family_id <- 1
-  ped_i$fam<- paste0("FAM ", family_id)
+  ped_i$fam <- paste0("FAM ", family_id)
   A_i <- make_symmetric(BGmisc::ped2add(ped_i))
   Cn_i <- make_symmetric(BGmisc::ped2cn(ped_i))
   Ce_i <- make_symmetric(BGmisc::ped2ce(ped_i))
@@ -144,7 +142,7 @@ simulate_temporal_family <- function(
   if ("mt" %in% components) V_i <- V_i + Mt_i * tcrossprod(lambda$mt)
   if ("e" %in% components) V_i <- V_i + I_i * tcrossprod(lambda$e)
 
- # V_i <- #make_symmetric(V_i) + diag(1e-6, n_i)
+  # V_i <- #make_symmetric(V_i) + diag(1e-6, n_i)
 
   y_i <- mvtnorm::rmvnorm(1, sigma = V_i)
 

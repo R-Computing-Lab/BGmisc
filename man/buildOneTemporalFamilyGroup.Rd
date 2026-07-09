@@ -18,7 +18,8 @@ buildOneTemporalFamilyGroup(
   H = NULL,
   use_exp_loadings = TRUE,
   condenseMatrixSlots = TRUE,
-  time_point_max = NULL
+  time_point_max = NULL,
+  clean_ids = FALSE
 )
 }
 \arguments{
@@ -58,6 +59,8 @@ exponentiated so its implied variance stays positive. Only used when \code{tempo
 
 \item{time_point_max}{Integer degree of the polynomial birth-year basis. Only used when
 \code{temporal = TRUE}. Default is 3.}
+
+\item{clean_ids}{Logical. If TRUE, clean the \code{obs_ids} to be syntactically valid R names using \code{make.names}. Default is FALSE.}
 }
 \value{
 An OpenMx model for the specified family group.

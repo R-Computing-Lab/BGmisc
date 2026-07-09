@@ -111,17 +111,17 @@ checkParentIDs <- function(ped, verbose = FALSE, repair = FALSE,
   # Are any parents in both momID and dadID?
   momdad <- intersect(ped$dadID, ped$momID)
   momdad <- momdad[!is.na(momdad)]
-if (length(momdad) > 0) {
-  validation_results$parents_in_both <- momdad
-  if (verbose == TRUE) {
-    cat(
-      "Some individuals appear in both momID and dadID roles.\n",
-      "These individuals are:\n",
-      sep = ""
-    )
-    message(paste(momdad, collapse = ", "))
+  if (length(momdad) > 0) {
+    validation_results$parents_in_both <- momdad
+    if (verbose == TRUE) {
+      cat(
+        "Some individuals appear in both momID and dadID roles.\n",
+        "These individuals are:\n",
+        sep = ""
+      )
+      message(paste(momdad, collapse = ", "))
+    }
   }
-}
 
 
   if (!repair) {

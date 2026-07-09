@@ -42,20 +42,21 @@ buildTemporalPedigreeModelCovariance <- function(
 #' @return An OpenMx model for the specified family group.
 #' @export
 buildOneTemporalFamilyGroup <- function(
-    group_name,
-    Addmat = NULL,
-    Nucmat = NULL,
-    Extmat = NULL,
-    Mtdmat = NULL,
-    Amimat = NULL,
-    Dmgmat = NULL,
-    full_df_row,
-    obs_ids,
-    birth_year,
-    H = NULL,
-    use_exp_loadings = TRUE,
-    condenseMatrixSlots = TRUE,
-    time_point_max = NULL
+  group_name,
+  Addmat = NULL,
+  Nucmat = NULL,
+  Extmat = NULL,
+  Mtdmat = NULL,
+  Amimat = NULL,
+  Dmgmat = NULL,
+  full_df_row,
+  obs_ids,
+  birth_year,
+  H = NULL,
+  use_exp_loadings = TRUE,
+  condenseMatrixSlots = TRUE,
+  time_point_max = NULL,
+  clean_ids = FALSE
 ) {
   buildOneFamilyGroup(
     group_name = group_name,
@@ -72,7 +73,8 @@ buildOneTemporalFamilyGroup <- function(
     birth_year = birth_year,
     H = H,
     use_exp_loadings = use_exp_loadings,
-    time_point_max = time_point_max
+    time_point_max = time_point_max,
+    clean_ids = clean_ids
   )
 }
 
@@ -100,7 +102,8 @@ buildTemporalFamilyGroups <- function(
   prefix = "fam",
   use_exp_loadings = FALSE,
   condenseMatrixSlots = TRUE,
-  time_point_max = NULL
+  time_point_max = NULL,
+  clean_ids = FALSE
 ) {
   buildFamilyGroups(
     dat = dat,
@@ -117,7 +120,8 @@ buildTemporalFamilyGroups <- function(
     birth_year_list = birth_year_list,
     H_list = H_list,
     use_exp_loadings = use_exp_loadings,
-    time_point_max = time_point_max
+    time_point_max = time_point_max,
+    clean_ids = clean_ids
   )
 }
 
@@ -143,7 +147,8 @@ buildTemporalFamilyGroups_list <- function(
   prefix = "fam",
   use_exp_loadings = FALSE,
   condenseMatrixSlots = TRUE,
-  time_point_max = NULL
+  time_point_max = NULL,
+  clean_ids = FALSE
 ) {
   buildFamilyGroups_list(
     dat_list = dat_list,
@@ -160,7 +165,8 @@ buildTemporalFamilyGroups_list <- function(
     birth_year_list = birth_year_list,
     H_list = H_list,
     use_exp_loadings = use_exp_loadings,
-    time_point_max = time_point_max
+    time_point_max = time_point_max,
+    clean_ids = clean_ids
   )
 }
 
@@ -173,12 +179,12 @@ buildTemporalFamilyGroups_list <- function(
 #' @return An OpenMx pedigree model combining the temporal covariance sub-model and family groups.
 #' @export
 buildTemporalPedigreeMx <- function(
-    model_name,
-    group_models,
-    p_hist,
-    components = c("a", "e"),
-    ci = FALSE,
-    time_point_max = NULL
+  model_name,
+  group_models,
+  p_hist,
+  components = c("a", "e"),
+  ci = FALSE,
+  time_point_max = NULL
 ) {
   buildPedigreeMx(
     model_name = model_name,
@@ -219,7 +225,8 @@ fitTemporalPedigreeModel <- function(
   intervals = TRUE,
   extraTries = 10,
   runmodel = TRUE,
-  time_point_max = NULL
+  time_point_max = NULL,
+  clean_ids = FALSE
 ) {
   fitPedigreeModel(
     model_name = model_name,
@@ -242,6 +249,7 @@ fitTemporalPedigreeModel <- function(
     intervals = intervals,
     extraTries = extraTries,
     runmodel = runmodel,
-    time_point_max = time_point_max
+    time_point_max = time_point_max,
+    clean_ids = clean_ids
   )
 }
