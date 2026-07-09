@@ -305,7 +305,7 @@ buildOneFamilyGroup <- function(
 ) {
   .require_openmx("buildOneFamilyGroup")
   if (clean_ids) {
-    obs_ids <- make.names(as.character(obs_ids))
+    obs_ids <- make_clean_personids(obs_ids)
     # clean once
     clean_ids <- FALSE
   }
@@ -591,7 +591,7 @@ buildFamilyGroups <- function(
 ) {
   .require_openmx("buildFamilyGroups")
   if (clean_ids == TRUE) {
-    obs_ids <- make.names(as.character(obs_ids))
+    obs_ids <-make_clean_personids(obs_ids)
     # clean once
     clean_ids <- FALSE
   }
@@ -675,7 +675,7 @@ buildFamilyGroups_list <- function(
 
   for (afam in seq_len(numfam)) {
     if (clean_ids == TRUE) {
-      obs_ids <- make.names(as.character(obs_ids_list[[afam]]))
+      obs_ids <- make_clean_personids(obs_ids_list[[afam]])
     } else {
       obs_ids <- obs_ids_list[[afam]]
     }
@@ -928,7 +928,7 @@ fitPedigreeModel <- function(
         stop("Either 'group_models' or 'data' must be provided.")
       }
       if (clean_ids == TRUE) {
-        obs_ids <- make.names(as.character(colnames(data)))
+        obs_ids <- make_clean_personids(colnames(data))
         # clean once
         clean_ids <- FALSE
       } else {
@@ -1045,4 +1045,14 @@ condenseMatrixSlots <- function(model) {
   #   return(model)
   # }
   OpenMx::imxConDecMatrixSlots(model)
+}
+
+#' Make Clean IDs for OpenMx
+#'
+#' This function takes a vector of IDs and returns a cleaned version suitable for use in OpenMx models. It replaces any illegal characters (such as '.') with underscores and ensures that the IDs are valid R variable names. This is important because OpenMx does not allow certain characters in matrix or variable names, which can lead to errors when building models.
+#' @param ids A vector of IDs to be cleaned.
+#' @return A vector of cleaned IDs suitable for use in OpenMx models.
+#'
+make_clean_personids <- function(ids) {
+ stringr::str_replace_all(make.names(as.character(ids)), "[^[:alnum:]_]", "_")
 }
