@@ -1054,5 +1054,6 @@ condenseMatrixSlots <- function(model) {
 #' @return A vector of cleaned IDs suitable for use in OpenMx models.
 #'
 make_clean_personids <- function(ids) {
- stringr::str_replace_all(make.names(as.character(ids)), "[^[:alnum:]_]", "_")
+  .require_openmx("make_clean_personids")
+  OpenMx::mxMakeNames(as.character(ids))
 }
