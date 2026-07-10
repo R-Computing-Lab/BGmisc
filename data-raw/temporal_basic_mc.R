@@ -69,6 +69,12 @@ recovery_file <- file.path(output_directory, "parameter_recovery_summary.csv")
 convergence_file <- file.path(output_directory, "convergence_summary.csv")
 plot_file <- file.path(output_directory, "parameter_recovery_plot.png")
 
+replication_filea <- file.path(output_directory, "replication_resultsa.csv")
+recovery_filea <- file.path(output_directory, "parameter_recovery_summarya.csv")
+convergence_filea <- file.path(output_directory, "convergence_summarya.csv")
+plot_filea <- file.path(output_directory, "parameter_recovery_plota.png")
+
+
 sim_components <- c(
   "a",
   # "cn", "ce",
@@ -142,8 +148,12 @@ simulate_one_dataset <- function(replication, replication_seed) {
   }
 
   family_sizes <- vapply(families, function(x) length(x$y), integer(1))
-  family_H <- vapply(families, function(x) mean(x$H))
-  family_z_year <- vapply(families, function(x) min(x$birth_year_scaled[x$H==1]))
+  all_H <- unlist(lapply(families, function(x) x$H), use.names = FALSE)
+  all_birth_year_scaled <- unlist(
+    lapply(families, function(x) x$birth_year_scaled),
+    use.names = FALSE
+  )
+  historical_birth_years_scaled <- all_birth_year_scaled[all_H == 1L]
   list(
     replication = replication,
     seed = replication_seed,
@@ -153,8 +163,12 @@ simulate_one_dataset <- function(replication, replication_seed) {
     mean_family_size = mean(family_sizes),
     min_family_size = min(family_sizes),
     max_family_size = max(family_sizes),
-    mean_H = mean(family_H),
-    z_year = min(family_z_year)
+    mean_H = mean(all_H, na.rm = TRUE),
+    z_year = if (length(historical_birth_years_scaled) > 0L) {
+      min(historical_birth_years_scaled, na.rm = TRUE)
+    } else {
+      NA_real_
+    }
   )
 }
 
@@ -594,6 +608,19 @@ output_pdf <- file.path(
   "panel_B_variance_component_recovery.pdf"
 )
 
+output_data_filea <- file.path(
+  results_directory,
+  "variance_component_recovery_over_timeA.csv"
+)
+output_pnga <- file.path(
+  results_directory,
+  "panel_A_variance_component_recovery.png"
+)
+output_pdfa <- file.path(
+  results_directory,
+  "panel_A_variance_component_recovery.pdf"
+)
+
 # The model uses scaled birth year. Modify this range if needed to match the
 # range represented in the simulated or empirical data.
 time_grid <- seq(-3, 3, length.out = 301)
@@ -810,7 +837,7 @@ plot_data <- recovered_summary %>%
   )
   # hybrid that combines pre and post estimate. because the historical event only occurs when time > H
 
-population_curves_hybrid <- population_curves
+
 
 
 readr::write_csv(plot_data, output_data_file, na = "")
@@ -898,10 +925,10 @@ print(panel_b)
 # -----------------------------------------------------------------------------
 # Save figure
 # -----------------------------------------------------------------------------
-  ggplot2::geom_line(ggplot2::aes(
-    x = unscaled_time, y = variance, linetype = factor(historical),
-    color = factor(component)
-  )) +
+#  ggplot2::geom_line(ggplot2::aes(
+#    x = unscaled_time, y = variance, linetype = factor(historical),
+#    color = factor(component)
+#  )) +
 ggsave(
   filename = output_png,
   plot = panel_b,
@@ -924,5 +951,234 @@ cat("Panel B data and figures written to:\n")
 cat("  ", normalizePath(output_data_file, mustWork = FALSE), "\n", sep = "")
 cat("  ", normalizePath(output_png, mustWork = FALSE), "\n", sep = "")
 cat("  ", normalizePath(output_pdf, mustWork = FALSE), "\n", sep = "")
+
+}
+
+
+#Figure A
+# -----------------------------------------------------------------------------
+
+# Calculate the true population variance-component trajectories
+
+# -----------------------------------------------------------------------------
+if(FIGURE){
+
+recovered_curves_a <- usable_results %>%
+  select(replication, all_of(parameter_names)) %>%
+  tidyr::crossing(
+    time = time_grid,
+    historical = c(0L, 1L)
+  ) %>%
+  mutate(
+  #  historical = as.integer(time > historical_threshold),
+    a_variance = exp(b_a_0 + b_a_1 * time + g_a_1 * historical),
+    e_variance = exp(b_e_0 + b_e_1 * time + g_e_1 * historical),
+    total_variance = a_variance + e_variance
+  ) %>%
+  select(
+    replication,
+    time,
+    historical,
+    a_variance,
+    e_variance,
+    total_variance
+  ) %>%
+  pivot_longer(
+    cols = c(a_variance, e_variance, total_variance),
+    names_to = "component",
+    values_to = "recovered_variance"
+  )
+
+# Empirical Monte Carlo distribution of the recovered variance component at
+# each time point and historical condition.
+recovered_summary_a <- recovered_curves_a %>%
+  group_by(time, historical, component) %>%
+  summarise(
+    n_replications = n(),
+    recovered_mean = mean(recovered_variance),
+    recovered_median = median(recovered_variance),
+    recovered_lower = as.numeric(
+      quantile(recovered_variance, probs = 0.025, names = FALSE)
+    ),
+    recovered_upper = as.numeric(
+      quantile(recovered_variance, probs = 0.975, names = FALSE)
+    ),
+    .groups = "drop"
+  )
+
+
+population_curves_a <- tidyr::expand_grid(
+time = time_grid,
+historical = c(0L, 1L),
+) %>%
+mutate(
+a_variance = exp(
+true_parameters$b_a_0 +
+true_parameters$b_a_1 * time +
+true_parameters$g_a_1 * historical
+),
+e_variance = exp(
+true_parameters$b_e_0 +
+true_parameters$b_e_1 * time +
+true_parameters$g_e_1 * historical
+),
+total_variance = a_variance + e_variance
+) %>%
+select(
+time,
+historical,
+a_variance,
+e_variance,
+total_variance
+) %>%
+pivot_longer(
+cols = c(a_variance, e_variance, total_variance),
+names_to = "component",
+values_to = "population_variance"
+)
+
+# Join the Monte Carlo findings directly to the corresponding population values.
+
+plot_data <- recovered_summary_a %>%
+left_join(
+population_curves_a,
+by = c("time", "historical", "component")
+) %>%
+mutate(
+recovered_central = if (central_summary == "median") {
+recovered_median
+} else {
+recovered_mean
+},
+historical = factor(
+historical,
+levels = c(0L, 1L),
+labels = c("Before historical event", "After historical event")
+),
+component = factor(
+component,
+levels = c("a_variance", "e_variance", "total_variance"),
+labels = c(
+"Additive genetic variance",
+"Nonshared environmental variance",
+"Total phenotypic variance"
+)
+)
+)
+
+# hybrid that combines pre and post estimate. because the historical event only occurs when time > H
+
+
+
+# -----------------------------------------------------------------------------
+
+# Create Panel a
+
+# -----------------------------------------------------------------------------
+
+panel_a <- ggplot(
+plot_data,
+aes(x = time, color = factor(component),
+fill = factor(component))
+) +
+
+# The ribbon is the empirical 95% range of the variance estimates obtained
+
+# from the successful Monte Carlo replications.
+
+geom_ribbon(
+aes(
+ymin = recovered_lower,
+ymax = recovered_upper
+),
+alpha = 0.20
+) +
+
+# Solid line: central variance estimate implied by the recovered parameters.
+
+geom_line(
+aes(
+y = recovered_central,
+linetype = "Recovered Monte Carlo estimate"
+),
+linewidth = 0.9
+) +
+
+# Dashed line: known population variance used to generate the data.
+
+geom_line(
+aes(
+y = population_variance,
+linetype = "Population parameter"
+),
+linewidth = 0.9
+) +
+facet_grid(
+
+# rows = vars(component),
+
+cols = vars(historical)#,
+
+# scales = "free_y"
+) +
+scale_linetype_manual(
+name = NULL,
+values = c(
+"Recovered Monte Carlo estimate" = "solid",
+"Population parameter" = "dashed"
+)
+) +
+labs(
+title = "Recovery of time-varying variance components",
+subtitle = paste0(
+"Recovered ", central_summary,
+" and empirical 95% Monte Carlo range mapped against the population trajectory"
+),
+x = "Scaled birth year",
+y = "Variance"
+) +
+theme_bw(base_size = 11) +
+theme(
+plot.title = element_text(face = "bold"),
+plot.subtitle = element_text(size = 9),
+strip.text = element_text(face = "bold", size = 9),
+panel.grid.minor = element_blank(),
+legend.position = "bottom"
+)
+
+print(panel_a)
+
+# -----------------------------------------------------------------------------
+
+# Save figure
+
+# -----------------------------------------------------------------------------
+
+ggplot2::geom_line(ggplot2::aes(
+x = unscaled_time, y = variance, linetype = factor(historical),
+color = factor(component)
+)) +
+ggsave(
+filename = output_pnga,
+plot = panel_a,
+width = 10.5,
+height = 8,
+dpi = 400,
+bg = "white"
+)
+
+ggsave(
+filename = output_pdfa,
+plot = panel_a,
+width = 10.5,
+height = 8,
+device = cairo_pdf,
+bg = "white"
+)
+
+cat("Panel A data and figures written to:\n")
+cat("  ", normalizePath(output_data_filea, mustWork = FALSE), "\n", sep = "")
+cat("  ", normalizePath(output_pnga, mustWork = FALSE), "\n", sep = "")
+cat("  ", normalizePath(output_pdfa, mustWork = FALSE), "\n", sep = "")
 
 }
