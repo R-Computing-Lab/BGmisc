@@ -33,17 +33,21 @@ library(mvtnorm)
 library(tidyverse)
 set.seed(202601)
 
-source("raw-data/smoketest_helpers.R")
-
+source("data-raw\\smoketest_helpers.R")
 
 # -----------------------------------------------------------------------------
 # Run smoke test
 # -----------------------------------------------------------------------------
 
-n_families <- 250
+n_families <- 150
 threshold_year <- 1776
-sim_components <- c("a", "e")
-fit_components <- c("a", "e")
+sim_components <- c("a", #"cn","ce",
+                   # "mt",
+                    "e"
+                    )
+fit_components <- c("a",# "cn","ce",
+                   # "mt",
+                   "e")
 
 # Data-generating parameters.
 # These are linear-loading parameters used for simulation. The fitted model below
@@ -51,36 +55,105 @@ fit_components <- c("a", "e")
 
 
 true_beta <- list(
-  a  = c(1.65, 0.1, 0.00, 0.00),
+  a  = c(1.65, -0.5, 0.00, 0.00),
   cn = c(0.00, 0.00, 0.00, 0.00),
   ce = c(0.00, 0.00, 0.00, 0.00),
   mt = c(0.00, 0.00, 0.00, 0.00),
-  e  = c(1.75, -0.10, 0.00, 0.00)
+  e  = c(2.05, -.20, 0.00, 0.00)
 )
 
 
 true_gamma <- list(
-  a  = 0.5,
+  a  = -0.5,
   cn = 0.00,
   ce = 0.00,
   mt = 0.00,
-  e  = 0.30
+  e  = -.50
 )
 
 target <- c(
-  b_a_0 = log(true_beta$a[1]),
-  b_a_1 = true_beta$a[2] / true_beta$a[1],
-  g_a_1 = true_gamma$a[1] / true_beta$a[1],
-  b_e_0 = log(true_beta$e[1]),
-  b_e_1 = true_beta$e[2] / true_beta$e[1],
-  g_e_1 = true_gamma$e[1] / true_beta$e[1]
+  b_a_0 = if (true_beta$a[1] != 0) {
+    log(true_beta$a[1])
+  } else {
+    0
+  },
+  b_a_1 = if (true_beta$a[1] != 0) {
+    true_beta$a[2] / true_beta$a[1]
+  } else {
+    0
+  },
+  g_a_1 = if (true_beta$a[1] != 0) {
+    true_gamma$a[1] / true_beta$a[1]
+  } else {
+    0
+  },
+  b_cn_0 = if (true_beta$cn[1] != 0) {
+    log(true_beta$cn[1])
+  } else {
+    0
+  },
+  b_cn_1 = if (true_beta$cn[1] != 0) {
+    true_beta$cn[2] / true_beta$cn[1]
+  } else {
+    0
+  },
+  g_cn_1 = if (true_beta$cn[1] != 0) {
+    true_gamma$cn[1] / true_beta$cn[1]
+  } else {
+    0
+  },
+  b_ce_0 = if (true_beta$ce[1] != 0) {
+    log(true_beta$ce[1])
+  } else {
+    0
+  },
+  b_ce_1 = if (true_beta$ce[1] != 0) {
+    true_beta$ce[2] / true_beta$ce[1]
+  } else {
+    0
+  },
+  g_ce_1 = if (true_beta$ce[1] != 0) {
+    true_gamma$ce[1] / true_beta$ce[1]
+  } else {
+    0
+  },
+  b_mt_0 = if (true_beta$mt[1] != 0) {
+    log(true_beta$mt[1])
+  } else {
+    0
+  },
+  b_mt_1 = if (true_beta$mt[1] != 0) {
+    true_beta$mt[2] / true_beta$mt[1]
+  } else {
+    0
+  },
+  g_mt_1 = if (true_beta$mt[1] != 0) {
+    true_gamma$mt[1] / true_beta$mt[1]
+  } else {
+    0
+  },
+  b_e_0 = if (true_beta$e[1] != 0) {
+    log(true_beta$e[1])
+  } else {
+    0
+  },
+  b_e_1 = if (true_beta$e[1] != 0) {
+    true_beta$e[2] / true_beta$e[1]
+  } else {
+    0
+  },
+  g_e_1 = if (true_beta$e[1] != 0) {
+    true_gamma$e[1] / true_beta$e[1]
+  } else {
+    0
+  }
 )
 
 
 families <- vector("list", n_families)
 for (i in seq_len(n_families)) {
   families[[i]] <- simulate_temporal_family(
-    kpc = 3,
+    kpc = 4,
     Ngen = 5,
     marR = 0.8,
     threshold_year = threshold_year,
@@ -105,12 +178,41 @@ family_peds <- lapply(families, function(x) {
 }) %>%
   dplyr::bind_rows() %>%
   dplyr::mutate(fam = factor(fam))
-
-ggplot2::ggplot(family_peds) +
-  ggplot2::geom_point(ggplot2::aes(x = birth_year_scaled, y = y, color = post_1776)) +
+library(ggplot2)
+library(ggforce)
+family_peds %>%
+#  slice_sample(n = 1000) %>%
+ggplot(aes(x = birth_year_scaled, y = y)) +
+  geom_point(aes(
+                 fill = as.factor(post_1776),
+                  color = fam,
+                 shape = sex),
+             alpha = .7) +
   #  ggplot2::facet_wrap(~fam) +
-  ggplot2::theme_bw() +
-  ggplot2::labs(title = "Simulated Phenotypes by Family", x = "Scaled Birth Year", y = "Phenotype (y)")
+#  geom_mark_hull(
+ #   aes(
+ #     x = birth_year_scaled,
+ #     y = y,
+ #     group = interaction(fam, gen),
+ #     fill = NULL,
+ #     color = fam
+ #   ),
+ #   concavity = 5,
+ #   expand = unit(3, "mm"),
+ #   radius = unit(1, "mm"),
+  #  alpha = .3,
+  #  fill = NA,
+  #  linewidth = 0.6
+ # ) +
+  theme_bw() +
+  labs(title = "Simulated Phenotypes by Family", x = "Scaled Birth Year", y = "Phenotype (y)") +
+  # add viridis color
+  scale_color_viridis_d(option = "plasma") +
+  scale_fill_viridis_d()+
+  scale_shape_manual(values = c("F" = 21, "M" = 24)) +
+  # remove color legend
+  theme(legend.position = "bottom") +
+  guides(color = "none", shape = guide_legend(override.aes = list(size = 3, alpha = 1, fill = "black")))
 
 
 # Build family group models for temporal A + E.
@@ -142,14 +244,14 @@ temporal_model_ae <- buildTemporalPedigreeMx(
 )
 
 # Stage 1: intercept-only AE.
-temporal_model_ae0 <- free_only(
+temporal_model_ae_0 <- free_only(
   temporal_model_ae,
   labels_to_free = c("b_a_0", "b_e_0", "mean_y")
 )
-fit_ae0 <- run_and_report(temporal_model_ae0, "AE intercept-only", tries = 20)
+fit_AE0 <- run_and_report(temporal_model_ae_0, "AE intercept-only", tries = 20)
 
 
-est <- est_int <- omxGetParameters(fit_ae0)[names(target)]
+est <- est_int <- omxGetParameters(fit_AE0)[names(target)]
 
 round(cbind(target = target, estimate = est, diff = est - target), 3)
 
@@ -248,12 +350,12 @@ results_summary <- data.frame(
   )
 )
 
-
+print(results_summary)
 # -----------------------------------------------------------------------------
 # Optional AME test after AE runs
 # -----------------------------------------------------------------------------
 
-run_optional_ame <- FALSE
+run_optional_ame <- T
 
 if (run_optional_ame) {
   ame_group_models <- vector("list", n_families)
@@ -287,4 +389,6 @@ if (run_optional_ame) {
     labels_to_free = c("b_a_0", "b_mt_0", "b_e_0", "mean_y")
   )
   fit_ame0 <- run_and_report(temporal_model_ame0, "AME intercept-only", tries = 30)
+
+
 }
