@@ -9,3 +9,9 @@ https://www.biorxiv.org/content/10.1101/2021.04.16.440189v1.full
 
 St Kilda Soay Sheep Project
 https://biology.ed.ac.uk/soaysheep/meet-sheep
+
+
+Modeling notes on gxe methods from the animal people
+
+https://pmc.ncbi.nlm.nih.gov/articles/PMC10082108/
+https://pmc.ncbi.nlm.nih.gov/articles/PMC2859745/

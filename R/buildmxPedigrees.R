@@ -499,6 +499,7 @@ buildOneFamilyGroup <- function(
     }
   }
 
+  # turn into loading
   make_lambda_alg <- function(k) {
     if (use_exp_loadings) {
       OpenMx::mxAlgebraFromString(paste0("exp(Eta_", k, ")"), name = paste0("L_", k))
@@ -507,6 +508,7 @@ buildOneFamilyGroup <- function(
     }
   }
 
+  # each variance component's covariance matrix is the outer product of its loading vector with itself, scaled by the relatedness matrix
   make_K_alg <- function(k, Kname) {
     # The K matrix is the outer product of the loading vector L_k with itself, which gives a symmetric matrix of loadings for the covariance structure.
     OpenMx::mxAlgebraFromString(paste0("L_", k, " %*% t(L_", k, ")"), name = Kname)
