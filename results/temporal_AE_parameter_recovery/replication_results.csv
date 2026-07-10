@@ -1,0 +1,4 @@
+replication,seed,converged,status_code,status_message,error_message,n_families,total_n,mean_family_size,min_family_size,max_family_size,minus2ll,elapsed_seconds,mean_H,z_year,b_a_0,b_a_1,g_a_1,b_e_0,b_e_1,g_e_1
+1,202602,FALSE,,,"argument ""FUN.VALUE"" is missing, with no default",15,,,,,,1.9199999999982538,,,,,,,,
+2,202603,FALSE,,,"argument ""FUN.VALUE"" is missing, with no default",15,,,,,,2.0599999999976717,,,,,,,,
+3,202604,FALSE,,,"argument ""FUN.VALUE"" is missing, with no default",15,,,,,,1.5800000000017462,,,,,,,,
