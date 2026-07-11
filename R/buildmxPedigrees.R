@@ -220,7 +220,13 @@ buildPedigreeModelCovariance <- function(
 #' @return An mxMatrix object.
 #' @keywords internal
 .pedigreeRelatednessMatrix <- function(mat, fsize, name, condense = TRUE, symmetrize = FALSE) {
-  values <- if (symmetrize) make_symmetric(mat) else as.matrix(mat)
+  if(is.null(mat)) stop("Relatedness matrix cannot be NULL.")
+  # keep dense if dense, or sparse if sparse, but symmetrize if requested
+  if (inherits(mat, "Matrix")) {
+    values <- if (symmetrize) make_symmetric(mat) else mat
+  } else {
+    values <- if (symmetrize) make_symmetric(mat) else as.matrix(mat)
+  }
   m <- OpenMx::mxMatrix(
     type = "Symm", nrow = fsize, ncol = fsize, free = FALSE,
     values = values, name = name
@@ -325,12 +331,30 @@ buildOneFamilyGroup <- function(
   # the same relatedness mxMatrix objects (relmat_list), rather than each branch rebuilding
   # its own copy of this table.
   mat_spec <- list(
-    list(mat = Addmat, mxname = "A", term = "(A  %x% ModelOne.Vad)", k = "a", K = "Ka"),
-    list(mat = Dmgmat, mxname = "D", term = "(D  %x% ModelOne.Vdd)", k = "d", K = "Kd"),
-    list(mat = Nucmat, mxname = "Cn", term = "(Cn %x% ModelOne.Vcn)", k = "cn", K = "Kcn"),
-    list(mat = Extmat, mxname = "Ce", term = "(Ce %x% ModelOne.Vce)", k = "ce", K = "Kce"),
-    list(mat = Amimat, mxname = "Am", term = "(Am %x% ModelOne.Vam)", k = "am", K = "Kam"),
-    list(mat = Mtdmat, mxname = "Mt", term = "(Mt %x% ModelOne.Vmt)", k = "mt", K = "Kmt")
+    list(mat = Addmat,
+         mxname = "A",
+         term = "(A  %x% ModelOne.Vad)",
+         k = "a", K = "Ka"),
+    list(mat = Dmgmat,
+         mxname = "D",
+         term = "(D  %x% ModelOne.Vdd)",
+         k = "d", K = "Kd"),
+    list(mat = Nucmat,
+         mxname = "Cn",
+         term = "(Cn %x% ModelOne.Vcn)",
+         k = "cn", K = "Kcn"),
+    list(mat = Extmat,
+         mxname = "Ce",
+         term = "(Ce %x% ModelOne.Vce)",
+         k = "ce", K = "Kce"),
+    list(mat = Amimat,
+         mxname = "Am",
+         term = "(Am %x% ModelOne.Vam)",
+         k = "am", K = "Kam"),
+    list(mat = Mtdmat,
+         mxname = "Mt",
+         term = "(Mt %x% ModelOne.Vmt)",
+         k = "mt", K = "Kmt")
   )
   active <- Filter(function(s) !is.null(s$mat), mat_spec)
 
@@ -457,6 +481,7 @@ buildOneFamilyGroup <- function(
   t_i <- as.numeric(birth_year)
   # Polynomial basis of degree time_point_max: columns are t_i^0, t_i^1, ..., t_i^time_point_max.
   if (time_point_max == 3) {
+    # default
     Tpoly <- cbind(1, t_i, t_i^2, t_i^3)
   } else {
     Tpoly <- sapply(0:time_point_max, function(p) t_i^p)
@@ -589,7 +614,8 @@ buildFamilyGroups <- function(
   H_list = NULL,
   use_exp_loadings = TRUE,
   time_point_max = NULL,
-  clean_ids = TRUE
+  clean_ids = TRUE,
+  group_static_families = FALSE
 ) {
   .require_openmx("buildFamilyGroups")
   if (clean_ids == TRUE) {
@@ -599,6 +625,8 @@ buildFamilyGroups <- function(
   }
   numfam <- nrow(dat)
   groups <- vector("list", numfam)
+
+
 
   for (afam in seq_len(numfam)) {
     full_df_row <- matrix(dat[afam, ], nrow = 1, dimnames = list(NULL, obs_ids))
@@ -617,7 +645,8 @@ buildFamilyGroups <- function(
       birth_year = if (temporal) birth_year_list[[afam]] else NULL,
       H = if (temporal) H_list[[afam]] else NULL,
       use_exp_loadings = use_exp_loadings,
-      time_point_max = time_point_max
+      time_point_max = time_point_max,
+      clean_ids = clean_ids
     )
   }
 
@@ -678,6 +707,7 @@ buildFamilyGroups_list <- function(
   for (afam in seq_len(numfam)) {
     if (clean_ids == TRUE) {
       obs_ids <- make_clean_personids(obs_ids_list[[afam]])
+      clean_ids <- FALSE
     } else {
       obs_ids <- obs_ids_list[[afam]]
     }
@@ -703,7 +733,7 @@ buildFamilyGroups_list <- function(
       H = if (temporal) get_or_null(H_list, afam) else NULL,
       use_exp_loadings = use_exp_loadings,
       time_point_max = time_point_max,
-      clean_ids = FALSE # already cleaned above if requested
+      clean_ids = clean_ids # already cleaned above if requested
     )
   }
 
@@ -735,6 +765,7 @@ buildPedigreeMx <- function(model_name, vars, group_models,
                             condenseMatrixSlots = TRUE,
                             temporal = FALSE,
                             p_hist = 0,
+                            birth_year = NULL,
                             components = c("a", "e"),
                             time_point_max = NULL) {
   .require_openmx("buildPedigreeMx")
