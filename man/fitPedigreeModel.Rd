@@ -36,7 +36,13 @@ fitPedigreeModel(
   components = c("a", "d", "cn", "ce", "mt", "am", "e"),
   use_exp_loadings = FALSE,
   time_point_max = NULL,
-  clean_ids = TRUE
+  retain_eta = TRUE,
+  retain_loadings = TRUE,
+  retain_loading_covariances = TRUE,
+  retain_component_covariances = TRUE,
+  residual_covariance_form = c("outer_product", "diagonal"),
+  clean_ids = TRUE,
+  group_static_families = FALSE
 )
 }
 \arguments{
@@ -108,8 +114,8 @@ family. Only used when \code{temporal = TRUE} and \code{group_models} is NULL.}
 \item{Mtdmat_list}{A list of mitochondrial genetic relatedness matrices, one per family. Only
 used when \code{temporal = TRUE} and \code{group_models} is NULL.}
 
-\item{Amimat_list}{A list of additive by mitochondrial interaction relatedness matrices, one
-per family. Only used when \code{temporal = TRUE} and \code{group_models} is NULL.}
+\item{Amimat_list}{A list of additive by mitochondrial interaction relatedness matrices, one per family. Only
+used when \code{temporal = TRUE} and \code{group_models} is NULL.}
 
 \item{Dmgmat_list}{A list of dominance genetic relatedness matrices, one per family. Only used
 when \code{temporal = TRUE} and \code{group_models} is NULL.}
@@ -126,7 +132,25 @@ exponentiated so its implied variance stays positive. Only used when \code{tempo
 \item{time_point_max}{Integer degree of the polynomial birth-year basis. Only used when
 \code{temporal = TRUE}. Default is 3.}
 
+\item{retain_eta}{Logical. Retain named temporal linear predictors \code{Eta_*}.}
+
+\item{retain_loadings}{Logical. Retain named loading vectors \code{L_*}.}
+
+\item{retain_loading_covariances}{Logical. Retain named loading outer products \code{K*}.}
+
+\item{retain_component_covariances}{Logical. Retain named relatedness-weighted component
+covariance algebras \code{Cov_*}. Any unretained layer is inlined, leaving \code{V}
+and the likelihood unchanged.}
+
+\item{residual_covariance_form}{Character. Use \code{"outer_product"} to preserve the
+original \code{I * K_e} representation or \code{"diagonal"} for the exactly equivalent
+\code{vec2diag(L_e * L_e)} representation.}
+
 \item{clean_ids}{Logical. If TRUE, clean the \code{obs_ids} to be syntactically valid R names using \code{make.names}. Default is FALSE.}
+
+\item{group_static_families}{Logical. If TRUE for a static model built from
+\code{data}, build one raw-data submodel containing all family rows. If
+FALSE, preserve the original one-submodel-per-family implementation.}
 }
 \value{
 A fitted OpenMx model.

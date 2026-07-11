@@ -15,7 +15,12 @@
   H = NULL,
   use_exp_loadings = TRUE,
   condenseMatrixSlots = TRUE,
-  time_point_max = NULL
+  time_point_max = NULL,
+  retain_eta = TRUE,
+  retain_loadings = TRUE,
+  retain_loading_covariances = TRUE,
+  retain_component_covariances = TRUE,
+  residual_covariance_form = c("outer_product", "diagonal")
 )
 }
 \arguments{
@@ -24,8 +29,8 @@
 \item{fsize}{Family size (number of members), as computed by \code{\link{buildOneFamilyGroup}}.}
 
 \item{active}{The filtered component table built by \code{\link{buildOneFamilyGroup}}
-(one entry per relatedness matrix actually supplied), used for its \code{k} (loading
-key) and \code{K} (loading-matrix name) fields.}
+(one entry per relatedness matrix actually supplied), used for its \code{k} loading
+key and \code{mxname} relatedness-matrix name.}
 
 \item{relmat_list}{The list of already-built (and already condensed, if requested)
 \code{"Symm"} mxMatrix objects for \code{active}, in the same order.}
@@ -43,6 +48,16 @@ key) and \code{K} (loading-matrix name) fields.}
 \item{condenseMatrixSlots}{Logical. If TRUE, condense the \code{Tpoly}/\code{H} mxMatrix objects.}
 
 \item{time_point_max}{Integer degree of the polynomial birth-year basis.}
+
+\item{retain_eta}{Logical. Retain named \code{Eta_*} algebras.}
+
+\item{retain_loadings}{Logical. Retain named \code{L_*} algebras.}
+
+\item{retain_loading_covariances}{Logical. Retain named \code{K*} outer-product algebras.}
+
+\item{retain_component_covariances}{Logical. Retain named \code{Cov_*} algebras.}
+
+\item{residual_covariance_form}{Character representation for the residual covariance.}
 }
 \value{
 An OpenMx model for the specified family group.

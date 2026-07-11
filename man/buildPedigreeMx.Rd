@@ -12,6 +12,7 @@ buildPedigreeMx(
   condenseMatrixSlots = TRUE,
   temporal = FALSE,
   p_hist = 0,
+  birth_year = NULL,
   components = c("a", "e"),
   time_point_max = NULL
 )
@@ -34,6 +35,9 @@ of a fixed scalar. Default is FALSE.}
 
 \item{p_hist}{Integer. Number of historical moderator columns. Only used when
 \code{temporal = TRUE}. Default is 0.}
+
+\item{birth_year}{Numeric vector of birth years (or another time index), one per member of
+the family, in the same order as \code{obs_ids}. Only used when \code{temporal = TRUE}.}
 
 \item{components}{Character vector of component keys to include (any of "a", "d", "cn",
 "ce", "mt", "am", "e"). Only used when \code{temporal = TRUE}. Default is \code{c("a", "e")}.}

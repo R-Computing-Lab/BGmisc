@@ -34,30 +34,30 @@
 #' @export
 
 buildPedigreeModelCovariance <- function(
-    vars = list(
-      ad2 = 0.5,
-      dd2 = 0.3,
-      cn2 = 0.2,
-      ce2 = 0.4,
-      mt2 = 0.1,
-      am2 = 0.25,
-      ee2 = 0.6
-    ),
-    Vad = TRUE,
-    Vdd = FALSE,
-    Vcn = TRUE,
-    Vce = TRUE,
-    Vmt = TRUE,
-    Vam = FALSE,
-    Ver = TRUE,
-    temporal = FALSE,
-    p_hist = 0,
-    components = c("a", "e"),
-    start_beta0 = 0.5,
-    start_beta_time = 0,
-    start_gamma = 0,
-    time_point_max = NULL,
-    lbound = 1e-10
+  vars = list(
+    ad2 = 0.5,
+    dd2 = 0.3,
+    cn2 = 0.2,
+    ce2 = 0.4,
+    mt2 = 0.1,
+    am2 = 0.25,
+    ee2 = 0.6
+  ),
+  Vad = TRUE,
+  Vdd = FALSE,
+  Vcn = TRUE,
+  Vce = TRUE,
+  Vmt = TRUE,
+  Vam = FALSE,
+  Ver = TRUE,
+  temporal = FALSE,
+  p_hist = 0,
+  components = c("a", "e"),
+  start_beta0 = 0.5,
+  start_beta_time = 0,
+  start_gamma = 0,
+  time_point_max = NULL,
+  lbound = 1e-10
 ) {
   .require_openmx("buildPedigreeModelCovariance")
 
@@ -140,12 +140,12 @@ buildPedigreeModelCovariance <- function(
 #' @return An OpenMx model containing the \code{B_*}/\code{G_*} parameter matrices.
 #' @keywords internal
 .buildTemporalPedigreeModelCovariance <- function(
-    p_hist = 0,
-    components = c("a", "e"),
-    start_beta0 = 0.5,
-    start_beta_time = 0,
-    start_gamma = 0,
-    time_point_max = NULL
+  p_hist = 0,
+  components = c("a", "e"),
+  start_beta0 = 0.5,
+  start_beta_time = 0,
+  start_gamma = 0,
+  time_point_max = NULL
 ) {
   .require_openmx(".buildTemporalPedigreeModelCovariance")
 
@@ -220,7 +220,7 @@ buildPedigreeModelCovariance <- function(
 #' @return An mxMatrix object.
 #' @keywords internal
 .pedigreeRelatednessMatrix <- function(mat, fsize, name, condense = TRUE, symmetrize = FALSE) {
-  if(is.null(mat)) stop("Relatedness matrix cannot be NULL.")
+  if (is.null(mat)) stop("Relatedness matrix cannot be NULL.")
   # keep dense if dense, or sparse if sparse, but symmetrize if requested
   if (inherits(mat, "Matrix")) {
     values <- if (symmetrize) make_symmetric(mat) else mat
@@ -287,27 +287,41 @@ buildPedigreeModelCovariance <- function(
 #'   exponentiated so its implied variance stays positive. Only used when \code{temporal = TRUE}.
 #' @param time_point_max Integer degree of the polynomial birth-year basis. Only used when
 #'   \code{temporal = TRUE}. Default is 3.
+#' @param retain_eta Logical. Retain named temporal linear predictors \code{Eta_*}.
+#' @param retain_loadings Logical. Retain named loading vectors \code{L_*}.
+#' @param retain_loading_covariances Logical. Retain named loading outer products \code{K*}.
+#' @param retain_component_covariances Logical. Retain named relatedness-weighted component
+#'   covariance algebras \code{Cov_*}. Any unretained layer is inlined, leaving \code{V}
+#'   and the likelihood unchanged.
+#' @param residual_covariance_form Character. Use \code{"outer_product"} to preserve the
+#'   original \code{I * K_e} representation or \code{"diagonal"} for the exactly equivalent
+#'   \code{vec2diag(L_e * L_e)} representation.
 #' @param clean_ids Logical. If TRUE, clean the \code{obs_ids} to be syntactically valid R names using \code{make.names}. Default is FALSE.
 #' @return An OpenMx model for the specified family group.
 #' @export
 
 buildOneFamilyGroup <- function(
-    group_name,
-    Addmat = NULL,
-    Nucmat = NULL,
-    Extmat = NULL,
-    Mtdmat = NULL,
-    Amimat = NULL,
-    Dmgmat = NULL,
-    full_df_row,
-    obs_ids,
-    condenseMatrixSlots = TRUE,
-    temporal = FALSE,
-    birth_year = NULL,
-    H = NULL,
-    use_exp_loadings = FALSE,
-    time_point_max = NULL,
-    clean_ids = FALSE
+  group_name,
+  Addmat = NULL,
+  Nucmat = NULL,
+  Extmat = NULL,
+  Mtdmat = NULL,
+  Amimat = NULL,
+  Dmgmat = NULL,
+  full_df_row,
+  obs_ids,
+  condenseMatrixSlots = TRUE,
+  temporal = FALSE,
+  birth_year = NULL,
+  H = NULL,
+  use_exp_loadings = FALSE,
+  time_point_max = NULL,
+  retain_eta = TRUE,
+  retain_loadings = TRUE,
+  retain_loading_covariances = TRUE,
+  retain_component_covariances = TRUE,
+  residual_covariance_form = c("outer_product", "diagonal"),
+  clean_ids = FALSE
 ) {
   .require_openmx("buildOneFamilyGroup")
   if (clean_ids) {
@@ -316,14 +330,15 @@ buildOneFamilyGroup <- function(
     clean_ids <- FALSE
   }
   # Determine family size from first available matrix. Shared by both branches below.
-  if(#not any of the matrices are provided
+  if ( # not any of the matrices are provided
     is.null(Addmat) && is.null(Dmgmat) && is.null(Nucmat) &&
-    is.null(Extmat) && is.null(Mtdmat) && is.null(Amimat)
+      is.null(Extmat) && is.null(Mtdmat) && is.null(Amimat)
   ) {
+    warning("At least one relatedness matrix should be provided. Using the number of columns in 'full_df_row' as family size.")
     fsize <- ncol(full_df_row)
   } else {
-  fsize <- .pedigreeFamilySize(list(Addmat, Dmgmat, Nucmat, Extmat, Mtdmat, Amimat))
-}
+    fsize <- .pedigreeFamilySize(list(Addmat, Dmgmat, Nucmat, Extmat, Mtdmat, Amimat))
+  }
   # If Extmat is requested but not supplied as a matrix, create a unit matrix
   # (all members share the extended environment equally).
   if (!is.null(Extmat) && !is.matrix(Extmat)) {
@@ -337,30 +352,42 @@ buildOneFamilyGroup <- function(
   # the same relatedness mxMatrix objects (relmat_list), rather than each branch rebuilding
   # its own copy of this table.
   mat_spec <- list(
-    list(mat = Addmat,
-         mxname = "A",
-         term = "(A  %x% ModelOne.Vad)",
-         k = "a", K = "Ka"),
-    list(mat = Dmgmat,
-         mxname = "D",
-         term = "(D  %x% ModelOne.Vdd)",
-         k = "d", K = "Kd"),
-    list(mat = Nucmat,
-         mxname = "Cn",
-         term = "(Cn %x% ModelOne.Vcn)",
-         k = "cn", K = "Kcn"),
-    list(mat = Extmat,
-         mxname = "Ce",
-         term = "(Ce %x% ModelOne.Vce)",
-         k = "ce", K = "Kce"),
-    list(mat = Amimat,
-         mxname = "Am",
-         term = "(Am %x% ModelOne.Vam)",
-         k = "am", K = "Kam"),
-    list(mat = Mtdmat,
-         mxname = "Mt",
-         term = "(Mt %x% ModelOne.Vmt)",
-         k = "mt", K = "Kmt")
+    list(
+      mat = Addmat,
+      mxname = "A",
+      term = "(A  %x% ModelOne.Vad)",
+      k = "a", K = "Ka"
+    ),
+    list(
+      mat = Dmgmat,
+      mxname = "D",
+      term = "(D  %x% ModelOne.Vdd)",
+      k = "d", K = "Kd"
+    ),
+    list(
+      mat = Nucmat,
+      mxname = "Cn",
+      term = "(Cn %x% ModelOne.Vcn)",
+      k = "cn", K = "Kcn"
+    ),
+    list(
+      mat = Extmat,
+      mxname = "Ce",
+      term = "(Ce %x% ModelOne.Vce)",
+      k = "ce", K = "Kce"
+    ),
+    list(
+      mat = Amimat,
+      mxname = "Am",
+      term = "(Am %x% ModelOne.Vam)",
+      k = "am", K = "Kam"
+    ),
+    list(
+      mat = Mtdmat,
+      mxname = "Mt",
+      term = "(Mt %x% ModelOne.Vmt)",
+      k = "mt", K = "Kmt"
+    )
   )
   active <- Filter(function(s) !is.null(s$mat), mat_spec)
 
@@ -386,7 +413,12 @@ buildOneFamilyGroup <- function(
       H = H,
       use_exp_loadings = use_exp_loadings,
       condenseMatrixSlots = condenseMatrixSlots,
-      time_point_max = time_point_max
+      time_point_max = time_point_max,
+      retain_eta = retain_eta,
+      retain_loadings = retain_loadings,
+      retain_loading_covariances = retain_loading_covariances,
+      retain_component_covariances = retain_component_covariances,
+      residual_covariance_form = residual_covariance_form
     ))
   }
 
@@ -411,7 +443,7 @@ buildOneFamilyGroup <- function(
       OpenMx::mxData(observed = full_df_row, type = "raw", sort = FALSE),
       .pedigreeMeanMatrix(fsize, obs_ids, "meanLI"),
       OpenMx::mxAlgebraFromString(algebra_str,
-                                  name = "V", dimnames = list(obs_ids, obs_ids)
+        name = "V", dimnames = list(obs_ids, obs_ids)
       ),
       OpenMx::mxExpectationNormal(covariance = "V", means = "M"),
       OpenMx::mxFitFunctionML()
@@ -440,17 +472,17 @@ buildOneFamilyGroup <- function(
 #' @return An OpenMx model containing all static family observations.
 #' @keywords internal
 .buildGroupedStaticFamily <- function(
-    group_name,
-    dat,
-    obs_ids,
-    Addmat = NULL,
-    Nucmat = NULL,
-    Extmat = NULL,
-    Mtdmat = NULL,
-    Amimat = NULL,
-    Dmgmat = NULL,
-    condenseMatrixSlots = TRUE,
-    clean_ids = FALSE
+  group_name,
+  dat,
+  obs_ids,
+  Addmat = NULL,
+  Nucmat = NULL,
+  Extmat = NULL,
+  Mtdmat = NULL,
+  Amimat = NULL,
+  Dmgmat = NULL,
+  condenseMatrixSlots = TRUE,
+  clean_ids = FALSE
 ) {
   .require_openmx(".buildGroupedStaticFamily")
 
@@ -595,8 +627,8 @@ buildOneFamilyGroup <- function(
 #' @param group_name Name of the family group.
 #' @param fsize Family size (number of members), as computed by \code{\link{buildOneFamilyGroup}}.
 #' @param active The filtered component table built by \code{\link{buildOneFamilyGroup}}
-#'   (one entry per relatedness matrix actually supplied), used for its \code{k} (loading
-#'   key) and \code{K} (loading-matrix name) fields.
+#'   (one entry per relatedness matrix actually supplied), used for its \code{k} loading
+#'   key and \code{mxname} relatedness-matrix name.
 #' @param relmat_list The list of already-built (and already condensed, if requested)
 #'   \code{"Symm"} mxMatrix objects for \code{active}, in the same order.
 #' @param full_df_row A 1-row matrix/vector of observed data.
@@ -606,23 +638,55 @@ buildOneFamilyGroup <- function(
 #' @param use_exp_loadings Logical. If TRUE, each component's loading is exponentiated.
 #' @param condenseMatrixSlots Logical. If TRUE, condense the \code{Tpoly}/\code{H} mxMatrix objects.
 #' @param time_point_max Integer degree of the polynomial birth-year basis.
+#' @param retain_eta Logical. Retain named \code{Eta_*} algebras.
+#' @param retain_loadings Logical. Retain named \code{L_*} algebras.
+#' @param retain_loading_covariances Logical. Retain named \code{K*} outer-product algebras.
+#' @param retain_component_covariances Logical. Retain named \code{Cov_*} algebras.
+#' @param residual_covariance_form Character representation for the residual covariance.
 #' @return An OpenMx model for the specified family group.
 #' @keywords internal
 .temporalFamilyGroupAlgebra <- function(
-    group_name,
-    fsize,
-    active,
-    relmat_list,
-    full_df_row,
-    obs_ids,
-    birth_year,
-    H = NULL,
-    use_exp_loadings = TRUE,
-    condenseMatrixSlots = TRUE,
-    time_point_max = NULL
+  group_name,
+  fsize,
+  active,
+  relmat_list,
+  full_df_row,
+  obs_ids,
+  birth_year,
+  H = NULL,
+  use_exp_loadings = TRUE,
+  condenseMatrixSlots = TRUE,
+  time_point_max = NULL,
+  retain_eta = TRUE,
+  retain_loadings = TRUE,
+  retain_loading_covariances = TRUE,
+  retain_component_covariances = TRUE,
+  residual_covariance_form = c("outer_product", "diagonal")
 ) {
+  # Checks
   if (length(obs_ids) != fsize) stop("Length of obs_ids must equal family size.")
   if (length(birth_year) != fsize) stop("Length of birth_year must equal family size.")
+
+  # retain checks
+  residual_covariance_form <- match.arg(residual_covariance_form)
+
+  retain_flags <- c(
+    retain_eta = retain_eta,
+    retain_loadings = retain_loadings,
+    retain_loading_covariances = retain_loading_covariances,
+    retain_component_covariances = retain_component_covariances
+  )
+  if (any(lengths(as.list(retain_flags)) != 1L) || any(is.na(retain_flags))) {
+    stop("All retain_* arguments must be non-missing logical scalars.")
+  }
+  # do I really need this data structure? I think I can just use the individual flags directly, but for now I'll keep it.
+  retain_flags_nmd <- retain_flags
+  retain_flags <- as.logical(retain_flags)
+  retain_eta <- unname(retain_flags_nmd[["retain_eta"]])
+  retain_loadings <- unname(retain_flags_nmd[["retain_loadings"]])
+  retain_loading_covariances <- unname(retain_flags_nmd[["retain_loading_covariances"]])
+  retain_component_covariances <- unname(retain_flags_nmd[["retain_component_covariances"]])
+
 
   if (is.null(H)) {
     H <- matrix(numeric(0), nrow = fsize, ncol = 0)
@@ -678,19 +742,76 @@ buildOneFamilyGroup <- function(
 
   # Eta_k = Tpoly %*% B_k + H %*% G_k
 
-  make_eta_alg <- function(k) {
+  # These helpers construct the same covariance model under every retention combination.
+  # A retained object is referenced by name downstream. An unretained object is inlined
+  # into the next expression, so retention changes inspectability and object size only.
+
+
+  eta_expression <- function(k) {
     if (p_hist > 0) {
-      OpenMx::mxAlgebraFromString(
-        paste0("Tpoly %*% ModelOne.B_", k, " + H %*% ModelOne.G_", k),
-        name = paste0("Eta_", k)
-      )
+      paste0("Tpoly %*% ModelOne.B_", k, " + H %*% ModelOne.G_", k)
     } else {
-      OpenMx::mxAlgebraFromString(
-        paste0("Tpoly %*% ModelOne.B_", k),
-        name = paste0("Eta_", k)
-      )
+      paste0("Tpoly %*% ModelOne.B_", k)
     }
   }
+
+  eta_reference <- function(k) {
+    if (retain_eta) paste0("Eta_", k) else paste0("(", eta_expression(k), ")")
+  }
+
+  loading_expression <- function(k) {
+    eta_ref <- eta_reference(k)
+    if (use_exp_loadings) paste0("exp(", eta_ref, ")") else eta_ref
+  }
+
+  loading_reference <- function(k) {
+    if (retain_loadings) paste0("L_", k) else paste0("(", loading_expression(k), ")")
+  }
+
+  loading_covariance_expression <- function(k) {
+    loading_ref <- loading_reference(k)
+    paste0(loading_ref, " %*% t(", loading_ref, ")")
+  }
+
+  loading_covariance_reference <- function(k) {
+    if (retain_loading_covariances) {
+      paste0("K", k)
+    } else {
+      paste0("(", loading_covariance_expression(k), ")")
+    }
+  }
+
+  component_covariance_expression <- function(s) {
+    paste0(s$mxname, " * ", loading_covariance_reference(s$k))
+  }
+
+  residual_covariance_expression <- function() {
+    if (residual_covariance_form == "diagonal") {
+      loading_ref <- loading_reference("e")
+      paste0("vec2diag(", loading_ref, " * ", loading_ref, ")")
+    } else {
+      paste0("I * ", loading_covariance_reference("e"))
+    }
+  }
+
+
+  eta_keys <- c(vapply(active, `[[`, character(1), "k"), "e")
+  eta_parts <- if (retain_eta) {
+    lapply(eta_keys, function(k) {
+      OpenMx::mxAlgebraFromString(eta_expression(k), name = paste0("Eta_", k))
+    })
+  } else {
+    list()
+  }
+
+  loading_parts <- if (retain_loadings) {
+    lapply(eta_keys, function(k) {
+      OpenMx::mxAlgebraFromString(loading_expression(k), name = paste0("L_", k))
+    })
+  } else {
+    list()
+  }
+
 
   # turn into loading
   make_lambda_alg <- function(k) {
@@ -702,37 +823,58 @@ buildOneFamilyGroup <- function(
   }
 
   # each variance component's covariance matrix is the outer product of its loading vector with itself, scaled by the relatedness matrix
-  make_K_alg <- function(k, Kname) {
-    # The K matrix is the outer product of the loading vector L_k with itself, which gives a symmetric matrix of loadings for the covariance structure.
-    OpenMx::mxAlgebraFromString(paste0("L_", k, " %*% t(L_", k, ")"), name = Kname)
+  # Kk is the unscaled loading outer product. It is retained independently because it
+  # is useful for evaluating the temporal/moderator scaling before relatedness is applied.
+  loading_covariance_parts <- if (retain_loading_covariances) {
+    lapply(eta_keys, function(k) {
+      OpenMx::mxAlgebraFromString(
+        loading_covariance_expression(k),
+        name = paste0("K", k)
+      )
+    })
+  } else {
+    list()
   }
 
-  eta_parts <- lapply(active, function(s) make_eta_alg(s$k))
-  lambda_parts <- lapply(active, function(s) make_lambda_alg(s$k))
-  K_parts <- lapply(active, function(s) make_K_alg(s$k, s$K))
 
-  eta_e <- make_eta_alg("e")
-  lambda_e <- make_lambda_alg("e")
-  K_e <- make_K_alg("e", "Ke")
+  # Cov_k is the full relatedness-weighted covariance contribution for component k.
+  component_covariance_parts <- list()
+  if (retain_component_covariances) {
+    component_covariance_parts <- lapply(active, function(s) {
+      OpenMx::mxAlgebraFromString(
+        component_covariance_expression(s),
+        name = paste0("Cov_", s$k)
+      )
+    })
+    component_covariance_parts[[length(component_covariance_parts) + 1L]] <-
+      OpenMx::mxAlgebraFromString(
+        residual_covariance_expression(),
+        name = "Cov_e"
+      )
+  }
 
-  rel_terms <- vapply(
-    active,
-    function(s) paste0("(", s$mxname, " * ", s$K, ")"),
-    character(1)
-  )
-  covariance_algebra <- paste(c(rel_terms, "(I * Ke)"), collapse = " + ")
+  if (retain_component_covariances) {
+    covariance_terms <- c(
+      vapply(active, function(s) paste0("Cov_", s$k), character(1)),
+      "Cov_e"
+    )
+  } else {
+    covariance_terms <- c(
+      vapply(active, component_covariance_expression, character(1)),
+      residual_covariance_expression()
+    )
+  }
+  covariance_algebra <- paste(c(covariance_terms), collapse = " + ")
 
   model_parts <- c(
     list(group_name),
     fixed_parts,
     relmat_list,
     eta_parts,
-    lambda_parts,
-    K_parts,
+    loading_parts,
+    loading_covariance_parts,
+    component_covariance_parts,
     list(
-      eta_e,
-      lambda_e,
-      K_e,
       .pedigreeMeanMatrix(fsize, obs_ids, "mean_y"),
       OpenMx::mxAlgebraFromString(
         covariance_algebra,
@@ -770,23 +912,28 @@ buildOneFamilyGroup <- function(
 #' @export
 
 buildFamilyGroups <- function(
-    dat,
-    obs_ids,
-    Addmat = NULL,
-    Nucmat = NULL,
-    Extmat = NULL,
-    Mtdmat = NULL,
-    Amimat = NULL,
-    Dmgmat = NULL,
-    prefix = "fam",
-    condenseMatrixSlots = TRUE,
-    temporal = FALSE,
-    birth_year_list = NULL,
-    H_list = NULL,
-    use_exp_loadings = TRUE,
-    time_point_max = NULL,
-    clean_ids = TRUE,
-    group_static_families = FALSE
+  dat,
+  obs_ids,
+  Addmat = NULL,
+  Nucmat = NULL,
+  Extmat = NULL,
+  Mtdmat = NULL,
+  Amimat = NULL,
+  Dmgmat = NULL,
+  prefix = "fam",
+  condenseMatrixSlots = TRUE,
+  temporal = FALSE,
+  birth_year_list = NULL,
+  H_list = NULL,
+  use_exp_loadings = TRUE,
+  time_point_max = NULL,
+  retain_eta = TRUE,
+  retain_loadings = TRUE,
+  retain_loading_covariances = TRUE,
+  retain_component_covariances = TRUE,
+  residual_covariance_form = c("outer_product", "diagonal"),
+  clean_ids = TRUE,
+  group_static_families = FALSE
 ) {
   .require_openmx("buildFamilyGroups")
   if (clean_ids == TRUE) {
@@ -840,6 +987,11 @@ buildFamilyGroups <- function(
       H = if (temporal) H_list[[afam]] else NULL,
       use_exp_loadings = use_exp_loadings,
       time_point_max = time_point_max,
+      retain_eta = retain_eta,
+      retain_loadings = retain_loadings,
+      retain_loading_covariances = retain_loading_covariances,
+      retain_component_covariances = retain_component_covariances,
+      residual_covariance_form = residual_covariance_form,
       clean_ids = clean_ids
     )
   }
@@ -872,22 +1024,27 @@ buildFamilyGroups <- function(
 #' @export
 
 buildFamilyGroups_list <- function(
-    dat_list,
-    obs_ids_list,
-    Addmat_list = NULL,
-    Nucmat_list = NULL,
-    Extmat_list = NULL,
-    Mtdmat_list = NULL,
-    Amimat_list = NULL,
-    Dmgmat_list = NULL,
-    prefix = "fam",
-    condenseMatrixSlots = TRUE,
-    temporal = FALSE,
-    birth_year_list = NULL,
-    H_list = NULL,
-    use_exp_loadings = TRUE,
-    time_point_max = NULL,
-    clean_ids = TRUE
+  dat_list,
+  obs_ids_list,
+  Addmat_list = NULL,
+  Nucmat_list = NULL,
+  Extmat_list = NULL,
+  Mtdmat_list = NULL,
+  Amimat_list = NULL,
+  Dmgmat_list = NULL,
+  prefix = "fam",
+  condenseMatrixSlots = TRUE,
+  temporal = FALSE,
+  birth_year_list = NULL,
+  H_list = NULL,
+  use_exp_loadings = TRUE,
+  time_point_max = NULL,
+  retain_eta = TRUE,
+  retain_loadings = TRUE,
+  retain_loading_covariances = TRUE,
+  retain_component_covariances = TRUE,
+  residual_covariance_form = c("outer_product", "diagonal"),
+  clean_ids = TRUE
 ) {
   .require_openmx("buildFamilyGroups_list")
 
@@ -927,6 +1084,11 @@ buildFamilyGroups_list <- function(
       H = if (temporal) get_or_null(H_list, afam) else NULL,
       use_exp_loadings = use_exp_loadings,
       time_point_max = time_point_max,
+      retain_eta = retain_eta,
+      retain_loadings = retain_loadings,
+      retain_loading_covariances = retain_loading_covariances,
+      retain_component_covariances = retain_component_covariances,
+      residual_covariance_form = residual_covariance_form,
       clean_ids = clean_ids # already cleaned above if requested
     )
   }
@@ -1083,46 +1245,51 @@ buildPedigreeMx <- function(model_name, vars, group_models,
 #' @export
 
 fitPedigreeModel <- function(
-    model_name = "PedigreeModel",
-    vars = list(
-      ad2 = 0.5,
-      dd2 = 0.3,
-      cn2 = 0.2,
-      ce2 = 0.4,
-      mt2 = 0.1,
-      am2 = 0.25,
-      ee2 = 0.6
-    ),
-    data = NULL,
-    group_models = NULL,
-    Addmat = NULL,
-    Nucmat = NULL,
-    Extmat = NULL,
-    Mtdmat = NULL,
-    Amimat = NULL,
-    Dmgmat = NULL,
-    tryhard = TRUE,
-    intervals = TRUE,
-    extraTries = 10,
-    condenseMatrixSlots = TRUE,
-    runmodel = TRUE,
-    temporal = FALSE,
-    dat_list = NULL,
-    obs_ids_list = NULL,
-    birth_year_list = NULL,
-    H_list = NULL,
-    Addmat_list = NULL,
-    Nucmat_list = NULL,
-    Extmat_list = NULL,
-    Mtdmat_list = NULL,
-    Amimat_list = NULL,
-    Dmgmat_list = NULL,
-    p_hist = NULL,
-    components = c("a", "d", "cn", "ce", "mt", "am", "e"),
-    use_exp_loadings = FALSE,
-    time_point_max = NULL,
-    clean_ids = TRUE,
-    group_static_families = FALSE
+  model_name = "PedigreeModel",
+  vars = list(
+    ad2 = 0.5,
+    dd2 = 0.3,
+    cn2 = 0.2,
+    ce2 = 0.4,
+    mt2 = 0.1,
+    am2 = 0.25,
+    ee2 = 0.6
+  ),
+  data = NULL,
+  group_models = NULL,
+  Addmat = NULL,
+  Nucmat = NULL,
+  Extmat = NULL,
+  Mtdmat = NULL,
+  Amimat = NULL,
+  Dmgmat = NULL,
+  tryhard = TRUE,
+  intervals = TRUE,
+  extraTries = 10,
+  condenseMatrixSlots = TRUE,
+  runmodel = TRUE,
+  temporal = FALSE,
+  dat_list = NULL,
+  obs_ids_list = NULL,
+  birth_year_list = NULL,
+  H_list = NULL,
+  Addmat_list = NULL,
+  Nucmat_list = NULL,
+  Extmat_list = NULL,
+  Mtdmat_list = NULL,
+  Amimat_list = NULL,
+  Dmgmat_list = NULL,
+  p_hist = NULL,
+  components = c("a", "d", "cn", "ce", "mt", "am", "e"),
+  use_exp_loadings = FALSE,
+  time_point_max = NULL,
+  retain_eta = TRUE,
+  retain_loadings = TRUE,
+  retain_loading_covariances = TRUE,
+  retain_component_covariances = TRUE,
+  residual_covariance_form = c("outer_product", "diagonal"),
+  clean_ids = TRUE,
+  group_static_families = FALSE
 ) {
   .require_openmx("fitPedigreeModel")
 
@@ -1163,6 +1330,11 @@ fitPedigreeModel <- function(
         H_list = H_list,
         use_exp_loadings = use_exp_loadings,
         time_point_max = time_point_max,
+        retain_eta = retain_eta,
+        retain_loadings = retain_loadings,
+        retain_loading_covariances = retain_loading_covariances,
+        retain_component_covariances = retain_component_covariances,
+        residual_covariance_form = residual_covariance_form,
         clean_ids = clean_ids
       )
     } else {

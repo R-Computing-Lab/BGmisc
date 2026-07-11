@@ -60,8 +60,8 @@ family. Only used when \code{temporal = TRUE} and \code{group_models} is NULL.}
 \item{Mtdmat_list}{A list of mitochondrial genetic relatedness matrices, one per family. Only
 used when \code{temporal = TRUE} and \code{group_models} is NULL.}
 
-\item{Amimat_list}{A list of additive by mitochondrial interaction relatedness matrices, one
-per family. Only used when \code{temporal = TRUE} and \code{group_models} is NULL.}
+\item{Amimat_list}{A list of additive by mitochondrial interaction relatedness matrices, one per family. Only
+used when \code{temporal = TRUE} and \code{group_models} is NULL.}
 
 \item{Dmgmat_list}{A list of dominance genetic relatedness matrices, one per family. Only used
 when \code{temporal = TRUE} and \code{group_models} is NULL.}

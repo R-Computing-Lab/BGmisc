@@ -56,7 +56,12 @@ buildOneTemporalFamilyGroup <- function(
   use_exp_loadings = TRUE,
   condenseMatrixSlots = TRUE,
   time_point_max = NULL,
-  clean_ids = FALSE
+  clean_ids = FALSE,
+  retain_eta = TRUE,
+  retain_loadings = TRUE,
+  retain_loading_covariances = TRUE,
+  retain_component_covariances = TRUE,
+  residual_covariance_form = c("outer_product", "diagonal")
 ) {
   buildOneFamilyGroup(
     group_name = group_name,
@@ -74,6 +79,11 @@ buildOneTemporalFamilyGroup <- function(
     H = H,
     use_exp_loadings = use_exp_loadings,
     time_point_max = time_point_max,
+    retain_eta = retain_eta,
+    retain_loadings = retain_loadings,
+    retain_loading_covariances = retain_loading_covariances,
+    retain_component_covariances = retain_component_covariances,
+    residual_covariance_form = residual_covariance_form,
     clean_ids = clean_ids
   )
 }
@@ -103,6 +113,11 @@ buildTemporalFamilyGroups <- function(
   use_exp_loadings = FALSE,
   condenseMatrixSlots = TRUE,
   time_point_max = NULL,
+  retain_eta = TRUE,
+  retain_loadings = TRUE,
+  retain_loading_covariances = TRUE,
+  retain_component_covariances = TRUE,
+  residual_covariance_form = c("outer_product", "diagonal"),
   clean_ids = FALSE
 ) {
   buildFamilyGroups(
@@ -121,6 +136,11 @@ buildTemporalFamilyGroups <- function(
     H_list = H_list,
     use_exp_loadings = use_exp_loadings,
     time_point_max = time_point_max,
+    retain_eta = retain_eta,
+    retain_loadings = retain_loadings,
+    retain_loading_covariances = retain_loading_covariances,
+    retain_component_covariances = retain_component_covariances,
+    residual_covariance_form = residual_covariance_form,
     clean_ids = clean_ids
   )
 }

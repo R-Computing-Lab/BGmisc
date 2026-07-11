@@ -201,7 +201,9 @@ test_that("buildOneFamilyGroup(temporal = TRUE) works with all components enable
   }
   # unique environment (Ke) is always included in the covariance algebra
   covariance_txt <- deparse(mod$V$formula, width.cutoff = 500L)
-  expect_true(grepl("Ke", covariance_txt, fixed = TRUE))
+
+  expect_true(grepl("Ke", covariance_txt, fixed = TRUE) |
+    grepl("Cov_e", covariance_txt, fixed = TRUE))
 })
 
 test_that("buildOneFamilyGroup(temporal = TRUE) errors on mismatched birth_year length", {

@@ -20,7 +20,13 @@ buildFamilyGroups(
   H_list = NULL,
   use_exp_loadings = TRUE,
   time_point_max = NULL,
-  clean_ids = TRUE
+  retain_eta = TRUE,
+  retain_loadings = TRUE,
+  retain_loading_covariances = TRUE,
+  retain_component_covariances = TRUE,
+  residual_covariance_form = c("outer_product", "diagonal"),
+  clean_ids = TRUE,
+  group_static_families = FALSE
 )
 }
 \arguments{
@@ -64,7 +70,25 @@ exponentiated so its implied variance stays positive. Only used when \code{tempo
 \item{time_point_max}{Integer degree of the polynomial birth-year basis. Only used when
 \code{temporal = TRUE}. Default is 3.}
 
+\item{retain_eta}{Logical. Retain named temporal linear predictors \code{Eta_*}.}
+
+\item{retain_loadings}{Logical. Retain named loading vectors \code{L_*}.}
+
+\item{retain_loading_covariances}{Logical. Retain named loading outer products \code{K*}.}
+
+\item{retain_component_covariances}{Logical. Retain named relatedness-weighted component
+covariance algebras \code{Cov_*}. Any unretained layer is inlined, leaving \code{V}
+and the likelihood unchanged.}
+
+\item{residual_covariance_form}{Character. Use \code{"outer_product"} to preserve the
+original \code{I * K_e} representation or \code{"diagonal"} for the exactly equivalent
+\code{vec2diag(L_e * L_e)} representation.}
+
 \item{clean_ids}{Logical. If TRUE, clean the \code{obs_ids} to be syntactically valid R names using \code{make.names}. Default is FALSE.}
+
+\item{group_static_families}{Logical. If TRUE and \code{temporal = FALSE}, build
+one OpenMx raw-data submodel containing all rows of \code{dat}. If FALSE,
+preserve the original behavior of building one submodel per family.}
 }
 \value{
 A list of OpenMx models for each family group.

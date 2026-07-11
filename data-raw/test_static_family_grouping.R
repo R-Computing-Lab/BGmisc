@@ -53,20 +53,20 @@ if (length(obs_ids) != fsize) {
 }
 
 simulate_static_families <- function(
-    n_fam = 50,
-    kpc = 3,
-    Ngen = 4,
-    marR = 0.6,
-    true_vars = list(
-      ad2 = 0.60,
-      cn2 = 0.15,
-      ce2 = 0.10,
-      mt2 = 0.05,
-      ee2 = 0.70
-    ),
-    components = c("a", "cn", "ce", "mt", "e"),
-    mean_y = 2,
-    seed = NULL
+  n_fam = 50,
+  kpc = 3,
+  Ngen = 4,
+  marR = 0.6,
+  true_vars = list(
+    ad2 = 0.60,
+    cn2 = 0.15,
+    ce2 = 0.10,
+    mt2 = 0.05,
+    ee2 = 0.70
+  ),
+  components = c("a", "cn", "ce", "mt", "e"),
+  mean_y = 2,
+  seed = NULL
 ) {
   if (!is.null(seed)) {
     set.seed(seed)
@@ -126,8 +126,8 @@ simulate_static_families <- function(
 
   if (
     is.null(rn) ||
-    anyNA(rn) ||
-    any(rn == "")
+      anyNA(rn) ||
+      any(rn == "")
   ) {
     rn <- as.character(seq_len(n))
   }
@@ -226,7 +226,6 @@ vars <- list(
 )
 
 
-
 fit_separate <- fitPedigreeModel(
   model_name = "PedigreeSeparate",
   vars = vars,
@@ -236,7 +235,7 @@ fit_separate <- fitPedigreeModel(
   Extmat = Extmat,
   Mtdmat = Mtdmat,
   Amimat = Amimat,
- Dmgmat = Dmgmat,
+  Dmgmat = Dmgmat,
   temporal = FALSE,
   group_static_families = FALSE,
   tryhard = FALSE,
@@ -296,8 +295,7 @@ parameter_comparison <- parameter_comparison[
   order(
     parameter_comparison$absolute_difference,
     decreasing = TRUE
-  ),
-  ,
+  ), ,
   drop = FALSE
 ]
 
@@ -311,57 +309,43 @@ grouped_size_bytes <- as.numeric(
 
 comparison <- list(
   number_of_families = nrow(data),
-
   family_size = ncol(data),
-
   separate_size_bytes =
     separate_size_bytes,
-
   grouped_size_bytes =
     grouped_size_bytes,
-
   bytes_saved =
     separate_size_bytes -
-    grouped_size_bytes,
-
+      grouped_size_bytes,
   size_ratio_grouped_to_separate =
     grouped_size_bytes /
-    separate_size_bytes,
-
+      separate_size_bytes,
   percent_size_reduction =
     100 * (
       1 -
-      grouped_size_bytes /
-        separate_size_bytes
+        grouped_size_bytes /
+          separate_size_bytes
     ),
-
   separate_status_code =
     fit_separate$output$status$code,
-
   grouped_status_code =
     fit_grouped$output$status$code,
-
   separate_minus2ll =
     fit_separate$output$fit,
-
   grouped_minus2ll =
     fit_grouped$output$fit,
-
   minus2ll_difference =
     fit_grouped$output$fit -
-    fit_separate$output$fit,
-
+      fit_separate$output$fit,
   maximum_absolute_parameter_difference =
     max(
       parameter_comparison$absolute_difference
     ),
-
   fit_equal = isTRUE(all.equal(
     fit_grouped$output$fit,
     fit_separate$output$fit,
     tolerance = 1e-7
   )),
-
   parameters_equal = isTRUE(all.equal(
     p_grouped[common_parameters],
     p_separate[common_parameters],
@@ -406,12 +390,12 @@ comparison <- list(
   ),
   size_ratio_grouped_to_separate =
     as.numeric(object.size(fit_grouped)) /
-    as.numeric(object.size(fit_separate)),
+      as.numeric(object.size(fit_separate)),
   percent_size_reduction =
     100 * (
       1 -
         as.numeric(object.size(fit_grouped)) /
-        as.numeric(object.size(fit_separate))
+          as.numeric(object.size(fit_separate))
     ),
   separate_status_code =
     fit_separate$output$status$code,
@@ -423,7 +407,7 @@ comparison <- list(
     fit_grouped$output$fit,
   minus2ll_difference =
     fit_grouped$output$fit -
-    fit_separate$output$fit,
+      fit_separate$output$fit,
   maximum_absolute_parameter_difference =
     max(parameter_comparison$absolute_difference),
   fit_equal = isTRUE(all.equal(
