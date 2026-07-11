@@ -159,11 +159,12 @@ simulate_static_families <- function(
 
 set.seed(5)
 
-sim <- simulate_static_families(
+sim_50 <- simulate_static_families(
   n_fam = 50,
   kpc = 3,
   Ngen = 4,
   marR = 0.6,
+  seed = 5,
   true_vars = list(
     ad2 = 0.60,
     cn2 = 0.15,
@@ -181,12 +182,35 @@ sim <- simulate_static_families(
   mean_y = 2
 )
 
-data <- sim$data
+sim_10 <- simulate_static_families(
+  n_fam = 10,
+  kpc = 4,
+  Ngen = 4,
+  marR = 0.8,
+  seed = 15,
+  true_vars = list(
+    ad2 = 0.60,
+    cn2 = 0.15,
+    ce2 = 0.10,
+    mt2 = 0.05,
+    ee2 = 0.70
+  ),
+  components = c(
+    "a",
+    "cn",
+    "ce",
+    "mt",
+    "e"
+  ),
+  mean_y = 2
+)
 
-Addmat <- sim$A
-Nucmat <- sim$Cn
-Extmat <- sim$Ce
-Mtdmat <- sim$Mt
+data <- sim_50$data
+
+Addmat <- sim_50$A
+Nucmat <- sim_50$Cn
+Extmat <- sim_50$Ce
+Mtdmat <- sim_50$Mt
 
 Amimat <- NULL
 Dmgmat <- NULL
@@ -201,6 +225,8 @@ vars <- list(
   ee2 = 0.60
 )
 
+
+
 fit_separate <- fitPedigreeModel(
   model_name = "PedigreeSeparate",
   vars = vars,
@@ -210,7 +236,7 @@ fit_separate <- fitPedigreeModel(
   Extmat = Extmat,
   Mtdmat = Mtdmat,
   Amimat = Amimat,
-  Dmgmat = Dmgmat,
+ Dmgmat = Dmgmat,
   temporal = FALSE,
   group_static_families = FALSE,
   tryhard = FALSE,
