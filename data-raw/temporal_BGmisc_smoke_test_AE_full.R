@@ -41,13 +41,16 @@ source("data-raw\\smoketest_helpers.R")
 
 n_families <- 150
 threshold_year <- 1776
-sim_components <- c("a", #"cn","ce",
-                   # "mt",
-                    "e"
-                    )
-fit_components <- c("a",# "cn","ce",
-                   # "mt",
-                   "e")
+sim_components <- c(
+  "a", # "cn","ce",
+  # "mt",
+  "e"
+)
+fit_components <- c(
+  "a", # "cn","ce",
+  # "mt",
+  "e"
+)
 
 # Data-generating parameters.
 # These are linear-loading parameters used for simulation. The fitted model below
@@ -181,34 +184,37 @@ family_peds <- lapply(families, function(x) {
 library(ggplot2)
 library(ggforce)
 family_peds %>%
-#  slice_sample(n = 1000) %>%
-ggplot(aes(x = birth_year_scaled, y = y)) +
-  geom_point(aes(
-                 fill = as.factor(post_1776),
-                  color = fam,
-                 shape = sex),
-             alpha = .7) +
+  #  slice_sample(n = 1000) %>%
+  ggplot(aes(x = birth_year_scaled, y = y)) +
+  geom_point(
+    aes(
+      fill = as.factor(post_1776),
+      color = fam,
+      shape = sex
+    ),
+    alpha = .7
+  ) +
   #  ggplot2::facet_wrap(~fam) +
-#  geom_mark_hull(
- #   aes(
- #     x = birth_year_scaled,
- #     y = y,
- #     group = interaction(fam, gen),
- #     fill = NULL,
- #     color = fam
- #   ),
- #   concavity = 5,
- #   expand = unit(3, "mm"),
- #   radius = unit(1, "mm"),
+  #  geom_mark_hull(
+  #   aes(
+  #     x = birth_year_scaled,
+  #     y = y,
+  #     group = interaction(fam, gen),
+  #     fill = NULL,
+  #     color = fam
+  #   ),
+  #   concavity = 5,
+  #   expand = unit(3, "mm"),
+  #   radius = unit(1, "mm"),
   #  alpha = .3,
   #  fill = NA,
   #  linewidth = 0.6
- # ) +
+  # ) +
   theme_bw() +
   labs(title = "Simulated Phenotypes by Family", x = "Scaled Birth Year", y = "Phenotype (y)") +
   # add viridis color
   scale_color_viridis_d(option = "plasma") +
-  scale_fill_viridis_d()+
+  scale_fill_viridis_d() +
   scale_shape_manual(values = c("F" = 21, "M" = 24)) +
   # remove color legend
   theme(legend.position = "bottom") +
@@ -389,6 +395,4 @@ if (run_optional_ame) {
     labels_to_free = c("b_a_0", "b_mt_0", "b_e_0", "mean_y")
   )
   fit_ame0 <- run_and_report(temporal_model_ame0, "AME intercept-only", tries = 30)
-
-
 }

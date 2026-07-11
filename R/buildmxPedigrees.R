@@ -593,7 +593,7 @@ buildFamilyGroups <- function(
 ) {
   .require_openmx("buildFamilyGroups")
   if (clean_ids == TRUE) {
-    obs_ids <-make_clean_personids(obs_ids)
+    obs_ids <- make_clean_personids(obs_ids)
     # clean once
     clean_ids <- FALSE
   }
