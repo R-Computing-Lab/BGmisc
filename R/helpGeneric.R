@@ -129,6 +129,13 @@ as_numeric_matrix <- function(x) {
 #' @return A numeric matrix, symmetrized if needed.
 #'
 make_symmetric <- function(x, tol = 1e-10) {
+    if (inherits(x, "sparseMatrix")) {
+    if (!Matrix::isSymmetric(x, tol = tol)) {
+      x <- (x + Matrix::t(x)) / 2
+    }
+
+    return(Matrix::forceSymmetric(x, uplo = "L"))
+  }
   x <- as_numeric_matrix(x)
   if (max(abs(x - t(x)), na.rm = TRUE) > tol) {
     x <- (x + t(x)) / 2
