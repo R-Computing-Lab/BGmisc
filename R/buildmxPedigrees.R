@@ -316,8 +316,14 @@ buildOneFamilyGroup <- function(
     clean_ids <- FALSE
   }
   # Determine family size from first available matrix. Shared by both branches below.
+  if(#not any of the matrices are provided
+    is.null(Addmat) && is.null(Dmgmat) && is.null(Nucmat) &&
+    is.null(Extmat) && is.null(Mtdmat) && is.null(Amimat)
+  ) {
+    fsize <- ncol(full_df_row)
+  } else {
   fsize <- .pedigreeFamilySize(list(Addmat, Dmgmat, Nucmat, Extmat, Mtdmat, Amimat))
-
+}
   # If Extmat is requested but not supplied as a matrix, create a unit matrix
   # (all members share the extended environment equally).
   if (!is.null(Extmat) && !is.matrix(Extmat)) {
