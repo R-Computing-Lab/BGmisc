@@ -34,30 +34,30 @@
 #' @export
 
 buildPedigreeModelCovariance <- function(
-  vars = list(
-    ad2 = 0.5,
-    dd2 = 0.3,
-    cn2 = 0.2,
-    ce2 = 0.4,
-    mt2 = 0.1,
-    am2 = 0.25,
-    ee2 = 0.6
-  ),
-  Vad = TRUE,
-  Vdd = FALSE,
-  Vcn = TRUE,
-  Vce = TRUE,
-  Vmt = TRUE,
-  Vam = FALSE,
-  Ver = TRUE,
-  temporal = FALSE,
-  p_hist = 0,
-  components = c("a", "e"),
-  start_beta0 = 0.5,
-  start_beta_time = 0,
-  start_gamma = 0,
-  time_point_max = NULL,
-  lbound = 1e-10
+    vars = list(
+      ad2 = 0.5,
+      dd2 = 0.3,
+      cn2 = 0.2,
+      ce2 = 0.4,
+      mt2 = 0.1,
+      am2 = 0.25,
+      ee2 = 0.6
+    ),
+    Vad = TRUE,
+    Vdd = FALSE,
+    Vcn = TRUE,
+    Vce = TRUE,
+    Vmt = TRUE,
+    Vam = FALSE,
+    Ver = TRUE,
+    temporal = FALSE,
+    p_hist = 0,
+    components = c("a", "e"),
+    start_beta0 = 0.5,
+    start_beta_time = 0,
+    start_gamma = 0,
+    time_point_max = NULL,
+    lbound = 1e-10
 ) {
   .require_openmx("buildPedigreeModelCovariance")
 
@@ -140,12 +140,12 @@ buildPedigreeModelCovariance <- function(
 #' @return An OpenMx model containing the \code{B_*}/\code{G_*} parameter matrices.
 #' @keywords internal
 .buildTemporalPedigreeModelCovariance <- function(
-  p_hist = 0,
-  components = c("a", "e"),
-  start_beta0 = 0.5,
-  start_beta_time = 0,
-  start_gamma = 0,
-  time_point_max = NULL
+    p_hist = 0,
+    components = c("a", "e"),
+    start_beta0 = 0.5,
+    start_beta_time = 0,
+    start_gamma = 0,
+    time_point_max = NULL
 ) {
   .require_openmx(".buildTemporalPedigreeModelCovariance")
 
@@ -292,22 +292,22 @@ buildPedigreeModelCovariance <- function(
 #' @export
 
 buildOneFamilyGroup <- function(
-  group_name,
-  Addmat = NULL,
-  Nucmat = NULL,
-  Extmat = NULL,
-  Mtdmat = NULL,
-  Amimat = NULL,
-  Dmgmat = NULL,
-  full_df_row,
-  obs_ids,
-  condenseMatrixSlots = TRUE,
-  temporal = FALSE,
-  birth_year = NULL,
-  H = NULL,
-  use_exp_loadings = FALSE,
-  time_point_max = NULL,
-  clean_ids = FALSE
+    group_name,
+    Addmat = NULL,
+    Nucmat = NULL,
+    Extmat = NULL,
+    Mtdmat = NULL,
+    Amimat = NULL,
+    Dmgmat = NULL,
+    full_df_row,
+    obs_ids,
+    condenseMatrixSlots = TRUE,
+    temporal = FALSE,
+    birth_year = NULL,
+    H = NULL,
+    use_exp_loadings = FALSE,
+    time_point_max = NULL,
+    clean_ids = FALSE
 ) {
   .require_openmx("buildOneFamilyGroup")
   if (clean_ids) {
@@ -405,9 +405,171 @@ buildOneFamilyGroup <- function(
       OpenMx::mxData(observed = full_df_row, type = "raw", sort = FALSE),
       .pedigreeMeanMatrix(fsize, obs_ids, "meanLI"),
       OpenMx::mxAlgebraFromString(algebra_str,
-        name = "V", dimnames = list(obs_ids, obs_ids)
+                                  name = "V", dimnames = list(obs_ids, obs_ids)
       ),
       OpenMx::mxExpectationNormal(covariance = "V", means = "M"),
+      OpenMx::mxFitFunctionML()
+    )
+  )
+
+  do.call(OpenMx::mxModel, model_args)
+}
+
+#' Build one grouped static family model
+#'
+#' This function constructs one OpenMx model for multiple independent family
+#' observations that share the same pedigree structure, relatedness matrices,
+#' variable ordering, expected covariance matrix, and expected mean vector.
+#'
+#' The observed data contain one family per row. The shared matrices, covariance
+#' algebra, expectation, and fit function are stored only once rather than once
+#' per family.
+#'
+#' @param group_name Name of the grouped family model.
+#' @param dat A matrix or data frame where each row represents an independent
+#'   family and columns correspond to pedigree positions.
+#' @param obs_ids A character vector of individual IDs corresponding to the
+#'   columns of \code{dat} and the rows/columns of the relatedness matrices.
+#' @inheritParams buildOneFamilyGroup
+#' @return An OpenMx model containing all static family observations.
+#' @keywords internal
+.buildGroupedStaticFamily <- function(
+    group_name,
+    dat,
+    obs_ids,
+    Addmat = NULL,
+    Nucmat = NULL,
+    Extmat = NULL,
+    Mtdmat = NULL,
+    Amimat = NULL,
+    Dmgmat = NULL,
+    condenseMatrixSlots = TRUE,
+    clean_ids = FALSE
+) {
+  .require_openmx(".buildGroupedStaticFamily")
+
+  if (clean_ids) {
+    obs_ids <- make_clean_personids(obs_ids)
+    # clean once
+    clean_ids <- FALSE
+  }
+
+  dat <- as.data.frame(dat, check.names = FALSE)
+
+  if (nrow(dat) < 1L) {
+    stop("'dat' must contain at least one family row.")
+  }
+
+  if (ncol(dat) != length(obs_ids)) {
+    stop("The number of columns in 'dat' must equal the length of 'obs_ids'.")
+  }
+
+  if (anyDuplicated(obs_ids)) {
+    stop("'obs_ids' must be unique.")
+  }
+
+  colnames(dat) <- obs_ids
+
+  # Determine family size from first available matrix.
+  fsize <- .pedigreeFamilySize(list(Addmat, Dmgmat, Nucmat, Extmat, Mtdmat, Amimat))
+
+  if (length(obs_ids) != fsize) {
+    stop("Length of 'obs_ids' must equal the shared family size.")
+  }
+
+  # If Extmat is requested but not supplied as a matrix, create a unit matrix
+  # (all members share the extended environment equally).
+  if (!is.null(Extmat) && !is.matrix(Extmat)) {
+    Extmat <- matrix(1, nrow = fsize, ncol = fsize)
+  }
+
+  # This is the same static variance-component specification used by
+  # buildOneFamilyGroup(), but it is constructed only once for all rows of dat.
+  mat_spec <- list(
+    list(
+      mat = Addmat,
+      mxname = "A",
+      term = "(A  %x% ModelOne.Vad)"
+    ),
+    list(
+      mat = Dmgmat,
+      mxname = "D",
+      term = "(D  %x% ModelOne.Vdd)"
+    ),
+    list(
+      mat = Nucmat,
+      mxname = "Cn",
+      term = "(Cn %x% ModelOne.Vcn)"
+    ),
+    list(
+      mat = Extmat,
+      mxname = "Ce",
+      term = "(Ce %x% ModelOne.Vce)"
+    ),
+    list(
+      mat = Amimat,
+      mxname = "Am",
+      term = "(Am %x% ModelOne.Vam)"
+    ),
+    list(
+      mat = Mtdmat,
+      mxname = "Mt",
+      term = "(Mt %x% ModelOne.Vmt)"
+    )
+  )
+
+  active <- Filter(function(s) !is.null(s$mat), mat_spec)
+
+  # Build one copy of each shared relatedness matrix.
+  relmat_list <- lapply(active, function(s) {
+    .pedigreeRelatednessMatrix(
+      s$mat,
+      fsize,
+      s$mxname,
+      condense = condenseMatrixSlots,
+      symmetrize = FALSE
+    )
+  })
+
+  # Add one identity matrix for the unique environment.
+  mat_list <- c(
+    list(OpenMx::mxMatrix("Iden", nrow = fsize, ncol = fsize, name = "I")),
+    relmat_list
+  )
+
+  algebra_terms <- vapply(active, `[[`, character(1), "term")
+
+  # Unique environment is always included.
+  algebra_terms <- c(algebra_terms, "(I %x% ModelOne.Ver)")
+
+  algebra_str <- paste(algebra_terms, collapse = " + ")
+
+  # The full data frame is passed to one raw-data model. Each row is an
+  # independent family likelihood contribution under the shared M and V.
+  model_args <- c(
+    list(name = group_name),
+    mat_list,
+    list(
+      OpenMx::mxData(
+        observed = dat,
+        type = "raw",
+        sort = FALSE
+      ),
+      .pedigreeMeanMatrix(
+        fsize,
+        obs_ids,
+        "meanLI"
+      ),
+      OpenMx::mxAlgebraFromString(
+        algebra_str,
+        name = "V",
+        dimnames = list(obs_ids, obs_ids)
+      ),
+      OpenMx::mxExpectationNormal(
+        covariance = "V",
+        means = "M",
+        dimnames = obs_ids
+      ),
       OpenMx::mxFitFunctionML()
     )
   )
@@ -441,17 +603,17 @@ buildOneFamilyGroup <- function(
 #' @return An OpenMx model for the specified family group.
 #' @keywords internal
 .temporalFamilyGroupAlgebra <- function(
-  group_name,
-  fsize,
-  active,
-  relmat_list,
-  full_df_row,
-  obs_ids,
-  birth_year,
-  H = NULL,
-  use_exp_loadings = TRUE,
-  condenseMatrixSlots = TRUE,
-  time_point_max = NULL
+    group_name,
+    fsize,
+    active,
+    relmat_list,
+    full_df_row,
+    obs_ids,
+    birth_year,
+    H = NULL,
+    use_exp_loadings = TRUE,
+    condenseMatrixSlots = TRUE,
+    time_point_max = NULL
 ) {
   if (length(obs_ids) != fsize) stop("Length of obs_ids must equal family size.")
   if (length(birth_year) != fsize) stop("Length of birth_year must equal family size.")
@@ -595,27 +757,30 @@ buildOneFamilyGroup <- function(
 #'   each matching \code{obs_ids} in length and order. Only used when \code{temporal = TRUE}.
 #' @param H_list A list of historical-moderator matrices, one per family. Only used when
 #'   \code{temporal = TRUE}.
+#' @param group_static_families Logical. If TRUE and \code{temporal = FALSE}, build
+#'   one OpenMx raw-data submodel containing all rows of \code{dat}. If FALSE,
+#'   preserve the original behavior of building one submodel per family.
 #' @return A list of OpenMx models for each family group.
 #' @export
 
 buildFamilyGroups <- function(
-  dat,
-  obs_ids,
-  Addmat = NULL,
-  Nucmat = NULL,
-  Extmat = NULL,
-  Mtdmat = NULL,
-  Amimat = NULL,
-  Dmgmat = NULL,
-  prefix = "fam",
-  condenseMatrixSlots = TRUE,
-  temporal = FALSE,
-  birth_year_list = NULL,
-  H_list = NULL,
-  use_exp_loadings = TRUE,
-  time_point_max = NULL,
-  clean_ids = TRUE,
-  group_static_families = FALSE
+    dat,
+    obs_ids,
+    Addmat = NULL,
+    Nucmat = NULL,
+    Extmat = NULL,
+    Mtdmat = NULL,
+    Amimat = NULL,
+    Dmgmat = NULL,
+    prefix = "fam",
+    condenseMatrixSlots = TRUE,
+    temporal = FALSE,
+    birth_year_list = NULL,
+    H_list = NULL,
+    use_exp_loadings = TRUE,
+    time_point_max = NULL,
+    clean_ids = TRUE,
+    group_static_families = FALSE
 ) {
   .require_openmx("buildFamilyGroups")
   if (clean_ids == TRUE) {
@@ -623,10 +788,33 @@ buildFamilyGroups <- function(
     # clean once
     clean_ids <- FALSE
   }
+
+  if (group_static_families && temporal) {
+    stop(
+      "'group_static_families = TRUE' is only supported when 'temporal = FALSE'."
+    )
+  }
+
+  if (group_static_families) {
+    return(list(
+      .buildGroupedStaticFamily(
+        group_name = paste0(prefix, "_grouped"),
+        dat = dat,
+        obs_ids = obs_ids,
+        Addmat = Addmat,
+        Nucmat = Nucmat,
+        Extmat = Extmat,
+        Mtdmat = Mtdmat,
+        Amimat = Amimat,
+        Dmgmat = Dmgmat,
+        condenseMatrixSlots = condenseMatrixSlots,
+        clean_ids = clean_ids
+      )
+    ))
+  }
+
   numfam <- nrow(dat)
   groups <- vector("list", numfam)
-
-
 
   for (afam in seq_len(numfam)) {
     full_df_row <- matrix(dat[afam, ], nrow = 1, dimnames = list(NULL, obs_ids))
@@ -678,22 +866,22 @@ buildFamilyGroups <- function(
 #' @export
 
 buildFamilyGroups_list <- function(
-  dat_list,
-  obs_ids_list,
-  Addmat_list = NULL,
-  Nucmat_list = NULL,
-  Extmat_list = NULL,
-  Mtdmat_list = NULL,
-  Amimat_list = NULL,
-  Dmgmat_list = NULL,
-  prefix = "fam",
-  condenseMatrixSlots = TRUE,
-  temporal = FALSE,
-  birth_year_list = NULL,
-  H_list = NULL,
-  use_exp_loadings = TRUE,
-  time_point_max = NULL,
-  clean_ids = TRUE
+    dat_list,
+    obs_ids_list,
+    Addmat_list = NULL,
+    Nucmat_list = NULL,
+    Extmat_list = NULL,
+    Mtdmat_list = NULL,
+    Amimat_list = NULL,
+    Dmgmat_list = NULL,
+    prefix = "fam",
+    condenseMatrixSlots = TRUE,
+    temporal = FALSE,
+    birth_year_list = NULL,
+    H_list = NULL,
+    use_exp_loadings = TRUE,
+    time_point_max = NULL,
+    clean_ids = TRUE
 ) {
   .require_openmx("buildFamilyGroups_list")
 
@@ -876,57 +1064,73 @@ buildPedigreeMx <- function(model_name, vars, group_models,
 #'   family. Only used when \code{temporal = TRUE} and \code{group_models} is NULL.
 #' @param Mtdmat_list A list of mitochondrial genetic relatedness matrices, one per family. Only
 #'   used when \code{temporal = TRUE} and \code{group_models} is NULL.
-#' @param Amimat_list A list of additive by mitochondrial interaction relatedness matrices, one
-#'   per family. Only used when \code{temporal = TRUE} and \code{group_models} is NULL.
+#' @param Amimat_list A list of additive by mitochondrial interaction relatedness matrices, one per family. Only
+#'   used when \code{temporal = TRUE} and \code{group_models} is NULL.
 #' @param Dmgmat_list A list of dominance genetic relatedness matrices, one per family. Only used
 #'   when \code{temporal = TRUE} and \code{group_models} is NULL.
 #' @param p_hist Integer. Number of historical moderator columns. Only used when
 #'   \code{temporal = TRUE}. If NULL, inferred from \code{H_list}.
+#' @param group_static_families Logical. If TRUE for a static model built from
+#'   \code{data}, build one raw-data submodel containing all family rows. If
+#'   FALSE, preserve the original one-submodel-per-family implementation.
 #' @return A fitted OpenMx model.
 #' @export
 
 fitPedigreeModel <- function(
-  model_name = "PedigreeModel",
-  vars = list(
-    ad2 = 0.5,
-    dd2 = 0.3,
-    cn2 = 0.2,
-    ce2 = 0.4,
-    mt2 = 0.1,
-    am2 = 0.25,
-    ee2 = 0.6
-  ),
-  data = NULL,
-  group_models = NULL,
-  Addmat = NULL,
-  Nucmat = NULL,
-  Extmat = NULL,
-  Mtdmat = NULL,
-  Amimat = NULL,
-  Dmgmat = NULL,
-  tryhard = TRUE,
-  intervals = TRUE,
-  extraTries = 10,
-  condenseMatrixSlots = TRUE,
-  runmodel = TRUE,
-  temporal = FALSE,
-  dat_list = NULL,
-  obs_ids_list = NULL,
-  birth_year_list = NULL,
-  H_list = NULL,
-  Addmat_list = NULL,
-  Nucmat_list = NULL,
-  Extmat_list = NULL,
-  Mtdmat_list = NULL,
-  Amimat_list = NULL,
-  Dmgmat_list = NULL,
-  p_hist = NULL,
-  components = c("a", "d", "cn", "ce", "mt", "am", "e"),
-  use_exp_loadings = FALSE,
-  time_point_max = NULL,
-  clean_ids = TRUE
+    model_name = "PedigreeModel",
+    vars = list(
+      ad2 = 0.5,
+      dd2 = 0.3,
+      cn2 = 0.2,
+      ce2 = 0.4,
+      mt2 = 0.1,
+      am2 = 0.25,
+      ee2 = 0.6
+    ),
+    data = NULL,
+    group_models = NULL,
+    Addmat = NULL,
+    Nucmat = NULL,
+    Extmat = NULL,
+    Mtdmat = NULL,
+    Amimat = NULL,
+    Dmgmat = NULL,
+    tryhard = TRUE,
+    intervals = TRUE,
+    extraTries = 10,
+    condenseMatrixSlots = TRUE,
+    runmodel = TRUE,
+    temporal = FALSE,
+    dat_list = NULL,
+    obs_ids_list = NULL,
+    birth_year_list = NULL,
+    H_list = NULL,
+    Addmat_list = NULL,
+    Nucmat_list = NULL,
+    Extmat_list = NULL,
+    Mtdmat_list = NULL,
+    Amimat_list = NULL,
+    Dmgmat_list = NULL,
+    p_hist = NULL,
+    components = c("a", "d", "cn", "ce", "mt", "am", "e"),
+    use_exp_loadings = FALSE,
+    time_point_max = NULL,
+    clean_ids = TRUE,
+    group_static_families = FALSE
 ) {
   .require_openmx("fitPedigreeModel")
+
+  if (temporal && group_static_families) {
+    stop(
+      "'group_static_families = TRUE' is only supported when 'temporal = FALSE'."
+    )
+  }
+
+  if (!is.null(group_models) && group_static_families) {
+    warning(
+      "'group_static_families' is ignored when pre-built 'group_models' are supplied."
+    )
+  }
 
   if (is.null(group_models)) {
     if (temporal) {
@@ -977,7 +1181,8 @@ fitPedigreeModel <- function(
         Amimat = Amimat,
         Dmgmat = Dmgmat,
         condenseMatrixSlots = condenseMatrixSlots,
-        clean_ids = clean_ids
+        clean_ids = clean_ids,
+        group_static_families = group_static_families
       )
     }
   }
