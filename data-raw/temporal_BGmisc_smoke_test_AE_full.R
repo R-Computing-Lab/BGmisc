@@ -547,5 +547,6 @@ graphing_data_long %>%
   theme_bw() +
   facet_wrap(~type)
 
-
 }
+saveRDS(temporal_model_macce,"tempmacce.rds")
+
