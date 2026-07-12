@@ -474,9 +474,9 @@ if (run_optional_macce) {
 
   temporal_model_macce <- buildTemporalPedigreeMx(
     model_name = "TemporalPedigreeSmokeTest_macce",
-    group_models = macee_group_models,
+    group_models = macce_group_models,
     p_hist = 1,
-    components = c("a", "mt", "e", "cn", "ce")
+    components = c("a", "mt", "e", "cn", "ce"),
     ci = FALSE
   )
 
