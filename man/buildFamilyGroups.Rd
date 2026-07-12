@@ -14,7 +14,9 @@ buildFamilyGroups(
   Amimat = NULL,
   Dmgmat = NULL,
   prefix = "fam",
-  condenseMatrixSlots = TRUE
+  condenseMatrixSlots = TRUE,
+  clean_ids = TRUE,
+  group_static_families = FALSE
 )
 }
 \arguments{
