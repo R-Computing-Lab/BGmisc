@@ -197,12 +197,11 @@ addParentalChain <- function(
     }
 
     # Find all nodes reachable from this person by following paternal edges.
-    reachable_ids <- igraph::subcomponent(
+    reachable_ids <- names(igraph::subcomponent(
       graph = parental_graph,
       v = id_chr,
       mode = traversal_direction
-    ) |>
-      names()
+    ))
 
     # Remove the person themselves from their paternal ancestor list.
     reachable_ids <- setdiff(reachable_ids, id_chr)
