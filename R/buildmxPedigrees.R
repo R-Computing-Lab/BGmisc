@@ -184,6 +184,7 @@ buildPedigreeModelCovariance <- function(
 #' @param condenseMatrixSlots Logical. If TRUE, use the mxCondenseMatrixSlots wrapper to optimize memory usage for large matrices. Default is TRUE.
 #' @param clean_ids Logical. If TRUE, clean the \code{obs_ids} using \code{\link{make_clean_personids}}. Default is FALSE.
 #' @param symmetrize Logical. If TRUE, symmetrize the relatedness matrices before use. Default is FALSE.
+
 #' @return An OpenMx model for the specified family group.
 #' @export
 
@@ -325,6 +326,7 @@ buildOneFamilyGroup <- function(
 #'   family and columns correspond to pedigree positions.
 #' @param obs_ids A character vector of individual IDs corresponding to the
 #'   columns of \code{dat} and the rows/columns of the relatedness matrices.
+#'
 #' @inheritParams buildOneFamilyGroup
 #' @return An OpenMx model containing all static family observations.
 #' @keywords internal
@@ -563,10 +565,6 @@ buildFamilyGroups <- function(
 #' @param Amimat_list A list of additive by mitochondrial interaction relatedness matrices, one per family.
 #' @param Dmgmat_list A list of dominance genetic relatedness matrices, one per family.
 #' @param prefix A prefix for naming the family groups. Default is "fam".
-#' @param birth_year_list A list of numeric birth-year vectors, one per family, each matching
-#'   the corresponding entry of \code{obs_ids_list}. Only used when \code{temporal = TRUE}.
-#' @param H_list A list of historical-moderator matrices, one per family. Only used when
-#'   \code{temporal = TRUE}.
 #' @return A list of OpenMx models for each family group.
 #' @export
 
@@ -580,8 +578,6 @@ buildFamilyGroups_list <- function(
   Amimat_list = NULL,
   Dmgmat_list = NULL,
   prefix = "fam",
-  birth_year_list = NULL,
-  H_list = NULL,
   condenseMatrixSlots = TRUE,
   clean_ids = TRUE
 ) {

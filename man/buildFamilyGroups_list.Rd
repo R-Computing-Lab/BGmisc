@@ -41,12 +41,6 @@ buildFamilyGroups_list(
 \item{condenseMatrixSlots}{Logical. If TRUE, use the mxCondenseMatrixSlots wrapper to optimize memory usage for large matrices. Default is TRUE.}
 
 \item{clean_ids}{Logical. If TRUE, clean the \code{obs_ids} using \code{\link{make_clean_personids}}. Default is FALSE.}
-
-\item{birth_year_list}{A list of numeric birth-year vectors, one per family, each matching
-the corresponding entry of \code{obs_ids_list}. Only used when \code{temporal = TRUE}.}
-
-\item{H_list}{A list of historical-moderator matrices, one per family. Only used when
-\code{temporal = TRUE}.}
 }
 \value{
 A list of OpenMx models for each family group.
