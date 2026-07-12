@@ -43,12 +43,12 @@ n_families <- 150
 threshold_year <- 1776
 sim_components <- c(
   "a", # "cn","ce",
-  # "mt",
+   "mt",
   "e"
 )
 fit_components <- c(
-  "a", # "cn","ce",
-  # "mt",
+  "a",  "cn","ce",
+   "mt",
   "e"
 )
 
@@ -67,7 +67,7 @@ true_beta <- list(
 
 
 true_gamma <- list(
-  a  = -0.5,
+  a  = 0.5,
   cn = 0.00,
   ce = 0.00,
   mt = 0.00,
@@ -390,9 +390,162 @@ if (run_optional_ame) {
     ci = FALSE
   )
 
-  temporal_model_ame0 <- free_only(
+  temporal_model_ame3 <- free_only(
     temporal_model_ame,
-    labels_to_free = c("b_a_0", "b_mt_0", "b_e_0", "mean_y")
+    labels_to_free = c("b_a_0", "b_mt_0", "b_e_0", "mean_y", "b_a_1", "b_mt_1", "b_e_1", "g_a_1", "g_mt_1", "g_e_1")
   )
-  fit_ame0 <- run_and_report(temporal_model_ame0, "AME intercept-only", tries = 30)
+  fit_ame3 <- run_and_report(temporal_model_ame3, "AME all", tries = 30)
+
+
+est <- est_linear_h_ae <- omxGetParameters(fit_ame3)[names(target)]
+
+round(cbind(target = target, estimate = est, diff = est - target), 3)
+
+
+
+graphing_data <- data.frame(
+  time = seq(-3, 3, length.out = 100),
+  historical = c(0, 1)
+)
+
+graphing_data$estimated_a_variance <- exp(est["b_a_0"] + est["b_a_1"] * graphing_data$time + est["g_a_1"] * graphing_data$historical)
+graphing_data$true_a_variance <- exp(target["b_a_0"] + target["b_a_1"] * graphing_data$time + target["g_a_1"] * graphing_data$historical)
+graphing_data$estimated_m_variance <- exp(est["b_mt_0"] + est["b_mt_1"] * graphing_data$time + est["g_mt_1"] * graphing_data$historical)
+graphing_data$true_m_variance <- exp(target["b_mt_0"] + target["b_mt_1"] * graphing_data$time + target["g_mt_1"] * graphing_data$historical)
+graphing_data$estimated_e_variance <- exp(est["b_e_0"] + est["b_e_1"] * graphing_data$time + est["g_e_1"] * graphing_data$historical)
+
+graphing_data$true_e_variance <- exp(target["b_e_0"] + target["b_e_1"] * graphing_data$time + target["g_e_1"] * graphing_data$historical)
+graphing_data$estimated_total_variance <- graphing_data$estimated_a_variance + graphing_data$estimated_e_variance+graphing_data$estimated_m_variance
+graphing_data$true_total_variance <- graphing_data$true_a_variance + graphing_data$true_e_variance + graphing_data$estimated_m_variance + graphing_data$true_m_variance
+graphing_data$unscaled_time <- graphing_data$time * sd(unlist(lapply(families, function(x) x$birth_year_scaled))) + mean(unlist(lapply(families, function(x) x$birth_year_scaled)))
+
+graphing_data_long <- # have a true and estimated factor
+  graphing_data %>%
+  tidyr::pivot_longer(
+    cols = c(estimated_a_variance, true_a_variance, estimated_e_variance,
+             estimated_m_variance, true_m_variance,
+             true_e_variance, estimated_total_variance, true_total_variance),
+    names_to = c("type", "component", NA),
+    names_sep = "_",
+    values_to = "variance"
+  )
+
+graphing_data_long %>%
+  filter(component %in% c("a", "e", "m")) %>%
+  ggplot() +
+  geom_line(aes(
+    x = unscaled_time, y = variance, linetype = factor(historical),
+    color = factor(component)
+  )) +
+  labs(title = "Estimated Variance as a function of time and historical moderator", x = "Scaled Birth Year", y = "Estimated Variance", color = "Variance Component") +
+  theme_bw() +
+  facet_wrap(~type)
+
+
+}
+
+
+
+print(results_summary)
+# -----------------------------------------------------------------------------
+# Optional MACE test after AE runs
+# -----------------------------------------------------------------------------
+
+run_optional_macee <- T
+
+if (run_optional_macce) {
+  macce_group_models <- vector("list", n_families)
+  for (i in seq_len(n_families)) {
+    fam <- families[[i]]
+    macce_group_models[[i]] <- buildOneTemporalFamilyGroup(
+      group_name = paste0("macce_family", i),
+      Addmat = fam$A,
+      Nucmat = fam$Cn,
+      Extmat = fam$Ce,
+      Mtdmat = fam$Mt,
+      Dmgmat = NULL,
+      full_df_row = fam$y,
+      obs_ids = fam$obs_ids,
+      birth_year = fam$birth_year_scaled,
+      H = fam$H,
+      use_exp_loadings = TRUE
+    )
+  }
+
+  temporal_model_macce <- buildTemporalPedigreeMx(
+    model_name = "TemporalPedigreeSmokeTest_macce",
+    group_models = macee_group_models,
+    p_hist = 1,
+    components = c("a", "mt", "e", "cn", "ce")
+    ci = FALSE
+  )
+
+  temporal_model_macce <- free_only(
+    temporal_model_macce,
+    labels_to_free = c("b_a_0", "b_mt_0", "b_e_0", "mean_y", "b_a_1", "b_mt_1", "b_e_1", "g_a_1", "g_mt_1", "g_e_1",
+                       "b_cn_0", "b_cn_1", "g_cn_1", "b_ce_0", "b_ce_1", "g_ce_1")
+  )
+  fit_macce <- run_and_report(temporal_model_macce, "MACCE all", tries = 30)
+
+
+est <- est_linear_h_macee <- omxGetParameters(fit_macce)[names(target)]
+
+round(cbind(target = target, estimate = est, diff = est - target), 3)
+
+
+
+graphing_data <- data.frame(
+  time = seq(-3, 3, length.out = 100),
+  historical = c(0, 1)
+)
+
+graphing_data$estimated_a_variance <- exp(est["b_a_0"] + est["b_a_1"] * graphing_data$time + est["g_a_1"] * graphing_data$historical)
+graphing_data$true_a_variance <- exp(target["b_a_0"] + target["b_a_1"] * graphing_data$time + target["g_a_1"] * graphing_data$historical)
+
+graphing_data$estimated_m_variance <- exp(est["b_mt_0"] + est["b_mt_1"] * graphing_data$time + est["g_mt_1"] * graphing_data$historical)
+graphing_data$true_m_variance <- exp(target["b_mt_0"] + target["b_mt_1"] * graphing_data$time + target["g_mt_1"] * graphing_data$historical)
+
+graphing_data$estimated_cn_variance <- exp(est["b_cn_0"] + est["b_cn_1"] * graphing_data$time + est["g_cn_1"] * graphing_data$historical)
+graphing_data$true_cn_variance <- exp(target["b_cn_0"] + target["b_cn_1"] * graphing_data$time + target["g_cn_1"] * graphing_data$historical)
+
+graphing_data$estimated_ce_variance <- exp(est["b_ce_0"] + est["b_ce_1"] * graphing_data$time + est["g_ce_1"] * graphing_data$historical)
+graphing_data$true_ce_variance <- exp(target["b_ce_0"] + target["b_ce_1"] * graphing_data$time + target["g_ce_1"] * graphing_data$historical)
+
+graphing_data$estimated_e_variance <- exp(est["b_e_0"] + est["b_e_1"] * graphing_data$time + est["g_e_1"] * graphing_data$historical)
+graphing_data$true_e_variance <- exp(target["b_e_0"] + target["b_e_1"] * graphing_data$time + target["g_e_1"] * graphing_data$historical)
+
+graphing_data$estimated_total_variance <- graphing_data$estimated_a_variance + graphing_data$estimated_e_variance+graphing_data$estimated_m_variance +
+  graphing_data$estimated_cn_variance + graphing_data$estimated_ce_variance
+
+graphing_data$true_total_variance <- graphing_data$true_a_variance + graphing_data$true_e_variance + graphing_data$true_m_variance +
+  graphing_data$true_cn_variance + graphing_data$true_ce_variance
+
+graphing_data$unscaled_time <- graphing_data$time * sd(unlist(lapply(families, function(x) x$birth_year_scaled))) + mean(unlist(lapply(families, function(x) x$birth_year_scaled)))
+
+graphing_data_long <- # have a true and estimated factor
+  graphing_data %>%
+  tidyr::pivot_longer(
+    cols = c(estimated_a_variance, true_a_variance, estimated_e_variance,
+             estimated_m_variance, true_m_variance,
+             true_e_variance, estimated_total_variance, true_total_variance,
+             estimated_cn_variance, true_cn_variance,
+             estimated_ce_variance, true_ce_variance
+             ),
+    names_to = c("type", "component", NA),
+    names_sep = "_",
+    values_to = "variance"
+  )
+
+graphing_data_long %>%
+  filter(component %in% c("a", "e", "m", "cn", "ce")) %>%
+  ggplot() +
+  geom_line(aes(
+    x = unscaled_time, y = variance, linetype = factor(historical),
+    color = factor(component)
+  )) +
+  labs(title = "Estimated Variance as a function of time and historical moderator", x = "Scaled Birth Year", y = "Estimated Variance", color = "Variance Component") +
+  theme_bw() +
+  facet_wrap(~type)
+
+
 }
