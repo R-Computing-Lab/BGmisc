@@ -31,8 +31,9 @@ make_time_vars <- function(ped, threshold_year = 1776, birth_year_sd = 3,
   )
 }
 
-make_lambda <- function(t_i, H_i, beta, gamma) {
-  Tpoly <- cbind(1, t_i, t_i^2, t_i^3)
+make_lambda <- function(t_i, H_i, beta, gamma, poly = 3){
+
+  Tpoly <- cbind(1, t_i^1:poly)
   as.vector(Tpoly %*% matrix(beta, ncol = 1) + H_i %*% matrix(gamma, ncol = 1))
 }
 
