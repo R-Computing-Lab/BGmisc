@@ -177,6 +177,8 @@ buildPedigreeModelCovariance <- function(
 #'   \code{full_df_row} and the rows/columns of the relatedness matrices. Must be in the
 #'   same order as the relatedness matrix rows.
 #' @param condenseMatrixSlots Logical. If TRUE, use the mxCondenseMatrixSlots wrapper to optimize memory usage for large matrices. Default is TRUE.
+#' @param clean_ids Logical. If TRUE, clean the \code{obs_ids} using \code{\link{make_clean_personids}}. Default is FALSE.
+#' @param symmetrize Logical. If TRUE, symmetrize the relatedness matrices before use. Default is FALSE.
 #' @return An OpenMx model for the specified family group.
 #' @export
 
@@ -203,7 +205,7 @@ buildOneFamilyGroup <- function(
   # Determine family size from first available matrix. Shared by both branches below.
   if ( # not any of the matrices are provided
     is.null(Addmat) && is.null(Dmgmat) && is.null(Nucmat) &&
-    is.null(Extmat) && is.null(Mtdmat) && is.null(Amimat)
+      is.null(Extmat) && is.null(Mtdmat) && is.null(Amimat)
   ) {
     warning("At least one relatedness matrix should be provided. Using the number of columns in 'full_df_row' as family size.")
     fsize <- ncol(full_df_row)
@@ -293,7 +295,7 @@ buildOneFamilyGroup <- function(
       OpenMx::mxData(observed = full_df_row, type = "raw", sort = FALSE),
       .pedigreeMeanMatrix(fsize, obs_ids, "meanLI"),
       OpenMx::mxAlgebraFromString(algebra_str,
-                                  name = "V", dimnames = list(obs_ids, obs_ids)
+        name = "V", dimnames = list(obs_ids, obs_ids)
       ),
       OpenMx::mxExpectationNormal(covariance = "V", means = "M"),
       OpenMx::mxFitFunctionML()
@@ -322,17 +324,17 @@ buildOneFamilyGroup <- function(
 #' @return An OpenMx model containing all static family observations.
 #' @keywords internal
 .buildGroupedStaticFamily <- function(
-    group_name,
-    dat,
-    obs_ids,
-    Addmat = NULL,
-    Nucmat = NULL,
-    Extmat = NULL,
-    Mtdmat = NULL,
-    Amimat = NULL,
-    Dmgmat = NULL,
-    condenseMatrixSlots = TRUE,
-    clean_ids = FALSE
+  group_name,
+  dat,
+  obs_ids,
+  Addmat = NULL,
+  Nucmat = NULL,
+  Extmat = NULL,
+  Mtdmat = NULL,
+  Amimat = NULL,
+  Dmgmat = NULL,
+  condenseMatrixSlots = TRUE,
+  clean_ids = FALSE
 ) {
   .require_openmx(".buildGroupedStaticFamily")
 
@@ -563,17 +565,17 @@ buildFamilyGroups <- function(
 #' @export
 
 buildFamilyGroups_list <- function(
-    dat_list,
-    obs_ids_list,
-    Addmat_list = NULL,
-    Nucmat_list = NULL,
-    Extmat_list = NULL,
-    Mtdmat_list = NULL,
-    Amimat_list = NULL,
-    Dmgmat_list = NULL,
-    prefix = "fam",
-    condenseMatrixSlots = TRUE,
-    clean_ids = TRUE
+  dat_list,
+  obs_ids_list,
+  Addmat_list = NULL,
+  Nucmat_list = NULL,
+  Extmat_list = NULL,
+  Mtdmat_list = NULL,
+  Amimat_list = NULL,
+  Dmgmat_list = NULL,
+  prefix = "fam",
+  condenseMatrixSlots = TRUE,
+  clean_ids = TRUE
 ) {
   .require_openmx("buildFamilyGroups_list")
 
@@ -675,7 +677,7 @@ buildPedigreeMx <- function(model_name, vars, group_models,
     Ver = isTRUE(flags$Ver)
   )
 
-  ci_obj <- if (ci & any(flags$Vad, flags$Vdd, flags$Vcn, flags$Vce, flags$Vmt, flags$Vam, flags$Ver)) {
+  ci_obj <- if (ci && any(flags$Vad, flags$Vdd, flags$Vcn, flags$Vce, flags$Vmt, flags$Vam, flags$Ver)) {
     OpenMx::mxCI(c("vad", "vdd", "vcn", "vce", "vmt", "vam", "ver")[c(flags$Vad, flags$Vdd, flags$Vcn, flags$Vce, flags$Vmt, flags$Vam, flags$Ver)])
   } else {
     NULL
@@ -850,4 +852,3 @@ make_clean_personids <- function(ids) {
   .require_openmx("make_clean_personids")
   OpenMx::mxMakeNames(as.character(ids))
 }
-

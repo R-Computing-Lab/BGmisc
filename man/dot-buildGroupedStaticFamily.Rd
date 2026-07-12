@@ -43,6 +43,8 @@ is created automatically.}
 \item{Dmgmat}{Dominance genetic relatedness matrix.}
 
 \item{condenseMatrixSlots}{Logical. If TRUE, use the mxCondenseMatrixSlots wrapper to optimize memory usage for large matrices. Default is TRUE.}
+
+\item{clean_ids}{Logical. If TRUE, clean the \code{obs_ids} using \code{\link{make_clean_personids}}. Default is FALSE.}
 }
 \value{
 An OpenMx model containing all static family observations.

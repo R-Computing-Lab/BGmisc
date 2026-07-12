@@ -43,7 +43,11 @@ is created automatically.}
 \code{full_df_row} and the rows/columns of the relatedness matrices. Must be in the
 same order as the relatedness matrix rows.}
 
+\item{symmetrize}{Logical. If TRUE, symmetrize the relatedness matrices before use. Default is FALSE.}
+
 \item{condenseMatrixSlots}{Logical. If TRUE, use the mxCondenseMatrixSlots wrapper to optimize memory usage for large matrices. Default is TRUE.}
+
+\item{clean_ids}{Logical. If TRUE, clean the \code{obs_ids} using \code{\link{make_clean_personids}}. Default is FALSE.}
 }
 \value{
 An OpenMx model for the specified family group.
