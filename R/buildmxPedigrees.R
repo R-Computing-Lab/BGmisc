@@ -221,16 +221,21 @@ buildPedigreeModelCovariance <- function(
 #' @keywords internal
 .pedigreeRelatednessMatrix <- function(mat, fsize, name, condense = TRUE, symmetrize = FALSE) {
   if (is.null(mat)) stop("Relatedness matrix cannot be NULL.")
-  # keep dense if dense, or sparse if sparse, but symmetrize if requested
-  if (inherits(mat, "Matrix")) {
-    values <- if (symmetrize) make_symmetric(mat) else mat
-  } else {
-    values <- if (symmetrize) make_symmetric(mat) else as.matrix(mat)
-  }
-  m <- OpenMx::mxMatrix(
+  # Symmetrize if requested, then coerce to a base dense matrix. OpenMx::mxMatrix()
+  # accepts only a scalar, vector, or base R matrix for 'values'; a Matrix-package
+  # sparse object (e.g. the dsCMatrix returned by ped2add(sparse = TRUE)) is rejected
+  # by matrixCheckArgument(), so it must be densified here.
+  values <- if (symmetrize) make_symmetric(mat) else mat
+  values <- as.matrix(values)
+ #todo allow this to be sparse and use sparse algebra in OpenMx
+  m <-   tryCatch( OpenMx::mxMatrix(
     type = "Symm", nrow = fsize, ncol = fsize, free = FALSE,
     values = values, name = name
-  )
+  ), error = function(e) {
+    print(values)
+    stop("Error creating mxMatrix for ", name, ": ", e$message)
+  })
+
   if (condense) m <- condenseMatrixSlots(m)
   m
 }
