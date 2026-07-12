@@ -45,6 +45,8 @@ is created automatically.}
 \item{condenseMatrixSlots}{Logical. If TRUE, use the mxCondenseMatrixSlots wrapper to optimize memory usage for large matrices. Default is TRUE.}
 
 \item{clean_ids}{Logical. If TRUE, clean the \code{obs_ids} using \code{\link{make_clean_personids}}. Default is FALSE.}
+
+\item{group_static_families}{Logical. If TRUE, build one grouped static family model instead of separate models for each family. Default is FALSE.}
 }
 \value{
 A list of OpenMx models for each family group.

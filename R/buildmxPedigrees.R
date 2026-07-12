@@ -476,6 +476,7 @@ buildOneFamilyGroup <- function(
 #' @param obs_ids A character vector of individual IDs corresponding to the columns of \code{dat}
 #'   and the rows/columns of the relatedness matrices.
 #' @param prefix A prefix for naming the family groups. Default is "fam".
+#' @param group_static_families Logical. If TRUE, build one grouped static family model instead of separate models for each family. Default is FALSE.
 #' @return A list of OpenMx models for each family group.
 #' @export
 
@@ -683,7 +684,11 @@ buildPedigreeMx <- function(model_name, vars, group_models,
     NULL
   }
 
-  .assemblePedigreeMx(model_name, model_one, group_models, ci_obj)
+  .assemblePedigreeMx(
+    model_name = model_name,
+    model_one = model_one,
+    group_models = group_models,
+    ci_obj  = ci_obj)
 }
 
 #' Fit an OpenMx pedigree model to observed data
