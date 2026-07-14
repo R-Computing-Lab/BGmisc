@@ -71,10 +71,6 @@ loading_link <- if (use_exp_loadings) {
   "identity"
 }
 
-# to do: resolve: default method not implemented for type 'list' error that occurs
-
-
-
 # Save a checkpoint after every completed replication. This is slower than
 # saving only at the end, but protects a long simulation from data loss.
 save_checkpoints <- TRUE
@@ -106,10 +102,10 @@ fit_components <- c(
   "e"
 )
 
-# Data-generating parameters.
-# These are linear-loading parameters used for simulation. The fitted model
-# uses exp(loadings). The target transformation below follows the same mapping
-# used in the original smoke-test script.
+# Data-generating parameters, expressed on the exponential-loading scale.
+# Element j of true_beta[[k]] is the coefficient on time^(j-1), so
+#   lambda_k = exp(beta_k0 + beta_k1 * t + beta_k2 * t^2 + beta_k3 * t^3 + gamma_k * H)
+# and component k contributes lambda_k^2 to the phenotypic variance.
 true_beta <- list(
   a  = c(log(2), 0.1, -0.1, 0.00),
   cn = c(log(1.0), 0.00, 0.00, 0.00),
@@ -127,20 +123,27 @@ true_gamma <- list(
 )
 
 
-# The parameters estimated in the true fitted model.
+# The parameters estimated in the true fitted model. The simulator
+# (simulate_temporal_family -> make_lambda, loading_link = "exp") and the fitted
+# model (buildOneFamilyGroup -> L_k = exp(Tpoly %*% B_k + H %*% G_k)) share the
+# same parameterization, so each generating coefficient is its own target and no
+# transformation is applied. A log()/ratio mapping would only be appropriate if
+# the simulator used linear (identity) loadings.
+stopifnot(use_exp_loadings, loading_link == "exp")
+
 target <- c(
-  b_a_0 = if (true_beta$a[1] != 0) log(true_beta$a[1]) else 0,
-  b_a_1 = if (true_beta$a[1] != 0) true_beta$a[2] / true_beta$a[1] else 0,
-  b_a_2 = if (true_beta$a[1] != 0) true_beta$a[3] / true_beta$a[1] else 0,
-  g_a_1 = if (true_beta$a[1] != 0) true_gamma$a[1] / true_beta$a[1] else 0,
-  b_cn_0 = if (true_beta$cn[1] != 0) log(true_beta$cn[1]) else 0,
-  b_cn_1 = if (true_beta$cn[1] != 0) true_beta$cn[2] / true_beta$cn[1] else 0,
-  b_cn_2 = if (true_beta$cn[1] != 0) true_beta$cn[3] / true_beta$cn[1] else 0,
-  g_cn_1 = if (true_beta$cn[1] != 0) true_gamma$cn[1] / true_beta$cn[1] else 0,
-  b_e_0 = if (true_beta$e[1] != 0) log(true_beta$e[1]) else 0,
-  b_e_1 = if (true_beta$e[1] != 0) true_beta$e[2] / true_beta$e[1] else 0,
-  b_e_2 = if (true_beta$e[1] != 0) true_beta$e[3] / true_beta$e[1] else 0,
-  g_e_1 = if (true_beta$e[1] != 0) true_gamma$e[1] / true_beta$e[1] else 0
+  b_a_0 = true_beta$a[1],
+  b_a_1 = true_beta$a[2],
+  b_a_2 = true_beta$a[3],
+  g_a_1 = true_gamma$a[1],
+  b_cn_0 = true_beta$cn[1],
+  b_cn_1 = true_beta$cn[2],
+  b_cn_2 = true_beta$cn[3],
+  g_cn_1 = true_gamma$cn[1],
+  b_e_0 = true_beta$e[1],
+  b_e_1 = true_beta$e[2],
+  b_e_2 = true_beta$e[3],
+  g_e_1 = true_gamma$e[1]
 )
 
 labels_to_free <- c(names(target), "mean_y")
@@ -243,6 +246,48 @@ build_true_model <- function(families, replication) {
   )
 }
 
+# OpenMx reports parameters in several shapes: omxGetParameters(fetch = "all")
+# returns a data.frame whose labels are rownames and whose estimates are the
+# "values" column, while output$standardErrors is a one-column matrix whose
+# labels are also rownames. In both cases names() returns something other than
+# the parameter labels. Collapse either shape to a named numeric vector.
+as_named_parameter_vector <- function(x) {
+  if (is.null(x) || length(x) == 0L) {
+    return(NULL)
+  }
+
+  labels <- if (!is.null(rownames(x))) rownames(x) else names(x)
+
+  values <- if (is.data.frame(x)) x[["values"]] else as.numeric(x)
+
+  if (is.null(labels) || is.null(values) || length(labels) != length(values)) {
+    return(NULL)
+  }
+
+  stats::setNames(as.numeric(values), labels)
+}
+
+# Look parameters up by label, leaving NA where the fit does not supply one.
+# as.numeric() on the right-hand side is load-bearing: assigning a list or
+# data.frame into a numeric vector coerces the vector to a list, even when the
+# index is empty, which turns a label mismatch into a downstream is.finite()
+# failure instead of a missing value.
+pick_by_label <- function(source, wanted) {
+  out <- stats::setNames(rep(NA_real_, length(wanted)), wanted)
+
+  if (is.null(source)) {
+    return(out)
+  }
+
+  available <- intersect(wanted, names(source))
+
+  if (length(available) > 0L) {
+    out[available] <- as.numeric(source[available])
+  }
+
+  out
+}
+
 fit_one_dataset <- function(model) {
   fit <- run_and_report(
     model,
@@ -253,45 +298,16 @@ fit_one_dataset <- function(model) {
   status_code <- as.integer(fit$output$status$code)
   status_message <- fit$output$status$status
 
-  all_estimates <- omxGetParameters(fit, fetch = 'all')
+  all_estimates <- as_named_parameter_vector(
+    omxGetParameters(fit, fetch = "all")
+  )
 
-  estimates <- stats::setNames(
-    rep(NA_real_, length(target)),
+  estimates <- pick_by_label(all_estimates, names(target))
+
+  standard_errors <- pick_by_label(
+    as_named_parameter_vector(fit$output$standardErrors),
     names(target)
   )
-
-  available_estimates <- intersect(
-    names(target),
-    names(all_estimates)
-  )
-
-  estimates[available_estimates] <-
-    all_estimates[available_estimates]
-
-  all_standard_errors <- fit$output$standardErrors
-
-  standard_errors <- stats::setNames(
-    rep(NA_real_, length(target)),
-    names(target)
-  )
-
-  if (!is.null(all_standard_errors)) {
-    if (is.null(names(all_standard_errors)) &&
-        length(all_standard_errors) == length(all_estimates)) {
-      names(all_standard_errors) <- names(all_estimates)
-    }
-
-    if (!is.null(names(all_standard_errors))) {
-      available_standard_errors <- intersect(
-        names(target),
-        names(all_standard_errors)
-      )
-
-      standard_errors[available_standard_errors] <-
-        all_standard_errors[available_standard_errors]
-    }
-  }
-
 
    list(
     fit = fit,
@@ -592,35 +608,35 @@ print(recovery_summary)
 # Parameter-recovery plot
 # -----------------------------------------------------------------------------
 
-recovery_plot <- ggplot2::ggplot(
+recovery_plot <- ggplot(
   recovery_summary,
-  ggplot2::aes(
+  aes(
     x = stats::reorder(parameter, true_value),
     y = mean_estimate
   )
 ) +
-  ggplot2::geom_hline(yintercept = 0, linewidth = 0.3) +
-  ggplot2::geom_errorbar(
-    ggplot2::aes(ymin = mc_lower, ymax = mc_upper),
+  geom_hline(yintercept = 0, linewidth = 0.3) +
+  geom_errorbar(
+    aes(ymin = mc_lower, ymax = mc_upper),
     width = 0.15
   ) +
-  ggplot2::geom_point(size = 2) +
-  ggplot2::geom_point(
-    ggplot2::aes(y = true_value),
+  geom_point(size = 2) +
+  geom_point(
+    aes(y = true_value),
     shape = 4,
     size = 3,
     stroke = 1
   ) +
-  ggplot2::coord_flip() +
-  ggplot2::theme_bw() +
-  ggplot2::labs(
+  coord_flip() +
+  theme_bw() +
+  labs(
     title = "Temporal AE Monte Carlo Parameter Recovery",
     subtitle = "Points are Monte Carlo means; crosses are generating values",
     x = "Parameter",
     y = "Estimate"
   )
 
-ggplot2::ggsave(
+ggsave(
   filename = plot_file,
   plot = recovery_plot,
   width = 8,
@@ -766,14 +782,14 @@ if (FIGURE) {
   if (!file.exists(replication_file)) {
     stop(
       "Could not find: ", replication_file,
-      "\nRun temporal_BGmisc_AE_parameter_recovery.R first."
+      "\nRun temporal_BGmisc_ACE_parameter_recovery.R first."
     )
   }
 
   if (!file.exists(recovery_file)) {
     stop(
       "Could not find: ", recovery_file,
-      "\nRun temporal_BGmisc_AE_parameter_recovery.R first."
+      "\nRun temporal_BGmisc_ACE_parameter_recovery.R first."
     )
   }
 
@@ -870,30 +886,35 @@ if (FIGURE) {
     ) %>%
     mutate(
       historical = as.integer(time > historical_threshold),
-      a_variance = exp(
-  2 * (
-    b_a_0 +
-      b_a_1 * time +
-      b_a_2 * time^2 +
-      g_a_1 * historical
-  )
-),
-cn_variance = exp(2 *( b_cn_0 + b_cn_1 * time + g_cn_1 * historical)),
+      # Each component contributes lambda^2 = exp(2 * eta) to the variance.
+      a_variance = exp(2 * (
+        b_a_0 +
+          b_a_1 * time +
+          b_a_2 * time^2 +
+          g_a_1 * historical
+      )),
+      cn_variance = exp(2 * (
+        b_cn_0 +
+          b_cn_1 * time +
+          b_cn_2 * time^2 +
+          g_cn_1 * historical
+      )),
       e_variance = exp(2 * (
         b_e_0 +
           b_e_1 * time +
           b_e_2 * time^2 +
           g_e_1 * historical
       )),
-      total_variance =   a_variance +
-  cn_variance +
-  e_variance
+      total_variance = a_variance +
+        cn_variance +
+        e_variance
     ) %>%
     select(
       replication,
       time,
       historical,
       a_variance,
+      cn_variance,
       e_variance,
       total_variance
     ) %>%
@@ -935,27 +956,39 @@ cn_variance = exp(2 *( b_cn_0 + b_cn_1 * time + g_cn_1 * historical)),
   ) %>%
     mutate(
       historical = as.integer(time > historical_threshold),
-      a_variance = exp(
+      # Must mirror recovered_curves exactly, or the two lines are not comparable.
+      a_variance = exp(2 * (
         true_parameters$b_a_0 +
           true_parameters$b_a_1 * time +
+          true_parameters$b_a_2 * time^2 +
           true_parameters$g_a_1 * historical
-      ),
-      e_variance = exp(
+      )),
+      cn_variance = exp(2 * (
+        true_parameters$b_cn_0 +
+          true_parameters$b_cn_1 * time +
+          true_parameters$b_cn_2 * time^2 +
+          true_parameters$g_cn_1 * historical
+      )),
+      e_variance = exp(2 * (
         true_parameters$b_e_0 +
           true_parameters$b_e_1 * time +
+          true_parameters$b_e_2 * time^2 +
           true_parameters$g_e_1 * historical
-      ),
-      total_variance = a_variance + e_variance
+      )),
+      total_variance = a_variance +
+        cn_variance +
+        e_variance
     ) %>%
     select(
       time,
       historical,
       a_variance,
+      cn_variance,
       e_variance,
       total_variance
     ) %>%
     pivot_longer(
-      cols = c(a_variance, e_variance, total_variance),
+      cols = c(a_variance, cn_variance, e_variance, total_variance),
       names_to = "component",
       values_to = "population_variance"
     )
@@ -979,9 +1012,12 @@ cn_variance = exp(2 *( b_cn_0 + b_cn_1 * time + g_cn_1 * historical)),
       #  ),
       component = factor(
         component,
-        levels = c("a_variance", "e_variance", "total_variance"),
+        levels = c("a_variance",
+                   "cn_variance",
+                   "e_variance", "total_variance"),
         labels = c(
           "Additive genetic variance",
+          "Common environmental variance",
           "Nonshared environmental variance",
           "Total phenotypic variance"
         )
@@ -1118,20 +1154,29 @@ if (FIGURE) {
     ) %>%
     mutate(
       #  historical = as.integer(time > historical_threshold),
-      a_variance = exp(b_a_0 + b_a_1 * time + g_a_1 * historical),
-      e_variance = exp(b_e_0 + b_e_1 * time + g_e_1 * historical),
-      total_variance = a_variance + e_variance
+      # Each component contributes lambda^2 = exp(2 * eta) to the variance.
+      a_variance = exp(2 * (
+        b_a_0 + b_a_1 * time + b_a_2 * time^2 + g_a_1 * historical
+      )),
+      cn_variance = exp(2 * (
+        b_cn_0 + b_cn_1 * time + b_cn_2 * time^2 + g_cn_1 * historical
+      )),
+      e_variance = exp(2 * (
+        b_e_0 + b_e_1 * time + b_e_2 * time^2 + g_e_1 * historical
+      )),
+      total_variance = a_variance + cn_variance + e_variance
     ) %>%
     select(
       replication,
       time,
       historical,
       a_variance,
+      cn_variance,
       e_variance,
       total_variance
     ) %>%
     pivot_longer(
-      cols = c(a_variance, e_variance, total_variance),
+      cols = c(a_variance, cn_variance, e_variance, total_variance),
       names_to = "component",
       values_to = "recovered_variance"
     )
@@ -1159,27 +1204,37 @@ if (FIGURE) {
     historical = c(0L, 1L),
   ) %>%
     mutate(
-      a_variance = exp(
+      # Must mirror recovered_curves_a exactly, or the two lines are not comparable.
+      a_variance = exp(2 * (
         true_parameters$b_a_0 +
           true_parameters$b_a_1 * time +
+          true_parameters$b_a_2 * time^2 +
           true_parameters$g_a_1 * historical
-      ),
-      e_variance = exp(
+      )),
+      cn_variance = exp(2 * (
+        true_parameters$b_cn_0 +
+          true_parameters$b_cn_1 * time +
+          true_parameters$b_cn_2 * time^2 +
+          true_parameters$g_cn_1 * historical
+      )),
+      e_variance = exp(2 * (
         true_parameters$b_e_0 +
           true_parameters$b_e_1 * time +
+          true_parameters$b_e_2 * time^2 +
           true_parameters$g_e_1 * historical
-      ),
-      total_variance = a_variance + e_variance
+      )),
+      total_variance = a_variance + cn_variance + e_variance
     ) %>%
     select(
       time,
       historical,
       a_variance,
+      cn_variance,
       e_variance,
       total_variance
     ) %>%
     pivot_longer(
-      cols = c(a_variance, e_variance, total_variance),
+      cols = c(a_variance, cn_variance, e_variance, total_variance),
       names_to = "component",
       values_to = "population_variance"
     )
@@ -1204,9 +1259,15 @@ if (FIGURE) {
       ),
       component = factor(
         component,
-        levels = c("a_variance", "e_variance", "total_variance"),
+        levels = c(
+          "a_variance",
+          "cn_variance",
+          "e_variance",
+          "total_variance"
+        ),
         labels = c(
           "Additive genetic variance",
+          "Common environmental variance",
           "Nonshared environmental variance",
           "Total phenotypic variance"
         )
@@ -1300,10 +1361,7 @@ if (FIGURE) {
 
   # -----------------------------------------------------------------------------
 
-  ggplot2::geom_line(ggplot2::aes(
-    x = unscaled_time, y = variance, linetype = factor(historical),
-    color = factor(component)
-  )) +
+
     ggsave(
       filename = output_pnga,
       plot = panel_a,
