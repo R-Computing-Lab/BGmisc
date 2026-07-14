@@ -49,12 +49,15 @@ source(file.path("data-raw", "smoketest_helpers.R"))
 # -----------------------------------------------------------------------------
 
 master_seed <- 202601
-n_replications <- 1
-n_families <- 15
-threshold_year <- 3
-birth_year_sd <- .5
-birth_year_base <- 1
-gen_gap <- 1
+n_replications <- 50
+n_families <- 150
+threshold_year <- 1776
+# Standard deviation of the birth-year range, widened here for broader time
+# coverage. It is not linked to parental age, so at this width about 8% of
+# parent-child pairs end up with the child born before the parent.
+birth_year_sd <- 12
+birth_year_base <- 1700
+gen_gap <- 30
 
 historical_threshold_centered <- (threshold_year - birth_year_base)
 
@@ -153,16 +156,10 @@ labels_to_free <- c(names(target), "mean_y")
 # Helper functions for one Monte Carlo replication
 # -----------------------------------------------------------------------------
 
+# threshold_year, birth_year_sd, birth_year_base, gen_gap and loading_link are
+# read from the Monte Carlo settings above, as kpc, Ngen and marR already are.
 simulate_one_dataset <- function(replication, replication_seed, poly = 3,
-  threshold_year = 1776,
-  # Standard deviation of the birth-year range, widened here for broader time
-  # coverage. It is not linked to parental age, so at this width about 8% of
-  # parent-child pairs end up with the child born before the parent.
-  birth_year_sd = 12,
-  birth_year_base = 1700,
-  gen_gap = 30,
   rescale = TRUE,
-  loading_link = "exp",
   # Map the designed birth-year span onto [-3, 3] with design constants instead
   # of a per-family z-score, so t genuinely covers the plotted time_grid.
   time_scale = "fixed",
@@ -638,7 +635,7 @@ recovery_plot <- ggplot(
   coord_flip() +
   theme_bw() +
   labs(
-    title = "Temporal AE Monte Carlo Parameter Recovery",
+    title = "Temporal ACE Monte Carlo Parameter Recovery",
     subtitle = "Points are Monte Carlo means; crosses are generating values",
     x = "Parameter",
     y = "Estimate"
@@ -876,7 +873,7 @@ if (FIGURE) {
 
   if (nrow(true_parameters) != 1L ||
     any(!is.finite(as.numeric(true_parameters[1, parameter_names])))) {
-    stop("Could not recover one finite true value for every temporal AE parameter.")
+    stop("Could not recover one finite true value for every temporal ACE parameter.")
   }
 
   # -----------------------------------------------------------------------------
