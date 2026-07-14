@@ -17,14 +17,35 @@ get_generation_vector <- function(ped) {
 make_time_vars <- function(ped, threshold_year = 1776, birth_year_sd = 3,
                            birth_year_base = 1700,
                            gen_gap = 30,
-                           rescale = TRUE
+                           rescale = TRUE,
+                           time_scale = c("zscore", "fixed"),
+                           Ngen = NULL,
+                           time_half_range = 3
                            ) {
+  time_scale <- match.arg(time_scale)
   gen <- get_generation_vector(ped)
+  # birth_year_sd spreads the range; it is not linked to parental age, so a wide
+  # value occasionally places someone before their parents.
   birth_year <- birth_year_base + gen_gap * (gen - min(gen, na.rm = TRUE)) + rnorm(length(gen), mean = 0, sd = birth_year_sd)
-  if(rescale){
-  t_i <- as.numeric(scale(birth_year))
-} else {
-  t_i <- as.numeric(birth_year)
+  if (!rescale) {
+    t_i <- as.numeric(birth_year)
+  } else if (time_scale == "fixed") {
+    # Map the designed generation span onto [-time_half_range, time_half_range]
+    # using design constants only.
+    #
+    # scale() instead divides by the realized SD, which unequal generation sizes
+    # skew badly: a growing pedigree puts most people in the youngest generation,
+    # which drags the mean toward them and caps the upper end of z at roughly
+    # sqrt((1 - p) / p), where p is the fraction of people in that generation.
+    # With p = 40/74 that ceiling is ~0.92, no matter how wide the birth years
+    # actually spread. A fixed map also keeps t comparable across families.
+    if (is.null(Ngen) || Ngen < 2) {
+      stop("`Ngen` (>= 2) is required when `time_scale = \"fixed\"`.")
+    }
+    span <- gen_gap * (Ngen - 1)
+    t_i <- (birth_year - (birth_year_base + span / 2)) / (span / (2 * time_half_range))
+  } else {
+    t_i <- as.numeric(scale(birth_year))
   }
   h_i <- as.numeric(birth_year >= threshold_year)
   H_i <- matrix(h_i, ncol = 1)
@@ -177,8 +198,11 @@ simulate_temporal_family <- function(
   family_id = NULL,
   poly = 3,
   rescale = TRUE,
-  loading_link = "exp"#c("identity", "exp")
+  loading_link = "exp",#c("identity", "exp")
+  time_scale = c("zscore", "fixed"),
+  time_half_range = 3
 ) {
+  time_scale <- match.arg(time_scale)
   ped_i <- simulate_pedigree_safe(kpc = kpc, Ngen = Ngen, marR = marR)
   if (is.null(family_id)) family_id <- 1
   ped_i$fam <- paste0("FAM ", family_id)
@@ -195,7 +219,10 @@ simulate_temporal_family <- function(
                          birth_year_sd = birth_year_sd,
                          birth_year_base = birth_year_base,
                          gen_gap = gen_gap,
-                         rescale = rescale)
+                         rescale = rescale,
+                         time_scale = time_scale,
+                         Ngen = Ngen,
+                         time_half_range = time_half_range)
   t_i <- tv_i$t
   H_i <- tv_i$H
 
