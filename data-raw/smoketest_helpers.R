@@ -46,8 +46,9 @@ make_lambda <- function(t_i, H_i, beta, gamma, poly = 3,
       "Multiple values provided for `loading_link`. Using the first value: ",
       loading_link[1]
     )
+    loading_link <- loading_link[1]
   }
-  loading_link <- match.arg(loading_link)
+#  loading_link <- match.arg(loading_link)
 
   powers <- seq_len(poly)
 
@@ -83,11 +84,14 @@ make_lambda <- function(t_i, H_i, beta, gamma, poly = 3,
       H_i %*% matrix(gamma, ncol = 1)
   )
 
-  switch(
-    loading_link,
-    identity = eta,
-    exp = exp(eta)
-  )
+
+
+  if(loading_link == "identity") {
+    eta
+    } else{
+      exp(eta)
+  }
+
 }
 
 as_numeric_matrix <- function(x) {
@@ -173,7 +177,7 @@ simulate_temporal_family <- function(
   family_id = NULL,
   poly = 3,
   rescale = TRUE,
-  loading_link = c("identity", "exp")
+  loading_link = "exp"#c("identity", "exp")
 ) {
   ped_i <- simulate_pedigree_safe(kpc = kpc, Ngen = Ngen, marR = marR)
   if (is.null(family_id)) family_id <- 1

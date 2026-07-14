@@ -64,11 +64,15 @@ kpc <-  4
 Ngen <-  4
 marR <-  0.8
 use_exp_loadings <- TRUE
+
 loading_link <- if (use_exp_loadings) {
   "exp"
 } else {
   "identity"
 }
+
+# to do: resolve: default method not implemented for type 'list' error that occurs
+
 
 
 # Save a checkpoint after every completed replication. This is slower than
@@ -152,7 +156,8 @@ simulate_one_dataset <- function(replication, replication_seed, poly = 3,
   birth_year_sd = 3,
   birth_year_base = 1700,
   gen_gap = 30,
-  rescale = TRUE) {
+  rescale = TRUE,
+  loading_link = "exp") {
   set.seed(replication_seed)
 
   families <- vector("list", n_families)
@@ -171,8 +176,8 @@ simulate_one_dataset <- function(replication, replication_seed, poly = 3,
       birth_year_base = birth_year_base,
       family_id = i,
       poly = poly,
-      rescale = TRUE
-
+      rescale = TRUE,
+      loading_link = loading_link
     )
   }
 
