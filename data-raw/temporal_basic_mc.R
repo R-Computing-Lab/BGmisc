@@ -154,13 +154,19 @@ labels_to_free <- c(names(target), "mean_y")
 # -----------------------------------------------------------------------------
 
 simulate_one_dataset <- function(replication, replication_seed, poly = 3,
-
-                                   threshold_year = 1776,
-  birth_year_sd = 3,
+  threshold_year = 1776,
+  # Standard deviation of the birth-year range, widened here for broader time
+  # coverage. It is not linked to parental age, so at this width about 8% of
+  # parent-child pairs end up with the child born before the parent.
+  birth_year_sd = 12,
   birth_year_base = 1700,
   gen_gap = 30,
   rescale = TRUE,
-  loading_link = "exp") {
+  loading_link = "exp",
+  # Map the designed birth-year span onto [-3, 3] with design constants instead
+  # of a per-family z-score, so t genuinely covers the plotted time_grid.
+  time_scale = "fixed",
+  time_half_range = 3) {
   set.seed(replication_seed)
 
   families <- vector("list", n_families)
@@ -180,7 +186,9 @@ simulate_one_dataset <- function(replication, replication_seed, poly = 3,
       family_id = i,
       poly = poly,
       rescale = TRUE,
-      loading_link = loading_link
+      loading_link = loading_link,
+      time_scale = time_scale,
+      time_half_range = time_half_range
     )
   }
 
