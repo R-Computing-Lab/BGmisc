@@ -16,10 +16,16 @@ get_generation_vector <- function(ped) {
 
 make_time_vars <- function(ped, threshold_year = 1776, birth_year_sd = 3,
                            birth_year_base = 1700,
-                           gen_gap = 30) {
+                           gen_gap = 30,
+                           rescale = TRUE
+                           ) {
   gen <- get_generation_vector(ped)
   birth_year <- birth_year_base + gen_gap * (gen - min(gen, na.rm = TRUE)) + rnorm(length(gen), mean = 0, sd = birth_year_sd)
+  if(rescale){
   t_i <- as.numeric(scale(birth_year))
+} else {
+  t_i <- as.numeric(birth_year)
+  }
   h_i <- as.numeric(birth_year >= threshold_year)
   H_i <- matrix(h_i, ncol = 1)
   colnames(H_i) <- paste0("post_", threshold_year)
@@ -111,10 +117,14 @@ simulate_temporal_family <- function(
   Ngen = 4,
   marR = 0.6,
   threshold_year = 1776,
+  birth_year_sd = 3,
+  birth_year_base = 1700,
+  gen_gap = 30,
   true_beta,
   true_gamma,
   components = c("a", "e"),
-  family_id = NULL
+  family_id = NULL,
+  poly = 3
 ) {
   ped_i <- simulate_pedigree_safe(kpc = kpc, Ngen = Ngen, marR = marR)
   if (is.null(family_id)) family_id <- 1
@@ -127,13 +137,15 @@ simulate_temporal_family <- function(
   n_i <- nrow(A_i)
   I_i <- diag(1, n_i)
 
-  tv_i <- make_time_vars(ped_i, threshold_year = threshold_year)
+  tv_i <- make_time_vars(ped_i, threshold_year = threshold_year, birth_year_sd = birth_year_sd, birth_year_base = birth_year_base, gen_gap = gen_gap)
   t_i <- tv_i$t
   H_i <- tv_i$H
 
   lambda <- list()
   for (k in components) {
-    lambda[[k]] <- make_lambda(t_i, H_i, true_beta[[k]], true_gamma[[k]])
+    lambda[[k]] <- make_lambda(
+     t_i= t_i,H_i= H_i, beta =true_beta[[k]], gamma =  true_gamma[[k]],
+     poly = poly)
   }
 
   V_i <- matrix(0, n_i, n_i)

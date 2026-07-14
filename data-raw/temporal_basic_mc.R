@@ -49,17 +49,21 @@ source(file.path("data-raw", "smoketest_helpers.R"))
 # -----------------------------------------------------------------------------
 
 master_seed <- 202601
-n_replications <- 3
+n_replications <- 5
 n_families <- 15
 threshold_year <- 1776
-optimizer_tries <- 30
+optimizer_tries <- 5
 save_rate <- 10 # every 10 reps
+kpc <-  4
+Ngen <-  4
+marR <-  0.8
+
 
 
 # Save a checkpoint after every completed replication. This is slower than
 # saving only at the end, but protects a long simulation from data loss.
 save_checkpoints <- TRUE
-output_directory <- file.path("results", "temporal_AE_parameter_recovery")
+output_directory <- file.path("results", "temporal_ACE_parameter_recovery")
 dir.create(output_directory, recursive = TRUE, showWarnings = FALSE)
 
 replication_file <- file.path(output_directory, "replication_results.csv")
@@ -67,22 +71,22 @@ recovery_file <- file.path(output_directory, "parameter_recovery_summary.csv")
 convergence_file <- file.path(output_directory, "convergence_summary.csv")
 plot_file <- file.path(output_directory, "parameter_recovery_plot.png")
 
-replication_filea <- file.path(output_directory, "replication_resultsa.csv")
-recovery_filea <- file.path(output_directory, "parameter_recovery_summarya.csv")
-convergence_filea <- file.path(output_directory, "convergence_summarya.csv")
-plot_filea <- file.path(output_directory, "parameter_recovery_plota.png")
+replication_file_ace <- file.path(output_directory, "replication_results_ace.csv")
+recovery_file_ace <- file.path(output_directory, "parameter_recovery_summary_ace.csv")
+convergence_file_ace <- file.path(output_directory, "convergence_summary_ace.csv")
+plot_file_ace <- file.path(output_directory, "parameter_recovery_plot_ace.png")
 
 
 sim_components <- c(
   "a",
-  # "cn", "ce",
-  # "mt",
+   "cn", #"ce",
+ #  "mt",
   "e"
 )
 
 fit_components <- c(
   "a",
-  # "cn", "ce",
+   "cn", #"ce",
   # "mt",
   "e"
 )
@@ -92,19 +96,19 @@ fit_components <- c(
 # uses exp(loadings). The target transformation below follows the same mapping
 # used in the original smoke-test script.
 true_beta <- list(
-  a  = c(5, 0.5, 0.00, 0.00),
-  cn = c(0.00, 0.00, 0.00, 0.00),
+  a  = c(log(2), 0.1, -0.1, 0.00),
+  cn = c(log(1.0), 0.00, 0.00, 0.00),
   ce = c(0.00, 0.00, 0.00, 0.00),
   mt = c(0.00, 0.00, 0.00, 0.00),
-  e  = c(5, -0.20, 0.00, 0.00)
+  e  = c(log(2.0), 0.0, 0.00, 0.00)
 )
 
 true_gamma <- list(
-  a  = 0.5,
+  a  = 0.2,
   cn = 0.00,
   ce = 0.00,
   mt = 0.00,
-  e  = -0.50
+  e  = 0.0
 )
 
 
@@ -113,6 +117,9 @@ target <- c(
   b_a_0 = if (true_beta$a[1] != 0) log(true_beta$a[1]) else 0,
   b_a_1 = if (true_beta$a[1] != 0) true_beta$a[2] / true_beta$a[1] else 0,
   g_a_1 = if (true_beta$a[1] != 0) true_gamma$a[1] / true_beta$a[1] else 0,
+  b_cn_0 = if (true_beta$cn[1] != 0) log(true_beta$cn[1]) else 0,
+  b_cn_1 = if (true_beta$cn[1] != 0) true_beta$cn[2] / true_beta$cn[1] else 0,
+  g_cn_1 = if (true_beta$cn[1] != 0) true_gamma$cn[1] / true_beta$cn[1] else 0,
   b_e_0 = if (true_beta$e[1] != 0) log(true_beta$e[1]) else 0,
   b_e_1 = if (true_beta$e[1] != 0) true_beta$e[2] / true_beta$e[1] else 0,
   g_e_1 = if (true_beta$e[1] != 0) true_gamma$e[1] / true_beta$e[1] else 0
@@ -132,9 +139,9 @@ simulate_one_dataset <- function(replication, replication_seed) {
 
   for (i in seq_len(n_families)) {
     families[[i]] <- simulate_temporal_family(
-      kpc = 4,
-      Ngen = 5,
-      marR = 0.8,
+      kpc = kpc,
+      Ngen = Ngen,
+      marR = marR,
       threshold_year = threshold_year,
       true_beta = true_beta,
       true_gamma = true_gamma,
@@ -177,7 +184,7 @@ build_true_model <- function(families, replication) {
     group_models[[i]] <- buildOneTemporalFamilyGroup(
       group_name = paste0("rep", replication, "_family", i),
       Addmat = fam$A,
-      Nucmat = NULL,
+      Nucmat = fam$Cn,
       Extmat = NULL,
       Mtdmat = NULL,
       Dmgmat = NULL,
@@ -189,8 +196,8 @@ build_true_model <- function(families, replication) {
     )
   }
 
-  temporal_model_ae <- buildTemporalPedigreeMx(
-    model_name = paste0("TemporalPedigreeRecovery_AE_rep", replication),
+  temporal_model_ace <- buildTemporalPedigreeMx(
+    model_name = paste0("TemporalPedigreeRecovery_ACE_rep", replication),
     group_models = group_models,
     p_hist = 1,
     components = fit_components,
@@ -200,7 +207,7 @@ build_true_model <- function(families, replication) {
   # Fit the true model: AE with linear birth-cohort moderation plus one
   # historical moderator.
   free_only(
-    temporal_model_ae,
+    temporal_model_ace,
     labels_to_free = labels_to_free
   )
 }
@@ -208,21 +215,24 @@ build_true_model <- function(families, replication) {
 fit_one_dataset <- function(model) {
   fit <- run_and_report(
     model,
-    "AE linear time + historical moderator",
+    "ACE linear time + historical moderator",
     tries = optimizer_tries
   )
 
   status_code <- fit$output$status$code
   status_message <- fit$output$status$status
   estimates <- omxGetParameters(fit)[names(target)]
-
+  standard_errors <- fit$output$standardErrors
   list(
     fit = fit,
     status_code = status_code,
     status_message = status_message,
     converged = isTRUE(status_code %in% c(0L, 1L)) && all(is.finite(estimates)),
     minus2ll = as.numeric(fit$output$Minus2LogLikelihood),
-    estimates = estimates
+    estimates = estimates,
+    standard_errors = standard_errors,
+    elapsed_seconds = fit$output$wallTime
+
   )
 }
 
@@ -240,7 +250,7 @@ failed_replication_row <- function(
   z_year = NA_real_
 ) {
   estimate_values <- stats::setNames(rep(NA_real_, length(target)), names(target))
-
+  standard_errors <- stats::setNames(rep(NA_real_, length(target)), names(target))
   tibble::as_tibble_row(c(
     list(
       replication = replication,
@@ -259,7 +269,8 @@ failed_replication_row <- function(
       mean_H = mean_H,
       z_year = z_year
     ),
-    as.list(estimate_values)
+    as.list(estimate_values),
+    as.list(standard_errors)
   ))
 }
 
@@ -282,13 +293,19 @@ run_one_replication <- function(replication) {
       )
 
       fitted <- fit_one_dataset(model)
-      elapsed_seconds <- proc.time()[["elapsed"]] - start_time
+      elapsed_seconds <- fitted$fit$output$wallTime
 
-      estimate_values <- stats::setNames(
-        as.numeric(fitted$estimates),
+      estimate_values <-   stats::setNames(as.numeric(fitted$estimates),
         names(target)
       )
 
+      standard_errors <- stats::setNames(
+        as.numeric(fitted$standard_errors),
+        names(target)
+      )
+      Minus2LogLikelihood <- as.numeric(fitted$fit$output$Minus2LogLikelihood)
+      iterations <- as.numeric(fitted$fit$output$iterations)
+      status_code <- as.numeric(fitted$fit$output$status$code)
       tibble::as_tibble_row(c(
         list(
           replication = replication,
@@ -601,7 +618,7 @@ if (FIGURE) {
     "panel_B_variance_component_recovery.pdf"
   )
 
-  output_data_filea <- file.path(
+  output_data_file_ace <- file.path(
     results_directory,
     "variance_component_recovery_over_timeA.csv"
   )
@@ -1168,7 +1185,7 @@ if (FIGURE) {
   )
 
   cat("Panel A data and figures written to:\n")
-  cat("  ", normalizePath(output_data_filea, mustWork = FALSE), "\n", sep = "")
+  cat("  ", normalizePath(output_data_file_ace, mustWork = FALSE), "\n", sep = "")
   cat("  ", normalizePath(output_pnga, mustWork = FALSE), "\n", sep = "")
   cat("  ", normalizePath(output_pdfa, mustWork = FALSE), "\n", sep = "")
 }
