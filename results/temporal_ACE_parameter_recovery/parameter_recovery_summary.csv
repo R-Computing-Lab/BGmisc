@@ -1,0 +1,13 @@
+parameter,true_value,n_requested,n_success,success_rate,mean_estimate,median_estimate,empirical_sd,mcse_mean,bias,relative_bias,rmse,mc_lower,mc_upper,empirical_interval_excludes_zero
+b_a_0,-0.36651292058166435,1,0,0,,,,,,,,,,
+b_a_1,0.14426950408889636,1,0,0,,,,,,,,,,
+b_a_2,-0.14426950408889636,1,0,0,,,,,,,,,,
+g_a_1,0.2885390081777927,1,0,0,,,,,,,,,,
+b_cn_0,0,1,0,0,,,,,,,,,,
+b_cn_1,0,1,0,0,,,,,,,,,,
+b_cn_2,0,1,0,0,,,,,,,,,,
+g_cn_1,0,1,0,0,,,,,,,,,,
+b_e_0,-0.36651292058166435,1,0,0,,,,,,,,,,
+b_e_1,0,1,0,0,,,,,,,,,,
+b_e_2,0,1,0,0,,,,,,,,,,
+g_e_1,0,1,0,0,,,,,,,,,,

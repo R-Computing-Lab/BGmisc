@@ -1,0 +1,2 @@
+replication,seed,converged,status_code,status_message,error_message,n_families,total_n,mean_family_size,min_family_size,max_family_size,minus2ll,iterations,elapsed_seconds,mean_H,z_year,b_a_0,b_a_1,b_a_2,g_a_1,b_cn_0,b_cn_1,b_cn_2,g_cn_1,b_e_0,b_e_1,b_e_2,g_e_1,se_b_a_0,se_b_a_1,se_b_a_2,se_g_a_1,se_b_cn_0,se_b_cn_1,se_b_cn_2,se_g_cn_1,se_b_e_0,se_b_e_1,se_b_e_2,se_g_e_1
+1,202602,FALSE,,,default method not implemented for type 'list',15,1110,74,74,74,,,16.639999999999873,0.5405405405405406,0.4547816625332607,,,,,,,,,,,,,,,,,,,,,,,,

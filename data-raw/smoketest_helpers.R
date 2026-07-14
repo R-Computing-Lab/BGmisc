@@ -37,10 +37,57 @@ make_time_vars <- function(ped, threshold_year = 1776, birth_year_sd = 3,
   )
 }
 
-make_lambda <- function(t_i, H_i, beta, gamma, poly = 3){
+make_lambda <- function(t_i, H_i, beta, gamma, poly = 3,
+  loading_link = c("identity", "exp")
+) {
 
-  Tpoly <- cbind(1, t_i^1:poly)
-  as.vector(Tpoly %*% matrix(beta, ncol = 1) + H_i %*% matrix(gamma, ncol = 1))
+  if(length(loading_link) > 1) {
+    warning(
+      "Multiple values provided for `loading_link`. Using the first value: ",
+      loading_link[1]
+    )
+  }
+  loading_link <- match.arg(loading_link)
+
+  powers <- seq_len(poly)
+
+  Tpoly <- cbind(
+    intercept = 1,
+    vapply(
+      powers,
+      function(power) t_i^power,
+      numeric(length(t_i))
+    )
+  )
+
+  if (length(beta) != ncol(Tpoly)) {
+    stop(
+      "`beta` must contain ", ncol(Tpoly),
+      " values: an intercept plus ", poly,
+      " polynomial coefficient(s)."
+    )
+  }
+
+  if (nrow(H_i) != length(t_i)) {
+    stop("`H_i` must have one row per value in `t_i`.")
+  }
+
+  if (length(gamma) != ncol(H_i)) {
+    stop(
+      "`gamma` must contain one coefficient per column of `H_i`."
+    )
+  }
+
+  eta <- as.vector(
+    Tpoly %*% matrix(beta, ncol = 1) +
+      H_i %*% matrix(gamma, ncol = 1)
+  )
+
+  switch(
+    loading_link,
+    identity = eta,
+    exp = exp(eta)
+  )
 }
 
 as_numeric_matrix <- function(x) {
@@ -124,7 +171,9 @@ simulate_temporal_family <- function(
   true_gamma,
   components = c("a", "e"),
   family_id = NULL,
-  poly = 3
+  poly = 3,
+  rescale = TRUE,
+  loading_link = c("identity", "exp")
 ) {
   ped_i <- simulate_pedigree_safe(kpc = kpc, Ngen = Ngen, marR = marR)
   if (is.null(family_id)) family_id <- 1
@@ -137,7 +186,12 @@ simulate_temporal_family <- function(
   n_i <- nrow(A_i)
   I_i <- diag(1, n_i)
 
-  tv_i <- make_time_vars(ped_i, threshold_year = threshold_year, birth_year_sd = birth_year_sd, birth_year_base = birth_year_base, gen_gap = gen_gap)
+  tv_i <- make_time_vars(ped_i,
+                         threshold_year = threshold_year,
+                         birth_year_sd = birth_year_sd,
+                         birth_year_base = birth_year_base,
+                         gen_gap = gen_gap,
+                         rescale = rescale)
   t_i <- tv_i$t
   H_i <- tv_i$H
 
@@ -145,7 +199,8 @@ simulate_temporal_family <- function(
   for (k in components) {
     lambda[[k]] <- make_lambda(
      t_i= t_i,H_i= H_i, beta =true_beta[[k]], gamma =  true_gamma[[k]],
-     poly = poly)
+     poly = poly,
+     loading_link= loading_link)
   }
 
   V_i <- matrix(0, n_i, n_i)

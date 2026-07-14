@@ -49,15 +49,26 @@ source(file.path("data-raw", "smoketest_helpers.R"))
 # -----------------------------------------------------------------------------
 
 master_seed <- 202601
-n_replications <- 5
+n_replications <- 1
 n_families <- 15
-threshold_year <- 1776
+threshold_year <- 3
+birth_year_sd <- .5
+birth_year_base <- 1
+gen_gap <- 1
+
+historical_threshold_centered <- (threshold_year - birth_year_base)
+
 optimizer_tries <- 5
 save_rate <- 10 # every 10 reps
 kpc <-  4
 Ngen <-  4
 marR <-  0.8
-
+use_exp_loadings <- TRUE
+loading_link <- if (use_exp_loadings) {
+  "exp"
+} else {
+  "identity"
+}
 
 
 # Save a checkpoint after every completed replication. This is slower than
@@ -116,12 +127,15 @@ true_gamma <- list(
 target <- c(
   b_a_0 = if (true_beta$a[1] != 0) log(true_beta$a[1]) else 0,
   b_a_1 = if (true_beta$a[1] != 0) true_beta$a[2] / true_beta$a[1] else 0,
+  b_a_2 = if (true_beta$a[1] != 0) true_beta$a[3] / true_beta$a[1] else 0,
   g_a_1 = if (true_beta$a[1] != 0) true_gamma$a[1] / true_beta$a[1] else 0,
   b_cn_0 = if (true_beta$cn[1] != 0) log(true_beta$cn[1]) else 0,
   b_cn_1 = if (true_beta$cn[1] != 0) true_beta$cn[2] / true_beta$cn[1] else 0,
+  b_cn_2 = if (true_beta$cn[1] != 0) true_beta$cn[3] / true_beta$cn[1] else 0,
   g_cn_1 = if (true_beta$cn[1] != 0) true_gamma$cn[1] / true_beta$cn[1] else 0,
   b_e_0 = if (true_beta$e[1] != 0) log(true_beta$e[1]) else 0,
   b_e_1 = if (true_beta$e[1] != 0) true_beta$e[2] / true_beta$e[1] else 0,
+  b_e_2 = if (true_beta$e[1] != 0) true_beta$e[3] / true_beta$e[1] else 0,
   g_e_1 = if (true_beta$e[1] != 0) true_gamma$e[1] / true_beta$e[1] else 0
 )
 
@@ -132,7 +146,13 @@ labels_to_free <- c(names(target), "mean_y")
 # Helper functions for one Monte Carlo replication
 # -----------------------------------------------------------------------------
 
-simulate_one_dataset <- function(replication, replication_seed) {
+simulate_one_dataset <- function(replication, replication_seed, poly = 3,
+
+                                   threshold_year = 1776,
+  birth_year_sd = 3,
+  birth_year_base = 1700,
+  gen_gap = 30,
+  rescale = TRUE) {
   set.seed(replication_seed)
 
   families <- vector("list", n_families)
@@ -146,7 +166,13 @@ simulate_one_dataset <- function(replication, replication_seed) {
       true_beta = true_beta,
       true_gamma = true_gamma,
       components = sim_components,
-      family_id = i
+      gen_gap = gen_gap,
+      birth_year_sd = birth_year_sd,
+      birth_year_base = birth_year_base,
+      family_id = i,
+      poly = poly,
+      rescale = TRUE
+
     )
   }
 
@@ -192,7 +218,7 @@ build_true_model <- function(families, replication) {
       obs_ids = fam$obs_ids,
       birth_year = fam$birth_year_scaled,
       H = fam$H,
-      use_exp_loadings = TRUE
+      use_exp_loadings = use_exp_loadings
     )
   }
 
@@ -219,20 +245,72 @@ fit_one_dataset <- function(model) {
     tries = optimizer_tries
   )
 
-  status_code <- fit$output$status$code
+  status_code <- as.integer(fit$output$status$code)
   status_message <- fit$output$status$status
-  estimates <- omxGetParameters(fit)[names(target)]
-  standard_errors <- fit$output$standardErrors
-  list(
+
+  all_estimates <- omxGetParameters(fit, fetch = 'all')
+
+  estimates <- stats::setNames(
+    rep(NA_real_, length(target)),
+    names(target)
+  )
+
+  available_estimates <- intersect(
+    names(target),
+    names(all_estimates)
+  )
+
+  estimates[available_estimates] <-
+    all_estimates[available_estimates]
+
+  all_standard_errors <- fit$output$standardErrors
+
+  standard_errors <- stats::setNames(
+    rep(NA_real_, length(target)),
+    names(target)
+  )
+
+  if (!is.null(all_standard_errors)) {
+    if (is.null(names(all_standard_errors)) &&
+        length(all_standard_errors) == length(all_estimates)) {
+      names(all_standard_errors) <- names(all_estimates)
+    }
+
+    if (!is.null(names(all_standard_errors))) {
+      available_standard_errors <- intersect(
+        names(target),
+        names(all_standard_errors)
+      )
+
+      standard_errors[available_standard_errors] <-
+        all_standard_errors[available_standard_errors]
+    }
+  }
+
+
+   list(
     fit = fit,
     status_code = status_code,
     status_message = status_message,
-    converged = isTRUE(status_code %in% c(0L, 1L)) && all(is.finite(estimates)),
-    minus2ll = as.numeric(fit$output$Minus2LogLikelihood),
+    converged = isTRUE(status_code %in% c(0L, 1L)) &&
+      all(is.finite(estimates)),
+    minus2ll = if (is.null(fit$output$Minus2LogLikelihood)) {
+      NA_real_
+    } else {
+      as.numeric(fit$output$Minus2LogLikelihood)
+    },
+    iterations = if (is.null(fit$output$iterations)) {
+      NA_real_
+    } else {
+      as.numeric(fit$output$iterations)
+    },
     estimates = estimates,
     standard_errors = standard_errors,
-    elapsed_seconds = fit$output$wallTime
-
+    elapsed_seconds = if (is.null(fit$output$wallTime)) {
+      NA_real_
+    } else {
+      as.numeric(fit$output$wallTime)
+    }
   )
 }
 
@@ -249,8 +327,15 @@ failed_replication_row <- function(
   mean_H = NA_real_,
   z_year = NA_real_
 ) {
-  estimate_values <- stats::setNames(rep(NA_real_, length(target)), names(target))
-  standard_errors <- stats::setNames(rep(NA_real_, length(target)), names(target))
+estimate_values <- stats::setNames(
+  rep(NA_real_, length(target)),
+  names(target)
+)
+
+standard_error_values <- stats::setNames(
+  rep(NA_real_, length(target)),
+  paste0("se_", names(target))
+)
   tibble::as_tibble_row(c(
     list(
       replication = replication,
@@ -265,14 +350,16 @@ failed_replication_row <- function(
       min_family_size = min_family_size,
       max_family_size = max_family_size,
       minus2ll = NA_real_,
+      iterations = NA_real_,
       elapsed_seconds = elapsed_seconds,
       mean_H = mean_H,
       z_year = z_year
     ),
     as.list(estimate_values),
-    as.list(standard_errors)
+    as.list(standard_error_values)
   ))
 }
+
 
 run_one_replication <- function(replication) {
   replication_seed <- master_seed + replication
@@ -293,41 +380,41 @@ run_one_replication <- function(replication) {
       )
 
       fitted <- fit_one_dataset(model)
-      elapsed_seconds <- fitted$fit$output$wallTime
 
-      estimate_values <-   stats::setNames(as.numeric(fitted$estimates),
-        names(target)
-      )
 
-      standard_errors <- stats::setNames(
-        as.numeric(fitted$standard_errors),
-        names(target)
-      )
-      Minus2LogLikelihood <- as.numeric(fitted$fit$output$Minus2LogLikelihood)
-      iterations <- as.numeric(fitted$fit$output$iterations)
-      status_code <- as.numeric(fitted$fit$output$status$code)
-      tibble::as_tibble_row(c(
-        list(
-          replication = replication,
-          seed = replication_seed,
-          converged = fitted$converged,
-          status_code = fitted$status_code,
-          status_message = fitted$status_message,
-          error_message = NA_character_,
-          n_families = simulated$n_families,
-          total_n = simulated$total_n,
-          mean_family_size = simulated$mean_family_size,
-          min_family_size = simulated$min_family_size,
-          max_family_size = simulated$max_family_size,
-          minus2ll = fitted$minus2ll,
-          elapsed_seconds = elapsed_seconds,
-          mean_H = simulated$mean_H,
-          z_year = simulated$z_year
-        ),
-        as.list(estimate_values)
-      ))
+estimate_values <- stats::setNames(
+  as.numeric(fitted$estimates),
+  names(target)
+)
+
+      standard_error_values <- stats::setNames(
+  as.numeric(fitted$standard_errors),
+  paste0("se_", names(target))
+)
+tibble::as_tibble_row(c(
+  list(
+    replication = replication,
+    seed = replication_seed,
+    converged = fitted$converged,
+    status_code = fitted$status_code,
+    status_message = fitted$status_message,
+    error_message = NA_character_,
+    n_families = simulated$n_families,
+    total_n = simulated$total_n,
+    mean_family_size = simulated$mean_family_size,
+    min_family_size = simulated$min_family_size,
+    max_family_size = simulated$max_family_size,
+    minus2ll = fitted$minus2ll,
+    iterations = fitted$iterations,
+    elapsed_seconds = fitted$elapsed_seconds,
+    mean_H = simulated$mean_H,
+    z_year = simulated$z_year
+  ),
+  as.list(estimate_values),
+  as.list(standard_error_values)
+))
     },
-    error = function(e) {
+     error = function(e) {
       elapsed_seconds <- proc.time()[["elapsed"]] - start_time
 
       failed_replication_row(
@@ -335,13 +422,41 @@ run_one_replication <- function(replication) {
         replication_seed = replication_seed,
         elapsed_seconds = elapsed_seconds,
         error_message = conditionMessage(e),
-        n_families_value = if (is.null(simulated)) n_families else simulated$n_families,
-        total_n = if (is.null(simulated)) NA_real_ else simulated$total_n,
-        mean_family_size = if (is.null(simulated)) NA_real_ else simulated$mean_family_size,
-        min_family_size = if (is.null(simulated)) NA_real_ else simulated$min_family_size,
-        max_family_size = if (is.null(simulated)) NA_real_ else simulated$max_family_size,
-        mean_H = if (is.null(simulated)) NA_real_ else simulated$mean_H,
-        z_year = if (is.null(simulated)) NA_real_ else simulated$z_year
+        n_families_value = if (is.null(simulated)) {
+          n_families
+        } else {
+          simulated$n_families
+        },
+        total_n = if (is.null(simulated)) {
+          NA_real_
+        } else {
+          simulated$total_n
+        },
+        mean_family_size = if (is.null(simulated)) {
+          NA_real_
+        } else {
+          simulated$mean_family_size
+        },
+        min_family_size = if (is.null(simulated)) {
+          NA_real_
+        } else {
+          simulated$min_family_size
+        },
+        max_family_size = if (is.null(simulated)) {
+          NA_real_
+        } else {
+          simulated$max_family_size
+        },
+        mean_H = if (is.null(simulated)) {
+          NA_real_
+        } else {
+          simulated$mean_H
+        },
+        z_year = if (is.null(simulated)) {
+          NA_real_
+        } else {
+          simulated$z_year
+        }
       )
     }
   )
@@ -573,8 +688,8 @@ if (FIGURE) {
   #      directly against the population trajectories.
   #
   # Required inputs from temporal_BGmisc_AE_parameter_recovery.R:
-  #   results/temporal_AE_parameter_recovery/replication_results.csv
-  #   results/temporal_AE_parameter_recovery/parameter_recovery_summary.csv
+  #   results/temporal_ACE_parameter_recovery/replication_results.csv
+  #   results/temporal_ACE_parameter_recovery/parameter_recovery_summary.csv
 
   # -----------------------------------------------------------------------------
   # Package setup
@@ -601,7 +716,7 @@ if (FIGURE) {
   # File locations and plotting settings
   # -----------------------------------------------------------------------------
 
-  results_directory <- file.path("results", "temporal_AE_parameter_recovery")
+  results_directory <- file.path("results", "temporal_ACE_parameter_recovery")
   replication_file <- file.path(results_directory, "replication_results.csv")
   recovery_file <- file.path(results_directory, "parameter_recovery_summary.csv")
 
@@ -668,8 +783,9 @@ if (FIGURE) {
   )
 
   parameter_names <- c(
-    "b_a_0", "b_a_1", "g_a_1",
-    "b_e_0", "b_e_1", "g_e_1"
+    "b_a_0", "b_a_1", "b_a_2","g_a_1",
+    "b_cn_0", "b_cn_1","b_cn_2", "g_cn_1",
+    "b_e_0", "b_e_1", "b_e_2", "g_e_1"
   )
 
   required_replication_columns <- c(
@@ -708,7 +824,7 @@ if (FIGURE) {
     filter(if_all(all_of(parameter_names), is.finite))
 
   if (nrow(usable_results) == 0L) {
-    stop("No converged replications with finite temporal AE parameters were found.")
+    stop("No converged replications with finite temporal ACE parameters were found.")
   }
 
 
@@ -749,9 +865,24 @@ if (FIGURE) {
     ) %>%
     mutate(
       historical = as.integer(time > historical_threshold),
-      a_variance = exp(b_a_0 + b_a_1 * time + g_a_1 * historical),
-      e_variance = exp(b_e_0 + b_e_1 * time + g_e_1 * historical),
-      total_variance = a_variance + e_variance
+      a_variance = exp(
+  2 * (
+    b_a_0 +
+      b_a_1 * time +
+      b_a_2 * time^2 +
+      g_a_1 * historical
+  )
+),
+cn_variance = exp(2 *( b_cn_0 + b_cn_1 * time + g_cn_1 * historical)),
+      e_variance = exp(2 * (
+        b_e_0 +
+          b_e_1 * time +
+          b_e_2 * time^2 +
+          g_e_1 * historical
+      )),
+      total_variance =   a_variance +
+  cn_variance +
+  e_variance
     ) %>%
     select(
       replication,
@@ -762,7 +893,12 @@ if (FIGURE) {
       total_variance
     ) %>%
     pivot_longer(
-      cols = c(a_variance, e_variance, total_variance),
+      cols =  c(
+    a_variance,
+    cn_variance,
+    e_variance,
+    total_variance
+  ),
       names_to = "component",
       values_to = "recovered_variance"
     )
@@ -936,10 +1072,7 @@ if (FIGURE) {
   # -----------------------------------------------------------------------------
   # Save figure
   # -----------------------------------------------------------------------------
-  #  ggplot2::geom_line(ggplot2::aes(
-  #    x = unscaled_time, y = variance, linetype = factor(historical),
-  #    color = factor(component)
-  #  )) +
+
   ggsave(
     filename = output_png,
     plot = panel_b,
