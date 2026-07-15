@@ -20,8 +20,7 @@ make_time_vars <- function(ped, threshold_year = 1776, birth_year_sd = 3,
                            rescale = TRUE,
                            time_scale = c("zscore", "fixed"),
                            Ngen = NULL,
-                           time_half_range = 3
-                           ) {
+                           time_half_range = 3) {
   time_scale <- match.arg(time_scale)
   gen <- get_generation_vector(ped)
   # birth_year_sd spreads the range; it is not linked to parental age, so a wide
@@ -58,18 +57,18 @@ make_time_vars <- function(ped, threshold_year = 1776, birth_year_sd = 3,
   )
 }
 
-make_lambda <- function(t_i, H_i, beta, gamma, poly = 3,
+make_lambda <- function(
+  t_i, H_i, beta, gamma, poly = 3,
   loading_link = c("identity", "exp")
 ) {
-
-  if(length(loading_link) > 1) {
+  if (length(loading_link) > 1) {
     warning(
       "Multiple values provided for `loading_link`. Using the first value: ",
       loading_link[1]
     )
     loading_link <- loading_link[1]
   }
-#  loading_link <- match.arg(loading_link)
+  #  loading_link <- match.arg(loading_link)
 
   powers <- seq_len(poly)
 
@@ -106,13 +105,11 @@ make_lambda <- function(t_i, H_i, beta, gamma, poly = 3,
   )
 
 
-
-  if(loading_link == "identity") {
+  if (loading_link == "identity") {
     eta
-    } else{
-      exp(eta)
+  } else {
+    exp(eta)
   }
-
 }
 
 as_numeric_matrix <- function(x) {
@@ -198,7 +195,7 @@ simulate_temporal_family <- function(
   family_id = NULL,
   poly = 3,
   rescale = TRUE,
-  loading_link = "exp",#c("identity", "exp")
+  loading_link = "exp", # c("identity", "exp")
   time_scale = c("zscore", "fixed"),
   time_half_range = 3
 ) {
@@ -215,23 +212,25 @@ simulate_temporal_family <- function(
   I_i <- diag(1, n_i)
 
   tv_i <- make_time_vars(ped_i,
-                         threshold_year = threshold_year,
-                         birth_year_sd = birth_year_sd,
-                         birth_year_base = birth_year_base,
-                         gen_gap = gen_gap,
-                         rescale = rescale,
-                         time_scale = time_scale,
-                         Ngen = Ngen,
-                         time_half_range = time_half_range)
+    threshold_year = threshold_year,
+    birth_year_sd = birth_year_sd,
+    birth_year_base = birth_year_base,
+    gen_gap = gen_gap,
+    rescale = rescale,
+    time_scale = time_scale,
+    Ngen = Ngen,
+    time_half_range = time_half_range
+  )
   t_i <- tv_i$t
   H_i <- tv_i$H
 
   lambda <- list()
   for (k in components) {
     lambda[[k]] <- make_lambda(
-     t_i= t_i,H_i= H_i, beta =true_beta[[k]], gamma =  true_gamma[[k]],
-     poly = poly,
-     loading_link= loading_link)
+      t_i = t_i, H_i = H_i, beta = true_beta[[k]], gamma = true_gamma[[k]],
+      poly = poly,
+      loading_link = loading_link
+    )
   }
 
   V_i <- matrix(0, n_i, n_i)

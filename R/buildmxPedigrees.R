@@ -227,8 +227,8 @@ buildPedigreeModelCovariance <- function(
   # by matrixCheckArgument(), so it must be densified here.
   values <- if (symmetrize) make_symmetric(mat) else mat
   values <- as.matrix(values)
- #todo allow this to be sparse and use sparse algebra in OpenMx
-  m <-   tryCatch( OpenMx::mxMatrix(
+  # todo allow this to be sparse and use sparse algebra in OpenMx
+  m <- tryCatch(OpenMx::mxMatrix(
     type = "Symm", nrow = fsize, ncol = fsize, free = FALSE,
     values = values, name = name
   ), error = function(e) {

@@ -48,8 +48,8 @@ source(file.path("data-raw", "smoketest_helpers.R"))
 # Monte Carlo settings
 # -----------------------------------------------------------------------------
 
-master_seed <- 202601
-n_replications <- 50
+master_seed <- 1202601
+n_replications <- 500
 n_families <- 150
 threshold_year <- 1776
 # Standard deviation of the birth-year range, widened here for broader time
@@ -63,11 +63,11 @@ historical_threshold_centered <- (threshold_year - birth_year_base)
 
 optimizer_tries <- 5
 save_rate <- 10 # every 10 reps
-kpc <-  4
-Ngen <-  4
-marR <-  0.8
+kpc <- 4
+Ngen <- 4
+marR <- 0.8
 use_exp_loadings <- TRUE
-
+core_folder <- "temporal_ACE_parameter_recovery_500"
 loading_link <- if (use_exp_loadings) {
   "exp"
 } else {
@@ -77,7 +77,7 @@ loading_link <- if (use_exp_loadings) {
 # Save a checkpoint after every completed replication. This is slower than
 # saving only at the end, but protects a long simulation from data loss.
 save_checkpoints <- TRUE
-output_directory <- file.path("results", "temporal_ACE_parameter_recovery")
+output_directory <- file.path("results", core_folder)
 dir.create(output_directory, recursive = TRUE, showWarnings = FALSE)
 
 replication_file <- file.path(output_directory, "replication_results.csv")
@@ -93,14 +93,14 @@ plot_file_ace <- file.path(output_directory, "parameter_recovery_plot_ace.png")
 
 sim_components <- c(
   "a",
-   "cn", #"ce",
- #  "mt",
+  "cn", # "ce",
+  #  "mt",
   "e"
 )
 
 fit_components <- c(
   "a",
-   "cn", #"ce",
+  "cn", # "ce",
   # "mt",
   "e"
 )
@@ -111,7 +111,7 @@ fit_components <- c(
 # and component k contributes lambda_k^2 to the phenotypic variance.
 true_beta <- list(
   a  = c(log(2), 0.1, -0.1, 0.00),
-  cn = c(log(1.0), 0.00, 0.00, 0.00),
+  cn = c(log(1.5), 0.00, 0.00, 0.00),
   ce = c(0.00, 0.00, 0.00, 0.00),
   mt = c(0.00, 0.00, 0.00, 0.00),
   e  = c(log(2.0), 0.0, 0.00, 0.00)
@@ -158,12 +158,14 @@ labels_to_free <- c(names(target), "mean_y")
 
 # threshold_year, birth_year_sd, birth_year_base, gen_gap and loading_link are
 # read from the Monte Carlo settings above, as kpc, Ngen and marR already are.
-simulate_one_dataset <- function(replication, replication_seed, poly = 3,
+simulate_one_dataset <- function(
+  replication, replication_seed, poly = 3,
   rescale = TRUE,
   # Map the designed birth-year span onto [-3, 3] with design constants instead
   # of a per-family z-score, so t genuinely covers the plotted time_grid.
   time_scale = "fixed",
-  time_half_range = 3) {
+  time_half_range = 3
+) {
   set.seed(replication_seed)
 
   families <- vector("list", n_families)
@@ -314,7 +316,7 @@ fit_one_dataset <- function(model) {
     names(target)
   )
 
-   list(
+  list(
     fit = fit,
     status_code = status_code,
     status_message = status_message,
@@ -353,15 +355,15 @@ failed_replication_row <- function(
   mean_H = NA_real_,
   z_year = NA_real_
 ) {
-estimate_values <- stats::setNames(
-  rep(NA_real_, length(target)),
-  names(target)
-)
+  estimate_values <- stats::setNames(
+    rep(NA_real_, length(target)),
+    names(target)
+  )
 
-standard_error_values <- stats::setNames(
-  rep(NA_real_, length(target)),
-  paste0("se_", names(target))
-)
+  standard_error_values <- stats::setNames(
+    rep(NA_real_, length(target)),
+    paste0("se_", names(target))
+  )
   tibble::as_tibble_row(c(
     list(
       replication = replication,
@@ -408,39 +410,39 @@ run_one_replication <- function(replication) {
       fitted <- fit_one_dataset(model)
 
 
-estimate_values <- stats::setNames(
-  as.numeric(fitted$estimates),
-  names(target)
-)
+      estimate_values <- stats::setNames(
+        as.numeric(fitted$estimates),
+        names(target)
+      )
 
       standard_error_values <- stats::setNames(
-  as.numeric(fitted$standard_errors),
-  paste0("se_", names(target))
-)
-tibble::as_tibble_row(c(
-  list(
-    replication = replication,
-    seed = replication_seed,
-    converged = fitted$converged,
-    status_code = fitted$status_code,
-    status_message = fitted$status_message,
-    error_message = NA_character_,
-    n_families = simulated$n_families,
-    total_n = simulated$total_n,
-    mean_family_size = simulated$mean_family_size,
-    min_family_size = simulated$min_family_size,
-    max_family_size = simulated$max_family_size,
-    minus2ll = fitted$minus2ll,
-    iterations = fitted$iterations,
-    elapsed_seconds = fitted$elapsed_seconds,
-    mean_H = simulated$mean_H,
-    z_year = simulated$z_year
-  ),
-  as.list(estimate_values),
-  as.list(standard_error_values)
-))
+        as.numeric(fitted$standard_errors),
+        paste0("se_", names(target))
+      )
+      tibble::as_tibble_row(c(
+        list(
+          replication = replication,
+          seed = replication_seed,
+          converged = fitted$converged,
+          status_code = fitted$status_code,
+          status_message = fitted$status_message,
+          error_message = NA_character_,
+          n_families = simulated$n_families,
+          total_n = simulated$total_n,
+          mean_family_size = simulated$mean_family_size,
+          min_family_size = simulated$min_family_size,
+          max_family_size = simulated$max_family_size,
+          minus2ll = fitted$minus2ll,
+          iterations = fitted$iterations,
+          elapsed_seconds = fitted$elapsed_seconds,
+          mean_H = simulated$mean_H,
+          z_year = simulated$z_year
+        ),
+        as.list(estimate_values),
+        as.list(standard_error_values)
+      ))
     },
-     error = function(e) {
+    error = function(e) {
       elapsed_seconds <- proc.time()[["elapsed"]] - start_time
 
       failed_replication_row(
@@ -574,6 +576,12 @@ recovery_summary <- long_results %>%
     rmse = sqrt(mean(squared_error)),
     mc_lower = as.numeric(stats::quantile(estimate, 0.025, names = FALSE)),
     mc_upper = as.numeric(stats::quantile(estimate, 0.975, names = FALSE)),
+    mc_q25 = as.numeric(
+      stats::quantile(estimate, 0.25, names = FALSE)
+    ),
+    mc_q75 = as.numeric(
+      stats::quantile(estimate, 0.75, names = FALSE)
+    ),
     empirical_interval_excludes_zero = mc_lower > 0 | mc_upper < 0,
     .groups = "drop"
   ) %>%
@@ -612,17 +620,51 @@ print(recovery_summary)
 # -----------------------------------------------------------------------------
 # Parameter-recovery plot
 # -----------------------------------------------------------------------------
+parameter_order <- c(
+  "b_a_0",  "b_a_1",  "b_a_2",  "g_a_1",
+  "b_cn_0", "b_cn_1", "b_cn_2", "g_cn_1",
+  "b_e_0",  "b_e_1",  "b_e_2",  "g_e_1"
+)
+parameter_labels <- c(
+  b_a_0  = "A: intercept",
+  b_a_1  = "A: linear time",
+  b_a_2  = "A: quadratic time",
+  g_a_1  = "A: historical event",
+  b_cn_0 = "C: intercept",
+  b_cn_1 = "C: linear time",
+  b_cn_2 = "C: quadratic time",
+  g_cn_1 = "C: historical event",
+  b_e_0  = "E: intercept",
+  b_e_1  = "E: linear time",
+  b_e_2  = "E: quadratic time",
+  g_e_1  = "E: historical event"
+)
 
-recovery_plot <- ggplot(
-  recovery_summary,
-  aes(
-    x = stats::reorder(parameter, true_value),
-    y = mean_estimate
-  )
-) +
+
+recovery_plot <- recovery_summary %>%
+  mutate(
+    parameter = factor(
+      parameter,
+      levels = rev(parameter_order)
+    )
+  ) %>%
+  ggplot(
+    aes(
+      x = parameter, # stats::reorder(parameter, true_value),
+      y = mean_estimate
+    )
+  ) +
+  geom_tile(
+    aes(
+      y = (mc_lower + mc_upper) / 2,
+      height = mc_upper - mc_lower
+    ),
+    width = 0.55,
+    alpha = 0.20
+  ) +
   geom_hline(yintercept = 0, linewidth = 0.3) +
   geom_errorbar(
-    aes(ymin = mc_lower, ymax = mc_upper),
+    aes(ymin = mc_q25, ymax = mc_q75),
     width = 0.15
   ) +
   geom_point(size = 2) +
@@ -636,10 +678,14 @@ recovery_plot <- ggplot(
   theme_bw() +
   labs(
     title = "Temporal ACE Monte Carlo Parameter Recovery",
-    subtitle = "Points are Monte Carlo means; crosses are generating values",
+    subtitle = paste0(
+      "Bands show empirical 95% intervals; thick bars show the middle 50%; ",
+      "points are Monte Carlo means; crosses are generating values"
+    ),
     x = "Parameter",
     y = "Estimate"
-  )
+  ) +
+  scale_x_discrete(labels = parameter_labels)
 
 ggsave(
   filename = plot_file,
@@ -742,7 +788,7 @@ if (FIGURE) {
   # File locations and plotting settings
   # -----------------------------------------------------------------------------
 
-  results_directory <- file.path("results", "temporal_ACE_parameter_recovery")
+  results_directory <- file.path("results", core_folder)
   replication_file <- file.path(results_directory, "replication_results.csv")
   recovery_file <- file.path(results_directory, "parameter_recovery_summary.csv")
 
@@ -809,8 +855,8 @@ if (FIGURE) {
   )
 
   parameter_names <- c(
-    "b_a_0", "b_a_1", "b_a_2","g_a_1",
-    "b_cn_0", "b_cn_1","b_cn_2", "g_cn_1",
+    "b_a_0", "b_a_1", "b_a_2", "g_a_1",
+    "b_cn_0", "b_cn_1", "b_cn_2", "g_cn_1",
     "b_e_0", "b_e_1", "b_e_2", "g_e_1"
   )
 
@@ -924,12 +970,12 @@ if (FIGURE) {
       total_variance
     ) %>%
     pivot_longer(
-      cols =  c(
-    a_variance,
-    cn_variance,
-    e_variance,
-    total_variance
-  ),
+      cols = c(
+        a_variance,
+        cn_variance,
+        e_variance,
+        total_variance
+      ),
       names_to = "component",
       values_to = "recovered_variance"
     )
@@ -1017,9 +1063,11 @@ if (FIGURE) {
       #  ),
       component = factor(
         component,
-        levels = c("a_variance",
-                   "cn_variance",
-                   "e_variance", "total_variance"),
+        levels = c(
+          "a_variance",
+          "cn_variance",
+          "e_variance", "total_variance"
+        ),
         labels = c(
           "Additive genetic variance",
           "Common environmental variance",
@@ -1063,7 +1111,7 @@ if (FIGURE) {
     geom_ribbon(
       aes(
         ymin = recovered_lower,
-        ymax = recovered_upper
+        ymax = recovered_upper,
       ),
       alpha = 0.20
     ) +
@@ -1110,7 +1158,9 @@ if (FIGURE) {
       plot.subtitle = element_text(size = 9),
       strip.text = element_text(face = "bold", size = 9),
       panel.grid.minor = element_blank(),
-      legend.position = "bottom"
+      legend.position = "bottom",
+      legend.box = "vertical",
+      legend.text = element_text(size = 8)
     )
 
   print(panel_b)
@@ -1355,7 +1405,9 @@ if (FIGURE) {
       plot.subtitle = element_text(size = 9),
       strip.text = element_text(face = "bold", size = 9),
       panel.grid.minor = element_blank(),
-      legend.position = "bottom"
+      legend.position = "bottom",
+      legend.box = "vertical",
+      legend.text = element_text(size = 8)
     )
 
   print(panel_a)
@@ -1367,14 +1419,14 @@ if (FIGURE) {
   # -----------------------------------------------------------------------------
 
 
-    ggsave(
-      filename = output_pnga,
-      plot = panel_a,
-      width = 10.5,
-      height = 8,
-      dpi = 400,
-      bg = "white"
-    )
+  ggsave(
+    filename = output_pnga,
+    plot = panel_a,
+    width = 10.5,
+    height = 8,
+    dpi = 400,
+    bg = "white"
+  )
 
   ggsave(
     filename = output_pdfa,
