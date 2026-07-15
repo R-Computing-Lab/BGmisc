@@ -52,6 +52,7 @@ master_seed <- 1202601
 n_replications <- 500
 n_families <- 150
 threshold_year <- 1776
+prop_historical <- 0.5
 # Standard deviation of the birth-year range, widened here for broader time
 # coverage. It is not linked to parental age, so at this width about 8% of
 # parent-child pairs end up with the child born before the parent.
@@ -164,7 +165,8 @@ simulate_one_dataset <- function(
   # Map the designed birth-year span onto [-3, 3] with design constants instead
   # of a per-family z-score, so t genuinely covers the plotted time_grid.
   time_scale = "fixed",
-  time_half_range = 3
+  time_half_range = 3,
+  prop_historical = 1
 ) {
   set.seed(replication_seed)
 
@@ -187,7 +189,8 @@ simulate_one_dataset <- function(
       rescale = TRUE,
       loading_link = loading_link,
       time_scale = time_scale,
-      time_half_range = time_half_range
+      time_half_range = time_half_range,
+      prop_historical = prop_historical
     )
   }
 
@@ -399,7 +402,8 @@ run_one_replication <- function(replication) {
     {
       simulated <- simulate_one_dataset(
         replication = replication,
-        replication_seed = replication_seed
+        replication_seed = replication_seed,
+        prop_historical = prop_historical
       )
 
       model <- build_true_model(

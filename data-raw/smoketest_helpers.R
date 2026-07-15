@@ -20,13 +20,14 @@ make_time_vars <- function(ped, threshold_year = 1776, birth_year_sd = 3,
                            rescale = TRUE,
                            time_scale = c("zscore", "fixed"),
                            Ngen = NULL,
-                           time_half_range = 3) {
+                           time_half_range = 3,
+                           prop_historical = 1) {
   time_scale <- match.arg(time_scale)
   gen <- get_generation_vector(ped)
   # birth_year_sd spreads the range; it is not linked to parental age, so a wide
   # value occasionally places someone before their parents.
   birth_year <- birth_year_base + gen_gap * (gen - min(gen, na.rm = TRUE)) + rnorm(length(gen), mean = 0, sd = birth_year_sd)
-  if (!rescale) {
+  if (rescale==FALSE) {
     t_i <- as.numeric(birth_year)
   } else if (time_scale == "fixed") {
     # Map the designed generation span onto [-time_half_range, time_half_range]
@@ -46,7 +47,16 @@ make_time_vars <- function(ped, threshold_year = 1776, birth_year_sd = 3,
   } else {
     t_i <- as.numeric(scale(birth_year))
   }
+  if (prop_historical < 0 || prop_historical > 1) {
+    stop("`prop_historical` must be between 0 and 1.")
+  } else  if (prop_historical == 1) {
   h_i <- as.numeric(birth_year >= threshold_year)
+  } else if (prop_historical == 0) {
+    h_i <- as.numeric(birth_year < threshold_year)
+  } else {
+    # For a proportion of the sample, assign historical status probabilistic, can only occur when year > 0
+    h_i <- ifelse(birth_year < threshold_year, 0, rbinom(length(birth_year), 1, prop_historical))
+  }
   H_i <- matrix(h_i, ncol = 1)
   colnames(H_i) <- paste0("post_", threshold_year)
 
@@ -197,7 +207,8 @@ simulate_temporal_family <- function(
   rescale = TRUE,
   loading_link = "exp", # c("identity", "exp")
   time_scale = c("zscore", "fixed"),
-  time_half_range = 3
+  time_half_range = 3,
+  prop_historical = 0.5
 ) {
   time_scale <- match.arg(time_scale)
   ped_i <- simulate_pedigree_safe(kpc = kpc, Ngen = Ngen, marR = marR)
@@ -219,7 +230,8 @@ simulate_temporal_family <- function(
     rescale = rescale,
     time_scale = time_scale,
     Ngen = Ngen,
-    time_half_range = time_half_range
+    time_half_range = time_half_range,
+    prop_historical=prop_historical
   )
   t_i <- tv_i$t
   H_i <- tv_i$H
