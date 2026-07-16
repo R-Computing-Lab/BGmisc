@@ -41,7 +41,7 @@ library(tidyr)
 library(purrr)
 library(readr)
 library(ggplot2)
-
+library(ggrepel)
 source(file.path("data-raw", "smoketest_helpers.R"))
 
 # -----------------------------------------------------------------------------
@@ -49,8 +49,8 @@ source(file.path("data-raw", "smoketest_helpers.R"))
 # -----------------------------------------------------------------------------
 
 master_seed <- 11202601
-n_replications <- 5
-n_families <- 150
+n_replications <- 500
+n_families <- 500
 threshold_year <- 1776
 prop_historical <- 0.5
 # Standard deviation of the birth-year range, widened here for broader time
@@ -115,7 +115,7 @@ true_beta <- list(
   cn = c(log(1.5), 0.00, 0.00, 0.00),
   ce = c(0.00, 0.00, 0.00, 0.00),
   mt = c(0.00, 0.00, 0.00, 0.00),
-  e  = c(log(2.0), 0.0, 0.00, 0.00)
+  e  = c(log(3.0), 0.0, 0.00, 0.00)
 )
 
 true_gamma <- list(
@@ -621,6 +621,9 @@ readr::write_csv(convergence_summary, convergence_file, na = "")
 print(convergence_summary)
 print(recovery_summary)
 
+
+recovery_summary <- readr::read_csv(recovery_file, na = "")
+
 # -----------------------------------------------------------------------------
 # Parameter-recovery plot
 # -----------------------------------------------------------------------------
@@ -644,6 +647,35 @@ parameter_labels <- c(
   g_e_1  = "E: historical event"
 )
 
+parameter_concise_labels <- c(
+  b_a_0  = "A: int",
+  b_a_1  = "A: lin",
+  b_a_2  = "A: quad",
+  g_a_1  = "A: hist",
+  b_cn_0 = "C: int",
+  b_cn_1 = "C: lin",
+  b_cn_2 = "C: quad",
+  g_cn_1 = "C: hist",
+  b_e_0  = "E: int",
+  b_e_1  = "E: lin",
+  b_e_2  = "E: quad",
+  g_e_1  = "E: hist"
+)
+
+recovery_summary <- recovery_summary %>%
+  mutate(variance_component = dplyr::case_when(
+      grepl("^b_a_", parameter) | grepl("^g_a_", parameter) ~ "A",
+      grepl("^b_cn_", parameter) | grepl("^g_cn_", parameter) ~ "C",
+      grepl("^b_e_", parameter) | grepl("^g_e_", parameter) ~ "E",
+      TRUE ~ NA_character_
+    ),
+    time_effect = dplyr::case_when(
+      grepl("^b_.*_0$", parameter) ~ "intercept",
+      grepl("^b_.*_1$", parameter) ~ "linear",
+      grepl("^b_.*_2$", parameter) ~ "quadratic",
+      grepl("^g_.*_1$", parameter) ~ "historical",
+      TRUE ~ NA_character_
+    ))
 
 recovery_plot <- recovery_summary %>%
   mutate(
@@ -690,12 +722,83 @@ recovery_plot <- recovery_summary %>%
     y = "Estimate"
   ) +
   scale_x_discrete(labels = parameter_labels)
-
+print(recovery_plot)
 ggsave(
   filename = plot_file,
   plot = recovery_plot,
   width = 8,
   height = 5,
+  dpi = 300
+)
+
+# -----------------------------------------------------------------------------
+# Second, compact true-value versus mean-estimate recovery plot
+# -----------------------------------------------------------------------------
+
+compact_recovery_plot <- recovery_summary %>%
+  dplyr::mutate(
+    parameter_label = unname(parameter_labels[parameter])
+  ) %>%
+  ggplot(
+    aes(
+      x = true_value,
+      y = mean_estimate,
+      color = variance_component,
+      fill = time_effect
+    )
+  ) +
+  geom_abline(
+    intercept = 0,
+    slope = 1,
+    linewidth = 0.5
+  ) +
+  geom_errorbar(
+    aes(
+      ymin = mc_lower,
+      ymax = mc_upper
+    ),
+    width = 0.01,
+    linewidth = 0.4
+  ) +
+  geom_point(size = 2) +
+  geom_label_repel(
+    aes(label = parameter_label),
+    nudge_x = 0.015,
+    nudge_y = -0.015,
+    size = 2.7,
+    label.size = NA,
+    alpha = 0.5,
+    color = "black",
+  ) +
+#  geom_text(
+  #  aes(label = parameter_label),
+#    aes(label = parameter),
+#    nudge_x = -0.015,
+#    nudge_y = 0.015,
+ #   size = 2.7,
+ #   check_overlap = TRUE
+#  ) +
+  coord_equal() +
+  theme_bw(base_size = 9) +
+  theme(
+    plot.margin = margin(4, 4, 4, 4),
+    panel.grid.minor = element_blank()
+  ) +
+  labs(
+    x = "True Value",
+    y = "Mean Estimate"
+  )
+
+compact_plot_file <- file.path(
+  output_directory,
+  "parameter_recovery_plot_compact.png"
+)
+
+ggsave(
+  filename = compact_plot_file,
+  plot = compact_recovery_plot,
+  width = 3.5,
+  height = 3.5,
   dpi = 300
 )
 

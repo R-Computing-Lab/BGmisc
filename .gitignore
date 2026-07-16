@@ -59,3 +59,12 @@ vignettes/understanding_relatedness.Xmd
 *.tmp.*
 benchmark_rowlessParents_results.csv
 dev/*
+fit_ace0_100_500_.rds
+fit_ace_linear_100_500_.rds
+fit_ace_linear_h_100_500_.rds
+fit_ae0_100_500_.rds
+fit_ae_linear_100_500_.rds
+fit_ae_linear_h_100_500_.rds
+fit_mace0_100_500_.rds
+fit_mace_linear_100_500_.rds
+fit_mace_linear_h_100_500_.rds
