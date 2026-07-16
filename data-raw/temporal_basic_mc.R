@@ -48,8 +48,8 @@ source(file.path("data-raw", "smoketest_helpers.R"))
 # Monte Carlo settings
 # -----------------------------------------------------------------------------
 
-master_seed <- 1202601
-n_replications <- 500
+master_seed <- 11202601
+n_replications <- 5
 n_families <- 150
 threshold_year <- 1776
 prop_historical <- 0.5

@@ -64,7 +64,8 @@ make_panel_files <- function(panel, directory = results_directory) {
 
 panel_a_files <- make_panel_files("A")
 panel_b_files <- make_panel_files("B")
-
+panel_b1_files <- make_panel_files("B1")
+panel_b2_files <- make_panel_files("B2")
 # -----------------------------------------------------------------------------
 # Figure settings and notation
 # -----------------------------------------------------------------------------
@@ -406,6 +407,7 @@ panel_a_data <- combine_recovered_and_population(
   central = central_summary
 )
 
+
 readr::write_csv(
   panel_a_data,
   panel_a_files$data,
@@ -415,48 +417,48 @@ readr::write_csv(
 # -----------------------------------------------------------------------------
 # Panel A figure
 # -----------------------------------------------------------------------------
-
-panel_a <- ggplot2::ggplot(
-  panel_a_data,
-  ggplot2::aes(
+panel_a <- panel_a_data %>%
+ filter(event_experienced == TRUE) %>%
+  ggplot(
+  aes(
     x = time,
     color = component,
     fill = component
   )
 ) +
-  ggplot2::geom_ribbon(
-    ggplot2::aes(
+  geom_ribbon(
+    aes(
       ymin = recovered_lower,
       ymax = recovered_upper
     ),
     alpha = 0.20
   ) +
-  ggplot2::geom_line(
-    ggplot2::aes(
+  geom_line(
+    aes(
       y = recovered_central,
       linetype = "Recovered Monte Carlo estimate"
     ),
     linewidth = 0.9
   ) +
-  ggplot2::geom_line(
-    ggplot2::aes(
+  geom_line(
+    aes(
       y = population_variance,
       linetype = "Population parameter"
     ),
     linewidth = 0.9
   ) +
-  ggplot2::facet_grid(
-    rows = ggplot2::vars(event_experience_label),
-    cols = ggplot2::vars(historical_period_label)
+  facet_grid(
+    rows = vars(event_experience_label),
+    cols = vars(historical_period_label)
   ) +
-  ggplot2::scale_linetype_manual(
+  scale_linetype_manual(
     name = NULL,
     values = c(
       "Recovered Monte Carlo estimate" = "solid",
       "Population parameter" = "dashed"
     )
   ) +
-  ggplot2::labs(
+  labs(
     title = "Conditional recovery of time-varying variance components",
     subtitle = paste0(
       "Recovered ",
@@ -468,15 +470,15 @@ panel_a <- ggplot2::ggplot(
     color = "Variance component",
     fill = "Variance component"
   ) +
-  ggplot2::theme_bw(base_size = 11) +
-  ggplot2::theme(
-    plot.title = ggplot2::element_text(face = "bold"),
-    plot.subtitle = ggplot2::element_text(size = 9),
-    strip.text = ggplot2::element_text(face = "bold", size = 9),
-    panel.grid.minor = ggplot2::element_blank(),
+  theme_bw(base_size = 11) +
+  theme(
+    plot.title = element_text(face = "bold"),
+    plot.subtitle = element_text(size = 9),
+    strip.text = element_text(face = "bold", size = 9),
+    panel.grid.minor = element_blank(),
     legend.position = "bottom",
     legend.box = "vertical",
-    legend.text = ggplot2::element_text(size = 8)
+    legend.text = element_text(size = 8)
   )
 
 print(panel_a)
@@ -551,15 +553,15 @@ readr::write_csv(
 # Panel B figure
 # -----------------------------------------------------------------------------
 
-panel_b <- ggplot2::ggplot(
+panel_b_core <- ggplot(
   panel_b_data,
-  ggplot2::aes(
+  aes(
     x = time,
     color = component,
     fill = component
   )
 ) +
-  ggplot2::annotate(
+  annotate(
     "rect",
     xmin = event_threshold,
     xmax = Inf,
@@ -568,45 +570,113 @@ panel_b <- ggplot2::ggplot(
     fill = "grey80",
     alpha = 0.20
   ) +
-  ggplot2::geom_vline(
+  geom_vline(
     xintercept = event_threshold,
     linetype = "dotdash",
     linewidth = 0.6
-  ) +
-  ggplot2::geom_ribbon(
-    ggplot2::aes(
+  )
+
+panel_b_event_facet <- panel_b_core +
+  geom_ribbon(
+    aes(
       ymin = recovered_lower,
-      ymax = recovered_upper
+      ymax = recovered_upper,
+      group=NULL
     ),
     alpha = 0.20
   ) +
-  ggplot2::geom_line(
-    ggplot2::aes(
+  geom_line(
+    aes(
       y = recovered_central,
       linetype = "Recovered Monte Carlo estimate"
     ),
     linewidth = 0.9
   ) +
-  ggplot2::geom_line(
-    ggplot2::aes(
+  geom_line(
+    aes(
       y = population_variance,
-      linetype = "Population parameter"
+      linetype = "Population parameter",
+      group=NULL
+    ),
+    linewidth = 0.9
+  )   +
+  facet_wrap(
+    vars( event_experience_label),
+    ncol = 1,
+    scales = "free_y"
+  )
+
+panel_b_event_combined <- panel_b_core +
+  geom_ribbon(data = panel_b_data %>% filter(event_experienced==0),
+    #historical_period ==0&event_experienced==0|
+    #historical_period ==1&event_experienced==0),
+    aes(
+      ymin = recovered_lower,
+      ymax = recovered_upper,
+      group=NULL
+    ),
+    alpha = 0.20
+  ) +
+    geom_ribbon(data = panel_b_data %>% filter(
+    historical_period ==1&event_experienced==1|
+      historical_period==0),
+    aes(
+      ymin = recovered_lower,
+      ymax = recovered_upper,
+      group=NULL
+    ),
+    alpha = 0.20
+  ) +
+  geom_line(data = panel_b_data %>% filter(event_experienced==0),
+    aes(
+      y = recovered_central,
+      linetype = "Recovered Monte Carlo estimate"
     ),
     linewidth = 0.9
   ) +
-  ggplot2::facet_wrap(
-    ggplot2::vars(event_experience_label),
+  geom_line(data = panel_b_data %>% filter(historical_period ==1&event_experienced==1|
+      historical_period==0),
+    aes(
+      y = recovered_central,
+      linetype = "Recovered Monte Carlo estimate",
+      group=NULL
+    ),
+    linewidth = 0.9
+  )   +
+  geom_line(data = panel_b_data %>% filter(event_experienced==0),
+    aes(
+      y = population_variance,
+      linetype = "Population parameter",
+      group=NULL
+    ),
+    linewidth = 0.9
+  )    +
+  geom_line(data = panel_b_data %>% filter(historical_period ==1&event_experienced==1|
+      historical_period==0),
+    aes(
+      y = population_variance,
+      linetype = "Population parameter",
+      group=NULL
+    ),
+    linewidth = 0.9
+  ) +
+  facet_wrap(
+    vars(component),
+    #  event_experience_label),
     ncol = 1,
     scales = "free_y"
-  ) +
-  ggplot2::scale_linetype_manual(
+  )
+
+# list prevents ggplot warning
+ggstyling_panel_b <- list(
+  scale_linetype_manual(
     name = NULL,
     values = c(
       "Recovered Monte Carlo estimate" = "solid",
       "Population parameter" = "dashed"
     )
-  ) +
-  ggplot2::labs(
+  ),
+  labs(
     title = "Realized recovery of time-varying variance components",
     subtitle = paste0(
       "Recovered ",
@@ -617,23 +687,28 @@ panel_b <- ggplot2::ggplot(
     y = "Variance",
     color = "Variance component",
     fill = "Variance component"
-  ) +
-  ggplot2::theme_bw(base_size = 11) +
-  ggplot2::theme(
-    plot.title = ggplot2::element_text(face = "bold"),
-    plot.subtitle = ggplot2::element_text(size = 9),
-    strip.text = ggplot2::element_text(face = "bold", size = 9),
-    panel.grid.minor = ggplot2::element_blank(),
+  ),
+  theme_bw(base_size = 11),
+  theme(
+    plot.title = element_text(face = "bold"),
+    plot.subtitle = element_text(size = 9),
+    strip.text = element_text(face = "bold", size = 9),
+    panel.grid.minor = element_blank(),
     legend.position = "bottom",
     legend.box = "vertical",
-    legend.text = ggplot2::element_text(size = 8)
+    legend.text = element_text(size = 8)
   )
+)
 
+panel_b_v1 <- panel_b_event_combined + ggstyling_panel_b
+panel_b_v2  <- panel_b_event_facet + ggstyling_panel_b
+
+panel_b <- panel_b_v2
 print(panel_b)
 
 ggsave(
-  filename = panel_b_files$png,
-  plot = panel_b,
+  filename = panel_b1_files$png,
+  plot = panel_b_v1,
   width = 10.5,
   height = 8,
   dpi = 400,
@@ -641,13 +716,34 @@ ggsave(
 )
 
 ggsave(
-  filename = panel_b_files$pdf,
-  plot = panel_b,
+  filename = panel_b1_files$pdf,
+  plot = panel_b_v1,
   width = 10.5,
   height = 8,
   device = cairo_pdf,
   bg = "white"
 )
+
+
+ggsave(
+  filename = panel_b2_files$png,
+  plot = panel_b_v2,
+  width = 10.5,
+  height = 8,
+  dpi = 400,
+  bg = "white"
+)
+
+ggsave(
+  filename = panel_b2_files$pdf,
+  plot = panel_b_v2,
+  width = 10.5,
+  height = 8,
+  device = cairo_pdf,
+  bg = "white"
+)
+
+
 
 cat("Figure data and files written to:\n")
 cat(
@@ -676,13 +772,25 @@ cat(
 )
 cat(
   "  Panel B PNG:  ",
-  normalizePath(panel_b_files$png, mustWork = FALSE),
+  normalizePath(panel_b1_files$png, mustWork = FALSE),
   "\n",
   sep = ""
 )
 cat(
   "  Panel B PDF:  ",
-  normalizePath(panel_b_files$pdf, mustWork = FALSE),
+  normalizePath(panel_b1_files$pdf, mustWork = FALSE),
+  "\n",
+  sep = ""
+)
+cat(
+  "  Panel B2 PNG:  ",
+  normalizePath(panel_b2_files$png, mustWork = FALSE),
+  "\n",
+  sep = ""
+)
+cat(
+  "  Panel B2 PDF:  ",
+  normalizePath(panel_b2_files$pdf, mustWork = FALSE),
   "\n",
   sep = ""
 )
