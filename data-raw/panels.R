@@ -321,7 +321,7 @@ make_h_top_strip <- function(historical) {
     scale_x_continuous(expand = c(0, 0)) +
     scale_y_continuous(expand = c(0, 0)) +
     coord_cartesian(clip = "off") +
-      coord_equal() +
+    coord_equal() +
     theme_void() +
     theme(legend.position = "none")
 }
@@ -350,28 +350,100 @@ add_historical_strips <- function(
   historical,
   title,
   subtitle,
-  caption
+  caption,
+  person_labels,
+  strip_thickness = 0.40,
+  strip_center = 0.25
 ) {
-  top_strip <- make_h_top_strip(historical)
-  left_strip <- make_h_left_strip(historical)
+	n <- length(historical)
+   strip_data <- tibble(
+    position = seq_len(n),
+    historical = as.integer(historical)
+  )
 
-  (patchwork::plot_spacer() | top_strip
-    |left_strip | main_plot) +
-    patchwork::plot_layout(
-      ncol = 2,
-      nrow = 2,
-      widths = c(0.055, 1),
-      heights = c(0.055, 1)
+  main_plot +
+
+    # Top history strip: one tile aligned with each matrix column.
+    geom_tile(
+      data = strip_data %>% filter(historical == 0L),
+      aes(x = position, y = strip_center),
+      inherit.aes = FALSE,
+      width = 1,
+      height = strip_thickness,
+      fill = "white",
+      colour = "grey40",
+      linewidth = 0.25
     ) +
-    patchwork::plot_annotation(
+    geom_tile(
+      data = strip_data %>% filter(historical == 1L),
+      aes(x = position, y = strip_center),
+      inherit.aes = FALSE,
+      width = 1,
+      height = strip_thickness,
+      fill = "#0B3B70",
+      colour = "grey40",
+      linewidth = 0.25
+    ) +
+
+    # Left history strip: one tile aligned with each matrix row.
+    geom_tile(
+      data = strip_data %>% filter(historical == 0L),
+      aes(x = strip_center, y = position),
+      inherit.aes = FALSE,
+      width = strip_thickness,
+      height = 1,
+      fill = "white",
+      colour = "grey40",
+      linewidth = 0.25
+    ) +
+    geom_tile(
+      data = strip_data %>% filter(historical == 1L),
+      aes(x = strip_center, y = position),
+      inherit.aes = FALSE,
+      width = strip_thickness,
+      height = 1,
+      fill = "#0B3B70",
+      colour = "grey40",
+      linewidth = 0.25
+    ) +
+
+    # These scales include a half-cell margin for the history strips.
+    scale_x_continuous(
+      breaks = seq_len(n),
+      labels = person_labels,
+      limits = c(0, n + 0.5),
+      expand = c(0, 0)
+    ) +
+    scale_y_reverse(
+      breaks = seq_len(n),
+      labels = person_labels,
+      limits = c(n + 0.5, 0),
+      expand = c(0, 0)
+    ) +
+
+    coord_equal(clip = "off") +
+
+    labs(
       title = title,
       subtitle = subtitle,
-      caption = caption,
-      theme = theme(
-        plot.title = element_text(face = "bold", size = 12),
-        plot.subtitle = element_text(size = 9),
-        plot.caption = element_text(size = 8, hjust = 0)
-      )
+      caption = caption
+    ) +
+
+    theme(
+      plot.title = element_text(face = "bold", size = 12),
+      plot.subtitle = element_text(size = 9),
+      plot.caption = element_text(size = 8, hjust = 0)
+    )  +
+
+    # Label for both historical-status strips
+    annotate(
+      "text",
+      x = strip_center,
+      y = strip_center,
+      label = "italic(H)",
+      parse = TRUE,
+      fontface = "bold",
+      size = 4
     )
 }
 
@@ -700,8 +772,9 @@ panel_2 <- add_historical_strips(
   ),
   caption = paste0(
     "Each dyad occupies two mirrored cells, so the two people retain separate ",
-    "temporal values. Margin strips show H (white = 0; navy = 1)."
-  )
+    "temporal values.\\\n Margin strips show H (white = 0; navy = 1)."
+  ),
+  person_labels = person_labels
 )
 
 # -----------------------------------------------------------------------------
@@ -774,7 +847,8 @@ panel_3 <- add_historical_strips(
   caption = paste0(
     "The two individual loadings are calculated separately, then multiplied ",
     "to form one symmetric pair-specific temporal weight."
-  )
+  ),
+  person_labels = person_labels
 )
 
 # -----------------------------------------------------------------------------
@@ -815,7 +889,7 @@ comparison_rows <- c(
   "Pair members",
   "Time values (t_i, t_j)",
   "Historical exposure (H_i, H_j)",
-  "Individual loadings (lambda_i, lambda_j)",
+  "Indiv. loadings (lambda_i, lambda_j)",
   "Additive relatedness A_ij",
   "Temporal weight T_A,ij",
   "Moderated covariance V_A,ij"
@@ -826,7 +900,7 @@ format_dyad_column <- function(x) {
     paste0(x$member_i, " and ", x$member_j),
     sprintf("%.2f, %.2f", x$t_i, x$t_j),
     sprintf("%d, %d", x$H_i, x$H_j),
-    sprintf("%.2f, %.2f", x$lambda_i, x$lambda_j),
+    sprintf("%.3f, %.3f", x$lambda_i, x$lambda_j),
     sprintf("%.5f", x$A_ij),
     sprintf("%.3f", x$T_ij),
     sprintf("%.3f", x$V_ij)
@@ -1006,7 +1080,8 @@ panel_5 <- add_historical_strips(
   caption = paste0(
     "Pedigree relatedness is retained, but each pair is reweighted using the ",
     "two members' separately estimated temporal loadings."
-  )
+  ),
+  person_labels = person_labels
 )
 
 # -----------------------------------------------------------------------------

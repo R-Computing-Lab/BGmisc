@@ -63,8 +63,8 @@ sfLibrary(OpenMx)
 # -----------------------------------------------------------------------------
 
 master_seed <- 11202601
-n_replications <- 10
-n_families <- 150
+n_replications <- 100
+n_families <- 250
 threshold_year <- 1776
 prop_historical <- 0.5
 # Standard deviation of the birth-year range, widened here for broader time
@@ -88,7 +88,7 @@ kpc <- 5
 Ngen <- 4
 marR <- 0.8
 use_exp_loadings <- TRUE
-core_folder <- "temporal_ACE_parameter_recovery_f150_p50"
+core_folder <- "temporal_ACE_parameter_recovery_f250_p50"
 loading_link <- if (use_exp_loadings) {
   "exp"
 } else {
@@ -131,11 +131,11 @@ fit_components <- c(
 #   lambda_k = exp(beta_k0 + beta_k1 * t + beta_k2 * t^2 + beta_k3 * t^3 + gamma_k * H)
 # and component k contributes lambda_k^2 to the phenotypic variance.
 true_beta <- list(
-  a  = c(log(4), 0.1, -0.1, 0.00),
+  a  = c(log(3), 0.1, -0.1, 0.00),
   cn = c(log(2.5), 0.00, 0.00, 0.00),
   ce = c(0.00, 0.00, 0.00, 0.00),
   mt = c(0.00, 0.00, 0.00, 0.00),
-  e  = c(log(3.0), -0.1, 0.1, 0.00)
+  e  = c(log(2.0), -0.1, 0.1, 0.00)
 )
 
 true_gamma <- list(
