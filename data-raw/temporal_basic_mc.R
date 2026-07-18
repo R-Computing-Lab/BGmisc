@@ -49,8 +49,8 @@ source(file.path("data-raw", "smoketest_helpers.R"))
 # -----------------------------------------------------------------------------
 
 master_seed <- 11202601
-n_replications <- 500
-n_families <- 500
+n_replications <- 100
+n_families <- 250
 threshold_year <- 1776
 prop_historical <- 0.5
 # Standard deviation of the birth-year range, widened here for broader time
@@ -59,7 +59,7 @@ prop_historical <- 0.5
 birth_year_sd <- 12
 birth_year_base <- 1700
 gen_gap <- 30
-
+n_threads <- max(1L, OpenMx::omxDetectCores() - 1L)
 historical_threshold_centered <- (threshold_year - birth_year_base)
 
 optimizer_tries <- 5
@@ -68,7 +68,7 @@ kpc <- 4
 Ngen <- 4
 marR <- 0.8
 use_exp_loadings <- TRUE
-core_folder <- "temporal_ACE_parameter_recovery_500_p50"
+core_folder <- "temporal_ACE_parameter_recovery_100_p50"
 loading_link <- if (use_exp_loadings) {
   "exp"
 } else {
@@ -152,7 +152,11 @@ target <- c(
 
 labels_to_free <- c(names(target), "mean_y")
 
-
+write_csv(
+  tibble::enframe(target, name = "parameter", value = "true_value"),
+  file.path(output_directory, "parameter_targets.csv"),
+  na = ""
+)
 # -----------------------------------------------------------------------------
 # Helper functions for one Monte Carlo replication
 # -----------------------------------------------------------------------------
@@ -219,7 +223,7 @@ simulate_one_dataset <- function(
   )
 }
 
-build_true_model <- function(families, replication) {
+build_true_model <- function(families, replication,n_threads=n_threads) {
   group_models <- vector("list", length(families))
 
   for (i in seq_along(families)) {
@@ -250,10 +254,11 @@ build_true_model <- function(families, replication) {
 
   # Fit the true model: AE with linear birth-cohort moderation plus one
   # historical moderator.
-  free_only(
-    temporal_model_ace,
-    labels_to_free = labels_to_free
-  )
+
+
+  temporal_model_ace <- free_only(temporal_model_ace, labels_to_free = labels_to_free)
+  mxOption(model=temporal_model_ace, key = "Number of Threads", value= n_threads)
+  return(temporal_model_ace)
 }
 
 # OpenMx reports parameters in several shapes: omxGetParameters(fetch = "all")
