@@ -62,10 +62,10 @@ sfLibrary(OpenMx)
 # Monte Carlo settings
 # -----------------------------------------------------------------------------
 
-master_seed <- 11202601
-n_replications <- 100
+master_seed <- 112026011
+n_replications <- 500
 n_families <- 250
-threshold_year <- 1776
+threshold_year <- 1770
 prop_historical <- 0.5
 # Standard deviation of the birth-year range, widened here for broader time
 # coverage. It is not linked to parental age, so at this width about 8% of
@@ -88,7 +88,9 @@ kpc <- 5
 Ngen <- 4
 marR <- 0.8
 use_exp_loadings <- TRUE
-core_folder <- "temporal_ACE_parameter_recovery_f250_p50"
+
+core_folder <- "temporal_ACE_parameter_recovery_f250_p50_reps500"
+
 loading_link <- if (use_exp_loadings) {
   "exp"
 } else {
@@ -813,7 +815,7 @@ compact_recovery_plot <- recovery_summary %>%
     aes(label = parameter_label),
     nudge_x = 0.015,
     nudge_y = -0.015,
-    size = 2.7,
+    size = 2.2,
     label.size = NA,
     alpha = 0.5,
     color = "black",
