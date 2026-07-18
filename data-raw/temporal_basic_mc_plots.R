@@ -34,7 +34,7 @@ library(ggplot2)
 # -----------------------------------------------------------------------------
 # check if this already exists, so that I can source the file after the simulation
 if(!exists("core_folder")){
-core_folder <- "temporal_ACE_parameter_recovery_500"
+core_folder <- "temporal_ACE_parameter_recovery_500_p50"
 }
 results_directory <- file.path("results", core_folder)
 
@@ -487,7 +487,7 @@ ggsave(
   filename = panel_a_files$png,
   plot = panel_a,
   width = 10.5,
-  height = 8,
+  height = 10.5,
   dpi = 400,
   bg = "white"
 )
