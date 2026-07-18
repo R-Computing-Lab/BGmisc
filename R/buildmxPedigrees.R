@@ -32,6 +32,9 @@
 #' @param lbound Numeric. A lower bound for the variance components to ensure they remain positive during optimization. Default is 1e-10
 #' @return An OpenMx model representing the pedigree with specified variance components.
 #' @export
+# Todo: add parallize options: mxOption(model= yourModel, key="Number of Threads", value= (omxDetectCores() - 1))
+
+
 
 buildPedigreeModelCovariance <- function(
   vars = list(
