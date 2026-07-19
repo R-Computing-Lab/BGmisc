@@ -688,6 +688,7 @@ buildOneFamilyGroup <- function(
     stop("All retain_* arguments must be non-missing logical scalars.")
   }
   # do I really need this data structure? I think I can just use the individual flags directly, but for now I'll keep it.
+  # this lets me drop all of the estimates I don't need
   retain_flags_nmd <- retain_flags
   retain_flags <- as.logical(retain_flags)
   retain_eta <- unname(retain_flags_nmd[["retain_eta"]])
@@ -750,6 +751,7 @@ buildOneFamilyGroup <- function(
 
   # Eta_k = Tpoly %*% B_k + H %*% G_k
 
+
   # These helpers construct the same covariance model under every retention combination.
   # A retained object is referenced by name downstream. An unretained object is inlined
   # into the next expression, so retention changes inspectability and object size only.
@@ -772,6 +774,7 @@ buildOneFamilyGroup <- function(
     if (use_exp_loadings) paste0("exp(", eta_ref, ")") else eta_ref
   }
 
+  # # Eta_k = Tpoly %*% B_k + H %*% G_k
   loading_reference <- function(k) {
     if (retain_loadings) paste0("L_", k) else paste0("(", loading_expression(k), ")")
   }
@@ -780,6 +783,7 @@ buildOneFamilyGroup <- function(
     loading_ref <- loading_reference(k)
     paste0(loading_ref, " %*% t(", loading_ref, ")")
   }
+  # exp(Tpoly %*% B_k + H %*% G_k) %*% t(exp(Tpoly %*% B_k + H %*% G_k))
 
   loading_covariance_reference <- function(k) {
     if (retain_loading_covariances) {
