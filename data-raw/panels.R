@@ -730,9 +730,10 @@ panel_0 <- ggplot() +
   panel_0_line(0.960, panel_0_eq_cov_line1, size = 4.4) +
   panel_0_line(0.905, panel_0_eq_cov_line2, size = 4.4) +
   panel_0_line(0.800, panel_0_eq_kij2) +
-  panel_0_line(0.705, panel_0_eq_pipj_line1) +
-  panel_0_line(0.650, panel_0_eq_pipj_line2) +
-  panel_0_line(0.545, panel_0_eq_pairwise) +
+  panel_0_line(0.705, panel_0_eq_pairwise) +
+  panel_0_line(0.605, panel_0_eq_pipj_line1) +
+  panel_0_line(0.545, panel_0_eq_pipj_line2) +
+
   panel_0_line(0.450, panel_0_eq_loading) +
   # Additive specialization traced through panels 1-5 (exp link, as coded):
   # individual loading, pairwise temporal weight, moderated covariance.
@@ -1236,8 +1237,13 @@ make_compact_recovery_plot <- function(recovery_data, labels = NULL) {
 
   padding <- max(0.04, 0.08 * diff(plot_range))
 
+  n_reps_min <- recovery_data %>%
+    summarise(n_reps_min = min(n_requested, na.rm = TRUE)) %>%
+    pull(n_reps_min)
+
   ggplot(plot_data, aes(x = true_value, y = mean_estimate)) +
     geom_abline(intercept = 0, slope = 1, linewidth = 0.55) +
+    geom_abline(intercept = 0, slope = 0, linetype = "dashed", linewidth = 0.4, alpha = 0.7) +
     geom_errorbar(
       aes(ymin = mc_lower, ymax = mc_upper),
       width = 0.012,
@@ -1246,8 +1252,8 @@ make_compact_recovery_plot <- function(recovery_data, labels = NULL) {
     geom_point(size = 2.2) +
     geom_text(
       aes(label = plot_label),
-      nudge_x = 0.015,
-      nudge_y = 0.015,
+      nudge_x = 0.03,
+      nudge_y = -0.015,
       hjust = 0,
       size = 2.5,
       check_overlap = TRUE
@@ -1259,7 +1265,8 @@ make_compact_recovery_plot <- function(recovery_data, labels = NULL) {
     ) +
     labs(
       title = "6. Parameter recovery",
-      subtitle = "Points are Monte Carlo means; bars are empirical 95% intervals.",
+      subtitle = paste0("Points are Monte Carlo means; bars are empirical 95% intervals.",
+                        " (n = ", n_reps_min, " replications)"),
       x = "True value",
       y = "Mean estimate"
     ) +
@@ -1374,7 +1381,7 @@ cat(
 )
 
 print(dyad_comparison)
-
+panel_0
 panel_1
 panel_2
 panel_3

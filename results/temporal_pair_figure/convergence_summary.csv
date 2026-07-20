@@ -1,2 +1,2 @@
 n_requested,n_converged,convergence_rate,n_with_errors,mean_total_n,sd_total_n,min_total_n,max_total_n,mean_family_size,mean_elapsed_seconds,total_elapsed_hours
-100,100,1,0,30500,0,30500,30500,122,567.6073387598991,15.76687052110831
+500,500,1,0,30500,0,30500,30500,122,547.5023369336128,76.04199124077955
