@@ -89,7 +89,7 @@ Ngen <- 4
 marR <- 0.8
 use_exp_loadings <- TRUE
 
-core_folder <- "temporal_ACE_parameter_recovery_f250_p50_reps500"
+core_folder <- "temporal_ACE_parameter_recovery_robust_f250_p50_reps500"
 
 loading_link <- if (use_exp_loadings) {
   "exp"
@@ -133,15 +133,15 @@ fit_components <- c(
 #   lambda_k = exp(beta_k0 + beta_k1 * t + beta_k2 * t^2 + beta_k3 * t^3 + gamma_k * H)
 # and component k contributes lambda_k^2 to the phenotypic variance.
 true_beta <- list(
-  a  = c(log(3), 0.1, -0.1, 0.00),
+  a  = c(log(3), 0, 0, 0.00),
   cn = c(log(2.5), 0.00, 0.00, 0.00),
   ce = c(0.00, 0.00, 0.00, 0.00),
   mt = c(0.00, 0.00, 0.00, 0.00),
-  e  = c(log(2.0), -0.1, 0.1, 0.00)
+  e  = c(log(2.0), 0, 0, 0.00)
 )
 
 true_gamma <- list(
-  a  = 0.2,
+  a  = 0.0,
   cn = 0.00,
   ce = 0.00,
   mt = 0.00,
