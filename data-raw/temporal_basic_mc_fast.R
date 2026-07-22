@@ -62,10 +62,11 @@ sfLibrary(OpenMx)
 # Monte Carlo settings
 # -----------------------------------------------------------------------------
 
-master_seed <- 112026011
+#master_seed <- 112026011
+master_seed <- 202607200
 n_replications <- 500
 n_families <- 250
-threshold_year <- 1770
+threshold_year <- 1771
 prop_historical <- 0.5
 # Standard deviation of the birth-year range, widened here for broader time
 # coverage. It is not linked to parental age, so at this width about 8% of
@@ -89,7 +90,7 @@ Ngen <- 4
 marR <- 0.8
 use_exp_loadings <- TRUE
 
-core_folder <- "temporal_ACE_parameter_recovery_robust_f250_p50_reps500"
+core_folder <- "temporal_ACE_parameter_recovery_robust_f250_p50_reps500v2"
 
 loading_link <- if (use_exp_loadings) {
   "exp"
@@ -599,6 +600,19 @@ parameter_targets <- tibble::enframe(
   name = "parameter",
   value = "true_value"
 )
+se_long <- replication_results %>%
+  dplyr::select(
+    replication,
+    dplyr::starts_with("se_")
+  ) %>%
+  tidyr::pivot_longer(
+    cols = dplyr::starts_with("se_"),
+    names_to = "parameter",
+    values_to = "estimated_se"
+  ) %>%
+  dplyr::mutate(
+    parameter = sub("^se_", "", parameter)
+  )
 
 long_results <- replication_results %>%
   dplyr::select(replication, converged, dplyr::all_of(names(target))) %>%
@@ -612,6 +626,11 @@ long_results <- replication_results %>%
     usable = converged & is.finite(estimate),
     error = estimate - true_value,
     squared_error = error^2
+  )
+long_results <- long_results %>%
+  dplyr::left_join(
+    se_long,
+    by = c("replication", "parameter")
   )
 
 recovery_summary <- long_results %>%
@@ -628,6 +647,15 @@ recovery_summary <- long_results %>%
     bias = mean(error),
     relative_bias = mean(bias / true_value, na.rm = TRUE),
     rmse = sqrt(mean(squared_error)),
+    mean_estimated_se = mean(estimated_se, na.rm = TRUE),
+    se_bias = mean_estimated_se - empirical_sd,
+    se_relative_bias = se_bias / empirical_sd,
+    se_rmse = sqrt(
+      mean(
+        (estimated_se - empirical_sd)^2,
+        na.rm = TRUE
+      )
+    ),
     mc_lower = as.numeric(stats::quantile(estimate, 0.025, names = FALSE)),
     mc_upper = as.numeric(stats::quantile(estimate, 0.975, names = FALSE)),
     mc_q25 = as.numeric(
@@ -638,6 +666,12 @@ recovery_summary <- long_results %>%
     ),
     empirical_interval_excludes_zero = mc_lower > 0 | mc_upper < 0,
     .groups = "drop"
+  ) %>%   dplyr::mutate(
+    relative_bias = replace(
+      relative_bias,
+      is.infinite(relative_bias),
+      NA_real_
+    )
   ) %>%
   dplyr::arrange(match(parameter, names(target)))
 
@@ -670,7 +704,28 @@ readr::write_csv(convergence_summary, convergence_file, na = "")
 
 print(convergence_summary)
 print(recovery_summary)
-
+max_relative_bias_pct <- recovery_summary %>%
+  dplyr::summarise(
+    value = 100 * max(
+      abs(relative_bias),
+      na.rm = TRUE
+    )
+  )
+print(max_relative_bias_pct)
+grant_metrics <- recovery_summary %>%
+  dplyr::summarise(
+    parameter_rmse = max(rmse, na.rm = TRUE),
+    parameter_relative_bias_pct = 100 * max(
+      abs(relative_bias),
+      na.rm = TRUE
+    ),
+    standard_error_rmse = max(se_rmse, na.rm = TRUE),
+    standard_error_relative_bias_pct = 100 * max(
+      abs(se_relative_bias),
+      na.rm = TRUE
+    )
+  )
+print(grant_metrics)
 
 recovery_summary <- readr::read_csv(recovery_file, na = "")
 
