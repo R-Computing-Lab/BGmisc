@@ -645,6 +645,113 @@ highlight_colours <- c(
   "Same-period relatives" = "#B2182B"
 )
 
+
+# -----
+# Panel 0: Full model
+# ------------------------------------------------------------------------
+
+# The Hadamard (elementwise) ring is built from an ASCII-only source so the
+# script stays portable across locales; the rendered figure shows the real
+# symbol. These equations are the FULL temporally moderated model from the
+# grant manuscript (Eq. 2): the six-component covariance decomposition, the
+# pairwise construction of each component, and the individual loading function.
+hadamard_ring <- intToUtf8(8728)
+Encoding(hadamard_ring) <- "UTF-8"
+
+# One moderated component term, e.g. (A o a^2(t, H)).
+panel_0_term <- function(relatedness, component) {
+  paste0("(", relatedness, " * '", hadamard_ring, "' * ", component, "^2*(list(t,H)))")
+}
+
+# Full covariance decomposition, wrapped across two lines (all six components).
+panel_0_eq_cov_line1 <- paste0(
+  "Cov(bold(p)) == ",
+  panel_0_term("A", "a"), " + ",
+  panel_0_term("D", "d"), " + ",
+  panel_0_term("C[N]", "c[N]")
+)
+panel_0_eq_cov_line2 <- paste0(
+  "phantom(Cov(bold(p)) == 0) + ",
+  panel_0_term("C[E]", "c[E]"), " + ",
+  panel_0_term("M", "mt"), " + ",
+  panel_0_term("E", "e")
+)
+
+
+# Individual loading function (birth-cohort polynomial plus historical shifts).
+panel_0_eq_loading <- paste0(
+  "k[i](list(t[i],H[i])) == beta[k0] + beta[k1]*t[i] + beta[k2]*t[i]^2 + ",
+  "beta[k3]*t[i]^3 + sum(gamma[km]*H[mi], m==1, p)"
+)
+
+
+panel_0_eq_loading2 <- paste0("lambda[Ai] == exp(beta[A0] + beta[A1]*t[i] + beta[A2]*t[i]^2 + ", "beta[A3]*t[i]^3 + gamma[A]*H[i])")
+
+# Component matrix definition: k^2(t, H) = [k_ij^2(t, H)]_{i,j=1}^n
+#k^2 (t,H)=[k_ij^2 (t,H)]_(i,j=1)^n
+panel_0_eq_kij2 <-
+  "bold(k)^2*(list(t,H)) == group('[', k[ij]^2*(list(t,H)), ']')[list(i,j)==1]^n"
+
+# Scalar per-pair covariance (manuscript): expected covariance of individuals
+# i and j, wrapped across two lines so the six terms fit the panel width.
+# Cov⁡(p_i,p_j )=A_ij a_ij^2 (t,H)+D_ij d_ij^2 (t,H)+C_Nij c_Nij^2 (t,H)+C_Eij c_Eij^2 (t,H)+M_ij mt_ij^2 (t,H)+E_ij e_ij^2 (t,H)
+
+
+
+panel_0_eq_pipj_line1 <- paste0(
+  "Cov(list(p[i],p[j])) == A[ij]*a[ij]^2*(list(t,H)) + ",
+  "D[ij]*d[ij]^2*(list(t,H)) + C[Nij]*c[Nij]^2*(list(t,H))"
+)
+panel_0_eq_pipj_line2 <- paste0(
+  "phantom(Cov(list(p[i],p[j])) == 0) + C[Eij]*c[Eij]^2*(list(t,H)) + ",
+  "M[ij]*mt[ij]^2*(list(t,H)) + E[ij]*e[ij]^2*(list(t,H))"
+)
+
+# Each component matrix is built pairwise from individual temporal loadings.
+panel_0_eq_pairwise <-
+  "k[ij]^2*(list(t,H)) == k[i](list(t[i],H[i])) %.% k[j](list(t[j],H[j]))"
+
+
+panel_0_eq_covariance <- paste0("V[A] == A * '", hadamard_ring, "' * T[A]")
+panel_0_eq_weight <- "T[A] == lambda[Ai] %*% lambda[Aj]"
+
+# Draw one equation line, left-aligned, at height y.
+panel_0_line <- function(y, label, size = 4.2) {
+  annotate(
+    "text", x = 0.02, y = y, label = label,
+    parse = TRUE, hjust = 0, size = size, fontface = "bold"
+  )
+}
+
+panel_0 <- ggplot() +
+  # General model (manuscript order): full matrix decomposition, the component
+  # matrix definition, the scalar per-pair covariance, the pairwise
+  # construction, and the general individual loading function.
+  panel_0_line(0.960, panel_0_eq_cov_line1, size = 4.4) +
+  panel_0_line(0.905, panel_0_eq_cov_line2, size = 4.4) +
+  panel_0_line(0.800, panel_0_eq_kij2) +
+  panel_0_line(0.705, panel_0_eq_pairwise) +
+  panel_0_line(0.605, panel_0_eq_pipj_line1) +
+  panel_0_line(0.545, panel_0_eq_pipj_line2) +
+
+  panel_0_line(0.450, panel_0_eq_loading) +
+  # Additive specialization traced through panels 1-5 (exp link, as coded):
+  # individual loading, pairwise temporal weight, moderated covariance.
+  panel_0_line(0.320, panel_0_eq_loading2) +
+  panel_0_line(0.225, panel_0_eq_weight) +
+  panel_0_line(0.130, panel_0_eq_covariance) +
+  scale_x_continuous(limits = c(0, 1), expand = c(0, 0)) +
+  scale_y_continuous(limits = c(0.07, 1.0), expand = c(0, 0)) +
+  labs(
+    title = "0. Full temporally moderated biometric model"
+  ) +
+  theme_void() +
+  theme(
+    plot.title = element_text(face = "bold", size = 13, hjust = 0),
+    plot.margin = margin(10, 12, 10, 12)
+  )
+
+
 # -----------------------------------------------------------------------------
 # Panel 1: additive relatedness matrix
 # -----------------------------------------------------------------------------
@@ -1130,8 +1237,13 @@ make_compact_recovery_plot <- function(recovery_data, labels = NULL) {
 
   padding <- max(0.04, 0.08 * diff(plot_range))
 
+  n_reps_min <- recovery_data %>%
+    summarise(n_reps_min = min(n_requested, na.rm = TRUE)) %>%
+    pull(n_reps_min)
+
   ggplot(plot_data, aes(x = true_value, y = mean_estimate)) +
     geom_abline(intercept = 0, slope = 1, linewidth = 0.55) +
+    geom_abline(intercept = 0, slope = 0, linetype = "dashed", linewidth = 0.4, alpha = 0.7) +
     geom_errorbar(
       aes(ymin = mc_lower, ymax = mc_upper),
       width = 0.012,
@@ -1140,8 +1252,8 @@ make_compact_recovery_plot <- function(recovery_data, labels = NULL) {
     geom_point(size = 2.2) +
     geom_text(
       aes(label = plot_label),
-      nudge_x = 0.015,
-      nudge_y = 0.015,
+      nudge_x = 0.03,
+      nudge_y = -0.015,
       hjust = 0,
       size = 2.5,
       check_overlap = TRUE
@@ -1153,7 +1265,8 @@ make_compact_recovery_plot <- function(recovery_data, labels = NULL) {
     ) +
     labs(
       title = "6. Parameter recovery",
-      subtitle = "Points are Monte Carlo means; bars are empirical 95% intervals.",
+      subtitle = paste0("Points are Monte Carlo means; bars are empirical 95% intervals.",
+                        " (n = ", n_reps_min, " replications)"),
       x = "True value",
       y = "Mean estimate"
     ) +
@@ -1229,6 +1342,7 @@ if (exists("compact_recovery_plot", inherits = TRUE)) {
 # Save the six individual panels and one optional composite
 # -----------------------------------------------------------------------------
 
+save_panel(panel_0, "panel_0_full_model_equation.png", 12, 8.5)
 save_panel(panel_1, "panel_1_additive_relatedness.png", 5.8, 5.4)
 save_panel(panel_2, "panel_2_two_person_temporal_inputs.png", 6.6, 5.8)
 save_panel(panel_3, "panel_3_pairwise_temporal_weight.png", 6.6, 5.8)
@@ -1237,12 +1351,12 @@ save_panel(panel_5, "panel_5_temporally_moderated_covariance.png", 6.6, 5.8)
 save_panel(panel_6, "panel_6_parameter_recovery.png", 5.8, 5.4)
 
 combined_figure <- (
-  panel_1 | panel_2 | panel_3
+  panel_0 | panel_1 | panel_2 | panel_3
 ) / (
   panel_4 | panel_5 | panel_6
 ) +
   patchwork::plot_layout(
-    widths = c(1, 1.08, 1.08),
+    widths = c(1.6, 1, 1.08, 1.08),
     heights = c(1, 1)
   ) +
   patchwork::plot_annotation(
@@ -1255,7 +1369,7 @@ combined_figure <- (
 save_panel(
   combined_figure,
   "combined_temporal_pair_figure.png",
-  18,
+  20,
   11.5
 )
 
@@ -1267,9 +1381,10 @@ cat(
 )
 
 print(dyad_comparison)
-
+panel_0
 panel_1
 panel_2
 panel_3
+panel_4
 panel_5
 panel_6
