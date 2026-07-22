@@ -99,7 +99,7 @@ test_that("buildOneFamilyGroup(temporal = TRUE) returns an mxModel with Ka/Eta_a
       full_df_row = make_dat3(),
       obs_ids = c("y1", "y2", "y3"),
       temporal = TRUE,
-      birth_year = c(-1, 0, 1)
+      param_year = c(-1, 0, 1)
     )
   )
   expect_true(inherits(mod, "MxModel"))
@@ -117,7 +117,7 @@ test_that("buildOneFamilyGroup(temporal = TRUE) supports Amimat (am component)",
     full_df_row = make_dat3(),
     obs_ids = c("y1", "y2", "y3"),
     temporal = TRUE,
-    birth_year = c(-1, 0, 1)
+    param_year = c(-1, 0, 1)
   )
   expect_false(is.null(mod$Am))
   expect_false(is.null(mod$Kam))
@@ -131,7 +131,7 @@ test_that("buildOneFamilyGroup(temporal = TRUE) supports Dmgmat (d component)", 
     full_df_row = make_dat3(),
     obs_ids = c("y1", "y2", "y3"),
     temporal = TRUE,
-    birth_year = c(-1, 0, 1)
+    param_year = c(-1, 0, 1)
   )
   expect_false(is.null(mod$D))
   expect_false(is.null(mod$Kd))
@@ -146,7 +146,7 @@ test_that("buildOneFamilyGroup(temporal = TRUE) supports Nucmat (cn component)",
     full_df_row = make_dat3(),
     obs_ids = c("y1", "y2", "y3"),
     temporal = TRUE,
-    birth_year = c(-1, 0, 1)
+    param_year = c(-1, 0, 1)
   )
   expect_false(is.null(mod$Cn))
   expect_false(is.null(mod$Kcn))
@@ -161,7 +161,7 @@ test_that("buildOneFamilyGroup(temporal = TRUE) supports Extmat (ce component)",
     full_df_row = make_dat3(),
     obs_ids = c("y1", "y2", "y3"),
     temporal = TRUE,
-    birth_year = c(-1, 0, 1)
+    param_year = c(-1, 0, 1)
   )
   expect_false(is.null(mod$Ce))
   expect_false(is.null(mod$Kce))
@@ -176,7 +176,7 @@ test_that("buildOneFamilyGroup(temporal = TRUE) supports Mtdmat (mt component)",
     full_df_row = make_dat3(),
     obs_ids = c("y1", "y2", "y3"),
     temporal = TRUE,
-    birth_year = c(-1, 0, 1)
+    param_year = c(-1, 0, 1)
   )
   expect_false(is.null(mod$Mt))
   expect_false(is.null(mod$Kmt))
@@ -193,7 +193,7 @@ test_that("buildOneFamilyGroup(temporal = TRUE) works with all components enable
       full_df_row = make_dat3(),
       obs_ids = c("y1", "y2", "y3"),
       temporal = TRUE,
-      birth_year = c(-1, 0, 1)
+      param_year = c(-1, 0, 1)
     )
   )
   for (K in c("Ka", "Kd", "Kcn", "Kce", "Kmt", "Kam", "Ke")) {
@@ -206,7 +206,7 @@ test_that("buildOneFamilyGroup(temporal = TRUE) works with all components enable
     grepl("Cov_e", covariance_txt, fixed = TRUE))
 })
 
-test_that("buildOneFamilyGroup(temporal = TRUE) errors on mismatched birth_year length", {
+test_that("buildOneFamilyGroup(temporal = TRUE) errors on mismatched param_year length", {
   skip_if_not_installed("OpenMx")
   expect_error(
     buildOneFamilyGroup(
@@ -215,9 +215,9 @@ test_that("buildOneFamilyGroup(temporal = TRUE) errors on mismatched birth_year 
       full_df_row = make_dat3(),
       obs_ids = c("y1", "y2", "y3"),
       temporal = TRUE,
-      birth_year = c(-1, 0) # wrong length
+      param_year = c(-1, 0) # wrong length
     ),
-    regexp = "birth_year"
+    regexp = "param_year"
   )
 })
 
@@ -230,7 +230,7 @@ test_that("buildOneFamilyGroup(temporal = TRUE) includes G_* algebra when H is s
     full_df_row = make_dat3(),
     obs_ids = c("y1", "y2", "y3"),
     temporal = TRUE,
-    birth_year = c(-1, 0, 1),
+    param_year = c(-1, 0, 1),
     H = H
   )
   expect_false(is.null(mod$H))
@@ -260,7 +260,7 @@ test_that("buildOneFamilyGroup(temporal = TRUE) applies condenseMatrixSlots with
       full_df_row = make_dat3(),
       obs_ids = c("y1", "y2", "y3"),
       temporal = TRUE,
-      birth_year = c(-1, 0, 1),
+      param_year = c(-1, 0, 1),
       condenseMatrixSlots = TRUE
     )
   )
@@ -277,11 +277,11 @@ test_that("buildFamilyGroups(temporal = TRUE) builds one temporal group per fami
     nrow = 2, byrow = TRUE,
     dimnames = list(NULL, c("y1", "y2", "y3"))
   )
-  birth_year_list <- list(c(-1, 0, 1), c(-2, 0, 2))
+  param_year_list <- list(c(-1, 0, 1), c(-2, 0, 2))
   groups <- expect_no_error(
     buildFamilyGroups(
       dat = dat, obs_ids = c("y1", "y2", "y3"), Addmat = Addmat,
-      temporal = TRUE, birth_year_list = birth_year_list
+      temporal = TRUE, param_year_list = param_year_list
     )
   )
   expect_equal(length(groups), 2)
@@ -301,7 +301,7 @@ test_that("buildFamilyGroups_list(temporal = TRUE) supports per-family relatedne
       obs_ids_list = list(c("y1", "y2", "y3"), c("z1", "z2")),
       Addmat_list = list(A3, A2),
       temporal = TRUE,
-      birth_year_list = list(c(-1, 0, 1), c(-1, 1))
+      param_year_list = list(c(-1, 0, 1), c(-1, 1))
     )
   )
   expect_equal(length(groups), 2)
@@ -332,7 +332,7 @@ test_that("buildPedigreeMx(temporal = TRUE) assembles a multigroup mxModel with 
   skip_if_not_installed("OpenMx")
   group <- buildOneFamilyGroup(
     group_name = "fam1", Addmat = make_add3(), full_df_row = make_dat3(),
-    obs_ids = c("y1", "y2", "y3"), temporal = TRUE, birth_year = c(-1, 0, 1)
+    obs_ids = c("y1", "y2", "y3"), temporal = TRUE, param_year = c(-1, 0, 1)
   )
   mod <- expect_no_error(
     buildPedigreeMx(
@@ -356,7 +356,7 @@ test_that("fitPedigreeModel(temporal = TRUE) fits an AE model end-to-end", {
       temporal = TRUE,
       dat_list = list(c(0.1, -0.1, 0.05), c(0.2, -0.2, 0.1)),
       obs_ids_list = list(c("y1", "y2", "y3"), c("z1", "z2", "z3")),
-      birth_year_list = list(c(-1, 0, 1), c(-1, 0, 1)),
+      param_year_list = list(c(-1, 0, 1), c(-1, 0, 1)),
       Addmat_list = list(Addmat, Addmat),
       components = c("a", "e"),
       intervals = FALSE,
@@ -366,7 +366,7 @@ test_that("fitPedigreeModel(temporal = TRUE) fits an AE model end-to-end", {
   expect_true(inherits(result, "MxModel"))
 })
 
-test_that("fitPedigreeModel(temporal = TRUE) errors without dat_list/obs_ids_list/birth_year_list", {
+test_that("fitPedigreeModel(temporal = TRUE) errors without dat_list/obs_ids_list/param_year_list", {
   skip_if_not_installed("OpenMx")
   expect_error(
     fitPedigreeModel(temporal = TRUE),
@@ -382,11 +382,11 @@ test_that("buildOneTemporalFamilyGroup matches buildOneFamilyGroup(temporal = TR
   dat <- make_dat3()
   direct <- buildOneFamilyGroup(
     group_name = "fam1", Addmat = Addmat, full_df_row = dat,
-    obs_ids = c("y1", "y2", "y3"), temporal = TRUE, birth_year = c(-1, 0, 1)
+    obs_ids = c("y1", "y2", "y3"), temporal = TRUE, param_year = c(-1, 0, 1)
   )
   wrapped <- buildOneTemporalFamilyGroup(
     group_name = "fam1", Addmat = Addmat, full_df_row = dat,
-    obs_ids = c("y1", "y2", "y3"), birth_year = c(-1, 0, 1)
+    obs_ids = c("y1", "y2", "y3"), param_year = c(-1, 0, 1)
   )
   expect_equal(direct$A@values, wrapped$A@values)
   expect_equal(deparse(direct$V$formula), deparse(wrapped$V$formula))
@@ -396,7 +396,7 @@ test_that("buildTemporalPedigreeMx matches buildPedigreeMx(temporal = TRUE)", {
   skip_if_not_installed("OpenMx")
   group <- buildOneFamilyGroup(
     group_name = "fam1", Addmat = make_add3(), full_df_row = make_dat3(),
-    obs_ids = c("y1", "y2", "y3"), temporal = TRUE, birth_year = c(-1, 0, 1)
+    obs_ids = c("y1", "y2", "y3"), temporal = TRUE, param_year = c(-1, 0, 1)
   )
   direct <- buildPedigreeMx(
     model_name = "M", group_models = list(group),
@@ -416,7 +416,7 @@ test_that("fitTemporalPedigreeModel matches fitPedigreeModel(temporal = TRUE)", 
   args <- list(
     dat_list = list(c(0.1, -0.1, 0.05), c(0.2, -0.2, 0.1)),
     obs_ids_list = list(c("y1", "y2", "y3"), c("z1", "z2", "z3")),
-    birth_year_list = list(c(-1, 0, 1), c(-1, 0, 1)),
+    param_year_list = list(c(-1, 0, 1), c(-1, 0, 1)),
     Addmat_list = list(Addmat, Addmat),
     components = c("a", "e"), intervals = FALSE, tryhard = FALSE
   )

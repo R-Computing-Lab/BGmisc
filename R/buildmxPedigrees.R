@@ -285,9 +285,9 @@ buildPedigreeModelCovariance <- function(
 #'   same order as the relatedness matrix rows.
 #' @param condenseMatrixSlots Logical. If TRUE, use the mxCondenseMatrixSlots wrapper to optimize memory usage for large matrices. Default is TRUE.
 #' @param temporal Logical. If TRUE, build a time-varying family-group model where each
-#'   component's weight is a function of \code{birth_year} (and, optionally, \code{H}) instead
+#'   component's weight is a function of \code{param_year} (and, optionally, \code{H}) instead
 #'   of a fixed scalar. Default is FALSE.
-#' @param birth_year Numeric vector of birth years (or another time index), one per member of
+#' @param param_year Numeric vector of birth years (or another time index), one per member of
 #'   the family, in the same order as \code{obs_ids}. Only used when \code{temporal = TRUE}.
 #' @param H Optional numeric matrix of historical moderators, one row per family member (same
 #'   order as \code{obs_ids}), one column per moderator. Only used when \code{temporal = TRUE}.
@@ -320,7 +320,7 @@ buildOneFamilyGroup <- function(
   obs_ids,
   condenseMatrixSlots = TRUE,
   temporal = FALSE,
-  birth_year = NULL,
+  param_year = NULL,
   H = NULL,
   use_exp_loadings = FALSE,
   time_point_max = NULL,
@@ -417,7 +417,7 @@ buildOneFamilyGroup <- function(
       relmat_list = relmat_list,
       full_df_row = full_df_row,
       obs_ids = obs_ids,
-      birth_year = birth_year,
+      param_year = param_year,
       H = H,
       use_exp_loadings = use_exp_loadings,
       condenseMatrixSlots = condenseMatrixSlots,
@@ -641,7 +641,7 @@ buildOneFamilyGroup <- function(
 #'   \code{"Symm"} mxMatrix objects for \code{active}, in the same order.
 #' @param full_df_row A 1-row matrix/vector of observed data.
 #' @param obs_ids Character vector of individual IDs, matching \code{full_df_row}.
-#' @param birth_year Numeric vector of birth years, one per family member, matching \code{obs_ids}.
+#' @param param_year Numeric vector of birth years, one per family member, matching \code{obs_ids}.
 #' @param H Optional numeric matrix of historical moderators.
 #' @param use_exp_loadings Logical. If TRUE, each component's loading is exponentiated.
 #' @param condenseMatrixSlots Logical. If TRUE, condense the \code{Tpoly}/\code{H} mxMatrix objects.
@@ -660,7 +660,7 @@ buildOneFamilyGroup <- function(
   relmat_list,
   full_df_row,
   obs_ids,
-  birth_year,
+  param_year,
   H = NULL,
   use_exp_loadings = TRUE,
   condenseMatrixSlots = TRUE,
@@ -673,7 +673,7 @@ buildOneFamilyGroup <- function(
 ) {
   # Checks
   if (length(obs_ids) != fsize) stop("Length of obs_ids must equal family size.")
-  if (length(birth_year) != fsize) stop("Length of birth_year must equal family size.")
+  if (length(param_year) != fsize) stop("Length of param_year must equal family size.")
 
   # retain checks
   residual_covariance_form <- match.arg(residual_covariance_form)
@@ -719,7 +719,7 @@ buildOneFamilyGroup <- function(
   full_df_row <- as.data.frame(full_df_row, check.names = FALSE)
   # stopifnot(identical(colnames(full_df_row), obs_ids))
 
-  t_i <- as.numeric(birth_year)
+  t_i <- as.numeric(param_year)
   # Polynomial basis of degree time_point_max: columns are t_i^0, t_i^1, ..., t_i^time_point_max.
   if (time_point_max == 3) {
     # default
@@ -913,7 +913,7 @@ buildOneFamilyGroup <- function(
 #' @param obs_ids A character vector of individual IDs corresponding to the columns of \code{dat}
 #'   and the rows/columns of the relatedness matrices.
 #' @param prefix A prefix for naming the family groups. Default is "fam".
-#' @param birth_year_list A list of numeric birth-year vectors, one per family (row of \code{dat}),
+#' @param param_year_list A list of numeric birth-year vectors, one per family (row of \code{dat}),
 #'   each matching \code{obs_ids} in length and order. Only used when \code{temporal = TRUE}.
 #' @param H_list A list of historical-moderator matrices, one per family. Only used when
 #'   \code{temporal = TRUE}.
@@ -935,7 +935,7 @@ buildFamilyGroups <- function(
   prefix = "fam",
   condenseMatrixSlots = TRUE,
   temporal = FALSE,
-  birth_year_list = NULL,
+  param_year_list = NULL,
   H_list = NULL,
   use_exp_loadings = TRUE,
   time_point_max = NULL,
@@ -995,7 +995,7 @@ buildFamilyGroups <- function(
       obs_ids = obs_ids,
       condenseMatrixSlots = condenseMatrixSlots,
       temporal = temporal,
-      birth_year = if (temporal) birth_year_list[[afam]] else NULL,
+      param_year = if (temporal) param_year_list[[afam]] else NULL,
       H = if (temporal) H_list[[afam]] else NULL,
       use_exp_loadings = use_exp_loadings,
       time_point_max = time_point_max,
@@ -1028,7 +1028,7 @@ buildFamilyGroups <- function(
 #' @param Amimat_list A list of additive by mitochondrial interaction relatedness matrices, one per family.
 #' @param Dmgmat_list A list of dominance genetic relatedness matrices, one per family.
 #' @param prefix A prefix for naming the family groups. Default is "fam".
-#' @param birth_year_list A list of numeric birth-year vectors, one per family, each matching
+#' @param param_year_list A list of numeric birth-year vectors, one per family, each matching
 #'   the corresponding entry of \code{obs_ids_list}. Only used when \code{temporal = TRUE}.
 #' @param H_list A list of historical-moderator matrices, one per family. Only used when
 #'   \code{temporal = TRUE}.
@@ -1047,7 +1047,7 @@ buildFamilyGroups_list <- function(
   prefix = "fam",
   condenseMatrixSlots = TRUE,
   temporal = FALSE,
-  birth_year_list = NULL,
+  param_year_list = NULL,
   H_list = NULL,
   use_exp_loadings = TRUE,
   time_point_max = NULL,
@@ -1092,7 +1092,7 @@ buildFamilyGroups_list <- function(
       obs_ids = obs_ids,
       condenseMatrixSlots = condenseMatrixSlots,
       temporal = temporal,
-      birth_year = if (temporal) birth_year_list[[afam]] else NULL,
+      param_year = if (temporal) param_year_list[[afam]] else NULL,
       H = if (temporal) get_or_null(H_list, afam) else NULL,
       use_exp_loadings = use_exp_loadings,
       time_point_max = time_point_max,
@@ -1133,7 +1133,7 @@ buildPedigreeMx <- function(model_name, vars, group_models,
                             condenseMatrixSlots = TRUE,
                             temporal = FALSE,
                             p_hist = 0,
-                            birth_year = NULL,
+                            param_year = NULL,
                             components = c("a", "e"),
                             time_point_max = NULL) {
   .require_openmx("buildPedigreeMx")
@@ -1232,7 +1232,7 @@ buildPedigreeMx <- function(model_name, vars, group_models,
 #'   \code{temporal = TRUE} and \code{group_models} is NULL.
 #' @param obs_ids_list A list of character vectors of individual IDs, one per family. Only used
 #'   when \code{temporal = TRUE} and \code{group_models} is NULL.
-#' @param birth_year_list A list of numeric birth-year vectors, one per family. Only used when
+#' @param param_year_list A list of numeric birth-year vectors, one per family. Only used when
 #'   \code{temporal = TRUE} and \code{group_models} is NULL.
 #' @param H_list A list of historical-moderator matrices, one per family. Only used when
 #'   \code{temporal = TRUE}.
@@ -1283,7 +1283,7 @@ fitPedigreeModel <- function(
   temporal = FALSE,
   dat_list = NULL,
   obs_ids_list = NULL,
-  birth_year_list = NULL,
+  param_year_list = NULL,
   H_list = NULL,
   Addmat_list = NULL,
   Nucmat_list = NULL,
@@ -1319,12 +1319,12 @@ fitPedigreeModel <- function(
 
   if (is.null(group_models)) {
     if (temporal) {
-      if (is.null(dat_list) || is.null(obs_ids_list) || is.null(birth_year_list)) {
-        stop("Provide either 'group_models' or dat_list, obs_ids_list, and birth_year_list.")
+      if (is.null(dat_list) || is.null(obs_ids_list) || is.null(param_year_list)) {
+        stop("Provide either 'group_models' or dat_list, obs_ids_list, and param_year_list.")
       }
 
       if (is.null(H_list)) {
-        H_list <- lapply(birth_year_list, function(x) matrix(numeric(0), nrow = length(x), ncol = 0))
+        H_list <- lapply(param_year_list, function(x) matrix(numeric(0), nrow = length(x), ncol = 0))
       }
 
       group_models <- buildFamilyGroups_list(
@@ -1338,7 +1338,7 @@ fitPedigreeModel <- function(
         Dmgmat_list = Dmgmat_list,
         condenseMatrixSlots = condenseMatrixSlots,
         temporal = TRUE,
-        birth_year_list = birth_year_list,
+        param_year_list = param_year_list,
         H_list = H_list,
         use_exp_loadings = use_exp_loadings,
         time_point_max = time_point_max,
