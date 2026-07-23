@@ -1073,11 +1073,11 @@ panel_4 <- ggplot() +
   scale_fill_manual(
     values = c(
       "Row label" = "#F2F2F2",
-      "Cross-period relatives" = "#FDE0DD",
-      "Same-period relatives" = "#FFF2CC",
+      "Cross-period relatives" = "#FFF2CC",
+      "Same-period relatives" = "#FDE0DD",
       "Header" = "#D9E2F3",
-      "Cross header" = "#F4B6AE",
-      "Same header" = "#F4DE88"
+      "Cross header" =  "#F4DE88",
+      "Same header" ="#F4B6AE"
     ),
     guide = "none"
   ) +
