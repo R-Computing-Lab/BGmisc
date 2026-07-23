@@ -11,7 +11,7 @@
   relmat_list,
   full_df_row,
   obs_ids,
-  birth_year,
+  param_year,
   H = NULL,
   use_exp_loadings = TRUE,
   condenseMatrixSlots = TRUE,
@@ -39,7 +39,7 @@ key and \code{mxname} relatedness-matrix name.}
 
 \item{obs_ids}{Character vector of individual IDs, matching \code{full_df_row}.}
 
-\item{birth_year}{Numeric vector of birth years, one per family member, matching \code{obs_ids}.}
+\item{param_year}{Numeric vector of birth years, one per family member, matching \code{obs_ids}.}
 
 \item{H}{Optional numeric matrix of historical moderators.}
 

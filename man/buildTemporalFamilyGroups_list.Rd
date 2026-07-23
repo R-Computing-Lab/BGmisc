@@ -7,7 +7,7 @@
 buildTemporalFamilyGroups_list(
   dat_list,
   obs_ids_list,
-  birth_year_list,
+  param_year_list,
   H_list,
   Addmat_list = NULL,
   Nucmat_list = NULL,
@@ -28,7 +28,7 @@ buildTemporalFamilyGroups_list(
 \item{obs_ids_list}{A list of character vectors of individual IDs, one per family, matching
 \code{dat_list} and the rows/columns of that family's relatedness matrices.}
 
-\item{birth_year_list}{A list of numeric birth-year vectors, one per family, each matching
+\item{param_year_list}{A list of numeric birth-year vectors, one per family, each matching
 the corresponding entry of \code{obs_ids_list}. Only used when \code{temporal = TRUE}.}
 
 \item{H_list}{A list of historical-moderator matrices, one per family. Only used when

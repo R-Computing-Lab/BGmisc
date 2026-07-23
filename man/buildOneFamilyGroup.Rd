@@ -16,7 +16,7 @@ buildOneFamilyGroup(
   obs_ids,
   condenseMatrixSlots = TRUE,
   temporal = FALSE,
-  birth_year = NULL,
+  param_year = NULL,
   H = NULL,
   use_exp_loadings = FALSE,
   time_point_max = NULL,
@@ -55,10 +55,10 @@ same order as the relatedness matrix rows.}
 \item{condenseMatrixSlots}{Logical. If TRUE, use the mxCondenseMatrixSlots wrapper to optimize memory usage for large matrices. Default is TRUE.}
 
 \item{temporal}{Logical. If TRUE, build a time-varying family-group model where each
-component's weight is a function of \code{birth_year} (and, optionally, \code{H}) instead
+component's weight is a function of \code{param_year} (and, optionally, \code{H}) instead
 of a fixed scalar. Default is FALSE.}
 
-\item{birth_year}{Numeric vector of birth years (or another time index), one per member of
+\item{param_year}{Numeric vector of birth years (or another time index), one per member of
 the family, in the same order as \code{obs_ids}. Only used when \code{temporal = TRUE}.}
 
 \item{H}{Optional numeric matrix of historical moderators, one row per family member (same

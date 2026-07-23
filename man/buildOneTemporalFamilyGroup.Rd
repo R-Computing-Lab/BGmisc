@@ -14,7 +14,7 @@ buildOneTemporalFamilyGroup(
   Dmgmat = NULL,
   full_df_row,
   obs_ids,
-  birth_year,
+  param_year,
   H = NULL,
   use_exp_loadings = TRUE,
   condenseMatrixSlots = TRUE,
@@ -51,7 +51,7 @@ is created automatically.}
 \code{full_df_row} and the rows/columns of the relatedness matrices. Must be in the
 same order as the relatedness matrix rows.}
 
-\item{birth_year}{Numeric vector of birth years (or another time index), one per member of
+\item{param_year}{Numeric vector of birth years (or another time index), one per member of
 the family, in the same order as \code{obs_ids}. Only used when \code{temporal = TRUE}.}
 
 \item{H}{Optional numeric matrix of historical moderators, one row per family member (same

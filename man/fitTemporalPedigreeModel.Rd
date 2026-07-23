@@ -9,7 +9,7 @@ fitTemporalPedigreeModel(
   group_models = NULL,
   dat_list = NULL,
   obs_ids_list = NULL,
-  birth_year_list = NULL,
+  param_year_list = NULL,
   H_list = NULL,
   Addmat_list = NULL,
   Nucmat_list = NULL,
@@ -42,7 +42,7 @@ relatedness matrices.}
 \item{obs_ids_list}{A list of character vectors of individual IDs, one per family. Only used
 when \code{temporal = TRUE} and \code{group_models} is NULL.}
 
-\item{birth_year_list}{A list of numeric birth-year vectors, one per family. Only used when
+\item{param_year_list}{A list of numeric birth-year vectors, one per family. Only used when
 \code{temporal = TRUE} and \code{group_models} is NULL.}
 
 \item{H_list}{A list of historical-moderator matrices, one per family. Only used when

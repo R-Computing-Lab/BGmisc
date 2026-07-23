@@ -16,7 +16,7 @@ buildFamilyGroups(
   prefix = "fam",
   condenseMatrixSlots = TRUE,
   temporal = FALSE,
-  birth_year_list = NULL,
+  param_year_list = NULL,
   H_list = NULL,
   use_exp_loadings = TRUE,
   time_point_max = NULL,
@@ -55,10 +55,10 @@ is created automatically.}
 \item{condenseMatrixSlots}{Logical. If TRUE, use the mxCondenseMatrixSlots wrapper to optimize memory usage for large matrices. Default is TRUE.}
 
 \item{temporal}{Logical. If TRUE, build a time-varying family-group model where each
-component's weight is a function of \code{birth_year} (and, optionally, \code{H}) instead
+component's weight is a function of \code{param_year} (and, optionally, \code{H}) instead
 of a fixed scalar. Default is FALSE.}
 
-\item{birth_year_list}{A list of numeric birth-year vectors, one per family (row of \code{dat}),
+\item{param_year_list}{A list of numeric birth-year vectors, one per family (row of \code{dat}),
 each matching \code{obs_ids} in length and order. Only used when \code{temporal = TRUE}.}
 
 \item{H_list}{A list of historical-moderator matrices, one per family. Only used when
