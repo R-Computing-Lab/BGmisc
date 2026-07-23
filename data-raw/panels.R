@@ -309,42 +309,6 @@ select_display_members <- function(n_total, required_members, n_keep) {
   sort(unique(selected))
 }
 
-make_h_top_strip <- function(historical) {
-  tibble(
-    x = seq_along(historical),
-    y = 1,
-    historical = factor(historical, levels = c(0, 1))
-  ) %>%
-    ggplot(aes(x = x, y = y, fill = historical)) +
-    geom_tile(colour = "grey40", linewidth = 0.25) +
-    scale_fill_manual(values = c(`0` = "white", `1` = "#0B3B70")) +
-    scale_x_continuous(expand = c(0, 0)) +
-    scale_y_continuous(expand = c(0, 0)) +
-    coord_cartesian(clip = "off") +
-    coord_equal() +
-    theme_void() +
-    theme(legend.position = "none")
-}
-
-make_h_left_strip <- function(historical) {
-  n <- length(historical)
-
-  tibble(
-    x = 1,
-    y = seq_len(n),
-    historical = factor(historical, levels = c(0, 1))
-  ) %>%
-    ggplot(aes(x = x, y = y, fill = historical)) +
-    geom_tile(colour = "grey40", linewidth = 0.25) +
-    scale_fill_manual(values = c(`0` = "white", `1` = "#0B3B70")) +
-    scale_x_continuous(expand = c(0, 0)) +
-    scale_y_reverse(limits = c(n + 0.5, 0.5), expand = c(0, 0)) +
-    coord_cartesian(clip = "off") +
-    coord_equal() +
-    theme_void() +
-    theme(legend.position = "none")
-}
-
 add_historical_strips <- function(
   main_plot,
   historical,
@@ -353,7 +317,8 @@ add_historical_strips <- function(
   caption,
   person_labels,
   strip_thickness = 0.40,
-  strip_center = 0.25
+  strip_center = 0.25,
+  fill = c(`0` = "white", `1` = "#0B3B70")
 ) {
 	n <- length(historical)
    strip_data <- tibble(
@@ -370,7 +335,7 @@ add_historical_strips <- function(
       inherit.aes = FALSE,
       width = 1,
       height = strip_thickness,
-      fill = "white",
+      fill =  fill[1],
       colour = "grey40",
       linewidth = 0.25
     ) +
@@ -380,7 +345,7 @@ add_historical_strips <- function(
       inherit.aes = FALSE,
       width = 1,
       height = strip_thickness,
-      fill = "#0B3B70",
+      fill =  fill[2],
       colour = "grey40",
       linewidth = 0.25
     ) +
@@ -392,7 +357,7 @@ add_historical_strips <- function(
       inherit.aes = FALSE,
       width = strip_thickness,
       height = 1,
-      fill = "white",
+      fill =  fill[1],
       colour = "grey40",
       linewidth = 0.25
     ) +
@@ -402,7 +367,7 @@ add_historical_strips <- function(
       inherit.aes = FALSE,
       width = strip_thickness,
       height = 1,
-      fill = "#0B3B70",
+      fill = fill[2],
       colour = "grey40",
       linewidth = 0.25
     ) +
@@ -817,6 +782,7 @@ panel_1 <- ggplot(panel_1_data, aes(x = column, y = row, fill = value)) +
 # Every row contains that row person's time value. Consequently, for a pair
 # i < j, cell (i, j) above the diagonal contains t_i, whereas mirrored cell
 # (j, i) below the diagonal contains t_j.
+
 time_input_matrix <- outer(time_display, rep(1, n))
 diag(time_input_matrix) <- NA_real_
 
@@ -883,6 +849,16 @@ panel_2 <- add_historical_strips(
   ),
   person_labels = person_labels
 )
+
+panel_2_watermark <-panel_2 + # watermarking text comment
+  geom_text(
+    data = data.frame(x = 5.0,
+                      y = 6.0, label = "Overly complicated \nvisual"),
+    aes(x, y, label = label),
+    hjust = 0.5, vjust = 0.0, angle = -45, size = 20/.pt,
+    color = "gray65", alpha = 0.80,
+    inherit.aes = FALSE
+  )
 
 # -----------------------------------------------------------------------------
 # Panel 3: pairwise temporal weight T_A = lambda_Ai * lambda_Aj
@@ -1351,7 +1327,7 @@ save_panel(panel_5, "panel_5_temporally_moderated_covariance.png", 6.6, 5.8)
 save_panel(panel_6, "panel_6_parameter_recovery.png", 5.8, 5.4)
 
 combined_figure <- (
-  panel_0 | panel_1 | panel_2 | panel_3
+  panel_0 | panel_1 | panel_2_watermark | panel_3
 ) / (
   panel_4 | panel_5 | panel_6
 ) +
