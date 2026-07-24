@@ -38,7 +38,7 @@ library(tibble)
 library(readr)
 library(patchwork)
 library(scales)
-
+library(BGmisc)
 # -----------------------------------------------------------------------------
 # Settings and fallbacks
 # -----------------------------------------------------------------------------
@@ -600,16 +600,255 @@ highlight_mirrored <- bind_rows(
   highlight_lower
 )
 
-#highlight_mirrored <- bind_rows(
-#  highlight_upper,
-#  highlight_upper %>% transmute(row = column, column = row, dyad = dyad)
-#)
 
 highlight_colours <- c(
   "Cross-period relatives" = "#C49A00",
   "Same-period relatives" = "#B2182B"
 )
 
+
+
+# Expected objects:
+#
+# A2  : additive genetic relatedness matrix
+# CN2 : nuclear-family environmental matrix
+# CE2 : extended-family environmental matrix
+# MT2 : mtDNA relatedness matrix
+# P   : phenotypic covariance matrix
+#
+# famID:
+#   A length-n vector identifying the diagonal pedigree blocks.
+#   Its ordering must match the row/column ordering of the matrices.
+#
+# Example:
+# famID <- c(rep("pedigree_1", 40),
+#                  rep("pedigree_2", 20))
+
+
+
+# Calculate the beginning and end of each contiguous pedigree block.
+make_block_data <- function(block_id) {
+  block_id <- as.character(block_id)
+
+  run_info <- rle(block_id)
+  block_end <- cumsum(run_info$lengths)
+  block_start <- block_end - run_info$lengths + 1L
+
+  data.frame(
+    block = run_info$values,
+    xmin  = block_start - 0.5,
+    xmax  = block_end   + 0.5,
+    ymin  = block_start - 0.5,
+    ymax  = block_end   + 0.5
+  )
+}
+
+
+# General matrix plotting function.
+plot_matrix <- function(
+    x,
+    title,
+    block_id,
+    low = "white",
+    high = "#08396D",
+    midpoint = NULL,
+    na_colour = "white",
+    outline_size = 0.65
+) {
+  n <- nrow(x)
+
+  if (length(block_id) != n) {
+    stop("block_id must have one element per matrix row/column.")
+  }
+
+  matrix_data <- matrix_to_long(x)
+  block_data  <- make_block_data(block_id)
+
+  # A midpoint is useful when the matrices are approximately in [0, 1].
+  if (is.null(midpoint)) {
+    midpoint <- mean(range(x, na.rm = TRUE))
+  }
+
+  ggplot(matrix_data, aes(x = column, y = row, fill = value)) +
+    geom_raster() +
+
+    # Outlines around the contiguous pedigree blocks.
+    geom_rect(
+      data = block_data,
+      aes(
+        xmin = xmin,
+        xmax = xmax,
+        ymin = ymin,
+        ymax = ymax
+      ),
+      inherit.aes = FALSE,
+      fill = NA,
+      colour = "black",
+      linewidth = outline_size
+    ) +
+
+    scale_fill_gradient2(
+      low = low,
+      mid = "#B8DBEB",
+      high = high,
+      midpoint = midpoint,
+      limits = range(x, na.rm = TRUE),
+      na.value = na_colour,
+      guide = "none"
+    ) +
+
+    # Reverse y so matrix row 1 appears at the top.
+    scale_x_continuous(
+      limits = c(0.5, n + 0.5),
+      expand = c(0, 0)
+    ) +
+    scale_y_reverse(
+      limits = c(n + 0.5, 0.5),
+      expand = c(0, 0)
+    ) +
+
+    coord_fixed(clip = "off") +
+
+    labs(title = title) +
+
+    theme_void(base_size = 12) +
+    theme(
+      plot.title = element_text(
+        size = 12,
+        face = "bold",
+        hjust = 0.5,
+        margin = margin(b = 8)
+      ),
+      plot.margin = margin(8, 8, 8, 8)
+    )
+}
+
+A2 <- figure_family$A[ordered_family$order, ordered_family$order]
+CN2 <- figure_family$Cn[ordered_family$order, ordered_family$order]
+CE2 <- figure_family$Ce[ordered_family$order, ordered_family$order]
+MT2 <- figure_family$Mt[ordered_family$order, ordered_family$order]
+P <- figure_family$V_true[ordered_family$order, ordered_family$order]
+
+matrix_nrows  <- nrow(A2)
+full_family_id <- rep(1L, nrow(A2))
+
+
+# relatedness-matrix figure uses every member of the simulated pedigree.
+time_full <- ordered_family$time
+historical_full <- ordered_family$historical
+
+stopifnot(
+  length(time_full) == matrix_nrows,
+  length(historical_full) == matrix_nrows
+)
+
+
+lambda_a_full <- calculate_lambda(
+  time = time_full,
+  historical = historical_full,
+  beta = true_beta$a,
+  gamma = true_gamma$a,
+  link = loading_link_figure
+)
+
+T_a_full <- outer(lambda_a_full, lambda_a_full)
+V_a_full <- A2 * T_a_full
+
+# Matrix panels
+p_a2 <- plot_matrix(
+  A2,
+  title = expression(
+    a^2 * ": nuclear-DNA alleles" ~
+      atop("summed across loci", "")
+  ),
+  block_id = full_family_id
+)
+
+p_cn2 <- plot_matrix(
+  CN2,
+  title = expression(
+    c[N]^2 * ": environmental effects common to" ~
+      atop("nuclear-family members only", "")
+  ),
+  block_id =  full_family_id
+)
+
+p_ce2 <- plot_matrix(
+  CE2,
+  title = expression(
+    c[E]^2 * ": environmental effects common to all" ~
+      atop("extended-family members", "")
+  ),
+  block_id =  full_family_id
+)
+
+p_mt2 <- plot_matrix(
+  MT2,
+  title = expression(mt^2),
+  block_id =  full_family_id
+)
+p_ta <- plot_matrix(
+  T_a_full,
+  title = expression(
+    T[A] == lambda[A] * lambda[A]^T ~
+      atop("pair-specific temporal weights", "")
+  ),
+  block_id = full_family_id,
+  high = "#B2182B"
+)
+
+p_temporal_a <- plot_matrix(
+  V_a_full,
+  title = expression(
+    V[A] == A %.% T[A] * ": temporally moderated" ~
+      atop("additive covariance, full pedigree", "")
+  ),
+  block_id =  full_family_id,
+  high = "#542788"
+)
+p_cov <- plot_matrix(
+  P,
+  title = expression(
+    Cov(p) * ": Phenotypic" ~
+      atop("covariance", "")
+  ),
+  block_id = full_family_id
+)
+
+
+
+# ------------------------------------------------------------------
+# Assemble the 2 x 3 figure
+# ------------------------------------------------------------------
+
+complete_figure <-
+  (p_a2  | p_ta| p_temporal_a) /
+  ( p_cn2 | p_ce2| p_mt2 ) /
+  ( p_cov )
+  plot_layout(
+    widths = c(1, 1, 1),
+    heights = c(1, 1, 1)
+  ) &
+  theme(
+    plot.background = element_rect(
+      fill = "white",
+      colour = NA
+    )
+  )
+
+complete_figure
+
+
+# Export
+ggsave(
+  filename = "relatedness_matrices.png",
+  plot = complete_figure,
+  width = 13,
+  height = 9,
+  units = "in",
+  dpi = 400,
+  bg = "white"
+)
 
 # -----
 # Panel 0: Full model
