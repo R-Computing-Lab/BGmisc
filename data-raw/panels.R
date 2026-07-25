@@ -14,6 +14,7 @@
 # The detailed temporal-pair panels use that one illustrative pedigree. The full
 # matrix figure adds independently simulated pedigrees as separate matrix blocks.
 
+# TODO: Allow pedigree size to differ between the illustrative pedigree and the additional pedigrees in the full matrix figure.
 # -----------------------------------------------------------------------------
 # Package setup
 # -----------------------------------------------------------------------------
@@ -59,6 +60,7 @@ n_full_figure_pedigrees <- 3L
 kpc_figure <- get0("kpc", ifnotfound = 4L)
 Ngen_figure <- get0("Ngen", ifnotfound = 4L)
 marR_figure <- get0("marR", ifnotfound = 0.8)
+
 threshold_year_figure <- get0("threshold_year", ifnotfound = 1750)
 birth_year_sd_figure <- get0("birth_year_sd", ifnotfound = 12)
 birth_year_base_figure <- get0("birth_year_base", ifnotfound = 1700)
