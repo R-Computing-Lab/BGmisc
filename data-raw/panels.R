@@ -11,13 +11,16 @@
 # It simulates ONE illustrative pedigree only. It does not rerun the Monte Carlo
 # study. For Panel 6, it uses compact_recovery_plot when that object already
 # exists; otherwise it reads parameter_recovery_summary.csv when available.
+# The detailed temporal-pair panels use that one illustrative pedigree. The full
+# matrix figure adds independently simulated pedigrees as separate matrix blocks.
 
 # -----------------------------------------------------------------------------
 # Package setup
 # -----------------------------------------------------------------------------
 
 required_packages <- c(
-  "ggplot2", "dplyr", "tidyr", "tibble", "readr", "patchwork", "scales"
+  "ggplot2", "dplyr", "tidyr", "tibble", "readr", "patchwork", "scales",
+  "Matrix", "BGmisc"
 )
 
 missing_packages <- required_packages[
@@ -46,7 +49,12 @@ library(BGmisc)
 # These defaults match the parameter-recovery script. Existing objects in the
 # current R session take precedence.
 figure_seed <- get0("master_seed", ifnotfound = 11202601L) + 9000L
+
 n_display <- 10L
+
+# Number of independently simulated pedigree blocks in relatedness_matrices.png.
+# The detailed temporal-pair panels below continue to use Pedigree 1 only.
+n_full_figure_pedigrees <- 3L
 
 kpc_figure <- get0("kpc", ifnotfound = 4L)
 Ngen_figure <- get0("Ngen", ifnotfound = 4L)
@@ -58,6 +66,9 @@ gen_gap_figure <- get0("gen_gap", ifnotfound = 30)
 prop_historical_figure <- get0("prop_historical", ifnotfound = 0.5)
 loading_link_figure <- get0("loading_link", ifnotfound = "exp")
 components_figure <- get0("sim_components", ifnotfound = c("a", "cn", "e"))
+
+
+
 
 if (!exists("true_beta", inherits = TRUE)) {
   true_beta <- list(
@@ -309,6 +320,33 @@ select_display_members <- function(n_total, required_members, n_keep) {
   sort(unique(selected))
 }
 
+# Calculate the beginning and end of each contiguous pedigree block.
+make_block_data <- function(block_id) {
+  block_id <- as.character(block_id)
+
+  run_info <- rle(block_id)
+  block_end <- cumsum(run_info$lengths)
+  block_start <- block_end - run_info$lengths + 1L
+
+  data.frame(
+    block = run_info$values,
+    xmin  = block_start - 0.5,
+    xmax  = block_end   + 0.5,
+    ymin  = block_start - 0.5,
+    ymax  = block_end   + 0.5
+  )
+}
+
+
+map_pair_to_display <- function(pair_row) {
+  c(
+    i = unname(member_map[as.character(pair_row$i)]),
+    j = unname(member_map[as.character(pair_row$j)])
+  )
+}
+
+# Graphs
+
 add_historical_strips <- function(
   main_plot,
   historical,
@@ -412,237 +450,6 @@ add_historical_strips <- function(
     )
 }
 
-save_panel <- function(plot_object, filename, width, height) {
-  ggplot2::ggsave(
-    filename = file.path(panel_output_directory, filename),
-    plot = plot_object,
-    width = width,
-    height = height,
-    dpi = 300,
-    bg = "white"
-  )
-}
-
-# -----------------------------------------------------------------------------
-# Simulate one illustrative pedigree and choose two equal-relatedness dyads
-# -----------------------------------------------------------------------------
-
-simulate_figure_family <- function(seed) {
-  set.seed(seed)
-
-  simulate_temporal_family(
-    kpc = kpc_figure,
-    Ngen = Ngen_figure,
-    marR = marR_figure,
-    threshold_year = threshold_year_figure,
-    true_beta = true_beta,
-    true_gamma = true_gamma,
-    components = components_figure,
-    gen_gap = gen_gap_figure,
-    birth_year_sd = birth_year_sd_figure,
-    birth_year_base = birth_year_base_figure,
-    family_id = seed,
-    poly = 3,
-    rescale = TRUE,
-    loading_link = loading_link_figure,
-    time_scale = "fixed",
-    time_half_range = 3,
-    prop_historical = prop_historical_figure
-  )
-}
-
-figure_family <- NULL
-contrast <- NULL
-ordered_family <- NULL
-
-for (attempt in 0:60) {
-  candidate <- simulate_figure_family(figure_seed + attempt)
-
-  time_candidate <- as.numeric(candidate$birth_year_scaled)
-  historical_candidate <- as.integer(candidate$H)
-  A_candidate <- as.matrix(candidate$A)
-
-  order_candidate <- order(time_candidate, seq_along(time_candidate))
-
-  A_ordered <- A_candidate[order_candidate, order_candidate, drop = FALSE]
-  time_ordered <- time_candidate[order_candidate]
-  historical_ordered <- historical_candidate[order_candidate]
-
-  candidate_contrast <- find_temporal_contrast(
-    A = A_ordered,
-    time = time_ordered,
-    historical = historical_ordered
-  )
-
-  if (
-    !is.null(candidate_contrast) &&
-    length(unique(historical_ordered)) >= 2L
-  ) {
-    figure_family <- candidate
-    contrast <- candidate_contrast
-    ordered_family <- list(
-      order = order_candidate,
-      A = A_ordered,
-      time = time_ordered,
-      historical = historical_ordered
-    )
-    break
-  }
-}
-
-if (is.null(figure_family) || is.null(contrast)) {
-  stop(
-    "Could not find one simulated pedigree containing two equal-relatedness ",
-    "dyads with sufficiently different temporal positions after 61 attempts."
-  )
-}
-
-required_members <- unique(c(
-  contrast$cross_pair$i,
-  contrast$cross_pair$j,
-  contrast$same_pair$i,
-  contrast$same_pair$j
-))
-
-selected_members <- select_display_members(
-  n_total = nrow(ordered_family$A),
-  required_members = required_members,
-  n_keep = n_display
-)
-
-A_display <- ordered_family$A[
-  selected_members,
-  selected_members,
-  drop = FALSE
-]
-
-time_display <- ordered_family$time[selected_members]
-historical_display <- ordered_family$historical[selected_members]
-
-# Use actual birth years on the axes when the simulator supplies them.
-raw_birth_year <- first_existing_vector(
-  figure_family,
-  candidates = c(
-    "birth_year", "birth_year_raw", "birth_year_unscaled", "year_birth"
-  ),
-  expected_length = length(ordered_family$order)
-)
-
-if (!is.null(raw_birth_year)) {
-  raw_birth_year <- raw_birth_year[ordered_family$order][selected_members]
-  person_labels <- as.character(round(raw_birth_year))
-  axis_description <- "Birth year"
-} else {
-  person_labels <- paste0("P", seq_along(selected_members))
-  axis_description <- "Birth-order position"
-}
-
-member_map <- stats::setNames(
-  seq_along(selected_members),
-  as.character(selected_members)
-)
-
-map_pair_to_display <- function(pair_row) {
-  c(
-    i = unname(member_map[as.character(pair_row$i)]),
-    j = unname(member_map[as.character(pair_row$j)])
-  )
-}
-
-cross_position <- map_pair_to_display(contrast$cross_pair)
-same_position <- map_pair_to_display(contrast$same_pair)
-
-if (any(!is.finite(c(cross_position, same_position)))) {
-  stop("Internal error: highlighted dyads were not retained in the display set.")
-}
-
-lambda_a <- calculate_lambda(
-  time = time_display,
-  historical = historical_display,
-  beta = true_beta$a,
-  gamma = true_gamma$a,
-  link = loading_link_figure
-)
-
-T_a <- outer(lambda_a, lambda_a)
-V_a <- A_display * T_a
-
-n <- length(time_display)
-
-highlight_upper <- bind_rows(
-  tibble(
-    row = cross_position["i"],
-    column = cross_position["j"],
-    dyad = "Cross-period relatives"
-  ),
-  tibble(
-    row = same_position["i"],
-    column = same_position["j"],
-    dyad = "Same-period relatives"
-  )
-)
-
-highlight_lower <- bind_rows(
-  tibble(
-    row = cross_position["j"],
-    column = cross_position["i"],
-    dyad = "Cross-period relatives"
-  ),
-  tibble(
-    row = same_position["j"],
-    column = same_position["i"],
-    dyad = "Same-period relatives"
-  )
-)
-
-highlight_mirrored <- bind_rows(
-  highlight_upper,
-  highlight_lower
-)
-
-
-highlight_colours <- c(
-  "Cross-period relatives" = "#C49A00",
-  "Same-period relatives" = "#B2182B"
-)
-
-
-
-# Expected objects:
-#
-# A2  : additive genetic relatedness matrix
-# CN2 : nuclear-family environmental matrix
-# CE2 : extended-family environmental matrix
-# MT2 : mtDNA relatedness matrix
-# P   : phenotypic covariance matrix
-#
-# famID:
-#   A length-n vector identifying the diagonal pedigree blocks.
-#   Its ordering must match the row/column ordering of the matrices.
-#
-# Example:
-# famID <- c(rep("pedigree_1", 40),
-#                  rep("pedigree_2", 20))
-
-
-
-# Calculate the beginning and end of each contiguous pedigree block.
-make_block_data <- function(block_id) {
-  block_id <- as.character(block_id)
-
-  run_info <- rle(block_id)
-  block_end <- cumsum(run_info$lengths)
-  block_start <- block_end - run_info$lengths + 1L
-
-  data.frame(
-    block = run_info$values,
-    xmin  = block_start - 0.5,
-    xmax  = block_end   + 0.5,
-    ymin  = block_start - 0.5,
-    ymax  = block_end   + 0.5
-  )
-}
-
 
 # General matrix plotting function.
 plot_matrix <- function(
@@ -723,40 +530,341 @@ plot_matrix <- function(
     )
 }
 
-A2 <- figure_family$A[ordered_family$order, ordered_family$order]
-CN2 <- figure_family$Cn[ordered_family$order, ordered_family$order]
-CE2 <- figure_family$Ce[ordered_family$order, ordered_family$order]
-MT2 <- figure_family$Mt[ordered_family$order, ordered_family$order]
-P <- figure_family$V_true[ordered_family$order, ordered_family$order]
 
-matrix_nrows  <- nrow(A2)
-full_family_id <- rep(1L, nrow(A2))
+save_panel <- function(plot_object, filename, width, height) {
+  ggplot2::ggsave(
+    filename = file.path(panel_output_directory, filename),
+    plot = plot_object,
+    width = width,
+    height = height,
+    dpi = 300,
+    bg = "white"
+  )
+}
+
+# -----------------------------------------------------------------------------
+# Simulate one illustrative pedigree and choose two equal-relatedness dyads
+# -----------------------------------------------------------------------------
+
+simulate_figure_family <- function(seed) {
+  set.seed(seed)
+
+  simulate_temporal_family(
+    kpc = kpc_figure,
+    Ngen = Ngen_figure,
+    marR = marR_figure,
+    threshold_year = threshold_year_figure,
+    true_beta = true_beta,
+    true_gamma = true_gamma,
+    components = components_figure,
+    gen_gap = gen_gap_figure,
+    birth_year_sd = birth_year_sd_figure,
+    birth_year_base = birth_year_base_figure,
+    family_id = seed,
+    poly = 3,
+    rescale = TRUE,
+    loading_link = loading_link_figure,
+    time_scale = "fixed",
+    time_half_range = 3,
+    prop_historical = prop_historical_figure
+  )
+}
 
 
-# relatedness-matrix figure uses every member of the simulated pedigree.
-time_full <- ordered_family$time
-historical_full <- ordered_family$historical
+# Put one simulated pedigree into the row/column order used in the full figure.
+prepare_full_figure_family <- function(family, pedigree_id) {
+  time <- as.numeric(family$birth_year_scaled)
+  historical <- as.integer(family$H)
+  order_index <- order(time, seq_along(time))
 
-stopifnot(
-  length(time_full) == matrix_nrows,
-  length(historical_full) == matrix_nrows
+  A <- as.matrix(family$A)[order_index, order_index, drop = FALSE]
+  Cn <- as.matrix(family$Cn)[order_index, order_index, drop = FALSE]
+  Ce <- as.matrix(family$Ce)[order_index, order_index, drop = FALSE]
+  Mt <- as.matrix(family$Mt)[order_index, order_index, drop = FALSE]
+  P <- as.matrix(family$V_true)[order_index, order_index, drop = FALSE]
+  time <- time[order_index]
+  historical <- historical[order_index]
+
+  lambda_a <- calculate_lambda(
+    time = time,
+    historical = historical,
+    beta = true_beta$a,
+    gamma = true_gamma$a,
+    link = loading_link_figure
+  )
+
+  T_a <- outer(lambda_a, lambda_a)
+
+  list(
+    pedigree_id = pedigree_id,
+    n = nrow(A),
+    order = order_index,
+    A = A,
+    Cn = Cn,
+    Ce = Ce,
+    Mt = Mt,
+    P = P,
+    time = time,
+    historical = historical,
+    lambda_a = lambda_a,
+    T_a = T_a,
+    V_a = A * T_a
+  )
+}
+
+# Assemble the separately simulated pedigrees once for the full matrix figure.
+# plot_matrix() still receives one matrix plus block_id; no pedigree logic is
+# duplicated inside the graph calls.
+assemble_full_figure_data <- function(families) {
+  prepared <- Map(
+    prepare_full_figure_family,
+    family = families,
+    pedigree_id = seq_along(families)
+  )
+
+  combine_matrix <- function(matrix_name) {
+    as.matrix(
+      Matrix::bdiag(
+        lapply(prepared, function(x) x[[matrix_name]])
+      )
+    )
+  }
+
+  list(
+    families = prepared,
+    block_id = unlist(
+      lapply(
+        prepared,
+        function(x) rep.int(x$pedigree_id, x$n)
+      ),
+      use.names = FALSE
+    ),
+    A = combine_matrix("A"),
+    Cn = combine_matrix("Cn"),
+    Ce = combine_matrix("Ce"),
+    Mt = combine_matrix("Mt"),
+    P = combine_matrix("P"),
+    T_a = combine_matrix("T_a"),
+    V_a = combine_matrix("V_a"),
+    time = unlist(lapply(prepared, function(x) x$time), use.names = FALSE),
+    historical = unlist(
+      lapply(prepared, function(x) x$historical),
+      use.names = FALSE
+    ),
+    lambda_a = unlist(
+      lapply(prepared, function(x) x$lambda_a),
+      use.names = FALSE
+    )
+  )
+}
+
+
+# Make sure we find a simulated pedigree that contains two dyads with the same
+figure_family <- NULL
+contrast <- NULL
+ordered_family <- NULL
+
+for (attempt in 0:60) {
+  candidate <- simulate_figure_family(figure_seed + attempt)
+
+  time_candidate <- as.numeric(candidate$birth_year_scaled)
+  historical_candidate <- as.integer(candidate$H)
+  A_candidate <- as.matrix(candidate$A)
+
+  order_candidate <- order(time_candidate, seq_along(time_candidate))
+
+  A_ordered <- A_candidate[order_candidate, order_candidate, drop = FALSE]
+  time_ordered <- time_candidate[order_candidate]
+  historical_ordered <- historical_candidate[order_candidate]
+
+  candidate_contrast <- find_temporal_contrast(
+    A = A_ordered,
+    time = time_ordered,
+    historical = historical_ordered
+  )
+
+  if (
+    !is.null(candidate_contrast) &&
+    length(unique(historical_ordered)) >= 2L
+  ) {
+    figure_family <- candidate
+    contrast <- candidate_contrast
+    ordered_family <- list(
+      order = order_candidate,
+      A = A_ordered,
+      time = time_ordered,
+      historical = historical_ordered
+    )
+    break
+  }
+}
+
+if (is.null(figure_family) || is.null(contrast)) {
+  stop(
+    "Could not find one simulated pedigree containing two equal-relatedness ",
+    "dyads with sufficiently different temporal positions after 61 attempts."
+  )
+}
+
+additional_family_seeds <-
+  figure_seed + attempt + seq_len(max(0L, n_full_figure_pedigrees - 1L))
+
+additional_figure_families <- lapply(
+  additional_family_seeds,
+  simulate_figure_family
 )
 
+full_figure_families <- c(
+  list(figure_family),
+  additional_figure_families
+)
 
-lambda_a_full <- calculate_lambda(
-  time = time_full,
-  historical = historical_full,
+# Keep the familiar object names available for interactive inspection.
+fam2 <- if (length(full_figure_families) >= 2L) full_figure_families[[2L]] else NULL
+fam3 <- if (length(full_figure_families) >= 3L) full_figure_families[[3L]] else NULL
+
+required_members <- unique(c(
+  contrast$cross_pair$i,
+  contrast$cross_pair$j,
+  contrast$same_pair$i,
+  contrast$same_pair$j
+))
+
+selected_members <- select_display_members(
+  n_total = nrow(ordered_family$A),
+  required_members = required_members,
+  n_keep = n_display
+)
+
+A_primary_full <- ordered_family$A
+
+A_display <- A_primary_full[
+  selected_members,
+  selected_members,
+  drop = FALSE
+]
+time_primary_full <- ordered_family$time
+time_display <- time_primary_full[selected_members]
+
+historical_primary_full <- ordered_family$historical
+historical_display <- historical_primary_full[selected_members]
+
+# Use actual birth years on the axes when the simulator supplies them.
+raw_birth_year <- first_existing_vector(
+  figure_family,
+  candidates = c(
+    "birth_year", "birth_year_raw", "birth_year_unscaled", "year_birth"
+  ),
+  expected_length = length(ordered_family$order)
+)
+
+if (!is.null(raw_birth_year)) {
+  raw_birth_year <- raw_birth_year[ordered_family$order][selected_members]
+  person_labels <- as.character(round(raw_birth_year))
+  axis_description <- "Birth year"
+} else {
+  person_labels <- paste0("P", seq_along(selected_members))
+  axis_description <- "Birth-order position"
+}
+
+member_map <- stats::setNames(
+  seq_along(selected_members),
+  as.character(selected_members)
+)
+
+cross_position <- map_pair_to_display(contrast$cross_pair)
+same_position <- map_pair_to_display(contrast$same_pair)
+
+if (any(!is.finite(c(cross_position, same_position)))) {
+  stop("Internal error: highlighted dyads were not retained in the display set.")
+}
+
+# full
+
+lambda_a_primary_full <- calculate_lambda(
+  time = time_primary_full,
+  historical = historical_primary_full,
   beta = true_beta$a,
   gamma = true_gamma$a,
   link = loading_link_figure
 )
+T_a_primary_full <- outer(lambda_a_primary_full, lambda_a_primary_full)
 
-T_a_full <- outer(lambda_a_full, lambda_a_full)
-V_a_full <- A2 * T_a_full
+
+lambda_a <- lambda_a_primary_full[selected_members]
+
+T_a <- T_a_primary_full[
+  selected_members,
+  selected_members,
+  drop = FALSE
+]
+
+V_a_primary_full <- A_primary_full * T_a_primary_full
+V_a <- A_display * T_a
+
+n <- length(time_display)
+
+highlight_upper <- bind_rows(
+  tibble(
+    row = cross_position["i"],
+    column = cross_position["j"],
+    dyad = "Cross-period relatives"
+  ),
+  tibble(
+    row = same_position["i"],
+    column = same_position["j"],
+    dyad = "Same-period relatives"
+  )
+)
+
+highlight_lower <- bind_rows(
+  tibble(
+    row = cross_position["j"],
+    column = cross_position["i"],
+    dyad = "Cross-period relatives"
+  ),
+  tibble(
+    row = same_position["j"],
+    column = same_position["i"],
+    dyad = "Same-period relatives"
+  )
+)
+
+highlight_mirrored <- bind_rows(
+  highlight_upper,
+  highlight_lower
+)
+
+
+highlight_colours <- c(
+  "Cross-period relatives" = "#C49A00",
+  "Same-period relatives" = "#B2182B"
+)
+
+
+
+
+full_figure_data <- assemble_full_figure_data(full_figure_families)
+
+A_display_full <- full_figure_data$A
+CN_display_full <- full_figure_data$Cn
+CE_display_full <- full_figure_data$Ce
+MT_display_full <- full_figure_data$Mt
+P_display_full <- full_figure_data$P
+T_a_full <- full_figure_data$T_a
+V_a_full <- full_figure_data$V_a
+time_display_full <- full_figure_data$time
+historical_display_full <- full_figure_data$historical
+lambda_a_full <- full_figure_data$lambda_a
+
+matrix_nrows  <- nrow(A_display_full)
+full_family_id <- full_figure_data$block_id
+
+
 
 # Matrix panels
 p_a2 <- plot_matrix(
-  A2,
+  A_display_full,
   title = expression(
     a^2 * ": nuclear-DNA alleles" ~
       atop("summed across loci", "")
@@ -765,7 +873,7 @@ p_a2 <- plot_matrix(
 )
 
 p_cn2 <- plot_matrix(
-  CN2,
+  CN_display_full,
   title = expression(
     c[N]^2 * ": environmental effects common to" ~
       atop("nuclear-family members only", "")
@@ -774,7 +882,7 @@ p_cn2 <- plot_matrix(
 )
 
 p_ce2 <- plot_matrix(
-  CE2,
+  CE_display_full,
   title = expression(
     c[E]^2 * ": environmental effects common to all" ~
       atop("extended-family members", "")
@@ -783,7 +891,7 @@ p_ce2 <- plot_matrix(
 )
 
 p_mt2 <- plot_matrix(
-  MT2,
+  MT_display_full,
   title = expression(mt^2),
   block_id =  full_family_id
 )
@@ -807,7 +915,7 @@ p_temporal_a <- plot_matrix(
   high = "#542788"
 )
 p_cov <- plot_matrix(
-  P,
+  P_display_full,
   title = expression(
     Cov(p) * ": Phenotypic" ~
       atop("covariance", "")
@@ -824,7 +932,7 @@ p_cov <- plot_matrix(
 complete_figure <-
   (p_a2  | p_ta | p_temporal_a) /
   ( p_cn2 | p_ce2| p_mt2 ) /
-  ( p_cov )
+  ( p_cov ) +
   plot_layout(
     widths = c(1, 1, 1),
     heights = c(1, 1, 1)
@@ -841,7 +949,7 @@ complete_figure
 
 # Export
 ggsave(
-  filename = "relatedness_matrices.png",
+  filename = file.path(panel_output_directory, "relatedness_matrices.png"),
   plot = complete_figure,
   width = 9,
   height = 13,
