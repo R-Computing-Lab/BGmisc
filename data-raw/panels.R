@@ -822,7 +822,7 @@ p_cov <- plot_matrix(
 # ------------------------------------------------------------------
 
 complete_figure <-
-  (p_a2  | p_ta| p_temporal_a) /
+  (p_a2  | p_ta | p_temporal_a) /
   ( p_cn2 | p_ce2| p_mt2 ) /
   ( p_cov )
   plot_layout(
@@ -843,8 +843,8 @@ complete_figure
 ggsave(
   filename = "relatedness_matrices.png",
   plot = complete_figure,
-  width = 13,
-  height = 9,
+  width = 9,
+  height = 13,
   units = "in",
   dpi = 400,
   bg = "white"
