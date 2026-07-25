@@ -55,7 +55,7 @@ n_display <- 10L
 
 # Number of independently simulated pedigree blocks in relatedness_matrices.png.
 # The detailed temporal-pair panels below continue to use Pedigree 1 only.
-n_full_figure_pedigrees <- 3L
+n_full_figure_pedigrees <- 2L
 
 kpc_figure <- get0("kpc", ifnotfound = 4L)
 Ngen_figure <- get0("Ngen", ifnotfound = 4L)
