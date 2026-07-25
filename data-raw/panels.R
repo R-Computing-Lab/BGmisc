@@ -57,11 +57,19 @@ n_display <- 10L
 # The detailed temporal-pair panels below continue to use Pedigree 1 only.
 n_full_figure_pedigrees <- 2L
 
-kpc_figure <- get0("kpc", ifnotfound = 4L)
-Ngen_figure <- get0("Ngen", ifnotfound = 4L)
-marR_figure <- get0("marR", ifnotfound = 0.8)
+kpc_solo_figure <- get0("kpc", ifnotfound = 4L)
+kpc_figures <- rep(kpc_solo_figure, n_full_figure_pedigrees - 1L)
+
+Ngen_solo_figure <- get0("Ngen", ifnotfound = 4L)
+Ngen_figures <- rep(Ngen_solo_figure, n_full_figure_pedigrees - 1L)
+Ngen_figures <- rep(3L, n_full_figure_pedigrees - 1L)
+
+
+marR_solo_figure <- get0("marR", ifnotfound = 0.8)
+marR_figures <- rep(marR_solo_figure, n_full_figure_pedigrees - 1L)
 
 threshold_year_figure <- get0("threshold_year", ifnotfound = 1750)
+
 birth_year_sd_figure <- get0("birth_year_sd", ifnotfound = 12)
 birth_year_base_figure <- get0("birth_year_base", ifnotfound = 1700)
 gen_gap_figure <- get0("gen_gap", ifnotfound = 30)
@@ -459,6 +467,7 @@ plot_matrix <- function(
     title,
     block_id,
     low = "white",
+    mid = "#B8DBEB",
     high = "#08396D",
     midpoint = NULL,
     na_colour = "white",
@@ -498,7 +507,7 @@ plot_matrix <- function(
 
     scale_fill_gradient2(
       low = low,
-      mid = "#B8DBEB",
+      mid = mid,
       high = high,
       midpoint = midpoint,
       limits = range(x, na.rm = TRUE),
@@ -548,13 +557,16 @@ save_panel <- function(plot_object, filename, width, height) {
 # Simulate one illustrative pedigree and choose two equal-relatedness dyads
 # -----------------------------------------------------------------------------
 
-simulate_figure_family <- function(seed) {
+simulate_figure_family <- function(seed,
+                                   kpc = kpc_solo_figure,
+                                   Ngen = Ngen_solo_figure,
+                                   marR = marR_solo_figure) {
   set.seed(seed)
 
   simulate_temporal_family(
-    kpc = kpc_figure,
-    Ngen = Ngen_figure,
-    marR = marR_figure,
+    kpc = kpc,
+    Ngen = Ngen,
+    marR = marR,
     threshold_year = threshold_year_figure,
     true_beta = true_beta,
     true_gamma = true_gamma,
@@ -615,8 +627,8 @@ prepare_full_figure_family <- function(family, pedigree_id) {
 }
 
 # Assemble the separately simulated pedigrees once for the full matrix figure.
-# plot_matrix() still receives one matrix plus block_id; no pedigree logic is
-# duplicated inside the graph calls.
+# plot_matrix() still receives one matrix plus block_id
+
 assemble_full_figure_data <- function(families) {
   prepared <- Map(
     prepare_full_figure_family,
@@ -713,7 +725,10 @@ additional_family_seeds <-
 
 additional_figure_families <- lapply(
   additional_family_seeds,
-  simulate_figure_family
+  simulate_figure_family,
+  kpc = kpc_figures,
+  Ngen = Ngen_figures,
+  marR = marR_figures
 )
 
 full_figure_families <- c(
@@ -901,9 +916,11 @@ p_ta <- plot_matrix(
   T_a_full,
   title = expression(
     T[A] == lambda[A] * lambda[A]^T ~
-      atop("pair-specific temporal weights", "")
+      atop("pair-specific temporal weights")
   ),
   block_id = full_family_id,
+  low = "white",
+  mid = NULL,
   high = "#B2182B"
 )
 
@@ -911,7 +928,7 @@ p_temporal_a <- plot_matrix(
   V_a_full,
   title = expression(
     V[A] == A %.% T[A] * ": temporally moderated" ~
-      atop("additive covariance, full pedigree", "")
+      atop("additive covariance, full pedigree")
   ),
   block_id =  full_family_id,
   high = "#542788"
@@ -920,7 +937,7 @@ p_cov <- plot_matrix(
   P_display_full,
   title = expression(
     Cov(p) * ": Phenotypic" ~
-      atop("covariance", "")
+      "covariance"
   ),
   block_id = full_family_id
 )
@@ -953,8 +970,8 @@ complete_figure
 ggsave(
   filename = file.path(panel_output_directory, "relatedness_matrices.png"),
   plot = complete_figure,
-  width = 9,
-  height = 13,
+  width = 13,
+  height = 11,
   units = "in",
   dpi = 400,
   bg = "white"
