@@ -66,7 +66,7 @@ sfLibrary(OpenMx)
 master_seed <- 202607200
 n_replications <- 500
 n_families <- 250
-threshold_year <- 1771
+threshold_year <- 1776
 prop_historical <- 0.5
 # Standard deviation of the birth-year range, widened here for broader time
 # coverage. It is not linked to parental age, so at this width about 8% of
@@ -90,7 +90,7 @@ Ngen <- 4
 marR <- 0.8
 use_exp_loadings <- TRUE
 
-core_folder <- "temporal_ACE_parameter_recovery_robust_f250_p50_reps500v2"
+core_folder <- "temporal_ACE_cub_parameter_recovery_f250_p50_reps500"
 
 loading_link <- if (use_exp_loadings) {
   "exp"
@@ -134,15 +134,15 @@ fit_components <- c(
 #   lambda_k = exp(beta_k0 + beta_k1 * t + beta_k2 * t^2 + beta_k3 * t^3 + gamma_k * H)
 # and component k contributes lambda_k^2 to the phenotypic variance.
 true_beta <- list(
-  a  = c(log(3), 0, 0, 0.00),
-  cn = c(log(2.5), 0.00, 0.00, 0.00),
+  a  = c(log(3), 0.1, 0.1, -0.10),
+  cn = c(log(2.5), 0.00, 0.20, 0.00),
   ce = c(0.00, 0.00, 0.00, 0.00),
   mt = c(0.00, 0.00, 0.00, 0.00),
-  e  = c(log(2.0), 0, 0, 0.00)
+  e  = c(log(2.0), -0.1, .1, 0.00)
 )
 
 true_gamma <- list(
-  a  = 0.0,
+  a  = 0.2,
   cn = 0.00,
   ce = 0.00,
   mt = 0.00,
@@ -162,14 +162,17 @@ target <- c(
   b_a_0 = true_beta$a[1],
   b_a_1 = true_beta$a[2],
   b_a_2 = true_beta$a[3],
+  b_a_3 = true_beta$a[4],
   g_a_1 = true_gamma$a[1],
   b_cn_0 = true_beta$cn[1],
   b_cn_1 = true_beta$cn[2],
   b_cn_2 = true_beta$cn[3],
+  b_cn_3 = true_beta$cn[4],
   g_cn_1 = true_gamma$cn[1],
   b_e_0 = true_beta$e[1],
   b_e_1 = true_beta$e[2],
   b_e_2 = true_beta$e[3],
+  b_e_3 = true_beta$e[4],
   g_e_1 = true_gamma$e[1]
 )
 
@@ -261,7 +264,7 @@ build_true_model <- function(families, replication) {
       Dmgmat = NULL,
       full_df_row = fam$y,
       obs_ids = fam$obs_ids,
-      birth_year = fam$birth_year_scaled,
+      param_year = fam$birth_year_scaled,
       H = fam$H,
       use_exp_loadings = use_exp_loadings
     )

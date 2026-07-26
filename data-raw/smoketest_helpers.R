@@ -163,7 +163,7 @@ free_only <- function(model, labels_to_free) {
   )
 }
 
-run_and_report <- function(model, label, tries = 20) {
+run_and_report <- function(model, label, tries = 5) {
   cat("\n==============================\n")
   cat("Running ", label, "\n", sep = "")
   cat("==============================\n")
