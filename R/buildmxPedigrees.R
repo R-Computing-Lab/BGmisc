@@ -1125,6 +1125,7 @@ buildFamilyGroups_list <- function(
 #'   \code{temporal = TRUE}. Default is 0.
 #' @param components Character vector of component keys to include (any of "a", "d", "cn",
 #'   "ce", "mt", "am", "e"). Only used when \code{temporal = TRUE}. Default is \code{c("a", "e")}.
+#' @param ci_names A vector of parameters for confidence intervals. If not provided, it is derived from components
 #' @return An OpenMx pedigree model combining variance components and family groups.
 #' @export
 
@@ -1135,6 +1136,7 @@ buildPedigreeMx <- function(model_name, vars, group_models,
                             p_hist = 0,
                             param_year = NULL,
                             components = c("a", "e"),
+                            ci_names = NULL,
                             time_point_max = NULL) {
   .require_openmx("buildPedigreeMx")
 
@@ -1151,11 +1153,13 @@ buildPedigreeMx <- function(model_name, vars, group_models,
 
     ci_obj <- NULL
     if (ci) {
+      if(is.null(ci_names)){
       ci_names <- unlist(lapply(components, function(k) {
         out <- paste0("b_", k, "_", 0:tp_max)
         if (p_hist > 0) out <- c(out, paste0("g_", k, "_", seq_len(p_hist)))
         out
       }))
+      }
       ci_obj <- OpenMx::mxCI(ci_names)
     }
 
@@ -1199,7 +1203,10 @@ buildPedigreeMx <- function(model_name, vars, group_models,
   )
 
   ci_obj <- if (ci & any(flags$Vad, flags$Vdd, flags$Vcn, flags$Vce, flags$Vmt, flags$Vam, flags$Ver)) {
-    OpenMx::mxCI(c("vad", "vdd", "vcn", "vce", "vmt", "vam", "ver")[c(flags$Vad, flags$Vdd, flags$Vcn, flags$Vce, flags$Vmt, flags$Vam, flags$Ver)])
+   if(is.null(ci_names)){
+     ci_names <- c("vad", "vdd", "vcn", "vce", "vmt", "vam", "ver")[c(flags$Vad, flags$Vdd, flags$Vcn, flags$Vce, flags$Vmt, flags$Vam, flags$Ver)]
+   }
+    OpenMx::mxCI(ci_names)
   } else {
     NULL
   }
