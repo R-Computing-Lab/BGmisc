@@ -163,7 +163,7 @@ free_only <- function(model, labels_to_free) {
   )
 }
 
-run_and_report <- function(model, label, tries = 5) {
+run_and_report <- function(model, label, tries = 5,confidence_intervals = FALSE) {
   cat("\n==============================\n")
   cat("Running ", label, "\n", sep = "")
   cat("==============================\n")
@@ -171,7 +171,7 @@ run_and_report <- function(model, label, tries = 5) {
   fit <- mxTryHard(
     model,
     extraTries = tries,
-    intervals = FALSE,
+    intervals = confidence_intervals,
     silent = FALSE
   )
 
