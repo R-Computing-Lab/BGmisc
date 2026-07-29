@@ -464,7 +464,9 @@ add_historical_strips <- function(
 # General matrix plotting function.
 plot_matrix <- function(
     x,
-    title,
+    title=NULL,
+    subtitle=NULL,
+    caption=NULL,
     block_id,
     low = "white",
     mid = "#B8DBEB",
@@ -527,7 +529,9 @@ plot_matrix <- function(
 
     coord_fixed(clip = "off") +
 
-    labs(title = title) +
+    labs(title = title,
+         subtitle = subtitle,
+         caption = caption) +
 
     theme_void(base_size = 12) +
     theme(
@@ -883,26 +887,21 @@ full_family_id <- full_figure_data$block_id
 p_a2 <- plot_matrix(
   A_display_full,
   title = expression(
-    a^2 * ": nuclear-DNA alleles" ~
-      atop("summed across loci", "")
-  ),
+    a^2),
   block_id = full_family_id
 )
 
 p_cn2 <- plot_matrix(
   CN_display_full,
   title = expression(
-    c[N]^2 * ": environmental effects common to" ~
-      atop("nuclear-family members only", "")
-  ),
+    c[N]^2),
   block_id =  full_family_id
 )
 
 p_ce2 <- plot_matrix(
   CE_display_full,
   title = expression(
-    c[E]^2 * ": environmental effects common to all" ~
-      atop("extended-family members", "")
+    c[E]^2
   ),
   block_id =  full_family_id
 )
@@ -915,8 +914,8 @@ p_mt2 <- plot_matrix(
 p_ta <- plot_matrix(
   T_a_full,
   title = expression(
-    T[A] == lambda[A] * lambda[A]^T ~
-      atop("pair-specific temporal weights")
+    atop(T[A] == lambda[A] * lambda[A]^T,
+      "pair-specific temporal weights")
   ),
   block_id = full_family_id,
   low = "white",
@@ -927,9 +926,9 @@ p_ta <- plot_matrix(
 p_temporal_a <- plot_matrix(
   V_a_full,
   title = expression(
-    V[A] == A %.% T[A] * ": temporally moderated" ~
-      atop("additive covariance, full pedigree")
-  ),
+    atop(V[A] == A %.% T[A],
+      ": temporally moderated additive covariance"
+  )),
   block_id =  full_family_id,
   high = "#542788"
 )
