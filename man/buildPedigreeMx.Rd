@@ -14,6 +14,7 @@ buildPedigreeMx(
   p_hist = 0,
   param_year = NULL,
   components = c("a", "e"),
+  ci_names = NULL,
   time_point_max = NULL
 )
 }
@@ -41,6 +42,8 @@ the family, in the same order as \code{obs_ids}. Only used when \code{temporal =
 
 \item{components}{Character vector of component keys to include (any of "a", "d", "cn",
 "ce", "mt", "am", "e"). Only used when \code{temporal = TRUE}. Default is \code{c("a", "e")}.}
+
+\item{ci_names}{A vector of parameters for confidence intervals. If not provided, it is derived from components}
 
 \item{time_point_max}{Integer degree of the polynomial birth-year basis. Only used when
 \code{temporal = TRUE}. Default is 3.}
