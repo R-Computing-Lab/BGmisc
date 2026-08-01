@@ -73,35 +73,23 @@ panel_b2_files <- make_panel_files("B2")
 time_grid <- seq(-3, 3, length.out = 301)
 central_summary <- "mean"
 
-parameter_names <- c(
-  "b_a_0", "b_a_1", "b_a_2", "g_a_1",
-  "b_cn_0", "b_cn_1", "b_cn_2", "g_cn_1",
-  "b_e_0", "b_e_1", "b_e_2", "g_e_1"
+# parameter_names, component_order, component_labels, historical_period_labels,
+# event_experience_labels, and calculate_variance_trajectories() all live here
+# so that the longevity-panel scripts can reuse the same variance math.
+trajectory_helpers <- c(
+  "data-raw/temporal_variance_trajectories.R",
+  "temporal_variance_trajectories.R"
 )
+trajectory_helpers <- trajectory_helpers[file.exists(trajectory_helpers)]
 
-component_order <- c(
-  "a_variance",
-  "cn_variance",
-  "e_variance",
-  "total_variance"
-)
+if (length(trajectory_helpers) == 0L) {
+  stop(
+    "Could not find temporal_variance_trajectories.R. ",
+    "Run this script from the package root or from data-raw/."
+  )
+}
 
-component_labels <- c(
-  a_variance = "Additive genetic variance",
-  cn_variance = "Nuclear-family environmental variance",
-  e_variance = "Nonshared environmental variance",
-  total_variance = "Phenotypic variance"
-)
-
-historical_period_labels <- c(
-  `0` = "Before the historical event",
-  `1` = "After the historical event"
-)
-
-event_experience_labels <- c(
-  `0` = "Event not experienced",
-  `1` = "Event experienced"
-)
+source(trajectory_helpers[1])
 
 # -----------------------------------------------------------------------------
 # Read and validate simulation output
@@ -208,87 +196,8 @@ if (
 # Shared figure-data helpers
 # -----------------------------------------------------------------------------
 
-# Convert parameter rows into model-implied variance trajectories. The input
-# parameter_data may contain one population row or many Monte Carlo rows.
-# prediction_grid must contain time, historical_period, and event_experienced.
-calculate_variance_trajectories <- function(
-  parameter_data,
-  prediction_grid,
-  id_columns = character(),
-  variance_column = "variance"
-) {
-  required_grid_columns <- c(
-    "time",
-    "historical_period",
-    "event_experienced"
-  )
-
-  missing_grid_columns <- setdiff(
-    required_grid_columns,
-    names(prediction_grid)
-  )
-
-  if (length(missing_grid_columns) > 0L) {
-    stop(
-      "prediction_grid is missing required column(s): ",
-      paste(missing_grid_columns, collapse = ", ")
-    )
-  }
-
-  missing_parameter_columns <- setdiff(
-    parameter_names,
-    names(parameter_data)
-  )
-
-  if (length(missing_parameter_columns) > 0L) {
-    stop(
-      "parameter_data is missing required column(s): ",
-      paste(missing_parameter_columns, collapse = ", ")
-    )
-  }
-
-  trajectories <- tidyr::crossing(
-    parameter_data,
-    prediction_grid
-  ) %>%
-    dplyr::mutate(
-      event_effect = historical_period * event_experienced,
-      a_variance = exp(2 * (
-        b_a_0 +
-          b_a_1 * time +
-          b_a_2 * time^2 +
-          g_a_1 * event_effect
-      )),
-      cn_variance = exp(2 * (
-        b_cn_0 +
-          b_cn_1 * time +
-          b_cn_2 * time^2 +
-          g_cn_1 * event_effect
-      )),
-      e_variance = exp(2 * (
-        b_e_0 +
-          b_e_1 * time +
-          b_e_2 * time^2 +
-          g_e_1 * event_effect
-      )),
-      total_variance = a_variance + cn_variance + e_variance
-    ) %>%
-    dplyr::select(
-      dplyr::all_of(id_columns),
-      time,
-      historical_period,
-      event_experienced,
-      event_effect,
-      dplyr::all_of(component_order)
-    ) %>%
-    tidyr::pivot_longer(
-      cols = dplyr::all_of(component_order),
-      names_to = "component",
-      values_to = variance_column
-    )
-
-  trajectories
-}
+# calculate_variance_trajectories() is defined in
+# data-raw/temporal_variance_trajectories.R, sourced above.
 
 # Summarize the pointwise Monte Carlo distribution while retaining every
 # prediction condition used in the figure.
