@@ -303,7 +303,7 @@ test_that("addPersonToPed works as expected", {
   )
 
   # Add person with all fields specified
-  updated <- addPersonToPed(
+  updated <- BGmisc:::.addPersonToPed(
     ped,
     name = "Charlie",
     sex = "M",
@@ -323,14 +323,14 @@ test_that("addPersonToPed works as expected", {
   expect_true(is.na(updated$twinID[3]))
 
   # Add person with generated ID
-  updated2 <- addPersonToPed(ped, name = "Dana", sex = "F")
+  updated2 <- BGmisc:::.addPersonToPed(ped, name = "Dana", sex = "F")
   expect_equal(nrow(updated2), 3)
   expect_equal(updated2$name[3], "Dana")
   expect_equal(updated2$sex[3], "F")
   expect_equal(updated2$personID[3], max(ped$personID, na.rm = TRUE) + 1)
 
   # Add person with missing optional fields
-  updated3 <- addPersonToPed(ped)
+  updated3 <- BGmisc:::.addPersonToPed(ped)
   expect_equal(nrow(updated3), 3)
   expect_true(is.na(updated3$name[3]))
   expect_true(is.na(updated3$sex[3]))
@@ -341,7 +341,7 @@ test_that("addPersonToPed works as expected", {
   expect_equal(updated3$personID[3], max(ped$personID, na.rm = TRUE) + 1)
 
   # Add person with overwrite = TRUE
-  updated4 <- addPersonToPed(ped, name = "New", sex = "F", personID = 1, overwrite = TRUE)
+  updated4 <- BGmisc:::.addPersonToPed(ped, name = "New", sex = "F", personID = 1, overwrite = TRUE)
   expect_equal(nrow(updated4), 2)
   expect_equal(updated4$name[1], "New")
   expect_equal(updated4$sex[1], "F")
@@ -373,7 +373,7 @@ test_that("addPersonToPed works as expected with zygosity", {
   )
 
   # Add person with all fields specified
-  updated <- addPersonToPed(
+  updated <- BGmisc:::.addPersonToPed(
     ped,
     name = "Charlie",
     sex = "M",
@@ -396,7 +396,7 @@ test_that("addPersonToPed works as expected with zygosity", {
   expect_true(is.na(updated$url[3]))
 
   # Add person with generated ID
-  updated2 <- addPersonToPed(ped, name = "Dana", sex = "F", url = "http://example.com")
+  updated2 <- BGmisc:::.addPersonToPed(ped, name = "Dana", sex = "F", url = "http://example.com")
   expect_equal(nrow(updated2), 3)
   expect_equal(updated2$name[3], "Dana")
   expect_equal(updated2$sex[3], "F")
@@ -405,7 +405,7 @@ test_that("addPersonToPed works as expected with zygosity", {
   expect_true(!is.na(updated2$url[3]))
 
   # Add person with missing optional fields
-  updated3 <- addPersonToPed(updated2)
+  updated3 <- BGmisc:::.addPersonToPed(updated2)
   expect_equal(nrow(updated3), 4)
   expect_true(is.na(updated3$name[4]))
   expect_true(is.na(updated3$sex[4]))
@@ -635,7 +635,7 @@ test_that("addPersonToPed - error when overwrite=TRUE and personID does not exis
     stringsAsFactors = FALSE
   )
   expect_error(
-    addPersonToPed(ped, personID = 99, overwrite = TRUE),
+    BGmisc:::.addPersonToPed(ped, personID = 99, overwrite = TRUE),
     regexp = "does not exist in the pedigree"
   )
 })
@@ -651,7 +651,7 @@ test_that("addPersonToPed - notes column is handled when present in ped", {
     notes = c(NA_character_, NA_character_),
     stringsAsFactors = FALSE
   )
-  updated <- addPersonToPed(ped,
+  updated <- BGmisc:::.addPersonToPed(ped,
     name = "Charlie", sex = "M",
     momID = 1, dadID = 2,
     notes = "test note", personID = 10
@@ -660,7 +660,7 @@ test_that("addPersonToPed - notes column is handled when present in ped", {
   expect_equal(updated$notes[3], "test note")
 
   # When notes not supplied it should be NA
-  updated2 <- addPersonToPed(ped, name = "Dana", sex = "F")
+  updated2 <- BGmisc:::.addPersonToPed(ped, name = "Dana", sex = "F")
   expect_true(is.na(updated2$notes[3]))
 })
 
