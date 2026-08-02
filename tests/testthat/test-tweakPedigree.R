@@ -666,7 +666,7 @@ test_that("addPersonToPed - notes column is handled when present in ped", {
 
 test_that("addPersonToPed - non-data.frame input raises error", {
   expect_error(
-    addPersonToPed(list(personID = 1), personID = 2)
+    BGmisc:::.addPersonToPed(list(personID = 1), personID = 2)
     # stopifnot(is.data.frame(ped)) fires for non-data.frame input
   )
 })
