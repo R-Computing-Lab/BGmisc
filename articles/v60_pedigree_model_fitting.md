@@ -333,8 +333,8 @@ summary(fitted1)
 #> AIC:      -9.611741               26.38826                14.388259
 #> BIC:      16.388259               16.38826                 5.991051
 #> To get additional fit indices, see help(mxRefModels)
-#> timestamp: 2026-08-02 11:54:00 
-#> Wall clock time: 0.06713295 secs 
+#> timestamp: 2026-08-02 11:59:43 
+#> Wall clock time: 0.07228208 secs 
 #> optimizer:  SLSQP 
 #> OpenMx version number: 2.22.11 
 #> Need help?  See help(mxSummary)
@@ -506,8 +506,8 @@ summary(fitted2)
 #> AIC:     -56.248897               29.75110                 14.75110
 #> BIC:      -6.588489               23.21684                 10.79231
 #> To get additional fit indices, see help(mxRefModels)
-#> timestamp: 2026-08-02 11:54:01 
-#> Wall clock time: 0.07654238 secs 
+#> timestamp: 2026-08-02 11:59:44 
+#> Wall clock time: 0.07871366 secs 
 #> optimizer:  SLSQP 
 #> OpenMx version number: 2.22.11 
 #> Need help?  See help(mxSummary)
@@ -698,8 +698,8 @@ summary(fitted_easy)
 #> AIC:     268.363208               1018.363                 1025.030
 #> BIC:       6.384633               1021.903                 1006.639
 #> To get additional fit indices, see help(mxRefModels)
-#> timestamp: 2026-08-02 11:54:04 
-#> Wall clock time: 1.645966 secs 
+#> timestamp: 2026-08-02 11:59:48 
+#> Wall clock time: 1.726042 secs 
 #> optimizer:  SLSQP 
 #> OpenMx version number: 2.22.11 
 #> Need help?  See help(mxSummary)
