@@ -192,41 +192,109 @@ temporal_parameters_wide <- function(estimates, extra = NULL) {
 }
 
 # -----------------------------------------------------------------------------
-# Calendar-year predictions
+# Predictions on the scaled time axis
 # -----------------------------------------------------------------------------
 
-# Map calendar years onto the model's scaled time axis and set the two
-# moderator indicators.
+# The model's native axis. Everything is evaluated here first; putting it on a
+# calendar is a rescaling applied afterwards, never a re-derivation of the
+# scaling that produced the fitted parameters.
+time_grid_default <- seq(-3, 3, length.out = 301)
+
+# Build the prediction grid on the scaled axis.
 #
-# historical_period is 1 from event_year onward, matching how the moderator is
-# coded in the fitted models: a period contrast, not a transient shock.
-# event_experienced selects whose trajectory to draw -- the cohort that lived
-# through the event (1) or the counterfactual that did not (0). The moderator
-# only bites where both are 1, so the two indicators together produce the
-# before/after step in a single exposed trajectory.
-calendar_prediction_grid <- function(
-  years,
+# event_threshold is the scaled time at which the historical period begins. It
+# must be supplied from whatever recorded the event, not recomputed from raw
+# data.
+#
+# event_experienced is who, at each point on the axis, actually carries the
+# event. In the fitted models the moderator is an individual attribute -- for
+# the 1918 flu, alive in 1917 -- so it belongs to a set of birth cohorts, not to
+# a span of calendar time. A population's exposed share therefore rises when the
+# event happens and then decays as those cohorts die out and are replaced by
+# people born too late to have been eligible. Pass a function of calendar year
+# to describe that decay; pass a scalar only when the exposed share genuinely is
+# constant, such as 1 for the exposed cohort's own trajectory or 0 for the
+# never-exposed counterfactual.
+#
+# Since event_effect is historical_period * event_experienced and multiplies
+# gamma on the log-loading scale, a fractional share interpolates the moderator
+# there rather than mixing two variances. That is a modelling choice, not an
+# identity: it says a half-exposed population sits halfway between the two
+# loadings, which is not the same as being a 50/50 mixture of them.
+scaled_prediction_grid <- function(
+  event_threshold,
   year_mean,
   year_sd,
-  event_year,
+  time = time_grid_default,
   event_experienced = 1
 ) {
+  if (!is.numeric(event_threshold) || length(event_threshold) != 1L) {
+    stop("event_threshold must be a single number on the scaled time axis.")
+  }
+
+  # Include the threshold itself, from both sides, so the step is not smeared
+  # by whatever resolution the grid happens to have.
+  time <- sort(unique(c(
+    time,
+    event_threshold,
+    event_threshold - .Machine$double.eps^0.5
+  )))
+
+  grid <- tibble::tibble(time = time) %>%
+    dplyr::mutate(
+      year = rescale_time_to_calendar(time, year_mean, year_sd),
+      historical_period = as.numeric(time >= event_threshold)
+    )
+
+  grid$event_experienced <- if (is.function(event_experienced)) {
+    share <- as.numeric(event_experienced(grid$year))
+
+    if (length(share) != nrow(grid)) {
+      stop("event_experienced() must return one value per year.")
+    }
+    if (any(is.na(share)) || any(share < 0) || any(share > 1)) {
+      stop("event_experienced() must return shares between 0 and 1.")
+    }
+
+    share
+  } else {
+    rep_len(as.numeric(event_experienced), nrow(grid))
+  }
+
+  grid
+}
+
+# Put the scaled axis onto calendar years. year_mean and year_sd are the
+# constants recorded by the run that fit the models.
+rescale_time_to_calendar <- function(time, year_mean, year_sd) {
   if (!is.numeric(year_sd) || length(year_sd) != 1L || year_sd <= 0) {
     stop("year_sd must be a single positive number.")
   }
 
-  tidyr::crossing(
-    year = sort(unique(as.numeric(years))),
-    event_experienced = as.numeric(event_experienced)
-  ) %>%
-    dplyr::mutate(
-      time = (year - year_mean) / year_sd,
-      historical_period = as.numeric(year >= event_year)
-    )
+  time * year_sd + year_mean
 }
 
-# Turn one row of temporal parameters into ACE proportions on a calendar-year
-# grid, in the year/A_val/C_val/E_val shape the longevity panels consume.
+rescale_calendar_to_time <- function(year, year_mean, year_sd) {
+  if (!is.numeric(year_sd) || length(year_sd) != 1L || year_sd <= 0) {
+    stop("year_sd must be a single positive number.")
+  }
+
+  (year - year_mean) / year_sd
+}
+
+# Turn one row of temporal parameters into a variance trajectory on the scaled
+# time axis, then rescale that axis to calendar years.
+#
+# The order matters. The trajectory is evaluated on the model's own grid, the
+# same seq(-3, 3) the parameter-recovery figures use. Only afterwards is the
+# axis relabelled, using year_mean and year_sd as recorded by the fitting run
+# and event_threshold as recorded for the event. Nothing here recomputes a
+# scaling from raw data, so the calendar mapping is exactly as trustworthy as
+# those recorded constants and no more.
+#
+# `years` requests calendar years for the panel. Shares are interpolated onto
+# them within each historical period separately, so the step at the event
+# survives instead of being averaged across.
 #
 # Va, Vc, Ve, and Vp are variance components on the phenotype's own scale.
 # A_val, C_val, and E_val are their shares of Vp -- ratios, not variances. For
@@ -243,12 +311,13 @@ calendar_prediction_grid <- function(
 # variance that was never estimated.
 ace_proportions_from_parameters <- function(
   parameter_data,
-  years,
   year_mean,
   year_sd,
-  event_year,
+  event_threshold,
+  years = NULL,
   components = c("a", "cn", "e"),
-  event_experienced = 1
+  event_experienced = 1,
+  time = time_grid_default
 ) {
   unknown_components <- setdiff(components, component_parameter_prefix)
   if (length(unknown_components) > 0L) {
@@ -265,11 +334,11 @@ ace_proportions_from_parameters <- function(
     stop("parameter_data must be exactly one row of parameters.")
   }
 
-  grid <- calendar_prediction_grid(
-    years = years,
+  grid <- scaled_prediction_grid(
+    event_threshold = event_threshold,
     year_mean = year_mean,
     year_sd = year_sd,
-    event_year = event_year,
+    time = time,
     event_experienced = event_experienced
   )
 
@@ -277,17 +346,16 @@ ace_proportions_from_parameters <- function(
     component_parameter_prefix %in% components
   ]
 
-  calculate_variance_trajectories(
+  trajectory <- calculate_variance_trajectories(
     parameter_data = parameter_data,
-    prediction_grid = grid,
-    id_columns = "year"
+    prediction_grid = grid
   ) %>%
     dplyr::filter(component != "total_variance") %>%
     dplyr::mutate(
       variance = dplyr::if_else(component %in% estimated, variance, 0)
     ) %>%
     tidyr::pivot_wider(
-      id_cols = c(year, historical_period, event_experienced, event_effect),
+      id_cols = c(time, historical_period, event_experienced, event_effect),
       names_from = component,
       values_from = variance
     ) %>%
@@ -295,13 +363,85 @@ ace_proportions_from_parameters <- function(
       Vp = a_variance + cn_variance + e_variance,
       A_val = a_variance / Vp,
       C_val = cn_variance / Vp,
-      E_val = e_variance / Vp
+      E_val = e_variance / Vp,
+      # The axis becomes a calendar only at this point.
+      year = rescale_time_to_calendar(time, year_mean, year_sd)
     ) %>%
     dplyr::rename(
       Va = a_variance,
       Vc = cn_variance,
       Ve = e_variance
     ) %>%
+    dplyr::arrange(time)
+
+  if (is.null(years)) {
+    return(trajectory)
+  }
+
+  interpolate_on_calendar(
+    trajectory = trajectory,
+    years = years,
+    year_mean = year_mean,
+    year_sd = year_sd,
+    event_threshold = event_threshold
+  )
+}
+
+# Read the trajectory off at the panel's calendar years. Each historical period
+# is interpolated on its own, so a year just before the event never borrows from
+# one just after it.
+interpolate_on_calendar <- function(
+  trajectory,
+  years,
+  year_mean,
+  year_sd,
+  event_threshold
+) {
+  years <- sort(unique(as.numeric(years)))
+  target_time <- rescale_calendar_to_time(years, year_mean, year_sd)
+
+  if (min(target_time) < min(trajectory$time) ||
+        max(target_time) > max(trajectory$time)) {
+    warning(
+      "Requested years fall outside the scaled time grid (",
+      round(rescale_time_to_calendar(min(trajectory$time), year_mean, year_sd)),
+      "-",
+      round(rescale_time_to_calendar(max(trajectory$time), year_mean, year_sd)),
+      "). Widen `time` rather than extrapolating."
+    )
+  }
+
+  target <- tibble::tibble(
+    year = years,
+    time = target_time,
+    historical_period = as.numeric(target_time >= event_threshold)
+  )
+
+  # event_experienced and event_effect are interpolated alongside the variances
+  # because the exposed share moves over the grid whenever a decaying exposure
+  # function was supplied.
+  value_columns <- c(
+    "Va", "Vc", "Ve", "Vp", "A_val", "C_val", "E_val",
+    "event_experienced", "event_effect"
+  )
+
+  interpolated <- lapply(split(target, target$historical_period), function(part) {
+    source_part <- trajectory %>%
+      dplyr::filter(historical_period == part$historical_period[1])
+
+    for (column in value_columns) {
+      part[[column]] <- stats::approx(
+        x = source_part$time,
+        y = source_part[[column]],
+        xout = part$time,
+        rule = 2
+      )$y
+    }
+
+    part
+  })
+
+  dplyr::bind_rows(interpolated) %>%
     dplyr::arrange(year)
 }
 
@@ -356,6 +496,24 @@ check_temporal_identification <- function(
   }))
 
   if (nrow(diagnostics) == 0L) {
+    return(invisible(diagnostics))
+  }
+
+  # A fit run without intervals = TRUE has no bounds at all. That is an absence
+  # of evidence, not evidence of a boundary fit, so say so instead of flagging
+  # every parameter. A fit with some bounds and some missing is the real signal.
+  diagnostics$intervals_requested <- !all(diagnostics$bound_missing)
+
+  if (!diagnostics$intervals_requested[1]) {
+    diagnostics$bound_missing <- FALSE
+
+    if (warn) {
+      warning(
+        "This fit carries no confidence intervals, so identification was not ",
+        "assessed. Re-fit with confidence_intervals = TRUE to check it."
+      )
+    }
+
     return(invisible(diagnostics))
   }
 
