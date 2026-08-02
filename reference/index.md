@@ -35,9 +35,6 @@
 - [`addPaternalLineFlag()`](https://r-computing-lab.github.io/BGmisc/reference/addPaternalLineFlag.md)
   : Add a paternal-line descendant flag to a pedigree
 
-- [`addPersonToPed()`](https://r-computing-lab.github.io/BGmisc/reference/addPersonToPed.md)
-  : addPersonToPed
-
 - [`addRowlessParents()`](https://r-computing-lab.github.io/BGmisc/reference/addRowlessParents.md)
   : Add addRowlessParents
 
@@ -145,6 +142,9 @@
 - [`determineSex()`](https://r-computing-lab.github.io/BGmisc/reference/determineSex.md)
   [`determineSex_beta()`](https://r-computing-lab.github.io/BGmisc/reference/determineSex.md)
   : Determine Sex of Offspring
+
+- [`.addPersonToPed()`](https://r-computing-lab.github.io/BGmisc/reference/dot-addPersonToPed.md)
+  : addPersonToPed
 
 - [`.adjBeta()`](https://r-computing-lab.github.io/BGmisc/reference/dot-adjBeta.md)
   : Construct Adjacency Matrix for Parent-Child Relationships Using Beta
