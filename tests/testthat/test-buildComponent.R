@@ -464,7 +464,8 @@ test_that("keep_ids subset produces correct relatedness values across all famili
     expect_equal(rownames(r_sub), keep)
 
     # values in the subset must match the corresponding entries of the full matrix
-    expect_equal(r_sub, r_full[keep, keep], tolerance = 1e-10, info = paste("Family", i))
+   expect_equal(as.matrix(r_sub), as.matrix(r_full[keep, keep]),
+                 tolerance = 1e-10, info = paste("Family", i))
 
     # entirely random subset of IDs across the whole dataset (not just within family)
     keep <- as.character(sample(df$ID, 15))
