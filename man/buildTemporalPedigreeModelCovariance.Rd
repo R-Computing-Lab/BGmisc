@@ -10,7 +10,9 @@ buildTemporalPedigreeModelCovariance(
   start_beta0 = 0.5,
   start_beta_time = 0,
   start_gamma = 0,
-  time_point_max = NULL
+  time_point_max = NULL,
+  mean_degree = 0,
+  start_mean = 0
 )
 }
 \arguments{

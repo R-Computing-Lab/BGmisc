@@ -17,7 +17,8 @@
 An mxMatrix object.
 }
 \description{
-Shared by the static and temporal branches of \code{\link{buildOneFamilyGroup}}; they
-only differ in the parameter label ("meanLI" vs "mean_y").
+Used by the static branches of \code{\link{buildOneFamilyGroup}}. The temporal branch
+instead builds its mean as an algebra over \code{Tpoly} and \code{ModelOne.B_mean}, so
+that the mean can vary across historical time.
 }
 \keyword{internal}

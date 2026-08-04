@@ -535,7 +535,7 @@ buildOneFamilyGroup <- function(
     mat_list,
     list(
       OpenMx::mxData(observed = full_df_row, type = "raw", sort = FALSE),
-      .pedigreeMeanMatrix(fsize, obs_ids, "meanLI"),
+      .pedigreeMeanMatrix(fsize= fsize, obs_ids= obs_ids, label= "meanLI"),
       OpenMx::mxAlgebraFromString(algebra_str,
         name = "V", dimnames = list(obs_ids, obs_ids)
       ),
@@ -688,9 +688,9 @@ buildOneFamilyGroup <- function(
         sort = FALSE
       ),
       .pedigreeMeanMatrix(
-        fsize,
-        obs_ids,
-        "meanLI"
+       fsize= fsize,
+      obs_ids=  obs_ids,
+       label= "meanLI"
       ),
       OpenMx::mxAlgebraFromString(
         algebra_str,

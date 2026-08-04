@@ -36,6 +36,8 @@ fitPedigreeModel(
   components = c("a", "d", "cn", "ce", "mt", "am", "e"),
   use_exp_loadings = FALSE,
   time_point_max = NULL,
+  mean_degree = 0,
+  start_mean = 0,
   retain_eta = TRUE,
   retain_loadings = TRUE,
   retain_loading_covariances = TRUE,

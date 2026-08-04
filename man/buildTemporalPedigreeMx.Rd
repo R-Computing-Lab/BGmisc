@@ -10,7 +10,9 @@ buildTemporalPedigreeMx(
   p_hist,
   components = c("a", "e"),
   ci = FALSE,
-  time_point_max = NULL
+  time_point_max = NULL,
+  mean_degree = 0,
+  start_mean = 0
 )
 }
 \arguments{

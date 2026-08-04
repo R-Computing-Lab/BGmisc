@@ -20,7 +20,11 @@
   retain_loadings = TRUE,
   retain_loading_covariances = TRUE,
   retain_component_covariances = TRUE,
-  residual_covariance_form = c("outer_product", "diagonal")
+  residual_covariance_form = c("outer_product", "diagonal"),
+  mean_degree = 0,
+  start_mean = 0,
+  mean_basis = "Tpoly",
+  mean_hist = "H"
 )
 }
 \arguments{

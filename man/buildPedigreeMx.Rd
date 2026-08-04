@@ -15,7 +15,9 @@ buildPedigreeMx(
   param_year = NULL,
   components = c("a", "e"),
   ci_names = NULL,
-  time_point_max = NULL
+  time_point_max = NULL,
+  mean_degree = 0,
+  start_mean = 0
 )
 }
 \arguments{

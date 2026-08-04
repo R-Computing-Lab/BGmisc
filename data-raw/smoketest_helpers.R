@@ -154,7 +154,12 @@ simulate_pedigree_safe <- function(kpc = 3, Ngen = 4, marR = 0.6) {
 
 
 free_only <- function(model, labels_to_free) {
-  pars <- omxGetParameters(model)
+  # free = NA returns fixed parameters as well as free ones, so this can widen
+  # (free something currently fixed) and not only narrow. Under the default,
+  # omxGetParameters() returns free parameters only, so anything already fixed --
+  # for instance the mean coefficients above mean_degree -- would be invisible
+  # here and could never be estimated, silently.
+  pars <- omxGetParameters(model, free = NA)
   omxSetParameters(
     model,
     labels = names(pars),
@@ -209,7 +214,9 @@ simulate_temporal_family <- function(
   time_scale = c("zscore", "fixed"),
   time_half_range = 3,
   prop_historical = 0.5,
-  y_mean = 0
+  y_mean = 0,
+  true_beta_mean = NULL,
+  true_gamma_mean = NULL
 ) {
   time_scale <- match.arg(time_scale)
   ped_i <- simulate_pedigree_safe(kpc = kpc, Ngen = Ngen, marR = marR)
@@ -255,7 +262,24 @@ simulate_temporal_family <- function(
 
   # V_i <- #make_symmetric(V_i) + diag(1e-6, n_i)
 
-  y_i <- mvtnorm::rmvnorm(1, sigma = V_i) + y_mean
+  # The mean uses the same polynomial/historical basis as the loadings, but always
+  # on the identity scale: it is a location, not a variance loading, so it is never
+  # exponentiated regardless of loading_link. With true_beta_mean = NULL this falls
+  # back to the scalar y_mean, so existing calls are unaffected.
+  mu_i <- if (is.null(true_beta_mean)) {
+    rep(y_mean, n_i)
+  } else {
+    make_lambda(
+      t_i = t_i,
+      H_i = H_i,
+      beta = true_beta_mean,
+      gamma = if (is.null(true_gamma_mean)) rep(0, ncol(H_i)) else true_gamma_mean,
+      poly = poly,
+      loading_link = "identity"
+    )
+  }
+
+  y_i <- mvtnorm::rmvnorm(1, sigma = V_i) + mu_i
 
   rn <- rownames(A_i)
   if (is.null(rn) || anyNA(rn) || any(rn == "")) rn <- as.character(seq_len(n_i))
@@ -272,6 +296,7 @@ simulate_temporal_family <- function(
     Cn = Cn_i,
     Ce = Ce_i,
     Mt = Mt_i,
-    V_true = V_i
+    V_true = V_i,
+    mu_true = mu_i
   )
 }

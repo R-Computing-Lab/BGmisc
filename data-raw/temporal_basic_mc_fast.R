@@ -64,7 +64,7 @@ sfLibrary(OpenMx)
 
 #master_seed <- 112026011
 master_seed <- 202607200
-n_replications <- 50
+n_replications <- 5
 n_families <- 250
 threshold_year <- 1776
 prop_historical <- 0.5
@@ -90,7 +90,7 @@ Ngen <- 4
 marR <- 0.8
 use_exp_loadings <- TRUE
 
-core_folder <- "temporal_ACE_mean_10_parameter_recovery_f250_p50_reps50"
+core_folder <- "temporal_ACE_means_parameter_recoveryv1_f250_p50_reps5"
 
 loading_link <- if (use_exp_loadings) {
   "exp"
@@ -149,6 +149,12 @@ true_gamma <- list(
   e  = 0.0
 )
 
+# Mean structure. Element j of true_beta_mean is the coefficient on time^(j-1), so
+#   mu = mean_y + b_mean_1 * t + b_mean_2 * t^2 + b_mean_3 * t^3 + g_mean_1 * H
+#
+true_beta_mean <- c(y_mean_param, 0.5, 0, 0.00)
+true_gamma_mean <- 0.3
+
 
 # The parameters estimated in the true fitted model. The simulator
 # (simulate_temporal_family -> make_lambda, loading_link = "exp") and the fitted
@@ -173,10 +179,21 @@ target <- c(
   b_e_1 = true_beta$e[2],
   b_e_2 = true_beta$e[3],
   b_e_3 = true_beta$e[4],
-  g_e_1 = true_gamma$e[1]
+  g_e_1 = true_gamma$e[1],
+  mean_y = true_beta_mean[1],
+  b_mean_1 = true_beta_mean[2],
+  b_mean_2 = true_beta_mean[3],
+  b_mean_3 = true_beta_mean[4],
+  g_mean_1 = true_gamma_mean[1]
 )
 
-labels_to_free <- c(names(target), "mean_y")
+
+
+# free_only() decides which parameters are estimated, but it can only narrow: it
+# reads omxGetParameters(), which returns already-free parameters only. So the mean
+# coefficients must be built free (see mean_degree in build_true_model) and are then
+# kept or fixed here. Drop b_mean_*/g_mean_1 from target to fit a constant mean.
+labels_to_free <- unique(c(names(target), "mean_y"))
 
 write_csv(
   tibble::enframe(target, name = "parameter", value = "true_value"),
@@ -197,7 +214,9 @@ simulate_one_dataset <- function(
   time_scale = "fixed",
   time_half_range = 3,
   prop_historical = 1,
-  y_mean=y_mean_param
+  y_mean=y_mean_param,
+  beta_mean = true_beta_mean,
+  gamma_mean = true_gamma_mean
 ) {
   set.seed(replication_seed)
 
@@ -222,7 +241,9 @@ simulate_one_dataset <- function(
       time_scale = time_scale,
       time_half_range = time_half_range,
       prop_historical = prop_historical,
-      y_mean = y_mean
+      y_mean = y_mean,
+      true_beta_mean = beta_mean,
+      true_gamma_mean = gamma_mean
     )
   }
 
@@ -277,7 +298,9 @@ build_true_model <- function(families, replication) {
     group_models = group_models,
     p_hist = 1,
     components = fit_components,
-    ci = FALSE
+    ci = FALSE,
+    mean_degree = 3,
+    start_mean = y_mean_param
   )
 
   # Fit the true model: AE with linear birth-cohort moderation plus one
@@ -744,7 +767,12 @@ parameter_order <- c(
   "b_cn_0", "b_cn_1", "b_cn_2", "b_cn_3",
   "g_cn_1",
   "b_e_0",  "b_e_1",  "b_e_2",  "b_e_3",
-  "g_e_1"
+  "g_e_1",
+  # Mean coefficients. Any parameter missing from this vector becomes NA when
+  # recovery_summary factors on it, which silently drops it from every plot and
+  # from the report table.
+  "mean_y", "b_mean_1", "b_mean_2", "b_mean_3",
+  "g_mean_1"
 )
 parameter_labels <- c(
   b_a_0  = "A: intercept",
@@ -761,7 +789,12 @@ parameter_labels <- c(
   b_e_1  = "E: linear time",
   b_e_2  = "E: quadratic time",
   b_e_3  = "E: cubic time",
-  g_e_1  = "E: historical event"
+  g_e_1  = "E: historical event",
+  mean_y   = "Mean: intercept",
+  b_mean_1 = "Mean: linear time",
+  b_mean_2 = "Mean: quadratic time",
+  b_mean_3 = "Mean: cubic time",
+  g_mean_1 = "Mean: historical event"
 )
 
 parameter_concise_labels <- c(
@@ -779,7 +812,12 @@ parameter_concise_labels <- c(
   b_e_1  = "E: lin",
   b_e_2  = "E: quad",
   b_e_3  = "E: cubic",
-  g_e_1  = "E: hist"
+  g_e_1  = "E: hist",
+  mean_y   = "M: int",
+  b_mean_1 = "M: lin",
+  b_mean_2 = "M: quad",
+  b_mean_3 = "M: cubic",
+  g_mean_1 = "M: hist"
 )
 
 recovery_summary <- recovery_summary %>%
@@ -787,9 +825,14 @@ recovery_summary <- recovery_summary %>%
       grepl("^b_a_", parameter) | grepl("^g_a_", parameter) ~ "A",
       grepl("^b_cn_", parameter) | grepl("^g_cn_", parameter) ~ "C",
       grepl("^b_e_", parameter) | grepl("^g_e_", parameter) ~ "E",
+      parameter == "mean_y" |
+        grepl("^b_mean_", parameter) | grepl("^g_mean_", parameter) ~ "Mean",
       TRUE ~ NA_character_
     ),
     time_effect = dplyr::case_when(
+      # mean_y is the mean's intercept but is not named b_*_0, so it needs its
+      # own branch before the positional patterns below.
+      parameter == "mean_y" ~ "intercept",
       grepl("^b_.*_0$", parameter) ~ "intercept",
       grepl("^b_.*_1$", parameter) ~ "linear",
       grepl("^b_.*_2$", parameter) ~ "quadratic",

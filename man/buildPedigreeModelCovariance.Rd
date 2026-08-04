@@ -21,6 +21,8 @@ buildPedigreeModelCovariance(
   start_beta_time = 0,
   start_gamma = 0,
   time_point_max = NULL,
+  mean_degree = 0,
+  start_mean = 0,
   lbound = 1e-10
 )
 }

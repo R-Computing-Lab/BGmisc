@@ -208,7 +208,9 @@ buildTemporalPedigreeMx <- function(
   p_hist,
   components = c("a", "e"),
   ci = FALSE,
-  time_point_max = NULL
+  time_point_max = NULL,
+  mean_degree = 0,
+  start_mean = 0
 ) {
   buildPedigreeMx(
     model_name = model_name,
@@ -217,7 +219,9 @@ buildTemporalPedigreeMx <- function(
     temporal = TRUE,
     p_hist = p_hist,
     components = components,
-    time_point_max = time_point_max
+    time_point_max = time_point_max,
+    mean_degree = mean_degree,
+    start_mean = start_mean
   )
 }
 
