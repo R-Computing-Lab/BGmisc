@@ -14,8 +14,8 @@ get_generation_vector <- function(ped) {
   as.numeric(ped[[gen_col]])
 }
 
-make_time_vars <- function(ped, threshold_year = 1776, birth_year_sd = 3,
-                           birth_year_base = 1700,
+make_time_vars <- function(ped, threshold_year = 1776, param_year_sd = 3,
+                           param_year_base = 1700,
                            gen_gap = 30,
                            rescale = TRUE,
                            time_scale = c("zscore", "fixed"),
@@ -24,11 +24,11 @@ make_time_vars <- function(ped, threshold_year = 1776, birth_year_sd = 3,
                            prop_historical = 1) {
   time_scale <- match.arg(time_scale)
   gen <- get_generation_vector(ped)
-  # birth_year_sd spreads the range; it is not linked to parental age, so a wide
+  # param_year_sd spreads the range; it is not linked to parental age, so a wide
   # value occasionally places someone before their parents.
-  birth_year <- birth_year_base + gen_gap * (gen - min(gen, na.rm = TRUE)) + rnorm(length(gen), mean = 0, sd = birth_year_sd)
+  param_year <- param_year_base + gen_gap * (gen - min(gen, na.rm = TRUE)) + rnorm(length(gen), mean = 0, sd = param_year_sd)
   if (rescale==FALSE) {
-    t_i <- as.numeric(birth_year)
+    t_i <- as.numeric(param_year)
   } else if (time_scale == "fixed") {
     # Map the designed generation span onto [-time_half_range, time_half_range]
     # using design constants only.
@@ -43,25 +43,25 @@ make_time_vars <- function(ped, threshold_year = 1776, birth_year_sd = 3,
       stop("`Ngen` (>= 2) is required when `time_scale = \"fixed\"`.")
     }
     span <- gen_gap * (Ngen - 1)
-    t_i <- (birth_year - (birth_year_base + span / 2)) / (span / (2 * time_half_range))
+    t_i <- (param_year - (param_year_base + span / 2)) / (span / (2 * time_half_range))
   } else {
-    t_i <- as.numeric(scale(birth_year))
+    t_i <- as.numeric(scale(param_year))
   }
   if (prop_historical < 0 || prop_historical > 1) {
     stop("`prop_historical` must be between 0 and 1.")
   } else  if (prop_historical == 1) {
-  h_i <- as.numeric(birth_year >= threshold_year)
+  h_i <- as.numeric(param_year >= threshold_year)
   } else if (prop_historical == 0) {
-    h_i <- as.numeric(birth_year < threshold_year)
+    h_i <- as.numeric(param_year < threshold_year)
   } else {
     # For a proportion of the sample, assign historical status probabilistic, can only occur when year > 0
-    h_i <- ifelse(birth_year < threshold_year, 0, rbinom(length(birth_year), 1, prop_historical))
+    h_i <- ifelse(param_year < threshold_year, 0, rbinom(length(param_year), 1, prop_historical))
   }
   H_i <- matrix(h_i, ncol = 1)
   colnames(H_i) <- paste0("post_", threshold_year)
 
   list(
-    birth_year = birth_year,
+    param_year = param_year,
     t = t_i,
     H = H_i
   )
@@ -196,8 +196,8 @@ simulate_temporal_family <- function(
   Ngen = 4,
   marR = 0.6,
   threshold_year = 1776,
-  birth_year_sd = 3,
-  birth_year_base = 1700,
+  param_year_sd = 3,
+  param_year_base = 1700,
   gen_gap = 30,
   true_beta,
   true_gamma,
@@ -225,8 +225,8 @@ simulate_temporal_family <- function(
 
   tv_i <- make_time_vars(ped_i,
     threshold_year = threshold_year,
-    birth_year_sd = birth_year_sd,
-    birth_year_base = birth_year_base,
+    param_year_sd = param_year_sd,
+    param_year_base = param_year_base,
     gen_gap = gen_gap,
     rescale = rescale,
     time_scale = time_scale,
@@ -265,8 +265,8 @@ simulate_temporal_family <- function(
     ped = ped_i,
     y = as.numeric(y_i),
     obs_ids = obs_ids,
-    birth_year_scaled = t_i,
-    birth_year = tv_i$birth_year,
+    param_year_scaled = t_i,
+    param_year = tv_i$param_year,
     H = H_i,
     A = A_i,
     Cn = Cn_i,

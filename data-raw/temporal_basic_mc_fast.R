@@ -71,11 +71,11 @@ prop_historical <- 0.5
 # Standard deviation of the birth-year range, widened here for broader time
 # coverage. It is not linked to parental age, so at this width about 8% of
 # parent-child pairs end up with the child born before the parent.
-birth_year_sd <- 12
-birth_year_base <- 1700
+param_year_sd <- 12
+param_year_base <- 1700
 gen_gap <- 30
 y_mean_param <- 10
-historical_threshold_centered <- (threshold_year - birth_year_base)
+historical_threshold_centered <- (threshold_year - param_year_base)
 
 optimizer_tries <- 5
 
@@ -187,7 +187,7 @@ write_csv(
 # Helper functions for one Monte Carlo replication
 # -----------------------------------------------------------------------------
 
-# threshold_year, birth_year_sd, birth_year_base, gen_gap and loading_link are
+# threshold_year, param_year_sd, param_year_base, gen_gap and loading_link are
 # read from the Monte Carlo settings above, as kpc, Ngen and marR already are.
 simulate_one_dataset <- function(
   replication, replication_seed, poly = 3,
@@ -213,8 +213,8 @@ simulate_one_dataset <- function(
       true_gamma = true_gamma,
       components = sim_components,
       gen_gap = gen_gap,
-      birth_year_sd = birth_year_sd,
-      birth_year_base = birth_year_base,
+      param_year_sd = param_year_sd,
+      param_year_base = param_year_base,
       family_id = i,
       poly = poly,
       rescale = TRUE,
@@ -228,11 +228,11 @@ simulate_one_dataset <- function(
 
   family_sizes <- vapply(families, function(x) length(x$y), integer(1))
   all_H <- unlist(lapply(families, function(x) x$H), use.names = FALSE)
-  all_birth_year_scaled <- unlist(
-    lapply(families, function(x) x$birth_year_scaled),
+  all_param_year_scaled <- unlist(
+    lapply(families, function(x) x$param_year_scaled),
     use.names = FALSE
   )
-  historical_birth_years_scaled <- all_birth_year_scaled[all_H == 1L]
+  historical_param_years_scaled <- all_param_year_scaled[all_H == 1L]
   list(
     replication = replication,
     seed = replication_seed,
@@ -243,8 +243,8 @@ simulate_one_dataset <- function(
     min_family_size = min(family_sizes),
     max_family_size = max(family_sizes),
     mean_H = mean(all_H, na.rm = TRUE),
-    z_year = if (length(historical_birth_years_scaled) > 0L) {
-      min(historical_birth_years_scaled, na.rm = TRUE)
+    z_year = if (length(historical_param_years_scaled) > 0L) {
+      min(historical_param_years_scaled, na.rm = TRUE)
     } else {
       NA_real_
     }
@@ -266,7 +266,7 @@ build_true_model <- function(families, replication) {
       Dmgmat = NULL,
       full_df_row = fam$y,
       obs_ids = fam$obs_ids,
-      param_year = fam$birth_year_scaled,
+      param_year = fam$param_year_scaled,
       H = fam$H,
       use_exp_loadings = use_exp_loadings
     )
