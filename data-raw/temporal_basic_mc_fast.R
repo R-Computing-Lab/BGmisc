@@ -64,7 +64,7 @@ sfLibrary(OpenMx)
 
 #master_seed <- 112026011
 master_seed <- 202607200
-n_replications <- 500
+n_replications <- 50
 n_families <- 250
 threshold_year <- 1776
 prop_historical <- 0.5
@@ -74,7 +74,7 @@ prop_historical <- 0.5
 birth_year_sd <- 12
 birth_year_base <- 1700
 gen_gap <- 30
-
+y_mean_param <- 10
 historical_threshold_centered <- (threshold_year - birth_year_base)
 
 optimizer_tries <- 5
@@ -90,7 +90,7 @@ Ngen <- 4
 marR <- 0.8
 use_exp_loadings <- TRUE
 
-core_folder <- "temporal_ACE_cub_parameter_recovery_f250_p50_reps500"
+core_folder <- "temporal_ACE_mean_10_parameter_recovery_f250_p50_reps50"
 
 loading_link <- if (use_exp_loadings) {
   "exp"
@@ -134,7 +134,7 @@ fit_components <- c(
 #   lambda_k = exp(beta_k0 + beta_k1 * t + beta_k2 * t^2 + beta_k3 * t^3 + gamma_k * H)
 # and component k contributes lambda_k^2 to the phenotypic variance.
 true_beta <- list(
-  a  = c(log(3), 0.1, 0.1, -0.10),
+  a  = c(log(3), 0.1, 0.1, 0.00),
   cn = c(log(2.5), 0.00, 0.20, 0.00),
   ce = c(0.00, 0.00, 0.00, 0.00),
   mt = c(0.00, 0.00, 0.00, 0.00),
@@ -196,7 +196,8 @@ simulate_one_dataset <- function(
   # of a per-family z-score, so t genuinely covers the plotted time_grid.
   time_scale = "fixed",
   time_half_range = 3,
-  prop_historical = 1
+  prop_historical = 1,
+  y_mean=y_mean_param
 ) {
   set.seed(replication_seed)
 
@@ -220,7 +221,8 @@ simulate_one_dataset <- function(
       loading_link = loading_link,
       time_scale = time_scale,
       time_half_range = time_half_range,
-      prop_historical = prop_historical
+      prop_historical = prop_historical,
+      y_mean = y_mean
     )
   }
 
@@ -435,7 +437,8 @@ run_one_replication <- function(replication) {
       simulated <- simulate_one_dataset(
         replication = replication,
         replication_seed = replication_seed,
-        prop_historical = prop_historical
+        prop_historical = prop_historical,
+        y_mean = y_mean_param
       )
 
       model <- build_true_model(
@@ -736,22 +739,28 @@ recovery_summary <- readr::read_csv(recovery_file, na = "")
 # Parameter-recovery plot
 # -----------------------------------------------------------------------------
 parameter_order <- c(
-  "b_a_0",  "b_a_1",  "b_a_2",  "g_a_1",
-  "b_cn_0", "b_cn_1", "b_cn_2", "g_cn_1",
-  "b_e_0",  "b_e_1",  "b_e_2",  "g_e_1"
+  "b_a_0",  "b_a_1",  "b_a_2",  "b_a_3",
+  "g_a_1",
+  "b_cn_0", "b_cn_1", "b_cn_2", "b_cn_3",
+  "g_cn_1",
+  "b_e_0",  "b_e_1",  "b_e_2",  "b_e_3",
+  "g_e_1"
 )
 parameter_labels <- c(
   b_a_0  = "A: intercept",
   b_a_1  = "A: linear time",
   b_a_2  = "A: quadratic time",
+  b_a_3  = "A: cubic time",
   g_a_1  = "A: historical event",
   b_cn_0 = "C: intercept",
   b_cn_1 = "C: linear time",
   b_cn_2 = "C: quadratic time",
+  b_cn_3 = "C: cubic time",
   g_cn_1 = "C: historical event",
   b_e_0  = "E: intercept",
   b_e_1  = "E: linear time",
   b_e_2  = "E: quadratic time",
+  b_e_3  = "E: cubic time",
   g_e_1  = "E: historical event"
 )
 
@@ -759,14 +768,17 @@ parameter_concise_labels <- c(
   b_a_0  = "A: int",
   b_a_1  = "A: lin",
   b_a_2  = "A: quad",
+  b_a_3  = "A: cubic",
   g_a_1  = "A: hist",
   b_cn_0 = "C: int",
   b_cn_1 = "C: lin",
   b_cn_2 = "C: quad",
+  b_cn_3 = "C: cubic",
   g_cn_1 = "C: hist",
   b_e_0  = "E: int",
   b_e_1  = "E: lin",
   b_e_2  = "E: quad",
+  b_e_3  = "E: cubic",
   g_e_1  = "E: hist"
 )
 
@@ -781,17 +793,21 @@ recovery_summary <- recovery_summary %>%
       grepl("^b_.*_0$", parameter) ~ "intercept",
       grepl("^b_.*_1$", parameter) ~ "linear",
       grepl("^b_.*_2$", parameter) ~ "quadratic",
+      grepl("^b_.*_3$", parameter) ~ "cubic",
       grepl("^g_.*_1$", parameter) ~ "historical",
       TRUE ~ NA_character_
-    ))
-
-recovery_plot <- recovery_summary %>%
-  mutate(
+    )) %>%
+    mutate(
     parameter = factor(
       parameter,
       levels = rev(parameter_order)
     )
-  ) %>%
+  )
+
+
+
+
+recovery_plot <- recovery_summary %>%
   ggplot(
     aes(
       x = parameter, # stats::reorder(parameter, true_value),

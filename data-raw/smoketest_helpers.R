@@ -208,7 +208,8 @@ simulate_temporal_family <- function(
   loading_link = "exp", # c("identity", "exp")
   time_scale = c("zscore", "fixed"),
   time_half_range = 3,
-  prop_historical = 0.5
+  prop_historical = 0.5,
+  y_mean = 0
 ) {
   time_scale <- match.arg(time_scale)
   ped_i <- simulate_pedigree_safe(kpc = kpc, Ngen = Ngen, marR = marR)
@@ -254,7 +255,7 @@ simulate_temporal_family <- function(
 
   # V_i <- #make_symmetric(V_i) + diag(1e-6, n_i)
 
-  y_i <- mvtnorm::rmvnorm(1, sigma = V_i)
+  y_i <- mvtnorm::rmvnorm(1, sigma = V_i) + y_mean
 
   rn <- rownames(A_i)
   if (is.null(rn) || anyNA(rn) || any(rn == "")) rn <- as.character(seq_len(n_i))

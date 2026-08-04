@@ -47,7 +47,7 @@ buildPedigreeModelCovariance <- function(
     ee2 = 0.6
   ),
   Vad = TRUE,
-  Vdd = FALSE,
+  Vdd = FALSE, # check into confirming that variance components are directly estimated
   Vcn = TRUE,
   Vce = TRUE,
   Vmt = TRUE,
