@@ -63,8 +63,8 @@ sfLibrary(OpenMx)
 # -----------------------------------------------------------------------------
 
 #master_seed <- 112026011
-master_seed <- 202607200
-n_replications <- 5
+master_seed <- 202607201
+n_replications <- 50
 n_families <- 250
 threshold_year <- 1776
 prop_historical <- 0.5
@@ -76,7 +76,7 @@ param_year_base <- 1700
 gen_gap <- 30
 y_mean_param <- 10
 historical_threshold_centered <- (threshold_year - param_year_base)
-
+poly_degree <- 2
 optimizer_tries <- 5
 
 # Threads each OpenMx fit may use. Kept at 1 because whole replications run in
@@ -90,7 +90,7 @@ Ngen <- 4
 marR <- 0.8
 use_exp_loadings <- TRUE
 
-core_folder <- "temporal_ACE_means_parameter_recoveryv1_f250_p50_reps5"
+core_folder <- "temporal_ACE_means_parameter_recoveryv1_f250_p50_reps50"
 
 loading_link <- if (use_exp_loadings) {
   "exp"
@@ -133,6 +133,9 @@ fit_components <- c(
 # Element j of true_beta[[k]] is the coefficient on time^(j-1), so
 #   lambda_k = exp(beta_k0 + beta_k1 * t + beta_k2 * t^2 + beta_k3 * t^3 + gamma_k * H)
 # and component k contributes lambda_k^2 to the phenotypic variance.
+#
+# Specify as many coefficients as you like: poly_degree decides how many are
+# actually used, and use_poly() below ignores the rest.
 true_beta <- list(
   a  = c(log(3), 0.1, 0.1, 0.00),
   cn = c(log(2.5), 0.00, 0.20, 0.00),
@@ -151,10 +154,13 @@ true_gamma <- list(
 
 # Mean structure. Element j of true_beta_mean is the coefficient on time^(j-1), so
 #   mu = mean_y + b_mean_1 * t + b_mean_2 * t^2 + b_mean_3 * t^3 + g_mean_1 * H
-#
+# The mean shares the loadings' Tpoly basis, so use_poly() applies to it too.
 true_beta_mean <- c(y_mean_param, 0.5, 0, 0.00)
 true_gamma_mean <- 0.3
 
+# make_lambda() takes exactly poly + 1 coefficients and errors on any other
+# length, so keep the first poly_degree + 1 and ignore anything above it.
+use_poly <- function(beta, poly = poly_degree) beta[seq_len(poly + 1L)]
 
 # The parameters estimated in the true fitted model. The simulator
 # (simulate_temporal_family -> make_lambda, loading_link = "exp") and the fitted
@@ -164,7 +170,7 @@ true_gamma_mean <- 0.3
 # the simulator used linear (identity) loadings.
 stopifnot(use_exp_loadings, loading_link == "exp")
 
-target <- c(
+target_full <- c(
   b_a_0 = true_beta$a[1],
   b_a_1 = true_beta$a[2],
   b_a_2 = true_beta$a[3],
@@ -187,7 +193,12 @@ target <- c(
   g_mean_1 = true_gamma_mean[1]
 )
 
-
+# only use the parameters that are actually estimated in the fitted model, so drop
+# every b_*_j above poly_degree. target_full keeps them so raising poly_degree is
+# a one-line change.
+target <- target_full[
+  !grepl(paste0("^b_.*_[", poly_degree + 1L, "-9]$"), names(target_full))
+]
 
 # free_only() decides which parameters are estimated, but it can only narrow: it
 # reads omxGetParameters(), which returns already-free parameters only. So the mean
@@ -207,7 +218,7 @@ write_csv(
 # threshold_year, param_year_sd, param_year_base, gen_gap and loading_link are
 # read from the Monte Carlo settings above, as kpc, Ngen and marR already are.
 simulate_one_dataset <- function(
-  replication, replication_seed, poly = 3,
+  replication, replication_seed, poly = poly_degree,
   rescale = TRUE,
   # Map the designed birth-year span onto [-3, 3] with design constants instead
   # of a per-family z-score, so t genuinely covers the plotted time_grid.
@@ -228,7 +239,7 @@ simulate_one_dataset <- function(
       Ngen = Ngen,
       marR = marR,
       threshold_year = threshold_year,
-      true_beta = true_beta,
+      true_beta = lapply(true_beta, use_poly, poly = poly),
       true_gamma = true_gamma,
       components = sim_components,
       gen_gap = gen_gap,
@@ -242,7 +253,7 @@ simulate_one_dataset <- function(
       time_half_range = time_half_range,
       prop_historical = prop_historical,
       y_mean = y_mean,
-      true_beta_mean = beta_mean,
+      true_beta_mean = use_poly(beta_mean, poly = poly),
       true_gamma_mean = gamma_mean
     )
   }
@@ -289,17 +300,22 @@ build_true_model <- function(families, replication) {
       obs_ids = fam$obs_ids,
       param_year = fam$param_year_scaled,
       H = fam$H,
-      use_exp_loadings = use_exp_loadings
+      use_exp_loadings = use_exp_loadings,
+      time_point_max = poly_degree
     )
   }
 
+  # time_point_max and mean_degree both default to a cubic basis. Tying them to
+  # poly_degree means the fitted model has exactly the terms that generated the
+  # data, instead of higher-order ones that free_only() then pins at zero.
   temporal_model_ace <- buildTemporalPedigreeMx(
     model_name = paste0("TemporalPedigreeRecovery_ACE_rep", replication),
     group_models = group_models,
     p_hist = 1,
     components = fit_components,
     ci = FALSE,
-    mean_degree = 3,
+    time_point_max = poly_degree,
+    mean_degree = poly_degree,
     start_mean = y_mean_param
   )
 
