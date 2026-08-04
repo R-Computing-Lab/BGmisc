@@ -21,7 +21,9 @@ buildTemporalPedigreeModelCovariance <- function(
   start_beta0 = 0.5,
   start_beta_time = 0,
   start_gamma = 0,
-  time_point_max = NULL
+  time_point_max = NULL,
+  mean_degree = 0,
+  start_mean = 0
 ) {
   buildPedigreeModelCovariance(
     temporal = TRUE,
@@ -30,7 +32,9 @@ buildTemporalPedigreeModelCovariance <- function(
     start_beta0 = start_beta0,
     start_beta_time = start_beta_time,
     start_gamma = start_gamma,
-    time_point_max = time_point_max
+    time_point_max = time_point_max,
+    mean_degree = mean_degree,
+    start_mean = start_mean
   )
 }
 

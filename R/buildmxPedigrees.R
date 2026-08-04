@@ -60,18 +60,22 @@ buildPedigreeModelCovariance <- function(
   start_beta_time = 0,
   start_gamma = 0,
   time_point_max = NULL,
+  mean_degree = 0,
+  start_mean = 0,
   lbound = 1e-10
 ) {
   .require_openmx("buildPedigreeModelCovariance")
 
   if (temporal) {
-    return(.buildTemporalPedigreeModelCovariance(
+    return(.buildTemporalLoadingModel(
       p_hist = p_hist,
       components = components,
       start_beta0 = start_beta0,
       start_beta_time = start_beta_time,
       start_gamma = start_gamma,
-      time_point_max = time_point_max
+      time_point_max = time_point_max,
+      mean_degree = mean_degree,
+      start_mean = start_mean
     ))
   }
 
@@ -127,11 +131,17 @@ buildPedigreeModelCovariance <- function(
   do.call(OpenMx::mxModel, c(list("ModelOne"), mat_list))
 }
 
-#' Build a temporal covariance sub-model (internal)
+#' Build the temporal loading sub-model (internal)
 #'
 #' Builds the parent \code{ModelOne} sub-model for a time-varying pedigree model: for each
 #' requested component, a vector of polynomial-time loadings (\code{B_k}) and, when
-#' \code{p_hist > 0}, a vector of historical-moderator loadings (\code{G_k}).
+#' \code{p_hist > 0}, a vector of historical-moderator loadings (\code{G_k}). Also builds
+#' the mean's coefficient vector (\code{B_mean}, and \code{G_mean} when \code{p_hist > 0}),
+#' which lets the phenotypic mean vary over the same basis as the loadings.
+#'
+#' Named for what it builds rather than mirroring the exported
+#' \code{\link{buildTemporalPedigreeModelCovariance}}, which differed from it by a single
+#' leading dot.
 #'
 #' @param p_hist Integer. Number of historical moderator columns. Default is 0.
 #' @param components Character vector of component keys (any of "a", "d", "cn", "ce", "mt",
@@ -140,17 +150,24 @@ buildPedigreeModelCovariance <- function(
 #' @param start_beta_time Numeric starting value for each component's time-slope loadings.
 #' @param start_gamma Numeric starting value for historical-moderator loadings.
 #' @param time_point_max Integer degree of the polynomial time basis. Defaults to 3 when NULL.
+#' @param mean_degree Integer degree of the temporal mean. 0 (the default) frees only the
+#'   intercept, which reproduces a single constant mean. Must not exceed
+#'   \code{time_point_max}, since the mean shares the components' \code{Tpoly} basis.
+#' @param start_mean Numeric starting value for the mean's intercept. Set this near the
+#'   observed phenotype mean; the optimizer starts from it.
 #' @return An OpenMx model containing the \code{B_*}/\code{G_*} parameter matrices.
 #' @keywords internal
-.buildTemporalPedigreeModelCovariance <- function(
+.buildTemporalLoadingModel <- function(
   p_hist = 0,
   components = c("a", "e"),
   start_beta0 = 0.5,
   start_beta_time = 0,
   start_gamma = 0,
-  time_point_max = NULL
+  time_point_max = NULL,
+  mean_degree = 0,
+  start_mean = 0
 ) {
-  .require_openmx(".buildTemporalPedigreeModelCovariance")
+  .require_openmx(".buildTemporalLoadingModel")
 
   beta_name <- function(k) paste0("B_", k)
   gamma_name <- function(k) paste0("G_", k)
@@ -187,6 +204,40 @@ buildPedigreeModelCovariance <- function(
         name = gamma_name(k)
       )
     }
+  }
+
+  if (mean_degree > time_point_max) {
+    stop("mean_degree cannot exceed time_point_max; the mean shares the Tpoly basis.")
+  }
+
+  # The mean is always expressed over the same Tpoly basis as the loadings, so the
+  # family groups need no branch: mean_degree just controls how many of its
+  # coefficients are free. At the default of 0 only the intercept is free and the
+  # expression evaluates to one constant for every family member, which is what the
+  # previous fixed mean matrix did. The intercept keeps the "mean_y" label so
+  # existing summaries and downstream parsers still resolve it.
+  mats[["B_mean"]] <- OpenMx::mxMatrix(
+    type = "Full",
+    nrow = time_point_max + 1,
+    ncol = 1,
+    free = c(rep(TRUE, mean_degree + 1), rep(FALSE, time_point_max - mean_degree)),
+    values = c(start_mean, rep(0, time_point_max)),
+    labels = c("mean_y", paste0("b_mean_", time_points[-1])),
+    name = "B_mean"
+  )
+
+  # Fixed at zero by default: freeing these tests whether a historical event shifts
+  # the mean as well as the variance components.
+  if (p_hist > 0) {
+    mats[["G_mean"]] <- OpenMx::mxMatrix(
+      type = "Full",
+      nrow = p_hist,
+      ncol = 1,
+      free = FALSE,
+      values = 0,
+      labels = paste0("g_mean_", seq_len(p_hist)),
+      name = "G_mean"
+    )
   }
 
   do.call(OpenMx::mxModel, c(list("ModelOne"), mats))
@@ -245,8 +296,9 @@ buildPedigreeModelCovariance <- function(
 
 #' Build the free mean mxMatrix for a family group (internal)
 #'
-#' Shared by the static and temporal branches of \code{\link{buildOneFamilyGroup}}; they
-#' only differ in the parameter label ("meanLI" vs "mean_y").
+#' Used by the static branches of \code{\link{buildOneFamilyGroup}}. The temporal branch
+#' instead builds its mean as an algebra over \code{Tpoly} and \code{ModelOne.B_mean}, so
+#' that the mean can vary across historical time.
 #'
 #' @param fsize Family size.
 #' @param obs_ids Character vector of individual IDs.
@@ -260,6 +312,40 @@ buildPedigreeModelCovariance <- function(
     values = 0, labels = label, dimnames = list(NULL, obs_ids)
   )
 }
+
+#' Build the temporal mean part for a family group (internal)
+#'
+#' @inheritParams .pedigreeMeanMatrix
+#' @param label The mean parameter's label, used only for the constant-mean case.
+#' @param mean_basis NULL for a single free mean (default), or the name of a fixed basis
+#'   matrix in the group model whose columns the mean is regressed on.
+#' @param mean_hist NULL, or the name of the historical-moderator matrix to add to the mean.
+#' @param parent Name of the sub-model holding \code{B_mean}/\code{G_mean}.
+#' @return An mxMatrix or mxAlgebra named "M".
+#' @keywords internal
+.pedigreeMeanPart <- function(fsize,
+                              obs_ids,
+                              label,
+                              mean_basis = NULL,
+                              mean_hist = NULL,
+                              parent = "ModelOne") {
+  if (is.null(mean_basis)) {
+    return(.pedigreeMeanMatrix(fsize, obs_ids, label))
+  }
+
+  expr <- paste0(mean_basis, " %*% ", parent, ".B_mean")
+  if (!is.null(mean_hist)) {
+    expr <- paste0(expr, " + ", mean_hist, " %*% ", parent, ".G_mean")
+  }
+
+  # t() because M must be 1 x fsize while the basis product is fsize x 1.
+  OpenMx::mxAlgebraFromString(
+    paste0("t(", expr, ")"),
+    name = "M",
+    dimnames = list(NULL, obs_ids)
+  )
+}
+
 
 #' Build one family group model
 #'
@@ -669,7 +755,11 @@ buildOneFamilyGroup <- function(
   retain_loadings = TRUE,
   retain_loading_covariances = TRUE,
   retain_component_covariances = TRUE,
-  residual_covariance_form = c("outer_product", "diagonal")
+  residual_covariance_form = c("outer_product", "diagonal"),
+  mean_degree = 0,
+  start_mean = 0,
+  mean_basis = "Tpoly",
+  mean_hist = "H"
 ) {
   # Checks
   if (length(obs_ids) != fsize) stop("Length of obs_ids must equal family size.")
@@ -887,7 +977,14 @@ buildOneFamilyGroup <- function(
     loading_covariance_parts,
     component_covariance_parts,
     list(
-      .pedigreeMeanMatrix(fsize, obs_ids, "mean_y"),
+      .pedigreeMeanPart(
+        fsize = fsize, obs_ids = obs_ids, label = "mean_y",
+        # mean_basis and mean_hist arrive as matrix names, not flags. Passing
+        # mean_basis = NULL falls back to the constant mean; the historical shift
+        # is only available when there are historical columns to shift on.
+        mean_basis = mean_basis,
+        mean_hist  = if (!is.null(mean_hist) && p_hist > 0) mean_hist else NULL
+      ),
       OpenMx::mxAlgebraFromString(
         covariance_algebra,
         name = "V",
@@ -1137,7 +1234,9 @@ buildPedigreeMx <- function(model_name, vars, group_models,
                             param_year = NULL,
                             components = c("a", "e"),
                             ci_names = NULL,
-                            time_point_max = NULL) {
+                            time_point_max = NULL,
+                            mean_degree = 0,
+                            start_mean = 0) {
   .require_openmx("buildPedigreeMx")
 
   if (temporal) {
@@ -1148,7 +1247,9 @@ buildPedigreeMx <- function(model_name, vars, group_models,
       temporal = TRUE,
       p_hist = p_hist,
       components = components,
-      time_point_max = time_point_max
+      time_point_max = time_point_max,
+      mean_degree = mean_degree,
+      start_mean = start_mean
     )
 
     ci_obj <- NULL
@@ -1302,6 +1403,8 @@ fitPedigreeModel <- function(
   components = c("a", "d", "cn", "ce", "mt", "am", "e"),
   use_exp_loadings = FALSE,
   time_point_max = NULL,
+  mean_degree = 0,
+  start_mean = 0,
   retain_eta = TRUE,
   retain_loadings = TRUE,
   retain_loading_covariances = TRUE,
@@ -1401,7 +1504,9 @@ fitPedigreeModel <- function(
     temporal = temporal,
     p_hist = if (temporal) p_hist else 0,
     components = components,
-    time_point_max = time_point_max
+    time_point_max = time_point_max,
+    mean_degree = mean_degree,
+    start_mean = start_mean
   )
   if (runmodel == TRUE) {
     if (tryhard == TRUE) {
