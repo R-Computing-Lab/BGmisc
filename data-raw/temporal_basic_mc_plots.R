@@ -297,7 +297,7 @@ panel_a_recovered_trajectories <- calculate_variance_trajectories(
     ),
   prediction_grid = panel_a_grid,
   id_columns = "replication",
-  variance_column = "recovered_variance"
+  param_column = "recovered_variance"
 )
 
 panel_a_recovered_summary <- summarize_recovered_trajectories(
@@ -307,7 +307,7 @@ panel_a_recovered_summary <- summarize_recovered_trajectories(
 panel_a_population_trajectories <- calculate_variance_trajectories(
   parameter_data = true_parameters,
   prediction_grid = panel_a_grid,
-  variance_column = "population_variance"
+  param_column= "population_variance"
 )
 
 panel_a_data <- combine_recovered_and_population(
@@ -433,7 +433,7 @@ panel_b_recovered_trajectories <- calculate_variance_trajectories(
     ),
   prediction_grid = panel_b_grid,
   id_columns = "replication",
-  variance_column = "recovered_variance"
+  param_column= "recovered_variance"
 )
 
 panel_b_recovered_summary <- summarize_recovered_trajectories(
@@ -443,7 +443,7 @@ panel_b_recovered_summary <- summarize_recovered_trajectories(
 panel_b_population_trajectories <- calculate_variance_trajectories(
   parameter_data = true_parameters,
   prediction_grid = panel_b_grid,
-  variance_column = "population_variance"
+  param_column= "population_variance"
 )
 
 panel_b_data <- combine_recovered_and_population(

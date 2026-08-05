@@ -63,9 +63,9 @@ sfLibrary(OpenMx)
 # -----------------------------------------------------------------------------
 
 #master_seed <- 112026011
-master_seed <- 202607201
-n_replications <- 50
-n_families <- 250
+master_seed <- 2026072011
+n_replications <- 100
+n_families <- 50
 threshold_year <- 1776
 prop_historical <- 0.5
 # Standard deviation of the birth-year range, widened here for broader time
@@ -74,9 +74,9 @@ prop_historical <- 0.5
 param_year_sd <- 12
 param_year_base <- 1700
 gen_gap <- 30
-y_mean_param <- 10
+y_mean_param <- 2
 historical_threshold_centered <- (threshold_year - param_year_base)
-poly_degree <- 2
+poly_degree <- 1
 optimizer_tries <- 5
 
 # Threads each OpenMx fit may use. Kept at 1 because whole replications run in
@@ -90,7 +90,7 @@ Ngen <- 4
 marR <- 0.8
 use_exp_loadings <- TRUE
 
-core_folder <- "temporal_ACE_means_parameter_recoveryv1_f250_p50_reps50"
+core_folder <- "temporal_ACE_means_parameter_recovery_f50_p50_reps100"
 
 loading_link <- if (use_exp_loadings) {
   "exp"
@@ -137,15 +137,15 @@ fit_components <- c(
 # Specify as many coefficients as you like: poly_degree decides how many are
 # actually used, and use_poly() below ignores the rest.
 true_beta <- list(
-  a  = c(log(3), 0.1, 0.1, 0.00),
-  cn = c(log(2.5), 0.00, 0.20, 0.00),
+  a  = c(log(3), 0, 0, 0.00),
+  cn = c(log(2.5), 0.00, 0, 0.00),
   ce = c(0.00, 0.00, 0.00, 0.00),
   mt = c(0.00, 0.00, 0.00, 0.00),
-  e  = c(log(2.0), -0.1, .1, 0.00)
+  e  = c(log(2.0), 0, 0, 0.00)
 )
 
 true_gamma <- list(
-  a  = 0.2,
+  a  = 0.0,
   cn = 0.00,
   ce = 0.00,
   mt = 0.00,
@@ -155,18 +155,16 @@ true_gamma <- list(
 # Mean structure. Element j of true_beta_mean is the coefficient on time^(j-1), so
 #   mu = mean_y + b_mean_1 * t + b_mean_2 * t^2 + b_mean_3 * t^3 + g_mean_1 * H
 # The mean shares the loadings' Tpoly basis, so use_poly() applies to it too.
-true_beta_mean <- c(y_mean_param, 0.5, 0, 0.00)
-true_gamma_mean <- 0.3
+true_beta_mean <- c(y_mean_param, 0.0, 0, 0.00)
+true_gamma_mean <- 0.0
 
 # make_lambda() takes exactly poly + 1 coefficients and errors on any other
 # length, so keep the first poly_degree + 1 and ignore anything above it.
 use_poly <- function(beta, poly = poly_degree) beta[seq_len(poly + 1L)]
 
 # The parameters estimated in the true fitted model. The simulator
-# (simulate_temporal_family -> make_lambda, loading_link = "exp") and the fitted
-# model (buildOneFamilyGroup -> L_k = exp(Tpoly %*% B_k + H %*% G_k)) share the
-# same parameterization, so each generating coefficient is its own target and no
-# transformation is applied. A log()/ratio mapping would only be appropriate if
+# (simulate_temporal_family -> make_lambda, loading_link = "exp")
+# A log()/ratio mapping would only be appropriate if
 # the simulator used linear (identity) loadings.
 stopifnot(use_exp_loadings, loading_link == "exp")
 
@@ -197,7 +195,7 @@ target_full <- c(
 # every b_*_j above poly_degree. target_full keeps them so raising poly_degree is
 # a one-line change.
 target <- target_full[
-  !grepl(paste0("^b_.*_[", poly_degree + 1L, "-9]$"), names(target_full))
+  !grepl(paste0("^[gb]_.*_[", poly_degree + 1L, "-9]$"), names(target_full))
 ]
 
 # free_only() decides which parameters are estimated, but it can only narrow: it

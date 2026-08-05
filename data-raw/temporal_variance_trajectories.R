@@ -35,25 +35,46 @@ library(tidyr)
 # -----------------------------------------------------------------------------
 # Notation
 # -----------------------------------------------------------------------------
+if(!exists("core_folder")){
+core_folder <- "temporal_ACE_parameter_recovery_500_p50"
+}
 
-parameter_names <- c(
+results_directory <- file.path("results", core_folder)
+
+parameter_targets_file <- file.path(
+  results_directory,
+  "parameter_targets.csv"
+)
+trajectory_parameter_names  <- c(
   "b_a_0", "b_a_1", "b_a_2", "g_a_1",
   "b_cn_0", "b_cn_1", "b_cn_2", "g_cn_1",
-  "b_e_0", "b_e_1", "b_e_2", "g_e_1"
+  "b_e_0", "b_e_1", "b_e_2", "g_e_1",
+  "y_mean", "b_mean_1", "b_mean_2", "g_mean_1"
 )
+parameter_ <- read.csv(parameter_targets_file)
+
+if(is.null(parameter_$parameter)){
+parameter_names <- trajectory_parameter_names
+} else {
+parameter_names  <-parameter_$parameter
+}
+
+
 
 component_order <- c(
   "a_variance",
   "cn_variance",
   "e_variance",
-  "total_variance"
+  "total_variance",
+  "mean"
 )
 
 component_labels <- c(
   a_variance = "Additive genetic variance",
   cn_variance = "Nuclear-family environmental variance",
   e_variance = "Nonshared environmental variance",
-  total_variance = "Phenotypic variance"
+  total_variance = "Phenotypic variance",
+  mean = "Phenotypic mean"
 )
 
 historical_period_labels <- c(
@@ -81,11 +102,28 @@ component_parameter_prefix <- c(
 # Convert parameter rows into model-implied variance trajectories. The input
 # parameter_data may contain one population row or many Monte Carlo rows.
 # prediction_grid must contain time, historical_period, and event_experienced.
+
 calculate_variance_trajectories <- function(
   parameter_data,
   prediction_grid,
   id_columns = character(),
-  variance_column = "variance"
+  param_column
+) {
+calculate_param_trajectories (
+  parameter_data=  parameter_data,
+  prediction_grid=prediction_grid,
+  id_columns =id_columns,
+  param = "variance",
+  param_column = param_column
+)
+}
+
+calculate_param_trajectories <- function(
+  parameter_data,
+  prediction_grid,
+  id_columns = character(),
+  param = "variance",
+  param_column = "variance"
 ) {
   required_grid_columns <- c(
     "time",
@@ -106,23 +144,34 @@ calculate_variance_trajectories <- function(
   }
 
   missing_parameter_columns <- setdiff(
-    parameter_names,
+    trajectory_parameter_names,
     names(parameter_data)
   )
 
+  # Parameters absent from parameter_data were not estimated and are therefore
+  # treated as fixed at zero.
   if (length(missing_parameter_columns) > 0L) {
-    stop(
-      "parameter_data is missing required column(s): ",
-      paste(missing_parameter_columns, collapse = ", ")
-    )
+    parameter_data[missing_parameter_columns] <- 0
   }
+
+   # Treat explicit missing values within existing parameter columns as zero.
+ parameter_data <- parameter_data %>%
+    dplyr::mutate(
+      dplyr::across(
+        dplyr::all_of(trajectory_parameter_names),
+        ~ tidyr::replace_na(.x, 0)
+      )
+    )
 
   trajectories <- tidyr::crossing(
     parameter_data,
     prediction_grid
-  ) %>%
+  ) %>%    dplyr::mutate(
+   event_effect = historical_period * event_experienced)
+
+if(param == "variance"){
+  trajectories <- trajectories  %>%
     dplyr::mutate(
-      event_effect = historical_period * event_experienced,
       a_variance = exp(2 * (
         b_a_0 +
           b_a_1 * time +
@@ -142,7 +191,22 @@ calculate_variance_trajectories <- function(
           g_e_1 * event_effect
       )),
       total_variance = a_variance + cn_variance + e_variance
-    ) %>%
+    )
+  component_order <- component_order[component_order!="mean"]
+
+} else {
+    trajectories <- trajectories  %>%
+    dplyr::mutate(
+      total_mean = exp(2 * (
+        y_mean +
+          b_mean_1 * time +
+          b_mean_2 * time^2 +
+          g_mean_1 * event_effect
+      )))
+    component_order <- component_order[component_order=="mean"]
+}
+
+ trajectories <- trajectories %>%
     dplyr::select(
       dplyr::all_of(id_columns),
       time,
@@ -154,7 +218,7 @@ calculate_variance_trajectories <- function(
     tidyr::pivot_longer(
       cols = dplyr::all_of(component_order),
       names_to = "component",
-      values_to = variance_column
+      values_to = param_column
     )
 
   trajectories
