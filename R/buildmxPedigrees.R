@@ -62,6 +62,8 @@ buildPedigreeModelCovariance <- function(
   time_point_max = NULL,
   mean_degree = 0,
   start_mean = 0,
+  mean_hist_free = FALSE,
+  start_mean_hist = 0,
   lbound = 1e-10
 ) {
   .require_openmx("buildPedigreeModelCovariance")
@@ -75,7 +77,9 @@ buildPedigreeModelCovariance <- function(
       start_gamma = start_gamma,
       time_point_max = time_point_max,
       mean_degree = mean_degree,
-      start_mean = start_mean
+      start_mean = start_mean,
+      mean_hist_free = mean_hist_free,
+      start_mean_hist = start_mean_hist
     ))
   }
 
@@ -155,6 +159,14 @@ buildPedigreeModelCovariance <- function(
 #'   \code{time_point_max}, since the mean shares the components' \code{Tpoly} basis.
 #' @param start_mean Numeric starting value for the mean's intercept. Set this near the
 #'   observed phenotype mean; the optimizer starts from it.
+#' @param mean_hist_free Logical, length 1 or \code{p_hist}. Whether each historical
+#'   moderator is allowed to shift the phenotypic mean. Defaults to FALSE, which
+#'   reproduces the previous behaviour of fixing every mean shift at zero. Set TRUE
+#'   to estimate them. Note that leaving these fixed while the components' own
+#'   \code{G_*} coefficients are free forces any event-driven change in the mean to
+#'   be absorbed by the variance components.
+#' @param start_mean_hist Numeric starting value for the free elements of
+#'   \code{G_mean}.
 #' @return An OpenMx model containing the \code{B_*}/\code{G_*} parameter matrices.
 #' @keywords internal
 .buildTemporalLoadingModel <- function(
@@ -165,7 +177,9 @@ buildPedigreeModelCovariance <- function(
   start_gamma = 0,
   time_point_max = NULL,
   mean_degree = 0,
-  start_mean = 0
+  start_mean = 0,
+  mean_hist_free = FALSE,
+  start_mean_hist = 0
 ) {
   .require_openmx(".buildTemporalLoadingModel")
 
@@ -206,6 +220,10 @@ buildPedigreeModelCovariance <- function(
     }
   }
 
+  if (!is.numeric(mean_degree) || length(mean_degree) != 1L ||
+    mean_degree < 0 || mean_degree != as.integer(mean_degree)) {
+    stop("mean_degree must be a non-negative whole number.")
+  }
   if (mean_degree > time_point_max) {
     stop("mean_degree cannot exceed time_point_max; the mean shares the Tpoly basis.")
   }
@@ -226,21 +244,52 @@ buildPedigreeModelCovariance <- function(
     name = "B_mean"
   )
 
-  # Fixed at zero by default: freeing these tests whether a historical event shifts
-  # the mean as well as the variance components.
+  # Fixed at zero by default, for backward compatibility. Freeing these tests
+  # whether a historical event shifts the mean as well as the variance components.
+  # Recycled to length p_hist so a single TRUE/FALSE applies to all moderators
+  # while a vector frees them selectively: a pandemic indicator plausibly shifts
+  # mean lifespan, whereas some other regime indicator may shift only the
+  # variance, and the two need not share one decision.
   if (p_hist > 0) {
+    mean_hist_free <- .recycleFlag(mean_hist_free, p_hist, "mean_hist_free")
+
     mats[["G_mean"]] <- OpenMx::mxMatrix(
       type = "Full",
       nrow = p_hist,
       ncol = 1,
-      free = FALSE,
-      values = 0,
+      free = mean_hist_free,
+      values = rep(start_mean_hist, length.out = p_hist),
       labels = paste0("g_mean_", seq_len(p_hist)),
       name = "G_mean"
     )
+  } else if (any(mean_hist_free)) {
+    warning("mean_hist_free was supplied but p_hist is 0; ignoring.", call. = FALSE)
   }
 
   do.call(OpenMx::mxModel, c(list("ModelOne"), mats))
+}
+
+#' Recycle a logical flag to a required length (internal)
+#'
+#' @param x A logical vector of length 1 or \code{n}.
+#' @param n Required length.
+#' @param arg_name Name of the calling argument, used in error messages.
+#' @return A logical vector of length \code{n}.
+#' @keywords internal
+.recycleFlag <- function(x, n, arg_name) {
+  if (!is.logical(x) || anyNA(x)) {
+    stop(sprintf("%s must be logical and non-missing.", arg_name))
+  }
+  if (length(x) == 1L) {
+    return(rep(x, n))
+  }
+  if (length(x) != n) {
+    stop(sprintf(
+      "%s must be length 1 or length p_hist (%d); got %d.",
+      arg_name, n, length(x)
+    ))
+  }
+  x
 }
 
 #' Determine family size from a family's relatedness matrices (internal)
@@ -1236,7 +1285,9 @@ buildPedigreeMx <- function(model_name, vars, group_models,
                             ci_names = NULL,
                             time_point_max = NULL,
                             mean_degree = 0,
-                            start_mean = 0) {
+                            start_mean = 0,
+                            mean_hist_free = FALSE,
+                            start_mean_hist = 0) {
   .require_openmx("buildPedigreeMx")
 
   if (temporal) {
@@ -1249,7 +1300,9 @@ buildPedigreeMx <- function(model_name, vars, group_models,
       components = components,
       time_point_max = time_point_max,
       mean_degree = mean_degree,
-      start_mean = start_mean
+      start_mean = start_mean,
+      mean_hist_free = mean_hist_free,
+      start_mean_hist = start_mean_hist
     )
 
     ci_obj <- NULL
@@ -1405,6 +1458,8 @@ fitPedigreeModel <- function(
   time_point_max = NULL,
   mean_degree = 0,
   start_mean = 0,
+  mean_hist_free = FALSE,
+  start_mean_hist = 0,
   retain_eta = TRUE,
   retain_loadings = TRUE,
   retain_loading_covariances = TRUE,
@@ -1506,7 +1561,9 @@ fitPedigreeModel <- function(
     components = components,
     time_point_max = time_point_max,
     mean_degree = mean_degree,
-    start_mean = start_mean
+    start_mean = start_mean,
+    mean_hist_free = mean_hist_free,
+    start_mean_hist = start_mean_hist
   )
   if (runmodel == TRUE) {
     if (tryhard == TRUE) {

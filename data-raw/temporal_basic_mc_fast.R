@@ -78,7 +78,7 @@ y_mean_param <- 2
 historical_threshold_centered <- (threshold_year - param_year_base)
 poly_degree <- 3
 optimizer_tries <- 5
-
+mean_hist_free <- FALSE
 # Threads each OpenMx fit may use. Kept at 1 because whole replications run in
 # parallel across snowfall workers (see the run section); letting each fit also
 # spin up threads would oversubscribe the cores and slow everything down.
@@ -90,7 +90,7 @@ Ngen <- 4
 marR <- 0.8
 use_exp_loadings <- TRUE
 
-core_folder <- "temporal_ACE_means_parameter_recovery_poly3_f250_p50_reps100"
+core_folder <- "temporal_ACE_means_parameter_recovery_poly3_moder_f250_p50_reps100"
 
 loading_link <- if (use_exp_loadings) {
   "exp"
@@ -137,25 +137,25 @@ fit_components <- c(
 # Specify as many coefficients as you like: poly_degree decides how many are
 # actually used, and use_poly() below ignores the rest.
 true_beta <- list(
-  a  = c(log(3), 0, 0, 0.00),
+  a  = c(log(3), .1, -.1, 0.00),
   cn = c(log(2.5), 0.00, 0, 0.00),
   ce = c(0.00, 0.00, 0.00, 0.00),
   mt = c(0.00, 0.00, 0.00, 0.00),
-  e  = c(log(2.0), 0, 0, 0.00)
+  e  = c(log(2.0), .1, 0, 0.00)
 )
 
 true_gamma <- list(
-  a  = 0.0,
+  a  = 0.5,
   cn = 0.00,
   ce = 0.00,
   mt = 0.00,
-  e  = 0.0
+  e  = 0.5
 )
 
 # Mean structure. Element j of true_beta_mean is the coefficient on time^(j-1), so
 #   mu = mean_y + b_mean_1 * t + b_mean_2 * t^2 + b_mean_3 * t^3 + g_mean_1 * H
 # The mean shares the loadings' Tpoly basis, so use_poly() applies to it too.
-true_beta_mean <- c(y_mean_param, 0.0, 0, 0.00)
+true_beta_mean <- c(y_mean_param, 0.5, 0, 0.00)
 true_gamma_mean <- 0.0
 
 # make_lambda() takes exactly poly + 1 coefficients and errors on any other
@@ -314,7 +314,8 @@ build_true_model <- function(families, replication) {
     ci = FALSE,
     time_point_max = poly_degree,
     mean_degree = poly_degree,
-    start_mean = y_mean_param
+    start_mean = y_mean_param,
+    mean_hist_free = mean_hist_free
   )
 
   # Fit the true model: AE with linear birth-cohort moderation plus one

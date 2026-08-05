@@ -17,7 +17,9 @@ buildPedigreeMx(
   ci_names = NULL,
   time_point_max = NULL,
   mean_degree = 0,
-  start_mean = 0
+  start_mean = 0,
+  mean_hist_free = FALSE,
+  start_mean_hist = 0
 )
 }
 \arguments{

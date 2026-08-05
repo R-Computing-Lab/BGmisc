@@ -23,7 +23,9 @@ buildTemporalPedigreeModelCovariance <- function(
   start_gamma = 0,
   time_point_max = NULL,
   mean_degree = 0,
-  start_mean = 0
+  start_mean = 0,
+  mean_hist_free = FALSE,
+  start_mean_hist = 0
 ) {
   buildPedigreeModelCovariance(
     temporal = TRUE,
@@ -34,7 +36,9 @@ buildTemporalPedigreeModelCovariance <- function(
     start_gamma = start_gamma,
     time_point_max = time_point_max,
     mean_degree = mean_degree,
-    start_mean = start_mean
+    start_mean = start_mean,
+    mean_hist_free = mean_hist_free,
+    start_mean_hist = start_mean_hist
   )
 }
 
@@ -210,7 +214,9 @@ buildTemporalPedigreeMx <- function(
   ci = FALSE,
   time_point_max = NULL,
   mean_degree = 0,
-  start_mean = 0
+  start_mean = 0,
+  mean_hist_free = FALSE,
+  start_mean_hist = 0
 ) {
   buildPedigreeMx(
     model_name = model_name,
@@ -221,7 +227,9 @@ buildTemporalPedigreeMx <- function(
     components = components,
     time_point_max = time_point_max,
     mean_degree = mean_degree,
-    start_mean = start_mean
+    start_mean = start_mean,
+    mean_hist_free = mean_hist_free,
+    start_mean_hist = start_mean_hist
   )
 }
 
@@ -254,6 +262,10 @@ fitTemporalPedigreeModel <- function(
   extraTries = 10,
   runmodel = TRUE,
   time_point_max = NULL,
+  mean_degree = 0,
+  start_mean = 0,
+  mean_hist_free = FALSE,
+  start_mean_hist = 0,
   clean_ids = FALSE
 ) {
   fitPedigreeModel(
@@ -278,6 +290,10 @@ fitTemporalPedigreeModel <- function(
     extraTries = extraTries,
     runmodel = runmodel,
     time_point_max = time_point_max,
+    mean_degree = mean_degree,
+    start_mean = start_mean,
+    mean_hist_free = mean_hist_free,
+    start_mean_hist = start_mean_hist,
     clean_ids = clean_ids
   )
 }

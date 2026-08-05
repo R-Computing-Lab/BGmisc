@@ -12,7 +12,9 @@
   start_gamma = 0,
   time_point_max = NULL,
   mean_degree = 0,
-  start_mean = 0
+  start_mean = 0,
+  mean_hist_free = FALSE,
+  start_mean_hist = 0
 )
 }
 \arguments{
@@ -35,6 +37,16 @@ intercept, which reproduces a single constant mean. Must not exceed
 
 \item{start_mean}{Numeric starting value for the mean's intercept. Set this near the
 observed phenotype mean; the optimizer starts from it.}
+
+\item{mean_hist_free}{Logical, length 1 or \code{p_hist}. Whether each historical
+moderator is allowed to shift the phenotypic mean. Defaults to FALSE, which
+reproduces the previous behaviour of fixing every mean shift at zero. Set TRUE
+to estimate them. Note that leaving these fixed while the components' own
+\code{G_*} coefficients are free forces any event-driven change in the mean to
+be absorbed by the variance components.}
+
+\item{start_mean_hist}{Numeric starting value for the free elements of
+\code{G_mean}.}
 }
 \value{
 An OpenMx model containing the \code{B_*}/\code{G_*} parameter matrices.

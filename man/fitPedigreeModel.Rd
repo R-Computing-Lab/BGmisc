@@ -38,6 +38,8 @@ fitPedigreeModel(
   time_point_max = NULL,
   mean_degree = 0,
   start_mean = 0,
+  mean_hist_free = FALSE,
+  start_mean_hist = 0,
   retain_eta = TRUE,
   retain_loadings = TRUE,
   retain_loading_covariances = TRUE,
