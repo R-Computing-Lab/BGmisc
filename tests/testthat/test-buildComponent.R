@@ -29,11 +29,11 @@ test_that("MZ twins coded at relatedness 1 via twinID column", {
   ped_kids <- potter
 
   # Add a child to one of the MZ twins
-  ped_kids <- addPersonToPed(ped_kids, sex = 0, momID = NA, dadID = NA, personID = 31)
-  ped_kids <- addPersonToPed(ped_kids, sex = 0, momID = NA, dadID = NA, personID = 32)
-  ped_kids <- addPersonToPed(ped_kids, sex = 0, momID = 31, dadID = 12, personID = 33)
-  ped_kids <- addPersonToPed(ped_kids, sex = 0, momID = 32, dadID = 13, personID = 34)
-  ped_kids <- addPersonToPed(ped_kids, sex = 0, momID = 31, dadID = 13, personID = 35)
+  ped_kids <- BGmisc:::.addPersonToPed(ped_kids, sex = 0, momID = NA, dadID = NA, personID = 31)
+  ped_kids <- BGmisc:::.addPersonToPed(ped_kids, sex = 0, momID = NA, dadID = NA, personID = 32)
+  ped_kids <- BGmisc:::.addPersonToPed(ped_kids, sex = 0, momID = 31, dadID = 12, personID = 33)
+  ped_kids <- BGmisc:::.addPersonToPed(ped_kids, sex = 0, momID = 32, dadID = 13, personID = 34)
+  ped_kids <- BGmisc:::.addPersonToPed(ped_kids, sex = 0, momID = 31, dadID = 13, personID = 35)
 
   for (mz_method in mz_method_opts) {
     r_kids <- ped2add(ped_kids, mz_twins = TRUE, sparse = FALSE, mz_method = mz_method)
