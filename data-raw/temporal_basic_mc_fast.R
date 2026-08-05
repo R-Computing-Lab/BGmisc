@@ -65,7 +65,7 @@ sfLibrary(OpenMx)
 #master_seed <- 112026011
 master_seed <- 2026072011
 n_replications <- 100
-n_families <- 50
+n_families <- 250
 threshold_year <- 1776
 prop_historical <- 0.5
 # Standard deviation of the birth-year range, widened here for broader time
@@ -76,7 +76,7 @@ param_year_base <- 1700
 gen_gap <- 30
 y_mean_param <- 2
 historical_threshold_centered <- (threshold_year - param_year_base)
-poly_degree <- 1
+poly_degree <- 3
 optimizer_tries <- 5
 
 # Threads each OpenMx fit may use. Kept at 1 because whole replications run in
@@ -90,7 +90,7 @@ Ngen <- 4
 marR <- 0.8
 use_exp_loadings <- TRUE
 
-core_folder <- "temporal_ACE_means_parameter_recovery_f50_p50_reps100"
+core_folder <- "temporal_ACE_means_parameter_recovery_poly3_f250_p50_reps100"
 
 loading_link <- if (use_exp_loadings) {
   "exp"
