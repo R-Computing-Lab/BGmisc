@@ -333,8 +333,8 @@ summary(fitted1)
 #> AIC:      -9.611741               26.38826                14.388259
 #> BIC:      16.388259               16.38826                 5.991051
 #> To get additional fit indices, see help(mxRefModels)
-#> timestamp: 2026-08-05 22:01:19 
-#> Wall clock time: 0.07021427 secs 
+#> timestamp: 2026-08-05 22:06:47 
+#> Wall clock time: 0.07323599 secs 
 #> optimizer:  SLSQP 
 #> OpenMx version number: 2.22.11 
 #> Need help?  See help(mxSummary)
@@ -506,8 +506,8 @@ summary(fitted2)
 #> AIC:     -56.248897               29.75110                 14.75110
 #> BIC:      -6.588489               23.21684                 10.79231
 #> To get additional fit indices, see help(mxRefModels)
-#> timestamp: 2026-08-05 22:01:20 
-#> Wall clock time: 0.08234215 secs 
+#> timestamp: 2026-08-05 22:06:48 
+#> Wall clock time: 0.07533216 secs 
 #> optimizer:  SLSQP 
 #> OpenMx version number: 2.22.11 
 #> Need help?  See help(mxSummary)
@@ -664,7 +664,7 @@ fitted_easy <- fitPedigreeModel(
   group_models = group_models,
   tryhard      = TRUE
 )
-#> Beginning initial fit attemptFit attempt 0, fit=1008.36320769182, new current best! (was 1013.57665124202)Final run, for Hessian and/or standard errors and/or confidence intervals                                                                             
+#> Beginning initial fit attemptFit attempt 0, fit=1008.36320769181, new current best! (was 1013.57665124202)Final run, for Hessian and/or standard errors and/or confidence intervals                                                                             
 #> 
 #>  Solution found!  Final fit=1008.3632 (started at 1013.5767)  (1 attempt(s): 1 valid, 0 errors)
 summary(fitted_easy)
@@ -672,15 +672,15 @@ summary(fitted_easy)
 #>  
 #> free parameters:
 #>     name       matrix row    col    Estimate  Std.Error A lbound ubound
-#> 1    vad ModelOne.Vad   1      1  0.59903086 0.16291591    1e-10       
-#> 2    vcn ModelOne.Vcn   1      1  0.14613696 0.06795751    1e-10       
-#> 3    vmt ModelOne.Vmt   1      1  0.03980215 0.06904713 !     0!       
-#> 4    ver ModelOne.Ver   1      1  0.28696799 0.09940299    1e-10       
-#> 5 meanLI       ped1.M   1 X10102 -0.01901727 0.09329989                
+#> 1    vad ModelOne.Vad   1      1  0.59903086 0.16291815    1e-10       
+#> 2    vcn ModelOne.Vcn   1      1  0.14613696 0.06795856    1e-10       
+#> 3    vmt ModelOne.Vmt   1      1  0.03980215 0.06904737 !     0!       
+#> 4    ver ModelOne.Ver   1      1  0.28696799 0.09940572    1e-10       
+#> 5 meanLI       ped1.M   1 X10102 -0.01901727 0.09329958                
 #> 
 #> confidence intervals:
 #>           lbound   estimate    ubound note
-#> vad 0.3042803327 0.59903086 0.9551061     
+#> vad 0.3042803329 0.59903086 0.9551061     
 #> vcn           NA 0.14613696        NA  !!!
 #> vmt 0.0000000001 0.03980215 0.2105368     
 #> ver 0.1036228265 0.28696799 0.4836285     
@@ -698,8 +698,8 @@ summary(fitted_easy)
 #> AIC:     268.363208               1018.363                 1025.030
 #> BIC:       6.384633               1021.903                 1006.639
 #> To get additional fit indices, see help(mxRefModels)
-#> timestamp: 2026-08-05 22:01:24 
-#> Wall clock time: 1.695753 secs 
+#> timestamp: 2026-08-05 22:06:51 
+#> Wall clock time: 1.493098 secs 
 #> optimizer:  SLSQP 
 #> OpenMx version number: 2.22.11 
 #> Need help?  See help(mxSummary)
