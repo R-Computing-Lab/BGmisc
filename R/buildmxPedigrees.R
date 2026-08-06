@@ -1272,6 +1272,12 @@ buildFamilyGroups_list <- function(
 #' @param components Character vector of component keys to include (any of "a", "d", "cn",
 #'   "ce", "mt", "am", "e"). Only used when \code{temporal = TRUE}. Default is \code{c("a", "e")}.
 #' @param ci_names A vector of parameters for confidence intervals. If not provided, it is derived from components
+#' @param start_beta0 Numeric. Starting value for each component's intercept loading. Only used
+#'   when \code{temporal = TRUE}. Default is 0.5.
+#' @param start_beta_time Numeric. Starting value for each component's time-slope loadings. Only
+#'   used when \code{temporal = TRUE}. Default is 0.
+#' @param start_gamma Numeric. Starting value for historical-moderator loadings. Only used when
+#'   \code{temporal = TRUE}. Default is 0.
 #' @return An OpenMx pedigree model combining variance components and family groups.
 #' @export
 
@@ -1284,6 +1290,9 @@ buildPedigreeMx <- function(model_name, vars, group_models,
                             components = c("a", "e"),
                             ci_names = NULL,
                             time_point_max = NULL,
+                            start_beta0 = 0.5,
+                            start_beta_time = 0,
+                            start_gamma = 0,
                             mean_degree = 0,
                             start_mean = 0,
                             mean_hist_free = FALSE,
@@ -1298,6 +1307,9 @@ buildPedigreeMx <- function(model_name, vars, group_models,
       temporal = TRUE,
       p_hist = p_hist,
       components = components,
+      start_beta0 = start_beta0,
+      start_beta_time = start_beta_time,
+      start_gamma = start_gamma,
       time_point_max = time_point_max,
       mean_degree = mean_degree,
       start_mean = start_mean,
@@ -1414,6 +1426,12 @@ buildPedigreeMx <- function(model_name, vars, group_models,
 #' @param group_static_families Logical. If TRUE for a static model built from
 #'   \code{data}, build one raw-data submodel containing all family rows. If
 #'   FALSE, preserve the original one-submodel-per-family implementation.
+#' @param start_beta0 Numeric. Starting value for each component's intercept loading. Only used
+#'   when \code{temporal = TRUE}. Default is 0.5.
+#' @param start_beta_time Numeric. Starting value for each component's time-slope loadings. Only
+#'   used when \code{temporal = TRUE}. Default is 0.
+#' @param start_gamma Numeric. Starting value for historical-moderator loadings. Only used when
+#'   \code{temporal = TRUE}. Default is 0.
 #' @return A fitted OpenMx model.
 #' @export
 
@@ -1456,6 +1474,9 @@ fitPedigreeModel <- function(
   components = c("a", "d", "cn", "ce", "mt", "am", "e"),
   use_exp_loadings = FALSE,
   time_point_max = NULL,
+  start_beta0 = 0.5,
+  start_beta_time = 0,
+  start_gamma = 0,
   mean_degree = 0,
   start_mean = 0,
   mean_hist_free = FALSE,
@@ -1560,6 +1581,9 @@ fitPedigreeModel <- function(
     p_hist = if (temporal) p_hist else 0,
     components = components,
     time_point_max = time_point_max,
+    start_beta0 = start_beta0,
+    start_beta_time = start_beta_time,
+    start_gamma = start_gamma,
     mean_degree = mean_degree,
     start_mean = start_mean,
     mean_hist_free = mean_hist_free,

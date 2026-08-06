@@ -16,6 +16,9 @@ buildPedigreeMx(
   components = c("a", "e"),
   ci_names = NULL,
   time_point_max = NULL,
+  start_beta0 = 0.5,
+  start_beta_time = 0,
+  start_gamma = 0,
   mean_degree = 0,
   start_mean = 0,
   mean_hist_free = FALSE,
@@ -51,6 +54,15 @@ the family, in the same order as \code{obs_ids}. Only used when \code{temporal =
 
 \item{time_point_max}{Integer degree of the polynomial birth-year basis. Only used when
 \code{temporal = TRUE}. Default is 3.}
+
+\item{start_beta0}{Numeric. Starting value for each component's intercept loading. Only used
+when \code{temporal = TRUE}. Default is 0.5.}
+
+\item{start_beta_time}{Numeric. Starting value for each component's time-slope loadings. Only
+used when \code{temporal = TRUE}. Default is 0.}
+
+\item{start_gamma}{Numeric. Starting value for historical-moderator loadings. Only used when
+\code{temporal = TRUE}. Default is 0.}
 }
 \value{
 An OpenMx pedigree model combining variance components and family groups.
