@@ -62,9 +62,11 @@ sfLibrary(OpenMx)
 # Monte Carlo settings
 # -----------------------------------------------------------------------------
 
+# A=\left(1.10,.10,-.10,.20\right), C_{N}=(.916,0,0,0), and E=(.693,-.10,.10,0).
+
 #master_seed <- 112026011
-master_seed <- 2026072011
-n_replications <- 100
+master_seed <- as.integer(as.numeric(20260720)) # otherwise it fails to be an integer on some systems
+n_replications <- 500
 n_families <- 250
 threshold_year <- 1776
 prop_historical <- 0.5
@@ -74,9 +76,10 @@ prop_historical <- 0.5
 param_year_sd <- 12
 param_year_base <- 1700
 gen_gap <- 30
-y_mean_param <- 2
+y_mean_param <- 5
 historical_threshold_centered <- (threshold_year - param_year_base)
 poly_degree <- 3
+mean_degree <- 2
 optimizer_tries <- 5
 mean_hist_free <- FALSE
 # Threads each OpenMx fit may use. Kept at 1 because whole replications run in
@@ -90,7 +93,7 @@ Ngen <- 4
 marR <- 0.8
 use_exp_loadings <- TRUE
 
-core_folder <- "temporal_ACE_means_parameter_recovery_poly3_moder_f250_p50_reps100"
+core_folder <- "temporal_ACE_means_parameter_recovery_poly32_moder_f250_p50_reps500"
 
 loading_link <- if (use_exp_loadings) {
   "exp"
@@ -133,7 +136,7 @@ fit_components <- c(
 # Element j of true_beta[[k]] is the coefficient on time^(j-1), so
 #   lambda_k = exp(beta_k0 + beta_k1 * t + beta_k2 * t^2 + beta_k3 * t^3 + gamma_k * H)
 # and component k contributes lambda_k^2 to the phenotypic variance.
-#
+# A=\left(1.10,.10,-.10,.20\right), C_{N}=(.916,0,0,0), and E=(.693,-.10,.10,0).
 # Specify as many coefficients as you like: poly_degree decides how many are
 # actually used, and use_poly() below ignores the rest.
 true_beta <- list(
@@ -145,17 +148,17 @@ true_beta <- list(
 )
 
 true_gamma <- list(
-  a  = 0.5,
+  a  = 0.2,
   cn = 0.00,
   ce = 0.00,
   mt = 0.00,
-  e  = 0.5
+  e  = 0.0
 )
 
 # Mean structure. Element j of true_beta_mean is the coefficient on time^(j-1), so
 #   mu = mean_y + b_mean_1 * t + b_mean_2 * t^2 + b_mean_3 * t^3 + g_mean_1 * H
 # The mean shares the loadings' Tpoly basis, so use_poly() applies to it too.
-true_beta_mean <- c(y_mean_param, 0.5, 0, 0.00)
+true_beta_mean <- c(y_mean_param, 0.0, 0, 0.00)
 true_gamma_mean <- 0.0
 
 # make_lambda() takes exactly poly + 1 coefficients and errors on any other
@@ -195,9 +198,12 @@ target_full <- c(
 # every b_*_j above poly_degree. target_full keeps them so raising poly_degree is
 # a one-line change.
 target <- target_full[
-  !grepl(paste0("^[gb]_.*_[", poly_degree + 1L, "-9]$"), names(target_full))
+  !grepl(paste0("^[b]_.*_[", poly_degree + 1L, "-9]$"), names(target_full))
 ]
 
+target <- target[
+  !grepl(paste0("^[g]_.*_[", mean_degree + 1L, "-9]$"), names(target))
+]
 # free_only() decides which parameters are estimated, but it can only narrow: it
 # reads omxGetParameters(), which returns already-free parameters only. So the mean
 # coefficients must be built free (see mean_degree in build_true_model) and are then
@@ -216,7 +222,7 @@ write_csv(
 # threshold_year, param_year_sd, param_year_base, gen_gap and loading_link are
 # read from the Monte Carlo settings above, as kpc, Ngen and marR already are.
 simulate_one_dataset <- function(
-  replication, replication_seed, poly = poly_degree,
+  replication, replication_seed=1L, poly = poly_degree,
   rescale = TRUE,
   # Map the designed birth-year span onto [-3, 3] with design constants instead
   # of a per-family z-score, so t genuinely covers the plotted time_grid.
@@ -313,7 +319,7 @@ build_true_model <- function(families, replication) {
     components = fit_components,
     ci = FALSE,
     time_point_max = poly_degree,
-    mean_degree = poly_degree,
+    mean_degree = mean_degree,
     start_mean = y_mean_param,
     mean_hist_free = mean_hist_free
   )
@@ -464,7 +470,7 @@ failed_replication_row <- function(
 }
 
 
-run_one_replication <- function(replication) {
+run_one_replication <- function(replication=1L) {
   replication_seed <- master_seed + replication
   start_time <- proc.time()[["elapsed"]]
 

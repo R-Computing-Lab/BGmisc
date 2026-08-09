@@ -82,14 +82,20 @@ export(summarizePedigrees)
 export(traceTreePaths)
 export(trimPedigree)
 export(vech)
-importFrom(Matrix,Diagonal)
-importFrom(Matrix,sparseMatrix)
+importFrom(Matrix,
+  Diagonal,
+  sparseMatrix
+)
 importFrom(data.table,as.data.table)
-importFrom(igraph,V)
-importFrom(igraph,distances)
-importFrom(igraph,subcomponent)
-importFrom(stats,na.omit)
-importFrom(stats,pnorm)
-importFrom(stats,qnorm)
-importFrom(stats,runif)
-importFrom(stats,setNames)
+importFrom(igraph,
+  V,
+  distances,
+  subcomponent
+)
+importFrom(stats,
+  na.omit,
+  pnorm,
+  qnorm,
+  runif,
+  setNames
+)
