@@ -93,6 +93,71 @@ buildPedigreeModelCovariance <- function(
 
   do.call(OpenMx::mxModel, c(list("ModelOne"), mat_list))
 }
+#' Determine family size from a family's relatedness matrices (internal)
+#'
+#' @param mats_in A list of relatedness matrices (possibly containing NULLs); the first
+#'   non-NULL matrix's row count is used as the family size.
+#' @return Integer family size.
+#' @keywords internal
+.pedigreeFamilySize <- function(mats_in) {
+  for (m in mats_in) {
+    if (!is.null(m)) {
+      return(nrow(m))
+    }
+  }
+  stop("At least one relatedness matrix must be provided.")
+}
+
+#' Build a relatedness mxMatrix (internal)
+#'
+#' Builds the \code{"Symm"} mxMatrix for one relatedness matrix.
+#'
+#' @param mat The relatedness matrix.
+#' @param fsize Family size.
+#' @param name The mxMatrix's name (e.g. "A", "Cn").
+#' @param condense Logical. If TRUE, apply \code{\link{condenseMatrixSlots}}.
+#' @param symmetrize Logical. If TRUE, symmetrize \code{mat} via \code{\link{make_symmetric}}
+#'   before use; if FALSE, coerce via \code{as.matrix} only.
+#' @return An mxMatrix object.
+#' @keywords internal
+.pedigreeRelatednessMatrix <- function(mat, fsize, name, condense = TRUE, symmetrize = FALSE) {
+  if (is.null(mat)) stop("Relatedness matrix cannot be NULL.")
+ # Symmetrize if requested, then coerce to a base dense matrix. OpenMx::mxMatrix()
+  # accepts only a scalar, vector, or base R matrix for 'values'; a Matrix-package
+  # sparse object (e.g. the dsCMatrix returned by ped2add(sparse = TRUE)) is rejected
+  # by matrixCheckArgument(), so it must be densified here.
+  values <- if (symmetrize) make_symmetric(mat) else mat
+  values <- as.matrix(values)
+ #todo allow this to be sparse and use sparse algebra in OpenMx
+  m <-   tryCatch( OpenMx::mxMatrix(
+    type = "Symm", nrow = fsize, ncol = fsize, free = FALSE,
+    values = values, name = name
+  ), error = function(e) {
+    print(values)
+    stop("Error creating mxMatrix for ", name, ": ", e$message)
+  })
+
+  if (condense) m <- condenseMatrixSlots(m)
+  m
+}
+
+#' Build the free mean mxMatrix for a family group (internal)
+#'
+#' Shared by the static and temporal branches of \code{\link{buildOneFamilyGroup}}; they
+#' only differ in the parameter label ("meanLI" vs "mean_y").
+#'
+#' @param fsize Family size.
+#' @param obs_ids Character vector of individual IDs.
+#' @param label The mean parameter's label.
+#' @return An mxMatrix object.
+#' @keywords internal
+.pedigreeMeanMatrix <- function(fsize, obs_ids, label) {
+  OpenMx::mxMatrix(
+    "Full",
+    nrow = 1, ncol = fsize, name = "M", free = TRUE,
+    values = 0, labels = label, dimnames = list(NULL, obs_ids)
+  )
+}
 
 #' Build one family group model
 #'
@@ -117,6 +182,9 @@ buildPedigreeModelCovariance <- function(
 #'   \code{full_df_row} and the rows/columns of the relatedness matrices. Must be in the
 #'   same order as the relatedness matrix rows.
 #' @param condenseMatrixSlots Logical. If TRUE, use the mxCondenseMatrixSlots wrapper to optimize memory usage for large matrices. Default is TRUE.
+#' @param clean_ids Logical. If TRUE, clean the \code{obs_ids} using \code{\link{make_clean_personids}}. Default is FALSE.
+#' @param symmetrize Logical. If TRUE, symmetrize the relatedness matrices before use. Default is FALSE.
+
 #' @return An OpenMx model for the specified family group.
 #' @export
 
@@ -130,19 +198,26 @@ buildOneFamilyGroup <- function(
   Dmgmat = NULL,
   full_df_row,
   obs_ids,
-  condenseMatrixSlots = TRUE
+  symmetrize = FALSE,
+  condenseMatrixSlots = TRUE,
+  clean_ids = FALSE
 ) {
   .require_openmx("buildOneFamilyGroup")
-
-  # Determine family size from first available matrix
-  fsize <- NULL
-  for (m in list(Addmat, Nucmat, Extmat, Mtdmat, Amimat, Dmgmat)) {
-    if (!is.null(m)) {
-      fsize <- nrow(m)
-      break
-    }
+  if (clean_ids) {
+    obs_ids <- make_clean_personids(obs_ids)
+    # clean once
+    clean_ids <- FALSE
   }
-  if (is.null(fsize)) stop("At least one relatedness matrix must be provided.")
+  # Determine family size from first available matrix. Shared by both branches below.
+  if ( # not any of the matrices are provided
+    is.null(Addmat) && is.null(Dmgmat) && is.null(Nucmat) &&
+      is.null(Extmat) && is.null(Mtdmat) && is.null(Amimat)
+  ) {
+    warning("At least one relatedness matrix should be provided. Using the number of columns in 'full_df_row' as family size.")
+    fsize <- ncol(full_df_row)
+  } else {
+    fsize <- .pedigreeFamilySize(list(Addmat, Dmgmat, Nucmat, Extmat, Mtdmat, Amimat))
+  }
 
   # If Extmat is requested but not supplied as a matrix, create a unit matrix
   # (all members share the extended environment equally).
@@ -150,35 +225,61 @@ buildOneFamilyGroup <- function(
     Extmat <- matrix(1, nrow = fsize, ncol = fsize)
   }
 
-  # ------------------------------------------------------------------
-  # Build the list of mxMatrix objects and the algebra terms
-  # Each entry: list(mat = input_matrix, mxname, algebra_term).
-  # ------------------------------------------------------------------
+  # One canonical table describing each variance component: which relatedness matrix it
+  # uses, its mxMatrix name, the exact static Kronecker algebra term (term, unchanged from
+  # the original static implementation), and the temporal loading/loading-matrix names
+  # (k / K). Both the static and temporal algebra below are built from this same table and
+  # the same relatedness mxMatrix objects (relmat_list), rather than each branch rebuilding
+  # its own copy of this table.
   mat_spec <- list(
-    list(mat = Addmat, mxname = "A", term = "(A  %x% ModelOne.Vad)"),
-    list(mat = Dmgmat, mxname = "D", term = "(D  %x% ModelOne.Vdd)"),
-    list(mat = Nucmat, mxname = "Cn", term = "(Cn %x% ModelOne.Vcn)"),
-    list(mat = Extmat, mxname = "Ce", term = "(Ce %x% ModelOne.Vce)"),
-    list(mat = Amimat, mxname = "Am", term = "(Am %x% ModelOne.Vam)"),
-    list(mat = Mtdmat, mxname = "Mt", term = "(Mt %x% ModelOne.Vmt)")
+    list(
+      mat = Addmat,
+      mxname = "A",
+      term = "(A  %x% ModelOne.Vad)",
+      k = "a", K = "Ka"
+    ),
+    list(
+      mat = Dmgmat,
+      mxname = "D",
+      term = "(D  %x% ModelOne.Vdd)",
+      k = "d", K = "Kd"
+    ),
+    list(
+      mat = Nucmat,
+      mxname = "Cn",
+      term = "(Cn %x% ModelOne.Vcn)",
+      k = "cn", K = "Kcn"
+    ),
+    list(
+      mat = Extmat,
+      mxname = "Ce",
+      term = "(Ce %x% ModelOne.Vce)",
+      k = "ce", K = "Kce"
+    ),
+    list(
+      mat = Amimat,
+      mxname = "Am",
+      term = "(Am %x% ModelOne.Vam)",
+      k = "am", K = "Kam"
+    ),
+    list(
+      mat = Mtdmat,
+      mxname = "Mt",
+      term = "(Mt %x% ModelOne.Vmt)",
+      k = "mt", K = "Kmt"
+    )
   )
   active <- Filter(function(s) !is.null(s$mat), mat_spec)
 
-  if (condenseMatrixSlots) {
-    relmat_list <- lapply(active, function(s) {
-      condenseMatrixSlots(OpenMx::mxMatrix("Symm",
-        nrow = fsize, ncol = fsize,
-        values = as.matrix(s$mat), name = s$mxname
-      ))
-    })
-  } else {
-    relmat_list <- lapply(active, function(s) {
-      OpenMx::mxMatrix("Symm",
-        nrow = fsize, ncol = fsize,
-        values = as.matrix(s$mat), name = s$mxname
-      )
-    })
-  }
+  # Static values are used as-is (as.matrix); temporal symmetrizes them first. Either
+  # way, this single loop replaces what used to be two separate (and, for static,
+  # itself duplicated condensed/uncondensed) copies of the same mxMatrix-building code.
+  relmat_list <- lapply(active, function(s) {
+    .pedigreeRelatednessMatrix(
+      s$mat, fsize, s$mxname,
+      condense = condenseMatrixSlots, symmetrize = symmetrize
+    )
+  })
   # add the identity matrix for the unique environment, which is always included as a term in the algebra
   mat_list <- c(
     list(OpenMx::mxMatrix("Iden", nrow = fsize, ncol = fsize, name = "I")),
@@ -198,14 +299,174 @@ buildOneFamilyGroup <- function(
     mat_list,
     list(
       OpenMx::mxData(observed = full_df_row, type = "raw", sort = FALSE),
-      OpenMx::mxMatrix("Full",
-        nrow = 1, ncol = fsize, name = "M", free = TRUE,
-        labels = "meanLI", dimnames = list(NULL, obs_ids)
-      ),
+      .pedigreeMeanMatrix(fsize, obs_ids, "meanLI"),
       OpenMx::mxAlgebraFromString(algebra_str,
         name = "V", dimnames = list(obs_ids, obs_ids)
       ),
       OpenMx::mxExpectationNormal(covariance = "V", means = "M"),
+      OpenMx::mxFitFunctionML()
+    )
+  )
+
+  do.call(OpenMx::mxModel, model_args)
+}
+
+#' Build one grouped static family model
+#'
+#' This function constructs one OpenMx model for multiple independent family
+#' observations that share the same pedigree structure, relatedness matrices,
+#' variable ordering, expected covariance matrix, and expected mean vector.
+#'
+#' The observed data contain one family per row. The shared matrices, covariance
+#' algebra, expectation, and fit function are stored only once rather than once
+#' per family.
+#'
+#' @param group_name Name of the grouped family model.
+#' @param dat A matrix or data frame where each row represents an independent
+#'   family and columns correspond to pedigree positions.
+#' @param obs_ids A character vector of individual IDs corresponding to the
+#'   columns of \code{dat} and the rows/columns of the relatedness matrices.
+#'
+#' @inheritParams buildOneFamilyGroup
+#' @return An OpenMx model containing all static family observations.
+#' @keywords internal
+.buildGroupedStaticFamily <- function(
+  group_name,
+  dat,
+  obs_ids,
+  Addmat = NULL,
+  Nucmat = NULL,
+  Extmat = NULL,
+  Mtdmat = NULL,
+  Amimat = NULL,
+  Dmgmat = NULL,
+  condenseMatrixSlots = TRUE,
+  clean_ids = FALSE
+) {
+  .require_openmx(".buildGroupedStaticFamily")
+
+  if (clean_ids) {
+    obs_ids <- make_clean_personids(obs_ids)
+    # clean once
+    clean_ids <- FALSE
+  }
+
+  dat <- as.data.frame(dat, check.names = FALSE)
+
+  if (nrow(dat) < 1L) {
+    stop("'dat' must contain at least one family row.")
+  }
+
+  if (ncol(dat) != length(obs_ids)) {
+    stop("The number of columns in 'dat' must equal the length of 'obs_ids'.")
+  }
+
+  if (anyDuplicated(obs_ids)) {
+    stop("'obs_ids' must be unique.")
+  }
+
+  colnames(dat) <- obs_ids
+
+  # Determine family size from first available matrix.
+  fsize <- .pedigreeFamilySize(list(Addmat, Dmgmat, Nucmat, Extmat, Mtdmat, Amimat))
+
+  if (length(obs_ids) != fsize) {
+    stop("Length of 'obs_ids' must equal the shared family size.")
+  }
+
+  # If Extmat is requested but not supplied as a matrix, create a unit matrix
+  # (all members share the extended environment equally).
+  if (!is.null(Extmat) && !is.matrix(Extmat)) {
+    Extmat <- matrix(1, nrow = fsize, ncol = fsize)
+  }
+
+  # This is the same static variance-component specification used by
+  # buildOneFamilyGroup(), but it is constructed only once for all rows of dat.
+  mat_spec <- list(
+    list(
+      mat = Addmat,
+      mxname = "A",
+      term = "(A  %x% ModelOne.Vad)"
+    ),
+    list(
+      mat = Dmgmat,
+      mxname = "D",
+      term = "(D  %x% ModelOne.Vdd)"
+    ),
+    list(
+      mat = Nucmat,
+      mxname = "Cn",
+      term = "(Cn %x% ModelOne.Vcn)"
+    ),
+    list(
+      mat = Extmat,
+      mxname = "Ce",
+      term = "(Ce %x% ModelOne.Vce)"
+    ),
+    list(
+      mat = Amimat,
+      mxname = "Am",
+      term = "(Am %x% ModelOne.Vam)"
+    ),
+    list(
+      mat = Mtdmat,
+      mxname = "Mt",
+      term = "(Mt %x% ModelOne.Vmt)"
+    )
+  )
+
+  active <- Filter(function(s) !is.null(s$mat), mat_spec)
+
+  # Build one copy of each shared relatedness matrix.
+  relmat_list <- lapply(active, function(s) {
+    .pedigreeRelatednessMatrix(
+      s$mat,
+      fsize,
+      s$mxname,
+      condense = condenseMatrixSlots,
+      symmetrize = FALSE
+    )
+  })
+
+  # Add one identity matrix for the unique environment.
+  mat_list <- c(
+    list(OpenMx::mxMatrix("Iden", nrow = fsize, ncol = fsize, name = "I")),
+    relmat_list
+  )
+
+  algebra_terms <- vapply(active, `[[`, character(1), "term")
+
+  # Unique environment is always included.
+  algebra_terms <- c(algebra_terms, "(I %x% ModelOne.Ver)")
+
+  algebra_str <- paste(algebra_terms, collapse = " + ")
+
+  # The full data frame is passed to one raw-data model. Each row is an
+  # independent family likelihood contribution under the shared M and V.
+  model_args <- c(
+    list(name = group_name),
+    mat_list,
+    list(
+      OpenMx::mxData(
+        observed = dat,
+        type = "raw",
+        sort = FALSE
+      ),
+      .pedigreeMeanMatrix(
+        fsize,
+        obs_ids,
+        "meanLI"
+      ),
+      OpenMx::mxAlgebraFromString(
+        algebra_str,
+        name = "V",
+        dimnames = list(obs_ids, obs_ids)
+      ),
+      OpenMx::mxExpectationNormal(
+        covariance = "V",
+        means = "M",
+        dimnames = obs_ids
+      ),
       OpenMx::mxFitFunctionML()
     )
   )
@@ -222,6 +483,7 @@ buildOneFamilyGroup <- function(
 #' @param obs_ids A character vector of individual IDs corresponding to the columns of \code{dat}
 #'   and the rows/columns of the relatedness matrices.
 #' @param prefix A prefix for naming the family groups. Default is "fam".
+#' @param group_static_families Logical. If TRUE, build one grouped static family model instead of separate models for each family. Default is FALSE.
 #' @return A list of OpenMx models for each family group.
 #' @export
 
@@ -234,10 +496,34 @@ buildFamilyGroups <- function(
   Amimat = NULL,
   Dmgmat = NULL,
   prefix = "fam",
-  condenseMatrixSlots = TRUE
+  condenseMatrixSlots = TRUE,
+  clean_ids = TRUE,
+  group_static_families = FALSE
 ) {
   .require_openmx("buildFamilyGroups")
+  if (clean_ids == TRUE) {
+    obs_ids <- make_clean_personids(obs_ids)
+    # clean once
+    clean_ids <- FALSE
+  }
 
+  if (group_static_families) {
+    return(list(
+      .buildGroupedStaticFamily(
+        group_name = paste0(prefix, "_grouped"),
+        dat = dat,
+        obs_ids = obs_ids,
+        Addmat = Addmat,
+        Nucmat = Nucmat,
+        Extmat = Extmat,
+        Mtdmat = Mtdmat,
+        Amimat = Amimat,
+        Dmgmat = Dmgmat,
+        condenseMatrixSlots = condenseMatrixSlots,
+        clean_ids = clean_ids
+      )
+    ))
+  }
   numfam <- nrow(dat)
   groups <- vector("list", numfam)
 
@@ -253,7 +539,82 @@ buildFamilyGroups <- function(
       Dmgmat = Dmgmat,
       full_df_row = full_df_row,
       obs_ids = obs_ids,
-      condenseMatrixSlots = condenseMatrixSlots
+      condenseMatrixSlots = condenseMatrixSlots,
+      clean_ids = clean_ids
+    )
+  }
+
+  groups
+}
+
+
+#' Build family group models with per-family relatedness matrices
+#'
+#' This function constructs OpenMx models for multiple family groups, each with its own
+#' relatedness matrices, observed IDs, and (for temporal models) birth years / historical
+#' moderators. Use this when families vary in size or structure; for families that all share
+#' the same relatedness matrices, see \code{\link{buildFamilyGroups}}.
+#' @inheritParams buildOneFamilyGroup
+#' @param dat_list A list of numeric vectors of observed data, one per family.
+#' @param obs_ids_list A list of character vectors of individual IDs, one per family, matching
+#'   \code{dat_list} and the rows/columns of that family's relatedness matrices.
+#' @param Addmat_list A list of additive genetic relatedness matrices, one per family.
+#' @param Nucmat_list A list of nuclear family shared environment relatedness matrices, one per family.
+#' @param Extmat_list A list of common extended family environment relatedness matrices, one per family.
+#' @param Mtdmat_list A list of mitochondrial genetic relatedness matrices, one per family.
+#' @param Amimat_list A list of additive by mitochondrial interaction relatedness matrices, one per family.
+#' @param Dmgmat_list A list of dominance genetic relatedness matrices, one per family.
+#' @param prefix A prefix for naming the family groups. Default is "fam".
+#' @return A list of OpenMx models for each family group.
+#' @export
+
+buildFamilyGroups_list <- function(
+  dat_list,
+  obs_ids_list,
+  Addmat_list = NULL,
+  Nucmat_list = NULL,
+  Extmat_list = NULL,
+  Mtdmat_list = NULL,
+  Amimat_list = NULL,
+  Dmgmat_list = NULL,
+  prefix = "fam",
+  condenseMatrixSlots = TRUE,
+  clean_ids = TRUE
+) {
+  .require_openmx("buildFamilyGroups_list")
+
+  numfam <- length(dat_list)
+  groups <- vector("list", numfam)
+
+  get_or_null <- function(x, i) {
+    if (is.null(x)) NULL else x[[i]]
+  }
+
+  for (afam in seq_len(numfam)) {
+    if (clean_ids == TRUE) {
+      obs_ids <- make_clean_personids(obs_ids_list[[afam]])
+      clean_ids <- FALSE
+    } else {
+      obs_ids <- obs_ids_list[[afam]]
+    }
+    full_df_row <- matrix(
+      dat_list[[afam]],
+      nrow = 1,
+      dimnames = list(NULL, obs_ids)
+    )
+
+    groups[[afam]] <- buildOneFamilyGroup(
+      group_name = paste0(prefix, afam),
+      Addmat = get_or_null(Addmat_list, afam),
+      Nucmat = get_or_null(Nucmat_list, afam),
+      Extmat = get_or_null(Extmat_list, afam),
+      Mtdmat = get_or_null(Mtdmat_list, afam),
+      Amimat = get_or_null(Amimat_list, afam),
+      Dmgmat = get_or_null(Dmgmat_list, afam),
+      full_df_row = full_df_row,
+      obs_ids = obs_ids,
+      condenseMatrixSlots = condenseMatrixSlots,
+      clean_ids = clean_ids # already cleaned above if requested
     )
   }
 
@@ -271,12 +632,15 @@ buildFamilyGroups <- function(
 #' @param vars A named list or vector of initial variance component values.
 #' @param group_models A list of OpenMx models for each family group.
 #' @param ci Logical. If TRUE, include confidence interval computations for the variance components. Default is FALSE
+#' @param components Character vector of component keys to include (any of "a", "d", "cn",
+#'   "ce", "mt", "am", "e"). Only used when \code{temporal = TRUE}. Default is \code{c("a", "e")}.
 #' @return An OpenMx pedigree model combining variance components and family groups.
 #' @export
 
 buildPedigreeMx <- function(model_name, vars, group_models,
                             ci = FALSE,
-                            condenseMatrixSlots = TRUE) {
+                            condenseMatrixSlots = TRUE,
+                            components = c("a", "e")) {
   .require_openmx("buildPedigreeMx")
 
   group_names <- vapply(group_models, function(m) m$name, character(1))
@@ -306,26 +670,28 @@ buildPedigreeMx <- function(model_name, vars, group_models,
 
   flags <- lapply(vc_map, function(pat) grepl(pat, all_formulas, fixed = TRUE))
 
-  OpenMx::mxModel(
-    model_name,
-    buildPedigreeModelCovariance(
-      vars,
-      Vad = isTRUE(flags$Vad),
-      Vdd = isTRUE(flags$Vdd),
-      Vcn = isTRUE(flags$Vcn),
-      Vce = isTRUE(flags$Vce),
-      Vmt = isTRUE(flags$Vmt),
-      Vam = isTRUE(flags$Vam),
-      Ver = isTRUE(flags$Ver)
-    ),
-    group_models,
-    OpenMx::mxFitFunctionMultigroup(group_names),
-    ci = if (ci & any(flags$Vad, flags$Vdd, flags$Vcn, flags$Vce, flags$Vmt, flags$Vam, flags$Ver)) {
-      OpenMx::mxCI(c("vad", "vdd", "vcn", "vce", "vmt", "vam", "ver")[c(flags$Vad, flags$Vdd, flags$Vcn, flags$Vce, flags$Vmt, flags$Vam, flags$Ver)])
-    } else {
-      NULL
-    }
+  model_one <- buildPedigreeModelCovariance(
+    vars,
+    Vad = isTRUE(flags$Vad),
+    Vdd = isTRUE(flags$Vdd),
+    Vcn = isTRUE(flags$Vcn),
+    Vce = isTRUE(flags$Vce),
+    Vmt = isTRUE(flags$Vmt),
+    Vam = isTRUE(flags$Vam),
+    Ver = isTRUE(flags$Ver)
   )
+
+  ci_obj <- if (ci && any(flags$Vad, flags$Vdd, flags$Vcn, flags$Vce, flags$Vmt, flags$Vam, flags$Ver)) {
+    OpenMx::mxCI(c("vad", "vdd", "vcn", "vce", "vmt", "vam", "ver")[c(flags$Vad, flags$Vdd, flags$Vcn, flags$Vce, flags$Vmt, flags$Vam, flags$Ver)])
+  } else {
+    NULL
+  }
+
+  .assemblePedigreeMx(
+    model_name = model_name,
+    model_one = model_one,
+    group_models = group_models,
+    ci_obj  = ci_obj)
 }
 
 #' Fit an OpenMx pedigree model to observed data
@@ -406,17 +772,45 @@ fitPedigreeModel <- function(
   )
   if (runmodel == TRUE) {
     if (tryhard == TRUE) {
-      fitted_model <- OpenMx::mxTryHard(pedigree_model, silent = TRUE, extraTries = extraTries, intervals = intervals)
+      return_model <- OpenMx::mxTryHard(pedigree_model, silent = TRUE, extraTries = extraTries, intervals = intervals)
     } else {
-      fitted_model <- OpenMx::mxRun(pedigree_model, intervals = intervals)
+      return_model <- OpenMx::mxRun(pedigree_model, intervals = intervals)
     }
   } else {
-    fitted_model <- pedigree_model
+    return_model <- pedigree_model
   }
 
-  fitted_model
+  return_model
 }
 
+
+#' Assemble the top-level pedigree mxModel (internal)
+#'
+#' Combines the covariance sub-model (named \code{"ModelOne"}), the family-group models,
+#' the multigroup fit function, and (optionally) a confidence-interval specification into
+#' one mxModel. Shared by both the static and temporal branches of
+#' \code{\link{buildPedigreeMx}}, which otherwise only differ in how \code{model_one}
+#' and \code{ci_obj} are built.
+#'
+#' @param model_name Name of the overall pedigree model.
+#' @param model_one The covariance sub-model (from \code{\link{buildPedigreeModelCovariance}}).
+#' @param group_models A list of OpenMx models for each family group.
+#' @param ci_obj An \code{mxCI} object to include, or NULL to omit confidence intervals.
+#' @return An OpenMx pedigree model.
+#' @keywords internal
+.assemblePedigreeMx <- function(model_name, model_one, group_models, ci_obj = NULL) {
+  group_names <- vapply(group_models, function(m) m$name, character(1))
+
+  model_parts <- c(
+    list(model_name),
+    list(model_one),
+    group_models,
+    list(OpenMx::mxFitFunctionMultigroup(group_names))
+  )
+  if (!is.null(ci_obj)) model_parts[[length(model_parts) + 1]] <- ci_obj
+
+  do.call(OpenMx::mxModel, model_parts)
+}
 
 #' Align Phenotype Vector to Matrix Format for OpenMx
 #'
@@ -454,4 +848,15 @@ condenseMatrixSlots <- function(model) {
   #   return(model)
   # }
   OpenMx::imxConDecMatrixSlots(model)
+}
+
+#' Make Clean IDs for OpenMx
+#'
+#' This function takes a vector of IDs and returns a cleaned version suitable for use in OpenMx models. It replaces any illegal characters (such as '.') with underscores and ensures that the IDs are valid R variable names. This is important because OpenMx does not allow certain characters in matrix or variable names, which can lead to errors when building models.
+#' @param ids A vector of IDs to be cleaned.
+#' @return A vector of cleaned IDs suitable for use in OpenMx models.
+#'
+make_clean_personids <- function(ids) {
+  .require_openmx("make_clean_personids")
+  OpenMx::mxMakeNames(as.character(ids))
 }

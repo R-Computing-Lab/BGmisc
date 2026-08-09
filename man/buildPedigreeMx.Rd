@@ -9,7 +9,8 @@ buildPedigreeMx(
   vars,
   group_models,
   ci = FALSE,
-  condenseMatrixSlots = TRUE
+  condenseMatrixSlots = TRUE,
+  components = c("a", "e")
 )
 }
 \arguments{
@@ -22,6 +23,9 @@ buildPedigreeMx(
 \item{ci}{Logical. If TRUE, include confidence interval computations for the variance components. Default is FALSE}
 
 \item{condenseMatrixSlots}{Logical. If TRUE, use the mxCondenseMatrixSlots wrapper to optimize memory usage for large matrices. Default is TRUE.}
+
+\item{components}{Character vector of component keys to include (any of "a", "d", "cn",
+"ce", "mt", "am", "e"). Only used when \code{temporal = TRUE}. Default is \code{c("a", "e")}.}
 }
 \value{
 An OpenMx pedigree model combining variance components and family groups.

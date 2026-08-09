@@ -67,3 +67,37 @@ test_that("functions issue a deprecation warning", {
   expect_warning(related_coef(), "deprecated")
   expect_warning(relatedness(obsR = .5), "deprecated")
 })
+
+test_that("as_numeric_matrix coerces a data.frame to a numeric matrix", {
+  df <- data.frame(a = c(1L, 2L), b = c(3L, 4L))
+  result <- as_numeric_matrix(df)
+  expect_true(is.matrix(result))
+  expect_equal(storage.mode(result), "double")
+  expect_equal(unname(result[1, 1]), 1)
+})
+
+test_that("as_numeric_matrix passes through an already-numeric matrix", {
+  m <- matrix(c(1.5, 2.5, 3.5, 4.5), nrow = 2)
+  result <- as_numeric_matrix(m)
+  expect_equal(result, m)
+})
+
+test_that("make_symmetric leaves an already-symmetric matrix unchanged", {
+  m <- matrix(c(1, 0.5, 0.5, 1), nrow = 2)
+  expect_equal(make_symmetric(m), m)
+})
+
+test_that("make_symmetric averages a matrix with its transpose when asymmetric", {
+  m <- matrix(c(1, 0.4, 0.6, 1), nrow = 2)
+  result <- make_symmetric(m)
+  expect_equal(result[1, 2], 0.5)
+  expect_equal(result[2, 1], 0.5)
+  expect_true(isSymmetric(result))
+})
+
+test_that("make_symmetric treats differences within tol as already symmetric", {
+  m <- matrix(c(1, 0.5, 0.5 + 1e-12, 1), nrow = 2)
+  result <- make_symmetric(m)
+  # Below tolerance: returned as-is, not averaged
+  expect_equal(result[1, 2], m[1, 2])
+})

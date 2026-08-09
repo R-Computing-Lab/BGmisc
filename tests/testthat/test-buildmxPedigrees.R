@@ -96,7 +96,7 @@ test_that("buildPedigreeModelCovariance works with minimal components (Vad + Ver
 test_that("buildOneFamilyGroup errors when no relatedness matrix is provided", {
   skip_if_not_installed("OpenMx")
   dat <- make_dat2()
-  expect_error(
+  expect_warning(
     buildOneFamilyGroup(
       group_name = "fam1",
       Addmat = NULL, Nucmat = NULL, Extmat = NULL,
@@ -104,7 +104,7 @@ test_that("buildOneFamilyGroup errors when no relatedness matrix is provided", {
       full_df_row = dat,
       obs_ids = c("y1", "y2")
     ),
-    regexp = "At least one relatedness matrix must be provided"
+    regexp = "At least one relatedness matrix should be provided"
   )
 })
 
