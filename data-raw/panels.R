@@ -886,37 +886,30 @@ full_family_id <- full_figure_data$block_id
 # Matrix panels
 p_a2 <- plot_matrix(
   A_display_full,
-  title = expression(
-    a^2),
+  title = expression(a^2),
   block_id = full_family_id
 )
 
 p_cn2 <- plot_matrix(
   CN_display_full,
-  title = expression(
-    c[N]^2),
+  title =  "",#expression(    c[N]^2),
   block_id =  full_family_id
 )
 
 p_ce2 <- plot_matrix(
   CE_display_full,
-  title = expression(
-    c[E]^2
-  ),
+  title =  "",# expression(    c[E]^2  ),
   block_id =  full_family_id
 )
 
 p_mt2 <- plot_matrix(
   MT_display_full,
-  title = expression(mt^2),
+  title =  "",#expression(mt^2),
   block_id =  full_family_id
 )
 p_ta <- plot_matrix(
   T_a_full,
-  title = expression(
-    atop(T[A] == lambda[A] * lambda[A]^T,
-      "pair-specific temporal weights")
-  ),
+  title =  "",# expression(    atop(T[A] == lambda[A] * lambda[A]^T,     "pair-specific temporal weights")  ),
   block_id = full_family_id,
   low = "white",
   mid = NULL,
@@ -925,19 +918,13 @@ p_ta <- plot_matrix(
 
 p_temporal_a <- plot_matrix(
   V_a_full,
-  title = expression(
-    atop(V[A] == A %.% T[A],
-      ": temporally moderated additive covariance"
-  )),
+  title =  "",# expression(    atop(V[A] == A %.% T[A],      ": temporally moderated additive covariance"  )),
   block_id =  full_family_id,
   high = "#542788"
 )
 p_cov <- plot_matrix(
   P_display_full,
-  title = expression(
-    Cov(p) * ": Phenotypic" ~
-      "covariance"
-  ),
+  title = "",#expression(    Cov(p) * ": Phenotypic" ~      "covariance" ),
   block_id = full_family_id
 )
 

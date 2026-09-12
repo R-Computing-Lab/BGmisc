@@ -37,6 +37,7 @@ library(tidyr)
 # -----------------------------------------------------------------------------
 if(!exists("core_folder")){
 core_folder <- "temporal_ACE_parameter_recovery_500_p50"
+core_folder <- "temporal_ACE_means_parameter_recovery_poly32_moder_f250_p50_reps500"
 }
 
 results_directory <- file.path("results", core_folder)
@@ -51,7 +52,17 @@ trajectory_parameter_names  <- c(
   "b_e_0", "b_e_1", "b_e_2", "g_e_1",
   "y_mean", "b_mean_1", "b_mean_2", "g_mean_1"
 )
-parameter_ <- read.csv(parameter_targets_file)
+tryCatch(
+  parameter_ <- read.csv(parameter_targets_file),
+  error = function(e) {
+    warning(
+      "Could not read parameter targets from ", parameter_targets_file,
+      ". Using default trajectory_parameter_names."
+    )
+    parameter_ <<- NULL
+  }
+)
+
 
 if(is.null(parameter_$parameter)){
 parameter_names <- trajectory_parameter_names
