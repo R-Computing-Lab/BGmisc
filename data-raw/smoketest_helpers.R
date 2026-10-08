@@ -1,0 +1,302 @@
+# -----------------------------------------------------------------------------
+# Helper functions
+# -----------------------------------------------------------------------------
+
+get_generation_vector <- function(ped) {
+  possible_names <- c("gen", "Gen", "generation", "Generation", "GEN")
+  gen_col <- intersect(possible_names, names(ped))[1]
+  if (is.na(gen_col)) {
+    stop(
+      "Could not find a generation column in the simulated pedigree.\n",
+      "Available columns are: ", paste(names(ped), collapse = ", ")
+    )
+  }
+  as.numeric(ped[[gen_col]])
+}
+
+make_time_vars <- function(ped, threshold_year = 1776, param_year_sd = 3,
+                           param_year_base = 1700,
+                           gen_gap = 30,
+                           rescale = TRUE,
+                           time_scale = c("zscore", "fixed"),
+                           Ngen = NULL,
+                           time_half_range = 3,
+                           prop_historical = 1) {
+  time_scale <- match.arg(time_scale)
+  gen <- get_generation_vector(ped)
+  # param_year_sd spreads the range; it is not linked to parental age, so a wide
+  # value occasionally places someone before their parents.
+  param_year <- param_year_base + gen_gap * (gen - min(gen, na.rm = TRUE)) + rnorm(length(gen), mean = 0, sd = param_year_sd)
+  if (rescale==FALSE) {
+    t_i <- as.numeric(param_year)
+  } else if (time_scale == "fixed") {
+    # Map the designed generation span onto [-time_half_range, time_half_range]
+    # using design constants only.
+    #
+    # scale() instead divides by the realized SD, which unequal generation sizes
+    # skew badly: a growing pedigree puts most people in the youngest generation,
+    # which drags the mean toward them and caps the upper end of z at roughly
+    # sqrt((1 - p) / p), where p is the fraction of people in that generation.
+    # With p = 40/74 that ceiling is ~0.92, no matter how wide the birth years
+    # actually spread. A fixed map also keeps t comparable across families.
+    if (is.null(Ngen) || Ngen < 2) {
+      stop("`Ngen` (>= 2) is required when `time_scale = \"fixed\"`.")
+    }
+    span <- gen_gap * (Ngen - 1)
+    t_i <- (param_year - (param_year_base + span / 2)) / (span / (2 * time_half_range))
+  } else {
+    t_i <- as.numeric(scale(param_year))
+  }
+  if (prop_historical < 0 || prop_historical > 1) {
+    stop("`prop_historical` must be between 0 and 1.")
+  } else  if (prop_historical == 1) {
+  h_i <- as.numeric(param_year >= threshold_year)
+  } else if (prop_historical == 0) {
+    h_i <- as.numeric(param_year < threshold_year)
+  } else {
+    # For a proportion of the sample, assign historical status probabilistic, can only occur when year > 0
+    h_i <- ifelse(param_year < threshold_year, 0, rbinom(length(param_year), 1, prop_historical))
+  }
+  H_i <- matrix(h_i, ncol = 1)
+  colnames(H_i) <- paste0("post_", threshold_year)
+
+  list(
+    param_year = param_year,
+    t = t_i,
+    H = H_i
+  )
+}
+
+make_lambda <- function(
+  t_i, H_i, beta, gamma, poly = 3,
+  loading_link = c("identity", "exp")
+) {
+  if (length(loading_link) > 1) {
+    warning(
+      "Multiple values provided for `loading_link`. Using the first value: ",
+      loading_link[1]
+    )
+    loading_link <- loading_link[1]
+  }
+  #  loading_link <- match.arg(loading_link)
+
+  powers <- seq_len(poly)
+
+  Tpoly <- cbind(
+    intercept = 1,
+    vapply(
+      powers,
+      function(power) t_i^power,
+      numeric(length(t_i))
+    )
+  )
+
+  if (length(beta) != ncol(Tpoly)) {
+    stop(
+      "`beta` must contain ", ncol(Tpoly),
+      " values: an intercept plus ", poly,
+      " polynomial coefficient(s)."
+    )
+  }
+
+  if (nrow(H_i) != length(t_i)) {
+    stop("`H_i` must have one row per value in `t_i`.")
+  }
+
+  if (length(gamma) != ncol(H_i)) {
+    stop(
+      "`gamma` must contain one coefficient per column of `H_i`."
+    )
+  }
+
+  eta <- as.vector(
+    Tpoly %*% matrix(beta, ncol = 1) +
+      H_i %*% matrix(gamma, ncol = 1)
+  )
+
+
+  if (loading_link == "identity") {
+    eta
+  } else {
+    exp(eta)
+  }
+}
+
+as_numeric_matrix <- function(x) {
+  x <- as.matrix(x)
+  storage.mode(x) <- "numeric"
+  x
+}
+
+make_symmetric <- function(x, tol = 1e-10) {
+  x <- as_numeric_matrix(x)
+  if (max(abs(x - t(x)), na.rm = TRUE) > tol) {
+    x <- (x + t(x)) / 2
+  }
+  x
+}
+
+simulate_pedigree_safe <- function(kpc = 3, Ngen = 4, marR = 0.6) {
+  fmls <- names(formals(BGmisc::simulatePedigree))
+
+  if (all(c("kpc", "Ngen", "marR") %in% fmls)) {
+    BGmisc::simulatePedigree(kpc = kpc, Ngen = Ngen, marR = marR)
+  } else if (all(c("numGen", "children", "marriageRate") %in% fmls)) {
+    BGmisc::simulatePedigree(numGen = Ngen, children = kpc, marriageRate = marR)
+  } else {
+    BGmisc::simulatePedigree(kpc, Ngen, marR)
+  }
+}
+
+# -----------------------------------------------------------------------------
+# Temporal OpenMx/BGmisc-style builders
+# -----------------------------------------------------------------------------
+
+
+free_only <- function(model, labels_to_free) {
+  # free = NA returns fixed parameters as well as free ones, so this can widen
+  # (free something currently fixed) and not only narrow. Under the default,
+  # omxGetParameters() returns free parameters only, so anything already fixed --
+  # for instance the mean coefficients above mean_degree -- would be invisible
+  # here and could never be estimated, silently.
+  pars <- omxGetParameters(model, free = NA)
+  omxSetParameters(
+    model,
+    labels = names(pars),
+    free = names(pars) %in% labels_to_free,
+    values = ifelse(names(pars) %in% labels_to_free, pars, 0)
+  )
+}
+
+run_and_report <- function(model, label, tries = 5,confidence_intervals = FALSE) {
+  cat("\n==============================\n")
+  cat("Running ", label, "\n", sep = "")
+  cat("==============================\n")
+
+  fit <- mxTryHard(
+    model,
+    extraTries = tries,
+    intervals = confidence_intervals,
+    silent = FALSE
+  )
+
+  print(summary(fit))
+  cat("\nParameter estimates:\n")
+  print(omxGetParameters(fit))
+  cat("\nOpenMx status:\n")
+  print(fit$output$status)
+
+  if (!is.finite(fit$output$fit)) stop(label, ": model fit is not finite.")
+  if (!all(is.finite(omxGetParameters(fit)))) stop(label, ": at least one parameter estimate is not finite.")
+
+  invisible(fit)
+}
+
+# -----------------------------------------------------------------------------
+# Simulation using BGmisc-style phenotype generation
+# -----------------------------------------------------------------------------
+
+simulate_temporal_family <- function(
+  kpc = 3,
+  Ngen = 4,
+  marR = 0.6,
+  threshold_year = 1776,
+  param_year_sd = 3,
+  param_year_base = 1700,
+  gen_gap = 30,
+  true_beta,
+  true_gamma,
+  components = c("a", "e"),
+  family_id = NULL,
+  poly = 3,
+  rescale = TRUE,
+  loading_link = "exp", # c("identity", "exp")
+  time_scale = c("zscore", "fixed"),
+  time_half_range = 3,
+  prop_historical = 0.5,
+  y_mean = 0,
+  true_beta_mean = NULL,
+  true_gamma_mean = NULL
+) {
+  time_scale <- match.arg(time_scale)
+  ped_i <- simulate_pedigree_safe(kpc = kpc, Ngen = Ngen, marR = marR)
+  if (is.null(family_id)) family_id <- 1
+  ped_i$fam <- paste0("FAM ", family_id)
+  A_i <- make_symmetric(BGmisc::ped2add(ped_i))
+  Cn_i <- make_symmetric(BGmisc::ped2cn(ped_i))
+  Ce_i <- make_symmetric(BGmisc::ped2ce(ped_i))
+  Mt_i <- make_symmetric(BGmisc::ped2mit(ped_i))
+
+  n_i <- nrow(A_i)
+  I_i <- diag(1, n_i)
+
+  tv_i <- make_time_vars(ped_i,
+    threshold_year = threshold_year,
+    param_year_sd = param_year_sd,
+    param_year_base = param_year_base,
+    gen_gap = gen_gap,
+    rescale = rescale,
+    time_scale = time_scale,
+    Ngen = Ngen,
+    time_half_range = time_half_range,
+    prop_historical=prop_historical
+  )
+  t_i <- tv_i$t
+  H_i <- tv_i$H
+
+  lambda <- list()
+  for (k in components) {
+    lambda[[k]] <- make_lambda(
+      t_i = t_i, H_i = H_i, beta = true_beta[[k]], gamma = true_gamma[[k]],
+      poly = poly,
+      loading_link = loading_link
+    )
+  }
+
+  V_i <- matrix(0, n_i, n_i)
+  if ("a" %in% components) V_i <- V_i + A_i * tcrossprod(lambda$a)
+  if ("cn" %in% components) V_i <- V_i + Cn_i * tcrossprod(lambda$cn)
+  if ("ce" %in% components) V_i <- V_i + Ce_i * tcrossprod(lambda$ce)
+  if ("mt" %in% components) V_i <- V_i + Mt_i * tcrossprod(lambda$mt)
+  if ("e" %in% components) V_i <- V_i + I_i * tcrossprod(lambda$e)
+
+  # V_i <- #make_symmetric(V_i) + diag(1e-6, n_i)
+
+  # The mean uses the same polynomial/historical basis as the loadings, but always
+  # on the identity scale: it is a location, not a variance loading, so it is never
+  # exponentiated regardless of loading_link. With true_beta_mean = NULL this falls
+  # back to the scalar y_mean, so existing calls are unaffected.
+  mu_i <- if (is.null(true_beta_mean)) {
+    rep(y_mean, n_i)
+  } else {
+    make_lambda(
+      t_i = t_i,
+      H_i = H_i,
+      beta = true_beta_mean,
+      gamma = if (is.null(true_gamma_mean)) rep(0, ncol(H_i)) else true_gamma_mean,
+      poly = poly,
+      loading_link = "identity"
+    )
+  }
+
+  y_i <- mvtnorm::rmvnorm(1, sigma = V_i) + mu_i
+
+  rn <- rownames(A_i)
+  if (is.null(rn) || anyNA(rn) || any(rn == "")) rn <- as.character(seq_len(n_i))
+  obs_ids <- paste0("S", rn)
+
+  list(
+    ped = ped_i,
+    y = as.numeric(y_i),
+    obs_ids = obs_ids,
+    param_year_scaled = t_i,
+    param_year = tv_i$param_year,
+    H = H_i,
+    A = A_i,
+    Cn = Cn_i,
+    Ce = Ce_i,
+    Mt = Mt_i,
+    V_true = V_i,
+    mu_true = mu_i
+  )
+}

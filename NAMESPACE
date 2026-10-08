@@ -9,9 +9,15 @@ export(addPaternalChain)
 export(addPaternalLineFlag)
 export(alignPhenToMatrix)
 export(buildFamilyGroups)
+export(buildFamilyGroups_list)
 export(buildOneFamilyGroup)
+export(buildOneTemporalFamilyGroup)
 export(buildPedigreeModelCovariance)
 export(buildPedigreeMx)
+export(buildTemporalFamilyGroups)
+export(buildTemporalFamilyGroups_list)
+export(buildTemporalPedigreeModelCovariance)
+export(buildTemporalPedigreeMx)
 export(buildTreeGrid)
 export(calcAllGens)
 export(calcFamilySize)
@@ -30,6 +36,7 @@ export(dropLink)
 export(findLeaves)
 export(fitComponentModel)
 export(fitPedigreeModel)
+export(fitTemporalPedigreeModel)
 export(getGenDist)
 export(getWikiTreeSummary)
 export(identifyComponentModel)
@@ -75,14 +82,20 @@ export(summarizePedigrees)
 export(traceTreePaths)
 export(trimPedigree)
 export(vech)
-importFrom(Matrix,Diagonal)
-importFrom(Matrix,sparseMatrix)
+importFrom(Matrix,
+  Diagonal,
+  sparseMatrix
+)
 importFrom(data.table,as.data.table)
-importFrom(igraph,V)
-importFrom(igraph,distances)
-importFrom(igraph,subcomponent)
-importFrom(stats,na.omit)
-importFrom(stats,pnorm)
-importFrom(stats,qnorm)
-importFrom(stats,runif)
-importFrom(stats,setNames)
+importFrom(igraph,
+  V,
+  distances,
+  subcomponent
+)
+importFrom(stats,
+  na.omit,
+  pnorm,
+  qnorm,
+  runif,
+  setNames
+)
