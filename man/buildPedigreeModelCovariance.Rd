@@ -71,6 +71,17 @@ used when \code{temporal = TRUE}. Default is 0.}
 \item{time_point_max}{Integer. Degree of the polynomial birth-year basis. Only used when
 \code{temporal = TRUE}. Default is 3.}
 
+\item{mean_degree}{Integer. Degree of the polynomial temporal mean. The default, 0,
+estimates a constant mean. Must not exceed \code{time_point_max}.}
+
+\item{start_mean}{Numeric. Starting value for the mean's intercept. Set this near the
+observed phenotype mean.}
+
+\item{mean_hist_free}{Logical, length 1 or \code{p_hist}. Whether historical moderators
+can shift the phenotypic mean. Defaults to FALSE, fixing those shifts at zero.}
+
+\item{start_mean_hist}{Numeric. Starting value for the free elements of \code{G_mean}.}
+
 \item{lbound}{Numeric. A lower bound for the variance components to ensure they remain positive during optimization. Default is 1e-10}
 }
 \value{

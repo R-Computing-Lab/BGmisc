@@ -43,6 +43,17 @@ used when \code{temporal = TRUE}. Default is 0.}
 
 \item{start_gamma}{Numeric. Starting value for historical-moderator loadings. Only used when
 \code{temporal = TRUE}. Default is 0.}
+
+\item{mean_degree}{Integer. Degree of the polynomial temporal mean. The default, 0,
+estimates a constant mean. Must not exceed \code{time_point_max}.}
+
+\item{start_mean}{Numeric. Starting value for the mean's intercept. Set this near the
+observed phenotype mean.}
+
+\item{mean_hist_free}{Logical, length 1 or \code{p_hist}. Whether historical moderators
+can shift the phenotypic mean. Defaults to FALSE, fixing those shifts at zero.}
+
+\item{start_mean_hist}{Numeric. Starting value for the free elements of \code{G_mean}.}
 }
 \value{
 An OpenMx pedigree model combining the temporal covariance sub-model and family groups.

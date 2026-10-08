@@ -29,6 +29,13 @@
 #'   \code{temporal = TRUE}. Default is 0.
 #' @param time_point_max Integer. Degree of the polynomial birth-year basis. Only used when
 #'   \code{temporal = TRUE}. Default is 3.
+#' @param mean_degree Integer. Degree of the polynomial temporal mean. The default, 0,
+#'   estimates a constant mean. Must not exceed \code{time_point_max}.
+#' @param start_mean Numeric. Starting value for the mean's intercept. Set this near the
+#'   observed phenotype mean.
+#' @param mean_hist_free Logical, length 1 or \code{p_hist}. Whether historical moderators
+#'   can shift the phenotypic mean. Defaults to FALSE, fixing those shifts at zero.
+#' @param start_mean_hist Numeric. Starting value for the free elements of \code{G_mean}.
 #' @param lbound Numeric. A lower bound for the variance components to ensure they remain positive during optimization. Default is 1e-10
 #' @return An OpenMx model representing the pedigree with specified variance components.
 #' @export
@@ -1278,6 +1285,13 @@ buildFamilyGroups_list <- function(
 #'   used when \code{temporal = TRUE}. Default is 0.
 #' @param start_gamma Numeric. Starting value for historical-moderator loadings. Only used when
 #'   \code{temporal = TRUE}. Default is 0.
+#' @param mean_degree Integer. Degree of the polynomial temporal mean. The default, 0,
+#'   estimates a constant mean. Must not exceed \code{time_point_max}.
+#' @param start_mean Numeric. Starting value for the mean's intercept. Set this near the
+#'   observed phenotype mean.
+#' @param mean_hist_free Logical, length 1 or \code{p_hist}. Whether historical moderators
+#'   can shift the phenotypic mean. Defaults to FALSE, fixing those shifts at zero.
+#' @param start_mean_hist Numeric. Starting value for the free elements of \code{G_mean}.
 #' @return An OpenMx pedigree model combining variance components and family groups.
 #' @export
 
@@ -1629,5 +1643,4 @@ fitPedigreeModel <- function(
 
   do.call(OpenMx::mxModel, model_parts)
 }
-
 
