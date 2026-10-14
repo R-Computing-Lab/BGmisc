@@ -223,7 +223,7 @@ simulate_one_dataset <- function(
   )
 }
 
-build_true_model <- function(families, replication,n_threads=n_threads) {
+build_true_model <- function(families, replication, n_threads = n_threads) {
   group_models <- vector("list", length(families))
 
   for (i in seq_along(families)) {
@@ -257,7 +257,7 @@ build_true_model <- function(families, replication,n_threads=n_threads) {
 
 
   temporal_model_ace <- free_only(temporal_model_ace, labels_to_free = labels_to_free)
-  mxOption(model=temporal_model_ace, key = "Number of Threads", value= n_threads)
+  mxOption(model = temporal_model_ace, key = "Number of Threads", value = n_threads)
   return(temporal_model_ace)
 }
 
@@ -668,7 +668,8 @@ parameter_concise_labels <- c(
 )
 
 recovery_summary <- recovery_summary %>%
-  mutate(variance_component = dplyr::case_when(
+  mutate(
+    variance_component = dplyr::case_when(
       grepl("^b_a_", parameter) | grepl("^g_a_", parameter) ~ "A",
       grepl("^b_cn_", parameter) | grepl("^g_cn_", parameter) ~ "C",
       grepl("^b_e_", parameter) | grepl("^g_e_", parameter) ~ "E",
@@ -680,7 +681,8 @@ recovery_summary <- recovery_summary %>%
       grepl("^b_.*_2$", parameter) ~ "quadratic",
       grepl("^g_.*_1$", parameter) ~ "historical",
       TRUE ~ NA_character_
-    ))
+    )
+  )
 
 recovery_plot <- recovery_summary %>%
   mutate(
@@ -775,14 +777,14 @@ compact_recovery_plot <- recovery_summary %>%
     alpha = 0.5,
     color = "black",
   ) +
-#  geom_text(
+  #  geom_text(
   #  aes(label = parameter_label),
-#    aes(label = parameter),
-#    nudge_x = -0.015,
-#    nudge_y = 0.015,
- #   size = 2.7,
- #   check_overlap = TRUE
-#  ) +
+  #    aes(label = parameter),
+  #    nudge_x = -0.015,
+  #    nudge_y = 0.015,
+  #   size = 2.7,
+  #   check_overlap = TRUE
+  #  ) +
   coord_equal() +
   theme_bw(base_size = 9) +
   theme(

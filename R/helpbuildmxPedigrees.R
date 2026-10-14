@@ -46,4 +46,3 @@ alignPhenToMatrix <- function(ped, phenotype, keep_ids, personID = "ID") {
   pheno_vals <- ped[[phenotype]][match(as.character(keep_ids), as.character(ped[[personID]]))]
   matrix(as.double(pheno_vals), nrow = 1, dimnames = list(NULL, obs_ids))
 }
-

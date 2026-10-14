@@ -33,8 +33,8 @@ library(ggplot2)
 # Input and output locations
 # -----------------------------------------------------------------------------
 # check if this already exists, so that I can source the file after the simulation
-if(!exists("core_folder")){
-core_folder <- "temporal_ACE_parameter_recovery_500_p50"
+if (!exists("core_folder")) {
+  core_folder <- "temporal_ACE_parameter_recovery_500_p50"
 }
 results_directory <- file.path("results", core_folder)
 
@@ -307,7 +307,7 @@ panel_a_recovered_summary <- summarize_recovered_trajectories(
 panel_a_population_trajectories <- calculate_variance_trajectories(
   parameter_data = true_parameters,
   prediction_grid = panel_a_grid,
-  param_column= "population_variance"
+  param_column = "population_variance"
 )
 
 panel_a_data <- combine_recovered_and_population(
@@ -327,14 +327,14 @@ readr::write_csv(
 # Panel A figure
 # -----------------------------------------------------------------------------
 panel_a <- panel_a_data %>%
- filter(event_experienced == TRUE) %>%
+  filter(event_experienced == TRUE) %>%
   ggplot(
-  aes(
-    x = time,
-    color = component,
-    fill = component
-  )
-) +
+    aes(
+      x = time,
+      color = component,
+      fill = component
+    )
+  ) +
   geom_ribbon(
     aes(
       ymin = recovered_lower,
@@ -433,7 +433,7 @@ panel_b_recovered_trajectories <- calculate_variance_trajectories(
     ),
   prediction_grid = panel_b_grid,
   id_columns = "replication",
-  param_column= "recovered_variance"
+  param_column = "recovered_variance"
 )
 
 panel_b_recovered_summary <- summarize_recovered_trajectories(
@@ -443,7 +443,7 @@ panel_b_recovered_summary <- summarize_recovered_trajectories(
 panel_b_population_trajectories <- calculate_variance_trajectories(
   parameter_data = true_parameters,
   prediction_grid = panel_b_grid,
-  param_column= "population_variance"
+  param_column = "population_variance"
 )
 
 panel_b_data <- combine_recovered_and_population(
@@ -490,7 +490,7 @@ panel_b_event_facet <- panel_b_core +
     aes(
       ymin = recovered_lower,
       ymax = recovered_upper,
-      group=NULL
+      group = NULL
     ),
     alpha = 0.20
   ) +
@@ -505,67 +505,74 @@ panel_b_event_facet <- panel_b_core +
     aes(
       y = population_variance,
       linetype = "Population parameter",
-      group=NULL
+      group = NULL
     ),
     linewidth = 0.9
-  )   +
+  ) +
   facet_wrap(
-    vars( event_experience_label),
+    vars(event_experience_label),
     ncol = 1,
     scales = "free_y"
   )
 
 panel_b_event_combined <- panel_b_core +
-  geom_ribbon(data = panel_b_data %>% filter(event_experienced==0),
-    #historical_period ==0&event_experienced==0|
-    #historical_period ==1&event_experienced==0),
+  geom_ribbon(
+    data = panel_b_data %>% filter(event_experienced == 0),
+    # historical_period ==0&event_experienced==0|
+    # historical_period ==1&event_experienced==0),
     aes(
       ymin = recovered_lower,
       ymax = recovered_upper,
-      group=NULL
+      group = NULL
     ),
     alpha = 0.20
   ) +
-    geom_ribbon(data = panel_b_data %>% filter(
-    historical_period ==1&event_experienced==1|
-      historical_period==0),
+  geom_ribbon(
+    data = panel_b_data %>% filter(
+      historical_period == 1 & event_experienced == 1 |
+        historical_period == 0
+    ),
     aes(
       ymin = recovered_lower,
       ymax = recovered_upper,
-      group=NULL
+      group = NULL
     ),
     alpha = 0.20
   ) +
-  geom_line(data = panel_b_data %>% filter(event_experienced==0),
+  geom_line(
+    data = panel_b_data %>% filter(event_experienced == 0),
     aes(
       y = recovered_central,
       linetype = "Recovered Monte Carlo estimate"
     ),
     linewidth = 0.9
   ) +
-  geom_line(data = panel_b_data %>% filter(historical_period ==1&event_experienced==1|
-      historical_period==0),
+  geom_line(
+    data = panel_b_data %>% filter(historical_period == 1 & event_experienced == 1 |
+      historical_period == 0),
     aes(
       y = recovered_central,
       linetype = "Recovered Monte Carlo estimate",
-      group=NULL
+      group = NULL
     ),
     linewidth = 0.9
-  )   +
-  geom_line(data = panel_b_data %>% filter(event_experienced==0),
+  ) +
+  geom_line(
+    data = panel_b_data %>% filter(event_experienced == 0),
     aes(
       y = population_variance,
       linetype = "Population parameter",
-      group=NULL
+      group = NULL
     ),
     linewidth = 0.9
-  )    +
-  geom_line(data = panel_b_data %>% filter(historical_period ==1&event_experienced==1|
-      historical_period==0),
+  ) +
+  geom_line(
+    data = panel_b_data %>% filter(historical_period == 1 & event_experienced == 1 |
+      historical_period == 0),
     aes(
       y = population_variance,
       linetype = "Population parameter",
-      group=NULL
+      group = NULL
     ),
     linewidth = 0.9
   ) +
@@ -610,7 +617,7 @@ ggstyling_panel_b <- list(
 )
 
 panel_b_v1 <- panel_b_event_combined + ggstyling_panel_b
-panel_b_v2  <- panel_b_event_facet + ggstyling_panel_b
+panel_b_v2 <- panel_b_event_facet + ggstyling_panel_b
 
 panel_b <- panel_b_v2
 print(panel_b)
@@ -651,7 +658,6 @@ ggsave(
   device = cairo_pdf,
   bg = "white"
 )
-
 
 
 cat("Figure data and files written to:\n")

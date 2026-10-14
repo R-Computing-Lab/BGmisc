@@ -27,7 +27,7 @@ make_time_vars <- function(ped, threshold_year = 1776, param_year_sd = 3,
   # param_year_sd spreads the range; it is not linked to parental age, so a wide
   # value occasionally places someone before their parents.
   param_year <- param_year_base + gen_gap * (gen - min(gen, na.rm = TRUE)) + rnorm(length(gen), mean = 0, sd = param_year_sd)
-  if (rescale==FALSE) {
+  if (rescale == FALSE) {
     t_i <- as.numeric(param_year)
   } else if (time_scale == "fixed") {
     # Map the designed generation span onto [-time_half_range, time_half_range]
@@ -49,8 +49,8 @@ make_time_vars <- function(ped, threshold_year = 1776, param_year_sd = 3,
   }
   if (prop_historical < 0 || prop_historical > 1) {
     stop("`prop_historical` must be between 0 and 1.")
-  } else  if (prop_historical == 1) {
-  h_i <- as.numeric(param_year >= threshold_year)
+  } else if (prop_historical == 1) {
+    h_i <- as.numeric(param_year >= threshold_year)
   } else if (prop_historical == 0) {
     h_i <- as.numeric(param_year < threshold_year)
   } else {
@@ -168,7 +168,7 @@ free_only <- function(model, labels_to_free) {
   )
 }
 
-run_and_report <- function(model, label, tries = 5,confidence_intervals = FALSE) {
+run_and_report <- function(model, label, tries = 5, confidence_intervals = FALSE) {
   cat("\n==============================\n")
   cat("Running ", label, "\n", sep = "")
   cat("==============================\n")
@@ -239,7 +239,7 @@ simulate_temporal_family <- function(
     time_scale = time_scale,
     Ngen = Ngen,
     time_half_range = time_half_range,
-    prop_historical=prop_historical
+    prop_historical = prop_historical
   )
   t_i <- tv_i$t
   H_i <- tv_i$H

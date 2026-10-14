@@ -35,9 +35,9 @@ library(tidyr)
 # -----------------------------------------------------------------------------
 # Notation
 # -----------------------------------------------------------------------------
-if(!exists("core_folder")){
-core_folder <- "temporal_ACE_parameter_recovery_500_p50"
-core_folder <- "temporal_ACE_means_parameter_recovery_poly32_moder_f250_p50_reps500"
+if (!exists("core_folder")) {
+  core_folder <- "temporal_ACE_parameter_recovery_500_p50"
+  core_folder <- "temporal_ACE_means_parameter_recovery_poly32_moder_f250_p50_reps500"
 }
 
 results_directory <- file.path("results", core_folder)
@@ -46,7 +46,7 @@ parameter_targets_file <- file.path(
   results_directory,
   "parameter_targets.csv"
 )
-trajectory_parameter_names  <- c(
+trajectory_parameter_names <- c(
   "b_a_0", "b_a_1", "b_a_2", "g_a_1",
   "b_cn_0", "b_cn_1", "b_cn_2", "g_cn_1",
   "b_e_0", "b_e_1", "b_e_2", "g_e_1",
@@ -64,12 +64,11 @@ tryCatch(
 )
 
 
-if(is.null(parameter_$parameter)){
-parameter_names <- trajectory_parameter_names
+if (is.null(parameter_$parameter)) {
+  parameter_names <- trajectory_parameter_names
 } else {
-parameter_names  <-parameter_$parameter
+  parameter_names <- parameter_$parameter
 }
-
 
 
 component_order <- c(
@@ -120,13 +119,13 @@ calculate_variance_trajectories <- function(
   id_columns = character(),
   param_column
 ) {
-calculate_param_trajectories (
-  parameter_data=  parameter_data,
-  prediction_grid=prediction_grid,
-  id_columns =id_columns,
-  param = "variance",
-  param_column = param_column
-)
+  calculate_param_trajectories(
+    parameter_data = parameter_data,
+    prediction_grid = prediction_grid,
+    id_columns = id_columns,
+    param = "variance",
+    param_column = param_column
+  )
 }
 
 calculate_param_trajectories <- function(
@@ -165,8 +164,8 @@ calculate_param_trajectories <- function(
     parameter_data[missing_parameter_columns] <- 0
   }
 
-   # Treat explicit missing values within existing parameter columns as zero.
- parameter_data <- parameter_data %>%
+  # Treat explicit missing values within existing parameter columns as zero.
+  parameter_data <- parameter_data %>%
     dplyr::mutate(
       dplyr::across(
         dplyr::all_of(trajectory_parameter_names),
@@ -177,47 +176,48 @@ calculate_param_trajectories <- function(
   trajectories <- tidyr::crossing(
     parameter_data,
     prediction_grid
-  ) %>%    dplyr::mutate(
-   event_effect = historical_period * event_experienced)
+  ) %>% dplyr::mutate(
+    event_effect = historical_period * event_experienced
+  )
 
-if(param == "variance"){
-  trajectories <- trajectories  %>%
-    dplyr::mutate(
-      a_variance = exp(2 * (
-        b_a_0 +
-          b_a_1 * time +
-          b_a_2 * time^2 +
-          g_a_1 * event_effect
-      )),
-      cn_variance = exp(2 * (
-        b_cn_0 +
-          b_cn_1 * time +
-          b_cn_2 * time^2 +
-          g_cn_1 * event_effect
-      )),
-      e_variance = exp(2 * (
-        b_e_0 +
-          b_e_1 * time +
-          b_e_2 * time^2 +
-          g_e_1 * event_effect
-      )),
-      total_variance = a_variance + cn_variance + e_variance
-    )
-  component_order <- component_order[component_order!="mean"]
+  if (param == "variance") {
+    trajectories <- trajectories %>%
+      dplyr::mutate(
+        a_variance = exp(2 * (
+          b_a_0 +
+            b_a_1 * time +
+            b_a_2 * time^2 +
+            g_a_1 * event_effect
+        )),
+        cn_variance = exp(2 * (
+          b_cn_0 +
+            b_cn_1 * time +
+            b_cn_2 * time^2 +
+            g_cn_1 * event_effect
+        )),
+        e_variance = exp(2 * (
+          b_e_0 +
+            b_e_1 * time +
+            b_e_2 * time^2 +
+            g_e_1 * event_effect
+        )),
+        total_variance = a_variance + cn_variance + e_variance
+      )
+    component_order <- component_order[component_order != "mean"]
+  } else {
+    trajectories <- trajectories %>%
+      dplyr::mutate(
+        total_mean = exp(2 * (
+          y_mean +
+            b_mean_1 * time +
+            b_mean_2 * time^2 +
+            g_mean_1 * event_effect
+        ))
+      )
+    component_order <- component_order[component_order == "mean"]
+  }
 
-} else {
-    trajectories <- trajectories  %>%
-    dplyr::mutate(
-      total_mean = exp(2 * (
-        y_mean +
-          b_mean_1 * time +
-          b_mean_2 * time^2 +
-          g_mean_1 * event_effect
-      )))
-    component_order <- component_order[component_order=="mean"]
-}
-
- trajectories <- trajectories %>%
+  trajectories <- trajectories %>%
     dplyr::select(
       dplyr::all_of(id_columns),
       time,
@@ -476,7 +476,7 @@ interpolate_on_calendar <- function(
   target_time <- rescale_calendar_to_time(years, year_mean, year_sd)
 
   if (min(target_time) < min(trajectory$time) ||
-        max(target_time) > max(trajectory$time)) {
+    max(target_time) > max(trajectory$time)) {
     warning(
       "Requested years fall outside the scaled time grid (",
       round(rescale_time_to_calendar(min(trajectory$time), year_mean, year_sd)),

@@ -42,7 +42,6 @@
 # Todo: add parallize options: mxOption(model= yourModel, key="Number of Threads", value= (omxDetectCores() - 1))
 
 
-
 buildPedigreeModelCovariance <- function(
   vars = list(
     ad2 = 0.5,
@@ -591,7 +590,7 @@ buildOneFamilyGroup <- function(
     mat_list,
     list(
       OpenMx::mxData(observed = full_df_row, type = "raw", sort = FALSE),
-      .pedigreeMeanMatrix(fsize= fsize, obs_ids= obs_ids, label= "meanLI"),
+      .pedigreeMeanMatrix(fsize = fsize, obs_ids = obs_ids, label = "meanLI"),
       OpenMx::mxAlgebraFromString(algebra_str,
         name = "V", dimnames = list(obs_ids, obs_ids)
       ),
@@ -744,9 +743,9 @@ buildOneFamilyGroup <- function(
         sort = FALSE
       ),
       .pedigreeMeanMatrix(
-       fsize= fsize,
-      obs_ids=  obs_ids,
-       label= "meanLI"
+        fsize = fsize,
+        obs_ids = obs_ids,
+        label = "meanLI"
       ),
       OpenMx::mxAlgebraFromString(
         algebra_str,
@@ -1039,7 +1038,7 @@ buildOneFamilyGroup <- function(
         # mean_basis = NULL falls back to the constant mean; the historical shift
         # is only available when there are historical columns to shift on.
         mean_basis = mean_basis,
-        mean_hist  = if (!is.null(mean_hist) && p_hist > 0) mean_hist else NULL
+        mean_hist = if (!is.null(mean_hist) && p_hist > 0) mean_hist else NULL
       ),
       OpenMx::mxAlgebraFromString(
         covariance_algebra,
@@ -1333,12 +1332,12 @@ buildPedigreeMx <- function(model_name, vars, group_models,
 
     ci_obj <- NULL
     if (ci) {
-      if(is.null(ci_names)){
-      ci_names <- unlist(lapply(components, function(k) {
-        out <- paste0("b_", k, "_", 0:tp_max)
-        if (p_hist > 0) out <- c(out, paste0("g_", k, "_", seq_len(p_hist)))
-        out
-      }))
+      if (is.null(ci_names)) {
+        ci_names <- unlist(lapply(components, function(k) {
+          out <- paste0("b_", k, "_", 0:tp_max)
+          if (p_hist > 0) out <- c(out, paste0("g_", k, "_", seq_len(p_hist)))
+          out
+        }))
       }
       ci_obj <- OpenMx::mxCI(ci_names)
     }
@@ -1383,9 +1382,9 @@ buildPedigreeMx <- function(model_name, vars, group_models,
   )
 
   ci_obj <- if (ci & any(flags$Vad, flags$Vdd, flags$Vcn, flags$Vce, flags$Vmt, flags$Vam, flags$Ver)) {
-   if(is.null(ci_names)){
-     ci_names <- c("vad", "vdd", "vcn", "vce", "vmt", "vam", "ver")[c(flags$Vad, flags$Vdd, flags$Vcn, flags$Vce, flags$Vmt, flags$Vam, flags$Ver)]
-   }
+    if (is.null(ci_names)) {
+      ci_names <- c("vad", "vdd", "vcn", "vce", "vmt", "vam", "ver")[c(flags$Vad, flags$Vdd, flags$Vcn, flags$Vce, flags$Vmt, flags$Vam, flags$Ver)]
+    }
     OpenMx::mxCI(ci_names)
   } else {
     NULL
@@ -1643,4 +1642,3 @@ fitPedigreeModel <- function(
 
   do.call(OpenMx::mxModel, model_parts)
 }
-

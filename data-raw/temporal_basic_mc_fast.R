@@ -45,13 +45,12 @@ library(ggrepel)
 source(file.path("data-raw", "smoketest_helpers.R"))
 
 
-#parallelize
-
+# parallelize
 
 
 library(snowfall)
 library(parallel)
-detect_cores <- parallel::detectCores(logical = FALSE) -  1L # leave one core free for the OS
+detect_cores <- parallel::detectCores(logical = FALSE) - 1L # leave one core free for the OS
 # Clear any cluster left running by an earlier run that errored before sfStop().
 # Without this, the next sfInit reuses dead sockets -> "invalid connection".
 if (sfIsRunning()) try(sfStop(), silent = TRUE)
@@ -64,7 +63,7 @@ sfLibrary(OpenMx)
 
 # A=\left(1.10,.10,-.10,.20\right), C_{N}=(.916,0,0,0), and E=(.693,-.10,.10,0).
 
-#master_seed <- 112026011
+# master_seed <- 112026011
 master_seed <- as.integer(as.numeric(20260720)) # otherwise it fails to be an integer on some systems
 n_replications <- 500
 n_families <- 250
@@ -222,14 +221,14 @@ write_csv(
 # threshold_year, param_year_sd, param_year_base, gen_gap and loading_link are
 # read from the Monte Carlo settings above, as kpc, Ngen and marR already are.
 simulate_one_dataset <- function(
-  replication, replication_seed=1L, poly = poly_degree,
+  replication, replication_seed = 1L, poly = poly_degree,
   rescale = TRUE,
   # Map the designed birth-year span onto [-3, 3] with design constants instead
   # of a per-family z-score, so t genuinely covers the plotted time_grid.
   time_scale = "fixed",
   time_half_range = 3,
   prop_historical = 1,
-  y_mean=y_mean_param,
+  y_mean = y_mean_param,
   beta_mean = true_beta_mean,
   gamma_mean = true_gamma_mean
 ) {
@@ -470,7 +469,7 @@ failed_replication_row <- function(
 }
 
 
-run_one_replication <- function(replication=1L) {
+run_one_replication <- function(replication = 1L) {
   replication_seed <- master_seed + replication
   start_time <- proc.time()[["elapsed"]]
 
@@ -716,7 +715,8 @@ recovery_summary <- long_results %>%
     ),
     empirical_interval_excludes_zero = mc_lower > 0 | mc_upper < 0,
     .groups = "drop"
-  ) %>%   dplyr::mutate(
+  ) %>%
+  dplyr::mutate(
     relative_bias = replace(
       relative_bias,
       is.infinite(relative_bias),
@@ -783,11 +783,11 @@ recovery_summary <- readr::read_csv(recovery_file, na = "")
 # Parameter-recovery plot
 # -----------------------------------------------------------------------------
 parameter_order <- c(
-  "b_a_0",  "b_a_1",  "b_a_2",  "b_a_3",
+  "b_a_0", "b_a_1", "b_a_2", "b_a_3",
   "g_a_1",
   "b_cn_0", "b_cn_1", "b_cn_2", "b_cn_3",
   "g_cn_1",
-  "b_e_0",  "b_e_1",  "b_e_2",  "b_e_3",
+  "b_e_0", "b_e_1", "b_e_2", "b_e_3",
   "g_e_1",
   # Mean coefficients. Any parameter missing from this vector becomes NA when
   # recovery_summary factors on it, which silently drops it from every plot and
@@ -796,22 +796,22 @@ parameter_order <- c(
   "g_mean_1"
 )
 parameter_labels <- c(
-  b_a_0  = "A: intercept",
-  b_a_1  = "A: linear time",
-  b_a_2  = "A: quadratic time",
-  b_a_3  = "A: cubic time",
-  g_a_1  = "A: historical event",
+  b_a_0 = "A: intercept",
+  b_a_1 = "A: linear time",
+  b_a_2 = "A: quadratic time",
+  b_a_3 = "A: cubic time",
+  g_a_1 = "A: historical event",
   b_cn_0 = "C: intercept",
   b_cn_1 = "C: linear time",
   b_cn_2 = "C: quadratic time",
   b_cn_3 = "C: cubic time",
   g_cn_1 = "C: historical event",
-  b_e_0  = "E: intercept",
-  b_e_1  = "E: linear time",
-  b_e_2  = "E: quadratic time",
-  b_e_3  = "E: cubic time",
-  g_e_1  = "E: historical event",
-  mean_y   = "Mean: intercept",
+  b_e_0 = "E: intercept",
+  b_e_1 = "E: linear time",
+  b_e_2 = "E: quadratic time",
+  b_e_3 = "E: cubic time",
+  g_e_1 = "E: historical event",
+  mean_y = "Mean: intercept",
   b_mean_1 = "Mean: linear time",
   b_mean_2 = "Mean: quadratic time",
   b_mean_3 = "Mean: cubic time",
@@ -819,22 +819,22 @@ parameter_labels <- c(
 )
 
 parameter_concise_labels <- c(
-  b_a_0  = "A: int",
-  b_a_1  = "A: lin",
-  b_a_2  = "A: quad",
-  b_a_3  = "A: cubic",
-  g_a_1  = "A: hist",
+  b_a_0 = "A: int",
+  b_a_1 = "A: lin",
+  b_a_2 = "A: quad",
+  b_a_3 = "A: cubic",
+  g_a_1 = "A: hist",
   b_cn_0 = "C: int",
   b_cn_1 = "C: lin",
   b_cn_2 = "C: quad",
   b_cn_3 = "C: cubic",
   g_cn_1 = "C: hist",
-  b_e_0  = "E: int",
-  b_e_1  = "E: lin",
-  b_e_2  = "E: quad",
-  b_e_3  = "E: cubic",
-  g_e_1  = "E: hist",
-  mean_y   = "M: int",
+  b_e_0 = "E: int",
+  b_e_1 = "E: lin",
+  b_e_2 = "E: quad",
+  b_e_3 = "E: cubic",
+  g_e_1 = "E: hist",
+  mean_y = "M: int",
   b_mean_1 = "M: lin",
   b_mean_2 = "M: quad",
   b_mean_3 = "M: cubic",
@@ -842,7 +842,8 @@ parameter_concise_labels <- c(
 )
 
 recovery_summary <- recovery_summary %>%
-  mutate(variance_component = dplyr::case_when(
+  mutate(
+    variance_component = dplyr::case_when(
       grepl("^b_a_", parameter) | grepl("^g_a_", parameter) ~ "A",
       grepl("^b_cn_", parameter) | grepl("^g_cn_", parameter) ~ "C",
       grepl("^b_e_", parameter) | grepl("^g_e_", parameter) ~ "E",
@@ -860,15 +861,14 @@ recovery_summary <- recovery_summary %>%
       grepl("^b_.*_3$", parameter) ~ "cubic",
       grepl("^g_.*_1$", parameter) ~ "historical",
       TRUE ~ NA_character_
-    )) %>%
-    mutate(
+    )
+  ) %>%
+  mutate(
     parameter = factor(
       parameter,
       levels = rev(parameter_order)
     )
   )
-
-
 
 
 recovery_plot <- recovery_summary %>%
@@ -958,14 +958,14 @@ compact_recovery_plot <- recovery_summary %>%
     alpha = 0.5,
     color = "black",
   ) +
-#  geom_text(
+  #  geom_text(
   #  aes(label = parameter_label),
-#    aes(label = parameter),
-#    nudge_x = -0.015,
-#    nudge_y = 0.015,
- #   size = 2.7,
- #   check_overlap = TRUE
-#  ) +
+  #    aes(label = parameter),
+  #    nudge_x = -0.015,
+  #    nudge_y = 0.015,
+  #   size = 2.7,
+  #   check_overlap = TRUE
+  #  ) +
   coord_equal() +
   theme_bw(base_size = 9) +
   theme(

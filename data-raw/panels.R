@@ -1,4 +1,3 @@
-
 # temporal_pair_panels.R
 #
 # Generate six separate figure panels that show how two individuals' temporal
@@ -78,8 +77,6 @@ loading_link_figure <- get0("loading_link", ifnotfound = "exp")
 components_figure <- get0("sim_components", ifnotfound = c("a", "cn", "e"))
 
 
-
-
 if (!exists("true_beta", inherits = TRUE)) {
   true_beta <- list(
     a  = c(log(2), 0.1, -0.1, 0.00),
@@ -137,9 +134,9 @@ first_existing_vector <- function(x, candidates, expected_length) {
 
     if (
       !is.null(value) &&
-      is.atomic(value) &&
-      length(value) == expected_length &&
-      all(is.finite(as.numeric(value)))
+        is.atomic(value) &&
+        length(value) == expected_length &&
+        all(is.finite(as.numeric(value)))
     ) {
       return(as.numeric(value))
     }
@@ -272,8 +269,8 @@ find_temporal_contrast <- function(A, time, historical) {
 
   if (
     same_pair$i == cross_pair$i &&
-    same_pair$j == cross_pair$j &&
-    nrow(candidates) > 1L
+      same_pair$j == cross_pair$j &&
+      nrow(candidates) > 1L
   ) {
     same_pair <- candidates %>%
       filter(!(i == cross_pair$i & j == cross_pair$j)) %>%
@@ -341,9 +338,9 @@ make_block_data <- function(block_id) {
   data.frame(
     block = run_info$values,
     xmin  = block_start - 0.5,
-    xmax  = block_end   + 0.5,
+    xmax  = block_end + 0.5,
     ymin  = block_start - 0.5,
-    ymax  = block_end   + 0.5
+    ymax  = block_end + 0.5
   )
 }
 
@@ -368,8 +365,8 @@ add_historical_strips <- function(
   strip_center = 0.25,
   fill = c(`0` = "white", `1` = "#0B3B70")
 ) {
-	n <- length(historical)
-   strip_data <- tibble(
+  n <- length(historical)
+  strip_data <- tibble(
     position = seq_len(n),
     historical = as.integer(historical)
   )
@@ -383,7 +380,7 @@ add_historical_strips <- function(
       inherit.aes = FALSE,
       width = 1,
       height = strip_thickness,
-      fill =  fill[1],
+      fill = fill[1],
       colour = "grey40",
       linewidth = 0.25
     ) +
@@ -393,7 +390,7 @@ add_historical_strips <- function(
       inherit.aes = FALSE,
       width = 1,
       height = strip_thickness,
-      fill =  fill[2],
+      fill = fill[2],
       colour = "grey40",
       linewidth = 0.25
     ) +
@@ -405,7 +402,7 @@ add_historical_strips <- function(
       inherit.aes = FALSE,
       width = strip_thickness,
       height = 1,
-      fill =  fill[1],
+      fill = fill[1],
       colour = "grey40",
       linewidth = 0.25
     ) +
@@ -446,7 +443,7 @@ add_historical_strips <- function(
       plot.title = element_text(face = "bold", size = 12),
       plot.subtitle = element_text(size = 9),
       plot.caption = element_text(size = 8, hjust = 0)
-    )  +
+    ) +
 
     # Label for both historical-status strips
     annotate(
@@ -463,17 +460,17 @@ add_historical_strips <- function(
 
 # General matrix plotting function.
 plot_matrix <- function(
-    x,
-    title=NULL,
-    subtitle=NULL,
-    caption=NULL,
-    block_id,
-    low = "white",
-    mid = "#B8DBEB",
-    high = "#08396D",
-    midpoint = NULL,
-    na_colour = "white",
-    outline_size = 0.65
+  x,
+  title = NULL,
+  subtitle = NULL,
+  caption = NULL,
+  block_id,
+  low = "white",
+  mid = "#B8DBEB",
+  high = "#08396D",
+  midpoint = NULL,
+  na_colour = "white",
+  outline_size = 0.65
 ) {
   n <- nrow(x)
 
@@ -482,7 +479,7 @@ plot_matrix <- function(
   }
 
   matrix_data <- matrix_to_long(x)
-  block_data  <- make_block_data(block_id)
+  block_data <- make_block_data(block_id)
 
   # A midpoint is useful when the matrices are approximately in [0, 1].
   if (is.null(midpoint)) {
@@ -506,7 +503,6 @@ plot_matrix <- function(
       colour = "black",
       linewidth = outline_size
     ) +
-
     scale_fill_gradient2(
       low = low,
       mid = mid,
@@ -526,13 +522,12 @@ plot_matrix <- function(
       limits = c(n + 0.5, 0.5),
       expand = c(0, 0)
     ) +
-
     coord_fixed(clip = "off") +
-
-    labs(title = title,
-         subtitle = subtitle,
-         caption = caption) +
-
+    labs(
+      title = title,
+      subtitle = subtitle,
+      caption = caption
+    ) +
     theme_void(base_size = 12) +
     theme(
       plot.title = element_text(
@@ -703,7 +698,7 @@ for (attempt in 0:60) {
 
   if (
     !is.null(candidate_contrast) &&
-    length(unique(historical_ordered)) >= 2L
+      length(unique(historical_ordered)) >= 2L
   ) {
     figure_family <- candidate
     contrast <- candidate_contrast
@@ -863,8 +858,6 @@ highlight_colours <- c(
 )
 
 
-
-
 full_figure_data <- assemble_full_figure_data(full_figure_families)
 
 A_display_full <- full_figure_data$A
@@ -878,9 +871,8 @@ time_display_full <- full_figure_data$time
 historical_display_full <- full_figure_data$historical
 lambda_a_full <- full_figure_data$lambda_a
 
-matrix_nrows  <- nrow(A_display_full)
+matrix_nrows <- nrow(A_display_full)
 full_family_id <- full_figure_data$block_id
-
 
 
 # Matrix panels
@@ -892,24 +884,24 @@ p_a2 <- plot_matrix(
 
 p_cn2 <- plot_matrix(
   CN_display_full,
-  title =  "",#expression(    c[N]^2),
-  block_id =  full_family_id
+  title = "", # expression(    c[N]^2),
+  block_id = full_family_id
 )
 
 p_ce2 <- plot_matrix(
   CE_display_full,
-  title =  "",# expression(    c[E]^2  ),
-  block_id =  full_family_id
+  title = "", # expression(    c[E]^2  ),
+  block_id = full_family_id
 )
 
 p_mt2 <- plot_matrix(
   MT_display_full,
-  title =  "",#expression(mt^2),
-  block_id =  full_family_id
+  title = "", # expression(mt^2),
+  block_id = full_family_id
 )
 p_ta <- plot_matrix(
   T_a_full,
-  title =  "",# expression(    atop(T[A] == lambda[A] * lambda[A]^T,     "pair-specific temporal weights")  ),
+  title = "", # expression(    atop(T[A] == lambda[A] * lambda[A]^T,     "pair-specific temporal weights")  ),
   block_id = full_family_id,
   low = "white",
   mid = NULL,
@@ -918,16 +910,15 @@ p_ta <- plot_matrix(
 
 p_temporal_a <- plot_matrix(
   V_a_full,
-  title =  "",# expression(    atop(V[A] == A %.% T[A],      ": temporally moderated additive covariance"  )),
-  block_id =  full_family_id,
+  title = "", # expression(    atop(V[A] == A %.% T[A],      ": temporally moderated additive covariance"  )),
+  block_id = full_family_id,
   high = "#542788"
 )
 p_cov <- plot_matrix(
   P_display_full,
-  title = "",#expression(    Cov(p) * ": Phenotypic" ~      "covariance" ),
+  title = "", # expression(    Cov(p) * ": Phenotypic" ~      "covariance" ),
   block_id = full_family_id
 )
-
 
 
 # ------------------------------------------------------------------
@@ -935,19 +926,19 @@ p_cov <- plot_matrix(
 # ------------------------------------------------------------------
 
 complete_figure <-
-  (p_a2  | p_ta | p_temporal_a) /
-  ( p_cn2 | p_ce2| p_mt2 ) /
-  ( p_cov ) +
-  plot_layout(
-    widths = c(1, 1, 1),
-    heights = c(1, 1, 1)
-  ) &
-  theme(
-    plot.background = element_rect(
-      fill = "white",
-      colour = NA
+  (p_a2 | p_ta | p_temporal_a) /
+    (p_cn2 | p_ce2 | p_mt2) /
+    (p_cov) +
+    plot_layout(
+      widths = c(1, 1, 1),
+      heights = c(1, 1, 1)
+    ) &
+    theme(
+      plot.background = element_rect(
+        fill = "white",
+        colour = NA
+      )
     )
-  )
 
 complete_figure
 
@@ -1005,14 +996,13 @@ panel_0_eq_loading <- paste0(
 panel_0_eq_loading2 <- paste0("lambda[Ai] == exp(beta[A0] + beta[A1]*t[i] + beta[A2]*t[i]^2 + ", "beta[A3]*t[i]^3 + gamma[A]*H[i])")
 
 # Component matrix definition: k^2(t, H) = [k_ij^2(t, H)]_{i,j=1}^n
-#k^2 (t,H)=[k_ij^2 (t,H)]_(i,j=1)^n
+# k^2 (t,H)=[k_ij^2 (t,H)]_(i,j=1)^n
 panel_0_eq_kij2 <-
   "bold(k)^2*(list(t,H)) == group('[', k[ij]^2*(list(t,H)), ']')[list(i,j)==1]^n"
 
 # Scalar per-pair covariance (manuscript): expected covariance of individuals
 # i and j, wrapped across two lines so the six terms fit the panel width.
 # Cov⁡(p_i,p_j )=A_ij a_ij^2 (t,H)+D_ij d_ij^2 (t,H)+C_Nij c_Nij^2 (t,H)+C_Eij c_Eij^2 (t,H)+M_ij mt_ij^2 (t,H)+E_ij e_ij^2 (t,H)
-
 
 
 panel_0_eq_pipj_line1 <- paste0(
@@ -1035,7 +1025,8 @@ panel_0_eq_weight <- "T[A] == lambda[Ai] %*% lambda[Aj]"
 # Draw one equation line, left-aligned, at height y.
 panel_0_line <- function(y, label, size = 4.2) {
   annotate(
-    "text", x = 0.02, y = y, label = label,
+    "text",
+    x = 0.02, y = y, label = label,
     parse = TRUE, hjust = 0, size = size, fontface = "bold"
   )
 }
@@ -1050,7 +1041,6 @@ panel_0 <- ggplot() +
   panel_0_line(0.705, panel_0_eq_pairwise) +
   panel_0_line(0.605, panel_0_eq_pipj_line1) +
   panel_0_line(0.545, panel_0_eq_pipj_line2) +
-
   panel_0_line(0.450, panel_0_eq_loading) +
   # Additive specialization traced through panels 1-5 (exp link, as coded):
   # individual loading, pairwise temporal weight, moderated covariance.
@@ -1202,12 +1192,14 @@ panel_2 <- add_historical_strips(
   person_labels = person_labels
 )
 
-panel_2_watermark <-panel_2 + # watermarking text comment
+panel_2_watermark <- panel_2 + # watermarking text comment
   geom_text(
-    data = data.frame(x = 5.0,
-                      y = 6.0, label = "Overly complicated \nvisual"),
+    data = data.frame(
+      x = 5.0,
+      y = 6.0, label = "Overly complicated \nvisual"
+    ),
     aes(x, y, label = label),
-    hjust = 0.5, vjust = 0.0, angle = -45, size = 20/.pt,
+    hjust = 0.5, vjust = 0.0, angle = -45, size = 20 / .pt,
     color = "gray65", alpha = 0.80,
     inherit.aes = FALSE
   )
@@ -1428,8 +1420,8 @@ panel_4 <- ggplot() +
       "Cross-period relatives" = "#FFF2CC",
       "Same-period relatives" = "#FDE0DD",
       "Header" = "#D9E2F3",
-      "Cross header" =  "#F4DE88",
-      "Same header" ="#F4B6AE"
+      "Cross header" = "#F4DE88",
+      "Same header" = "#F4B6AE"
     ),
     guide = "none"
   ) +
@@ -1593,8 +1585,10 @@ make_compact_recovery_plot <- function(recovery_data, labels = NULL) {
     ) +
     labs(
       title = "6. Parameter recovery",
-      subtitle = paste0("Points are Monte Carlo means; bars are empirical 95% intervals.",
-                        " (n = ", n_reps_min, " replications)"),
+      subtitle = paste0(
+        "Points are Monte Carlo means; bars are empirical 95% intervals.",
+        " (n = ", n_reps_min, " replications)"
+      ),
       x = "True value",
       y = "Mean estimate"
     ) +
