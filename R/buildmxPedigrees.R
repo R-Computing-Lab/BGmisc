@@ -1381,7 +1381,7 @@ buildPedigreeMx <- function(model_name, vars, group_models,
     Ver = isTRUE(flags$Ver)
   )
 
-  ci_obj <- if (ci & any(flags$Vad, flags$Vdd, flags$Vcn, flags$Vce, flags$Vmt, flags$Vam, flags$Ver)) {
+  ci_obj <- if (ci && any(flags$Vad, flags$Vdd, flags$Vcn, flags$Vce, flags$Vmt, flags$Vam, flags$Ver)) {
     if (is.null(ci_names)) {
       ci_names <- c("vad", "vdd", "vcn", "vce", "vmt", "vam", "ver")[c(flags$Vad, flags$Vdd, flags$Vcn, flags$Vce, flags$Vmt, flags$Vam, flags$Ver)]
     }
