@@ -20,20 +20,52 @@ fitPedigreeModel(
   intervals = TRUE,
   extraTries = 10,
   condenseMatrixSlots = TRUE,
-  runmodel = TRUE
+  runmodel = TRUE,
+  temporal = FALSE,
+  dat_list = NULL,
+  obs_ids_list = NULL,
+  param_year_list = NULL,
+  H_list = NULL,
+  Addmat_list = NULL,
+  Nucmat_list = NULL,
+  Extmat_list = NULL,
+  Mtdmat_list = NULL,
+  Amimat_list = NULL,
+  Dmgmat_list = NULL,
+  p_hist = NULL,
+  components = c("a", "d", "cn", "ce", "mt", "am", "e"),
+  use_exp_loadings = FALSE,
+  time_point_max = NULL,
+  start_beta0 = 0.5,
+  start_beta_time = 0,
+  start_gamma = 0,
+  mean_degree = 0,
+  start_mean = 0,
+  mean_hist_free = FALSE,
+  start_mean_hist = 0,
+  retain_eta = TRUE,
+  retain_loadings = TRUE,
+  retain_loading_covariances = TRUE,
+  retain_component_covariances = TRUE,
+  residual_covariance_form = c("outer_product", "diagonal"),
+  clean_ids = TRUE,
+  group_static_families = FALSE
 )
 }
 \arguments{
 \item{model_name}{Character. Name for the overall OpenMx model. Default is "PedigreeModel".}
 
-\item{vars}{A named list or vector of initial variance component values.}
+\item{vars}{A named list or vector of initial variance component values. Only used
+when \code{temporal = FALSE}.}
 
 \item{data}{A matrix or data frame of observed data, where each row is a family
-and columns correspond to individuals. Only used when \code{group_models} is NULL.}
+and columns correspond to individuals. Only used when \code{group_models} is NULL
+and \code{temporal = FALSE}.}
 
 \item{group_models}{Optional list of pre-built OpenMx family group models
 (from \code{\link{buildOneFamilyGroup}}). If NULL, they are generated from \code{data}
-using the provided relatedness matrices.}
+(or, when \code{temporal = TRUE}, from \code{dat_list} and friends) using the provided
+relatedness matrices.}
 
 \item{Addmat}{Additive genetic relatedness matrix (from \code{\link{ped2add}}).}
 
@@ -60,6 +92,92 @@ if FALSE, use \code{mxRun}.}
 \item{condenseMatrixSlots}{Logical. If TRUE, use the mxCondenseMatrixSlots wrapper to optimize memory usage for large matrices. Default is TRUE.}
 
 \item{runmodel}{Logical. If TRUE (default), the model is fitted; if FALSE, the model is returned without fitting.}
+
+\item{temporal}{Logical. If TRUE, build a time-varying family-group model where each
+component's weight is a function of \code{param_year} (and, optionally, \code{H}) instead
+of a fixed scalar. Default is FALSE.}
+
+\item{dat_list}{A list of numeric vectors of observed data, one per family. Only used when
+\code{temporal = TRUE} and \code{group_models} is NULL.}
+
+\item{obs_ids_list}{A list of character vectors of individual IDs, one per family. Only used
+when \code{temporal = TRUE} and \code{group_models} is NULL.}
+
+\item{param_year_list}{A list of numeric birth-year vectors, one per family. Only used when
+\code{temporal = TRUE} and \code{group_models} is NULL.}
+
+\item{H_list}{A list of historical-moderator matrices, one per family. Only used when
+\code{temporal = TRUE}.}
+
+\item{Addmat_list}{A list of additive genetic relatedness matrices, one per family. Only used
+when \code{temporal = TRUE} and \code{group_models} is NULL.}
+
+\item{Nucmat_list}{A list of nuclear family shared environment relatedness matrices, one per
+family. Only used when \code{temporal = TRUE} and \code{group_models} is NULL.}
+
+\item{Extmat_list}{A list of common extended family environment relatedness matrices, one per
+family. Only used when \code{temporal = TRUE} and \code{group_models} is NULL.}
+
+\item{Mtdmat_list}{A list of mitochondrial genetic relatedness matrices, one per family. Only
+used when \code{temporal = TRUE} and \code{group_models} is NULL.}
+
+\item{Amimat_list}{A list of additive by mitochondrial interaction relatedness matrices, one per family. Only
+used when \code{temporal = TRUE} and \code{group_models} is NULL.}
+
+\item{Dmgmat_list}{A list of dominance genetic relatedness matrices, one per family. Only used
+when \code{temporal = TRUE} and \code{group_models} is NULL.}
+
+\item{p_hist}{Integer. Number of historical moderator columns. Only used when
+\code{temporal = TRUE}. If NULL, inferred from \code{H_list}.}
+
+\item{components}{Character vector of component keys to include (any of "a", "d", "cn",
+"ce", "mt", "am", "e"). Only used when \code{temporal = TRUE}. Default is \code{c("a", "e")}.}
+
+\item{use_exp_loadings}{Logical. If TRUE (default), each component's loading is
+exponentiated so its implied variance stays positive. Only used when \code{temporal = TRUE}.}
+
+\item{time_point_max}{Integer degree of the polynomial birth-year basis. Only used when
+\code{temporal = TRUE}. Default is 3.}
+
+\item{start_beta0}{Numeric. Starting value for each component's intercept loading. Only used
+when \code{temporal = TRUE}. Default is 0.5.}
+
+\item{start_beta_time}{Numeric. Starting value for each component's time-slope loadings. Only
+used when \code{temporal = TRUE}. Default is 0.}
+
+\item{start_gamma}{Numeric. Starting value for historical-moderator loadings. Only used when
+\code{temporal = TRUE}. Default is 0.}
+
+\item{mean_degree}{Integer. Degree of the polynomial temporal mean. The default, 0,
+estimates a constant mean. Must not exceed \code{time_point_max}.}
+
+\item{start_mean}{Numeric. Starting value for the mean's intercept. Set this near the
+observed phenotype mean.}
+
+\item{mean_hist_free}{Logical, length 1 or \code{p_hist}. Whether historical moderators
+can shift the phenotypic mean. Defaults to FALSE, fixing those shifts at zero.}
+
+\item{start_mean_hist}{Numeric. Starting value for the free elements of \code{G_mean}.}
+
+\item{retain_eta}{Logical. Retain named temporal linear predictors \code{Eta_*}.}
+
+\item{retain_loadings}{Logical. Retain named loading vectors \code{L_*}.}
+
+\item{retain_loading_covariances}{Logical. Retain named loading outer products \code{K*}.}
+
+\item{retain_component_covariances}{Logical. Retain named relatedness-weighted component
+covariance algebras \code{Cov_*}. Any unretained layer is inlined, leaving \code{V}
+and the likelihood unchanged.}
+
+\item{residual_covariance_form}{Character. Use \code{"outer_product"} to preserve the
+original \code{I * K_e} representation or \code{"diagonal"} for the exactly equivalent
+\code{vec2diag(L_e * L_e)} representation.}
+
+\item{clean_ids}{Logical. If TRUE, clean the \code{obs_ids} to be syntactically valid R names using \code{make.names}. Default is FALSE.}
+
+\item{group_static_families}{Logical. If TRUE for a static model built from
+\code{data}, build one raw-data submodel containing all family rows. If
+FALSE, preserve the original one-submodel-per-family implementation.}
 }
 \value{
 A fitted OpenMx model.

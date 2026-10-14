@@ -509,11 +509,11 @@ dropLink <- function(ped,
 #'
 #'
 .addPersonToPed <- function(ped, name = NULL,
-                           sex = NULL, momID = NA,
-                           dadID = NA, twinID = NULL,
-                           personID = NULL, zygosity = NULL,
-                           notes = NULL, url = NULL,
-                           overwrite = FALSE) {
+                            sex = NULL, momID = NA,
+                            dadID = NA, twinID = NULL,
+                            personID = NULL, zygosity = NULL,
+                            notes = NULL, url = NULL,
+                            overwrite = FALSE) {
   stopifnot(is.data.frame(ped))
   if (overwrite == TRUE) {
     # Check if the personID already exists in the pedigree

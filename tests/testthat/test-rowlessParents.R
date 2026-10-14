@@ -16,10 +16,10 @@ test_that(".findRowlessParents identifies parent IDs with no row of their own", 
 })
 
 test_that("ped2add warns when momID/dadID reference parents with no row", {
-  expect_warning(
+  suppressWarnings(expect_warning(
     ped2add(ped_rowless, sparse = FALSE),
     "no matching row"
-  )
+  ))
 })
 
 test_that("repair_rowless_parents = TRUE fixes diagonal and sibling relatedness without warning, and does not grow the returned matrix", {

@@ -14,7 +14,19 @@ buildFamilyGroups(
   Amimat = NULL,
   Dmgmat = NULL,
   prefix = "fam",
-  condenseMatrixSlots = TRUE
+  condenseMatrixSlots = TRUE,
+  temporal = FALSE,
+  param_year_list = NULL,
+  H_list = NULL,
+  use_exp_loadings = TRUE,
+  time_point_max = NULL,
+  retain_eta = TRUE,
+  retain_loadings = TRUE,
+  retain_loading_covariances = TRUE,
+  retain_component_covariances = TRUE,
+  residual_covariance_form = c("outer_product", "diagonal"),
+  clean_ids = TRUE,
+  group_static_families = FALSE
 )
 }
 \arguments{
@@ -41,11 +53,50 @@ is created automatically.}
 \item{prefix}{A prefix for naming the family groups. Default is "fam".}
 
 \item{condenseMatrixSlots}{Logical. If TRUE, use the mxCondenseMatrixSlots wrapper to optimize memory usage for large matrices. Default is TRUE.}
+
+\item{temporal}{Logical. If TRUE, build a time-varying family-group model where each
+component's weight is a function of \code{param_year} (and, optionally, \code{H}) instead
+of a fixed scalar. Default is FALSE.}
+
+\item{param_year_list}{A list of numeric birth-year vectors, one per family (row of \code{dat}),
+each matching \code{obs_ids} in length and order. Only used when \code{temporal = TRUE}.}
+
+\item{H_list}{A list of historical-moderator matrices, one per family. Only used when
+\code{temporal = TRUE}.}
+
+\item{use_exp_loadings}{Logical. If TRUE (default), each component's loading is
+exponentiated so its implied variance stays positive. Only used when \code{temporal = TRUE}.}
+
+\item{time_point_max}{Integer degree of the polynomial birth-year basis. Only used when
+\code{temporal = TRUE}. Default is 3.}
+
+\item{retain_eta}{Logical. Retain named temporal linear predictors \code{Eta_*}.}
+
+\item{retain_loadings}{Logical. Retain named loading vectors \code{L_*}.}
+
+\item{retain_loading_covariances}{Logical. Retain named loading outer products \code{K*}.}
+
+\item{retain_component_covariances}{Logical. Retain named relatedness-weighted component
+covariance algebras \code{Cov_*}. Any unretained layer is inlined, leaving \code{V}
+and the likelihood unchanged.}
+
+\item{residual_covariance_form}{Character. Use \code{"outer_product"} to preserve the
+original \code{I * K_e} representation or \code{"diagonal"} for the exactly equivalent
+\code{vec2diag(L_e * L_e)} representation.}
+
+\item{clean_ids}{Logical. If TRUE, clean the \code{obs_ids} to be syntactically valid R names using \code{make.names}. Default is FALSE.}
+
+\item{group_static_families}{Logical. If TRUE and \code{temporal = FALSE}, build
+one OpenMx raw-data submodel containing all rows of \code{dat}. If FALSE,
+preserve the original behavior of building one submodel per family.}
 }
 \value{
 A list of OpenMx models for each family group.
 }
 \description{
 This function constructs OpenMx models for multiple family groups based on
-provided relatedness matrices and observed data.
+provided relatedness matrices and observed data. All families share the same
+relatedness matrices (e.g. a fixed pedigree template); only the observed data
+row (and, for temporal models, birth year / historical moderators) varies by
+family. For families with different structure or size, see \code{\link{buildFamilyGroups_list}}.
 }
