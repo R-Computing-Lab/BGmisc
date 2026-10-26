@@ -50,14 +50,33 @@
 - [`buildFamilyGroups()`](https://r-computing-lab.github.io/BGmisc/reference/buildFamilyGroups.md)
   : Build family group models
 
+- [`buildFamilyGroups_list()`](https://r-computing-lab.github.io/BGmisc/reference/buildFamilyGroups_list.md)
+  : Build family group models with per-family relatedness matrices
+
 - [`buildOneFamilyGroup()`](https://r-computing-lab.github.io/BGmisc/reference/buildOneFamilyGroup.md)
   : Build one family group model
+
+- [`buildOneTemporalFamilyGroup()`](https://r-computing-lab.github.io/BGmisc/reference/buildOneTemporalFamilyGroup.md)
+  : Build One Temporal Family Group Model
 
 - [`buildPedigreeModelCovariance()`](https://r-computing-lab.github.io/BGmisc/reference/buildPedigreeModelCovariance.md)
   : Create an mxModel for a pedigree
 
 - [`buildPedigreeMx()`](https://r-computing-lab.github.io/BGmisc/reference/buildPedigreeMx.md)
   : Build Pedigree mxModel
+
+- [`buildTemporalFamilyGroups()`](https://r-computing-lab.github.io/BGmisc/reference/buildTemporalFamilyGroups.md)
+  : Build Temporal Family Group Models
+
+- [`buildTemporalFamilyGroups_list()`](https://r-computing-lab.github.io/BGmisc/reference/buildTemporalFamilyGroups_list.md)
+  : Build Temporal Family Group Models with Per-Family Relatedness
+  Matrices
+
+- [`buildTemporalPedigreeModelCovariance()`](https://r-computing-lab.github.io/BGmisc/reference/buildTemporalPedigreeModelCovariance.md)
+  : Build a Temporal Covariance Sub-model
+
+- [`buildTemporalPedigreeMx()`](https://r-computing-lab.github.io/BGmisc/reference/buildTemporalPedigreeMx.md)
+  : Build a Temporal Pedigree mxModel
 
 - [`buildWithinGenerations()`](https://r-computing-lab.github.io/BGmisc/reference/buildWithinGenerations.md)
   : Process Generations for Pedigree Simulation
@@ -202,6 +221,9 @@
 - [`fitPedigreeModel()`](https://r-computing-lab.github.io/BGmisc/reference/fitPedigreeModel.md)
   : Fit an OpenMx pedigree model to observed data
 
+- [`fitTemporalPedigreeModel()`](https://r-computing-lab.github.io/BGmisc/reference/fitTemporalPedigreeModel.md)
+  : Fit a Temporal OpenMx Pedigree Model to Observed Data
+
 - [`fuseTwins()`](https://r-computing-lab.github.io/BGmisc/reference/fuseTwins.md)
   : Fuse MZ twin pairs in a pedigree dataset for path tracing This
   function identifies MZ twin pairs in the pedigree dataset and merges
@@ -237,6 +259,9 @@
 
 - [`makeTwins()`](https://r-computing-lab.github.io/BGmisc/reference/makeTwins.md)
   : makeTwins
+
+- [`make_clean_personids()`](https://r-computing-lab.github.io/BGmisc/reference/make_clean_personids.md)
+  : Make Clean IDs for OpenMx
 
 - [`mapFAMS2parents()`](https://r-computing-lab.github.io/BGmisc/reference/mapFAMS2parents.md)
   : Create a Mapping from Family IDs to Parent IDs
