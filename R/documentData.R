@@ -103,29 +103,4 @@ NULL
 #' @format A data frame (and ped object) with 36 rows and 10 variables
 NULL
 
-#' Royal pedigree data from 1992
-#'
-#' A dataset created by Denis Reid from the Royal Families of Europe. The data was originally published in 1992 and is available on the internet. This version has been updated to combine duplicate entries and to include additional information on birth and death dates, as well as titles. This dataset is intended for educational and illustrative use in software demonstrations involving pedigree diagrams, inheritance structures, and kinship modeling. This dataset is not intended to represent any real individuals or families beyond the original source data, and it is provided solely for educational purposes.
-#'
-#' The variables are as follows:
-#' \itemize{
-#'   \item \code{personID}:  Person identification variable
-#'   \item \code{momID}:  ID of the mother
-#'   \item \code{dadID}:  ID of the father
-#'   \item \code{famID}:  ID of the extended family
-#'   \item \code{twinID}:  ID of the twin, if applicable
-#'   \item \code{name}:  Name of the person
-#'   \item \code{sex}: Biological sex
-#'   \item \code{birth_date}:  Date of birth
-#'   \item \code{death_date}:  Date of death
-#'   \item \code{title}:  Title of the person
-#'
-#' }
-#'
-#'
-#' @docType data
-#' @keywords datasets
-#' @name royal92
-#' @usage data(royal92)
-#' @format A data frame with 3110 observations
-NULL
+

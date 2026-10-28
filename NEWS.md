@@ -1,11 +1,11 @@
 # BGmisc NEWS
 
-## Development version
+## BGmisc 2.0.0
 
-* Added temporal pedigree models. 
+* Added temporal pedigree models 
 * Added make clean personids for error handling and debugging.
 * Added optional way to reduce file size when the pedigrees share matrices.
-* Preparing for CRAN transition to tidygedcom
+* CRAN transition to tidygedcom for several gedcom file handlers as well as royal92 data
 
 ## BGmisc 1.9.0
 * Added `addParentalChain()` and `addParentalFlag()` for tracing parental lineages. These functions support general parental-chain construction and convenient maternal and paternal lineage workflows. `addParentalFlag()` adds a binary indicator for whether each individual belongs to a specified parental chain, which can be useful for filtering, grouping, and lineage-specific summaries.
