@@ -333,8 +333,8 @@ summary(fitted1)
 #> AIC:      -9.611741               26.38826                14.388259
 #> BIC:      16.388259               16.38826                 5.991051
 #> To get additional fit indices, see help(mxRefModels)
-#> timestamp: 2026-10-26 19:47:38 
-#> Wall clock time: 0.0385139 secs 
+#> timestamp: 2026-10-28 17:02:30 
+#> Wall clock time: 0.07125425 secs 
 #> optimizer:  SLSQP 
 #> OpenMx version number: 2.22.11 
 #> Need help?  See help(mxSummary)
@@ -506,8 +506,8 @@ summary(fitted2)
 #> AIC:     -56.248897               29.75110                 14.75110
 #> BIC:      -6.588489               23.21684                 10.79231
 #> To get additional fit indices, see help(mxRefModels)
-#> timestamp: 2026-10-26 19:47:39 
-#> Wall clock time: 0.04584193 secs 
+#> timestamp: 2026-10-28 17:02:31 
+#> Wall clock time: 0.09128261 secs 
 #> optimizer:  SLSQP 
 #> OpenMx version number: 2.22.11 
 #> Need help?  See help(mxSummary)
@@ -672,18 +672,18 @@ summary(fitted_easy)
 #>  
 #> free parameters:
 #>     name       matrix row    col    Estimate  Std.Error A lbound ubound
-#> 1    vad ModelOne.Vad   1      1  0.59903086 0.16290951    1e-10       
-#> 2    vcn ModelOne.Vcn   1      1  0.14613696 0.06795750    1e-10       
-#> 3    vmt ModelOne.Vmt   1      1  0.03980215 0.06904675 !     0!       
-#> 4    ver ModelOne.Ver   1      1  0.28696799 0.09940060    1e-10       
-#> 5 meanLI       ped1.M   1 X10102 -0.01901727 0.09329926                
+#> 1    vad ModelOne.Vad   1      1  0.59903086 0.16291279    1e-10       
+#> 2    vcn ModelOne.Vcn   1      1  0.14613696 0.06795779    1e-10       
+#> 3    vmt ModelOne.Vmt   1      1  0.03980215 0.06904697 !     0!       
+#> 4    ver ModelOne.Ver   1      1  0.28696799 0.09940217    1e-10       
+#> 5 meanLI       ped1.M   1 X10102 -0.01901727 0.09329942                
 #> 
 #> confidence intervals:
 #>           lbound   estimate    ubound note
-#> vad 0.3042803328 0.59903086 0.9551060     
+#> vad 0.3042803326 0.59903086 0.9551061     
 #> vcn           NA 0.14613696        NA  !!!
 #> vmt 0.0000000001 0.03980215 0.2105368     
-#> ver 0.1036228265 0.28696799 0.4836285     
+#> ver 0.1036228264 0.28696799 0.4836285     
 #>   To investigate missing CIs, run summary() again, with verbose=T, to see CI details. 
 #> 
 #> Model Statistics: 
@@ -698,8 +698,8 @@ summary(fitted_easy)
 #> AIC:     268.363208               1018.363                 1025.030
 #> BIC:       6.384633               1021.903                 1006.639
 #> To get additional fit indices, see help(mxRefModels)
-#> timestamp: 2026-10-26 19:47:41 
-#> Wall clock time: 0.8579977 secs 
+#> timestamp: 2026-10-28 17:02:35 
+#> Wall clock time: 1.68962 secs 
 #> optimizer:  SLSQP 
 #> OpenMx version number: 2.22.11 
 #> Need help?  See help(mxSummary)

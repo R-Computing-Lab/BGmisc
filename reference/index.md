@@ -371,9 +371,6 @@
 - [`restorePedColnames()`](https://r-computing-lab.github.io/BGmisc/reference/restorePedColnames.md)
   : Restore Original Column Names in a Pedigree Dataframe
 
-- [`royal92`](https://r-computing-lab.github.io/BGmisc/reference/royal92.md)
-  : Royal pedigree data from 1992
-
 - [`simulatePedigree()`](https://r-computing-lab.github.io/BGmisc/reference/simulatePedigree.md)
   [`SimPed()`](https://r-computing-lab.github.io/BGmisc/reference/simulatePedigree.md)
   : Simulate Pedigrees This function simulates "balanced" pedigrees
