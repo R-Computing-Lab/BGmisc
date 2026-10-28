@@ -18,7 +18,6 @@ export(buildTemporalFamilyGroups)
 export(buildTemporalFamilyGroups_list)
 export(buildTemporalPedigreeModelCovariance)
 export(buildTemporalPedigreeMx)
-export(buildTreeGrid)
 export(calcAllGens)
 export(calcFamilySize)
 export(calculateCIs)
@@ -38,7 +37,6 @@ export(fitComponentModel)
 export(fitPedigreeModel)
 export(fitTemporalPedigreeModel)
 export(getGenDist)
-export(getWikiTreeSummary)
 export(identifyComponentModel)
 export(inferRelatedness)
 export(makeInbreeding)
@@ -60,10 +58,6 @@ export(ped2maternal)
 export(ped2mit)
 export(ped2mitFocal)
 export(ped2paternal)
-export(readGed)
-export(readGedcom)
-export(readWikifamilytree)
-export(readgedcom)
 export(recodeSex)
 export(related_coef)
 export(repairIDs)
@@ -79,7 +73,6 @@ export(summarizeFamilies)
 export(summarizeMatrilines)
 export(summarizePatrilines)
 export(summarizePedigrees)
-export(traceTreePaths)
 export(trimPedigree)
 export(vech)
 importFrom(Matrix,
@@ -96,6 +89,5 @@ importFrom(stats,
   na.omit,
   pnorm,
   qnorm,
-  runif,
-  setNames
+  runif
 )
