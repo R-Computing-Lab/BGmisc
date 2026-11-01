@@ -102,5 +102,3 @@ NULL
 #' @usage data(potter)
 #' @format A data frame (and ped object) with 36 rows and 10 variables
 NULL
-
-
