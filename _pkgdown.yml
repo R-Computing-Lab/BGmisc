@@ -3,14 +3,6 @@ template:
   bootstrap: 5
 
 reference:
-  - title: GEDCOM I/O
-    contents:
-      - readGedcom
-      - readGed
-      - readgedcom
-      - gedcomLatToNumeric
-      - gedcomLonToNumeric
-
-  - title: Other functions
+  - title: Functions
     contents:
       - matches(".*")
