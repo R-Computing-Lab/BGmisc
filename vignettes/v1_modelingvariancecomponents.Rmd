@@ -24,7 +24,7 @@ This vignette provides a detailed guide to specific functions in the `BGmisc` pa
 
 ```{r setup, include=FALSE}
 library(BGmisc)
-
+library(tidygedcom)
 if (!requireNamespace("OpenMx", quietly = TRUE)) {
   message("Please install OpenMx to run the model fitting examples.")
 } else {

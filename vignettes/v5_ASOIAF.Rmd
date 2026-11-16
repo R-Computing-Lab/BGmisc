@@ -22,6 +22,7 @@ We begin by loading the required libraries and examining the structure of the bu
 library(BGmisc)
 library(tidyverse)
 library(ggpedigree)
+library(tidygedcom)
 data(ASOIAF, package = "ggpedigree")
 ```
 
