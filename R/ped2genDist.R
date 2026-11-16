@@ -103,7 +103,10 @@
 #' @seealso \code{\link{ped2genDist}}, \code{\link{ped2genDistFocal}}
 #' @export
 getGenDist <- function(ped, id1, id2,
-                       method = c("rank", "path", "mrca_min", "mrca_max", "mrca_all"),
+                       method = c(
+                         "rank", "path",
+                         "mrca_min", "mrca_max", "mrca_all"
+                       ),
                        personID = "ID",
                        momID = "momID",
                        dadID = "dadID",

@@ -53,7 +53,6 @@ This vignette extends the example from `vignette("v60_pedigree_model_fitting", p
 
 # Scaling Up to Many Families
 
-
 Here we replicate several estimates of heritability across multiple families of red squirrels.  We use the `redsquirrels_full` dataset from the `ggpedigree` package, which contains pedigree and phenotypic data on red squirrels from the Kluane region of the Yukon, Canada.  The phenotype we analyze is lifetime reproductive success (LRS), which is a count of the number of offspring that survive to a certain age.
 
 ```{r krsp-prep}
