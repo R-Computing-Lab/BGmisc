@@ -1,17 +1,6 @@
 # Package index
 
-## GEDCOM I/O
-
-- [`readGedcom()`](https://r-computing-lab.github.io/BGmisc/reference/readGedcom.md)
-  [`readGed()`](https://r-computing-lab.github.io/BGmisc/reference/readGedcom.md)
-  [`readgedcom()`](https://r-computing-lab.github.io/BGmisc/reference/readGedcom.md)
-  : Read a GEDCOM File
-- [`gedcomLatToNumeric()`](https://r-computing-lab.github.io/BGmisc/reference/gedcomLatToNumeric.md)
-  : Convert GEDCOM Latitude String to Numeric
-- [`gedcomLonToNumeric()`](https://r-computing-lab.github.io/BGmisc/reference/gedcomLonToNumeric.md)
-  : Convert GEDCOM Longitude String to Numeric
-
-## Other functions
+## Functions
 
 - [`addMaternalChain()`](https://r-computing-lab.github.io/BGmisc/reference/addMaternalChain.md)
   : Add maternal ancestor chains to a pedigree
@@ -40,9 +29,6 @@
 
 - [`alignPhenToMatrix()`](https://r-computing-lab.github.io/BGmisc/reference/alignPhenToMatrix.md)
   : Align Phenotype Vector to Matrix Format for OpenMx
-
-- [`applyTagMappings()`](https://r-computing-lab.github.io/BGmisc/reference/applyTagMappings.md)
-  : Apply Tag Mappings to a Line
 
 - [`buildBtwnGenerations()`](https://r-computing-lab.github.io/BGmisc/reference/buildBtwnGenerations.md)
   : Process Generation Connections
@@ -135,9 +121,6 @@
 - [`checkWithinRowDuplicates()`](https://r-computing-lab.github.io/BGmisc/reference/checkWithinRowDuplicates.md)
   : Check for within-row duplicates (self-parents, same mom/dad)
 
-- [`collapseNames()`](https://r-computing-lab.github.io/BGmisc/reference/collapseNames.md)
-  : collapse Names
-
 - [`com2links()`](https://r-computing-lab.github.io/BGmisc/reference/com2links.md)
   : Convert Sparse Relationship Matrices to Kinship Links
 
@@ -150,9 +133,6 @@
 
 - [`condenseMatrixSlots()`](https://r-computing-lab.github.io/BGmisc/reference/condenseMatrixSlots.md)
   : Condense Matrix Slots in an OpenMx Model
-
-- [`countPatternRows()`](https://r-computing-lab.github.io/BGmisc/reference/countPatternRows.md)
-  : Count GEDCOM Pattern Rows
 
 - [`createGenDataFrame()`](https://r-computing-lab.github.io/BGmisc/reference/createGenDataFrame.md)
   [`createGenDataFrame_beta()`](https://r-computing-lab.github.io/BGmisc/reference/createGenDataFrame.md)
@@ -187,9 +167,6 @@
 
 - [`.loadOrComputeIsChild()`](https://r-computing-lab.github.io/BGmisc/reference/dot-loadOrComputeIsChild.md)
   : Load or compute the isChild matrix
-
-- [`.postProcessGedcom.legacy()`](https://r-computing-lab.github.io/BGmisc/reference/dot-postProcessGedcom.legacy.md)
-  : Post-process GEDCOM Data Frame
 
 - [`dropIdenticalDuplicateIDs()`](https://r-computing-lab.github.io/BGmisc/reference/dropIdenticalDuplicateIDs.md)
   : Drop Identical Duplicate IDs from Pedigree Data Frame
@@ -246,9 +223,6 @@
 - [`inbreeding`](https://r-computing-lab.github.io/BGmisc/reference/inbreeding.md)
   : Artificial pedigree data on eight families with inbreeding
 
-- [`initializeRecord()`](https://r-computing-lab.github.io/BGmisc/reference/initializeRecord.md)
-  : Initialize an Empty Individual Record
-
 - [`insertEven()`](https://r-computing-lab.github.io/BGmisc/reference/insertEven.md)
   [`evenInsert()`](https://r-computing-lab.github.io/BGmisc/reference/insertEven.md)
   : evenInsert A function to insert m elements evenly into a length n
@@ -263,15 +237,9 @@
 - [`make_clean_personids()`](https://r-computing-lab.github.io/BGmisc/reference/make_clean_personids.md)
   : Make Clean IDs for OpenMx
 
-- [`mapFAMS2parents()`](https://r-computing-lab.github.io/BGmisc/reference/mapFAMS2parents.md)
-  : Create a Mapping from Family IDs to Parent IDs
-
 - [`markPotentialChildren()`](https://r-computing-lab.github.io/BGmisc/reference/markPotentialChildren.md)
   [`markPotentialChildren_beta()`](https://r-computing-lab.github.io/BGmisc/reference/markPotentialChildren.md)
   : Mark and Assign children
-
-- [`parseNameLine()`](https://r-computing-lab.github.io/BGmisc/reference/parseNameLine.md)
-  : Parse Name Line
 
 - [`ped2add()`](https://r-computing-lab.github.io/BGmisc/reference/ped2add.md)
   : Take a pedigree and turn it into an additive genetics relatedness
@@ -331,9 +299,6 @@
 - [`ped2paternal()`](https://r-computing-lab.github.io/BGmisc/reference/ped2paternal.md)
   : Add a paternal line ID variable to a pedigree
 
-- [`postProcessGedcom()`](https://r-computing-lab.github.io/BGmisc/reference/postProcessGedcom.md)
-  : Post-process GEDCOM Data Frame
-
 - [`potter`](https://r-computing-lab.github.io/BGmisc/reference/potter.md)
   : Fictional pedigree data on a wizarding family
 
@@ -341,20 +306,6 @@
   : Function to prepare the pedigree for summarization This function
   prepares the pedigree for summarization by ensuring that the necessary
   IDs are present and that the pedigree is built correctly.
-
-- [`processEventLine()`](https://r-computing-lab.github.io/BGmisc/reference/processEventLine.md)
-  : Process Event Lines (Birth or Death)
-
-- [`processParents()`](https://r-computing-lab.github.io/BGmisc/reference/processParents.md)
-  : Process Parents Information from GEDCOM Data
-
-- [`readGedcom()`](https://r-computing-lab.github.io/BGmisc/reference/readGedcom.md)
-  [`readGed()`](https://r-computing-lab.github.io/BGmisc/reference/readGedcom.md)
-  [`readgedcom()`](https://r-computing-lab.github.io/BGmisc/reference/readGedcom.md)
-  : Read a GEDCOM File
-
-- [`readWikifamilytree()`](https://r-computing-lab.github.io/BGmisc/reference/readWikifamilytree.md)
-  : Read Wiki Family Tree
 
 - [`recodeSex()`](https://r-computing-lab.github.io/BGmisc/reference/recodeSex.md)
   : Recodes Sex Variable in a Pedigree Dataframe
@@ -399,9 +350,6 @@
 - [`summarizePedigrees()`](https://r-computing-lab.github.io/BGmisc/reference/summarizePedigrees.md)
   [`summarisePedigrees()`](https://r-computing-lab.github.io/BGmisc/reference/summarizePedigrees.md)
   : Summarize Pedigree Data
-
-- [`traceTreePaths()`](https://r-computing-lab.github.io/BGmisc/reference/traceTreePaths.md)
-  : Trace paths between individuals in a family tree grid
 
 - [`trimPedigree()`](https://r-computing-lab.github.io/BGmisc/reference/trimPedigree.md)
   : Iteratively Trim Leaf Nodes from a Pedigree

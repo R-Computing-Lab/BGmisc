@@ -25,6 +25,7 @@ of the built-in `ASOIAF` pedigree.
 library(BGmisc)
 library(tidyverse)
 library(ggpedigree)
+library(tidygedcom)
 data(ASOIAF, package = "ggpedigree")
 ```
 
